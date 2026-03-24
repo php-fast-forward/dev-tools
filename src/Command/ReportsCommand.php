@@ -49,12 +49,14 @@ final class ReportsCommand extends AbstractCommand
     {
         $output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>');
 
-        $this->runCommand('tests', [
-            'coverage' => $this->getAbsolutePath('public/coverage'),
-        ], $output);
-        $this->runCommand('docs', [
-            'target' => $this->getAbsolutePath('public/api'),
-        ], $output);
+        $docsPath = $this->getAbsolutePath('./public/api');
+        $coveragePath = $this->getAbsolutePath('./public/coverage');
+
+        $output->writeln('<info>Generating API documentation on path: ' . $docsPath . '</info>');
+        $this->runCommand('docs', ['target' => $docsPath], $output);
+
+        $output->writeln('<info>Generating test coverage report on path: ' . $coveragePath . '</info>');
+        $this->runCommand('tests', ['coverage' => $coveragePath], $output);
 
         $this->generateFrontpage();
 
@@ -77,7 +79,7 @@ final class ReportsCommand extends AbstractCommand
             ]
         );
 
-        $this->filesystem->dumpFile($this->getAbsolutePath('public/index.html'), $html);
+        $this->filesystem->dumpFile($this->getAbsolutePath('./public/index.html'), $html);
     }
 
     /**
@@ -93,7 +95,7 @@ final class ReportsCommand extends AbstractCommand
             'title' => $title,
             'links' => $links,
         ]);
-        include $this->getAbsolutePath('resources/index.php');
+        include $this->getAbsolutePath('./resources/index.php');
 
         return ob_get_clean();
     }
