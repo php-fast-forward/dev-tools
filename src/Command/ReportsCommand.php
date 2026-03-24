@@ -99,7 +99,7 @@ final class ReportsCommand extends AbstractCommand
             'title' => $title,
             'links' => $links,
         ]);
-        include $this->getAbsolutePath('resources/index.php');
+        include $this->getConfigFile('resources/index.php');
 
         return ob_get_clean();
     }
