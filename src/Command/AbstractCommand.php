@@ -55,9 +55,13 @@ abstract class AbstractCommand extends BaseCommand
         /** @var ProcessHelper $processHelper */
         $processHelper = $this->getHelper('process');
 
-        $command = $command
-            ->setWorkingDirectory($this->getCurrentWorkingDirectory())
-            ->setTty(true);
+        $command = $command->setWorkingDirectory($this->getCurrentWorkingDirectory());
+
+        if (Process::isTtySupported()) {
+            $command->setTty(true);
+        } else {
+            $output->writeln('<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>');
+        }
 
         $process = $processHelper->run($output, $command);
 
