@@ -33,7 +33,7 @@
             <source dsn="%%WORKING_DIRECTORY%%">
                 <path>%%GUIDE_PATH%%</path>
             </source>
-            <output>/guide</output>
+            <output>./guide</output>
         </guide>
     </version>
 </phpdocumentor>
