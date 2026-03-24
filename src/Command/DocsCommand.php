@@ -147,7 +147,7 @@ final class DocsCommand extends AbstractCommand
         $templateContents = $this->filesystem->readFile($templateFile);
         
         $this->filesystem->dumpFile($configFile, strtr($templateContents, [
-            '%%TITLE%%' => $this->getProjectName(),
+            '%%TITLE%%' => $this->getProjectDescription(),
             '%%TEMPLATE%%' => $template,
             '%%TARGET%%' => $target,
             '%%WORKING_DIRECTORY%%' => $workingDirectory,

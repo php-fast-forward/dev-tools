@@ -216,7 +216,7 @@ abstract class AbstractCommand extends BaseCommand
         $composer = $this->requireComposer();
         $package = $composer->getPackage();
 
-        return $package->getDescription() ?? $package->getName();
+        return $package->getName();
     }
 
     /**

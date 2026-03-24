@@ -7,8 +7,8 @@
    running/index
    internals/index
 
-FastForward DevTools Guide
-=========================
+Documentation
+=============
 
 Welcome to the documentation for FastForward DevTools.
 
