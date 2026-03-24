@@ -95,6 +95,10 @@ final class ReportsCommand extends AbstractCommand
     private function renderTemplate(string $title, array $links): string
     {
         ob_start();
+        extract([
+            'title' => $title,
+            'links' => $links,
+        ]);
         include $this->getConfigFile('resources/index.php');
 
         return ob_get_clean();

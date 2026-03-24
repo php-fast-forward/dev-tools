@@ -45,9 +45,9 @@
     <main>
         <h1><?= htmlspecialchars((string) $title, ENT_QUOTES, 'UTF-8') ?></h1>
         <ul>
-<?php foreach ($links as $name => $url): ?>
+            <?php foreach ($links as $name => $url): ?>
             <li><a href="<?= htmlspecialchars((string) $url, ENT_QUOTES, 'UTF-8') ?>"><?= htmlspecialchars((string) $name, ENT_QUOTES, 'UTF-8') ?></a></li>
-<?php endforeach; ?>
+            <?php endforeach; ?>
         </ul>
     </main>
 </body>
