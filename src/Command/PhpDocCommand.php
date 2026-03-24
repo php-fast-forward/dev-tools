@@ -77,7 +77,7 @@ final class PhpDocCommand extends AbstractCommand
     private function runPhpCsFixer(InputInterface $input, OutputInterface $output): int
     {
         $arguments = [
-            \dirname(__DIR__, 2) . '/vendor/bin/php-cs-fixer',
+            $this->getAbsolutePath('vendor/bin/php-cs-fixer'),
             'fix',
             '--config=' . parent::getConfigFile(self::CONFIG),
             '--cache-file=' . $this->getCurrentWorkingDirectory() . '/tmp/cache/.php-cs-fixer.cache',
@@ -109,7 +109,7 @@ final class PhpDocCommand extends AbstractCommand
             '--autoload-file',
             $this->getAbsolutePath('vendor/autoload.php'),
             '--only',
-            AddMissingMethodPhpDocRector::class,
+            '\\' . AddMissingMethodPhpDocRector::class,
         ];
 
         if (! $input->getOption('fix')) {
