@@ -106,8 +106,10 @@ final class PhpDocCommand extends AbstractCommand
             'process',
             '--config',
             parent::getConfigFile(RefactorCommand::CONFIG),
+            '--autoload-file',
+            $this->getAbsolutePath('vendor/autoload.php'),
             '--only',
-            '\\' . AddMissingMethodPhpDocRector::class,
+            AddMissingMethodPhpDocRector::class,
         ];
 
         if (! $input->getOption('fix')) {
