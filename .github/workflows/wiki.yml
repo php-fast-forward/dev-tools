@@ -52,10 +52,22 @@ jobs:
           args: 'docs'
 
       - name: Prepare wiki submodule branch
+        id: wiki_branch
         working-directory: docs/wiki
         run: |
-          wiki_branch="main"
-          git fetch origin "$wiki_branch"
+          git fetch origin
+          wiki_branch="$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')"
+
+          if [ -z "$wiki_branch" ]; then
+            wiki_branch="$(git branch -r | sed 's/^[[:space:]]*origin\///' | grep -v '^HEAD$' | head -n 1)"
+          fi
+
+          if [ -z "$wiki_branch" ]; then
+            echo "Could not determine wiki branch" >&2
+            exit 1
+          fi
+
+          echo "branch=$wiki_branch" >> "$GITHUB_OUTPUT"
           git checkout -B "$wiki_branch" "origin/$wiki_branch"
 
       - name: Commit & push wiki submodule
