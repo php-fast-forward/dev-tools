@@ -21,9 +21,6 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v4
-              with:
-                submodules: recursive
-                ref: ${{ github.head_ref || github.ref_name }}
 
             - name: Get Composer Cache Directory
               id: composer-cache
@@ -45,7 +42,7 @@ jobs:
               with:
                   php_version: '8.3'
 
-            - name: Generate phpDocumentor API Docs
+            - name: Generate reports
               uses: php-actions/composer@v6
               with:
                 php_version: '8.3'

@@ -24,9 +24,6 @@ jobs:
                 php-version: [ '8.3', '8.4', '8.5' ]
         steps:
             - uses: actions/checkout@v4
-              with:
-                submodules: recursive
-                ref: ${{ github.head_ref || github.ref_name }}
 
             - name: Get Composer Cache Directory
               id: composer-cache
