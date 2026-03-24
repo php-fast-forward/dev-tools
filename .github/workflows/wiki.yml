@@ -48,32 +48,22 @@ jobs:
         uses: php-actions/composer@v6
         with:
           php_version: '8.3'
-          command: 'dev-tools docs'
+          command: 'dev-tools'
+          args: 'wiki -- --target=.wiki'
 
       - name: Prepare wiki submodule branch
         id: wiki_branch
-        working-directory: docs/wiki
+        working-directory: .wiki
         run: |
           git fetch origin
-          wiki_branch="$(git remote show origin | sed -n '/HEAD branch/s/.*: //p')"
-
-          if [ -z "$wiki_branch" ]; then
-            wiki_branch="$(git branch -r | sed 's/^[[:space:]]*origin\///' | grep -v '^HEAD$' | head -n 1)"
-          fi
-
-          if [ -z "$wiki_branch" ]; then
-            echo "Could not determine wiki branch" >&2
-            exit 1
-          fi
-
-          echo "branch=$wiki_branch" >> "$GITHUB_OUTPUT"
-          git checkout -B "$wiki_branch" "origin/$wiki_branch"
+          git checkout master || git checkout -b master
+          echo "branch=master" >> "$GITHUB_OUTPUT"
 
       - name: Commit & push wiki submodule
         id: wiki_commit
         uses: EndBug/add-and-commit@v10
         with:
-          cwd: docs/wiki
+          cwd: .wiki
           add: .
           message: "Update wiki docs"
           default_author: github_actions
@@ -85,7 +75,7 @@ jobs:
         id: parent_commit
         uses: EndBug/add-and-commit@v10
         with:
-          add: docs/wiki
+          add: .wiki
           message: "Update wiki submodule pointer"
           default_author: github_actions
           pull: "--rebase"

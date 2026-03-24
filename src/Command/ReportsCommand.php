@@ -62,7 +62,7 @@ final class ReportsCommand extends AbstractCommand
     {
         $output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>');
 
-        $docsPath = $this->getAbsolutePath('public/api');
+        $docsPath = $this->getAbsolutePath('public/docs');
         $coveragePath = $this->getAbsolutePath('public/coverage');
 
         $output->writeln('<info>Generating API documentation on path: ' . $docsPath . '</info>');
@@ -93,9 +93,9 @@ final class ReportsCommand extends AbstractCommand
     private function generateFrontpage(): void
     {
         $html = $this->renderTemplate(
-            $this->getTitle(),
+            $this->getProjectDescription(),
             [
-                'API Documentation' => './api/index.html',
+                'Documentation' => './docs/index.html',
                 'Testdox Report' => './coverage/testdox.html',
                 'Test Coverage Report' => './coverage/index.html',
             ]

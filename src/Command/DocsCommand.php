@@ -21,7 +21,21 @@ namespace FastForward\DevTools\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Process\Process;
+
+use RuntimeException;
+
+use function Safe\file_get_contents;
+use function Safe\file_put_contents;
+use function array_map;
+use function implode;
+use function is_string;
+use function ltrim;
+use function Safe\mkdir;
+use function Safe\realpath;
+use function sprintf;
+use function strtr;
 
 /**
  * Handles the generation of API documentation for the project.
@@ -48,6 +62,14 @@ final class DocsCommand extends AbstractCommand
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated HTML documentation.',
+                default: 'public/docs',
+            )
+            ->addOption(
+                name: 'source',
+                shortcut: 's',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Path to the source directory for the generated HTML documentation.',
+                default: 'docs',
             );
     }
 
@@ -66,53 +88,74 @@ final class DocsCommand extends AbstractCommand
     {
         $output->writeln('<info>Generating API documentation...</info>');
 
-        $arguments = [
-            $this->getAbsolutePath('vendor/bin/phpdoc'),
-            '--cache-folder',
-            $this->getCurrentWorkingDirectory() . '/tmp/cache/phpdoc',
-            '--visibility=public,protected',
-        ];
+        $source = $this->getAbsolutePath($input->getOption('source'));
 
-        $psr4Namespaces = $this->getPsr4Namespaces();
+        if (!$this->filesystem->exists($source)) {
+            $output->writeln(sprintf('<error>Source directory not found: %s</error>', $source));
 
-        foreach ($psr4Namespaces as $path) {
-            $arguments[] = '--directory';
-            $arguments[] = $path;
-        }
-
-        if ($defaultPackageName = array_key_first($psr4Namespaces)) {
-            $arguments[] = '--defaultpackagename';
-            $arguments[] = $defaultPackageName;
-        }
-
-        $title = $this->getTitle();
-
-        if ('' !== $title && '0' !== $title) {
-            $arguments[] = '--title';
-            $arguments[] = $title;
-        }
-
-        $command = new Process([
-            ...$arguments,
-            '--target',
-            $this->getCurrentWorkingDirectory() . '/docs/wiki',
-            '--visibility=public,protected',
-            '--template',
-            'vendor/saggre/phpdocumentor-markdown/themes/markdown',
-        ]);
-
-        $resultWiki = parent::runProcess($command, $output);
-
-        if (self::FAILURE === $resultWiki) {
             return self::FAILURE;
         }
 
-        if ($input->getOption('target')) {
-            $command = new Process([...$arguments, '--target', $this->getAbsolutePath($input->getOption('target'))]);
+        $target = $this->getAbsolutePath($input->getOption('target'));
 
-            return parent::runProcess($command, $output);
+        $htmlConfig = $this->createPhpDocumentorConfig(
+            source: $source,
+            target: $target,
+            template: 'default',
+        );
+
+        $command = new Process([
+            $this->getAbsolutePath('vendor/bin/phpdoc'),
+            '--config',
+            $htmlConfig,
+        ]);
+
+        return parent::runProcess($command, $output);
+    }
+
+    /**
+     * Creates a temporary phpDocumentor configuration for the current project.
+     *
+     * @param string $source the source directory for the generated documentation
+     * @param string $target the output directory for the generated documentation
+     * @param string $template the phpDocumentor template name or path
+     *
+     * @return string the absolute path to the generated configuration
+     */
+    private function createPhpDocumentorConfig(string $source, string $target, string $template): string
+    {
+        $workingDirectory = $this->getCurrentWorkingDirectory();
+
+        $templateFile = $this->getAbsolutePath('resources/phpdocumentor.xml');
+
+        $configDirectory = $this->getAbsolutePath('tmp/cache/phpdoc');
+        $configFile = $configDirectory . '/phpdocumentor.xml';
+    
+        if (! $this->filesystem->exists($configDirectory)) {
+            $this->filesystem->mkdir($configDirectory);
         }
 
-        return $resultWiki;
+        $psr4Namespaces = $this->getPsr4Namespaces();
+        $paths = implode("\n", array_map(
+            fn (string $path): string => sprintf('<path>%s</path>', ltrim(str_replace($workingDirectory, '', $path), '/')),
+            $psr4Namespaces,
+        ));
+
+        $guidePath = Path::makeRelative($source, $workingDirectory);
+
+        $defaultPackageName = array_key_first($psr4Namespaces) ?: '';
+        $templateContents = $this->filesystem->readFile($templateFile);
+        
+        $this->filesystem->dumpFile($configFile, strtr($templateContents, [
+            '%%TITLE%%' => $this->getProjectName(),
+            '%%TEMPLATE%%' => $template,
+            '%%TARGET%%' => $target,
+            '%%WORKING_DIRECTORY%%' => $workingDirectory,
+            '%%PATHS%%' => $paths,
+            '%%GUIDE_PATH%%' => $guidePath,
+            '%%DEFAULT_PACKAGE_NAME%%' => $defaultPackageName,
+        ]));
+
+        return $configFile;
     }
 }

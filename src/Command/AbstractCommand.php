@@ -211,11 +211,27 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @return string the computed title or description string
      */
-    protected function getTitle(): string
+    protected function getProjectName(): string
     {
         $composer = $this->requireComposer();
         $package = $composer->getPackage();
 
         return $package->getDescription() ?? $package->getName();
+    }
+
+    /**
+     * Computes the human-readable description of the current application.
+     *
+     * The method SHOULD utilize the package description as the title, but MUST provide
+     * the raw package name as a fallback mechanism.
+     *
+     * @return string the computed title or description string
+     */
+    protected function getProjectDescription(): string
+    {
+        $composer = $this->requireComposer();
+        $package = $composer->getPackage();
+
+        return $package->getDescription();
     }
 }

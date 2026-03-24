@@ -27,6 +27,7 @@ use FastForward\DevTools\Command\RefactorCommand;
 use FastForward\DevTools\Command\ReportsCommand;
 use FastForward\DevTools\Command\StandardsCommand;
 use FastForward\DevTools\Command\TestsCommand;
+use FastForward\DevTools\Command\WikiCommand;
 
 /**
  * Provides a registry of custom dev-tools commands mapped for Composer integration.
@@ -52,6 +53,7 @@ final class DevToolsCommandProvider implements CommandProviderCapability
             new DocsCommand(),
             new StandardsCommand(),
             new ReportsCommand(),
+            new WikiCommand(),
         ];
     }
 }

@@ -26,6 +26,7 @@ use FastForward\DevTools\Command\RefactorCommand;
 use FastForward\DevTools\Command\ReportsCommand;
 use FastForward\DevTools\Command\StandardsCommand;
 use FastForward\DevTools\Command\TestsCommand;
+use FastForward\DevTools\Command\WikiCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -40,6 +41,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(DocsCommand::class)]
 #[UsesClass(StandardsCommand::class)]
 #[UsesClass(ReportsCommand::class)]
+#[UsesClass(WikiCommand::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
     private DevToolsCommandProvider $commandProvider;
@@ -67,6 +69,7 @@ final class DevToolsCommandProviderTest extends TestCase
                 new DocsCommand(),
                 new StandardsCommand(),
                 new ReportsCommand(),
+                new WikiCommand(),
             ],
             $this->commandProvider->getCommands(),
         );
