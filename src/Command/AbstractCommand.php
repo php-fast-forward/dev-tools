@@ -56,14 +56,23 @@ abstract class AbstractCommand extends BaseCommand
         $processHelper = $this->getHelper('process');
 
         $command = $command->setWorkingDirectory($this->getCurrentWorkingDirectory());
+        $callback = null;
 
         if (Process::isTtySupported()) {
             $command->setTty(true);
         } else {
             $output->writeln('<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>');
+
+            $callback = function (string $type, string $buffer) use ($output) {
+                $output->write($buffer);
+            };
         }
 
-        $process = $processHelper->run($output, $command);
+        $process = $processHelper->run(
+            output: $output, 
+            cmd: $command,
+            callback: $callback
+        );
 
         if (! $process->isSuccessful()) {
             $output->writeln(\sprintf(

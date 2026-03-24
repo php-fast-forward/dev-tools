@@ -100,7 +100,7 @@ abstract class AbstractCommandTestCase extends TestCase
             ->willReturn(true);
 
         $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::type(Process::class))
+            ->run(Argument::type(OutputInterface::class), Argument::type(Process::class), Argument::cetera())
             ->willReturn($process->reveal());
 
         $this->command->setApplication($this->application->reveal());
@@ -176,7 +176,7 @@ abstract class AbstractCommandTestCase extends TestCase
             ->shouldBeCalled();
 
         $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that($callback))
+            ->run(Argument::type(OutputInterface::class), Argument::that($callback), Argument::cetera())
             ->willReturn($process->reveal())
             ->shouldBeCalled();
     }
