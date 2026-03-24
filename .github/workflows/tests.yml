@@ -57,4 +57,4 @@ jobs:
                 args: 'tests --coverage=./public/coverage'
 
             - name: Ensure minimum code coverage
-              run: php vendor/bin/phpunit-coverage-check --min=80 ./public/coverage/clover.xml
+              run: php vendor/bin/coverage-check ./public/coverage/clover.xml 80
