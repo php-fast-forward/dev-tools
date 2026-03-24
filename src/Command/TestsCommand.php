@@ -24,11 +24,23 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+/**
+ * Facilitates the execution of the PHPUnit testing framework.
+ * This class MUST NOT be overridden and SHALL configure testing parameters dynamically.
+ */
 final class TestsCommand extends AbstractCommand
 {
+    /**
+     * @var string identifies the local configuration file for PHPUnit processes
+     */
     public const string CONFIG = 'phpunit.xml';
 
     /**
+     * Configures the testing command input constraints.
+     *
+     * The method MUST specify valid arguments for testing paths, caching directories,
+     * bootstrap scripts, and coverage instructions. It SHALL align with robust testing standards.
+     *
      * @return void
      */
     protected function configure(): void
@@ -70,10 +82,15 @@ final class TestsCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Triggers the PHPUnit engine based on resolved paths and settings.
      *
-     * @return int
+     * The method MUST assemble the necessary commands to initiate PHPUnit securely.
+     * It SHOULD optionally construct advanced configuration arguments such as caching and coverage.
+     *
+     * @param InputInterface $input the runtime instruction set from the CLI
+     * @param OutputInterface $output the console feedback relay
+     *
+     * @return int the status integer describing the termination code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -111,10 +128,15 @@ final class TestsCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param string $option
+     * Safely constructs an absolute path tied to a defined capability option.
      *
-     * @return string
+     * The method MUST compute absolute properties based on the supplied input parameters.
+     * It SHALL strictly return a securely bounded path string.
+     *
+     * @param InputInterface $input the raw parameter definitions
+     * @param string $option the requested option key to resolve
+     *
+     * @return string validated absolute path string
      */
     private function resolvePath(InputInterface $input, string $option): string
     {

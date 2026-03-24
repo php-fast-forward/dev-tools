@@ -23,11 +23,23 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+/**
+ * Provides functionality to execute automated code refactoring using Rector.
+ * This class MUST NOT be extended and SHALL encapsulate the logic for Rector invocation.
+ */
 final class RefactorCommand extends AbstractCommand
 {
+    /**
+     * @var string the default Rector configuration file
+     */
     public const string CONFIG = 'rector.php';
 
     /**
+     * Configures the refactor command options and description.
+     *
+     * This method MUST define the expected `--fix` option. It SHALL configure the command name
+     * and descriptions accurately.
+     *
      * @return void
      */
     protected function configure(): void
@@ -45,10 +57,15 @@ final class RefactorCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the refactoring process securely.
      *
-     * @return int
+     * The method MUST execute Rector securely via `Process`. It SHALL use dry-run mode
+     * unless the `--fix` option is specified. It MUST return `self::SUCCESS` or `self::FAILURE`.
+     *
+     * @param InputInterface $input the input interface to retrieve arguments properly
+     * @param OutputInterface $output the output interface to log outputs
+     *
+     * @return int the status code denoting success or failure
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

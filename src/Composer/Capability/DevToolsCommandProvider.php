@@ -28,10 +28,19 @@ use FastForward\DevTools\Command\ReportsCommand;
 use FastForward\DevTools\Command\StandardsCommand;
 use FastForward\DevTools\Command\TestsCommand;
 
+/**
+ * Provides a registry of custom dev-tools commands mapped for Composer integration.
+ * This capability struct MUST implement the defined `CommandProviderCapability`.
+ */
 final class DevToolsCommandProvider implements CommandProviderCapability
 {
     /**
-     * @return AbstractCommand[]
+     * Dispatches the comprehensive collection of CLI commands.
+     *
+     * The method MUST yield an array of instantiated command classes representing the tools.
+     * It SHALL be queried by the Composer plugin dynamically during runtime execution.
+     *
+     * @return array<int, AbstractCommand> the commands defined within the toolset
      */
     public function getCommands()
     {

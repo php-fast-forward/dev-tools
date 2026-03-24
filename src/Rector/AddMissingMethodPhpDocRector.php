@@ -41,10 +41,19 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 
 use function Safe\preg_split;
 
+/**
+ * Executes AST inspections parsing missing documentation on methods automatically.
+ * It MUST append `@param`, `@return`, and `@throws` tags where deduced accurately.
+ * The logic SHALL NOT override existing documentation.
+ */
 final class AddMissingMethodPhpDocRector extends AbstractRector
 {
     /**
-     * @return RuleDefinition
+     * Delivers the formal rule description configured within the Rector ecosystem.
+     *
+     * The method MUST accurately describe its functional changes logically.
+     *
+     * @return RuleDefinition explains the rule's active behavior context
      */
     public function getRuleDefinition(): RuleDefinition
     {
@@ -52,7 +61,11 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @return array
+     * Designates the primary Abstract Syntax Tree (AST) node structures intercepted.
+     *
+     * The method MUST register solely `ClassMethod` class references to guarantee precision.
+     *
+     * @return array<int, class-string<Node>> the structural bindings applicable for this modification
      */
     public function getNodeTypes(): array
     {
@@ -60,9 +73,14 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param Node $node
+     * Computes necessary PHPDoc metadata for a given class method selectively.
      *
-     * @return Node
+     * The method MUST identify the missing `@param`, `@return`, and `@throws` tags algorithmically.
+     * It SHALL preserve pre-existing valid tags cleanly. If no augmentation is achieved, it returns the node unaltered.
+     *
+     * @param Node $node the target method representation parsed synchronously
+     *
+     * @return Node the refined active syntax instance inclusive of generated documentation
      */
     public function refactor(Node $node): Node
     {
@@ -124,9 +142,14 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param string $docblock
+     * Formats the newly synthesized document block optimally, balancing whitespaces and gaps.
      *
-     * @return string
+     * This method MUST ensure visual spacing between separate tag families (e.g., between param and return).
+     * It SHALL preserve the structural integrity of the PHPDoc format effectively.
+     *
+     * @param string $docblock the unsanitized raw string equivalent of the document block
+     *
+     * @return string the formatted textual content accurately respecting conventions
      */
     private function normalizeDocblockSpacing(string $docblock): string
     {
@@ -165,9 +188,13 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param string $line
+     * Attempts to resolve the functional category inherent to a documentation tag.
      *
-     * @return string|null
+     * The method MUST parse the string descriptor reliably, extracting the tag intention logically.
+     *
+     * @param string $line the single document property statement being reviewed
+     *
+     * @return string|null the functional label or null if unbound correctly
      */
     private function resolveTagGroup(string $line): ?string
     {
@@ -189,10 +216,14 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param string $previousTagGroup
-     * @param string $currentTagGroup
+     * Concludes if architectural clarity requires an explicit blank interval.
      *
-     * @return bool
+     * The method MUST mandate proper line spacing between `@param`, `@return`, and `@throws` groups.
+     *
+     * @param string $previousTagGroup the prior tag context encountered
+     * @param string $currentTagGroup the newly active tag context currently processing
+     *
+     * @return bool true if an empty marker requires insertion natively
      */
     private function shouldInsertBlankLineBetweenTagGroups(string $previousTagGroup, string $currentTagGroup): bool
     {
@@ -204,9 +235,13 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param Docblock $docblock
+     * Collates variables already declared adequately within the existing documentation base.
      *
-     * @return string[]
+     * This method MUST retrieve predefined `@param` configurations logically, avoiding collisions.
+     *
+     * @param Docblock $docblock the active parsed commentary structure instance
+     *
+     * @return string[] uniquely filtered established parameters
      */
     private function getExistingParamVariables(Docblock $docblock): array
     {
@@ -230,10 +265,14 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod $node
-     * @param Docblock $docblock
+     * Calculates whether a `@return` tag is fundamentally valid for the given context.
      *
-     * @return bool
+     * The method SHALL exclude magic implementations such as `__construct` deliberately.
+     *
+     * @param ClassMethod $node the specific operation structure verified securely
+     * @param Docblock $docblock the connected documentation references
+     *
+     * @return bool indicates validation explicitly approving return blocks selectively
      */
     private function shouldAddReturnTag(ClassMethod $node, Docblock $docblock): bool
     {
@@ -245,9 +284,13 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param Docblock $docblock
+     * Assembles all established exceptions logged intentionally within the existing tag array.
      *
-     * @return string[]
+     * The method MUST enumerate declared `@throws` statements efficiently.
+     *
+     * @param Docblock $docblock the functional parser tree model internally loaded
+     *
+     * @return string[] discovered types of configured operational errors generically
      */
     private function getExistingThrowsTypes(Docblock $docblock): array
     {
@@ -271,9 +314,14 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod $node
+     * Parses the architectural scope of an intercepted method to infer exceptional operations natively.
      *
-     * @return string[]
+     * This method MUST accurately deduce exception creations traversing internal components recursively.
+     * It SHALL strictly return precise, unique internal naming identifiers safely.
+     *
+     * @param ClassMethod $node the active evaluated root target element dynamically instantiated
+     *
+     * @return string[] expected failure objects effectively defined within its contextual boundary
      */
     private function resolveThrows(ClassMethod $node): array
     {
@@ -304,9 +352,13 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param Name $name
+     * Expands Name syntax objects into human-readable string descriptors universally.
      *
-     * @return string
+     * The method MUST handle aliases seamlessly or fallback to base names dependably.
+     *
+     * @param Name $name the structured reference to parse accurately
+     *
+     * @return string the computed class identifier successfully reconstructed
      */
     private function resolveNameToString(Name $name): string
     {
@@ -320,9 +372,13 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param ClassMethod $node
+     * Evaluates PHPStan reflection metadata securely deriving original PHPDoc components.
      *
-     * @return Docblock
+     * The method SHOULD establish scope accurately and fetch reliable documentation defaults safely.
+     *
+     * @param ClassMethod $node the associated target structure explicitly handled internally
+     *
+     * @return Docblock the built virtualized docblock reference precisely retrieved natively
      */
     private function createDocblockFromReflection(ClassMethod $node): Docblock
     {
@@ -356,9 +412,13 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param string|Identifier|Name|ComplexType|null $type
+     * Translates complicated type primitives cleanly back into uniform string declarations consistently.
      *
-     * @return string
+     * The method MUST parse complex combinations including Intersections, Unions natively and securely.
+     *
+     * @param string|Identifier|Name|ComplexType|null $type the original metadata instance safely captured
+     *
+     * @return string the final interpreted designation string explicitly represented safely
      */
     private function resolveTypeToString(string|Identifier|Name|ComplexType|null $type): string
     {

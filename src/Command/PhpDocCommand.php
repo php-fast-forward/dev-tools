@@ -27,13 +27,27 @@ use Symfony\Component\Process\Process;
 
 use function Safe\file_get_contents;
 
+/**
+ * Provides operations to inspect, lint, and repair PHPDoc comments across the project.
+ * The class MUST NOT be extended and SHALL coordinate tools like PHP-CS-Fixer and Rector.
+ */
 final class PhpDocCommand extends AbstractCommand
 {
+    /**
+     * @var string determines the template filename for docheaders
+     */
     public const string FILENAME = '.docheader';
 
+    /**
+     * @var string stores the underlying configuration file for PHP-CS-Fixer
+     */
     public const string CONFIG = '.php-cs-fixer.dist.php';
 
     /**
+     * Configures the PHPDoc command.
+     *
+     * This method MUST securely configure the expected inputs, such as the `--fix` option.
+     *
      * @return void
      */
     protected function configure(): void
@@ -51,10 +65,15 @@ final class PhpDocCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the PHPDoc checks and rectifications.
      *
-     * @return int
+     * The method MUST ensure the `.docheader` template is present. It SHALL then invoke
+     * PHP-CS-Fixer and Rector. If both succeed, it MUST return `self::SUCCESS`.
+     *
+     * @param InputInterface $input the command input parameters
+     * @param OutputInterface $output the system output handler
+     *
+     * @return int the success or failure state
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -69,10 +88,15 @@ final class PhpDocCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the PHP-CS-Fixer checks internally.
      *
-     * @return mixed
+     * The method SHOULD run in dry-run mode unless the fix flag is explicitly provided.
+     * It MUST return an integer describing the exit code.
+     *
+     * @param InputInterface $input the parsed console inputs
+     * @param OutputInterface $output the configured outputs
+     *
+     * @return int the status result of the underlying process
      */
     private function runPhpCsFixer(InputInterface $input, OutputInterface $output): int
     {
@@ -94,10 +118,15 @@ final class PhpDocCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Runs Rector to insert missing method block comments automatically.
      *
-     * @return mixed
+     * The method MUST apply the `AddMissingMethodPhpDocRector` constraint locally.
+     * It SHALL strictly return an integer denoting success or failure.
+     *
+     * @param InputInterface $input the incoming console parameters
+     * @param OutputInterface $output the outgoing console display
+     *
+     * @return int the code indicating the process result
      */
     private function runRector(InputInterface $input, OutputInterface $output): int
     {
@@ -122,7 +151,12 @@ final class PhpDocCommand extends AbstractCommand
     }
 
     /**
-     * @param OutputInterface $output
+     * Creates the missing document header configuration file if needed.
+     *
+     * The method MUST query the local filesystem. If the file is missing, it SHOULD copy
+     * the tool template into the root folder.
+     *
+     * @param OutputInterface $output the logger where missing capabilities are announced
      *
      * @return void
      */

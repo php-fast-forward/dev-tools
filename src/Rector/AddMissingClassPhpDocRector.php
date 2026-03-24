@@ -24,10 +24,18 @@ use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use PhpParser\Node\Stmt\Class_;
 
+/**
+ * Provides automated refactoring to prepend basic PHPDoc comments on classes missing them.
+ * This rule MUST adhere to AST standards and SHALL traverse `Class_` nodes exclusively.
+ */
 final class AddMissingClassPhpDocRector extends AbstractRector
 {
     /**
-     * @return RuleDefinition
+     * Resolves the definition describing this rule for documentation generation.
+     *
+     * The method MUST return a properly instantiated RuleDefinition stating its purpose.
+     *
+     * @return RuleDefinition the description entity for the given Rector rule
      */
     public function getRuleDefinition(): RuleDefinition
     {
@@ -35,7 +43,11 @@ final class AddMissingClassPhpDocRector extends AbstractRector
     }
 
     /**
-     * @return array
+     * Declares the types of Abstract Syntax Tree nodes that trigger this refactoring run.
+     *
+     * The method MUST identify `Class_` nodes reliably. It SHALL define the interception target.
+     *
+     * @return array<int, class-string<Node>> an array containing registered node class references
      */
     public function getNodeTypes(): array
     {
@@ -43,9 +55,15 @@ final class AddMissingClassPhpDocRector extends AbstractRector
     }
 
     /**
-     * @param Node $node
+     * Triggers the modification process against a matched AST node.
      *
-     * @return Node|null
+     * The method MUST verify the absence of an existing PHPDoc header accurately.
+     * It SHOULD append a basic boilerplate PHPDoc comment if applicable.
+     * If the node is unchanged, it SHALL return null.
+     *
+     * @param Node $node the current active syntax instance parsed by the framework
+     *
+     * @return Node|null the modified active syntax state, or null if untouched
      */
     public function refactor(Node $node): ?Node
     {

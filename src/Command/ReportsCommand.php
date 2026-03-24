@@ -24,9 +24,17 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\ob_start;
 use function Safe\ob_get_clean;
 
+/**
+ * Coordinates the generation of Fast Forward documentation frontpage and related reports.
+ * This class MUST NOT be overridden and SHALL securely combine docs and testing commands.
+ */
 final class ReportsCommand extends AbstractCommand
 {
     /**
+     * Configures the metadata for the reports generation command.
+     *
+     * The method MUST identify the command correctly and describe its intent broadly.
+     *
      * @return void
      */
     protected function configure(): void
@@ -40,10 +48,15 @@ final class ReportsCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the generation logic for diverse reports.
      *
-     * @return int
+     * The method MUST run the underlying `docs` and `tests` commands. It SHALL process
+     * and generate the frontpage output file successfully.
+     *
+     * @param InputInterface $input the structured inputs holding specific arguments
+     * @param OutputInterface $output the designated output interface
+     *
+     * @return int the integer outcome from the base process execution
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -70,6 +83,11 @@ final class ReportsCommand extends AbstractCommand
     }
 
     /**
+     * Generates the compiled documentation frontpage correctly.
+     *
+     * This method MUST collect the configured render template and write it persistently
+     * to the `public/index.html` directory.
+     *
      * @return void
      */
     private function generateFrontpage(): void
@@ -87,10 +105,15 @@ final class ReportsCommand extends AbstractCommand
     }
 
     /**
-     * @param string $title
-     * @param array $links
+     * Constructs string variations defining standard components by linking to predefined resources.
      *
-     * @return string
+     * The method MUST extract variables correctly and stream the content safely.
+     * It SHALL strictly return the interpreted string structure.
+     *
+     * @param string $title the main title intended for the index interface
+     * @param array<string, string> $links the associative array representing link titles and their URIs
+     *
+     * @return string the evaluated and parsed HTML content
      */
     private function renderTemplate(string $title, array $links): string
     {

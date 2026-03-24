@@ -23,11 +23,23 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+/**
+ * Represents the command responsible for checking and fixing code style issues.
+ * This class MUST NOT be overridden and SHALL rely on external tools like ECS and Composer Normalize.
+ */
 final class CodeStyleCommand extends AbstractCommand
 {
+    /**
+     * @var string the default configuration file used for EasyCodingStandard
+     */
     public const string CONFIG = 'ecs.php';
 
     /**
+     * Configures the current command.
+     *
+     * This method MUST define the name, description, help text, and options for the command.
+     * It SHALL register the `--fix` option to allow automatic resolutions of style issues.
+     *
      * @return void
      */
     protected function configure(): void
@@ -45,10 +57,15 @@ final class CodeStyleCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the code style checks and fixes block.
      *
-     * @return int
+     * The method MUST execute `composer update --lock`, `composer normalize`, and ECS using secure processes.
+     * It SHALL return `self::SUCCESS` if all commands succeed, or `self::FAILURE` otherwise.
+     *
+     * @param InputInterface $input the input interface to retrieve options
+     * @param OutputInterface $output the output interface to log messages
+     *
+     * @return int the status code of the command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

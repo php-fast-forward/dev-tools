@@ -25,10 +25,19 @@ use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 
+/**
+ * Implements the lifecycle of the Composer dev-tools extension framework.
+ * This plugin class MUST initialize and coordinate custom script registrations securely.
+ */
 final class Plugin implements Capable, PluginInterface
 {
     /**
-     * @return array
+     * Resolves the implemented Composer capabilities structure.
+     *
+     * This method MUST map the primary capability handlers to custom implementations.
+     * It SHALL describe how tools seamlessly integrate into the execution layer.
+     *
+     * @return array<string, string> the capability mapping configurations
      */
     public function getCapabilities(): array
     {
@@ -38,8 +47,13 @@ final class Plugin implements Capable, PluginInterface
     }
 
     /**
-     * @param Composer $composer
-     * @param IOInterface $io
+     * Handles activation lifecycle events for the Composer session.
+     *
+     * The method MUST ensure the `dev-tools` script capability exists inside `composer.json` extras.
+     * It SHOULD append it if currently missing.
+     *
+     * @param Composer $composer the primary package configuration instance over Composer
+     * @param IOInterface $io interactive communication channels
      *
      * @return void
      */
@@ -57,8 +71,12 @@ final class Plugin implements Capable, PluginInterface
     }
 
     /**
-     * @param Composer $composer
-     * @param IOInterface $io
+     * Cleans up operations during Composer plugin deactivation events.
+     *
+     * This method MUST implement the standard Composer lifecycle correctly, even if vacant.
+     *
+     * @param Composer $composer the primary metadata controller object
+     * @param IOInterface $io defined interactions proxy
      *
      * @return void
      */
@@ -68,8 +86,12 @@ final class Plugin implements Capable, PluginInterface
     }
 
     /**
-     * @param Composer $composer
-     * @param IOInterface $io
+     * Handles final uninstallation processes logically.
+     *
+     * This method MUST manage cleanup duties per Composer constraints, even if empty.
+     *
+     * @param Composer $composer system package registry utility
+     * @param IOInterface $io execution runtime outputs and inputs proxy interface
      *
      * @return void
      */

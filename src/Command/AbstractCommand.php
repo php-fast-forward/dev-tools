@@ -30,12 +30,24 @@ use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
 
+/**
+ * Provides a base configuration and common utilities for Composer commands.
+ * Extending classes MUST rely on this base abstraction to interact with the console
+ * application gracefully, and SHALL adhere to the expected return types for commands.
+ */
 abstract class AbstractCommand extends BaseCommand
 {
+    /**
+     * @var Filesystem The filesystem instance used for file operations. This property MUST be utilized for interacting with the file system securely.
+     */
     protected readonly Filesystem $filesystem;
 
     /**
-     * @param Filesystem|null $filesystem
+     * Constructs a new AbstractCommand instance.
+     *
+     * The method MAY accept a Filesystem instance; if omitted, it SHALL instantiate a new one.
+     *
+     * @param Filesystem|null $filesystem the filesystem utility to use
      */
     public function __construct(?Filesystem $filesystem = null)
     {
@@ -45,10 +57,16 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @param Process $command
-     * @param OutputInterface $output
+     * Executes a given system process gracefully and outputs its buffer.
      *
-     * @return int
+     * The method MUST execute the provided command ensuring the output is channeled
+     * to the OutputInterface. It SHOULD leverage TTY if supported. If the process
+     * fails, it MUST return `self::FAILURE`; otherwise, it SHALL return `self::SUCCESS`.
+     *
+     * @param Process $command the configured process instance to run
+     * @param OutputInterface $output the output interface to log warnings or results
+     *
+     * @return int the status code of the command execution
      */
     protected function runProcess(Process $command, OutputInterface $output): int
     {
@@ -86,7 +104,12 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @return string
+     * Retrieves the current working directory of the application.
+     *
+     * The method MUST return the initial working directory defined by the application.
+     * If not available, it SHALL fall back to the safe current working directory.
+     *
+     * @return string the absolute path to the current working directory
      */
     protected function getCurrentWorkingDirectory(): string
     {
@@ -95,9 +118,14 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @param string $relativePath
+     * Computes the absolute path for a given relative or absolute path.
      *
-     * @return string
+     * This method MUST return the exact path if it is already absolute.
+     * If relative, it SHALL make it absolute relying on the current working directory.
+     *
+     * @param string $relativePath the path to evaluate or resolve
+     *
+     * @return string the resolved absolute path
      */
     protected function getAbsolutePath(string $relativePath): string
     {
@@ -109,10 +137,15 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @param string $filename
-     * @param bool $force
+     * Determines the correct absolute path to a configuration file.
      *
-     * @return string
+     * The method MUST attempt to resolve the configuration file locally in the working directory.
+     * If absent and not forced, it SHALL provide the default equivalent from the package itself.
+     *
+     * @param string $filename the name of the configuration file
+     * @param bool $force determines whether to bypass fallback and forcefully return the local file path
+     *
+     * @return string the resolved absolute path to the configuration file
      */
     protected function getConfigFile(string $filename, bool $force = false): string
     {
@@ -128,11 +161,16 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param string $commandName
-     * @param OutputInterface $output
+     * Configures and executes a registered console command by name.
      *
-     * @return int
+     * The method MUST look up the command from the application and run it. It SHALL ignore generic
+     * validation errors and route the custom input and output correctly.
+     *
+     * @param string $commandName the name of the required command
+     * @param array|InputInterface $input the input arguments or array definition
+     * @param OutputInterface $output the interface for buffering output
+     *
+     * @return int the status code resulting from the dispatched command
      */
     protected function runCommand(string $commandName, array|InputInterface $input, OutputInterface $output): int
     {
@@ -149,7 +187,12 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @return array
+     * Retrieves configured PSR-4 namespaces from the composer configuration.
+     *
+     * This method SHALL parse the underlying `composer.json` using the Composer instance,
+     * and MUST provide an empty array if no specific paths exist.
+     *
+     * @return array the PSR-4 namespaces mappings
      */
     protected function getPsr4Namespaces(): array
     {
@@ -161,7 +204,12 @@ abstract class AbstractCommand extends BaseCommand
     }
 
     /**
-     * @return string
+     * Computes the human-readable title or description of the current application.
+     *
+     * The method SHOULD utilize the package description as the title, but MUST provide
+     * the raw package name as a fallback mechanism.
+     *
+     * @return string the computed title or description string
      */
     protected function getTitle(): string
     {

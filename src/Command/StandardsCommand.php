@@ -22,9 +22,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Executes the full suite of Fast Forward code standard checks.
+ * This class MUST NOT be modified through inheritance and SHALL streamline code validation workflows.
+ */
 final class StandardsCommand extends AbstractCommand
 {
     /**
+     * Configures constraints and arguments for the collective standard runner.
+     *
+     * This method MUST specify definitions and help texts appropriately. It SHALL
+     * expose an optional `--fix` mode.
+     *
      * @return void
      */
     protected function configure(): void
@@ -45,10 +54,15 @@ final class StandardsCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Evaluates multiple commands seamlessly in a sequential execution.
      *
-     * @return int
+     * The method MUST trigger refactoring, phpdoc generation, code styling, and reports building block consecutively.
+     * It SHALL reliably return a standard SUCCESS execution state on completion.
+     *
+     * @param InputInterface $input internal input arguments retrieved via terminal runtime constraints
+     * @param OutputInterface $output external output mechanisms
+     *
+     * @return int the status indicator describing the completion
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

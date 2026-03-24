@@ -29,10 +29,18 @@ use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
 use function Safe\preg_split;
 use function Safe\preg_replace;
 
+/**
+ * Implements automation targeting the removal of purposeless empty DocBlock structures natively.
+ * It MUST intercept specific nodes exclusively and SHALL prune invalid redundant properties transparently.
+ */
 final class RemoveEmptyDocBlockRector extends AbstractRector
 {
     /**
-     * @return RuleDefinition
+     * Resolves the defined documentation object detailing expected behavior parameters intrinsically.
+     *
+     * The method MUST clarify accurately to external systems the primary objective successfully.
+     *
+     * @return RuleDefinition the instantiated declaration reference properly bounded natively
      */
     public function getRuleDefinition(): RuleDefinition
     {
@@ -40,7 +48,11 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
     }
 
     /**
-     * @return array
+     * Exposes intercepted root AST targets consistently during analytical sweeps functionally.
+     *
+     * The method MUST enforce inspections primarily on class frames and class components cleanly.
+     *
+     * @return array<int, class-string<Node>> bound runtime types reliably tracked correctly
      */
     public function getNodeTypes(): array
     {
@@ -48,9 +60,14 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
     }
 
     /**
-     * @param Node $node
+     * Strips empty document definitions structurally from the designated AST dynamically parsed.
      *
-     * @return Node|null
+     * The method MUST systematically evaluate content verifying an absolute absence accurately.
+     * If validated, it SHALL destroy the related virtual node properties carefully.
+     *
+     * @param Node $node the dynamic input tree chunk inherently processed strictly
+     *
+     * @return Node|null the streamlined object successfully truncated or null unhandled
      */
     public function refactor(Node $node): ?Node
     {
@@ -87,9 +104,13 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
     }
 
     /**
-     * @param string $docBlock
+     * Ascertains visually and technically if a provided block comprises an absolute empty placeholder structure safely.
      *
-     * @return bool
+     * The method MUST strip control characters accurately isolating legitimate characters completely.
+     *
+     * @param string $docBlock the textual contents actively extracted continuously dynamically natively
+     *
+     * @return bool success configuration inherently signaling absolute absence accurately effectively strictly
      */
     private function isEmptyDocBlock(string $docBlock): bool
     {

@@ -23,9 +23,18 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+/**
+ * Handles the generation of API documentation for the project.
+ * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
+ */
 final class DocsCommand extends AbstractCommand
 {
     /**
+     * Configures the command instance.
+     *
+     * The method MUST set up the name and description. It MAY accept an optional `--target` option
+     * pointing to an alternative configuration target path.
+     *
      * @return void
      */
     protected function configure(): void
@@ -43,10 +52,15 @@ final class DocsCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the generation of the documentation files.
      *
-     * @return int
+     * This method MUST compile arguments based on PSR-4 namespaces to feed into phpDocumentor.
+     * It SHOULD provide feedback on generation progress, and SHALL return `self::SUCCESS` on success.
+     *
+     * @param InputInterface $input the input details for the command
+     * @param OutputInterface $output the output mechanism for logging
+     *
+     * @return int the final execution status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -56,6 +70,7 @@ final class DocsCommand extends AbstractCommand
             $this->getAbsolutePath('vendor/bin/phpdoc'),
             '--cache-folder',
             $this->getCurrentWorkingDirectory() . '/tmp/cache/phpdoc',
+            '--visibility=public,protected',
         ];
 
         $psr4Namespaces = $this->getPsr4Namespaces();
@@ -81,6 +96,7 @@ final class DocsCommand extends AbstractCommand
             ...$arguments,
             '--target',
             $this->getCurrentWorkingDirectory() . '/docs/wiki',
+            '--visibility=public,protected',
             '--template',
             'vendor/saggre/phpdocumentor-markdown/themes/markdown',
         ]);

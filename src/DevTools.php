@@ -27,10 +27,19 @@ use Symfony\Component\Console\Command\CompleteCommand;
 use Symfony\Component\Console\Command\DumpCompletionCommand;
 use Symfony\Component\Console\Command\HelpCommand;
 
+/**
+ * Wraps the fast-forward console tooling suite conceptually as an isolated application instance.
+ * Extending the base application, it MUST provide default command injections safely.
+ */
 final class DevTools extends Application
 {
     /**
-     * @param CommandProvider|null $commandProvider
+     * Initializes the DevTools global context and dependency graph.
+     *
+     * The method MUST define default configurations and MAY accept an explicit command provider.
+     * It SHALL instruct the runner to treat the `standards` command generically as its default endpoint.
+     *
+     * @param CommandProvider|null $commandProvider provides the execution references securely, defaults dynamically
      */
     public function __construct(
         private readonly ?CommandProvider $commandProvider = new DevToolsCommandProvider(),
@@ -40,7 +49,12 @@ final class DevTools extends Application
     }
 
     /**
-     * @return array
+     * Aggregates default processes attached safely to the environment base lifecycle.
+     *
+     * The method MUST inject core operational constraints and external definitions seamlessly.
+     * It SHALL execute an overriding merge logically combining provider and utility features.
+     *
+     * @return array<int, mixed> the collected list of functional commands configured to run
      */
     #[Override]
     protected function getDefaultCommands(): array
