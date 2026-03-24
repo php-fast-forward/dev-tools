@@ -55,7 +55,7 @@ final class RefactorCommand extends AbstractCommand
         $output->writeln('<info>Running Rector for code refactoring...</info>');
 
         $command = new Process([
-            \dirname(__DIR__, 2) . '/vendor/bin/rector',
+            $this->getAbsolutePath('vendor/bin/rector'),
             'process',
             '--config',
             parent::getConfigFile(self::CONFIG),

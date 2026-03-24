@@ -141,7 +141,6 @@ abstract class AbstractCommand extends BaseCommand
         $application = $this->getApplication();
 
         $command = $application->find($commandName);
-        $command->ignoreValidationErrors();
 
         if (\is_array($input)) {
             $input = new ArgvInput($input);

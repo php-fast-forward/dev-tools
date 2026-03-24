@@ -53,7 +53,7 @@ final class DocsCommand extends AbstractCommand
         $output->writeln('<info>Generating API documentation...</info>');
 
         $arguments = [
-            \dirname(__DIR__, 2) . '/vendor/bin/phpdoc',
+            $this->getAbsolutePath('vendor/bin/phpdoc'),
             '--cache-folder',
             $this->getCurrentWorkingDirectory() . '/tmp/cache/phpdoc',
         ];

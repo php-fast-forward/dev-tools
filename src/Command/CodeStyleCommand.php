@@ -63,7 +63,7 @@ final class CodeStyleCommand extends AbstractCommand
         parent::runProcess($command, $output);
 
         $command = new Process([
-            \dirname(__DIR__, 2) . '/vendor/bin/ecs',
+            $this->getAbsolutePath('vendor/bin/ecs'),
             '--config=' . parent::getConfigFile(self::CONFIG),
             $input->getOption('fix') ? '--fix' : '--clear-cache',
         ]);

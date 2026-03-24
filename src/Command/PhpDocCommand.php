@@ -102,7 +102,7 @@ final class PhpDocCommand extends AbstractCommand
     private function runRector(InputInterface $input, OutputInterface $output): int
     {
         $arguments = [
-            \dirname(__DIR__, 2) . '/vendor/bin/rector',
+            $this->getAbsolutePath('vendor/bin/rector'),
             'process',
             '--config',
             parent::getConfigFile(RefactorCommand::CONFIG),

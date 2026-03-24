@@ -80,7 +80,7 @@ final class TestsCommand extends AbstractCommand
         $output->writeln('<info>Running PHPUnit tests...</info>');
 
         $arguments = [
-            \dirname(__DIR__, 2) . '/vendor/bin/phpunit',
+            $this->getAbsolutePath('vendor/bin/phpunit'),
             '--configuration=' . parent::getConfigFile(self::CONFIG),
             '--bootstrap=' . $this->resolvePath($input, 'bootstrap'),
         ];
@@ -90,6 +90,8 @@ final class TestsCommand extends AbstractCommand
         }
 
         if ($input->getOption('coverage')) {
+            $output->writeln('<info>Generating code coverage reports on path: ' . $this->resolvePath($input, 'coverage') . '</info>');
+
             foreach ($this->getPsr4Namespaces() as $path) {
                 $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
             }
