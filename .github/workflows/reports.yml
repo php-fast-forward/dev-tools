@@ -47,8 +47,7 @@ jobs:
               with:
                 php_version: '8.3'
                 php_extensions: pcov
-                command: 'dev-tools'
-                args: 'reports'
+                command: 'dev-tools reports'
 
             - name: Fix permissions
               run: |
