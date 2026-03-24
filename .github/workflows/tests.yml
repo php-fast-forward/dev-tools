@@ -1,0 +1,73 @@
+name: Run PHPUnit Tests
+
+on:
+    workflow_dispatch:
+    pull_request:
+    push:
+        branches: [ "main" ]
+
+permissions:
+    contents: write
+    pages: write
+    id-token: write
+
+concurrency:
+    group: "pages"
+    cancel-in-progress: false
+
+jobs:
+    tests:
+        name: Run Tests
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                php-version: [ '8.3', '8.4', '8.5' ]
+        steps:
+            - uses: actions/checkout@v4
+              with:
+                submodules: recursive
+                ref: ${{ github.head_ref || github.ref_name }}
+
+            - name: Get Composer Cache Directory
+              id: composer-cache
+              run: |
+                  echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v4
+              with:
+                  path: ${{ steps.composer-cache.outputs.dir }}
+                  key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                  restore-keys: |
+                      ${{ runner.os }}-composer-
+
+            - name: Install dependencies
+              uses: php-actions/composer@v6
+              env:
+                  COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+              with:
+                  php_version: ${{ matrix.php-version }}
+
+            - name: Run PHPUnit tests
+              uses: php-actions/composer@v6
+              with:
+                php_version: ${{ matrix.php-version }}
+                php_extensions: pcov
+                command: 'dev-tools'
+                args: 'tests --coverage=public/coverage'
+
+            - name: Ensure minimum code coverage
+              env:
+                  MINIMUM_COVERAGE: 80
+              run: |
+                  COVERAGE=$(php -r '
+                      $xml = new SimpleXMLElement(file_get_contents("public/coverage/clover.xml"));
+                      $m   = $xml->project->metrics;
+                      $pct = (int) round(((int) $m["coveredstatements"]) * 100 / (int) $m["statements"]);
+                      echo $pct;
+                  ')
+                  echo "Coverage: ${COVERAGE}%"
+                  if [ "${COVERAGE}" -lt ${{ env.MINIMUM_COVERAGE }} ]; then
+                    echo "Code coverage below ${{ env.MINIMUM_COVERAGE }}% threshold."
+                    exit 1
+                  fi

@@ -1,0 +1,84 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
+namespace FastForward\DevTools\Tests\Composer\Capability;
+
+use FastForward\DevTools\Command\AbstractCommand;
+use FastForward\DevTools\Command\CodeStyleCommand;
+use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Command\PhpDocCommand;
+use FastForward\DevTools\Command\RefactorCommand;
+use FastForward\DevTools\Command\ReportsCommand;
+use FastForward\DevTools\Command\StandardsCommand;
+use FastForward\DevTools\Command\TestsCommand;
+use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
+
+#[CoversClass(DevToolsCommandProvider::class)]
+#[UsesClass(CodeStyleCommand::class)]
+#[UsesClass(RefactorCommand::class)]
+#[UsesClass(TestsCommand::class)]
+#[UsesClass(PhpDocCommand::class)]
+#[UsesClass(DocsCommand::class)]
+#[UsesClass(StandardsCommand::class)]
+final class DevToolsCommandProviderTest extends TestCase
+{
+    private DevToolsCommandProvider $commandProvider;
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->commandProvider = new DevToolsCommandProvider();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommandsWillReturnAllSupportedCommandsInExpectedOrder(): void
+    {
+        self::assertEquals(
+            [
+                new CodeStyleCommand(),
+                new RefactorCommand(),
+                new TestsCommand(),
+                new PhpDocCommand(),
+                new DocsCommand(),
+                new StandardsCommand(),
+                new ReportsCommand(),
+            ],
+            $this->commandProvider->getCommands(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommandsWillReturnOnlyAbstractCommandImplementations(): void
+    {
+        foreach ($this->commandProvider->getCommands() as $command) {
+            self::assertInstanceOf(AbstractCommand::class, $command);
+        }
+    }
+}

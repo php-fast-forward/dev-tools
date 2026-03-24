@@ -1,0 +1,76 @@
+{
+    "name": "fast-forward/dev-tools",
+    "description": "Fast Forward Development Tools for PHP projects",
+    "license": "MIT",
+    "type": "composer-plugin",
+    "keywords": [
+        "dev-tools",
+        "testing",
+        "static analysis",
+        "code style",
+        "rector",
+        "ecs",
+        "fast-forward"
+    ],
+    "authors": [
+        {
+            "name": "Felipe Sayão Lobato Abreu",
+            "email": "github@mentordosnerds.com"
+        }
+    ],
+    "homepage": "https://github.com/php-fast-forward/dev-tools",
+    "support": {
+        "issues": "https://github.com/php-fast-forward/dev-tools/issues",
+        "source": "https://github.com/php-fast-forward/dev-tools"
+    },
+    "require": {
+        "php": "^8.3",
+        "composer-plugin-api": "^2.0",
+        "ergebnis/composer-normalize": "^2.50",
+        "ergebnis/rector-rules": "^1.14",
+        "fakerphp/faker": "^1.24",
+        "friendsofphp/php-cs-fixer": "^3.94",
+        "phpdocumentor/shim": "^3.9",
+        "phpowermove/docblock": "^4.0",
+        "phpspec/prophecy-phpunit": "^2.5",
+        "phpunit/phpunit": "^12.5",
+        "rector/rector": "^2.3",
+        "saggre/phpdocumentor-markdown": "^1.0",
+        "symplify/easy-coding-standard": "^13.0",
+        "thecodingmachine/safe": "^3.4"
+    },
+    "require-dev": {
+        "composer/composer": "^2.9"
+    },
+    "minimum-stability": "stable",
+    "autoload": {
+        "psr-4": {
+            "FastForward\\DevTools\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "FastForward\\DevTools\\Tests\\": "tests/"
+        }
+    },
+    "bin": "bin/devtools",
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "phpdocumentor/shim": true
+        },
+        "platform": {
+            "php": "8.3.0"
+        },
+        "sort-packages": true
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-main": "1.x-dev"
+        },
+        "class": "FastForward\\DevTools\\Composer\\Plugin"
+    },
+    "scripts": {
+        "dev-tools": "./bin/dev-tools"
+    }
+}

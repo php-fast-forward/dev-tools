@@ -1,0 +1,51 @@
+<?php
+
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
+use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
+use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestCaseStaticMethodCallsFixer;
+use Symplify\EasyCodingStandard\Config\ECSConfig;
+
+use function Safe\getcwd;
+
+return ECSConfig::configure()
+    ->withPaths([getcwd()])
+    ->withSkip([
+        getcwd() . '/public',
+        getcwd() . '/resources',
+        getcwd() . '/vendor',
+        getcwd() . '/tmp',
+        PhpdocToCommentFixer::class,
+        NoSuperfluousPhpdocTagsFixer::class,
+        NoEmptyPhpdocFixer::class,
+        PhpdocNoEmptyReturnFixer::class,
+        GlobalNamespaceImportFixer::class,
+    ])
+    ->withRootFiles()
+    ->withPhpCsFixerSets(symfony: true, symfonyRisky: true, auto: true, autoRisky: true)
+    ->withPreparedSets(psr12: true, common: true, symplify: true, strict: true, cleanCode: true)
+    ->withConfiguredRule(PhpdocAlignFixer::class, [
+        'align' => 'left',
+    ])
+    ->withConfiguredRule(PhpUnitTestCaseStaticMethodCallsFixer::class, [
+        'call_type' => 'self',
+    ]);
