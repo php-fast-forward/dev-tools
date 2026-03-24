@@ -39,6 +39,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(PhpDocCommand::class)]
 #[UsesClass(DocsCommand::class)]
 #[UsesClass(StandardsCommand::class)]
+#[UsesClass(ReportsCommand::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
     private DevToolsCommandProvider $commandProvider;

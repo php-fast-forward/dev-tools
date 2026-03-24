@@ -54,7 +54,7 @@ jobs:
                 php_version: ${{ matrix.php-version }}
                 php_extensions: pcov
                 command: 'dev-tools'
-                args: 'tests --coverage=./public/coverage'
+                args: 'tests -- --coverage=./public/coverage'
 
             - name: Ensure minimum code coverage
               run: php vendor/bin/coverage-check ./public/coverage/clover.xml 80
