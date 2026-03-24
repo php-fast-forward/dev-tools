@@ -46,11 +46,13 @@ final class Plugin implements Capable, PluginInterface
     public function activate(Composer $composer, IOInterface $io): void
     {
         // Add dev-tools script to composer.json if not already present
-        $extra = $composer->getPackage()->getExtra() ?? [];
-        
-        if (!isset($extra['scripts']['dev-tools'])) {
+        $extra = $composer->getPackage()
+            ->getExtra() ?? [];
+
+        if (! isset($extra['scripts']['dev-tools'])) {
             $extra['scripts']['dev-tools'] = 'dev-tools';
-            $composer->getPackage()->setExtra($extra);
+            $composer->getPackage()
+                ->setExtra($extra);
         }
     }
 

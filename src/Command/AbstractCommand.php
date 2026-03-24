@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Command;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Composer\Command\BaseCommand;
 use Composer\InstalledVersions;
-use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -62,18 +61,16 @@ abstract class AbstractCommand extends BaseCommand
         if (Process::isTtySupported()) {
             $command->setTty(true);
         } else {
-            $output->writeln('<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>');
+            $output->writeln(
+                '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
+            );
 
-            $callback = function (string $type, string $buffer) use ($output) {
+            $callback = function (string $type, string $buffer) use ($output): void {
                 $output->write($buffer);
             };
         }
 
-        $process = $processHelper->run(
-            output: $output, 
-            cmd: $command,
-            callback: $callback
-        );
+        $process = $processHelper->run(output: $output, cmd: $command, callback: $callback);
 
         if (! $process->isSuccessful()) {
             $output->writeln(\sprintf(
@@ -142,6 +139,7 @@ abstract class AbstractCommand extends BaseCommand
         $application = $this->getApplication();
 
         $command = $application->find($commandName);
+        $command->ignoreValidationErrors();
 
         if (\is_array($input)) {
             $input = new ArrayInput($input);

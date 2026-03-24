@@ -90,7 +90,9 @@ final class TestsCommand extends AbstractCommand
         }
 
         if ($input->getOption('coverage')) {
-            $output->writeln('<info>Generating code coverage reports on path: ' . $this->resolvePath($input, 'coverage') . '</info>');
+            $output->writeln(
+                '<info>Generating code coverage reports on path: ' . $this->resolvePath($input, 'coverage') . '</info>'
+            );
 
             foreach ($this->getPsr4Namespaces() as $path) {
                 $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
