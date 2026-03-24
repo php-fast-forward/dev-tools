@@ -53,11 +53,17 @@ jobs:
                 command: 'dev-tools'
                 args: 'reports'
 
+            - name: Fix permissions
+              run: |
+                chmod -c -R +rX "public/" | while read line; do
+                    echo "::warning title=Invalid file permissions automatically fixed::$line"
+                done
+
             - name: Upload artifact
               if: github.ref == 'refs/heads/main'
               uses: actions/upload-pages-artifact@v3
               with:
-                  path: public/
+                path: public/
 
     deploy:
         if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
