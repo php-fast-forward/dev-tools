@@ -22,6 +22,7 @@ use Symfony\Component\Console\Helper\ProcessHelper;
 use Composer\Command\BaseCommand;
 use Composer\InstalledVersions;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -143,7 +144,7 @@ abstract class AbstractCommand extends BaseCommand
         $command = $application->find($commandName);
 
         if (\is_array($input)) {
-            $input = new ArgvInput($input);
+            $input = new ArrayInput($input);
         }
 
         return $command->run($input, $output);

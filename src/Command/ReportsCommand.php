@@ -53,10 +53,10 @@ final class ReportsCommand extends AbstractCommand
         $coveragePath = $this->getAbsolutePath('public/coverage');
 
         $output->writeln('<info>Generating API documentation on path: ' . $docsPath . '</info>');
-        $this->runCommand('docs', ['target' => $docsPath], $output);
+        $this->runCommand('docs', ['--target' => $docsPath], $output);
 
         $output->writeln('<info>Generating test coverage report on path: ' . $coveragePath . '</info>');
-        $this->runCommand('tests', ['coverage' => $coveragePath], $output);
+        $this->runCommand('tests', ['--coverage' => $coveragePath], $output);
 
         $this->generateFrontpage();
 
