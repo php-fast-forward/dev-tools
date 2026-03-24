@@ -48,6 +48,7 @@ final class WikiCommand extends AbstractCommand
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated Markdown documentation.',
+                default: '.github/wiki'
             );
     }
 
@@ -89,7 +90,7 @@ final class WikiCommand extends AbstractCommand
         $command = new Process([
             ...$arguments,
             '--target',
-            $this->getAbsolutePath('wiki'),
+            $this->getAbsolutePath($input->getOption('target')),
             '--template',
             'vendor/saggre/phpdocumentor-markdown/themes/markdown',
         ]);

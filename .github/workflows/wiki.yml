@@ -49,11 +49,11 @@ jobs:
         with:
           php_version: '8.3'
           command: 'dev-tools'
-          args: 'wiki -- --target=.wiki'
+          args: 'wiki -- --target=.github/wiki'
 
       - name: Prepare wiki submodule branch
         id: wiki_branch
-        working-directory: .wiki
+        working-directory: .github/wiki
         run: |
           git fetch origin
           git checkout master || git checkout -b master
@@ -63,7 +63,7 @@ jobs:
         id: wiki_commit
         uses: EndBug/add-and-commit@v10
         with:
-          cwd: .wiki
+          cwd: .github/wiki
           add: .
           message: "Update wiki docs"
           default_author: github_actions
@@ -75,7 +75,7 @@ jobs:
         id: parent_commit
         uses: EndBug/add-and-commit@v10
         with:
-          add: .wiki
+          add: .github/wiki
           message: "Update wiki submodule pointer"
           default_author: github_actions
           pull: "--rebase"
