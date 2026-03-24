@@ -107,7 +107,7 @@ final class PhpDocCommand extends AbstractCommand
             '--config',
             parent::getConfigFile(RefactorCommand::CONFIG),
             '--only',
-            AddMissingMethodPhpDocRector::class,
+            '\\' . AddMissingMethodPhpDocRector::class,
         ];
 
         if (! $input->getOption('fix')) {
