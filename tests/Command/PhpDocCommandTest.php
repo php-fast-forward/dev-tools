@@ -79,9 +79,37 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
      * @return void
      */
     #[Test]
+    public function executeWillCopyDocHeaderWhenMissing(): void
+    {
+        $this->filesystem->exists(\Safe\getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
+        $this->filesystem->dumpFile(\Prophecy\Argument::any(), \Prophecy\Argument::any())->shouldBeCalled();
+
+        $this->willRunProcessWithCallback(static fn(): bool => true);
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillHandleDumpFileException(): void
+    {
+        $this->filesystem->exists(\Safe\getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
+        $this->filesystem->dumpFile(\Prophecy\Argument::any(), \Prophecy\Argument::any())->willThrow(new \RuntimeException('dump error'));
+
+        $this->willRunProcessWithCallback(static fn(): bool => true);
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWillReturnFailureIfProcessFails(): void
     {
-        $this->willRunProcessWithCallback(static fn(): true => true, false);
+        $this->willRunProcessWithCallback(static fn(): bool => true, false);
 
         self::assertSame(PhpDocCommand::FAILURE, $this->invokeExecute());
     }

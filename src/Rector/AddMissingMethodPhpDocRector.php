@@ -32,7 +32,7 @@ use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Throw_;
+use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\UnionType;
 use PhpParser\NodeFinder;
 use Rector\PHPStan\ScopeFetcher;
@@ -57,7 +57,12 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
      */
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add basic PHPDoc to methods without docblock', []);
+        return new RuleDefinition('Add basic PHPDoc to methods without docblock', [
+            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+                'public function foo() {}',
+                "/**\n * \n */\npublic function foo() {}"
+            )
+        ]);
     }
 
     /**
@@ -337,15 +342,17 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
         $exceptions = [];
 
         foreach ($throwNodes as $throwNode) {
-            if (! $throwNode->expr instanceof New_) {
+            $throwExpr = $throwNode->expr;
+            
+            if (! $throwExpr instanceof New_) {
                 continue;
             }
 
-            if (! $throwNode->expr->class instanceof Name) {
+            if (! $throwExpr->class instanceof Name) {
                 continue;
             }
 
-            $exceptions[] = $this->resolveNameToString($throwNode->expr->class);
+            $exceptions[] = $this->resolveNameToString($throwExpr->class);
         }
 
         return array_values(array_unique($exceptions));

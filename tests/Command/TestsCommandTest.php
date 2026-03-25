@@ -113,9 +113,26 @@ final class TestsCommandTest extends AbstractCommandTestCase
      * @return void
      */
     #[Test]
+    public function executeWithCoverageWillIncludeCoverageArguments(): void
+    {
+        $this->willRunProcessWithCallback(function (Process $process): bool {
+            $commandLine = $process->getCommandLine();
+
+            return str_contains($commandLine, '--coverage-text')
+                && str_contains($commandLine, '--coverage-html=');
+        });
+
+        $this->input->getOption('coverage')->willReturn('public/coverage');
+        $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWillReturnFailureIfProcessFails(): void
     {
-        $this->willRunProcessWithCallback(static fn(): true => true, false);
+        $this->willRunProcessWithCallback(static fn(): bool => true, false);
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }

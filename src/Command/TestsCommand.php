@@ -100,6 +100,10 @@ final class TestsCommand extends AbstractCommand
             $this->getAbsolutePath('vendor/bin/phpunit'),
             '--configuration=' . parent::getConfigFile(self::CONFIG),
             '--bootstrap=' . $this->resolvePath($input, 'bootstrap'),
+            '--display-deprecations',
+            '--display-phpunit-deprecations',
+            '--display-incomplete',
+            '--display-skipped',
         ];
 
         if (! $input->getOption('no-cache')) {

@@ -63,6 +63,10 @@ abstract class AbstractCommandTestCase extends TestCase
 
     protected ObjectProphecy $application;
 
+    protected ObjectProphecy $composer;
+
+    protected ObjectProphecy $package;
+
     /**
      * @return void
      */
@@ -73,6 +77,20 @@ abstract class AbstractCommandTestCase extends TestCase
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->processHelper = $this->prophesize(ProcessHelper::class);
         $this->application = $this->prophesize(Application::class);
+        $this->composer = $this->prophesize(\Composer\Composer::class);
+        $this->package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
+
+        $this->package->getAutoload()->willReturn([
+            'psr-4' => [
+                'FastForward\\DevTools\\' => 'src/',
+            ],
+        ]);
+        $this->package->getName()->willReturn('fast-forward/dev-tools');
+        $this->package->getDescription()->willReturn('Fast Forward Dev Tools plugin');
+
+        $this->composer->getPackage()->willReturn($this->package->reveal());
+
+        $this->application->getComposer(Argument::cetera())->willReturn($this->composer->reveal());
 
         $this->filesystem->isAbsolutePath(Argument::any())->willReturn(false);
 
