@@ -1,3 +1,6 @@
 [submodule "docs/wiki"]
 	path = .github/wiki
 	url = https://github.com/php-fast-forward/dev-tools.wiki.git
+[submodule ".github/wiki"]
+	path = .github/wiki
+	url = https://github.com/php-fast-forward/dev-tools.wiki.git
