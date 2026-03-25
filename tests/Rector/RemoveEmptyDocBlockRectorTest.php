@@ -114,4 +114,35 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
         self::assertNull($result->getDocComment());
         self::assertSame([$comment], $result->getAttribute('comments'));
     }
+
+    #[Test]
+    public function refactorWillRemoveSingleLineEmptyDocComment(): void
+    {
+        $node = new Class_('TestClass');
+        $node->setDocComment(new Doc('/** */'));
+
+        $result = $this->rector->refactor($node);
+
+        self::assertInstanceOf(Class_::class, $result);
+        self::assertNull($result->getDocComment());
+    }
+
+    #[Test]
+    public function refactorWillRemoveEmptyDocCommentWithSpaces(): void
+    {
+        $node = new ClassMethod('testMethod');
+        $node->setDocComment(new Doc("/**  \n  *  \n  */"));
+
+        $result = $this->rector->refactor($node);
+
+        self::assertInstanceOf(ClassMethod::class, $result);
+        self::assertNull($result->getDocComment());
+    }
+
+    #[Test]
+    public function refactorWillReturnNullForNonSupportedNodes(): void
+    {
+        $node = new \PhpParser\Node\Expr\Variable('var');
+        self::assertNull($this->rector->refactor($node));
+    }
 }

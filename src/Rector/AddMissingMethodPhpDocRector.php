@@ -127,7 +127,8 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
         $existingThrowsTypes = $this->getExistingThrowsTypes($docblock);
 
         foreach ($this->resolveThrows($node) as $exception) {
-            if (\in_array($exception, $existingThrowsTypes, true)) {
+            $normalizedException = ltrim($exception, '\\');
+            if (\in_array($normalizedException, $existingThrowsTypes, true)) {
                 continue;
             }
 
@@ -135,6 +136,7 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
             $throwsTag->setType($exception);
 
             $docblock->appendTag($throwsTag);
+            $existingThrowsTypes[] = $normalizedException;
         }
 
         if ($docblock->isEmpty()) {
@@ -232,11 +234,7 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
      */
     private function shouldInsertBlankLineBetweenTagGroups(string $previousTagGroup, string $currentTagGroup): bool
     {
-        if ('param' === $previousTagGroup && 'return' === $currentTagGroup) {
-            return true;
-        }
-
-        return ('param' === $previousTagGroup || 'return' === $previousTagGroup) && 'throws' === $currentTagGroup;
+        return $previousTagGroup !== $currentTagGroup;
     }
 
     /**
@@ -312,7 +310,7 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
                 continue;
             }
 
-            $types[] = $type;
+            $types[] = ltrim($type, '\\');
         }
 
         return array_values(array_unique($types));

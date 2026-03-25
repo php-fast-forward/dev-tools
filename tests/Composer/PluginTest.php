@@ -74,9 +74,30 @@ final class PluginTest extends TestCase
      * @return void
      */
     #[Test]
-    public function activateWillDoNothing(): void
+    public function activateWillAddDevToolsScriptIfMissing(): void
     {
-        self::markTestIncomplete('The activate method needs to be tested.');
+        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
+        $package->getExtra()->willReturn([]);
+        $package->setExtra(['scripts' => ['dev-tools' => 'dev-tools']])->shouldBeCalled();
+
+        $this->composer->getPackage()->willReturn($package->reveal());
+
+        $this->plugin->activate($this->composer->reveal(), $this->io->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function activateWillDoNothingIfDevToolsScriptIsPresent(): void
+    {
+        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
+        $package->getExtra()->willReturn(['scripts' => ['dev-tools' => 'dev-tools']]);
+        $package->setExtra(\Prophecy\Argument::any())->shouldNotBeCalled();
+
+        $this->composer->getPackage()->willReturn($package->reveal());
+
+        $this->plugin->activate($this->composer->reveal(), $this->io->reveal());
     }
 
     /**

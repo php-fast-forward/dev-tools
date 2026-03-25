@@ -119,12 +119,6 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
      */
     private function isEmptyDocBlock(string $docBlock): bool
     {
-        $docblock = new Docblock($docBlock);
-
-        if (! $docblock->isEmpty()) {
-            return false;
-        }
-
         $lines = preg_split('/\R/', $docBlock);
 
         if (! \is_array($lines)) {
@@ -133,21 +127,13 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
 
         foreach ($lines as $line) {
             $normalizedLine = trim((string) $line);
-            if ('/**' === $normalizedLine) {
-                continue;
-            }
-
-            if ('*/' === $normalizedLine) {
-                continue;
-            }
-
-            if ('*' === $normalizedLine) {
+            if ('/**' === $normalizedLine || '*/' === $normalizedLine || '*' === $normalizedLine) {
                 continue;
             }
 
             $normalizedLine = preg_replace('#^/\*\*\s*#', '', $normalizedLine);
-            $normalizedLine = preg_replace('#^\*\s?#', '', (string) $normalizedLine);
             $normalizedLine = preg_replace('#\s*\*/$#', '', (string) $normalizedLine);
+            $normalizedLine = preg_replace('#^\*\s?#', '', (string) $normalizedLine);
             $normalizedLine = trim((string) $normalizedLine);
 
             if ('' !== $normalizedLine) {

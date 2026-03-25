@@ -113,6 +113,23 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
 
         self::assertSame(PhpDocCommand::FAILURE, $this->invokeExecute());
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillHandleComposerExceptionDuringDocheaderCreation(): void
+    {
+        // Mock getComposer to return null, which makes requireComposer return null (swallowed)
+        $this->application->getComposer()->willReturn(null);
+        
+        // Mock exists to return true for the project header so it returns early
+        $this->filesystem->exists(\Safe\getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(true);
+
+        $this->willRunProcessWithCallback(static fn(): bool => true);
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
 }
 
 // VDI
