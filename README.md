@@ -43,8 +43,11 @@ composer dev-tools refactor
 # Check and fix PHPDoc comments
 composer dev-tools phpdoc
 
-# Generate API documentation using phpDocumentor
+# Generate HTML API documentation using phpDocumentor
 composer dev-tools docs
+
+# Generate Markdown documentation for the wiki
+composer dev-tools wiki
 
 # Generate documentation frontpage and related reports
 composer dev-tools reports

@@ -45,16 +45,25 @@ Intelligently audits your project methods to identify lacking definitions, execu
 
    composer dev-tools phpdoc
 
-5. API Documentation (``docs``)
--------------------------------
+5. HTML Documentation (``docs``)
+--------------------------------
 
-Reads defined PSR-4 paths logically extracting explicit structures accurately. It deploys Markdown documentation describing your internal structural hierarchy inside ``docs/wiki``.
+Reads defined PSR-4 paths logically extracting explicit structures accurately. It deploys HTML documentation describing your internal structural hierarchy using phpDocumentor.
 
 .. code-block:: bash
 
    composer dev-tools docs
 
-6. Reports Output (``reports``)
+6. Wiki Markdown Documentation (``wiki``)
+-----------------------------------------
+
+Extracts explicit API structures and deploys Markdown documentation representing your architectural hierarchy directly into the ``.github/wiki`` repository.
+
+.. code-block:: bash
+
+   composer dev-tools wiki
+
+7. Reports Output (``reports``)
 -------------------------------
 
 Structurally consolidates distinct reporting commands, accurately aggregating testing coverage and docs into clean visual output components.
