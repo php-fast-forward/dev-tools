@@ -85,13 +85,9 @@ final class ReportsCommandTest extends AbstractCommandTestCase
 
         $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
             ->shouldBeCalled();
-        $this->output->writeln(
-            '<info>Generating API documentation on path: /Users/mentordosnerds/Sites/github.com/php-fast-forward/dev-tools/public</info>'
-        )
+        $this->output->writeln(Argument::containingString('Generating API documentation on path:'))
             ->shouldBeCalled();
-        $this->output->writeln(
-            '<info>Generating test coverage report on path: /Users/mentordosnerds/Sites/github.com/php-fast-forward/dev-tools/public/coverage</info>'
-        )
+        $this->output->writeln(Argument::containingString('Generating test coverage report on path:'))
             ->shouldBeCalled();
         $this->output->writeln('<info>Frontpage generation completed!</info>')
             ->shouldBeCalled();
