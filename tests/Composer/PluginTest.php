@@ -64,8 +64,9 @@ final class PluginTest extends TestCase
 
         $this->originalComposerEnv = (string) getenv('COMPOSER');
         $this->tempComposerFile = tempnam(sys_get_temp_dir(), 'composer_test');
-        file_put_contents($this->tempComposerFile, json_encode(['name' => 'test/package', 'scripts' => (object) []]));
-        
+        // O nome do pacote precisa ser fast-forward/dev-tools para que o método installScripts execute a lógica
+        file_put_contents($this->tempComposerFile, json_encode(['name' => 'fast-forward/dev-tools', 'scripts' => (object) []]));
+
         putenv("COMPOSER={$this->tempComposerFile}");
         $_ENV['COMPOSER'] = $this->tempComposerFile;
         $_SERVER['COMPOSER'] = $this->tempComposerFile;
@@ -115,6 +116,11 @@ final class PluginTest extends TestCase
     {
         $event = $this->prophesize(PackageEvent::class);
 
+        // Mock RootPackageInterface para getPackage()
+        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
+        $package->getName()->willReturn('fast-forward/dev-tools');
+        $this->composer->getPackage()->willReturn($package->reveal());
+
         $event->getComposer()
             ->willReturn($this->composer->reveal());
         $event->getIO()
@@ -127,8 +133,8 @@ final class PluginTest extends TestCase
 
         $data = json_decode(file_get_contents($this->tempComposerFile), true);
         self::assertArrayHasKey('scripts', $data);
-        self::assertSame('./bin/dev-tools', $data['scripts']['dev-tools']);
-        self::assertSame('./bin/dev-tools --fix', $data['scripts']['dev-tools:fix']);
+        self::assertSame('dev-tools', $data['scripts']['dev-tools']);
+        self::assertSame('dev-tools --fix', $data['scripts']['dev-tools:fix']);
     }
 
     /**
@@ -138,6 +144,11 @@ final class PluginTest extends TestCase
     public function onPostPackageUpdateWillInstallScripts(): void
     {
         $event = $this->prophesize(PackageEvent::class);
+
+        // Mock RootPackageInterface para getPackage()
+        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
+        $package->getName()->willReturn('fast-forward/dev-tools');
+        $this->composer->getPackage()->willReturn($package->reveal());
 
         $event->getComposer()
             ->willReturn($this->composer->reveal());
@@ -151,8 +162,8 @@ final class PluginTest extends TestCase
 
         $data = json_decode(file_get_contents($this->tempComposerFile), true);
         self::assertArrayHasKey('scripts', $data);
-        self::assertSame('./bin/dev-tools', $data['scripts']['dev-tools']);
-        self::assertSame('./bin/dev-tools --fix', $data['scripts']['dev-tools:fix']);
+        self::assertSame('dev-tools', $data['scripts']['dev-tools']);
+        self::assertSame('dev-tools --fix', $data['scripts']['dev-tools:fix']);
     }
 
     /**
