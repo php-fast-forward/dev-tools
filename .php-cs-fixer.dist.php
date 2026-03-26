@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 $rules = [
     'phpdoc_indent' => true,
-    'phpdoc_order' => true,
+    'phpdoc_order' => [
+        'order' => ['param', 'return', 'throws'],
+    ],
     'phpdoc_separation' => true,
     'phpdoc_trim' => true,
     'phpdoc_trim_consecutive_blank_line_separation' => true,
