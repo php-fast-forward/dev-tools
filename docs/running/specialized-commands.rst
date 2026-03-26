@@ -71,3 +71,12 @@ Structurally consolidates distinct reporting commands, accurately aggregating te
 .. code-block:: bash
 
    composer dev-tools reports
+
+8. Install Scripts (``install-scripts``)
+---------------------------------------
+
+Installs and synchronizes development scripts into the root ``composer.json`` file accurately. It ensures your project seamlessly integrates core toolkit shortcuts natively.
+
+.. code-block:: bash
+
+   composer dev-tools install-scripts
