@@ -25,7 +25,7 @@ Once installed, the plugin automatically exposes the `dev-tools` command via Com
 composer dev-tools
 
 # Automatically fix code standards issues where applicable
-composer dev-tools -- --fix
+composer dev-tools:fix
 ```
 
 You can also run individual commands for specific development tasks:
