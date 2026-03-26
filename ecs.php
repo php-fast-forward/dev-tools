@@ -17,6 +17,7 @@ declare(strict_types=1);
  */
 
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
+use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
@@ -39,6 +40,7 @@ return ECSConfig::configure()
         NoEmptyPhpdocFixer::class,
         PhpdocNoEmptyReturnFixer::class,
         GlobalNamespaceImportFixer::class,
+        GeneralPhpdocAnnotationRemoveFixer::class,
     ])
     ->withRootFiles()
     ->withPhpCsFixerSets(symfony: true, symfonyRisky: true, auto: true, autoRisky: true)
