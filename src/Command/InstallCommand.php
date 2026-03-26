@@ -24,6 +24,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Process\Process;
 
 /**
  * Represents the command responsible for installing development scripts into `composer.json`.
@@ -69,6 +70,7 @@ final class InstallCommand extends AbstractCommand
         $this->updateComposerJson();
         $this->createGitHubActionWorkflows();
         $this->copyEditorConfig();
+        $this->addRepositoryWikiGitSubmodule();
 
         return self::SUCCESS;
     }
@@ -163,5 +165,43 @@ final class InstallCommand extends AbstractCommand
 
         $content = $this->filesystem->readFile($source);
         $this->filesystem->dumpFile($target, $content);
+    }
+
+    /**
+     * Ensures the repository wiki is added as a git submodule in .github/wiki.
+     *
+     * This method checks if the .github/wiki directory exists. If not, it adds the repository's wiki as a submodule
+     * using the remote origin URL, replacing .git with .wiki.git. This allows automated documentation and wiki updates.
+     *
+     * @return void
+     */
+    private function addRepositoryWikiGitSubmodule(): void
+    {
+        $repositoryUrl = $this->getGitRepositoryUrl();
+
+        $wikiRepoUrl = str_replace('.git', '.wiki.git', $repositoryUrl);
+        $wikiSubmodulePath = $this->getConfigFile('.github/wiki', true);
+
+        if ($this->filesystem->exists($wikiSubmodulePath)) {
+            return;
+        }
+
+        $process = new Process(['git', 'submodule', 'add', $wikiRepoUrl, $wikiSubmodulePath]);
+        $process->mustRun();
+    }
+
+    /**
+     * Retrieves the git remote origin URL for the current repository.
+     *
+     * This method runs 'git config --get remote.origin.url' and returns the trimmed output.
+     *
+     * @return string The remote origin URL of the repository
+     */
+    private function getGitRepositoryUrl(): string
+    {
+        $process = new Process(['git', 'config', '--get', 'remote.origin.url']);
+        $process->mustRun();
+
+        return trim($process->getOutput());
     }
 }

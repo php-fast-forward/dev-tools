@@ -76,7 +76,7 @@ Structurally consolidates distinct reporting commands, accurately aggregating te
 8. Install (``install``)
 ------------------------
 
-Adds or updates dev-tools scripts in your ``composer.json``, copies reusable GitHub Actions workflows, and ensures the ``.editorconfig`` file is present and up to date. This command helps standardize your team's workflow and automation setup.
+Adds or updates dev-tools scripts in your ``composer.json``, copies reusable GitHub Actions workflows, ensures the ``.editorconfig`` file is present and up to date, and guarantees the repository wiki is present as a git submodule in ``.github/wiki``. This command helps standardize your team's workflow and automation setup.
 
 .. code-block:: bash
 
