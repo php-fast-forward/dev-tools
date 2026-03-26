@@ -73,11 +73,11 @@ Structurally consolidates distinct reporting commands, accurately aggregating te
 
    composer dev-tools reports
 
-8. Install (``install``)
+8. Sync (``dev-tools:sync``)
 ------------------------
 
 Adds or updates dev-tools scripts in your ``composer.json``, copies reusable GitHub Actions workflows, ensures the ``.editorconfig`` file is present and up to date, and guarantees the repository wiki is present as a git submodule in ``.github/wiki``. This command helps standardize your team's workflow and automation setup.
 
 .. code-block:: bash
 
-   composer dev-tools:install
+   composer dev-tools:sync

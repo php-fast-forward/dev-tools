@@ -30,7 +30,7 @@ use Symfony\Component\Process\Process;
  * Represents the command responsible for installing development scripts into `composer.json`.
  * This class MUST NOT be overridden and SHALL rely on the `ScriptsInstallerTrait`.
  */
-final class InstallCommand extends AbstractCommand
+final class SyncCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -43,7 +43,7 @@ final class InstallCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('dev-tools:install')
+            ->setName('dev-tools:sync')
             ->setDescription(
                 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig in the root project.'
             )

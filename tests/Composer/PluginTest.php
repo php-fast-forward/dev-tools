@@ -138,7 +138,7 @@ final class PluginTest extends TestCase
 
         // Mock EventDispatcher
         $eventDispatcher = $this->prophesize(EventDispatcher::class);
-        $eventDispatcher->dispatchScript('dev-tools:install', true)
+        $eventDispatcher->dispatchScript('dev-tools:sync', true)
             ->willReturn(0);
         $this->composer->getEventDispatcher()
             ->willReturn($eventDispatcher->reveal());
@@ -170,7 +170,7 @@ final class PluginTest extends TestCase
 
         // Mock EventDispatcher
         $eventDispatcher = $this->prophesize(EventDispatcher::class);
-        $eventDispatcher->dispatchScript('dev-tools:install', true)
+        $eventDispatcher->dispatchScript('dev-tools:sync', true)
             ->willReturn(0);
         $this->composer->getEventDispatcher()
             ->willReturn($eventDispatcher->reveal());
