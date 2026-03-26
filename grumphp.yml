@@ -1,0 +1,12 @@
+grumphp:
+    stop_on_failure: true
+
+    tasks:
+        composer_script:
+            script: 'dev-tools'
+            triggered_by: ['php']
+
+    testsuites:
+        git_pre_commit:
+            tasks:
+                - composer_script

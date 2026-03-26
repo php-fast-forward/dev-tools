@@ -68,13 +68,15 @@ final class StandardsCommand extends AbstractCommand
     {
         $output->writeln('<info>Running code standards checks...</info>');
 
-        $this->runCommand('refactor', $input, $output);
-        $this->runCommand('phpdoc', $input, $output);
-        $this->runCommand('code-style', $input, $output);
-        $this->runCommand('reports', $input, $output);
+        $results = [];
+
+        $results[] = $this->runCommand('refactor', $input, $output);
+        $results[] = $this->runCommand('phpdoc', $input, $output);
+        $results[] = $this->runCommand('code-style', $input, $output);
+        $results[] = $this->runCommand('reports', $input, $output);
 
         $output->writeln('<info>All code standards checks completed!</info>');
 
-        return self::SUCCESS;
+        return in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
     }
 }

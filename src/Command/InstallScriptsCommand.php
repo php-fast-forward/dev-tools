@@ -18,9 +18,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Command;
 
-use FastForward\DevTools\Composer\ScriptsInstallerTrait;
+use Composer\Factory;
+use Composer\Json\JsonManipulator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Path;
 
 /**
  * Represents the command responsible for installing development scripts into `composer.json`.
@@ -28,8 +30,6 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class InstallScriptsCommand extends AbstractCommand
 {
-    use ScriptsInstallerTrait;
-
     /**
      * Configures the current command.
      *
@@ -61,7 +61,38 @@ final class InstallScriptsCommand extends AbstractCommand
     {
         $output->writeln('<info>Starting script installation...</info>');
 
-        $this->installScripts($this->requireComposer(), $this->getIO());
+        $file = Factory::getComposerFile();
+
+        if (! $this->filesystem->exists($file)) {
+            return self::FAILURE;
+        }
+
+        $contents = $this->filesystem->readFile($file);
+        $manipulator = new JsonManipulator($contents);
+
+        $scripts = [
+            'dev-tools' => 'dev-tools',
+            'dev-tools:fix' => 'dev-tools --fix',
+        ];
+
+        $extra = [
+            'grumphp' => [
+                'config-default-path' => Path::makeRelative(
+                    dirname(__DIR__, 2) . '/grumphp.yml',
+                    $this->getCurrentWorkingDirectory(),
+                ),
+            ],
+        ];
+
+        foreach ($scripts as $name => $command) {
+            $manipulator->addSubNode('scripts', $name, $command);
+        }
+
+        foreach ($extra as $name => $config) {
+            $manipulator->addSubNode('extra', $name, $config, true);
+        }
+
+        $this->filesystem->dumpFile($file, $manipulator->getContents());
 
         return self::SUCCESS;
     }

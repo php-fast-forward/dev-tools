@@ -20,8 +20,7 @@ namespace FastForward\DevTools\Composer;
 
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\Installer\PackageEvent;
-use Composer\Installer\PackageEvents;
+use Composer\Script\Event;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
@@ -35,8 +34,6 @@ use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
  */
 final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
 {
-    use ScriptsInstallerTrait;
-
     /**
      * Resolves the implemented Composer capabilities structure.
      *
@@ -63,7 +60,7 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ScriptEvents::POST_INSTALL_CMD=> 'onPostInstall',
+            ScriptEvents::POST_INSTALL_CMD => 'onPostInstall',
             ScriptEvents::POST_UPDATE_CMD => 'onPostUpdate',
         ];
     }
@@ -74,13 +71,13 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
      * This method MUST be triggered by `POST_INSTALL_CMD` and SHALL delegate
      * the actual work to the `installScripts` utility.
      *
-     * @param PackageEvent $event the package installation event context
+     * @param Event $event the Composer script event context
      *
      * @return void
      */
-    public function onPostInstall(PackageEvent $event): void
+    public function onPostInstall(Event $event): void
     {
-        $this->installScripts($event->getComposer(), $event->getIO());
+        $event->getComposer()->getEventDispatcher()->dispatchScript('install-scripts', true);
     }
 
     /**
@@ -89,13 +86,13 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
      * This method MUST be triggered by `POST_UPDATE_CMD` and SHALL ensure
      * that all development scripts are correctly aligned in the root configuration.
      *
-     * @param PackageEvent $event the package update event context
+     * @param Event $event the Composer script event context
      *
      * @return void
      */
-    public function onPostUpdate(PackageEvent $event): void
+    public function onPostUpdate(Event $event): void
     {
-        $this->installScripts($event->getComposer(), $event->getIO());
+        $event->getComposer()->getEventDispatcher()->dispatchScript('install-scripts', true);
     }
 
     /**

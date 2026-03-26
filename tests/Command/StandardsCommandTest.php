@@ -72,13 +72,15 @@ final class StandardsCommandTest extends AbstractCommandTestCase
 
         foreach ($orderedCommands as $commandName) {
             $prophecy = $this->prophesize(Command::class);
-            $prophecy->ignoreValidationErrors()
-                ->shouldBeCalled();
             $prophecy->run(Argument::any(), Argument::any())->willReturn(StandardsCommand::SUCCESS);
-
+            $prophecy->ignoreValidationErrors()->will(function () {});
             $this->application->find($commandName)
                 ->willReturn($prophecy->reveal());
         }
+
+        $this->output->writeln('<info>Running code standards checks...</info>')->shouldBeCalled();
+        $this->output->writeln('<info>All code standards checks completed!</info>')->shouldBeCalled();
+        $this->output->writeln(Argument::any())->shouldBeCalled();
 
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
     }

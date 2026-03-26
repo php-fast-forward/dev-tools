@@ -34,6 +34,7 @@
         "friendsofphp/php-cs-fixer": "^3.94",
         "phpdocumentor/shim": "^3.9",
         "phpowermove/docblock": "^4.0",
+        "phpro/grumphp": "^2.19",
         "phpspec/prophecy-phpunit": "^2.5",
         "phpunit/phpunit": "^12.5",
         "rector/rector": "^2.3",
@@ -56,7 +57,8 @@
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
-            "phpdocumentor/shim": true
+            "phpdocumentor/shim": true,
+            "phpro/grumphp": true
         },
         "platform": {
             "php": "8.3.0"
@@ -67,7 +69,10 @@
         "branch-alias": {
             "dev-main": "1.x-dev"
         },
-        "class": "FastForward\\DevTools\\Composer\\Plugin"
+        "class": "FastForward\\DevTools\\Composer\\Plugin",
+        "grumphp": {
+            "config-default-path": "grumphp.yml"
+        }
     },
     "scripts": {
         "dev-tools": "dev-tools",
