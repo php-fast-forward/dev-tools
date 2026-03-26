@@ -1,10 +1,10 @@
-# Modelo para reutilização do workflow de wiki do dev-tools
-# Este arquivo pode ser instalado automaticamente no seu projeto consumidor
-# e permite chamar o workflow principal deste pacote via workflow_call
+name: "Fast Forward Wiki Update"
 
-name: "Wiki do Fast Forward"
 on:
-  workflow_call:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   wiki:

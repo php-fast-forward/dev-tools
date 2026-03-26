@@ -1,7 +1,10 @@
 name: "Fast Forward Reports"
 
 on:
-  workflow_call:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   reports:
