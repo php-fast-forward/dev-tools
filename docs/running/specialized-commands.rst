@@ -54,10 +54,11 @@ Reads defined PSR-4 paths logically extracting explicit structures accurately. I
 
    composer dev-tools docs
 
+
 6. Wiki Markdown Documentation (``wiki``)
 -----------------------------------------
 
-Extracts explicit API structures and deploys Markdown documentation representing your architectural hierarchy directly into the ``.github/wiki`` repository.
+Generates API documentation in Markdown format, ideal for GitHub wikis or other collaborative documentation platforms. The output is placed in the ``.github/wiki`` directory, making it easy to keep your project wiki up to date with the latest API changes.
 
 .. code-block:: bash
 
@@ -73,9 +74,9 @@ Structurally consolidates distinct reporting commands, accurately aggregating te
    composer dev-tools reports
 
 8. Install Scripts (``install-scripts``)
----------------------------------------
+----------------------------------------
 
-Installs and synchronizes development scripts into the root ``composer.json`` file accurately. It ensures your project seamlessly integrates core toolkit shortcuts natively.
+Adds or updates useful development tool scripts directly in your ``composer.json``, making it easier to standardize your team's workflow. This command ensures that all recommended scripts for QA and automation are present and up to date.
 
 .. code-block:: bash
 
