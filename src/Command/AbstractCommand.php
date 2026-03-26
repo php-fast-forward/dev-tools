@@ -20,7 +20,6 @@ namespace FastForward\DevTools\Command;
 
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Composer\Command\BaseCommand;
-use Composer\InstalledVersions;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -171,9 +170,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     protected function getDevToolsFile(string $filename): string
     {
-        $devToolsPackagePath = InstalledVersions::getInstallPath('fast-forward/dev-tools');
-
-        return Path::makeAbsolute($filename, $devToolsPackagePath);
+        return Path::makeAbsolute($filename, \dirname(__DIR__, 2));
     }
 
     /**
