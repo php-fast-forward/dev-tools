@@ -112,7 +112,7 @@ final class PluginTest extends TestCase
      * @return void
      */
     #[Test]
-    public function onPostPackageInstallWillInstallScripts(): void
+    public function onPostInstallWillInstallScripts(): void
     {
         $event = $this->prophesize(PackageEvent::class);
 
@@ -129,7 +129,7 @@ final class PluginTest extends TestCase
         $this->io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>')
             ->shouldBeCalled();
 
-        $this->plugin->onPostPackageInstall($event->reveal());
+        $this->plugin->onPostInstall($event->reveal());
 
         $data = json_decode(file_get_contents($this->tempComposerFile), true);
         self::assertArrayHasKey('scripts', $data);
@@ -137,11 +137,8 @@ final class PluginTest extends TestCase
         self::assertSame('dev-tools --fix', $data['scripts']['dev-tools:fix']);
     }
 
-    /**
-     * @return void
-     */
     #[Test]
-    public function onPostPackageUpdateWillInstallScripts(): void
+    public function onPostUpdateWillInstallScripts(): void
     {
         $event = $this->prophesize(PackageEvent::class);
 
@@ -158,7 +155,7 @@ final class PluginTest extends TestCase
         $this->io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>')
             ->shouldBeCalled();
 
-        $this->plugin->onPostPackageUpdate($event->reveal());
+        $this->plugin->onPostUpdate($event->reveal());
 
         $data = json_decode(file_get_contents($this->tempComposerFile), true);
         self::assertArrayHasKey('scripts', $data);

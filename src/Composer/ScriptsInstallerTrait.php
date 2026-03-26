@@ -43,12 +43,6 @@ trait ScriptsInstallerTrait
      */
     private function installScripts(Composer $composer, IOInterface $io): void
     {
-        $package = $composer->getPackage();
-
-        if ($package->getName() !== 'fast-forward/dev-tools') {
-            return;
-        }
-
         $io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>');
 
         $file = Factory::getComposerFile();

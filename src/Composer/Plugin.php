@@ -26,6 +26,7 @@ use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
 use Composer\Plugin\PluginInterface;
+use Composer\Script\ScriptEvents;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 
 /**
@@ -62,37 +63,37 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            PackageEvents::POST_PACKAGE_INSTALL => 'onPostPackageInstall',
-            PackageEvents::POST_PACKAGE_UPDATE => 'onPostPackageUpdate',
+            ScriptEvents::POST_INSTALL_CMD=> 'onPostInstall',
+            ScriptEvents::POST_UPDATE_CMD => 'onPostUpdate',
         ];
     }
 
     /**
-     * Handles the automated script installation after a new package creation.
+     * Handles the automated script installation.
      *
-     * This method MUST be triggered by `POST_PACKAGE_INSTALL` and SHALL delegate
+     * This method MUST be triggered by `POST_INSTALL_CMD` and SHALL delegate
      * the actual work to the `installScripts` utility.
      *
      * @param PackageEvent $event the package installation event context
      *
      * @return void
      */
-    public function onPostPackageInstall(PackageEvent $event): void
+    public function onPostInstall(PackageEvent $event): void
     {
         $this->installScripts($event->getComposer(), $event->getIO());
     }
 
     /**
-     * Handles the automated script synchronization after a package update.
+     * Handles the automated script synchronization after updates.
      *
-     * This method MUST be triggered by `POST_PACKAGE_UPDATE` and SHALL ensure
+     * This method MUST be triggered by `POST_UPDATE_CMD` and SHALL ensure
      * that all development scripts are correctly aligned in the root configuration.
      *
      * @param PackageEvent $event the package update event context
      *
      * @return void
      */
-    public function onPostPackageUpdate(PackageEvent $event): void
+    public function onPostUpdate(PackageEvent $event): void
     {
         $this->installScripts($event->getComposer(), $event->getIO());
     }
