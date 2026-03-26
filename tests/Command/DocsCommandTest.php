@@ -81,7 +81,11 @@ final class DocsCommandTest extends AbstractCommandTestCase
     public function executeWillGeneratePhpDocumentorConfigAndRunProcess(): void
     {
         $this->filesystem->exists(Argument::any())->willReturn(true);
-        $this->filesystem->readFile(Argument::cetera())->willReturn('template_content');
+        // O template agora é resolvido via getConfigFile, então precisamos garantir que o mock aceite o caminho relativo
+        $this->filesystem->readFile(Argument::that(function($file) {
+            // Aceita tanto caminho absoluto quanto relativo, pois getConfigFile pode resolver ambos
+            return str_contains($file, 'resources/phpdocumentor.xml');
+        }))->willReturn('template_content');
         $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
 
         $this->willRunProcessWithCallback(function (Process $process): bool {

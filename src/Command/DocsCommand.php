@@ -110,7 +110,7 @@ final class DocsCommand extends AbstractCommand
     {
         $workingDirectory = $this->getCurrentWorkingDirectory();
 
-        $templateFile = $this->getAbsolutePath('resources/phpdocumentor.xml');
+        $templateFile = $this->getConfigFile('resources/phpdocumentor.xml');
 
         $configDirectory = $this->getAbsolutePath('tmp/cache/phpdoc');
         $configFile = $configDirectory . '/phpdocumentor.xml';
