@@ -54,7 +54,7 @@
             "FastForward\\DevTools\\Tests\\": "tests/"
         }
     },
-    "bin": "bin/devtools",
+    "bin": "bin/dev-tools",
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
