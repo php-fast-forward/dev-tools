@@ -80,4 +80,4 @@ Adds or updates dev-tools scripts in your ``composer.json``, copies reusable Git
 
 .. code-block:: bash
 
-   composer dev-tools install
+   composer dev-tools:install

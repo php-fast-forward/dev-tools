@@ -43,7 +43,7 @@ final class InstallCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('install')
+            ->setName('dev-tools:install')
             ->setDescription(
                 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig in the root project.'
             )
