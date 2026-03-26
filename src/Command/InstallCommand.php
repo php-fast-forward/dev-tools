@@ -29,7 +29,7 @@ use Symfony\Component\Finder\Finder;
  * Represents the command responsible for installing development scripts into `composer.json`.
  * This class MUST NOT be overridden and SHALL rely on the `ScriptsInstallerTrait`.
  */
-final class InstallScriptsCommand extends AbstractCommand
+final class InstallCommand extends AbstractCommand
 {
     /**
      * Configures the current command.
@@ -42,9 +42,9 @@ final class InstallScriptsCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('install-scripts')
-            ->setDescription('Installs and synchronizes development scripts in the root composer.json.')
-            ->setHelp('This command adds common development tool scripts to your composer.json file.');
+            ->setName('install')
+            ->setDescription('Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig in the root project.')
+            ->setHelp('This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, and ensures .editorconfig is present and up to date.');
     }
 
     /**
@@ -64,6 +64,7 @@ final class InstallScriptsCommand extends AbstractCommand
 
         $this->updateComposerJson();
         $this->createGitHubActionWorkflows();
+        $this->copyEditorConfig();
 
         return self::SUCCESS;
     }
@@ -120,7 +121,7 @@ final class InstallScriptsCommand extends AbstractCommand
      *
      * @return void
      */
-    public function createGitHubActionWorkflows(): void
+    private function createGitHubActionWorkflows(): void
     {
         $finder = Finder::create()
             ->files()
@@ -137,5 +138,26 @@ final class InstallScriptsCommand extends AbstractCommand
             $content = $this->filesystem->readFile($file->getRealPath());
             $this->filesystem->dumpFile($targetPath, $content);
         }
+    }
+
+    /**
+     * Installs or updates the .editorconfig file in the root project directory.
+     *
+     * This method copies the .editorconfig from the package resources to the project root,
+     * always overwriting to ensure it is up to date.
+     *
+     * @return void
+     */
+    private function copyEditorConfig(): void
+    {
+        $source = $this->getConfigFile('.editorconfig');
+        $target = $this->getConfigFile('.editorconfig', true);
+
+        if ($this->filesystem->exists($target)) {
+            return;
+        }
+
+        $content = $this->filesystem->readFile($source);
+        $this->filesystem->dumpFile($target, $content);
     }
 }

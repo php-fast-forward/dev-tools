@@ -73,11 +73,11 @@ Structurally consolidates distinct reporting commands, accurately aggregating te
 
    composer dev-tools reports
 
-8. Install Scripts (``install-scripts``)
-----------------------------------------
+8. Install (``install``)
+------------------------
 
-Adds or updates useful development tool scripts directly in your ``composer.json``, making it easier to standardize your team's workflow. This command ensures that all recommended scripts for QA and automation are present and up to date.
+Adds or updates dev-tools scripts in your ``composer.json``, copies reusable GitHub Actions workflows, and ensures the ``.editorconfig`` file is present and up to date. This command helps standardize your team's workflow and automation setup.
 
 .. code-block:: bash
 
-   composer dev-tools install-scripts
+   composer dev-tools install

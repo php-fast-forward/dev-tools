@@ -52,8 +52,8 @@ composer dev-tools wiki
 # Generate documentation frontpage and related reports
 composer dev-tools reports
 
-# Installs and synchronizes development scripts in the root composer.json
-composer dev-tools install-scripts
+# Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig
+composer dev-tools install
 ```
 
 ## 📄 License
