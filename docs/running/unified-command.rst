@@ -26,6 +26,6 @@ If you intend to instruct the automated tools (e.g., Rector, ECS, and PHP-CS-Fix
 
 .. code-block:: bash
 
-   composer dev-tools -- --fix
+   composer dev-tools:fix
 
 Using this flag guarantees that formatting inconsistencies and missing PHPDocs are automatically patched inside your files directly, drastically reducing manual review times before submitting a Pull Request.
