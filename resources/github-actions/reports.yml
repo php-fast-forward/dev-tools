@@ -1,0 +1,9 @@
+name: "Fast Forward Reports"
+
+on:
+  workflow_call:
+
+jobs:
+  reports:
+    uses: php-fast-forward/dev-tools/.github/workflows/reports.yml@main
+    secrets: inherit

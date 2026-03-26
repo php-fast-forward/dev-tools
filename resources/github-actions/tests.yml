@@ -1,0 +1,12 @@
+# Modelo para reutilização do workflow de testes do dev-tools
+# Este arquivo pode ser instalado automaticamente no seu projeto consumidor
+# e permite chamar o workflow principal deste pacote via workflow_call
+
+name: "Testes do Fast Forward"
+on:
+  workflow_call:
+
+jobs:
+  tests:
+    uses: php-fast-forward/dev-tools/.github/workflows/tests.yml@main
+    secrets: inherit

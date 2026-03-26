@@ -1,6 +1,7 @@
 name: Generate Reports and Deploy to GitHub Pages
 
 on:
+    workflow_call:
     workflow_dispatch:
     pull_request:
     push:

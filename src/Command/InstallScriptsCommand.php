@@ -23,6 +23,7 @@ use Composer\Json\JsonManipulator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Represents the command responsible for installing development scripts into `composer.json`.
@@ -61,10 +62,26 @@ final class InstallScriptsCommand extends AbstractCommand
     {
         $output->writeln('<info>Starting script installation...</info>');
 
+        $this->updateComposerJson();
+        $this->createGitHubActionWorkflows();
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Updates the root composer.json file with required scripts and extra configuration.
+     *
+     * This method adds or updates the dev-tools scripts and extra configuration for tools like grumphp.
+     * It does nothing if the composer.json file does not exist.
+     *
+     * @return void
+     */
+    private function updateComposerJson(): void
+    {
         $file = Factory::getComposerFile();
 
         if (! $this->filesystem->exists($file)) {
-            return self::FAILURE;
+            return;
         }
 
         $contents = $this->filesystem->readFile($file);
@@ -93,7 +110,32 @@ final class InstallScriptsCommand extends AbstractCommand
         }
 
         $this->filesystem->dumpFile($file, $manipulator->getContents());
+    }
 
-        return self::SUCCESS;
+    /**
+     * Creates GitHub Actions workflow templates in the consumer repository.
+     *
+     * This method copies all .yml workflow templates from resources/github-actions to .github/workflows,
+     * unless the target file already exists. It is intended to provide reusable workflow_call templates for consumers.
+     *
+     * @return void
+     */
+    public function createGitHubActionWorkflows(): void
+    {
+        $finder = Finder::create()
+            ->files()
+            ->in($this->getAbsolutePath('resources/github-actions'))
+            ->name('*.yml');
+
+        foreach ($finder as $file) {
+            $targetPath = Path::join('.github', 'workflows', $file->getFilename());
+
+            if ($this->filesystem->exists($targetPath)) {
+                continue;
+            }
+
+            $content = $this->filesystem->readFile($file->getRealPath());
+            $this->filesystem->dumpFile($targetPath, $content);
+        }
     }
 }

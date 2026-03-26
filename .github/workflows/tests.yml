@@ -1,6 +1,7 @@
 name: Run PHPUnit Tests
 
 on:
+    workflow_call:
     workflow_dispatch:
     pull_request:
     push:
