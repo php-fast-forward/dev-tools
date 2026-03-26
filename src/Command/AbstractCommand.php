@@ -155,6 +155,22 @@ abstract class AbstractCommand extends BaseCommand
             return Path::makeAbsolute($filename, $rootPackagePath);
         }
 
+        return $this->getDevToolsFile($filename);
+    }
+
+    /**
+     * Resolves the absolute path to a file within the fast-forward/dev-tools package.
+     *
+     * This method uses Composer's InstalledVersions to determine the installation path of the
+     * fast-forward/dev-tools package and returns the absolute path to the given filename within it.
+     * It is used as a fallback when a configuration file is not found in the project root.
+     *
+     * @param string $filename The name of the file to resolve within the dev-tools package.
+     *
+     * @return string The absolute path to the file inside the dev-tools package.
+     */
+    protected function getDevToolsFile(string $filename): string
+    {
         $devToolsPackagePath = InstalledVersions::getInstallPath('fast-forward/dev-tools');
 
         return Path::makeAbsolute($filename, $devToolsPackagePath);

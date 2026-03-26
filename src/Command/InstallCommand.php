@@ -131,7 +131,7 @@ final class InstallCommand extends AbstractCommand
     {
         $finder = Finder::create()
             ->files()
-            ->in($this->getConfigFile('resources/github-actions'))
+            ->in(parent::getDevToolsFile('resources/github-actions'))
             ->name('*.yml');
 
         foreach ($finder as $file) {
@@ -156,8 +156,8 @@ final class InstallCommand extends AbstractCommand
      */
     private function copyEditorConfig(): void
     {
-        $source = $this->getConfigFile('.editorconfig');
-        $target = $this->getConfigFile('.editorconfig', true);
+        $source = parent::getDevToolsFile('.editorconfig');
+        $target = parent::getConfigFile('.editorconfig', true);
 
         if ($this->filesystem->exists($target)) {
             return;
@@ -180,7 +180,7 @@ final class InstallCommand extends AbstractCommand
         $repositoryUrl = $this->getGitRepositoryUrl();
 
         $wikiRepoUrl = str_replace('.git', '.wiki.git', $repositoryUrl);
-        $wikiSubmodulePath = $this->getConfigFile('.github/wiki', true);
+        $wikiSubmodulePath = parent::getConfigFile('.github/wiki', true);
 
         if ($this->filesystem->exists($wikiSubmodulePath)) {
             return;
