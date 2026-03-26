@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Rector;
 
+use FastForward\DevTools\Docblock\OrderedDocblock;
 use ReflectionClass;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeAnalyzer\CallAnalyzer;
@@ -39,10 +40,12 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Expr\Throw_;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 #[CoversClass(AddMissingMethodPhpDocRector::class)]
+#[UsesClass(OrderedDocblock::class)]
 final class AddMissingMethodPhpDocRectorTest extends TestCase
 {
     use ProphecyTrait;
@@ -270,7 +273,7 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
             ->getText();
 
         // Should have blank lines between all different groups
-        self::assertStringContainsString("@param string \$p\n *\n * @throws Exception\n *\n * @return int", $doc);
+        self::assertStringContainsString("@param string \$p\n *\n * @return int\n *\n * @throws Exception", $doc);
     }
 
     /**
@@ -370,7 +373,7 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
 
         // Should reorder and normalize spacing
         // Order is param, throws, return. Blank lines between DIFFERENT groups.
-        self::assertStringContainsString("@param string \$a\n *\n * @throws \Exception\n *\n * @return void", $doc);
+        self::assertStringContainsString("@param string \$a\n *\n * @return void\n *\n * @throws \Exception", $doc);
     }
 
     /**

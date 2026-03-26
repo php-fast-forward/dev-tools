@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Rector;
 
+use FastForward\DevTools\Docblock\OrderedDocblock;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use PHPStan\Reflection\ClassReflection;
 use phpowermove\docblock\Docblock;
@@ -93,7 +94,7 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
 
         $docComment = $node->getDocComment();
         $docblock = $docComment instanceof Doc
-            ? new Docblock($docComment->getText())
+            ? OrderedDocblock::create($docComment->getText())
             : $this->createDocblockFromReflection($node);
 
         $existingParamVariables = $this->getExistingParamVariables($docblock);
@@ -381,37 +382,37 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
      *
      * @param ClassMethod $node the associated target structure explicitly handled internally
      *
-     * @return Docblock the built virtualized docblock reference precisely retrieved natively
+     * @return OrderedDocblock the built virtualized docblock reference precisely retrieved natively
      */
-    private function createDocblockFromReflection(ClassMethod $node): Docblock
+    private function createDocblockFromReflection(ClassMethod $node): OrderedDocblock
     {
         $scope = ScopeFetcher::fetch($node);
         $classReflection = $scope->getClassReflection();
 
         if (! $classReflection instanceof ClassReflection) {
-            return new Docblock('/** */');
+            return OrderedDocblock::create('/** */');
         }
 
         $methodName = $this->getName($node->name);
 
         if (null === $methodName) {
-            return new Docblock('/** */');
+            return OrderedDocblock::create('/** */');
         }
 
         $nativeReflection = $classReflection->getNativeReflection();
 
         if (! $nativeReflection->hasMethod($methodName)) {
-            return new Docblock('/** */');
+            return OrderedDocblock::create('/** */');
         }
 
         $reflectionMethod = $nativeReflection->getMethod($methodName);
         $reflectionDocComment = $reflectionMethod->getDocComment();
 
         if (! \is_string($reflectionDocComment) || '' === $reflectionDocComment) {
-            return new Docblock('/** */');
+            return OrderedDocblock::create('/** */');
         }
 
-        return new Docblock($reflectionDocComment);
+        return OrderedDocblock::create($reflectionDocComment);
     }
 
     /**
