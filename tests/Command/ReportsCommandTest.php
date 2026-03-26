@@ -66,7 +66,7 @@ final class ReportsCommandTest extends AbstractCommandTestCase
      * @return void
      */
     #[Test]
-    public function executeWillRunDocsAndTestsCommandAndGenerateFrontpage(): void
+    public function executeWillRunDocsAndTestsCommand(): void
     {
         $docsCommand = $this->prophesize(Command::class);
         $docsCommand->ignoreValidationErrors()
@@ -82,10 +82,6 @@ final class ReportsCommandTest extends AbstractCommandTestCase
             ->willReturn($docsCommand->reveal());
         $this->application->find('tests')
             ->willReturn($testsCommand->reveal());
-
-        $this->withConfigFile('resources/index.php', true);
-
-        $this->filesystem->dumpFile(Argument::type('string'), Argument::type('string'))->shouldBeCalledOnce();
 
         self::assertSame(ReportsCommand::SUCCESS, $this->invokeExecute());
     }

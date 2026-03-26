@@ -13,3 +13,4 @@ In this Section
 
    unified-command
    specialized-commands
+   reports

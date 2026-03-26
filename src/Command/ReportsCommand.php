@@ -21,8 +21,6 @@ namespace FastForward\DevTools\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function Safe\ob_start;
-use function Safe\ob_get_clean;
 
 /**
  * Coordinates the generation of Fast Forward documentation frontpage and related reports.
@@ -62,7 +60,7 @@ final class ReportsCommand extends AbstractCommand
     {
         $output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>');
 
-        $docsPath = $this->getAbsolutePath('public/docs');
+        $docsPath = $this->getAbsolutePath('public');
         $coveragePath = $this->getAbsolutePath('public/coverage');
 
         $output->writeln('<info>Generating API documentation on path: ' . $docsPath . '</info>');
@@ -75,55 +73,8 @@ final class ReportsCommand extends AbstractCommand
             '--coverage' => $coveragePath,
         ], $output);
 
-        $this->generateFrontpage();
-
         $output->writeln('<info>Frontpage generation completed!</info>');
 
         return self::SUCCESS;
-    }
-
-    /**
-     * Generates the compiled documentation frontpage correctly.
-     *
-     * This method MUST collect the configured render template and write it persistently
-     * to the `public/index.html` directory.
-     *
-     * @return void
-     */
-    private function generateFrontpage(): void
-    {
-        $html = $this->renderTemplate(
-            $this->getProjectDescription(),
-            [
-                'Documentation' => './docs/index.html',
-                'Testdox Report' => './coverage/testdox.html',
-                'Test Coverage Report' => './coverage/index.html',
-            ]
-        );
-
-        $this->filesystem->dumpFile($this->getAbsolutePath('public/index.html'), $html);
-    }
-
-    /**
-     * Constructs string variations defining standard components by linking to predefined resources.
-     *
-     * The method MUST extract variables correctly and stream the content safely.
-     * It SHALL strictly return the interpreted string structure.
-     *
-     * @param string $title the main title intended for the index interface
-     * @param array<string, string> $links the associative array representing link titles and their URIs
-     *
-     * @return string the evaluated and parsed HTML content
-     */
-    private function renderTemplate(string $title, array $links): string
-    {
-        ob_start();
-        extract([
-            'title' => $title,
-            'links' => $links,
-        ]);
-        include $this->getConfigFile('resources/index.php');
-
-        return ob_get_clean();
     }
 }
