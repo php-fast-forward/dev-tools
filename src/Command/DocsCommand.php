@@ -54,7 +54,7 @@ final class DocsCommand extends AbstractCommand
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated HTML documentation.',
-                default: 'public/docs',
+                default: 'public',
             )
             ->addOption(
                 name: 'source',
