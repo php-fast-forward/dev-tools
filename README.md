@@ -53,7 +53,7 @@ composer dev-tools wiki
 composer dev-tools reports
 
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and ensures the repository wiki is present as a git submodule in .github/wiki
-composer dev-tools install
+composer dev-tools:install
 ```
 
 ## 📄 License
