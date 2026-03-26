@@ -20,6 +20,8 @@ namespace FastForward\DevTools\Composer;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
+use Composer\Factory;
+use Composer\Json\JsonManipulator;
 
 /**
  * Provides a reusable mechanism for installing development scripts into `composer.json`.
@@ -43,13 +45,22 @@ trait ScriptsInstallerTrait
     {
         $io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>');
 
-        $package = $composer->getPackage();
+        $file = Factory::getComposerFile();
 
-        $package->setScripts([
-            ...$package->getScripts(),
+        if (! file_exists($file)) {
+            return;
+        }
 
+        $contents = file_get_contents($file);
+        $manipulator = new JsonManipulator($contents);
+
+        foreach ([
             'dev-tools' => './bin/dev-tools',
             'dev-tools:fix' => './bin/dev-tools --fix',
-        ]);
+        ] as $name => $command) {
+            $manipulator->addSubNode('scripts', $name, $command);
+        }
+
+        file_put_contents($file, $manipulator->getContents());
     }
 }

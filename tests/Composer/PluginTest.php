@@ -22,7 +22,6 @@ use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Installer\PackageEvent;
-use Composer\Package\RootPackageInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Plugin;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -51,11 +50,38 @@ final class PluginTest extends TestCase
     /**
      * @return void
      */
+    private string $tempComposerFile;
+    private string $originalComposerEnv;
+
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->plugin = new Plugin();
         $this->composer = $this->prophesize(Composer::class);
         $this->io = $this->prophesize(IOInterface::class);
+
+        $this->originalComposerEnv = (string) getenv('COMPOSER');
+        $this->tempComposerFile = tempnam(sys_get_temp_dir(), 'composer_test');
+        file_put_contents($this->tempComposerFile, json_encode(['name' => 'test/package', 'scripts' => (object) []]));
+        
+        putenv("COMPOSER={$this->tempComposerFile}");
+        $_ENV['COMPOSER'] = $this->tempComposerFile;
+        $_SERVER['COMPOSER'] = $this->tempComposerFile;
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        if (file_exists($this->tempComposerFile)) {
+            unlink($this->tempComposerFile);
+        }
+        putenv("COMPOSER={$this->originalComposerEnv}");
+        $_ENV['COMPOSER'] = $this->originalComposerEnv;
+        $_SERVER['COMPOSER'] = $this->originalComposerEnv;
     }
 
     /**
@@ -88,29 +114,21 @@ final class PluginTest extends TestCase
     public function onPostPackageInstallWillInstallScripts(): void
     {
         $event = $this->prophesize(PackageEvent::class);
-        $package = $this->prophesize(RootPackageInterface::class);
 
         $event->getComposer()
             ->willReturn($this->composer->reveal());
         $event->getIO()
             ->willReturn($this->io->reveal());
 
-        $this->composer->getPackage()
-            ->willReturn($package->reveal());
-
-        $package->getScripts()
-            ->willReturn(['existing' => 'script']);
-
         $this->io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>')
             ->shouldBeCalled();
 
-        $package->setScripts([
-            'existing' => 'script',
-            'dev-tools' => './bin/dev-tools',
-            'dev-tools:fix' => './bin/dev-tools --fix',
-        ])->shouldBeCalled();
-
         $this->plugin->onPostPackageInstall($event->reveal());
+
+        $data = json_decode(file_get_contents($this->tempComposerFile), true);
+        self::assertArrayHasKey('scripts', $data);
+        self::assertSame('./bin/dev-tools', $data['scripts']['dev-tools']);
+        self::assertSame('./bin/dev-tools --fix', $data['scripts']['dev-tools:fix']);
     }
 
     /**
@@ -120,28 +138,21 @@ final class PluginTest extends TestCase
     public function onPostPackageUpdateWillInstallScripts(): void
     {
         $event = $this->prophesize(PackageEvent::class);
-        $package = $this->prophesize(RootPackageInterface::class);
 
         $event->getComposer()
             ->willReturn($this->composer->reveal());
         $event->getIO()
             ->willReturn($this->io->reveal());
 
-        $this->composer->getPackage()
-            ->willReturn($package->reveal());
-
-        $package->getScripts()
-            ->willReturn([]);
-
         $this->io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>')
             ->shouldBeCalled();
 
-        $package->setScripts([
-            'dev-tools' => './bin/dev-tools',
-            'dev-tools:fix' => './bin/dev-tools --fix',
-        ])->shouldBeCalled();
-
         $this->plugin->onPostPackageUpdate($event->reveal());
+
+        $data = json_decode(file_get_contents($this->tempComposerFile), true);
+        self::assertArrayHasKey('scripts', $data);
+        self::assertSame('./bin/dev-tools', $data['scripts']['dev-tools']);
+        self::assertSame('./bin/dev-tools --fix', $data['scripts']['dev-tools:fix']);
     }
 
     /**
