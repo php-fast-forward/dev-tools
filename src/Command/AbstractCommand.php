@@ -165,9 +165,9 @@ abstract class AbstractCommand extends BaseCommand
      * fast-forward/dev-tools package and returns the absolute path to the given filename within it.
      * It is used as a fallback when a configuration file is not found in the project root.
      *
-     * @param string $filename The name of the file to resolve within the dev-tools package.
+     * @param string $filename the name of the file to resolve within the dev-tools package
      *
-     * @return string The absolute path to the file inside the dev-tools package.
+     * @return string the absolute path to the file inside the dev-tools package
      */
     protected function getDevToolsFile(string $filename): string
     {
