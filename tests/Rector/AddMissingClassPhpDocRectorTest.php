@@ -44,9 +44,7 @@ final class AddMissingClassPhpDocRectorTest extends TestCase
     {
         $this->rector = new AddMissingClassPhpDocRector();
 
-        $nodeNameResolver = (new ReflectionClass(
-            NodeNameResolver::class
-        ))->newInstanceWithoutConstructor();
+        $nodeNameResolver = (new ReflectionClass(NodeNameResolver::class))->newInstanceWithoutConstructor();
 
         $resolverReflection = new ReflectionClass(NodeNameResolver::class);
 

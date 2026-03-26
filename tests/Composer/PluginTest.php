@@ -18,19 +18,25 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Composer;
 
+use Composer\Package\RootPackageInterface;
+use Composer\EventDispatcher\EventDispatcher;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
-use Composer\Installer\PackageEvent;
 use Composer\Script\Event as ScriptEvent;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Plugin;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+
+use function Safe\tempnam;
+use function Safe\file_put_contents;
+use function Safe\json_encode;
+use function Safe\putenv;
+use function Safe\unlink;
 
 #[CoversClass(Plugin::class)]
 final class PluginTest extends TestCase
@@ -53,6 +59,7 @@ final class PluginTest extends TestCase
      * @return void
      */
     private string $tempComposerFile;
+
     private string $originalComposerEnv;
 
     /**
@@ -67,9 +74,12 @@ final class PluginTest extends TestCase
         $this->originalComposerEnv = (string) getenv('COMPOSER');
         $this->tempComposerFile = tempnam(sys_get_temp_dir(), 'composer_test');
         // O nome do pacote precisa ser fast-forward/dev-tools para que o método installScripts execute a lógica
-        file_put_contents($this->tempComposerFile, json_encode(['name' => 'fast-forward/dev-tools', 'scripts' => (object) []]));
+        file_put_contents($this->tempComposerFile, json_encode([
+            'name' => 'fast-forward/dev-tools',
+            'scripts' => (object) [],
+        ]));
 
-        putenv("COMPOSER={$this->tempComposerFile}");
+        putenv('COMPOSER=' . $this->tempComposerFile);
         $_ENV['COMPOSER'] = $this->tempComposerFile;
         $_SERVER['COMPOSER'] = $this->tempComposerFile;
     }
@@ -82,7 +92,8 @@ final class PluginTest extends TestCase
         if (file_exists($this->tempComposerFile)) {
             unlink($this->tempComposerFile);
         }
-        putenv("COMPOSER={$this->originalComposerEnv}");
+
+        putenv('COMPOSER=' . $this->originalComposerEnv);
         $_ENV['COMPOSER'] = $this->originalComposerEnv;
         $_SERVER['COMPOSER'] = $this->originalComposerEnv;
     }
@@ -119,14 +130,18 @@ final class PluginTest extends TestCase
         $event = $this->prophesize(ScriptEvent::class);
 
         // Mock RootPackageInterface para getPackage()
-        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
-        $package->getName()->willReturn('fast-forward/dev-tools');
-        $this->composer->getPackage()->willReturn($package->reveal());
+        $package = $this->prophesize(RootPackageInterface::class);
+        $package->getName()
+            ->willReturn('fast-forward/dev-tools');
+        $this->composer->getPackage()
+            ->willReturn($package->reveal());
 
         // Mock EventDispatcher
-        $eventDispatcher = $this->prophesize(\Composer\EventDispatcher\EventDispatcher::class);
-        $eventDispatcher->dispatchScript('install-scripts', true)->willReturn(0);
-        $this->composer->getEventDispatcher()->willReturn($eventDispatcher->reveal());
+        $eventDispatcher = $this->prophesize(EventDispatcher::class);
+        $eventDispatcher->dispatchScript('install-scripts', true)
+            ->willReturn(0);
+        $this->composer->getEventDispatcher()
+            ->willReturn($eventDispatcher->reveal());
 
         $event->getComposer()
             ->willReturn($this->composer->reveal());
@@ -135,23 +150,30 @@ final class PluginTest extends TestCase
 
         $this->plugin->onPostInstall($event->reveal());
 
-        $this->assertTrue(true); // Evita teste risky
+        self::assertTrue(true); // Evita teste risky
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function onPostUpdateWillInstallScripts(): void
     {
         $event = $this->prophesize(ScriptEvent::class);
 
         // Mock RootPackageInterface para getPackage()
-        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
-        $package->getName()->willReturn('fast-forward/dev-tools');
-        $this->composer->getPackage()->willReturn($package->reveal());
+        $package = $this->prophesize(RootPackageInterface::class);
+        $package->getName()
+            ->willReturn('fast-forward/dev-tools');
+        $this->composer->getPackage()
+            ->willReturn($package->reveal());
 
         // Mock EventDispatcher
-        $eventDispatcher = $this->prophesize(\Composer\EventDispatcher\EventDispatcher::class);
-        $eventDispatcher->dispatchScript('install-scripts', true)->willReturn(0);
-        $this->composer->getEventDispatcher()->willReturn($eventDispatcher->reveal());
+        $eventDispatcher = $this->prophesize(EventDispatcher::class);
+        $eventDispatcher->dispatchScript('install-scripts', true)
+            ->willReturn(0);
+        $this->composer->getEventDispatcher()
+            ->willReturn($eventDispatcher->reveal());
 
         $event->getComposer()
             ->willReturn($this->composer->reveal());
@@ -160,7 +182,7 @@ final class PluginTest extends TestCase
 
         $this->plugin->onPostUpdate($event->reveal());
 
-        $this->assertTrue(true); // Evita teste risky
+        self::assertTrue(true); // Evita teste risky
     }
 
     /**

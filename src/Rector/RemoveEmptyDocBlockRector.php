@@ -45,10 +45,7 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove empty docblocks from classes and methods', [
-            new CodeSample(
-                "/**\n *\n */\nclass SomeClass {}",
-                'class SomeClass {}'
-            ),
+            new CodeSample("/**\n *\n */\nclass SomeClass {}", 'class SomeClass {}'),
         ]);
     }
 
@@ -130,9 +127,11 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
             if ('/**' === $normalizedLine) {
                 continue;
             }
+
             if ('*/' === $normalizedLine) {
                 continue;
             }
+
             if ('*' === $normalizedLine) {
                 continue;
             }

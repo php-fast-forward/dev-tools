@@ -70,21 +70,31 @@ final class ReportsCommandTest extends AbstractCommandTestCase
     {
         $docsCommand = $this->prophesize(Command::class);
         $docsCommand->run(Argument::any(), Argument::any())->willReturn(ReportsCommand::SUCCESS);
-        $docsCommand->ignoreValidationErrors()->will(function () {});
+        $docsCommand->ignoreValidationErrors()
+            ->will(function (): void {});
 
         $testsCommand = $this->prophesize(Command::class);
         $testsCommand->run(Argument::any(), Argument::any())->willReturn(ReportsCommand::SUCCESS);
-        $testsCommand->ignoreValidationErrors()->will(function () {});
+        $testsCommand->ignoreValidationErrors()
+            ->will(function (): void {});
 
         $this->application->find('docs')
             ->willReturn($docsCommand->reveal());
         $this->application->find('tests')
             ->willReturn($testsCommand->reveal());
 
-        $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')->shouldBeCalled();
-        $this->output->writeln('<info>Generating API documentation on path: /Users/mentordosnerds/Sites/github.com/php-fast-forward/dev-tools/public</info>')->shouldBeCalled();
-        $this->output->writeln('<info>Generating test coverage report on path: /Users/mentordosnerds/Sites/github.com/php-fast-forward/dev-tools/public/coverage</info>')->shouldBeCalled();
-        $this->output->writeln('<info>Frontpage generation completed!</info>')->shouldBeCalled();
+        $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
+            ->shouldBeCalled();
+        $this->output->writeln(
+            '<info>Generating API documentation on path: /Users/mentordosnerds/Sites/github.com/php-fast-forward/dev-tools/public</info>'
+        )
+            ->shouldBeCalled();
+        $this->output->writeln(
+            '<info>Generating test coverage report on path: /Users/mentordosnerds/Sites/github.com/php-fast-forward/dev-tools/public/coverage</info>'
+        )
+            ->shouldBeCalled();
+        $this->output->writeln('<info>Frontpage generation completed!</info>')
+            ->shouldBeCalled();
 
         self::assertSame(ReportsCommand::SUCCESS, $this->invokeExecute());
     }

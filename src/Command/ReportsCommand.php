@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-
 /**
  * Coordinates the generation of Fast Forward documentation frontpage and related reports.
  * This class MUST NOT be overridden and SHALL securely combine docs and testing commands.
@@ -77,6 +76,6 @@ final class ReportsCommand extends AbstractCommand
 
         $output->writeln('<info>Frontpage generation completed!</info>');
 
-        return in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
+        return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
     }
 }

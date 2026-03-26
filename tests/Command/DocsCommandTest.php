@@ -18,13 +18,14 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use function Safe\getcwd;
 use FastForward\DevTools\Command\DocsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Process\Process;
+
+use function Safe\getcwd;
 
 #[CoversClass(DocsCommand::class)]
 final class DocsCommandTest extends AbstractCommandTestCase
@@ -82,10 +83,10 @@ final class DocsCommandTest extends AbstractCommandTestCase
     {
         $this->filesystem->exists(Argument::any())->willReturn(true);
         // O template agora é resolvido via getConfigFile, então precisamos garantir que o mock aceite o caminho relativo
-        $this->filesystem->readFile(Argument::that(function($file) {
+        $this->filesystem->readFile(Argument::that(
             // Aceita tanto caminho absoluto quanto relativo, pois getConfigFile pode resolver ambos
-            return str_contains($file, 'resources/phpdocumentor.xml');
-        }))->willReturn('template_content');
+            fn($file): bool => str_contains((string) $file, 'resources/phpdocumentor.xml')
+        ))->willReturn('template_content');
         $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
 
         $this->willRunProcessWithCallback(function (Process $process): bool {

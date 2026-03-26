@@ -72,13 +72,13 @@ final class InstallScriptsCommand extends AbstractCommand
 
         $scripts = [
             'dev-tools' => 'dev-tools',
-            'dev-tools:fix' => 'dev-tools --fix',
+            'dev-tools:fix' => '@dev-tools --fix',
         ];
 
         $extra = [
             'grumphp' => [
                 'config-default-path' => Path::makeRelative(
-                    dirname(__DIR__, 2) . '/grumphp.yml',
+                    \dirname(__DIR__, 2) . '/grumphp.yml',
                     $this->getCurrentWorkingDirectory(),
                 ),
             ],

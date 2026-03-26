@@ -59,10 +59,7 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add basic PHPDoc to methods without docblock', [
-            new CodeSample(
-                'public function foo() {}',
-                "/**\n * \n */\npublic function foo() {}"
-            ),
+            new CodeSample('public function foo() {}', "/**\n * \n */\npublic function foo() {}"),
         ]);
     }
 

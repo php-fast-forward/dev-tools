@@ -77,7 +77,9 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
      */
     public function onPostInstall(Event $event): void
     {
-        $event->getComposer()->getEventDispatcher()->dispatchScript('install-scripts', true);
+        $event->getComposer()
+            ->getEventDispatcher()
+            ->dispatchScript('install-scripts', true);
     }
 
     /**
@@ -92,7 +94,9 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
      */
     public function onPostUpdate(Event $event): void
     {
-        $event->getComposer()->getEventDispatcher()->dispatchScript('install-scripts', true);
+        $event->getComposer()
+            ->getEventDispatcher()
+            ->dispatchScript('install-scripts', true);
     }
 
     /**

@@ -77,6 +77,6 @@ final class StandardsCommand extends AbstractCommand
 
         $output->writeln('<info>All code standards checks completed!</info>');
 
-        return in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
+        return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
     }
 }

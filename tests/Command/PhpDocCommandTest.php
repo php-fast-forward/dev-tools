@@ -20,12 +20,13 @@ namespace FastForward\DevTools\Tests\Command;
 
 use Prophecy\Argument;
 use RuntimeException;
-use function Safe\getcwd;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\PhpUnit\ProphecyTrait;
+
+use function Safe\getcwd;
 
 #[CoversClass(PhpDocCommand::class)]
 final class PhpDocCommandTest extends AbstractCommandTestCase

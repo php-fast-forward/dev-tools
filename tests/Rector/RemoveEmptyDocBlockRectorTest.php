@@ -45,9 +45,7 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
     {
         $this->rector = new RemoveEmptyDocBlockRector();
 
-        $nodeNameResolver = (new ReflectionClass(
-            NodeNameResolver::class
-        ))->newInstanceWithoutConstructor();
+        $nodeNameResolver = (new ReflectionClass(NodeNameResolver::class))->newInstanceWithoutConstructor();
 
         $resolverReflection = new ReflectionClass(NodeNameResolver::class);
 
@@ -82,7 +80,8 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
     {
         self::assertSame(
             'Remove empty docblocks from classes and methods',
-            $this->rector->getRuleDefinition()->getDescription()
+            $this->rector->getRuleDefinition()
+                ->getDescription()
         );
     }
 

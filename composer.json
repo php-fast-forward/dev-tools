@@ -76,6 +76,6 @@
     },
     "scripts": {
         "dev-tools": "dev-tools",
-        "dev-tools:fix": "dev-tools --fix"
+        "dev-tools:fix": "@dev-tools --fix"
     }
 }

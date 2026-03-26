@@ -56,9 +56,7 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
     {
         $this->rector = new AddMissingMethodPhpDocRector();
 
-        $nodeNameResolver = (new ReflectionClass(
-            NodeNameResolver::class
-        ))->newInstanceWithoutConstructor();
+        $nodeNameResolver = (new ReflectionClass(NodeNameResolver::class))->newInstanceWithoutConstructor();
 
         $resolverReflection = new ReflectionClass(NodeNameResolver::class);
 
@@ -93,7 +91,8 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
     {
         self::assertSame(
             'Add basic PHPDoc to methods without docblock',
-            $this->rector->getRuleDefinition()->getDescription()
+            $this->rector->getRuleDefinition()
+                ->getDescription()
         );
     }
 
@@ -133,9 +132,7 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
 
         $node->returnType = new Identifier('bool');
 
-        $throw = new Expression(new Throw_(new New_(new FullyQualified(
-            'RuntimeException'
-        ))));
+        $throw = new Expression(new Throw_(new New_(new FullyQualified('RuntimeException'))));
         $node->stmts = [$throw];
 
         $result = $this->rector->refactor($node);
@@ -333,16 +330,11 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
         $node->setDocComment(new Doc("/**\n */"));
 
         $param = new Param(new Variable('p'));
-        $param->type = new IntersectionType([
-            new FullyQualified('Iterator'),
-            new FullyQualified('Countable'),
-        ]);
+        $param->type = new IntersectionType([new FullyQualified('Iterator'), new FullyQualified('Countable')]);
+
         $node->params = [$param];
 
-        $node->returnType = new UnionType([
-            new Identifier('string'),
-            new Identifier('int'),
-        ]);
+        $node->returnType = new UnionType([new Identifier('string'), new Identifier('int')]);
 
         $result = $this->rector->refactor($node);
         $doc = $result->getDocComment()
@@ -391,10 +383,8 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
         $node->setDocComment(new Doc("/**\n */"));
 
         $param = new Param(new Variable('p'));
-        $param->type = new IntersectionType([
-            new FullyQualified('ArrayAccess'),
-            new FullyQualified('Countable'),
-        ]);
+        $param->type = new IntersectionType([new FullyQualified('ArrayAccess'), new FullyQualified('Countable')]);
+
         $node->params = [$param];
 
         $result = $this->rector->refactor($node);

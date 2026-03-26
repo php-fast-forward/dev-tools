@@ -16,12 +16,12 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-$projectVendorAutoload = dirname(__DIR__, 4) . '/vendor/autoload.php';
-$pluginVendorAutoload = dirname(__DIR__) . '/vendor/autoload.php';
+namespace FastForward\DevTools;
+
+$projectVendorAutoload = \dirname(__DIR__, 4) . '/vendor/autoload.php';
+$pluginVendorAutoload = \dirname(__DIR__) . '/vendor/autoload.php';
 
 require_once file_exists($projectVendorAutoload) ? $projectVendorAutoload : $pluginVendorAutoload;
-
-use FastForward\DevTools\DevTools;
 
 $application = new DevTools();
 $application->run();
