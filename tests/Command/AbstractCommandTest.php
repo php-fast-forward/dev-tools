@@ -19,14 +19,10 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Command;
 
 use FastForward\DevTools\Command\AbstractCommand;
-use FastForward\DevTools\Tests\Command\AbstractCommandTestCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-
-use function Safe\getcwd;
 
 #[CoversClass(AbstractCommand::class)]
 final class AbstractCommandTest extends AbstractCommandTestCase
@@ -69,7 +65,8 @@ final class AbstractCommandTest extends AbstractCommandTestCase
     #[Test]
     public function getAbsolutePathWillReturnAbsolutePathIfProvided(): void
     {
-        $this->filesystem->isAbsolutePath('/absolute/path')->willReturn(true);
+        $this->filesystem->isAbsolutePath('/absolute/path')
+            ->willReturn(true);
 
         self::assertSame('/absolute/path', $this->command->publicGetAbsolutePath('/absolute/path'));
     }
@@ -89,6 +86,9 @@ final class AbstractCommandTest extends AbstractCommandTestCase
  */
 class AbstractCommandStub extends AbstractCommand
 {
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this->setName('stub')
@@ -96,16 +96,30 @@ class AbstractCommandStub extends AbstractCommand
             ->setHelp('This is a stub command.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         return self::SUCCESS;
     }
 
+    /**
+     * @param string $path
+     *
+     * @return string
+     */
     public function publicGetAbsolutePath(string $path): string
     {
         return $this->getAbsolutePath($path);
     }
 
+    /**
+     * @return string
+     */
     public function publicGetProjectName(): string
     {
         return $this->getProjectName();

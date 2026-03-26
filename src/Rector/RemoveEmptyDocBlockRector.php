@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Rector;
 
-use phpowermove\docblock\Docblock;
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -45,10 +45,10 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Remove empty docblocks from classes and methods', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+            new CodeSample(
                 "/**\n *\n */\nclass SomeClass {}",
-                "class SomeClass {}"
-            )
+                'class SomeClass {}'
+            ),
         ]);
     }
 
@@ -127,7 +127,13 @@ final class RemoveEmptyDocBlockRector extends AbstractRector
 
         foreach ($lines as $line) {
             $normalizedLine = trim((string) $line);
-            if ('/**' === $normalizedLine || '*/' === $normalizedLine || '*' === $normalizedLine) {
+            if ('/**' === $normalizedLine) {
+                continue;
+            }
+            if ('*/' === $normalizedLine) {
+                continue;
+            }
+            if ('*' === $normalizedLine) {
                 continue;
             }
 

@@ -28,6 +28,7 @@ use FastForward\DevTools\Command\ReportsCommand;
 use FastForward\DevTools\Command\StandardsCommand;
 use FastForward\DevTools\Command\TestsCommand;
 use FastForward\DevTools\Command\WikiCommand;
+use FastForward\DevTools\Command\InstallScriptsCommand;
 
 /**
  * Provides a registry of custom dev-tools commands mapped for Composer integration.
@@ -54,6 +55,7 @@ final class DevToolsCommandProvider implements CommandProviderCapability
             new StandardsCommand(),
             new ReportsCommand(),
             new WikiCommand(),
+            new InstallScriptsCommand(),
         ];
     }
 }

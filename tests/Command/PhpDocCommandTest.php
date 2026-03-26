@@ -18,6 +18,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
+use Prophecy\Argument;
+use RuntimeException;
+use function Safe\getcwd;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -81,8 +84,8 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillCopyDocHeaderWhenMissing(): void
     {
-        $this->filesystem->exists(\Safe\getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
-        $this->filesystem->dumpFile(\Prophecy\Argument::any(), \Prophecy\Argument::any())->shouldBeCalled();
+        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
+        $this->filesystem->dumpFile(Argument::any(), Argument::any())->shouldBeCalled();
 
         $this->willRunProcessWithCallback(static fn(): bool => true);
 
@@ -95,8 +98,10 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillHandleDumpFileException(): void
     {
-        $this->filesystem->exists(\Safe\getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
-        $this->filesystem->dumpFile(\Prophecy\Argument::any(), \Prophecy\Argument::any())->willThrow(new \RuntimeException('dump error'));
+        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
+        $this->filesystem->dumpFile(Argument::any(), Argument::any())->willThrow(
+            new RuntimeException('dump error')
+        );
 
         $this->willRunProcessWithCallback(static fn(): bool => true);
 
@@ -121,10 +126,11 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
     public function executeWillHandleComposerExceptionDuringDocheaderCreation(): void
     {
         // Mock getComposer to return null, which makes requireComposer return null (swallowed)
-        $this->application->getComposer()->willReturn(null);
-        
+        $this->application->getComposer()
+            ->willReturn(null);
+
         // Mock exists to return true for the project header so it returns early
-        $this->filesystem->exists(\Safe\getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(true);
+        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(true);
 
         $this->willRunProcessWithCallback(static fn(): bool => true);
 

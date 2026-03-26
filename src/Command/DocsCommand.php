@@ -24,17 +24,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Process\Process;
 
-use RuntimeException;
-
-use function Safe\file_get_contents;
-use function Safe\file_put_contents;
 use function array_map;
 use function implode;
-use function is_string;
 use function ltrim;
-use function Safe\mkdir;
-use function Safe\realpath;
-use function sprintf;
 use function strtr;
 
 /**
@@ -90,25 +82,17 @@ final class DocsCommand extends AbstractCommand
 
         $source = $this->getAbsolutePath($input->getOption('source'));
 
-        if (!$this->filesystem->exists($source)) {
-            $output->writeln(sprintf('<error>Source directory not found: %s</error>', $source));
+        if (! $this->filesystem->exists($source)) {
+            $output->writeln(\sprintf('<error>Source directory not found: %s</error>', $source));
 
             return self::FAILURE;
         }
 
         $target = $this->getAbsolutePath($input->getOption('target'));
 
-        $htmlConfig = $this->createPhpDocumentorConfig(
-            source: $source,
-            target: $target,
-            template: 'default',
-        );
+        $htmlConfig = $this->createPhpDocumentorConfig(source: $source, target: $target, template: 'default');
 
-        $command = new Process([
-            $this->getAbsolutePath('vendor/bin/phpdoc'),
-            '--config',
-            $htmlConfig,
-        ]);
+        $command = new Process([$this->getAbsolutePath('vendor/bin/phpdoc'), '--config', $htmlConfig]);
 
         return parent::runProcess($command, $output);
     }
@@ -130,14 +114,17 @@ final class DocsCommand extends AbstractCommand
 
         $configDirectory = $this->getAbsolutePath('tmp/cache/phpdoc');
         $configFile = $configDirectory . '/phpdocumentor.xml';
-    
+
         if (! $this->filesystem->exists($configDirectory)) {
             $this->filesystem->mkdir($configDirectory);
         }
 
         $psr4Namespaces = $this->getPsr4Namespaces();
         $paths = implode("\n", array_map(
-            fn (string $path): string => sprintf('<path>%s</path>', ltrim(str_replace($workingDirectory, '', $path), '/')),
+            fn(string $path): string => \sprintf(
+                '<path>%s</path>',
+                ltrim(str_replace($workingDirectory, '', $path), '/')
+            ),
             $psr4Namespaces,
         ));
 
@@ -145,7 +132,7 @@ final class DocsCommand extends AbstractCommand
 
         $defaultPackageName = array_key_first($psr4Namespaces) ?: '';
         $templateContents = $this->filesystem->readFile($templateFile);
-        
+
         $this->filesystem->dumpFile($configFile, strtr($templateContents, [
             '%%TITLE%%' => $this->getProjectDescription(),
             '%%TEMPLATE%%' => $template,

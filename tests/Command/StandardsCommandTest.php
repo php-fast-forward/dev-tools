@@ -30,37 +30,54 @@ final class StandardsCommandTest extends AbstractCommandTestCase
 {
     use ProphecyTrait;
 
+    /**
+     * @return string
+     */
     protected function getCommandClass(): string
     {
         return StandardsCommand::class;
     }
 
+    /**
+     * @return string
+     */
     protected function getCommandName(): string
     {
         return 'standards';
     }
 
+    /**
+     * @return string
+     */
     protected function getCommandDescription(): string
     {
         return 'Runs Fast Forward code standards checks.';
     }
 
+    /**
+     * @return string
+     */
     protected function getCommandHelp(): string
     {
         return 'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.';
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillRunSuiteSequentially(): void
     {
         $orderedCommands = ['refactor', 'phpdoc', 'code-style', 'reports'];
-        
+
         foreach ($orderedCommands as $commandName) {
             $prophecy = $this->prophesize(Command::class);
-            $prophecy->ignoreValidationErrors()->shouldBeCalled();
+            $prophecy->ignoreValidationErrors()
+                ->shouldBeCalled();
             $prophecy->run(Argument::any(), Argument::any())->willReturn(StandardsCommand::SUCCESS);
-            
-            $this->application->find($commandName)->willReturn($prophecy->reveal());
+
+            $this->application->find($commandName)
+                ->willReturn($prophecy->reveal());
         }
 
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());

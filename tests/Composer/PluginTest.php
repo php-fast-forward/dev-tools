@@ -21,6 +21,8 @@ namespace FastForward\DevTools\Tests\Composer;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
+use Composer\Installer\PackageEvent;
+use Composer\Package\RootPackageInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Plugin;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -74,30 +76,72 @@ final class PluginTest extends TestCase
      * @return void
      */
     #[Test]
-    public function activateWillAddDevToolsScriptIfMissing(): void
+    public function activateWillDoNothing(): void
     {
-        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
-        $package->getExtra()->willReturn([]);
-        $package->setExtra(['scripts' => ['dev-tools' => 'dev-tools']])->shouldBeCalled();
-
-        $this->composer->getPackage()->willReturn($package->reveal());
-
-        $this->plugin->activate($this->composer->reveal(), $this->io->reveal());
+        self::assertNull($this->plugin->activate($this->composer->reveal(), $this->io->reveal()));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function activateWillDoNothingIfDevToolsScriptIsPresent(): void
+    public function onPostPackageInstallWillInstallScripts(): void
     {
-        $package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
-        $package->getExtra()->willReturn(['scripts' => ['dev-tools' => 'dev-tools']]);
-        $package->setExtra(\Prophecy\Argument::any())->shouldNotBeCalled();
+        $event = $this->prophesize(PackageEvent::class);
+        $package = $this->prophesize(RootPackageInterface::class);
 
-        $this->composer->getPackage()->willReturn($package->reveal());
+        $event->getComposer()
+            ->willReturn($this->composer->reveal());
+        $event->getIO()
+            ->willReturn($this->io->reveal());
 
-        $this->plugin->activate($this->composer->reveal(), $this->io->reveal());
+        $this->composer->getPackage()
+            ->willReturn($package->reveal());
+
+        $package->getScripts()
+            ->willReturn(['existing' => 'script']);
+
+        $this->io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>')
+            ->shouldBeCalled();
+
+        $package->setScripts([
+            'existing' => 'script',
+            'dev-tools' => './bin/dev-tools',
+            'dev-tools:fix' => './bin/dev-tools --fix',
+        ])->shouldBeCalled();
+
+        $this->plugin->onPostPackageInstall($event->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function onPostPackageUpdateWillInstallScripts(): void
+    {
+        $event = $this->prophesize(PackageEvent::class);
+        $package = $this->prophesize(RootPackageInterface::class);
+
+        $event->getComposer()
+            ->willReturn($this->composer->reveal());
+        $event->getIO()
+            ->willReturn($this->io->reveal());
+
+        $this->composer->getPackage()
+            ->willReturn($package->reveal());
+
+        $package->getScripts()
+            ->willReturn([]);
+
+        $this->io->write('<info>fast-forward/dev-tools: Installing scripts into composer.json</info>')
+            ->shouldBeCalled();
+
+        $package->setScripts([
+            'dev-tools' => './bin/dev-tools',
+            'dev-tools:fix' => './bin/dev-tools --fix',
+        ])->shouldBeCalled();
+
+        $this->plugin->onPostPackageUpdate($event->reveal());
     }
 
     /**

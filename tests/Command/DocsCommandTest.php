@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
+use function Safe\getcwd;
 use FastForward\DevTools\Command\DocsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -114,12 +115,12 @@ final class DocsCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillCreateConfigDirectoryIfItDoesNotExist(): void
     {
-        $this->filesystem->exists(\Prophecy\Argument::any())->willReturn(true);
-        $this->filesystem->exists(\Safe\getcwd() . '/tmp/cache/phpdoc')->willReturn(false);
+        $this->filesystem->exists(Argument::any())->willReturn(true);
+        $this->filesystem->exists(getcwd() . '/tmp/cache/phpdoc')->willReturn(false);
 
-        $this->filesystem->readFile(\Prophecy\Argument::cetera())->willReturn('template_content');
-        $this->filesystem->mkdir(\Prophecy\Argument::any())->shouldBeCalled();
-        $this->filesystem->dumpFile(\Prophecy\Argument::cetera())->shouldBeCalled();
+        $this->filesystem->readFile(Argument::cetera())->willReturn('template_content');
+        $this->filesystem->mkdir(Argument::any())->shouldBeCalled();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
 
         $this->willRunProcessWithCallback(static fn(): bool => true);
 

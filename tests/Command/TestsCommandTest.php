@@ -122,7 +122,8 @@ final class TestsCommandTest extends AbstractCommandTestCase
                 && str_contains($commandLine, '--coverage-html=');
         });
 
-        $this->input->getOption('coverage')->willReturn('public/coverage');
+        $this->input->getOption('coverage')
+            ->willReturn('public/coverage');
         $this->invokeExecute();
     }
 

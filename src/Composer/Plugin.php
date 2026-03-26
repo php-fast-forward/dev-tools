@@ -19,6 +19,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Composer;
 
 use Composer\Composer;
+use Composer\EventDispatcher\EventSubscriberInterface;
+use Composer\Installer\PackageEvent;
+use Composer\Installer\PackageEvents;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
@@ -29,8 +32,10 @@ use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
  * Implements the lifecycle of the Composer dev-tools extension framework.
  * This plugin class MUST initialize and coordinate custom script registrations securely.
  */
-final class Plugin implements Capable, PluginInterface
+final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
 {
+    use ScriptsInstallerTrait;
+
     /**
      * Resolves the implemented Composer capabilities structure.
      *
@@ -47,6 +52,52 @@ final class Plugin implements Capable, PluginInterface
     }
 
     /**
+     * Retrieves the comprehensive map of events this listener SHALL handle.
+     *
+     * This method MUST define the lifecycle triggers for script installation and
+     * synchronization during Composer package operations.
+     *
+     * @return array<string, string> the event mapping registry
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            PackageEvents::POST_PACKAGE_INSTALL => 'onPostPackageInstall',
+            PackageEvents::POST_PACKAGE_UPDATE => 'onPostPackageUpdate',
+        ];
+    }
+
+    /**
+     * Handles the automated script installation after a new package creation.
+     *
+     * This method MUST be triggered by `POST_PACKAGE_INSTALL` and SHALL delegate
+     * the actual work to the `installScripts` utility.
+     *
+     * @param PackageEvent $event the package installation event context
+     *
+     * @return void
+     */
+    public function onPostPackageInstall(PackageEvent $event): void
+    {
+        $this->installScripts($event->getComposer(), $event->getIO());
+    }
+
+    /**
+     * Handles the automated script synchronization after a package update.
+     *
+     * This method MUST be triggered by `POST_PACKAGE_UPDATE` and SHALL ensure
+     * that all development scripts are correctly aligned in the root configuration.
+     *
+     * @param PackageEvent $event the package update event context
+     *
+     * @return void
+     */
+    public function onPostPackageUpdate(PackageEvent $event): void
+    {
+        $this->installScripts($event->getComposer(), $event->getIO());
+    }
+
+    /**
      * Handles activation lifecycle events for the Composer session.
      *
      * The method MUST ensure the `dev-tools` script capability exists inside `composer.json` extras.
@@ -59,15 +110,7 @@ final class Plugin implements Capable, PluginInterface
      */
     public function activate(Composer $composer, IOInterface $io): void
     {
-        // Add dev-tools script to composer.json if not already present
-        $extra = $composer->getPackage()
-            ->getExtra() ?? [];
-
-        if (! isset($extra['scripts']['dev-tools'])) {
-            $extra['scripts']['dev-tools'] = 'dev-tools';
-            $composer->getPackage()
-                ->setExtra($extra);
-        }
+        // No activation logic needed for this plugin
     }
 
     /**

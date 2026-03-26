@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Rector;
 
+use ReflectionClass;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeAnalyzer\CallAnalyzer;
+use Rector\Rector\AbstractRector;
 use FastForward\DevTools\Rector\AddMissingClassPhpDocRector;
 use PhpParser\Comment\Doc;
 use PhpParser\Node\Identifier;
@@ -33,14 +37,19 @@ final class AddMissingClassPhpDocRectorTest extends TestCase
 {
     private AddMissingClassPhpDocRector $rector;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->rector = new AddMissingClassPhpDocRector();
 
-        $nodeNameResolver = (new \ReflectionClass(\Rector\NodeNameResolver\NodeNameResolver::class))->newInstanceWithoutConstructor();
-        
-        $resolverReflection = new \ReflectionClass(\Rector\NodeNameResolver\NodeNameResolver::class);
-        
+        $nodeNameResolver = (new ReflectionClass(
+            NodeNameResolver::class
+        ))->newInstanceWithoutConstructor();
+
+        $resolverReflection = new ReflectionClass(NodeNameResolver::class);
+
         if ($resolverReflection->hasProperty('nodeNameResolvers')) {
             $prop = $resolverReflection->getProperty('nodeNameResolvers');
             $prop->setValue($nodeNameResolver, []);
@@ -53,45 +62,63 @@ final class AddMissingClassPhpDocRectorTest extends TestCase
 
         if ($resolverReflection->hasProperty('callAnalyzer')) {
             $prop = $resolverReflection->getProperty('callAnalyzer');
-            $prop->setValue($nodeNameResolver, (new \ReflectionClass(\Rector\NodeAnalyzer\CallAnalyzer::class))->newInstanceWithoutConstructor());
+            $prop->setValue(
+                $nodeNameResolver,
+                (new ReflectionClass(CallAnalyzer::class))->newInstanceWithoutConstructor()
+            );
         }
 
-        $reflection = new \ReflectionClass(\Rector\Rector\AbstractRector::class);
+        $reflection = new ReflectionClass(AbstractRector::class);
         $property = $reflection->getProperty('nodeNameResolver');
         $property->setValue($this->rector, $nodeNameResolver);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function getRuleDefinitionWillReturnConfiguredDefinition(): void
     {
         $definition = $this->rector->getRuleDefinition();
-        
+
         self::assertSame('Add basic PHPDoc to classes without docblock', $definition->getDescription());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function getNodeTypesWillReturnClassNode(): void
     {
         self::assertSame([Class_::class], $this->rector->getNodeTypes());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillReturnNullIfNotClassNode(): void
     {
         $node = new Function_('test');
-        
+
         self::assertNull($this->rector->refactor($node));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillReturnNullIfNodeHasDocComment(): void
     {
         $node = new Class_('TestClass');
         $node->setDocComment(new Doc('/** @var string */'));
-        
+
         self::assertNull($this->rector->refactor($node));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillAddDocCommentToClassWithoutNamespace(): void
     {
@@ -107,6 +134,9 @@ final class AddMissingClassPhpDocRectorTest extends TestCase
         self::assertStringNotContainsString('@package', $result->getDocComment()->getText());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillAddDocCommentToClassWithNamespace(): void
     {

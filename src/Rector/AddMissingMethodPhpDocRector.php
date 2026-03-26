@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Rector;
 
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use PHPStan\Reflection\ClassReflection;
 use phpowermove\docblock\Docblock;
 use phpowermove\docblock\tags\ParamTag;
@@ -58,10 +59,10 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add basic PHPDoc to methods without docblock', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+            new CodeSample(
                 'public function foo() {}',
                 "/**\n * \n */\npublic function foo() {}"
-            )
+            ),
         ]);
     }
 
@@ -341,7 +342,7 @@ final class AddMissingMethodPhpDocRector extends AbstractRector
 
         foreach ($throwNodes as $throwNode) {
             $throwExpr = $throwNode->expr;
-            
+
             if (! $throwExpr instanceof New_) {
                 continue;
             }

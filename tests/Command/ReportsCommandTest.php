@@ -30,39 +30,58 @@ final class ReportsCommandTest extends AbstractCommandTestCase
 {
     use ProphecyTrait;
 
+    /**
+     * @return string
+     */
     protected function getCommandClass(): string
     {
         return ReportsCommand::class;
     }
 
+    /**
+     * @return string
+     */
     protected function getCommandName(): string
     {
         return 'reports';
     }
 
+    /**
+     * @return string
+     */
     protected function getCommandDescription(): string
     {
         return 'Generates the frontpage for Fast Forward documentation.';
     }
 
+    /**
+     * @return string
+     */
     protected function getCommandHelp(): string
     {
         return 'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.';
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillRunDocsAndTestsCommandAndGenerateFrontpage(): void
     {
         $docsCommand = $this->prophesize(Command::class);
-        $docsCommand->ignoreValidationErrors()->shouldBeCalled();
+        $docsCommand->ignoreValidationErrors()
+            ->shouldBeCalled();
         $docsCommand->run(Argument::any(), Argument::any())->willReturn(ReportsCommand::SUCCESS);
 
         $testsCommand = $this->prophesize(Command::class);
-        $testsCommand->ignoreValidationErrors()->shouldBeCalled();
+        $testsCommand->ignoreValidationErrors()
+            ->shouldBeCalled();
         $testsCommand->run(Argument::any(), Argument::any())->willReturn(ReportsCommand::SUCCESS);
 
-        $this->application->find('docs')->willReturn($docsCommand->reveal());
-        $this->application->find('tests')->willReturn($testsCommand->reveal());
+        $this->application->find('docs')
+            ->willReturn($docsCommand->reveal());
+        $this->application->find('tests')
+            ->willReturn($testsCommand->reveal());
 
         $this->withConfigFile('resources/index.php', true);
 

@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
+use Composer\Composer;
+use Composer\Package\RootPackageInterface;
 use Composer\Console\Application;
 use ReflectionMethod;
 use FastForward\DevTools\Command\AbstractCommand;
@@ -77,18 +79,22 @@ abstract class AbstractCommandTestCase extends TestCase
         $this->filesystem = $this->prophesize(Filesystem::class);
         $this->processHelper = $this->prophesize(ProcessHelper::class);
         $this->application = $this->prophesize(Application::class);
-        $this->composer = $this->prophesize(\Composer\Composer::class);
-        $this->package = $this->prophesize(\Composer\Package\RootPackageInterface::class);
+        $this->composer = $this->prophesize(Composer::class);
+        $this->package = $this->prophesize(RootPackageInterface::class);
 
-        $this->package->getAutoload()->willReturn([
-            'psr-4' => [
-                'FastForward\\DevTools\\' => 'src/',
-            ],
-        ]);
-        $this->package->getName()->willReturn('fast-forward/dev-tools');
-        $this->package->getDescription()->willReturn('Fast Forward Dev Tools plugin');
+        $this->package->getAutoload()
+            ->willReturn([
+                'psr-4' => [
+                    'FastForward\\DevTools\\' => 'src/',
+                ],
+            ]);
+        $this->package->getName()
+            ->willReturn('fast-forward/dev-tools');
+        $this->package->getDescription()
+            ->willReturn('Fast Forward Dev Tools plugin');
 
-        $this->composer->getPackage()->willReturn($this->package->reveal());
+        $this->composer->getPackage()
+            ->willReturn($this->package->reveal());
 
         $this->application->getComposer(Argument::cetera())->willReturn($this->composer->reveal());
 

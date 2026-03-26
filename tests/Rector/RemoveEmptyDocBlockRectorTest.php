@@ -18,6 +18,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Rector;
 
+use ReflectionClass;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\NodeAnalyzer\CallAnalyzer;
+use Rector\Rector\AbstractRector;
+use PhpParser\Node\Expr\Variable;
 use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
@@ -33,14 +38,19 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
 {
     private RemoveEmptyDocBlockRector $rector;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->rector = new RemoveEmptyDocBlockRector();
-        
-        $nodeNameResolver = (new \ReflectionClass(\Rector\NodeNameResolver\NodeNameResolver::class))->newInstanceWithoutConstructor();
-        
-        $resolverReflection = new \ReflectionClass(\Rector\NodeNameResolver\NodeNameResolver::class);
-        
+
+        $nodeNameResolver = (new ReflectionClass(
+            NodeNameResolver::class
+        ))->newInstanceWithoutConstructor();
+
+        $resolverReflection = new ReflectionClass(NodeNameResolver::class);
+
         if ($resolverReflection->hasProperty('nodeNameResolvers')) {
             $prop = $resolverReflection->getProperty('nodeNameResolvers');
             $prop->setValue($nodeNameResolver, []);
@@ -53,58 +63,82 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
 
         if ($resolverReflection->hasProperty('callAnalyzer')) {
             $prop = $resolverReflection->getProperty('callAnalyzer');
-            $prop->setValue($nodeNameResolver, (new \ReflectionClass(\Rector\NodeAnalyzer\CallAnalyzer::class))->newInstanceWithoutConstructor());
+            $prop->setValue(
+                $nodeNameResolver,
+                (new ReflectionClass(CallAnalyzer::class))->newInstanceWithoutConstructor()
+            );
         }
 
-        $reflection = new \ReflectionClass(\Rector\Rector\AbstractRector::class);
+        $reflection = new ReflectionClass(AbstractRector::class);
         $property = $reflection->getProperty('nodeNameResolver');
         $property->setValue($this->rector, $nodeNameResolver);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function getRuleDefinitionWillReturnConfiguredDefinition(): void
     {
-        self::assertSame('Remove empty docblocks from classes and methods', $this->rector->getRuleDefinition()->getDescription());
+        self::assertSame(
+            'Remove empty docblocks from classes and methods',
+            $this->rector->getRuleDefinition()->getDescription()
+        );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function getNodeTypesWillReturnClassAndClassMethodNode(): void
     {
         self::assertSame([Class_::class, ClassMethod::class], $this->rector->getNodeTypes());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillReturnNullIfNotClassOrClassMethodNode(): void
     {
         $node = new Function_('test');
-        
+
         self::assertNull($this->rector->refactor($node));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillReturnNullIfNodeHasNoDocComment(): void
     {
         $node = new Class_('TestClass');
-        
+
         self::assertNull($this->rector->refactor($node));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillReturnNullIfDocCommentIsNotEmpty(): void
     {
         $node = new Class_('TestClass');
         $node->setDocComment(new Doc("/**\n * Test class\n */"));
-        
+
         self::assertNull($this->rector->refactor($node));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillRemoveEmptyDocComment(): void
     {
         $node = new ClassMethod('testMethod');
         $doc = new Doc("/**\n *\n */");
         $comment = new Comment('// test comment');
-        
+
         $node->setDocComment($doc);
         $node->setAttribute('comments', [$comment, $doc]);
 
@@ -115,6 +149,9 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
         self::assertSame([$comment], $result->getAttribute('comments'));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillRemoveSingleLineEmptyDocComment(): void
     {
@@ -127,6 +164,9 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
         self::assertNull($result->getDocComment());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillRemoveEmptyDocCommentWithSpaces(): void
     {
@@ -139,10 +179,13 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
         self::assertNull($result->getDocComment());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function refactorWillReturnNullForNonSupportedNodes(): void
     {
-        $node = new \PhpParser\Node\Expr\Variable('var');
+        $node = new Variable('var');
         self::assertNull($this->rector->refactor($node));
     }
 }

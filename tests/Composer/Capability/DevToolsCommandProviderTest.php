@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 use FastForward\DevTools\Command\AbstractCommand;
 use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Command\InstallScriptsCommand;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
 use FastForward\DevTools\Command\ReportsCommand;
@@ -42,6 +43,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(StandardsCommand::class)]
 #[UsesClass(ReportsCommand::class)]
 #[UsesClass(WikiCommand::class)]
+#[UsesClass(InstallScriptsCommand::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
     private DevToolsCommandProvider $commandProvider;
@@ -70,6 +72,7 @@ final class DevToolsCommandProviderTest extends TestCase
                 new StandardsCommand(),
                 new ReportsCommand(),
                 new WikiCommand(),
+                new InstallScriptsCommand(),
             ],
             $this->commandProvider->getCommands(),
         );

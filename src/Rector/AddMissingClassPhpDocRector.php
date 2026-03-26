@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Rector;
 
+use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
 use Rector\Rector\AbstractRector;
@@ -40,10 +41,10 @@ final class AddMissingClassPhpDocRector extends AbstractRector
     public function getRuleDefinition(): RuleDefinition
     {
         return new RuleDefinition('Add basic PHPDoc to classes without docblock', [
-            new \Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample(
+            new CodeSample(
                 'class SomeClass {}',
                 "/**\n * SomeClass\n */\nclass SomeClass {}"
-            )
+            ),
         ]);
     }
 
