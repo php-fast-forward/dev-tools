@@ -131,7 +131,7 @@ final class InstallCommand extends AbstractCommand
     {
         $finder = Finder::create()
             ->files()
-            ->in($this->getAbsolutePath('resources/github-actions'))
+            ->in($this->getConfigFile('resources/github-actions'))
             ->name('*.yml');
 
         foreach ($finder as $file) {
