@@ -43,8 +43,12 @@ final class InstallCommand extends AbstractCommand
     {
         $this
             ->setName('install')
-            ->setDescription('Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig in the root project.')
-            ->setHelp('This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, and ensures .editorconfig is present and up to date.');
+            ->setDescription(
+                'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig in the root project.'
+            )
+            ->setHelp(
+                'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, and ensures .editorconfig is present and up to date.'
+            );
     }
 
     /**

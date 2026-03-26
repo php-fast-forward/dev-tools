@@ -79,7 +79,7 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
     {
         $event->getComposer()
             ->getEventDispatcher()
-                ->dispatchScript('install', true);
+            ->dispatchScript('install', true);
     }
 
     /**
@@ -96,7 +96,7 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
     {
         $event->getComposer()
             ->getEventDispatcher()
-                ->dispatchScript('install', true);
+            ->dispatchScript('install', true);
     }
 
     /**
