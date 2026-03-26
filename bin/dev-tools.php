@@ -16,7 +16,10 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+$projectVendorAutoload = dirname(__DIR__, 4) . '/vendor/autoload.php';
+$pluginVendorAutoload = dirname(__DIR__) . '/vendor/autoload.php';
+
+require_once file_exists($projectVendorAutoload) ? $projectVendorAutoload : $pluginVendorAutoload;
 
 use FastForward\DevTools\DevTools;
 

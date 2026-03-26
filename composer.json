@@ -72,7 +72,7 @@
         "class": "FastForward\\DevTools\\Composer\\Plugin"
     },
     "scripts": {
-        "dev-tools": "./bin/dev-tools",
-        "dev-tools:fix": "./bin/dev-tools --fix"
+        "dev-tools": "dev-tools",
+        "dev-tools:fix": "dev-tools --fix"
     }
 }

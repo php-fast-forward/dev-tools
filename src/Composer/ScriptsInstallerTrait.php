@@ -55,8 +55,8 @@ trait ScriptsInstallerTrait
         $manipulator = new JsonManipulator($contents);
 
         foreach ([
-            'dev-tools' => './bin/dev-tools',
-            'dev-tools:fix' => './bin/dev-tools --fix',
+            'dev-tools' => 'dev-tools',
+            'dev-tools:fix' => 'dev-tools --fix',
         ] as $name => $command) {
             $manipulator->addSubNode('scripts', $name, $command);
         }
