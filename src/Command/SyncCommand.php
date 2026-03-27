@@ -179,7 +179,7 @@ final class SyncCommand extends AbstractCommand
      */
     private function copyDependabotConfig(): void
     {
-        $source = parent::getDevToolsFile('dependabot.yml');
+        $source = parent::getDevToolsFile('resources/dependabot.yml');
         $target = parent::getConfigFile('.github/dependabot.yml', true);
 
         if ($this->filesystem->exists($target)) {
