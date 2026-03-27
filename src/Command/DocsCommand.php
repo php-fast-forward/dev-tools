@@ -24,6 +24,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Process\Process;
 
+use function Safe\file_get_contents;
 use function array_map;
 use function implode;
 use function ltrim;
@@ -131,7 +132,7 @@ final class DocsCommand extends AbstractCommand
         $guidePath = Path::makeRelative($source, $workingDirectory);
 
         $defaultPackageName = array_key_first($psr4Namespaces) ?: '';
-        $templateContents = $this->filesystem->readFile($templateFile);
+        $templateContents = file_get_contents($templateFile);
 
         $this->filesystem->dumpFile($configFile, strtr($templateContents, [
             '%%TITLE%%' => $this->getProjectDescription(),
