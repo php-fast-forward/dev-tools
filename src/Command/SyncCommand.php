@@ -26,6 +26,8 @@ use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 
+use function Safe\file_get_contents;
+
 /**
  * Represents the command responsible for installing development scripts into `composer.json`.
  * This class MUST NOT be overridden and SHALL rely on the `ScriptsInstallerTrait`.
@@ -70,6 +72,7 @@ final class SyncCommand extends AbstractCommand
         $this->updateComposerJson();
         $this->createGitHubActionWorkflows();
         $this->copyEditorConfig();
+        $this->copyDependabotConfig();
         $this->addRepositoryWikiGitSubmodule();
 
         return self::SUCCESS;
@@ -91,7 +94,7 @@ final class SyncCommand extends AbstractCommand
             return;
         }
 
-        $contents = $this->filesystem->readFile($file);
+        $contents = file_get_contents($file);
         $manipulator = new JsonManipulator($contents);
 
         $scripts = [
@@ -141,7 +144,7 @@ final class SyncCommand extends AbstractCommand
                 continue;
             }
 
-            $content = $this->filesystem->readFile($file->getRealPath());
+            $content = file_get_contents($file->getRealPath());
             $this->filesystem->dumpFile($targetPath, $content);
         }
     }
@@ -163,7 +166,27 @@ final class SyncCommand extends AbstractCommand
             return;
         }
 
-        $content = $this->filesystem->readFile($source);
+        $content = file_get_contents($source);
+        $this->filesystem->dumpFile($target, $content);
+    }
+
+    /**
+     * Installs the dependabot.yml configuration file in the .github directory if it does not exist.
+     *
+     * This method copies the dependabot.yml from the package resources to .github/dependabot.yml if it is not already present.
+     *
+     * @return void
+     */
+    private function copyDependabotConfig(): void
+    {
+        $source = parent::getDevToolsFile('dependabot.yml');
+        $target = parent::getConfigFile('.github/dependabot.yml', true);
+
+        if ($this->filesystem->exists($target)) {
+            return;
+        }
+
+        $content = file_get_contents($source);
         $this->filesystem->dumpFile($target, $content);
     }
 
