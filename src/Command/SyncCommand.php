@@ -209,7 +209,13 @@ final class SyncCommand extends AbstractCommand
             return;
         }
 
-        $process = new Process(['git', 'submodule', 'add', $wikiRepoUrl, $wikiSubmodulePath]);
+        $process = new Process([
+            'git',
+            'submodule',
+            'add',
+            $wikiRepoUrl,
+            Path::makeRelative($wikiSubmodulePath, $this->getCurrentWorkingDirectory()),
+        ]);
         $process->mustRun();
     }
 
