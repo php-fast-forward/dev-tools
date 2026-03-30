@@ -78,6 +78,12 @@ final class TestsCommand extends AbstractCommand
                 shortcut: 'c',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Whether to generate code coverage reports.',
+            )
+            ->addOption(
+                name: 'filter',
+                shortcut: 'f',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Filter which tests to run based on a pattern.',
             );
     }
 
@@ -124,6 +130,10 @@ final class TestsCommand extends AbstractCommand
             $arguments[] = '--testdox-html=' . $this->resolvePath($input, 'coverage') . '/testdox.html';
             $arguments[] = '--coverage-clover=' . $this->resolvePath($input, 'coverage') . '/clover.xml';
             $arguments[] = '--coverage-php=' . $this->resolvePath($input, 'coverage') . '/coverage.php';
+        }
+
+        if ($input->getOption('filter')) {
+            $arguments[] = '--filter=' . $input->getOption('filter');
         }
 
         $command = new Process([...$arguments, $input->getArgument('path')]);
