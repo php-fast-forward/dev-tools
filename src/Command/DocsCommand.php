@@ -63,6 +63,12 @@ final class DocsCommand extends AbstractCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the source directory for the generated HTML documentation.',
                 default: 'docs',
+            )
+            ->addOption(
+                name: 'template',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Path to the template directory for the generated HTML documentation.',
+                default: 'vendor/fast-forward/phpdoc-bootstrap-template',
             );
     }
 
@@ -90,10 +96,17 @@ final class DocsCommand extends AbstractCommand
         }
 
         $target = $this->getAbsolutePath($input->getOption('target'));
+        $template = $input->getOption('template');
 
-        $htmlConfig = $this->createPhpDocumentorConfig(source: $source, target: $target, template: 'default');
+        $htmlConfig = $this->createPhpDocumentorConfig(source: $source, target: $target, template: $template);
 
-        $command = new Process([$this->getAbsolutePath('vendor/bin/phpdoc'), '--config', $htmlConfig]);
+        $command = new Process([
+            $this->getAbsolutePath('vendor/bin/phpdoc'),
+            '--config', 
+            $htmlConfig,
+            '--markers',
+            'TODO,FIXME,BUG,HACK',
+        ]);
 
         return parent::runProcess($command, $output);
     }
