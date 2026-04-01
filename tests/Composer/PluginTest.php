@@ -18,12 +18,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Composer;
 
-use Composer\Package\RootPackageInterface;
-use Composer\EventDispatcher\EventDispatcher;
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Script\Event as ScriptEvent;
+use Composer\Util\Loop;
+use Composer\Util\ProcessExecutor;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Plugin;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -125,62 +125,29 @@ final class PluginTest extends TestCase
      * @return void
      */
     #[Test]
-    public function onPostInstallWillInstallScripts(): void
+    public function runSyncCommandWillExecuteDevToolsSync(): void
     {
         $event = $this->prophesize(ScriptEvent::class);
 
-        // Mock RootPackageInterface para getPackage()
-        $package = $this->prophesize(RootPackageInterface::class);
-        $package->getName()
-            ->willReturn('fast-forward/dev-tools');
-        $this->composer->getPackage()
-            ->willReturn($package->reveal());
+        // Mock ProcessExecutor
+        $processExecutor = $this->prophesize(ProcessExecutor::class);
+        $processExecutor->execute('vendor/bin/dev-tools dev-tools:sync')
+            ->shouldBeCalled();
 
-        // Mock EventDispatcher
-        $eventDispatcher = $this->prophesize(EventDispatcher::class);
-        $eventDispatcher->dispatchScript('dev-tools:sync', true)
-            ->willReturn(0);
-        $this->composer->getEventDispatcher()
-            ->willReturn($eventDispatcher->reveal());
+        // Mock Loop
+        $loop = $this->prophesize(Loop::class);
+        $loop->getProcessExecutor()
+            ->willReturn($processExecutor->reveal());
 
-        $event->getComposer()
-            ->willReturn($this->composer->reveal());
-        $event->getIO()
-            ->willReturn($this->io->reveal());
-
-        $this->plugin->onPostInstall($event->reveal());
-
-        self::assertTrue(true); // Evita teste risky
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function onPostUpdateWillInstallScripts(): void
-    {
-        $event = $this->prophesize(ScriptEvent::class);
-
-        // Mock RootPackageInterface para getPackage()
-        $package = $this->prophesize(RootPackageInterface::class);
-        $package->getName()
-            ->willReturn('fast-forward/dev-tools');
-        $this->composer->getPackage()
-            ->willReturn($package->reveal());
-
-        // Mock EventDispatcher
-        $eventDispatcher = $this->prophesize(EventDispatcher::class);
-        $eventDispatcher->dispatchScript('dev-tools:sync', true)
-            ->willReturn(0);
-        $this->composer->getEventDispatcher()
-            ->willReturn($eventDispatcher->reveal());
+        // Mock Composer
+        $composer = $this->prophesize(Composer::class);
+        $composer->getLoop()
+            ->willReturn($loop->reveal());
 
         $event->getComposer()
-            ->willReturn($this->composer->reveal());
-        $event->getIO()
-            ->willReturn($this->io->reveal());
+            ->willReturn($composer->reveal());
 
-        $this->plugin->onPostUpdate($event->reveal());
+        $this->plugin->runSyncCommand($event->reveal());
 
         self::assertTrue(true); // Evita teste risky
     }

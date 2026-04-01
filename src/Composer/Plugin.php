@@ -60,50 +60,33 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            ScriptEvents::POST_INSTALL_CMD => 'onPostInstall',
-            ScriptEvents::POST_UPDATE_CMD => 'onPostUpdate',
+            ScriptEvents::POST_INSTALL_CMD => 'runSyncCommand',
+            ScriptEvents::POST_UPDATE_CMD => 'runSyncCommand',
         ];
     }
 
     /**
      * Handles the automated script installation.
      *
-     * This method MUST be triggered by `POST_INSTALL_CMD` and SHALL delegate
-     * the actual work to the `installScripts` utility.
+     * This method MUST execute the `dev-tools:sync` command after relevant Composer operations to ensure
+     * the development tools are correctly synchronized with the current project state.
      *
      * @param Event $event the Composer script event context
      *
      * @return void
      */
-    public function onPostInstall(Event $event): void
+    public function runSyncCommand(Event $event): void
     {
         $event->getComposer()
-            ->getEventDispatcher()
-            ->dispatchScript('dev-tools:sync', true);
-    }
-
-    /**
-     * Handles the automated script synchronization after updates.
-     *
-     * This method MUST be triggered by `POST_UPDATE_CMD` and SHALL ensure
-     * that all development scripts are correctly aligned in the root configuration.
-     *
-     * @param Event $event the Composer script event context
-     *
-     * @return void
-     */
-    public function onPostUpdate(Event $event): void
-    {
-        $event->getComposer()
-            ->getEventDispatcher()
-            ->dispatchScript('dev-tools:sync', true);
+            ->getLoop()
+            ->getProcessExecutor()
+            ->execute('vendor/bin/dev-tools dev-tools:sync');
     }
 
     /**
      * Handles activation lifecycle events for the Composer session.
      *
-     * The method MUST ensure the `dev-tools` script capability exists inside `composer.json` extras.
-     * It SHOULD append it if currently missing.
+     * This method MUST adhere to the standard Composer plugin activation protocol, even if no specific logic is required.
      *
      * @param Composer $composer the primary package configuration instance over Composer
      * @param IOInterface $io interactive communication channels
