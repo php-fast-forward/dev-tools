@@ -102,7 +102,7 @@ final class DocsCommand extends AbstractCommand
 
         $command = new Process([
             $this->getAbsolutePath('vendor/bin/phpdoc'),
-            '--config', 
+            '--config',
             $htmlConfig,
             '--markers',
             'TODO,FIXME,BUG,HACK',
