@@ -13,7 +13,7 @@ A Composer plugin and console toolkit designed to unify and standardize developm
 ## 🚀 Installation
 
 ```bash
-composer require --dev fast-forward/dev-tools
+composer require --dev fast-forward/dev-tools:dev-main
 ```
 
 ## 🛠️ Usage

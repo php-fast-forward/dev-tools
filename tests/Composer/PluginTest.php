@@ -116,6 +116,21 @@ final class PluginTest extends TestCase
      * @return void
      */
     #[Test]
+    public function getSubscribedEventsWillReturnExpectedEventMapping(): void
+    {
+        self::assertSame(
+            [
+                'post-install-cmd' => 'runSyncCommand',
+                'post-update-cmd' => 'runSyncCommand',
+            ],
+            Plugin::getSubscribedEvents(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function activateWillDoNothing(): void
     {
         self::assertNull($this->plugin->activate($this->composer->reveal(), $this->io->reveal()));

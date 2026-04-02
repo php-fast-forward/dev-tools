@@ -8,4 +8,8 @@
          displayDetailsOnPhpunitDeprecations="true"
          failOnPhpunitDeprecation="true"
          failOnRisky="true"
-         failOnWarning="true"/>
+         failOnWarning="true">
+    <extensions>
+        <bootstrap class="FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension" />
+    </extensions>   
+</phpunit>  

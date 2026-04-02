@@ -15,7 +15,7 @@ Require the package as a development dependency using Composer:
 
 .. code-block:: bash
 
-   composer require --dev fast-forward/dev-tools
+   composer require --dev fast-forward/dev-tools:dev-main
 
 What happens during installation?
 ---------------------------------
