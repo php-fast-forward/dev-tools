@@ -24,7 +24,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use ReflectionClass;
+use Symfony\Component\VarExporter\Instantiator;
 
 #[CoversClass(ByPassfinalsStartedSubscriber::class)]
 final class ByPassfinalsStartedSubscriberTest extends TestCase
@@ -38,7 +38,7 @@ final class ByPassfinalsStartedSubscriberTest extends TestCase
     public function notifyWillEnableBypassFinals(): void
     {
         $subscriber = new ByPassfinalsStartedSubscriber();
-        $event = (new ReflectionClass(Started::class))->newInstanceWithoutConstructor();
+        $event = Instantiator::instantiate(Started::class);
 
         $this->expectNotToPerformAssertions();
         $subscriber->notify($event);
