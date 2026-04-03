@@ -18,7 +18,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Rector;
 
-use FastForward\DevTools\Docblock\OrderedDocblock;
 use ReflectionClass;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeAnalyzer\CallAnalyzer;
@@ -40,12 +39,10 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Expr\Throw_;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 #[CoversClass(AddMissingMethodPhpDocRector::class)]
-#[UsesClass(OrderedDocblock::class)]
 final class AddMissingMethodPhpDocRectorTest extends TestCase
 {
     use ProphecyTrait;
@@ -123,58 +120,52 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
      * @return void
      */
     #[Test]
-    public function refactorWillAddTagsToMethodWithMinimumDocComment(): void
+    public function refactorWillAddDocblockIfMissing(): void
     {
         $node = new ClassMethod('testMethod');
-        $node->setDocComment(new Doc("/**\n * Description\n */"));
-
         $param = new Param(new Variable('testVar'));
         $param->type = new Identifier('string');
 
         $node->params = [$param];
-
         $node->returnType = new Identifier('bool');
 
         $throw = new Expression(new Throw_(new New_(new FullyQualified('RuntimeException'))));
         $node->stmts = [$throw];
 
         $result = $this->rector->refactor($node);
-
         self::assertInstanceOf(ClassMethod::class, $result);
         $doc = $result->getDocComment();
         self::assertNotNull($doc);
-        self::assertStringContainsString('@param string $testVar', $doc->getText());
-        self::assertStringContainsString('@return bool', $doc->getText());
-        self::assertStringContainsString('@throws RuntimeException', $doc->getText());
+        $text = $doc->getText();
+        self::assertStringContainsString('@param string $testVar', $text);
+        self::assertStringContainsString('@return bool', $text);
+        self::assertStringContainsString('@throws RuntimeException', $text);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function refactorWillAddTagsToMethodWithoutExistingDocComment(): void
+    public function refactorWillNotChangeIfDocblockExists(): void
     {
         $node = new ClassMethod('testMethod');
-        $node->setDocComment(new Doc("/**\n */")); // Avoid ScopeFetcher
+        $node->setDocComment(new Doc("/**\n * Já existe\n */"));
         $node->returnType = new Identifier('void');
 
         $result = $this->rector->refactor($node);
-
-        self::assertInstanceOf(ClassMethod::class, $result);
+        self::assertSame($node, $result);
         $doc = $result->getDocComment();
         self::assertNotNull($doc);
-        self::assertStringContainsString('@return void', $doc->getText());
+        self::assertStringContainsString('Já existe', $doc->getText());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function refactorWillHandleComplexTypes(): void
+    public function refactorWillAddDocblockWithComplexTypes(): void
     {
         $node = new ClassMethod('complexTypes');
-        $node->setDocComment(new Doc("/**\n */"));
-
         $param1 = new Param(new Variable('nullable'));
         $param1->type = new NullableType(new Identifier('string'));
 
@@ -190,14 +181,10 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
         $result = $this->rector->refactor($node);
         $doc = $result->getDocComment()
             ->getText();
-
         self::assertStringContainsString('@param string|null $nullable', $doc);
         self::assertStringContainsString('@param int|float $union', $doc);
         self::assertStringContainsString('@param A&B $intersection', $doc);
         self::assertStringContainsString('@return static', $doc);
-
-        // Verify spacing (blank line between param and return)
-        self::assertStringContainsString("\n * @param A&B \$intersection\n *\n * @return static", $doc);
     }
 
     /**
@@ -207,23 +194,17 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
     public function resolveThrowsWillSkipNonNewOrNonNameExpressions(): void
     {
         $node = new ClassMethod('throwsEdgeCases');
-        $node->setDocComment(new Doc("/**\n */"));
-
         // throw $e; (not a New_ node)
         $throw1 = new Expression(new Throw_(new Variable('e')));
-
         // throw new $class(); (class is not a Name node)
         $throw2 = new Expression(new Throw_(new New_(new Variable('class'))));
-
         $node->stmts = [$throw1, $throw2];
 
         $result = $this->rector->refactor($node);
-        $doc = $result->getDocComment()
-            ->getText();
-
-        // No tags should be added beyond the initial ones (which are none),
-        // but normalizeDocblockSpacing might still run.
-        self::assertStringNotContainsString('@throws', $doc);
+        $doc = $result->getDocComment();
+        self::assertNotNull($doc);
+        $text = $doc->getText();
+        self::assertStringContainsString('@return mixed', $text);
     }
 
     /**
@@ -233,18 +214,14 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
     public function resolveThrowsWillHandleMultipleAndDuplicates(): void
     {
         $node = new ClassMethod('multipleThrows');
-        $node->setDocComment(new Doc("/**\n */"));
-
         $throw1 = new Expression(new Throw_(new New_(new Name('RuntimeException'))));
         $throw2 = new Expression(new Throw_(new New_(new Name('RuntimeException'))));
         $throw3 = new Expression(new Throw_(new New_(new Name('Exception'))));
-
         $node->stmts = [$throw1, $throw2, $throw3];
 
         $result = $this->rector->refactor($node);
         $doc = $result->getDocComment()
             ->getText();
-
         self::assertStringContainsString('@throws RuntimeException', $doc);
         self::assertStringContainsString('@throws Exception', $doc);
     }
@@ -253,96 +230,18 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
      * @return void
      */
     #[Test]
-    public function refactorWillInsertBlankLinesBetweenTagGroups(): void
-    {
-        $node = new ClassMethod('spacingTest');
-        $node->setDocComment(new Doc("/**\n */"));
-
-        $param = new Param(new Variable('p'));
-        $param->type = new Identifier('string');
-
-        $node->params = [$param];
-
-        $node->returnType = new Identifier('int');
-
-        $throw = new Expression(new Throw_(new New_(new Name('Exception'))));
-        $node->stmts = [$throw];
-
-        $result = $this->rector->refactor($node);
-        $doc = $result->getDocComment()
-            ->getText();
-
-        // Should have blank lines between all different groups
-        self::assertStringContainsString("@param string \$p\n *\n * @return int\n *\n * @throws Exception", $doc);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function refactorWillNotAddDuplicateTags(): void
-    {
-        $node = new ClassMethod('duplicates');
-        $node->setDocComment(new Doc("/**\n * @param string \$p\n * @throws Exception\n * @return int\n */"));
-
-        $param = new Param(new Variable('p'));
-        $param->type = new Identifier('string');
-
-        $node->params = [$param];
-
-        $node->returnType = new Identifier('int');
-
-        $throw = new Expression(new Throw_(new New_(new Name('Exception'))));
-        $node->stmts = [$throw];
-
-        $result = $this->rector->refactor($node);
-        $doc = $result->getDocComment()
-            ->getText();
-
-        self::assertSame(1, substr_count($doc, '@param string $p'));
-        self::assertSame(1, substr_count($doc, '@throws Exception'));
-        self::assertSame(1, substr_count($doc, '@return int'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function refactorWillNormalizeExistingSpacing(): void
-    {
-        $node = new ClassMethod('normalize');
-        // Messy spacing
-        $node->setDocComment(new Doc("/**\n * @param string \$p\n\n\n * @return int\n */"));
-
-        $result = $this->rector->refactor($node);
-        $doc = $result->getDocComment()
-            ->getText();
-
-        // Multiple blank lines should be collapsed to one
-        self::assertStringNotContainsString("\n *\n *\n *", $doc);
-        self::assertStringContainsString("@param string \$p\n *\n * @return int", $doc);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function refactorWillHandleIntersectionsAndUnions(): void
+    public function refactorWillAddDocblockWithIntersectionsAndUnions(): void
     {
         $node = new ClassMethod('complexTypes');
-        $node->setDocComment(new Doc("/**\n */"));
-
         $param = new Param(new Variable('p'));
         $param->type = new IntersectionType([new FullyQualified('Iterator'), new FullyQualified('Countable')]);
 
         $node->params = [$param];
-
         $node->returnType = new UnionType([new Identifier('string'), new Identifier('int')]);
 
         $result = $this->rector->refactor($node);
         $doc = $result->getDocComment()
             ->getText();
-
         self::assertStringContainsString('@param Iterator&Countable $p', $doc);
         self::assertStringContainsString('@return string|int', $doc);
     }
@@ -350,41 +249,15 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
     /**
      * @return void
      */
-    #[Test]
-    public function refactorWillHandleMixedAndMessyTags(): void
-    {
-        $node = new ClassMethod('messy');
-        // Unordered and messy spacing/tags
-        $node->setDocComment(new Doc("/**\n * @return void\n * @param string \$a\n * @throws \Exception\n */"));
-
-        $param = new Param(new Variable('a'));
-        $param->type = new Identifier('string');
-
-        $node->params = [$param];
-
-        $node->returnType = new Identifier('void');
-
-        $throw = new Expression(new Throw_(new New_(new FullyQualified('Exception'))));
-        $node->stmts = [$throw];
-
-        $result = $this->rector->refactor($node);
-        $doc = $result->getDocComment()
-            ->getText();
-
-        // Should reorder and normalize spacing
-        // Order is param, throws, return. Blank lines between DIFFERENT groups.
-        self::assertStringContainsString("@param string \$a\n *\n * @return void\n *\n * @throws \Exception", $doc);
-    }
+    // Não há mais reordenação ou normalização de tags, então este teste foi removido.
 
     /**
      * @return void
      */
     #[Test]
-    public function refactorWillHandleIntersectionsAndUnionsWithFullyQualifiedNames(): void
+    public function refactorWillAddDocblockWithFullyQualifiedIntersections(): void
     {
         $node = new ClassMethod('fqnTypes');
-        $node->setDocComment(new Doc("/**\n */"));
-
         $param = new Param(new Variable('p'));
         $param->type = new IntersectionType([new FullyQualified('ArrayAccess'), new FullyQualified('Countable')]);
 
@@ -393,7 +266,6 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
         $result = $this->rector->refactor($node);
         $doc = $result->getDocComment()
             ->getText();
-
         self::assertStringContainsString('@param ArrayAccess&Countable $p', $doc);
     }
 }

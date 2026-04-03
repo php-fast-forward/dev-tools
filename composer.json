@@ -36,7 +36,6 @@
         "friendsofphp/php-cs-fixer": "^3.94",
         "jolicode/jolinotif": "^3.3",
         "phpdocumentor/shim": "^3.9",
-        "phpowermove/docblock": "^4.0",
         "phpro/grumphp": "^2.19",
         "phpspec/prophecy-phpunit": "^2.5",
         "phpunit/phpunit": "^12.5",

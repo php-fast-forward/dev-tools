@@ -22,6 +22,7 @@ use Ergebnis\Rector\Rules\Faker\GeneratorPropertyFetchToMethodCallRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
 use Rector\Config\RectorConfig;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
 use Rector\Set\ValueObject\SetList;
@@ -45,6 +46,7 @@ return static function (RectorConfig $rectorConfig): void {
         getcwd() . '/vendor',
         getcwd() . '/tmp',
         RemoveUselessReturnTagRector::class,
+        RemoveUselessParamTagRector::class,
     ]);
     $rectorConfig->cacheDirectory(getcwd() . '/tmp/cache/rector');
     $rectorConfig->importNames();

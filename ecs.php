@@ -21,6 +21,7 @@ use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocAddMissingParamAnnotationFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestCaseStaticMethodCallsFixer;
@@ -50,4 +51,7 @@ return ECSConfig::configure()
     ])
     ->withConfiguredRule(PhpUnitTestCaseStaticMethodCallsFixer::class, [
         'call_type' => 'self',
+    ])
+    ->withConfiguredRule(PhpdocAddMissingParamAnnotationFixer::class, [
+        'only_untyped' => false,
     ]);
