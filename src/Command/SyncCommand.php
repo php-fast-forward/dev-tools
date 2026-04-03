@@ -200,14 +200,14 @@ final class SyncCommand extends AbstractCommand
      */
     private function addRepositoryWikiGitSubmodule(): void
     {
-        $repositoryUrl = $this->getGitRepositoryUrl();
-
-        $wikiRepoUrl = str_replace('.git', '.wiki.git', $repositoryUrl);
         $wikiSubmodulePath = parent::getConfigFile('.github/wiki', true);
 
         if ($this->filesystem->exists($wikiSubmodulePath)) {
             return;
         }
+
+        $repositoryUrl = $this->getGitRepositoryUrl();
+        $wikiRepoUrl = str_replace('.git', '.wiki.git', $repositoryUrl);
 
         $process = new Process([
             'git',
