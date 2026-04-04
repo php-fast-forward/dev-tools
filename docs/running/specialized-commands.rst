@@ -1,83 +1,140 @@
 Specialized Commands
 ====================
 
-The unified toolkit exposes robust standalone commands mapped directly to discrete operational behaviors for enhanced granularity natively.
+Use the standalone commands when you want one tool instead of the full
+``standards`` pipeline.
 
-1. Running Tests (``tests``)
-----------------------------
+``tests``
+---------
 
-Safely executes the meticulously configured PHPUnit test suite against your codebase exactly. It automatically allocates valid configuration routes natively.
+Runs PHPUnit with the resolved ``phpunit.xml``.
 
 .. code-block:: bash
 
    composer dev-tools tests
+   composer dev-tools tests -- --filter=EventTracerTest
 
-*Supports passing ``--coverage`` to dictate HTML frontend reporting.*
+Important details:
 
-2. Auditing Code Style (``code-style``)
----------------------------------------
+- local ``phpunit.xml`` is preferred over the packaged default;
+- ``--coverage=<path>`` creates HTML, Testdox, Clover, and raw coverage output;
+- ``--no-cache`` disables ``tmp/cache/phpunit``;
+- the packaged configuration registers the DevTools PHPUnit extension.
 
-Analyzes and transparently validates adherence to standard coding constraints leveraging EasyCodingStandard (ECS) and Composer Normalize.
+``code-style``
+--------------
+
+Runs Composer Normalize and ECS.
 
 .. code-block:: bash
 
    composer dev-tools code-style
+   composer dev-tools code-style -- --fix
 
-*Supports passing ``--fix`` to adjust syntax automatically.*
+Important details:
 
-3. Automated Refactoring (``refactor``)
----------------------------------------
+- it always executes ``composer update --lock --quiet`` first;
+- without ``--fix``, Composer Normalize runs in ``--dry-run`` mode;
+- ECS uses local ``ecs.php`` when present, otherwise the packaged fallback.
 
-Triggers abstract syntax tree inspections evaluating logical components internally. It strictly executes architecture upgrades efficiently and securely via Rector natively.
+``refactor``
+------------
+
+Runs Rector against the current project.
 
 .. code-block:: bash
 
    composer dev-tools refactor
+   composer dev-tools refactor -- --fix
 
-*Supports passing ``--fix`` to apply transformations to code files.*
+Important details:
 
-4. Generating PHPDoc (``phpdoc``)
-----------------------------------
+- without ``--fix``, Rector runs in dry-run mode;
+- local ``rector.php`` is preferred when present;
+- the packaged default includes Fast Forward custom Rector rules plus shared
+  Rector sets.
 
-Intelligently audits your project methods to identify lacking definitions, executing Rector rules conforming to `RFC 2119 <https://datatracker.ietf.org/doc/html/rfc2119>`_ dynamically.
+``phpdoc``
+----------
+
+Coordinates PHP-CS-Fixer and a focused Rector pass for missing method PHPDoc.
 
 .. code-block:: bash
 
    composer dev-tools phpdoc
+   composer dev-tools phpdoc -- --fix
 
-5. HTML Documentation (``docs``)
---------------------------------
+Important details:
 
-Reads defined PSR-4 paths logically extracting explicit structures accurately. It deploys HTML documentation describing your internal structural hierarchy using phpDocumentor.
+- it creates ``.docheader`` from the packaged template when the file is
+  missing;
+- it uses ``.php-cs-fixer.dist.php`` and ``rector.php`` through the same
+  local-first fallback logic;
+- the Rector phase explicitly runs
+  ``FastForward\DevTools\Rector\AddMissingMethodPhpDocRector``.
+
+``docs``
+--------
+
+Builds the HTML documentation site with phpDocumentor.
 
 .. code-block:: bash
 
    composer dev-tools docs
+   vendor/bin/dev-tools docs --source=docs --target=public
 
+Important details:
 
-6. Wiki Markdown Documentation (``wiki``)
------------------------------------------
+- ``docs/`` must exist unless you pass another ``--source`` directory;
+- API pages are built from the PSR-4 paths declared in ``composer.json``;
+- guide pages are built from the selected source directory;
+- ``--template`` defaults to
+  ``vendor/fast-forward/phpdoc-bootstrap-template``.
 
-Generates API documentation in Markdown format, ideal for GitHub wikis or other collaborative documentation platforms. The output is placed in the ``.github/wiki`` directory, making it easy to keep your project wiki up to date with the latest API changes.
+``wiki``
+--------
+
+Builds Markdown API pages for a GitHub wiki.
 
 .. code-block:: bash
 
    composer dev-tools wiki
 
-7. Reports Output (``reports``)
--------------------------------
+Important details:
 
-Structurally consolidates distinct reporting commands, accurately aggregating testing coverage and docs into clean visual output components.
+- the default output directory is ``.github/wiki``;
+- it uses the Markdown template from
+  ``vendor/saggre/phpdocumentor-markdown/themes/markdown``;
+- it is especially useful together with the reusable wiki workflow.
+
+``reports``
+-----------
+
+Runs the documentation and test-report pipeline used by GitHub Pages.
 
 .. code-block:: bash
 
    composer dev-tools reports
 
-8. Sync (``dev-tools:sync``)
-------------------------
+Important details:
 
-Adds or updates dev-tools scripts in your ``composer.json``, copies reusable GitHub Actions workflows, ensures the ``.editorconfig`` file is present and up to date, and guarantees the repository wiki is present as a git submodule in ``.github/wiki``. This command helps standardize your team's workflow and automation setup.
+- it calls ``docs --target public``;
+- it calls ``tests --coverage public/coverage``;
+- it is the reporting stage used by ``standards``.
+
+``dev-tools:sync``
+------------------
+
+Synchronizes consumer-facing automation and defaults.
 
 .. code-block:: bash
 
    composer dev-tools:sync
+
+Important details:
+
+- it updates ``composer.json`` scripts and
+  ``extra.grumphp.config-default-path``;
+- it copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``;
+- it creates ``.github/wiki`` as a git submodule when the directory is
+  missing.

@@ -1,12 +1,8 @@
 Running the Tools
 =================
 
-The FastForward DevTools plugin registers a solitary, unified entry point containing all operations natively. This section covers the execution of these commands, ranging from the full suite runner to granular targeted tools.
-
-Once installed, your Composer environment gains superpowers: allowing you to lint, format, refactor, and generate documentation via straightforward commands without worrying about underlying configurations or path resolving.
-
-In this Section
----------------
+This section is the command reference. Use it when you already know which
+command you want and need the exact behavior, flags, or output locations.
 
 .. toctree::
    :maxdepth: 1

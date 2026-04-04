@@ -1,31 +1,41 @@
 The Unified Command
 ===================
 
-FastForward DevTools exposes a highly reliable base command to orchestrate tests, generate documentation, validate constraints, and audit your code styling strictly sequentially.
+The default command of the local application is ``standards``. In practice,
+that means the following entry points all reach the same orchestration flow:
 
-Executing the QA Suite
-----------------------
+- ``composer dev-tools``
+- ``vendor/bin/dev-tools``
+- ``vendor/bin/dev-tools standards``
 
-To run all capabilities, simply execute:
+Execution Order
+---------------
 
-.. code-block:: bash
-
-   composer dev-tools
-
-This master command runs internal commands in the following sequence:
+``standards`` runs these commands in sequence:
 
 1. ``refactor``
 2. ``phpdoc``
 3. ``code-style``
 4. ``reports``
 
-Auto-fixing Issues
-------------------
+The command attempts every stage and returns a failing exit code if any stage
+failed.
 
-If you intend to instruct the automated tools (e.g., Rector, ECS, and PHP-CS-Fixer) to resolve style violations transparently and iteratively, append the ``--fix`` (or ``-f``) flag to the instruction:
+Using ``--fix``
+---------------
+
+To allow the tools to modify files, use one of the following entry points:
 
 .. code-block:: bash
 
    composer dev-tools:fix
+   vendor/bin/dev-tools standards --fix
 
-Using this flag guarantees that formatting inconsistencies and missing PHPDocs are automatically patched inside your files directly, drastically reducing manual review times before submitting a Pull Request.
+The flag mainly affects ``refactor``, ``phpdoc``, and ``code-style``. The
+reporting steps still run, but they do not use the flag themselves.
+
+When the Unified Command Is the Right Choice
+--------------------------------------------
+
+Use ``standards`` before pushing, before opening a pull request, or after a
+large refactor when you want one command to rebuild the expected project state.

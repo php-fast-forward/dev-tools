@@ -1,25 +1,66 @@
 Overriding Defaults
 ===================
 
-When invoked, the internal toolkit instances dramatically minimize setup times by dynamically reverting to sensible, strict configuration defaults securely bundled within the ``fast-forward/dev-tools`` package itself.
+Local override files let a consumer project keep the Fast Forward baseline
+without forking the whole package.
 
-However, recognizing that specific projects may have edge-cases or expanded scopes, DevTools allows you to effortlessly override these settings locally.
-
-How to Override
----------------
-
-To override a default setup, simply create the corresponding configuration file mapped firmly onto your generic root application path:
-
-- ``ecs.php`` (for Code Style specifications)
-- ``rector.php`` (for Application Refactoring targets)
-- ``phpunit.xml`` (for managing Testing suites)
-
-Resolution Logic
+Resolution Order
 ----------------
 
-The internal execution engine (housed in ``AbstractCommand``) invokes ``getConfigFile()``. This method specifically verifies the presence of the configuration file inside your project’s working directory:
+``FastForward\DevTools\Command\AbstractCommand::getConfigFile()`` resolves
+configuration in this order:
 
-1. If the mapped configuration file *exists*, tools utilize the custom instructions provided within your project.
-2. If the configuration file is *absent*, the ``dev-tools`` process securely abstracts the instruction and dynamically relays it to the standard template preserved within the Composer installation path.
+1. Check whether the file exists in the current working directory.
+2. Use the local file when it exists.
+3. Otherwise fall back to the packaged file inside ``fast-forward/dev-tools``.
 
-This guarantees robust predictability while maintaining advanced customization capabilities reliably.
+Commands and Their Configuration Files
+--------------------------------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Command
+     - Local file
+     - Fallback behavior
+   * - ``code-style``
+     - ``ecs.php``
+     - Falls back to the packaged ECS configuration.
+   * - ``refactor``
+     - ``rector.php``
+     - Falls back to the packaged Rector configuration.
+   * - ``tests``
+     - ``phpunit.xml``
+     - Falls back to the packaged PHPUnit configuration.
+   * - ``phpdoc``
+     - ``.php-cs-fixer.dist.php`` and ``rector.php``
+     - Falls back to the packaged files; ``.docheader`` is created locally
+       when missing.
+   * - ``docs``
+     - ``docs/`` or another path passed with ``--source``
+     - The selected guide source must exist locally.
+   * - ``dev-tools:sync``
+     - Consumer repository files
+     - Works directly against local project files such as ``composer.json`` and
+       ``.github/*``.
+
+A Practical Example
+-------------------
+
+To customize Rector for one library, create ``rector.php`` in the consumer
+project root. The ``refactor`` command and the Rector phase inside ``phpdoc``
+will use that file instead of the packaged default.
+
+What Is Not Overwritten Automatically
+-------------------------------------
+
+- existing workflow files in ``.github/workflows/``;
+- an existing ``.editorconfig``;
+- an existing ``.github/dependabot.yml``;
+- an existing ``.github/wiki`` directory or submodule.
+
+.. tip::
+
+   Start with the packaged defaults, copy only the file you need to customize,
+   and keep the rest on the shared baseline. That gives you the least
+   maintenance overhead across Fast Forward libraries.

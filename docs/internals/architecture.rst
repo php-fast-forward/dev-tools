@@ -1,25 +1,58 @@
 Architecture and Command Lifecycle
 ==================================
 
-Understanding the structural execution behavior naturally highlights the toolkit's strict stability expectations.
+The package has two connected execution models: local command execution and
+consumer repository synchronization.
 
-1. Plugin Initialization
-------------------------
+Local Command Lifecycle
+-----------------------
 
-Upon invoking composer context triggers, the overarching ``Plugin`` class initializes. Acting in isolation, it intercepts generic triggers dynamically providing seamless integration without modifying your ``composer.json`` destructively beyond safe metadata insertions. It relies meticulously on the ``Composer\Plugin\Capable`` interface implementation natively.
+1. ``bin/dev-tools`` loads ``bin/dev-tools.php``.
+2. ``bin/dev-tools.php`` prefers the consumer ``vendor/autoload.php`` and
+   falls back to the package autoloader.
+3. ``FastForward\DevTools\DevTools`` boots the command registry from
+   ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
+4. ``standards`` is used as the default command when no explicit command name
+   is given.
+5. Individual commands resolve local configuration first and packaged
+   fallbacks second through
+   ``FastForward\DevTools\Command\AbstractCommand::getConfigFile()``.
 
-2. Dynamic Command Provider
----------------------------
+Consumer Synchronization Lifecycle
+----------------------------------
 
-A dedicated constraint definition mapped to ``DevToolsCommandProvider`` statically compiles specific functional dependencies securely. This system registers commands directly into Composer’s known operational boundaries cleanly, allowing generic shell commands (e.g. ``composer dev-tools``) to act natively like binary scripts correctly.
+1. A library installs ``fast-forward/dev-tools`` as a development dependency.
+2. Composer loads ``FastForward\DevTools\Composer\Plugin``.
+3. The plugin exposes commands through
+   ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
+4. After ``composer install`` or ``composer update``, the plugin runs
+   ``vendor/bin/dev-tools dev-tools:sync``.
+5. ``FastForward\DevTools\Command\SyncCommand`` updates scripts, GitHub
+   workflow stubs, ``.editorconfig``, ``dependabot.yml``, and the wiki
+   submodule in the consumer repository.
 
-3. Abstract Execution Layer
----------------------------
+Documentation Pipeline
+----------------------
 
-Functional execution contexts actively inherit orchestrated, inherently isolated structures directly via ``AbstractCommand``. Features abstracted inside this definition include:
+1. ``FastForward\DevTools\Command\DocsCommand`` reads PSR-4 paths from
+   ``composer.json``.
+2. It generates a temporary ``phpdocumentor.xml`` file in
+   ``tmp/cache/phpdoc``.
+3. phpDocumentor builds API pages from those PSR-4 paths.
+4. phpDocumentor also builds the guide from the selected ``docs/`` source
+   directory.
+5. ``FastForward\DevTools\Command\ReportsCommand`` combines that
+   documentation build with PHPUnit coverage generation.
 
-* **Path Resolution:** Computing absolute execution binaries securely via ``getAbsolutePath()``.
-* **Metadata Integration:** Deriving target properties intelligently relying natively on ``getPsr4Namespaces()``.
-* **Operational Execution:** Governing generic isolated context processing triggering fully operational and robust ``Symfony\Component\Process\Process`` structures successfully executing targeted binaries recursively cleanly.
+Key Abstraction
+---------------
 
-By preserving logical domains explicitly, developers ensure dependencies evaluate natively mitigating unwanted conflicts transparently openly natively.
+``FastForward\DevTools\Command\AbstractCommand`` is the main shared layer. It
+centralizes:
+
+- current working directory detection;
+- absolute path resolution;
+- local-versus-packaged config lookup;
+- command-to-command dispatch inside the same application;
+- access to Composer package metadata such as PSR-4 namespaces and project
+  description.

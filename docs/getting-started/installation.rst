@@ -1,26 +1,77 @@
 Installation
 ============
 
-Because FastForward DevTools operates as a Composer plugin, the installation process seamlessly integrates its commands directly into your project environment automatically.
+FastForward DevTools is installed as a development dependency and exposed
+through Composer as both a plugin and a local binary.
 
 Requirements
 ------------
 
-Ensure you meet the basic requirements described in `Supported PHP Versions <supported-php-versions>`_.
+- PHP 8.3 or newer.
+- Composer 2.
+- A project with PSR-4 autoload definitions in ``composer.json``.
+- Git, if you want ``dev-tools:sync`` to create the repository wiki submodule.
 
-Using Composer
---------------
-
-Require the package as a development dependency using Composer:
+Install with Composer
+---------------------
 
 .. code-block:: bash
 
-   composer require --dev fast-forward/dev-tools:dev-main
+   composer require --dev fast-forward/dev-tools
 
-What happens during installation?
----------------------------------
+What happens after installation?
+--------------------------------
 
-1. Composer installs the package alongside its underlying tool dependencies (``symplify/easy-coding-standard``, ``rector/rector``, ``phpunit/phpunit``, ``phpdocumentor/shim``, etc.).
-2. The internal ``Plugin`` provider securely audits your ``composer.json`` file.
-3. The plugin natively injects the ``composer-command-provider`` instructions containing ``DevToolsCommandProvider::class`` into your ``extra`` configuration block.
-4. Finally, it initializes the ``dev-tools`` executable script shortcut globally within your project, making commands accessible via ``composer dev-tools``.
+When Composer finishes the install or update, the package performs the
+following steps:
+
+1. Composer loads ``FastForward\DevTools\Composer\Plugin``.
+2. The plugin exposes commands through
+   ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
+3. Composer triggers ``vendor/bin/dev-tools dev-tools:sync`` after install and
+   update.
+4. ``dev-tools:sync`` adds or refreshes the ``dev-tools`` and
+   ``dev-tools:fix`` scripts in the consumer ``composer.json``.
+5. ``dev-tools:sync`` updates ``extra.grumphp.config-default-path`` and copies
+   missing automation assets such as workflow stubs, ``.editorconfig``, and
+   ``.github/dependabot.yml``.
+6. If ``.github/wiki`` is missing, ``dev-tools:sync`` adds it as a Git
+   submodule that points to the repository wiki.
+
+First commands to try
+---------------------
+
+After installation, these are the most useful sanity checks:
+
+.. code-block:: bash
+
+   composer dev-tools tests
+   composer dev-tools docs
+   composer dev-tools
+
+If Composer argument forwarding becomes awkward, call the binary directly:
+
+.. code-block:: bash
+
+   vendor/bin/dev-tools tests --filter=SyncCommandTest
+
+When manual sync is useful
+--------------------------
+
+If the package was installed with Composer plugins disabled, or if you want to
+refresh consumer automation after upgrading this package, run:
+
+.. code-block:: bash
+
+   composer dev-tools:sync
+
+Or call the binary explicitly:
+
+.. code-block:: bash
+
+   vendor/bin/dev-tools dev-tools:sync
+
+.. important::
+
+   The ``docs`` and ``reports`` commands require a ``docs/`` directory. If
+   your package does not have one yet, create it before running those commands.

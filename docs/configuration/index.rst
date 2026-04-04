@@ -1,14 +1,12 @@
 Configuration
 =============
 
-FastForward DevTools is strictly built on the philosophy of **Convention over Configuration**. This section explains how configurations are supplied by default and how they can be modified.
-
-By default, the plugin aims to provide zero-configuration setups for all underlying QA tools. However, identifying that advanced scenarios may require specific rulesets or paths, the architecture supports granular overrides locally within your project context.
-
-In this Section
----------------
+FastForward DevTools follows convention over configuration. Consumer projects
+start with useful packaged defaults, but local overrides always win when a
+command supports them.
 
 .. toctree::
    :maxdepth: 1
 
+   tooling-defaults
    overriding-defaults

@@ -1,12 +1,33 @@
 Supported PHP Versions
 ======================
 
-This library explicitly utilizes modern PHP typed properties, union types, strict definitions, and ``match`` expressions internally. As such, the supported engine versions are strictly managed.
+The package targets modern PHP and ships configuration files that assume PHP
+8.3 language features and tooling support.
 
-Minimum Requirements
---------------------
+Compatibility Summary
+---------------------
 
-- **Minimum PHP Version:** ``^8.3``
-- **Recommended PHP Version:** 8.3 or greater
+.. list-table::
+   :header-rows: 1
 
-Please ensure your local environment and Continuous Integration (CI) pipelines satisfy the PHP 8.3 minimum constraints prior to installation. Execution against older versions is officially unsupported and may result in parsing failures.
+   * - Area
+     - Version
+     - Notes
+   * - Minimum supported version
+     - ``8.3``
+     - Declared in ``composer.json``.
+   * - Composer platform baseline
+     - ``8.3.0``
+     - Used to resolve dependencies consistently during development.
+   * - CI matrix
+     - ``8.3``, ``8.4``, ``8.5``
+     - Covered by the reusable ``tests.yml`` workflow.
+
+Practical Guidance
+------------------
+
+- Treat PHP 8.3 as the compatibility floor for local development.
+- If a consumer library tests against newer engines, keep the local minimum at
+  8.3 unless the library itself is intentionally raising its baseline.
+- When debugging dependency resolution, remember that the package sets
+  ``config.platform.php`` to ``8.3.0``.
