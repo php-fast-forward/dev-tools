@@ -50,7 +50,7 @@ jobs:
               uses: php-actions/composer@v6
               with:
                 php_version: ${{ matrix.php-version }}
-                php_extensions: pcov,pcntl
+                php_extensions: pcov pcntl
                 command: 'dev-tools'
                 args: 'tests -- --coverage=public/coverage'
 
