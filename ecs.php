@@ -16,6 +16,23 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\AssertsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\BackticksSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\CallbackFunctionsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\CryptoFunctionsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\EasyRFISniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\ErrorHandlingSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\FilesystemFunctionsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\FringeFunctionsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\FunctionHandlingFunctionsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\MysqliSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\NoEvalsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\PhpinfosSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\PregReplaceSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\SQLFunctionsSniff;
+use PHPCS_SecurityAudit\Sniffs\BadFunctions\SystemExecFunctionsSniff;
+use PHPCS_SecurityAudit\Sniffs\Misc\BadCorsHeaderSniff;
+use PHPCS_SecurityAudit\Sniffs\Misc\IncludeMismatchSniff;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
@@ -54,4 +71,23 @@ return ECSConfig::configure()
     ])
     ->withConfiguredRule(PhpdocAddMissingParamAnnotationFixer::class, [
         'only_untyped' => false,
+    ])
+    ->withRules([
+        AssertsSniff::class,
+        BackticksSniff::class,
+        CallbackFunctionsSniff::class,
+        CryptoFunctionsSniff::class,
+        EasyRFISniff::class,
+        ErrorHandlingSniff::class,
+        FilesystemFunctionsSniff::class,
+        FringeFunctionsSniff::class,
+        FunctionHandlingFunctionsSniff::class,
+        MysqliSniff::class,
+        NoEvalsSniff::class,
+        PhpinfosSniff::class,
+        PregReplaceSniff::class,
+        SQLFunctionsSniff::class,
+        SystemExecFunctionsSniff::class,
+        BadCorsHeaderSniff::class,
+        // IncludeMismatchSniff::class,
     ]);
