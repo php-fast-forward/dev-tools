@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward Sphinx Docs"
+  short_description: "Generate Sphinx docs for Fast Forward packages"
+  default_prompt: "Use $sphinx-docs to generate or revise Sphinx documentation for this Fast Forward PHP package."

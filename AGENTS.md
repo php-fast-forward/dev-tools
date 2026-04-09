@@ -73,7 +73,7 @@ composer dev-tools tests -- --coverage=public/coverage
 
 **Creating/Updating Tests:**
 
-- Use skill `fast-forward-tests` in `.agents/skills/fast-forward-tests/` for creating or updating PHPUnit tests with Prophecy
+- Use skill `phpunit-tests` in `.agents/skills/phpunit-tests/` for creating or updating PHPUnit tests with Prophecy
 - Run skill when: creating new test classes, adding test methods, or fixing existing tests
 
 ## Code Style
@@ -108,6 +108,7 @@ composer dev-tools tests -- --coverage=public/coverage
 - All classes require docblocks with `@copyright` and `@license`
 - Use RFC 2119 keywords (MUST, SHOULD, MAY, etc.)
 - PHPDoc checked via dev-tools phpdoc command
+- Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
 
 ## Build and Deployment
 
@@ -121,7 +122,7 @@ This is a Composer plugin - no build step required. The package is published to 
 
 ## Pull Request Guidelines
 
-**Title Format:** `[<area>] Brief description`
+**Title Format:** `[<area>] Brief description (#<issue-number>)`
 
 **Required Checks:**
 
@@ -148,8 +149,9 @@ composer dev-tools
 
 ## Skills Usage
 
-- **Creating/Updating Tests**: Use skill `fast-forward-tests` in `.agents/skills/fast-forward-tests/` for PHPUnit tests with Prophecy
-- **Generating Documentation**: Use skill `fast-forward-docs` in `.agents/skills/fast-forward-docs/` for Sphinx documentation in `docs/`
-- **Updating README**: Use skill `fast-forward-readme` in `.agents/skills/fast-forward-readme/` for generating README.md files
-- **Creating GitHub Issues**: Use skill `fast-forward-issues` to transform a short feature description into a complete, production-ready GitHub issue with structured sections, acceptance criteria, and architectural quality requirements
-- **Implementing Issues & PRs**: Use skill `fast-forward-pull-request` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests
+- **Creating/Updating Tests**: Use skill `phpunit-tests` in `.agents/skills/phpunit-tests/` for PHPUnit tests with Prophecy
+- **Generating Documentation**: Use skill `sphinx-docs` in `.agents/skills/sphinx-docs/` for Sphinx documentation in `docs/`
+- **Updating README**: Use skill `package-readme` in `.agents/skills/package-readme/` for generating README.md files
+- **Updating PHPDoc / PHP Style**: Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
+- **Drafting / Publishing GitHub Issues**: Use skill `github-issues` in `.agents/skills/github-issues/` to transform a short feature description into a complete, production-ready GitHub issue and create or update it on GitHub when needed
+- **Implementing Issues & PRs**: Use skill `github-pull-request` in `.agents/skills/github-pull-request/` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests

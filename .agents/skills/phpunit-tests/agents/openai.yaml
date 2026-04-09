@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward PHPUnit Tests"
+  short_description: "Generate PHPUnit tests using local Prophecy patterns"
+  default_prompt: "Use $phpunit-tests to create or update PHPUnit tests for this PHP codebase using local conventions and Prophecy when applicable."

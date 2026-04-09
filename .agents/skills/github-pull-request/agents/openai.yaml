@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward GitHub Pull Request"
+  short_description: "Implement ready issues through branch and PR workflow"
+  default_prompt: "Use $github-pull-request to implement this ready Fast Forward issue on an isolated branch and open or update the matching PR."

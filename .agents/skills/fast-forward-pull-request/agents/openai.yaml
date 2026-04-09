@@ -1,4 +1,0 @@
-interface:
-  display_name: "Fast Forward Pull Request"
-  short_description: "Implement GitHub issues with tests, docs, and PR flow"
-  default_prompt: "Use $fast-forward-pull-request to implement open GitHub issues one by one with branches, tests, docs, and pull requests."

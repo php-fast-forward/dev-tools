@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward PHPDoc Code Style"
+  short_description: "Format PHP and PHPDoc for Fast Forward packages"
+  default_prompt: "Use $phpdoc-code-style to normalize this Fast Forward PHP code and write conservative English PHPDoc that matches repository conventions."
