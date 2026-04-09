@@ -16,12 +16,12 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-use Rector\Configuration\PhpLevelSetResolver;
 use Composer\InstalledVersions;
 use Ergebnis\Rector\Rules\Faker\GeneratorPropertyFetchToMethodCallRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
 use Rector\Config\RectorConfig;
+use Rector\Configuration\PhpLevelSetResolver;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
@@ -29,6 +29,37 @@ use Rector\Set\ValueObject\SetList;
 
 use function Safe\getcwd;
 
+/**
+ * Base Rector configuration for dev-tools.
+ *
+ * This configuration can be extended in consumer projects using one of the following patterns:
+ *
+ * 1. Use directly (recommended):
+ *    ```php
+ *    return require __DIR__ . '/vendor/fast-forward/dev-tools/rector.php';
+ *    ```
+ *
+ * 2. Extend with custom rules:
+ *    ```php
+ *    $configure = require __DIR__ . '/vendor/fast-forward/dev-tools/rector.php';
+ *    return static function (RectorConfig $rectorConfig) use ($configure): void {
+ *        $configure($rectorConfig);
+ *        $rectorConfig->rules([CustomRule::class]);
+ *    };
+ *    ```
+ *
+ * 3. Using the factory:
+ *    ```php
+ *    use FastForward\DevTools\Config\RectorConfigFactory;
+ *
+ *    return static function (RectorConfig $rectorConfig): void {
+ *        RectorConfigFactory::configure($rectorConfig);
+ *        // Add custom configuration
+ *    };
+ *    ```
+ *
+ * @return callable(RectorConfig): void the configuration closure that configures Rector
+ */
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->sets([
         SetList::DEAD_CODE,
