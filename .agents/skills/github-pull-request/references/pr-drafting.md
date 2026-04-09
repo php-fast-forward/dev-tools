@@ -41,15 +41,15 @@ Closes #123
 ## Title Guidance
 
 - Follow repository title rules when they exist.
-- For this repository, prefer `[area] Brief description (#123)`.
+- For this repository, prefer `[area] Brief description`.
 - Use the issue number that the PR closes in the title when it is known.
 - Derive `area` from the touched subsystem, command, or package rather than using a generic label.
 
 Examples:
 
-- `[tests] Add command coverage for sync workflow (#42)`
-- `[docs] Document wiki generation flow (#57)`
-- `[command] Add dependency analysis command (#91)`
+- `[tests] Add command coverage for sync workflow`
+- `[docs] Document wiki generation flow`
+- `[command] Add dependency analysis command`
 
 ## Draft vs Ready
 
