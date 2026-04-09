@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward Tests"
+  short_description: "Generate PHPUnit tests with Prophecy patterns"
+  default_prompt: "Use fast-forward-tests to create or update PHPUnit tests for this PHP codebase using local project conventions and Prophecy when applicable."
