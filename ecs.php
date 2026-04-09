@@ -16,42 +16,6 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
-use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
-use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
-use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
-use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
-use PhpCsFixer\Fixer\Phpdoc\PhpdocAddMissingParamAnnotationFixer;
-use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
-use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
-use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestCaseStaticMethodCallsFixer;
-use Symplify\EasyCodingStandard\Config\ECSConfig;
+use FastForward\DevTools\Config\ECSConfig;
 
-use function Safe\getcwd;
-
-return ECSConfig::configure()
-    ->withPaths([getcwd()])
-    ->withSkip([
-        getcwd() . '/public',
-        getcwd() . '/resources',
-        getcwd() . '/vendor',
-        getcwd() . '/tmp',
-        PhpdocToCommentFixer::class,
-        NoSuperfluousPhpdocTagsFixer::class,
-        NoEmptyPhpdocFixer::class,
-        PhpdocNoEmptyReturnFixer::class,
-        GlobalNamespaceImportFixer::class,
-        GeneralPhpdocAnnotationRemoveFixer::class,
-    ])
-    ->withRootFiles()
-    ->withPhpCsFixerSets(symfony: true, symfonyRisky: true, auto: true, autoRisky: true)
-    ->withPreparedSets(psr12: true, common: true, symplify: true, strict: true, cleanCode: true)
-    ->withConfiguredRule(PhpdocAlignFixer::class, [
-        'align' => 'left',
-    ])
-    ->withConfiguredRule(PhpUnitTestCaseStaticMethodCallsFixer::class, [
-        'call_type' => 'self',
-    ])
-    ->withConfiguredRule(PhpdocAddMissingParamAnnotationFixer::class, [
-        'only_untyped' => false,
-    ]);
+return ECSConfig::configure();
