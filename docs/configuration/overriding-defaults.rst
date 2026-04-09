@@ -51,6 +51,31 @@ To customize Rector for one library, create ``rector.php`` in the consumer
 project root. The ``refactor`` command and the Rector phase inside ``phpdoc``
 will use that file instead of the packaged default.
 
+Extending ECS Configuration
+----------------------------
+
+Instead of copying the entire ``ecs.php`` file, consumers can extend the
+default configuration using the ``ECSConfig`` class:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\ECSConfig;
+   use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
+
+   $config = ECSConfig::configure();
+   $config->withRules([CustomRule::class]);
+   $config->withConfiguredRule(PhpdocAlignFixer::class, ['align' => 'right']);
+
+   return $config;
+
+This approach:
+
+- Eliminates duplication of the base configuration
+- Automatically receives upstream updates
+- Only requires overriding what is needed
+
 What Is Not Overwritten Automatically
 -------------------------------------
 

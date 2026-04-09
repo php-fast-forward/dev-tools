@@ -53,7 +53,6 @@ final class ECSConfig
     public static function configure(): ECSConfigBuilder
     {
         $cwd = getcwd();
-
         $config = new ECSConfigBuilder();
 
         return $config
