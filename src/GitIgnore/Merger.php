@@ -21,26 +21,24 @@ namespace FastForward\DevTools\GitIgnore;
 /**
  * Merges, deduplicates, and sorts .gitignore entries.
  */
-final readonly class Merger
+final readonly class Merger implements MergerInterface
 {
     /**
-     * @param Classifier $classifier
+     * @param ClassifierInterface $classifier
      */
     public function __construct(
-        private Classifier $classifier
+        private ClassifierInterface $classifier = new Classifier()
     ) {}
 
     /**
-     * Merges canonical and project entries, removes duplicates, and sorts.
+     * @param GitIgnoreInterface $canonical
+     * @param GitIgnoreInterface $project
      *
-     * @param array<int, string> $canonical the canonical .gitignore entries from dev-tools
-     * @param array<int, string> $project the project-specific .gitignore entries
-     *
-     * @return array<int, string> the merged and sorted entries
+     * @return GitIgnoreInterface
      */
-    public function merge(array $canonical, array $project): array
+    public function merge(GitIgnoreInterface $canonical, GitIgnoreInterface $project): GitIgnoreInterface
     {
-        $entries = array_unique(array_merge($canonical, $project));
+        $entries = array_unique(array_merge($canonical->entries(), $project->entries()));
 
         $directories = [];
         $files = [];
@@ -50,6 +48,7 @@ final readonly class Merger
             if ('' === $trimmed) {
                 continue;
             }
+
             if (str_starts_with($trimmed, '#')) {
                 continue;
             }
@@ -64,6 +63,8 @@ final readonly class Merger
         sort($directories, \SORT_STRING);
         sort($files, \SORT_STRING);
 
-        return array_merge($directories, $files);
+        $mergedEntries = array_merge($directories, $files);
+
+        return new GitIgnore($project->path(), array_values($mergedEntries));
     }
 }

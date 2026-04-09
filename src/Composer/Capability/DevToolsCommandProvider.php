@@ -22,6 +22,7 @@ use FastForward\DevTools\Command\AbstractCommand;
 use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
 use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
 use FastForward\DevTools\Command\ReportsCommand;
@@ -56,6 +57,7 @@ final class DevToolsCommandProvider implements CommandProviderCapability
             new ReportsCommand(),
             new WikiCommand(),
             new SyncCommand(),
+            new GitIgnoreCommand(),
         ];
     }
 }

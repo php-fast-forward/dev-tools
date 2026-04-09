@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\GitIgnore;
 
-final class Reader implements ReaderInterface
+interface ReaderInterface
 {
     /**
      * Reads a .gitignore file from the specified path.
@@ -27,8 +27,5 @@ final class Reader implements ReaderInterface
      *
      * @return GitIgnoreInterface the GitIgnore instance
      */
-    public function read(string $gitignorePath): GitIgnoreInterface
-    {
-        return GitIgnore::fromFile($gitignorePath);
-    }
+    public function read(string $gitignorePath): GitIgnoreInterface;
 }

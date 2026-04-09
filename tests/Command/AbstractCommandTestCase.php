@@ -115,8 +115,15 @@ abstract class AbstractCommandTestCase extends TestCase
             ->willReturn($helperSet);
         $this->application->getInitialWorkingDirectory()
             ->willReturn(getcwd());
+        $this->application->doRun(Argument::any(), Argument::any())->willReturn(AbstractCommand::SUCCESS);
 
-        $this->command = new ($this->getCommandClass())($this->filesystem->reveal());
+        $command = $this->getCommandClass();
+
+        if (\is_string($command)) {
+            $command = new $command($this->filesystem->reveal());
+        }
+
+        $this->command = $command;
         $this->command->setHelperSet($helperSet);
 
         $process = $this->prophesize(Process::class);
@@ -146,9 +153,9 @@ abstract class AbstractCommandTestCase extends TestCase
     }
 
     /**
-     * @return string
+     * @return string|AbstractCommand
      */
-    abstract protected function getCommandClass(): string;
+    abstract protected function getCommandClass(): string|AbstractCommand;
 
     /**
      * @return string

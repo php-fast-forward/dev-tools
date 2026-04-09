@@ -23,7 +23,7 @@ use Symfony\Component\Filesystem\Filesystem;
 /**
  * Renders and writes the normalized .gitignore file.
  */
-final readonly class Writer
+final readonly class Writer implements WriterInterface
 {
     /**
      * @param Filesystem $filesystem
@@ -33,15 +33,14 @@ final readonly class Writer
     ) {}
 
     /**
-     * Writes the normalized .gitignore entries to the target file.
+     * @param GitIgnoreInterface $gitignore
      *
-     * @param array<int, string> $entries the sorted .gitignore entries
-     * @param string $targetPath the target .gitignore file path
+     * @return void
      */
-    public function write(array $entries, string $targetPath): void
+    public function write(GitIgnoreInterface $gitignore): void
     {
-        $content = implode("\n", $entries) . "\n";
+        $content = implode("\n", $gitignore->entries()) . "\n";
 
-        $this->filesystem->dumpFile($targetPath, $content);
+        $this->filesystem->dumpFile($gitignore->path(), $content);
     }
 }

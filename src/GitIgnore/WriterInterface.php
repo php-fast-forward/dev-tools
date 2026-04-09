@@ -18,17 +18,17 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\GitIgnore;
 
-final class Reader implements ReaderInterface
+/**
+ * Defines the contract for writing .gitignore files.
+ */
+interface WriterInterface
 {
     /**
-     * Reads a .gitignore file from the specified path.
+     * Writes the GitIgnore content to its associated file path.
      *
-     * @param string $gitignorePath the path to the .gitignore file
+     * @param GitIgnoreInterface $gitignore the GitIgnore instance to write
      *
-     * @return GitIgnoreInterface the GitIgnore instance
+     * @return void
      */
-    public function read(string $gitignorePath): GitIgnoreInterface
-    {
-        return GitIgnore::fromFile($gitignorePath);
-    }
+    public function write(GitIgnoreInterface $gitignore): void;
 }

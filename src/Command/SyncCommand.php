@@ -19,12 +19,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Command;
 
 use Composer\Factory;
-use FastForward\DevTools\GitIgnore\Classifier;
-use FastForward\DevTools\GitIgnore\Merger;
-use FastForward\DevTools\GitIgnore\Reader;
-use FastForward\DevTools\GitIgnore\Writer;
 use Composer\Json\JsonManipulator;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
@@ -39,11 +36,6 @@ use function Safe\file_get_contents;
 final class SyncCommand extends AbstractCommand
 {
     /**
-     * Configures the current command.
-     *
-     * This method MUST define the name, description, and help text for the command.
-     * It SHALL identify the tool as the mechanism for script synchronization.
-     *
      * @return void
      */
     protected function configure(): void
@@ -78,7 +70,7 @@ final class SyncCommand extends AbstractCommand
         $this->copyEditorConfig();
         $this->copyDependabotConfig();
         $this->addRepositoryWikiGitSubmodule();
-        $this->syncGitIgnore();
+        $this->syncGitIgnore($output);
 
         return self::SUCCESS;
     }
@@ -245,22 +237,13 @@ final class SyncCommand extends AbstractCommand
      * This method merges canonical .gitignore entries from the dev-tools package
      * with the target project's existing .gitignore entries, then writes the merged result.
      *
+     * @param OutputInterface $output
+     *
      * @return void
      */
-    private function syncGitIgnore(): void
+    private function syncGitIgnore(OutputInterface $output): void
     {
-        $packagePath = parent::getDevToolsFile('');
-        $projectPath = $this->getCurrentWorkingDirectory();
-        $targetPath = $projectPath . '/.gitignore';
-
-        $canonicalEntries = Reader::readFromPackage($packagePath);
-        $projectEntries = Reader::readFromProject($projectPath);
-
-        $classifier = new Classifier();
-        $merger = new Merger($classifier);
-        $mergedEntries = $merger->merge($canonicalEntries, $projectEntries);
-
-        $writer = new Writer($this->filesystem);
-        $writer->write($mergedEntries, $targetPath);
+        $this->getApplication()
+            ->doRun(new StringInput('gitignore'), $output);
     }
 }

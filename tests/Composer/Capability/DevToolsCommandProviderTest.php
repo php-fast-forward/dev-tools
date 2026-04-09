@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 use FastForward\DevTools\Command\AbstractCommand;
 use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
@@ -29,6 +30,8 @@ use FastForward\DevTools\Command\StandardsCommand;
 use FastForward\DevTools\Command\TestsCommand;
 use FastForward\DevTools\Command\WikiCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
+use FastForward\DevTools\GitIgnore\Merger;
+use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -44,6 +47,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(ReportsCommand::class)]
 #[UsesClass(WikiCommand::class)]
 #[UsesClass(SyncCommand::class)]
+#[UsesClass(GitIgnoreCommand::class)]
+#[UsesClass(Merger::class)]
+#[UsesClass(Writer::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
     private DevToolsCommandProvider $commandProvider;
@@ -73,6 +79,7 @@ final class DevToolsCommandProviderTest extends TestCase
                 new ReportsCommand(),
                 new WikiCommand(),
                 new SyncCommand(),
+                new GitIgnoreCommand(),
             ],
             $this->commandProvider->getCommands(),
         );

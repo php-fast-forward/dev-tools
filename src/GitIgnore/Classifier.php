@@ -23,18 +23,16 @@ use function Safe\preg_match;
 /**
  * Classifies .gitignore entries as directories or files.
  */
-final class Classifier
+final class Classifier implements ClassifierInterface
 {
     private const string DIRECTORY = 'directory';
 
     private const string FILE = 'file';
 
     /**
-     * Classifies a .gitignore entry as directory or file pattern.
+     * @param string $entry
      *
-     * @param string $entry the .gitignore entry
-     *
-     * @return 'directory'|'file' the classification
+     * @return string
      */
     public function classify(string $entry): string
     {
@@ -52,11 +50,7 @@ final class Classifier
             return self::DIRECTORY;
         }
 
-        if (1 === preg_match('/^[^.*]+[\/*]+$/', $entry)) {
-            return self::DIRECTORY;
-        }
-
-        if (str_contains($entry, '*/')) {
+        if (1 === preg_match('/^[^.*]+[\/*]+/', $entry)) {
             return self::DIRECTORY;
         }
 
@@ -64,13 +58,17 @@ final class Classifier
             return self::DIRECTORY;
         }
 
+        if (str_contains($entry, '*/')) {
+            return self::DIRECTORY;
+        }
+
         return self::FILE;
     }
 
     /**
-     * Checks if an entry is a directory pattern.
-     *
      * @param string $entry
+     *
+     * @return bool
      */
     public function isDirectory(string $entry): bool
     {
@@ -78,9 +76,9 @@ final class Classifier
     }
 
     /**
-     * Checks if an entry is a file pattern.
-     *
      * @param string $entry
+     *
+     * @return bool
      */
     public function isFile(string $entry): bool
     {
