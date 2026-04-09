@@ -1,6 +1,6 @@
 ---
-name: fast-forward-github-issues
-description: Iterates through all open GitHub issues in the repository and implements them one by one following a structured workflow. For each issue: creates a feature branch from main, implements the solution, creates or updates tests using fast-forward-tests, updates README with fast-forward-readme, updates docs with fast-forward-docs if applicable, and opens a pull request with Closes #<issue-number>. Triggers on requests like "implement issues", "work on issues", "handle all issues", "iterate through issues", "process issues", "implement all open issues".
+name: fast-forward-pull-request
+description: Implement open GitHub issues in a repository one by one with isolated branches, tests, documentation updates, and pull requests. Use when Codex is asked to work through issue queues, implement repository issues sequentially, or manage the full issue-to-PR flow in Fast Forward projects.
 ---
 
 # Implement GitHub Issues
@@ -16,8 +16,8 @@ For each open issue:
 3. **Commits**: Create well-structured commits with clear messages
 4. **Tests**: Create or update tests using the `fast-forward-tests` skill
 5. **Documentation**: Update README using `fast-forward-readme`, update docs using `fast-forward-docs` if applicable
-6. **Pull Request**: Open a PR targeting `main` with `Closes #<issue-number>` in the description
-7. **Issue Handling**: Never close issues directly; only reference via `Closes #<issue-number>` in PR
+6. **Pull Request**: Open a PR targeting `main` with `Closes #123` style closing text in the description
+7. **Issue Handling**: Never close issues directly; only reference them via `Closes #123` style text in the PR
 
 ## Global Rules
 
@@ -154,7 +154,7 @@ Create a pull request:
   Closes #{issue-number}
   ```
 
-**Important**: Include `Closes #<issue-number>` in the PR description so the issue is automatically closed only after the PR is merged.
+**Important**: Include `Closes #{issue-number}` in the PR description so the issue is automatically closed only after the PR is merged.
 
 #### 2.10 Wait for Merge
 

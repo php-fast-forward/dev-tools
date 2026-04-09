@@ -73,7 +73,7 @@ composer dev-tools tests -- --coverage=public/coverage
 
 **Creating/Updating Tests:**
 
-- Use skill `fast-forward-tests` (in `docs/skills/fast-forward-tests/`) for creating or updating PHPUnit tests with Prophecy
+- Use skill `fast-forward-tests` in `.agents/skills/fast-forward-tests/` for creating or updating PHPUnit tests with Prophecy
 - Run skill when: creating new test classes, adding test methods, or fixing existing tests
 
 ## Code Style
@@ -148,6 +148,8 @@ composer dev-tools
 
 ## Skills Usage
 
-- **Creating/Updating Tests**: Use skill `fast-forward-tests` (in `docs/skills/fast-forward-tests/`) for PHPUnit tests with Prophecy
-- **Generating Documentation**: Use skill `fast-forward-docs` (in `docs/skills/fast-forward-docs/`) for Sphinx documentation in `docs/`
-- **Updating README**: Use skill `fast-forward-readme` (in `docs/skills/fast-forward-readme/`) for generating README.md files
+- **Creating/Updating Tests**: Use skill `fast-forward-tests` in `.agents/skills/fast-forward-tests/` for PHPUnit tests with Prophecy
+- **Generating Documentation**: Use skill `fast-forward-docs` in `.agents/skills/fast-forward-docs/` for Sphinx documentation in `docs/`
+- **Updating README**: Use skill `fast-forward-readme` in `.agents/skills/fast-forward-readme/` for generating README.md files
+- **Creating GitHub Issues**: Use skill `fast-forward-issues` to transform a short feature description into a complete, production-ready GitHub issue with structured sections, acceptance criteria, and architectural quality requirements
+- **Implementing Issues & PRs**: Use skill `fast-forward-pull-request` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests

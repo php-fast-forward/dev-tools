@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward README"
+  short_description: "Generate consistent README files for Fast Forward packages"
+  default_prompt: "Use $fast-forward-readme to write or refresh a README.md for this Fast Forward PHP package."

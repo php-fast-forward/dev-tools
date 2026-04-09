@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward Issues"
+  short_description: "Turn brief prompts into production-ready GitHub issues"
+  default_prompt: "Use $fast-forward-issues to turn this repository idea into a complete GitHub issue with acceptance criteria."

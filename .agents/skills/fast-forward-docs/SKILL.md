@@ -1,24 +1,10 @@
 ---
-name: fastforward-sphinx-docs
-description: Generate structured, consistent, and reusable Sphinx (reStructuredText) documentation for Fast Forward PHP framework libraries.
-version: 1.0.0
-tags:
-  - documentation
-  - sphinx
-  - rst
-  - php
-  - fast-forward
-  - technical-writing
-author: Fast Forward Ecosystem
-license: MIT
-inputs: []
-outputs:
-  - type: documentation
-    format: rst
+name: fast-forward-docs
+description: Generate or refresh Sphinx reStructuredText documentation for Fast Forward PHP packages. Use when Codex needs to create package docs in `docs/`, expand existing `.rst` sections, document APIs or workflows, or keep Fast Forward documentation structure consistent.
 ---
 
 
-# Sphinx Documentation Skill for Fast Forward Framework
+# Fast Forward Docs
 
 This skill provides a comprehensive checklist and structure for generating rich, congruent, and reusable documentation in reStructuredText (.rst) for all libraries in the Fast Forward PHP framework ecosystem. Use these guidelines to ensure consistency, depth, and usability across all package docs.
 

@@ -1,23 +1,9 @@
 ---
-name: fastforward-readme
-description: Generate high-quality, consistent, and discoverable README.md files for Fast Forward PHP framework components.
-version: 1.0.0
-tags:
-  - documentation
-  - readme
-  - markdown
-  - php
-  - fast-forward
-  - developer-experience
-author: Fast Forward Ecosystem
-license: MIT
-inputs: []
-outputs:
-  - type: documentation
-    format: markdown
+name: fast-forward-readme
+description: Generate or refresh README.md files for Fast Forward PHP packages. Use when Codex needs to create a new package README, reorganize an existing README, improve onboarding and discoverability, or align README structure with the Fast Forward ecosystem.
 ---
 
-# SKILL.md — Fast Forward Framework README Skill
+# Fast Forward README
 
 ## Purpose
 This skill provides a comprehensive, reusable checklist and structure for creating high-quality, consistent, and discoverable `README.md` files for any component in the Fast Forward PHP framework ecosystem. It ensures:
