@@ -76,6 +76,24 @@ Create only the local configuration file you want to customize, such as
 ``rector.php`` or ``phpunit.xml``. DevTools will prefer that file and keep the
 rest on the packaged defaults.
 
+How do I extend the ECS configuration without copying the whole file?
+----------------------------------------------------------------------
+
+Use the ``ECSConfig`` class to extend instead of replace:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\ECSConfig;
+
+   $config = ECSConfig::configure();
+   $config->withRules([CustomRule::class]);
+
+   return $config;
+
+This approach automatically receives upstream updates while allowing additive customization.
+
 Can I generate coverage without running the full ``standards`` pipeline?
 ------------------------------------------------------------------------
 
