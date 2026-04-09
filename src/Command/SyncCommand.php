@@ -36,6 +36,11 @@ use function Safe\file_get_contents;
 final class SyncCommand extends AbstractCommand
 {
     /**
+     * Configures the current command.
+     *
+     * This method MUST define the name, description, and help text for the command.
+     * It SHALL identify the tool as the mechanism for script synchronization.
+     *
      * @return void
      */
     protected function configure(): void
