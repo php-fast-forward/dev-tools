@@ -18,11 +18,10 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Command;
 
-use FastForward\DevTools\Command\Skills\SkillsSynchronizer;
-use FastForward\DevTools\Command\Skills\SynchronizeResult;
+use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
+use FastForward\DevTools\Agent\Skills\SynchronizeResult;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Path;
 
 /**
  * Synchronizes Fast Forward skills into the consumer repository by managing `.agents/skills` links.
@@ -31,6 +30,9 @@ final class SkillsCommand extends AbstractCommand
 {
     private readonly SkillsSynchronizer $synchronizer;
 
+    /**
+     * @param SkillsSynchronizer|null $synchronizer
+     */
     public function __construct(?SkillsSynchronizer $synchronizer = null)
     {
         $this->synchronizer = $synchronizer ?? new SkillsSynchronizer();
@@ -38,10 +40,13 @@ final class SkillsCommand extends AbstractCommand
         parent::__construct();
     }
 
+    /**
+     * @return void
+     */
     protected function configure(): void
     {
         $this
-            ->setName('dev-tools:skills')
+            ->setName('skills')
             ->setDescription('Synchronizes Fast Forward skills into .agents/skills directory.')
             ->setHelp(
                 'This command ensures the consumer repository contains linked Fast Forward skills '
@@ -49,31 +54,18 @@ final class SkillsCommand extends AbstractCommand
             );
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('<info>Starting skills synchronization...</info>');
 
-        $rootPath = $this->getCurrentWorkingDirectory();
-        $skillsDir = Path::makeAbsolute('.agents/skills', $rootPath);
-
-        // Use __DIR__ to get the package path
-        $packagePath = Path::makeAbsolute('..', __DIR__);
-        while (! file_exists($packagePath . '/composer.json')) {
-            $parent = \dirname($packagePath);
-            if ($parent === $packagePath) {
-                break;
-            }
-            $packagePath = $parent;
-        }
-        $packageSkillsPath = Path::makeAbsolute('.agents/skills', $packagePath);
-
-        // If package path equals root path, we're in the dev-tools repo itself
-        // and skills are already present as regular files (tracked in git)
-        if ($packagePath === $rootPath && $this->filesystem->exists($skillsDir)) {
-            $output->writeln('<info>Skills already available in development repository (tracked in git).</info>');
-
-            return self::SUCCESS;
-        }
+        $packageSkillsPath = $this->getDevToolsFile('.agents/skills');
+        $skillsDir = $this->getConfigFile('.agents/skills', true);
 
         // Normal consumer repository flow
         if (! $this->filesystem->exists($packageSkillsPath)) {
@@ -88,14 +80,7 @@ final class SkillsCommand extends AbstractCommand
         }
 
         /** @var SynchronizeResult $result */
-        $result = $this->synchronizer->synchronize(
-            $rootPath,
-            $skillsDir,
-            $packageSkillsPath,
-            static function (string $message) use ($output): void {
-                $output->writeln($message);
-            },
-        );
+        $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, $this->getIO());
 
         if ($result->failed()) {
             $output->writeln('<error>Skills synchronization failed.</error>');
