@@ -20,6 +20,12 @@ namespace FastForward\DevTools\GitIgnore;
 
 /**
  * Defines the contract for classifying .gitignore entries.
+ *
+ * This classifier SHALL inspect a raw .gitignore entry and determine whether the
+ * entry expresses directory semantics or file semantics. Implementations MUST
+ * preserve deterministic classification for identical inputs. Blank entries and
+ * comment entries MUST be treated as file-oriented values to avoid incorrectly
+ * inferring directory intent where no effective pattern exists.
  */
 interface ClassifierInterface
 {

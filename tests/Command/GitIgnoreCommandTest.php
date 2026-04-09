@@ -50,39 +50,37 @@ final class GitIgnoreCommandTest extends AbstractCommandTestCase
     use ProphecyTrait;
 
     /**
-     * Mock for the ReaderInterface.
-     *
      * @var ObjectProphecy<ReaderInterface>
      */
     private ObjectProphecy $reader;
 
     /**
-     * Mock for the MergerInterface.
+     * @var ObjectProphecy<MergerInterface>
      */
     private ObjectProphecy $merger;
 
     /**
-     * Mock for the WriterInterface.
+     * @var ObjectProphecy<WriterInterface>
      */
     private ObjectProphecy $writer;
 
     /**
-     * Mock for the source GitIgnore.
+     * @var ObjectProphecy<GitIgnoreInterface>
      */
     private ObjectProphecy $gitIgnoreSource;
 
     /**
-     * Mock for the target GitIgnore to merge.
+     * @var ObjectProphecy<GitIgnoreInterface>
      */
     private ObjectProphecy $gitIgnoreMerge;
 
     /**
-     * The source .gitignore path.
+     * @var string The source .gitignore path.
      */
     private string $sourcePath;
 
     /**
-     * The target .gitignore path.
+     * @var string The target .gitignore path.
      */
     private string $targetPath;
 

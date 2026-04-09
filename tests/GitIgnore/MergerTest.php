@@ -35,10 +35,19 @@ final class MergerTest extends TestCase
 {
     use ProphecyTrait;
 
+    /**
+     * @var ObjectProphecy<ClassifierInterface>
+     */
     private ObjectProphecy $classifier;
 
+    /**
+     * @var ObjectProphecy<GitIgnoreInterface>
+     */
     private ObjectProphecy $gitIgnoreDevTools;
 
+    /**
+     * @var ObjectProphecy<GitIgnoreInterface>
+     */
     private ObjectProphecy $gitIgnoreProject;
 
     private Merger $merger;

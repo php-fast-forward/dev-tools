@@ -18,14 +18,25 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\GitIgnore;
 
+/**
+ * Reads .gitignore files and returns domain representations for them.
+ *
+ * This reader SHALL provide a minimal abstraction for loading a .gitignore file
+ * from a filesystem path. The implementation MUST delegate file parsing to the
+ * GitIgnore value object and MUST return a GitIgnoreInterface-compatible result.
+ */
 final class Reader implements ReaderInterface
 {
     /**
-     * Reads a .gitignore file from the specified path.
+     * Reads a .gitignore file from the specified filesystem path.
      *
-     * @param string $gitignorePath the path to the .gitignore file
+     * The provided path MUST reference a readable .gitignore file. This method
+     * SHALL delegate object creation to GitIgnore::fromFile() and MUST return
+     * the resulting GitIgnoreInterface implementation.
      *
-     * @return GitIgnoreInterface the GitIgnore instance
+     * @param string $gitignorePath The filesystem path to the .gitignore file.
+     *
+     * @return GitIgnoreInterface The loaded .gitignore representation.
      */
     public function read(string $gitignorePath): GitIgnoreInterface
     {

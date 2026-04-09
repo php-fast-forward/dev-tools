@@ -32,8 +32,10 @@ use SplFileObject;
 final readonly class GitIgnore implements GitIgnoreInterface
 {
     /**
-     * @param list<string> $entries the .gitignore entries
+     * Initializes a GitIgnore instance with the given path and entries.
+     *
      * @param string $path the file system path to the .gitignore file
+     * @param list<string> $entries the .gitignore entries
      */
     public function __construct(
         public string $path,

@@ -40,6 +40,9 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 final class GitIgnoreCommand extends AbstractCommand
 {
+    /**
+     * @param WriterInterface $writer the writer component for handling .gitignore file writing
+     */
     private readonly WriterInterface $writer;
 
     /**

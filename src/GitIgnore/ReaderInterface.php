@@ -18,14 +18,26 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\GitIgnore;
 
+/**
+ * Defines the contract for reading .gitignore files from a storage location.
+ *
+ * Implementations MUST load a .gitignore resource from the provided filesystem
+ * path and SHALL return a GitIgnoreInterface representation of its contents.
+ * Implementations SHOULD delegate parsing and normalization responsibilities to
+ * a dedicated domain object or parser when appropriate.
+ */
 interface ReaderInterface
 {
     /**
-     * Reads a .gitignore file from the specified path.
+     * Reads a .gitignore file from the specified filesystem path.
      *
-     * @param string $gitignorePath the path to the .gitignore file
+     * The provided path MUST identify a readable .gitignore file. Implementations
+     * SHALL return a GitIgnoreInterface instance representing the contents read
+     * from that path.
      *
-     * @return GitIgnoreInterface the GitIgnore instance
+     * @param string $gitignorePath The filesystem path to the .gitignore file.
+     *
+     * @return GitIgnoreInterface The loaded .gitignore representation.
      */
     public function read(string $gitignorePath): GitIgnoreInterface;
 }
