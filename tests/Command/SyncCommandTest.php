@@ -19,12 +19,21 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Command;
 
 use FastForward\DevTools\Command\SyncCommand;
+use FastForward\DevTools\GitIgnore\Classifier;
+use FastForward\DevTools\GitIgnore\Merger;
+use FastForward\DevTools\GitIgnore\Reader;
+use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 #[CoversClass(SyncCommand::class)]
+#[UsesClass(Reader::class)]
+#[UsesClass(Classifier::class)]
+#[UsesClass(Merger::class)]
+#[UsesClass(Writer::class)]
 final class SyncCommandTest extends AbstractCommandTestCase
 {
     use ProphecyTrait;

@@ -19,6 +19,10 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Command;
 
 use Composer\Factory;
+use FastForward\DevTools\GitIgnore\Classifier;
+use FastForward\DevTools\GitIgnore\Merger;
+use FastForward\DevTools\GitIgnore\Reader;
+use FastForward\DevTools\GitIgnore\Writer;
 use Composer\Json\JsonManipulator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -74,6 +78,7 @@ final class SyncCommand extends AbstractCommand
         $this->copyEditorConfig();
         $this->copyDependabotConfig();
         $this->addRepositoryWikiGitSubmodule();
+        $this->syncGitIgnore();
 
         return self::SUCCESS;
     }
@@ -232,5 +237,30 @@ final class SyncCommand extends AbstractCommand
         $process->mustRun();
 
         return trim($process->getOutput());
+    }
+
+    /**
+     * Synchronizes .gitignore entries from dev-tools into the target project.
+     *
+     * This method merges canonical .gitignore entries from the dev-tools package
+     * with the target project's existing .gitignore entries, then writes the merged result.
+     *
+     * @return void
+     */
+    private function syncGitIgnore(): void
+    {
+        $packagePath = parent::getDevToolsFile('');
+        $projectPath = $this->getCurrentWorkingDirectory();
+        $targetPath = $projectPath . '/.gitignore';
+
+        $canonicalEntries = Reader::readFromPackage($packagePath);
+        $projectEntries = Reader::readFromProject($projectPath);
+
+        $classifier = new Classifier();
+        $merger = new Merger($classifier);
+        $mergedEntries = $merger->merge($canonicalEntries, $projectEntries);
+
+        $writer = new Writer($this->filesystem);
+        $writer->write($mergedEntries, $targetPath);
     }
 }
