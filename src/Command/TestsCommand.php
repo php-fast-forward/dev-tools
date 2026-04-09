@@ -84,6 +84,13 @@ final class TestsCommand extends AbstractCommand
                 shortcut: 'f',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Filter which tests to run based on a pattern.',
+            )
+            ->addOption(
+                name: 'parallel',
+                shortcut: 'p',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Run tests in parallel using ParaTest. Optional: specify number of workers (e.g., --parallel or --parallel=4).',
+                default: null,
             );
     }
 
@@ -102,8 +109,11 @@ final class TestsCommand extends AbstractCommand
     {
         $output->writeln('<info>Running PHPUnit tests...</info>');
 
+        $parallel = $input->getOption('parallel');
+        $runner = $this->getTestRunner($parallel !== false ? $parallel : null);
+
         $arguments = [
-            $this->getAbsolutePath('vendor/bin/phpunit'),
+            $runner,
             '--configuration=' . parent::getConfigFile(self::CONFIG),
             '--bootstrap=' . $this->resolvePath($input, 'bootstrap'),
             '--display-deprecations',
@@ -111,6 +121,13 @@ final class TestsCommand extends AbstractCommand
             '--display-incomplete',
             '--display-skipped',
         ];
+
+        if ($parallel !== null) {
+            if (is_numeric($parallel)) {
+                $arguments[] = '--processes=' . (int) $parallel;
+            }
+            $arguments[] = '--parallel';
+        }
 
         if (! $input->getOption('no-cache')) {
             $arguments[] = '--cache-directory=' . $this->resolvePath($input, 'cache-dir');
@@ -155,5 +172,24 @@ final class TestsCommand extends AbstractCommand
     private function resolvePath(InputInterface $input, string $option): string
     {
         return $this->getAbsolutePath($input->getOption($option));
+    }
+
+    /**
+     * Determines the test runner to use based on parallel execution flag.
+     *
+     * The method MUST return the appropriate test runner binary path.
+     * If parallel is enabled, it SHALL return paratest; otherwise, it SHALL return phpunit.
+     *
+     * @param string|null $parallel the parallel option value
+     *
+     * @return string the path to the test runner binary
+     */
+    private function getTestRunner(?string $parallel): string
+    {
+        if ($parallel !== null && $this->filesystem->exists($this->getAbsolutePath('vendor/bin/paratest'))) {
+            return $this->getAbsolutePath('vendor/bin/paratest');
+        }
+
+        return $this->getAbsolutePath('vendor/bin/phpunit');
     }
 }

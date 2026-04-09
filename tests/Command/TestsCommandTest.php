@@ -137,4 +137,65 @@ final class TestsCommandTest extends AbstractCommandTestCase
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithParallelOptionWillRunParaTest(): void
+    {
+        $this->filesystem->exists(getcwd() . '/vendor/bin/paratest')->willReturn(true);
+
+        $this->willRunProcessWithCallback(function (Process $process): bool {
+            $commandLine = $process->getCommandLine();
+
+            return str_contains($commandLine, 'vendor/bin/paratest')
+                && str_contains($commandLine, '--parallel');
+        });
+
+        $this->input->getOption('parallel')
+            ->willReturn('1');
+        $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithParallelOptionAndWorkerCount(): void
+    {
+        $this->filesystem->exists(getcwd() . '/vendor/bin/paratest')->willReturn(true);
+
+        $this->willRunProcessWithCallback(function (Process $process): bool {
+            $commandLine = $process->getCommandLine();
+
+            return str_contains($commandLine, 'vendor/bin/paratest')
+                && str_contains($commandLine, '--processes=4')
+                && str_contains($commandLine, '--parallel');
+        });
+
+        $this->input->getOption('parallel')
+            ->willReturn('4');
+        $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithParallelOptionButNoParaTestWillFallbackToPhpUnit(): void
+    {
+        $this->filesystem->exists(getcwd() . '/vendor/bin/paratest')->willReturn(false);
+
+        $this->willRunProcessWithCallback(function (Process $process): bool {
+            $commandLine = $process->getCommandLine();
+
+            return str_contains($commandLine, 'vendor/bin/phpunit')
+                && ! str_contains($commandLine, 'paratest');
+        });
+
+        $this->input->getOption('parallel')
+            ->willReturn('1');
+        $this->invokeExecute();
+    }
 }
