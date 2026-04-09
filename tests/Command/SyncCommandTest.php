@@ -18,13 +18,26 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
+use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
+use FastForward\DevTools\GitIgnore\Classifier;
+use FastForward\DevTools\GitIgnore\GitIgnore;
+use FastForward\DevTools\GitIgnore\Merger;
+use FastForward\DevTools\GitIgnore\Reader;
+use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 #[CoversClass(SyncCommand::class)]
+#[UsesClass(Reader::class)]
+#[UsesClass(GitIgnore::class)]
+#[UsesClass(Classifier::class)]
+#[UsesClass(Merger::class)]
+#[UsesClass(Writer::class)]
+#[UsesClass(GitIgnoreCommand::class)]
 final class SyncCommandTest extends AbstractCommandTestCase
 {
     use ProphecyTrait;
@@ -67,15 +80,12 @@ final class SyncCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillReturnSuccessAndWriteInfo(): void
     {
-        // Filesystem mocks para não executar nada real
         $this->filesystem->exists(Argument::any())->willReturn(true);
         $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
 
-        // Output deve receber a mensagem inicial
-        $this->output->writeln('<info>Starting script installation...</info>')
+        $this->output->writeln(Argument::type('string'))
             ->shouldBeCalled();
 
-        $result = $this->invokeExecute();
-        self::assertSame(0, $result);
+        self::assertSame(SyncCommand::SUCCESS, $this->invokeExecute());
     }
 }

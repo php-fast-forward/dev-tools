@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Command;
 
+use RuntimeException;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Composer\Command\BaseCommand;
 use Symfony\Component\Console\Input\ArrayInput;
@@ -112,8 +113,12 @@ abstract class AbstractCommand extends BaseCommand
      */
     protected function getCurrentWorkingDirectory(): string
     {
-        return $this->getApplication()
-            ->getInitialWorkingDirectory() ?: getcwd();
+        try {
+            return $this->getApplication()
+                ->getInitialWorkingDirectory() ?: getcwd();
+        } catch (RuntimeException) {
+            return getcwd();
+        }
     }
 
     /**

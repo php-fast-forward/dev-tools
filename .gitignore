@@ -4,7 +4,6 @@ backup/
 public/
 tmp/
 vendor/
+*.cache
 .DS_Store
 composer.lock
-*.cache
-TODO.md
