@@ -51,6 +51,36 @@ To customize Rector for one library, create ``rector.php`` in the consumer
 project root. The ``refactor`` command and the Rector phase inside ``phpdoc``
 will use that file instead of the packaged default.
 
+Extending Rector Configuration
+-------------------------------
+
+Instead of copying the entire ``rector.php`` file, consumers can extend the
+default configuration using the ``RectorConfig`` class:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\RectorConfig;
+
+   return RectorConfig::configure(
+       static function (\Rector\Config\RectorConfig $rectorConfig): void {
+           $rectorConfig->rules([
+               // custom rules
+           ]);
+
+           $rectorConfig->skip([
+               // custom skips
+           ]);
+       }
+   );
+
+This approach:
+
+- Eliminates duplication of the base configuration
+- Automatically receives upstream updates
+- Only requires overriding what is needed
+
 What Is Not Overwritten Automatically
 -------------------------------------
 

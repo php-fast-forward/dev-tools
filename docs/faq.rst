@@ -76,6 +76,25 @@ Create only the local configuration file you want to customize, such as
 ``rector.php`` or ``phpunit.xml``. DevTools will prefer that file and keep the
 rest on the packaged defaults.
 
+How do I extend the Rector configuration without copying the whole file?
+--------------------------------------------------------------------------
+
+Use the ``RectorConfig`` class to extend instead of replace:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\RectorConfig;
+
+   return RectorConfig::configure(
+       static function (\Rector\Config\RectorConfig $rectorConfig): void {
+           $rectorConfig->rules([CustomRule::class]);
+       }
+   );
+
+This approach automatically receives upstream updates while allowing additive customization.
+
 Can I generate coverage without running the full ``standards`` pipeline?
 ------------------------------------------------------------------------
 
