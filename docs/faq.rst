@@ -77,7 +77,7 @@ Create only the local configuration file you want to customize, such as
 rest on the packaged defaults.
 
 How do I extend the ECS configuration without copying the whole file?
-----------------------------------------------------------------------
+-----------------------------------------------------------------------
 
 Use the ``ECSConfig`` class to extend instead of replace:
 
@@ -91,6 +91,25 @@ Use the ``ECSConfig`` class to extend instead of replace:
    $config->withRules([CustomRule::class]);
 
    return $config;
+
+This approach automatically receives upstream updates while allowing additive customization.
+
+How do I extend the Rector configuration without copying the whole file?
+-------------------------------------------------------------------------
+
+Use the ``RectorConfig`` class to extend instead of replace:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\RectorConfig;
+
+   return RectorConfig::configure(
+       static function (\Rector\Config\RectorConfig $rectorConfig): void {
+           $rectorConfig->rules([CustomRule::class]);
+       }
+   );
 
 This approach automatically receives upstream updates while allowing additive customization.
 

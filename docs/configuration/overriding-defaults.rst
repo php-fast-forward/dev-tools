@@ -1,5 +1,5 @@
 Overriding Defaults
-===================
+==================
 
 Local override files let a consumer project keep the Fast Forward baseline
 without forking the whole package.
@@ -70,6 +70,30 @@ default configuration using the ``ECSConfig`` class:
 
    return $config;
 
+Extending Rector Configuration
+-------------------------------
+
+Instead of copying the entire ``rector.php`` file, consumers can extend the
+default configuration using the ``RectorConfig`` class:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\RectorConfig;
+
+   return RectorConfig::configure(
+       static function (\Rector\Config\RectorConfig $rectorConfig): void {
+           $rectorConfig->rules([
+               // custom rules
+           ]);
+
+           $rectorConfig->skip([
+               // custom skips
+           ]);
+       }
+   );
+
 This approach:
 
 - Eliminates duplication of the base configuration
@@ -77,7 +101,7 @@ This approach:
 - Only requires overriding what is needed
 
 What Is Not Overwritten Automatically
--------------------------------------
+--------------------------------------
 
 - existing workflow files in ``.github/workflows/``;
 - an existing ``.editorconfig``;
