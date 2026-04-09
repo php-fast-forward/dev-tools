@@ -26,16 +26,44 @@ use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestCaseStaticMethodCallsFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig;
+use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
 
 use function Safe\getcwd;
 
+/**
+ * Base ECS configuration for dev-tools.
+ *
+ * This configuration can be extended in consumer projects using one of the following patterns:
+ *
+ * 1. Use directly (recommended):
+ *    ```php
+ *    return require __DIR__ . '/vendor/fast-forward/dev-tools/ecs.php';
+ *    ```
+ *
+ * 2. Extend with custom rules:
+ *    ```php
+ *    $builder = require __DIR__ . '/vendor/fast-forward/dev-tools/ecs.php';
+ *    return $builder->withRules([CustomRule::class]);
+ *    ```
+ *
+ * 3. Using the factory (recommended for advanced use cases):
+ *    ```php
+ *    use FastForward\DevTools\Config\EcsConfigFactory;
+ *
+ *    return EcsConfigFactory::create();
+ *    ```
+ *
+ * @return ECSConfigBuilder the pre-configured ECS configuration builder
+ */
+$cwd = getcwd();
+
 return ECSConfig::configure()
-    ->withPaths([getcwd()])
+    ->withPaths([$cwd])
     ->withSkip([
-        getcwd() . '/public',
-        getcwd() . '/resources',
-        getcwd() . '/vendor',
-        getcwd() . '/tmp',
+        $cwd . '/public',
+        $cwd . '/resources',
+        $cwd . '/vendor',
+        $cwd . '/tmp',
         PhpdocToCommentFixer::class,
         NoSuperfluousPhpdocTagsFixer::class,
         NoEmptyPhpdocFixer::class,
