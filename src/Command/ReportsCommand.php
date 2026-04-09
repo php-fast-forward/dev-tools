@@ -65,14 +65,10 @@ final class ReportsCommand extends AbstractCommand
         $results = [];
 
         $output->writeln('<info>Generating API documentation on path: ' . $docsPath . '</info>');
-        $results[] = $this->runCommand('docs', [
-            '--target' => $docsPath,
-        ], $output);
+        $results[] = $this->runCommand('docs --target=' . $docsPath, $output);
 
         $output->writeln('<info>Generating test coverage report on path: ' . $coveragePath . '</info>');
-        $results[] = $this->runCommand('tests', [
-            '--coverage' => $coveragePath,
-        ], $output);
+        $results[] = $this->runCommand('tests --coverage=' . $coveragePath, $output);
 
         $output->writeln('<info>Frontpage generation completed!</info>');
 

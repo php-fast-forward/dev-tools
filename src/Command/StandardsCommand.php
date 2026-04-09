@@ -70,10 +70,12 @@ final class StandardsCommand extends AbstractCommand
 
         $results = [];
 
-        $results[] = $this->runCommand('refactor', $input, $output);
-        $results[] = $this->runCommand('phpdoc', $input, $output);
-        $results[] = $this->runCommand('code-style', $input, $output);
-        $results[] = $this->runCommand('reports', $input, $output);
+        $fix = $input->getOption('fix') ? '--fix' : '';
+
+        $results[] = $this->runCommand('refactor ' . $fix, $output);
+        $results[] = $this->runCommand('phpdoc ' . $fix, $output);
+        $results[] = $this->runCommand('code-style ' . $fix, $output);
+        $results[] = $this->runCommand('reports', $output);
 
         $output->writeln('<info>All code standards checks completed!</info>');
 

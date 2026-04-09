@@ -21,8 +21,7 @@ namespace FastForward\DevTools\Command;
 use RuntimeException;
 use Symfony\Component\Console\Helper\ProcessHelper;
 use Composer\Command\BaseCommand;
-use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
@@ -181,27 +180,17 @@ abstract class AbstractCommand extends BaseCommand
     /**
      * Configures and executes a registered console command by name.
      *
-     * The method MUST look up the command from the application and run it. It SHALL ignore generic
-     * validation errors and route the custom input and output correctly.
+     * The method MUST run the specified command with the provided input and output interfaces.
      *
-     * @param string $commandName the name of the required command
-     * @param array|InputInterface $input the input arguments or array definition
+     * @param string $command the commandline name of the command to execute
      * @param OutputInterface $output the interface for buffering output
      *
      * @return int the status code resulting from the dispatched command
      */
-    protected function runCommand(string $commandName, array|InputInterface $input, OutputInterface $output): int
+    protected function runCommand(string $command, OutputInterface $output): int
     {
-        $application = $this->getApplication();
-
-        $command = $application->find($commandName);
-        $command->ignoreValidationErrors();
-
-        if (\is_array($input)) {
-            $input = new ArrayInput($input);
-        }
-
-        return $command->run($input, $output);
+        return $this->getApplication()
+            ->doRun(new StringInput($command), $output);
     }
 
     /**

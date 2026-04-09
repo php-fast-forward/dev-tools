@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Command;
 use Composer\Factory;
 use Composer\Json\JsonManipulator;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
@@ -75,7 +74,7 @@ final class SyncCommand extends AbstractCommand
         $this->copyEditorConfig();
         $this->copyDependabotConfig();
         $this->addRepositoryWikiGitSubmodule();
-        $this->syncGitIgnore($output);
+        $this->runCommand('gitignore', $output);
 
         return self::SUCCESS;
     }
@@ -234,21 +233,5 @@ final class SyncCommand extends AbstractCommand
         $process->mustRun();
 
         return trim($process->getOutput());
-    }
-
-    /**
-     * Synchronizes .gitignore entries from dev-tools into the target project.
-     *
-     * This method merges canonical .gitignore entries from the dev-tools package
-     * with the target project's existing .gitignore entries, then writes the merged result.
-     *
-     * @param OutputInterface $output
-     *
-     * @return void
-     */
-    private function syncGitIgnore(OutputInterface $output): void
-    {
-        $this->getApplication()
-            ->doRun(new StringInput('gitignore'), $output);
     }
 }
