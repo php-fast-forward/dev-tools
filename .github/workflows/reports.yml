@@ -3,7 +3,6 @@ name: Generate Reports and Deploy to GitHub Pages
 on:
     workflow_call:
     workflow_dispatch:
-    pull_request:
     push:
         branches: [ "main" ]
 
@@ -76,7 +75,7 @@ jobs:
         environment:
             name: github-pages
             url: ${{ steps.deployment.outputs.page_url }}
-            
+
         runs-on: ubuntu-latest
         steps:
             - name: Deploy to GitHub Pages
