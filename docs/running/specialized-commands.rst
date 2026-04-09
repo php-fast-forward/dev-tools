@@ -138,3 +138,24 @@ Important details:
 - it copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``;
 - it creates ``.github/wiki`` as a git submodule when the directory is
   missing.
+- it calls ``gitignore`` to merge the canonical .gitignore with the project's .gitignore.
+
+``gitignore``
+-------------
+
+Merges and synchronizes .gitignore files.
+
+.. code-block:: bash
+
+   composer dev-tools gitignore
+   composer dev-tools gitignore -- --source=/path/to/source/.gitignore --target=/path/to/target/.gitignore
+
+Important details:
+
+- it reads the canonical .gitignore from dev-tools and merges with the
+  project's existing .gitignore;
+- by default, the source is the packaged .gitignore and the target is the
+  project's root .gitignore;
+- duplicates are removed and entries are sorted alphabetically;
+- it uses the Reader, Merger, and Writer components from the GitIgnore
+  namespace.

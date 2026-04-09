@@ -42,3 +42,6 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
    * - ``FastForward\DevTools\Command\SyncCommand``
      - ``dev-tools:sync``
      - Synchronizes consumer-facing scripts and automation assets.
+   * - ``FastForward\DevTools\Command\GitIgnoreCommand``
+     - ``gitignore``
+     - Merges and synchronizes .gitignore files.

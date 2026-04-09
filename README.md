@@ -58,6 +58,9 @@ composer dev-tools wiki
 # Generate documentation frontpage and related reports
 composer dev-tools reports
 
+# Merges and synchronizes .gitignore files
+composer dev-tools gitignore
+
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and ensures the repository wiki is present as a git submodule in .github/wiki
 composer dev-tools:sync
 ```
