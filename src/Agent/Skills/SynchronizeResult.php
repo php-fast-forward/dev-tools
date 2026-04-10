@@ -48,6 +48,9 @@ final class SynchronizeResult
      */
     private array $removedBrokenLinks = [];
 
+    /**
+     * Indicates whether the synchronization encountered a failure.
+     */
     private bool $failed = false;
 
     /**

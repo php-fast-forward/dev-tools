@@ -22,25 +22,53 @@ use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
 use FastForward\DevTools\Agent\Skills\SynchronizeResult;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 /**
- * Synchronizes Fast Forward skills into the consumer repository by managing `.agents/skills` links.
+ * Synchronizes packaged Fast Forward skills into the consumer repository.
+ *
+ * This command SHALL ensure that the consumer repository contains the expected
+ * `.agents/skills` directory structure backed by the packaged skill set. The
+ * command MUST verify that the packaged skills directory exists before any
+ * synchronization is attempted. If the target skills directory does not exist,
+ * it SHALL be created before the synchronization process begins.
+ *
+ * The synchronization workflow is delegated to {@see SkillsSynchronizer}. This
+ * command MUST act as an orchestration layer only: it prepares the source and
+ * target paths, triggers synchronization, and translates the resulting status
+ * into Symfony Console output and process exit codes.
  */
 final class SkillsCommand extends AbstractCommand
 {
-    private readonly SkillsSynchronizer $synchronizer;
-
     /**
-     * @param SkillsSynchronizer|null $synchronizer
+     * Initializes the command with an optional skills synchronizer instance.
+     *
+     * If no synchronizer is provided, the command SHALL instantiate the default
+     * {@see SkillsSynchronizer} implementation. Consumers MAY inject a custom
+     * synchronizer for testing or alternative synchronization behavior, provided
+     * it preserves the expected contract.
+     *
+     * @param SkillsSynchronizer|null $synchronizer the synchronizer responsible
+     *                                              for applying the skills
+     *                                              synchronization process
+     * @param Filesystem|null $filesystem filesystem used to resolve
+     *                                    and manage the skills
+     *                                    directory structure
      */
-    public function __construct(?SkillsSynchronizer $synchronizer = null)
-    {
-        $this->synchronizer = $synchronizer ?? new SkillsSynchronizer();
-
-        parent::__construct();
+    public function __construct(
+        private readonly SkillsSynchronizer $synchronizer = new SkillsSynchronizer(),
+        ?Filesystem $filesystem = null
+    ) {
+        parent::__construct($filesystem);
     }
 
     /**
+     * Configures the command name, description, and help text.
+     *
+     * The command metadata MUST clearly describe that the operation synchronizes
+     * Fast Forward skills into the `.agents/skills` directory and that it manages
+     * link-based synchronization for packaged skills.
+     *
      * @return void
      */
     protected function configure(): void
@@ -55,10 +83,25 @@ final class SkillsCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the skills synchronization workflow.
      *
-     * @return int
+     * This method SHALL:
+     * - announce the start of synchronization;
+     * - resolve the packaged skills path and consumer target directory;
+     * - fail when the packaged skills directory does not exist;
+     * - create the target directory when it is missing;
+     * - delegate synchronization to {@see SkillsSynchronizer};
+     * - return a success or failure exit code based on the synchronization result.
+     *
+     * The command MUST return {@see self::FAILURE} when packaged skills are not
+     * available or when the synchronizer reports a failure. It MUST return
+     * {@see self::SUCCESS} only when synchronization completes successfully.
+     *
+     * @param InputInterface $input the console input instance provided by Symfony
+     * @param OutputInterface $output the console output instance used to report progress
+     *
+     * @return int The process exit status. This MUST be {@see self::SUCCESS} on
+     *             success and {@see self::FAILURE} on failure.
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -67,7 +110,6 @@ final class SkillsCommand extends AbstractCommand
         $packageSkillsPath = $this->getDevToolsFile('.agents/skills');
         $skillsDir = $this->getConfigFile('.agents/skills', true);
 
-        // Normal consumer repository flow
         if (! $this->filesystem->exists($packageSkillsPath)) {
             $output->writeln('<comment>No packaged skills found at: ' . $packageSkillsPath . '</comment>');
 
@@ -79,8 +121,10 @@ final class SkillsCommand extends AbstractCommand
             $output->writeln('<info>Created .agents/skills directory.</info>');
         }
 
+        $this->synchronizer->setLogger($this->getIO());
+
         /** @var SynchronizeResult $result */
-        $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, $this->getIO());
+        $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath);
 
         if ($result->failed()) {
             $output->writeln('<error>Skills synchronization failed.</error>');

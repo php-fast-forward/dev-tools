@@ -18,7 +18,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Agent\Skills;
 
-use Psr\Log\LoggerInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
+use Psr\Log\NullLogger;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Path;
@@ -30,16 +32,23 @@ use Symfony\Component\Filesystem\Path;
  * repository to the skills packaged within the fast-forward/dev-tools dependency.
  * It handles initial sync, idempotent re-runs, and cleanup of broken links.
  */
-final class SkillsSynchronizer
+final class SkillsSynchronizer implements LoggerAwareInterface
 {
-    private readonly Filesystem $filesystem;
+    use LoggerAwareTrait;
 
     /**
+     * Initializes the synchronizer with an optional filesystem instance.
+     *
+     * If no filesystem is provided, a default {@see Filesystem} instance is created.
+     *
      * @param Filesystem|null $filesystem Filesystem instance for file operations
+     * @param Finder $finder Finder instance for locating skill directories in the package
      */
-    public function __construct(?Filesystem $filesystem = null)
-    {
-        $this->filesystem = $filesystem ?? new Filesystem();
+    public function __construct(
+        private readonly Filesystem $filesystem = new Filesystem(),
+        private readonly Finder $finder = new Finder(),
+    ) {
+        $this->logger = new NullLogger();
     }
 
     /**
@@ -51,19 +60,15 @@ final class SkillsSynchronizer
      *
      * @param string $skillsDir Absolute path to the consumer's .agents/skills directory
      * @param string $packageSkillsPath Absolute path to the packaged skills in the dependency
-     * @param LoggerInterface $logger Logger for reporting sync operations
      *
      * @return SynchronizeResult Result containing counts of created, preserved, and removed links
      */
-    public function synchronize(
-        string $skillsDir,
-        string $packageSkillsPath,
-        LoggerInterface $logger,
-    ): SynchronizeResult {
+    public function synchronize(string $skillsDir, string $packageSkillsPath): SynchronizeResult
+    {
         $result = new SynchronizeResult();
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
-            $logger->error('No packaged skills found at: ' . $packageSkillsPath);
+            $this->logger->error('No packaged skills found at: ' . $packageSkillsPath);
             $result->markFailed();
 
             return $result;
@@ -71,10 +76,10 @@ final class SkillsSynchronizer
 
         if (! $this->filesystem->exists($skillsDir)) {
             $this->filesystem->mkdir($skillsDir);
-            $logger->info('Created .agents/skills directory.');
+            $this->logger->info('Created .agents/skills directory.');
         }
 
-        $this->syncPackageSkills($skillsDir, $packageSkillsPath, $logger, $result);
+        $this->syncPackageSkills($skillsDir, $packageSkillsPath, $result);
 
         return $result;
     }
@@ -87,16 +92,14 @@ final class SkillsSynchronizer
      *
      * @param string $skillsDir Target directory for symlinks
      * @param string $packageSkillsPath Source directory containing packaged skills
-     * @param LoggerInterface $logger Logger for operation feedback
      * @param SynchronizeResult $result Result object to track outcomes
      */
     private function syncPackageSkills(
         string $skillsDir,
         string $packageSkillsPath,
-        LoggerInterface $logger,
         SynchronizeResult $result,
     ): void {
-        $finder = Finder::create()
+        $finder = $this->finder
             ->directories()
             ->in($packageSkillsPath)
             ->depth('== 0');
@@ -106,7 +109,7 @@ final class SkillsSynchronizer
             $targetLink = Path::makeAbsolute($skillName, $skillsDir);
             $sourcePath = $skillDir->getRealPath();
 
-            $this->processSkillLink($skillName, $targetLink, $sourcePath, $logger, $result);
+            $this->processSkillLink($skillName, $targetLink, $sourcePath, $result);
         }
     }
 
@@ -119,29 +122,27 @@ final class SkillsSynchronizer
      * @param string $skillName Name of the skill being processed
      * @param string $targetLink Absolute path where the symlink should exist
      * @param string $sourcePath Absolute path to the packaged skill directory
-     * @param LoggerInterface $logger Logger for feedback on actions taken
      * @param SynchronizeResult $result Result tracker for reporting outcomes
      */
     private function processSkillLink(
         string $skillName,
         string $targetLink,
         string $sourcePath,
-        LoggerInterface $logger,
         SynchronizeResult $result,
     ): void {
         if (! $this->filesystem->exists($targetLink)) {
-            $this->createNewLink($skillName, $targetLink, $sourcePath, $logger, $result);
+            $this->createNewLink($skillName, $targetLink, $sourcePath, $result);
 
             return;
         }
 
         if (! $this->isSymlink($targetLink)) {
-            $this->preserveExistingNonSymlink($skillName, $logger, $result);
+            $this->preserveExistingNonSymlink($skillName, $result);
 
             return;
         }
 
-        $this->processExistingSymlink($skillName, $targetLink, $sourcePath, $logger, $result);
+        $this->processExistingSymlink($skillName, $targetLink, $sourcePath, $result);
     }
 
     /**
@@ -153,18 +154,16 @@ final class SkillsSynchronizer
      * @param string $skillName Name identifying the skill
      * @param string $targetLink Absolute path where the symlink will be created
      * @param string $sourcePath Absolute path to the packaged skill directory
-     * @param LoggerInterface $logger Logger for confirmation message
      * @param SynchronizeResult $result Result object for tracking creation
      */
     private function createNewLink(
         string $skillName,
         string $targetLink,
         string $sourcePath,
-        LoggerInterface $logger,
         SynchronizeResult $result,
     ): void {
         $this->filesystem->symlink($sourcePath, $targetLink);
-        $logger->info('Created link: ' . $skillName . ' -> ' . $sourcePath);
+        $this->logger->info('Created link: ' . $skillName . ' -> ' . $sourcePath);
         $result->addCreatedLink($skillName);
     }
 
@@ -176,15 +175,11 @@ final class SkillsSynchronizer
      * replaced to avoid accidental data loss.
      *
      * @param string $skillName Name of the skill with the conflicting item
-     * @param LoggerInterface $logger Logger for the preservation notice
      * @param SynchronizeResult $result Result tracker for preserved items
      */
-    private function preserveExistingNonSymlink(
-        string $skillName,
-        LoggerInterface $logger,
-        SynchronizeResult $result,
-    ): void {
-        $logger->notice('Existing non-symlink found: ' . $skillName . ' (keeping as is, skipping link creation)');
+    private function preserveExistingNonSymlink(string $skillName, SynchronizeResult $result): void
+    {
+        $this->logger->notice('Existing non-symlink found: ' . $skillName . ' (keeping as is, skipping link creation)');
         $result->addPreservedLink($skillName);
     }
 
@@ -197,25 +192,23 @@ final class SkillsSynchronizer
      * @param string $skillName Name of the skill with the existing symlink
      * @param string $targetLink Absolute path to the existing symlink
      * @param string $sourcePath Absolute path to the expected source directory
-     * @param LoggerInterface $logger Logger for preservation or repair messages
      * @param SynchronizeResult $result Result tracker for preserved or removed links
      */
     private function processExistingSymlink(
         string $skillName,
         string $targetLink,
         string $sourcePath,
-        LoggerInterface $logger,
         SynchronizeResult $result,
     ): void {
         $linkPath = $this->filesystem->readlink($targetLink, true);
 
         if (! $linkPath || ! $this->filesystem->exists($linkPath)) {
-            $this->repairBrokenLink($skillName, $targetLink, $sourcePath, $logger, $result);
+            $this->repairBrokenLink($skillName, $targetLink, $sourcePath, $result);
 
             return;
         }
 
-        $logger->notice('Preserved existing link: ' . $skillName);
+        $this->logger->notice('Preserved existing link: ' . $skillName);
         $result->addPreservedLink($skillName);
     }
 
@@ -229,21 +222,19 @@ final class SkillsSynchronizer
      * @param string $skillName Name of the skill with the broken symlink
      * @param string $targetLink Absolute path to the broken symlink
      * @param string $sourcePath Absolute path to the current packaged skill
-     * @param LoggerInterface $logger Logger for repair and creation messages
      * @param SynchronizeResult $result Result tracker for removed and created items
      */
     private function repairBrokenLink(
         string $skillName,
         string $targetLink,
         string $sourcePath,
-        LoggerInterface $logger,
         SynchronizeResult $result,
     ): void {
         $this->filesystem->remove($targetLink);
-        $logger->notice('Existing link is broken: ' . $skillName . ' (removing and recreating)');
+        $this->logger->notice('Existing link is broken: ' . $skillName . ' (removing and recreating)');
         $result->addRemovedBrokenLink($skillName);
 
-        $this->createNewLink($skillName, $targetLink, $sourcePath, $logger, $result);
+        $this->createNewLink($skillName, $targetLink, $sourcePath, $result);
     }
 
     /**
@@ -253,6 +244,6 @@ final class SkillsSynchronizer
      */
     private function isSymlink(string $path): bool
     {
-        return is_link($path);
+        return null !== $this->filesystem->readlink($path);
     }
 }
