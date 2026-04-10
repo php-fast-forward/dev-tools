@@ -22,6 +22,7 @@ use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
 use FastForward\DevTools\GitAttributes\CandidateProvider;
 use FastForward\DevTools\GitAttributes\ExistenceChecker;
+use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
 use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
 use FastForward\DevTools\GitIgnore\Classifier;
 use FastForward\DevTools\GitIgnore\GitIgnore;
@@ -43,6 +44,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 #[UsesClass(GitIgnoreCommand::class)]
 #[UsesClass(CandidateProvider::class)]
 #[UsesClass(ExistenceChecker::class)]
+#[UsesClass(ExportIgnoreFilter::class)]
 #[UsesClass(GitAttributesMerger::class)]
 final class SyncCommandTest extends AbstractCommandTestCase
 {

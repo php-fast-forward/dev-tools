@@ -28,70 +28,75 @@ use Symfony\Component\Filesystem\Filesystem;
  */
 final readonly class ExistenceChecker implements ExistenceCheckerInterface
 {
-    private string $basePath;
-
     /**
-     * @param string $basePath The base directory to check paths against
      * @param Filesystem $filesystem
      */
     public function __construct(
-        string $basePath,
         private Filesystem $filesystem = new Filesystem()
-    ) {
-        $this->basePath = rtrim($basePath, '/');
-    }
+    ) {}
 
     /**
      * Checks if a path exists as a file or directory.
      *
+     * @param string $basePath the repository base path used to resolve the candidate
      * @param string $path The path to check (e.g., "/.github/" or "/.editorconfig")
      *
      * @return bool True if the path exists as a file or directory
      */
-    public function exists(string $path): bool
+    public function exists(string $basePath, string $path): bool
     {
-        $fullPath = $this->basePath . $path;
-
-        return $this->filesystem->exists($fullPath);
+        return $this->filesystem->exists($this->absolutePath($basePath, $path));
     }
 
     /**
      * Filters a list of paths to only those that exist.
      *
+     * @param string $basePath the repository base path used to resolve the candidates
      * @param list<string> $paths The paths to filter
      *
      * @return list<string> Only the paths that exist
      */
-    public function filterExisting(array $paths): array
+    public function filterExisting(string $basePath, array $paths): array
     {
-        return array_values(array_filter($paths, $this->exists(...)));
+        return array_values(array_filter($paths, fn(string $path): bool => $this->exists($basePath, $path)));
     }
 
     /**
      * Checks if a path is a directory.
      *
+     * @param string $basePath the repository base path used to resolve the candidate
      * @param string $path The path to check (e.g., "/.github/")
      *
      * @return bool True if the path exists and is a directory
      */
-    public function isDirectory(string $path): bool
+    public function isDirectory(string $basePath, string $path): bool
     {
-        $fullPath = $this->basePath . $path;
-
-        return is_dir($fullPath);
+        return is_dir($this->absolutePath($basePath, $path));
     }
 
     /**
      * Checks if a path is a file.
      *
+     * @param string $basePath the repository base path used to resolve the candidate
      * @param string $path The path to check (e.g., "/.editorconfig")
      *
      * @return bool True if the path exists and is a file
      */
-    public function isFile(string $path): bool
+    public function isFile(string $basePath, string $path): bool
     {
-        $fullPath = $this->basePath . $path;
+        return is_file($this->absolutePath($basePath, $path));
+    }
 
-        return is_file($fullPath);
+    /**
+     * Resolves a candidate path against the repository base path.
+     *
+     * @param string $basePath the repository base path
+     * @param string $path the candidate path in canonical form
+     *
+     * @return string the absolute path used for filesystem checks
+     */
+    private function absolutePath(string $basePath, string $path): string
+    {
+        return rtrim($basePath, '/\\') . $path;
     }
 }

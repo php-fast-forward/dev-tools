@@ -37,7 +37,10 @@ use FastForward\DevTools\Command\WikiCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\GitAttributes\CandidateProvider;
 use FastForward\DevTools\GitAttributes\ExistenceChecker;
+use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
 use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
+use FastForward\DevTools\GitAttributes\Reader as GitAttributesReader;
+use FastForward\DevTools\GitAttributes\Writer as GitAttributesWriter;
 use FastForward\DevTools\GitIgnore\Merger as GitIgnoreMerger;
 use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -63,7 +66,10 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(SkillsSynchronizer::class)]
 #[UsesClass(CandidateProvider::class)]
 #[UsesClass(ExistenceChecker::class)]
+#[UsesClass(ExportIgnoreFilter::class)]
 #[UsesClass(GitAttributesMerger::class)]
+#[UsesClass(GitAttributesReader::class)]
+#[UsesClass(GitAttributesWriter::class)]
 #[UsesClass(GitIgnoreMerger::class)]
 #[UsesClass(Writer::class)]
 final class DevToolsCommandProviderTest extends TestCase

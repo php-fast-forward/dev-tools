@@ -23,32 +23,19 @@ namespace FastForward\DevTools\GitAttributes;
  *
  * This interface defines the contract for managing .gitattributes files,
  * specifically handling the merging of canonical export-ignore rules with
- * existing custom entries while preserving the managed block structure.
+ * existing custom entries while removing obsolete generated markers and
+ * duplicate lines.
  */
 interface MergerInterface
 {
     /**
-     * Reads the current .gitattributes content.
+     * Merges generated export-ignore entries with existing .gitattributes content.
      *
-     * @return string The raw file content
-     */
-    public function read(): string;
-
-    /**
-     * Merges the managed export-ignore entries with existing .gitattributes content.
-     *
+     * @param string $existingContent The current .gitattributes content.
      * @param list<string> $exportIgnoreEntries The export-ignore entries to manage
+     * @param list<string> $keepInExportPaths The paths that MUST remain exported
      *
      * @return string The merged .gitattributes content
      */
-    public function merge(array $exportIgnoreEntries): string;
-
-    /**
-     * Writes the merged content to the .gitattributes file.
-     *
-     * @param string $content The merged content to write
-     *
-     * @return void
-     */
-    public function write(string $content): void;
+    public function merge(string $existingContent, array $exportIgnoreEntries, array $keepInExportPaths = []): string;
 }

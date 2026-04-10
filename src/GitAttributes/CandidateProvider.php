@@ -33,6 +33,7 @@ final class CandidateProvider implements CandidateProviderInterface
     public function folders(): array
     {
         return [
+            '/.devcontainer/',
             '/.github/',
             '/.idea/',
             '/.vscode/',
@@ -63,6 +64,16 @@ final class CandidateProvider implements CandidateProviderInterface
             '/Makefile',
             '/phpunit.xml.dist',
             '/README.md',
+            '/AGENTS.md',
+            '/GEMINI.md',
+            '/Dockerfile',
+            '/.dockerignore',
+            '/.env',
+            '/docker-compose.yml',
+            '/docker-compose.override.yml',
+            '/docker-stack.yml',
+            '/compose.yml',
+            '/compose.override.yml',
         ];
     }
 

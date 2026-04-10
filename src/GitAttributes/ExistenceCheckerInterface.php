@@ -29,36 +29,40 @@ interface ExistenceCheckerInterface
     /**
      * Checks if a path exists as a file or directory.
      *
+     * @param string $basePath the repository base path used to resolve the candidate
      * @param string $path The path to check (e.g., "/.github/" or "/.editorconfig")
      *
      * @return bool True if the path exists as a file or directory
      */
-    public function exists(string $path): bool;
+    public function exists(string $basePath, string $path): bool;
 
     /**
      * Filters a list of paths to only those that exist.
      *
+     * @param string $basePath the repository base path used to resolve the candidates
      * @param list<string> $paths The paths to filter
      *
      * @return list<string> Only the paths that exist
      */
-    public function filterExisting(array $paths): array;
+    public function filterExisting(string $basePath, array $paths): array;
 
     /**
      * Checks if a path is a directory.
      *
+     * @param string $basePath the repository base path used to resolve the candidate
      * @param string $path The path to check (e.g., "/.github/")
      *
      * @return bool True if the path exists and is a directory
      */
-    public function isDirectory(string $path): bool;
+    public function isDirectory(string $basePath, string $path): bool;
 
     /**
      * Checks if a path is a file.
      *
+     * @param string $basePath the repository base path used to resolve the candidate
      * @param string $path The path to check (e.g., "/.editorconfig")
      *
      * @return bool True if the path exists and is a file
      */
-    public function isFile(string $path): bool;
+    public function isFile(string $basePath, string $path): bool;
 }

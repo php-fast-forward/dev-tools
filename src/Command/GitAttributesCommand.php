@@ -21,7 +21,15 @@ namespace FastForward\DevTools\Command;
 use FastForward\DevTools\GitAttributes\CandidateProvider;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceChecker;
+use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
+use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
+use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
 use FastForward\DevTools\GitAttributes\Merger;
+use FastForward\DevTools\GitAttributes\MergerInterface;
+use FastForward\DevTools\GitAttributes\Reader;
+use FastForward\DevTools\GitAttributes\ReaderInterface;
+use FastForward\DevTools\GitAttributes\Writer;
+use FastForward\DevTools\GitAttributes\WriterInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -35,64 +43,36 @@ use Symfony\Component\Filesystem\Path;
  */
 final class GitAttributesCommand extends AbstractCommand
 {
+    private const string EXTRA_NAMESPACE = 'gitattributes';
+
+    private const string EXTRA_KEEP_IN_EXPORT = 'keep-in-export';
+
+    private const string EXTRA_NO_EXPORT_IGNORE = 'no-export-ignore';
+
+    private readonly WriterInterface $writer;
+
     /**
      * Creates a new GitAttributesCommand instance.
      *
      * @param Filesystem|null $filesystem the filesystem component
-     * @param CandidateProviderInterface|null $candidateProvider the candidate provider
+     * @param CandidateProviderInterface $candidateProvider the candidate provider
+     * @param ExistenceCheckerInterface $existenceChecker the repository path existence checker
+     * @param ExportIgnoreFilterInterface $exportIgnoreFilter the configured candidate filter
+     * @param MergerInterface $merger the merger component
+     * @param ReaderInterface $reader the reader component
+     * @param WriterInterface|null $writer the writer component
      */
     public function __construct(
         ?Filesystem $filesystem = null,
-        private readonly ?CandidateProviderInterface $candidateProvider = new CandidateProvider()
+        private readonly CandidateProviderInterface $candidateProvider = new CandidateProvider(),
+        private readonly ExistenceCheckerInterface $existenceChecker = new ExistenceChecker(),
+        private readonly ExportIgnoreFilterInterface $exportIgnoreFilter = new ExportIgnoreFilter(),
+        private readonly MergerInterface $merger = new Merger(),
+        private readonly ReaderInterface $reader = new Reader(),
+        ?WriterInterface $writer = null,
     ) {
         parent::__construct($filesystem);
-    }
-
-    /**
-     * Configures the current command.
-     *
-     * This method MUST define the name, description, and help text for the command.
-     *
-     * @param InputInterface $input
-     * @param OutputInterface $output
-     */
-    protected function execute(InputInterface $input, OutputInterface $output): int
-    {
-        $output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>');
-
-        $basePath = $this->getCurrentWorkingDirectory();
-
-        /** @var ExistenceChecker $checker */
-        $checker = new ExistenceChecker($basePath, $this->filesystem);
-
-        $existingFolders = $checker->filterExisting($this->candidateProvider->folders());
-        $existingFiles = $checker->filterExisting($this->candidateProvider->files());
-
-        sort($existingFolders, \SORT_STRING);
-        sort($existingFiles, \SORT_STRING);
-
-        $entries = [...$existingFolders, ...$existingFiles];
-
-        if ([] === $entries) {
-            $output->writeln(
-                '<comment>No candidate paths found in repository. Skipping .gitattributes sync.</comment>'
-            );
-
-            return self::SUCCESS;
-        }
-
-        $gitattributesPath = Path::join($basePath, '.gitattributes');
-        $merger = new Merger($gitattributesPath);
-
-        $content = $merger->merge($entries);
-        $merger->write($content);
-
-        $output->writeln(\sprintf(
-            '<info>Added %d export-ignore entries to .gitattributes.</info>',
-            \count($entries)
-        ));
-
-        return self::SUCCESS;
+        $this->writer = $writer ?? new Writer($this->filesystem);
     }
 
     /**
@@ -110,7 +90,96 @@ final class GitAttributesCommand extends AbstractCommand
             ->setHelp(
                 'This command adds export-ignore entries for repository-only files and directories '
                 . 'to keep them out of Composer package archives. Only paths that exist in the '
-                . 'repository are added, and existing custom rules are preserved.'
+                . 'repository are added, existing custom rules are preserved, and '
+                . '"extra.gitattributes.keep-in-export" paths stay in exported archives.'
             );
+    }
+
+    /**
+     * Configures the current command.
+     *
+     * This method MUST define the name, description, and help text for the command.
+     *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     */
+    protected function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>');
+
+        $basePath = $this->getCurrentWorkingDirectory();
+        $keepInExportPaths = $this->configuredKeepInExportPaths();
+
+        $folderCandidates = $this->exportIgnoreFilter->filter($this->candidateProvider->folders(), $keepInExportPaths);
+        $fileCandidates = $this->exportIgnoreFilter->filter($this->candidateProvider->files(), $keepInExportPaths);
+
+        $existingFolders = $this->existenceChecker->filterExisting($basePath, $folderCandidates);
+        $existingFiles = $this->existenceChecker->filterExisting($basePath, $fileCandidates);
+
+        $entries = [...$existingFolders, ...$existingFiles];
+
+        if ([] === $entries) {
+            $output->writeln(
+                '<comment>No candidate paths found in repository. Skipping .gitattributes sync.</comment>'
+            );
+
+            return self::SUCCESS;
+        }
+
+        $gitattributesPath = Path::join($basePath, '.gitattributes');
+        $existingContent = $this->reader->read($gitattributesPath);
+        $content = $this->merger->merge($existingContent, $entries, $keepInExportPaths);
+        $this->writer->write($gitattributesPath, $content);
+
+        $output->writeln(\sprintf(
+            '<info>Added %d export-ignore entries to .gitattributes.</info>',
+            \count($entries)
+        ));
+
+        return self::SUCCESS;
+    }
+
+    /**
+     * Resolves the consumer-defined paths that MUST stay in exported archives.
+     *
+     * The preferred configuration key is "extra.gitattributes.keep-in-export".
+     * The alternate "extra.gitattributes.no-export-ignore" key remains
+     * supported as a compatibility alias.
+     *
+     * @return list<string> the configured keep-in-export paths
+     */
+    private function configuredKeepInExportPaths(): array
+    {
+        $extra = $this->requireComposer()
+            ->getPackage()
+            ->getExtra();
+
+        $gitattributesConfig = $extra[self::EXTRA_NAMESPACE] ?? null;
+
+        if (! \is_array($gitattributesConfig)) {
+            return [];
+        }
+
+        $configuredPaths = [];
+
+        foreach ([self::EXTRA_KEEP_IN_EXPORT, self::EXTRA_NO_EXPORT_IGNORE] as $key) {
+            $values = $gitattributesConfig[$key] ?? [];
+
+            if (\is_string($values)) {
+                $values = [$values];
+            }
+
+            if (! \is_array($values)) {
+                continue;
+            }
+
+            foreach ($values as $value) {
+                if (\is_string($value)) {
+                    $configuredPaths[] = $value;
+                }
+            }
+        }
+
+        return array_values(array_unique($configuredPaths));
     }
 }
