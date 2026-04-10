@@ -23,12 +23,23 @@ use SplFileObject;
 
 use function Safe\json_decode;
 
+/**
+ * Reads composer.json and exposes metadata for license generation.
+ *
+ * This class parses a composer.json file via SplFileObject and provides
+ * methods to extract license information, package name, authors, vendor,
+ * and the current year for copyright notices.
+ */
 final readonly class Reader implements ReaderInterface
 {
     private array $data;
 
     /**
+     * Creates a new Reader instance.
+     *
      * @param SplFileObject $source The source file to read from, typically composer.json
+     *
+     * @throws JsonException if the JSON content is invalid
      */
     public function __construct(SplFileObject $source)
     {
@@ -36,9 +47,11 @@ final readonly class Reader implements ReaderInterface
     }
 
     /**
-     * @param SplFileObject $source The source file to read from, typically composer.json
+     * Reads and parses the JSON content from the source file.
      *
-     * @return array
+     * @param SplFileObject $source The source file to read from
+     *
+     * @return array The parsed JSON data as an associative array
      *
      * @throws JsonException if the JSON is invalid
      */
@@ -50,7 +63,13 @@ final readonly class Reader implements ReaderInterface
     }
 
     /**
-     * @return string|null
+     * Retrieves the license identifier from composer.json.
+     *
+     * If the license is a single string, returns it directly.
+     * If it's an array with one element, extracts that element.
+     * Returns null if no license is set or if multiple licenses are specified.
+     *
+     * @return string|null The license string, or null if not set or unsupported.
      */
     public function getLicense(): ?string
     {
@@ -64,7 +83,9 @@ final readonly class Reader implements ReaderInterface
     }
 
     /**
-     * @return string
+     * Retrieves the package name from composer.json.
+     *
+     * @return string The full package name (vendor/package), or empty string if not set.
      */
     public function getPackageName(): string
     {
@@ -72,7 +93,12 @@ final readonly class Reader implements ReaderInterface
     }
 
     /**
-     * @return array
+     * Retrieves the list of authors from composer.json.
+     *
+     * Each author is normalized to include name, email, homepage, and role fields.
+     * Returns an empty array if no authors are defined.
+     *
+     * @return array<int, array{name: string, email: string, homepage: string, role: string}>
      */
     public function getAuthors(): array
     {
@@ -94,7 +120,12 @@ final readonly class Reader implements ReaderInterface
     }
 
     /**
-     * @return string|null
+     * Extracts the vendor name from the package name.
+     *
+     * The package name is expected in vendor/package format.
+     * Returns null if no package name is set or if the package has no vendor prefix.
+     *
+     * @return string|null The vendor name, or null if package has no vendor prefix.
      */
     public function getVendor(): ?string
     {
@@ -114,7 +145,9 @@ final readonly class Reader implements ReaderInterface
     }
 
     /**
-     * @return int
+     * Returns the current year for copyright notices.
+     *
+     * @return int The current year as an integer.
      */
     public function getYear(): int
     {
@@ -122,9 +155,14 @@ final readonly class Reader implements ReaderInterface
     }
 
     /**
-     * @param array $license
+     * Extracts a single license from an array of licenses.
      *
-     * @return string|null
+     * Returns the first license if exactly one element exists.
+     * Returns null if the array is empty or contains multiple licenses.
+     *
+     * @param array<string> $license The license array to extract from
+     *
+     * @return string|null A single license string, or null if extraction is not possible.
      */
     private function extractLicense(array $license): ?string
     {

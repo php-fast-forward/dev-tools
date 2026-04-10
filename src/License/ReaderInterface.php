@@ -18,30 +18,46 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+/**
+ * Reads and exposes metadata from composer.json for license generation.
+ *
+ * This interface provides access to license information, package name,
+ * authors, vendor, and year data extracted from a project's composer.json.
+ */
 interface ReaderInterface
 {
     /**
-     * @return string|null
+     * Retrieves the license identifier from composer.json.
+     *
+     * @return string|null The license string, or null if not set or unsupported.
      */
     public function getLicense(): ?string;
 
     /**
-     * @return string
+     * Retrieves the package name from composer.json.
+     *
+     * @return string The full package name (vendor/package).
      */
     public function getPackageName(): string;
 
     /**
+     * Retrieves the list of authors from composer.json.
+     *
      * @return array<int, array{name: string, email: string, homepage: string, role: string}>
      */
     public function getAuthors(): array;
 
     /**
-     * @return string|null
+     * Extracts the vendor name from the package name.
+     *
+     * @return string|null The vendor name, or null if package has no vendor prefix.
      */
     public function getVendor(): ?string;
 
     /**
-     * @return int
+     * Returns the current year for copyright notices.
+     *
+     * @return int The current year as an integer.
      */
     public function getYear(): int;
 }

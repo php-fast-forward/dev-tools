@@ -22,12 +22,20 @@ use RuntimeException;
 
 use function Safe\file_get_contents;
 
+/**
+ * Loads license template files from the filesystem.
+ *
+ * This class reads license template files from a configured templates directory.
+ * The default directory is the packaged resources/licenses folder.
+ */
 final readonly class TemplateLoader implements TemplateLoaderInterface
 {
     private string $templatesPath;
 
     /**
-     * @param string|null $templatesPath
+     * Creates a new TemplateLoader instance.
+     *
+     * @param string|null $templatesPath Optional custom path to the templates directory
      */
     public function __construct(?string $templatesPath = null)
     {
@@ -35,11 +43,13 @@ final readonly class TemplateLoader implements TemplateLoaderInterface
     }
 
     /**
-     * @param string $templateFilename
+     * Loads a license template file by its filename.
      *
-     * @return string
+     * @param string $templateFilename The filename of the template to load (e.g., "mit.txt")
      *
-     * @throws RuntimeException
+     * @return string The template content
+     *
+     * @throws RuntimeException if the template file is not found
      */
     public function load(string $templateFilename): string
     {

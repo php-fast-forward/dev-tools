@@ -18,12 +18,22 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+/**
+ * Loads license template files from the filesystem.
+ *
+ * This interface defines the contract for reading license template content
+ * based on a template filename provided by the resolver.
+ */
 interface TemplateLoaderInterface
 {
     /**
-     * @param string $templateFilename
+     * Loads a license template file by its filename.
      *
-     * @return string
+     * @param string $templateFilename The filename of the template to load
+     *
+     * @return string The template content
+     *
+     * @throws RuntimeException if the template file is not found
      */
     public function load(string $templateFilename): string;
 }

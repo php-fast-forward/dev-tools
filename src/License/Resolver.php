@@ -18,6 +18,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+/**
+ * Resolves license identifiers to their corresponding template filenames.
+ *
+ * This class maintains a mapping of supported open-source licenses to their
+ * template files and provides methods to check support and resolve licenses.
+ */
 final class Resolver implements ResolverInterface
 {
     private const array SUPPORTED_LICENSES = [
@@ -38,9 +44,13 @@ final class Resolver implements ResolverInterface
     ];
 
     /**
-     * @param string $license
+     * Checks whether the given license identifier is supported.
      *
-     * @return bool
+     * The check is case-insensitive and handles common license variants.
+     *
+     * @param string $license The license identifier to check
+     *
+     * @return bool True if the license is supported, false otherwise
      */
     public function isSupported(string $license): bool
     {
@@ -48,9 +58,11 @@ final class Resolver implements ResolverInterface
     }
 
     /**
-     * @param string $license
+     * Resolves a license identifier to its template filename.
      *
-     * @return string|null
+     * @param string $license The license identifier to resolve
+     *
+     * @return string|null The template filename if supported, or null if not
      */
     public function resolve(string $license): ?string
     {
@@ -64,9 +76,11 @@ final class Resolver implements ResolverInterface
     }
 
     /**
-     * @param string $license
+     * Normalizes the license identifier for comparison.
      *
-     * @return string
+     * @param string $license The license identifier to normalize
+     *
+     * @return string The normalized license string
      */
     private function normalize(string $license): string
     {
