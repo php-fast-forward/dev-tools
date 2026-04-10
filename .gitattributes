@@ -1,5 +1,4 @@
 *                   text=auto
-/.agents/           export-ignore
 /.github/           export-ignore
 /docs/              export-ignore
 /tests/             export-ignore
