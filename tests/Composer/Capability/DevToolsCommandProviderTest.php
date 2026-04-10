@@ -24,7 +24,7 @@ use FastForward\DevTools\Command\DocsCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
 use FastForward\DevTools\Command\SkillsCommand;
-use FastForward\DevTools\Command\Skills\SkillsSynchronizer;
+use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
 use FastForward\DevTools\Command\ReportsCommand;
