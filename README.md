@@ -16,6 +16,8 @@ across Fast Forward libraries.
 
 - Aggregates refactoring, PHPDoc, code style, tests, and reporting under a
   single Composer-facing command vocabulary
+- Adds dependency analysis for missing and unused Composer packages through a
+  single report entrypoint
 - Ships shared workflow stubs, `.editorconfig`, Dependabot configuration, and
   other onboarding defaults for consumer repositories
 - Synchronizes packaged agent skills into consumer `.agents/skills`
@@ -47,6 +49,10 @@ You can also run individual commands for specific development tasks:
 # Run PHPUnit tests
 composer dev-tools tests
 
+# Analyze missing and unused Composer dependencies
+composer dependencies
+vendor/bin/dev-tools dependencies
+
 # Check and fix code style using ECS and Composer Normalize
 composer dev-tools code-style
 
@@ -77,6 +83,10 @@ composer dev-tools gitignore
 composer dev-tools:sync
 ```
 
+The `dependencies` command ships with both dependency analyzers as direct
+dependencies of `fast-forward/dev-tools`, so it works without extra
+installation in the consumer project.
+
 The `skills` command keeps `.agents/skills` aligned with the packaged Fast
 Forward skill set. It creates missing links, repairs broken links, and
 preserves existing non-symlink directories. The `dev-tools:sync` command calls
@@ -89,6 +99,7 @@ automation assets.
 |---------|---------|
 | `composer dev-tools` | Runs the full `standards` pipeline. |
 | `composer dev-tools tests` | Runs PHPUnit with local-or-packaged configuration. |
+| `composer dev-tools dependencies` | Reports missing and unused Composer dependencies. |
 | `composer dev-tools docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer dev-tools skills` | Creates or repairs packaged skill links in `.agents/skills`. |
 | `composer dev-tools:sync` | Updates scripts, workflow stubs, `.editorconfig`, `.gitignore`, wiki setup, and packaged skills. |
