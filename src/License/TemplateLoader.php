@@ -31,7 +31,7 @@ final readonly class TemplateLoader
      */
     public function __construct(?string $templatesPath = null)
     {
-        $this->templatesPath = $templatesPath ?? __DIR__ . '/resources/templates';
+        $this->templatesPath = $templatesPath ?? \dirname(__DIR__, 2) . '/resources/licenses';
     }
 
     /**
