@@ -7,3 +7,14 @@
 /.gitignore         export-ignore
 /.gitmodules        export-ignore
 AGENTS.md           export-ignore
+# << dev-tools:managed export-ignore
+/.github/ export-ignore
+/.vscode/ export-ignore
+/docs/ export-ignore
+/tests/ export-ignore
+/.editorconfig export-ignore
+/.gitattributes export-ignore
+/.gitignore export-ignore
+/.gitmodules export-ignore
+/README.md export-ignore
+# >> dev-tools:managed export-ignore

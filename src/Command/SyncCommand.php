@@ -47,10 +47,10 @@ final class SyncCommand extends AbstractCommand
         $this
             ->setName('dev-tools:sync')
             ->setDescription(
-                'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig in the root project.'
+                'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.'
             )
             ->setHelp(
-                'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, and ensures .editorconfig is present and up to date.'
+                'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.'
             );
     }
 
@@ -75,6 +75,7 @@ final class SyncCommand extends AbstractCommand
         $this->copyDependabotConfig();
         $this->addRepositoryWikiGitSubmodule();
         $this->runCommand('gitignore', $output);
+        $this->runCommand('gitattributes', $output);
         $this->runCommand('skills', $output);
         $this->runCommand('license', $output);
 

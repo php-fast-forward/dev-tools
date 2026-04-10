@@ -24,6 +24,7 @@ use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\CopyLicenseCommand;
 use FastForward\DevTools\Command\DependenciesCommand;
 use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Command\GitAttributesCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
@@ -62,6 +63,7 @@ final class DevToolsCommandProvider implements CommandProviderCapability
             new WikiCommand(),
             new SyncCommand(),
             new GitIgnoreCommand(),
+            new GitAttributesCommand(),
             new SkillsCommand(),
             new CopyLicenseCommand(),
         ];

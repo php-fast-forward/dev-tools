@@ -23,6 +23,7 @@ use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\CopyLicenseCommand;
 use FastForward\DevTools\Command\DependenciesCommand;
 use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Command\GitAttributesCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
 use FastForward\DevTools\Command\SkillsCommand;
@@ -34,7 +35,10 @@ use FastForward\DevTools\Command\StandardsCommand;
 use FastForward\DevTools\Command\TestsCommand;
 use FastForward\DevTools\Command\WikiCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
-use FastForward\DevTools\GitIgnore\Merger;
+use FastForward\DevTools\GitAttributes\CandidateProvider;
+use FastForward\DevTools\GitAttributes\ExistenceChecker;
+use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
+use FastForward\DevTools\GitIgnore\Merger as GitIgnoreMerger;
 use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -53,10 +57,14 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(WikiCommand::class)]
 #[UsesClass(SyncCommand::class)]
 #[UsesClass(GitIgnoreCommand::class)]
+#[UsesClass(GitAttributesCommand::class)]
 #[UsesClass(SkillsCommand::class)]
 #[UsesClass(CopyLicenseCommand::class)]
 #[UsesClass(SkillsSynchronizer::class)]
-#[UsesClass(Merger::class)]
+#[UsesClass(CandidateProvider::class)]
+#[UsesClass(ExistenceChecker::class)]
+#[UsesClass(GitAttributesMerger::class)]
+#[UsesClass(GitIgnoreMerger::class)]
 #[UsesClass(Writer::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
@@ -89,6 +97,7 @@ final class DevToolsCommandProviderTest extends TestCase
                 new WikiCommand(),
                 new SyncCommand(),
                 new GitIgnoreCommand(),
+                new GitAttributesCommand(),
                 new SkillsCommand(),
                 new CopyLicenseCommand(),
             ],
