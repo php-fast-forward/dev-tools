@@ -29,14 +29,14 @@ interface ReaderInterface
     /**
      * Retrieves the license identifier from composer.json.
      *
-     * @return string|null The license string, or null if not set or unsupported.
+     * @return string|null the license string, or null if not set or unsupported
      */
     public function getLicense(): ?string;
 
     /**
      * Retrieves the package name from composer.json.
      *
-     * @return string The full package name (vendor/package).
+     * @return string the full package name (vendor/package)
      */
     public function getPackageName(): string;
 
@@ -50,14 +50,14 @@ interface ReaderInterface
     /**
      * Extracts the vendor name from the package name.
      *
-     * @return string|null The vendor name, or null if package has no vendor prefix.
+     * @return string|null the vendor name, or null if package has no vendor prefix
      */
     public function getVendor(): ?string;
 
     /**
      * Returns the current year for copyright notices.
      *
-     * @return int The current year as an integer.
+     * @return int the current year as an integer
      */
     public function getYear(): int;
 }

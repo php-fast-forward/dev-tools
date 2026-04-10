@@ -69,7 +69,7 @@ final readonly class Reader implements ReaderInterface
      * If it's an array with one element, extracts that element.
      * Returns null if no license is set or if multiple licenses are specified.
      *
-     * @return string|null The license string, or null if not set or unsupported.
+     * @return string|null the license string, or null if not set or unsupported
      */
     public function getLicense(): ?string
     {
@@ -85,7 +85,7 @@ final readonly class Reader implements ReaderInterface
     /**
      * Retrieves the package name from composer.json.
      *
-     * @return string The full package name (vendor/package), or empty string if not set.
+     * @return string the full package name (vendor/package), or empty string if not set
      */
     public function getPackageName(): string
     {
@@ -125,7 +125,7 @@ final readonly class Reader implements ReaderInterface
      * The package name is expected in vendor/package format.
      * Returns null if no package name is set or if the package has no vendor prefix.
      *
-     * @return string|null The vendor name, or null if package has no vendor prefix.
+     * @return string|null the vendor name, or null if package has no vendor prefix
      */
     public function getVendor(): ?string
     {
@@ -147,7 +147,7 @@ final readonly class Reader implements ReaderInterface
     /**
      * Returns the current year for copyright notices.
      *
-     * @return int The current year as an integer.
+     * @return int the current year as an integer
      */
     public function getYear(): int
     {
@@ -162,7 +162,7 @@ final readonly class Reader implements ReaderInterface
      *
      * @param array<string> $license The license array to extract from
      *
-     * @return string|null A single license string, or null if extraction is not possible.
+     * @return string|null a single license string, or null if extraction is not possible
      */
     private function extractLicense(array $license): ?string
     {
