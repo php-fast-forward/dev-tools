@@ -11,7 +11,8 @@ By the end of this section you will know how to:
 - run the generated commands through Composer or directly through the binary;
 - prepare the minimum ``docs/`` structure required by the documentation
   pipeline;
-- understand which files ``dev-tools:sync`` creates or updates.
+- understand which files ``dev-tools:sync`` creates or updates, including
+  packaged skills under ``.agents/skills``.
 
 .. toctree::
    :maxdepth: 1

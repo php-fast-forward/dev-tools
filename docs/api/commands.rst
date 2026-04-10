@@ -39,9 +39,13 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
    * - ``FastForward\DevTools\Command\ReportsCommand``
      - ``reports``
      - Combines the documentation build with coverage generation.
+   * - ``FastForward\DevTools\Command\SkillsCommand``
+     - ``skills``
+     - Synchronizes packaged agent skills into ``.agents/skills``.
    * - ``FastForward\DevTools\Command\SyncCommand``
      - ``dev-tools:sync``
-     - Synchronizes consumer-facing scripts and automation assets.
+     - Synchronizes consumer-facing scripts, automation assets, and packaged
+       skills.
    * - ``FastForward\DevTools\Command\GitIgnoreCommand``
      - ``gitignore``
      - Merges and synchronizes .gitignore files.

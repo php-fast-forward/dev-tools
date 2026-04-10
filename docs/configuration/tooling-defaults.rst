@@ -28,6 +28,10 @@ create them on day one.
    * - ``.editorconfig``
      - ``dev-tools:sync``
      - Copied into the consumer root when missing.
+   * - ``.agents/skills/*``
+     - ``skills`` and ``dev-tools:sync``
+     - Packaged agent skill directories exposed to consumer repositories
+       through symlinks.
 
 Generated and Cache Directories
 -------------------------------
@@ -37,6 +41,8 @@ Generated and Cache Directories
   coverage data.
 - ``.github/wiki/`` contains generated Markdown API documentation and, in
   consumer repositories, the wiki submodule.
+- ``.agents/skills/`` contains symlinked packaged skills or consumer-owned
+  directories kept in place by the ``skills`` command.
 - ``tmp/cache/phpdoc``, ``tmp/cache/phpunit``, ``tmp/cache/rector``, and
   ``tmp/cache/.php-cs-fixer.cache`` store tool caches.
 

@@ -30,6 +30,7 @@ use FastForward\DevTools\Command\StandardsCommand;
 use FastForward\DevTools\Command\TestsCommand;
 use FastForward\DevTools\Command\WikiCommand;
 use FastForward\DevTools\Command\SyncCommand;
+use FastForward\DevTools\Command\SkillsCommand;
 
 /**
  * Provides a registry of custom dev-tools commands mapped for Composer integration.
@@ -58,6 +59,7 @@ final class DevToolsCommandProvider implements CommandProviderCapability
             new WikiCommand(),
             new SyncCommand(),
             new GitIgnoreCommand(),
+            new SkillsCommand(),
         ];
     }
 }

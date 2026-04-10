@@ -39,6 +39,10 @@ Commands and Their Configuration Files
    * - ``docs``
      - ``docs/`` or another path passed with ``--source``
      - The selected guide source must exist locally.
+   * - ``skills``
+     - ``.agents/skills/``
+     - Creates missing local links to packaged skills and preserves existing
+       non-symlink directories.
    * - ``dev-tools:sync``
      - Consumer repository files
      - Works directly against local project files such as ``composer.json`` and
@@ -106,6 +110,7 @@ What Is Not Overwritten Automatically
 - existing workflow files in ``.github/workflows/``;
 - an existing ``.editorconfig``;
 - an existing ``.github/dependabot.yml``;
+- an existing non-symlink directory inside ``.agents/skills/``;
 - an existing ``.github/wiki`` directory or submodule.
 
 .. tip::

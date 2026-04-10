@@ -75,6 +75,7 @@ final class SyncCommand extends AbstractCommand
         $this->copyDependabotConfig();
         $this->addRepositoryWikiGitSubmodule();
         $this->runCommand('gitignore', $output);
+        $this->runCommand('skills', $output);
 
         return self::SUCCESS;
     }

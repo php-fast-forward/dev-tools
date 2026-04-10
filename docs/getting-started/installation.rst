@@ -37,6 +37,10 @@ following steps:
    ``.github/dependabot.yml``.
 6. If ``.github/wiki`` is missing, ``dev-tools:sync`` adds it as a Git
    submodule that points to the repository wiki.
+7. ``dev-tools:sync`` runs ``gitignore`` to merge canonical ignore rules into
+   the consumer project.
+8. ``dev-tools:sync`` runs ``skills`` to create or repair packaged skill links
+   inside ``.agents/skills``.
 
 First commands to try
 ---------------------
@@ -45,6 +49,7 @@ After installation, these are the most useful sanity checks:
 
 .. code-block:: bash
 
+   composer dev-tools skills
    composer dev-tools tests
    composer dev-tools docs
    composer dev-tools
@@ -54,6 +59,12 @@ If Composer argument forwarding becomes awkward, call the binary directly:
 .. code-block:: bash
 
    vendor/bin/dev-tools tests --filter=SyncCommandTest
+
+If you want to verify the packaged skills on their own, run:
+
+.. code-block:: bash
+
+   vendor/bin/dev-tools skills
 
 When manual sync is useful
 --------------------------
@@ -75,3 +86,5 @@ Or call the binary explicitly:
 
    The ``docs`` and ``reports`` commands require a ``docs/`` directory. If
    your package does not have one yet, create it before running those commands.
+   The ``skills`` command creates ``.agents/skills`` when needed, but it does
+   not overwrite an existing non-symlink directory inside that tree.

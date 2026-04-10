@@ -23,6 +23,8 @@ use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\DocsCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
+use FastForward\DevTools\Command\SkillsCommand;
+use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
 use FastForward\DevTools\Command\ReportsCommand;
@@ -48,6 +50,8 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(WikiCommand::class)]
 #[UsesClass(SyncCommand::class)]
 #[UsesClass(GitIgnoreCommand::class)]
+#[UsesClass(SkillsCommand::class)]
+#[UsesClass(SkillsSynchronizer::class)]
 #[UsesClass(Merger::class)]
 #[UsesClass(Writer::class)]
 final class DevToolsCommandProviderTest extends TestCase
@@ -80,6 +84,7 @@ final class DevToolsCommandProviderTest extends TestCase
                 new WikiCommand(),
                 new SyncCommand(),
                 new GitIgnoreCommand(),
+                new SkillsCommand(),
             ],
             $this->commandProvider->getCommands(),
         );

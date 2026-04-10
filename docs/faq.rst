@@ -20,7 +20,15 @@ Do I always need to run ``dev-tools:sync`` manually?
 Usually no. The plugin already runs it after ``composer install`` and
 ``composer update``. Manual sync is most useful when plugins were disabled or
 after upgrading ``fast-forward/dev-tools`` and wanting to refresh consumer
-automation.
+automation. That flow also runs ``skills`` so packaged skill links are kept up
+to date.
+
+When should I run ``composer dev-tools skills`` manually?
+---------------------------------------------------------
+
+Run it when you want to refresh ``.agents/skills`` without rerunning the full
+consumer sync flow, especially after upgrading ``fast-forward/dev-tools`` or
+after deleting a packaged skill link locally.
 
 Why does ``code-style`` touch ``composer.lock``?
 ------------------------------------------------
@@ -68,6 +76,13 @@ What happens if ``.github/wiki`` already exists?
 
 ``dev-tools:sync`` leaves it alone. The wiki submodule is only created when the
 directory is missing.
+
+What happens if ``.agents/skills/my-skill`` already exists?
+-----------------------------------------------------------
+
+If that path is a real directory instead of a symlink, the ``skills`` command
+preserves it and skips link creation. Broken symlinks are repaired, but
+consumer-owned directories are not overwritten automatically.
 
 How do I override only one tool without forking the whole package?
 ------------------------------------------------------------------

@@ -10,4 +10,5 @@ task-oriented guidance instead of class-by-class reference.
    common-workflows
    testing-and-coverage
    documentation-workflows
+   syncing-packaged-skills
    syncing-consumer-projects

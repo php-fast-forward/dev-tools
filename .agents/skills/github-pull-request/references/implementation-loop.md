@@ -7,7 +7,7 @@ Use this loop for each selected issue.
 - Update `main` or the repository's integration branch before branching.
 - Keep branch names stable and descriptive.
 - Prefer the repository convention when one exists.
-- If no repository convention is defined, use a stable pattern such as `issue-123-short-slug`.
+- If no repository convention is defined, use a stable pattern such as `type-of-issue/123-short-slug`.
 
 ## Implementation Boundaries
 
