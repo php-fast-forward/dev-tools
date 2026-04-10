@@ -64,10 +64,11 @@ abstract class AbstractCommand extends BaseCommand
      *
      * @param Process $command the configured process instance to run
      * @param OutputInterface $output the output interface to log warnings or results
+     * @param bool $tty
      *
      * @return int the status code of the command execution
      */
-    protected function runProcess(Process $command, OutputInterface $output): int
+    protected function runProcess(Process $command, OutputInterface $output, bool $tty = true): int
     {
         /** @var ProcessHelper $processHelper */
         $processHelper = $this->getHelper('process');
@@ -75,13 +76,16 @@ abstract class AbstractCommand extends BaseCommand
         $command = $command->setWorkingDirectory($this->getCurrentWorkingDirectory());
         $callback = null;
 
-        if (Process::isTtySupported()) {
-            $command->setTty(true);
-        } else {
+        try {
+            $command->setTty($tty);
+        } catch (RuntimeException) {
             $output->writeln(
                 '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
             );
+            $tty = false;
+        }
 
+        if (! $tty) {
             $callback = function (string $type, string $buffer) use ($output): void {
                 $output->write($buffer);
             };
@@ -89,17 +93,7 @@ abstract class AbstractCommand extends BaseCommand
 
         $process = $processHelper->run(output: $output, cmd: $command, callback: $callback);
 
-        if (! $process->isSuccessful()) {
-            $output->writeln(\sprintf(
-                '<error>Command "%s" failed with exit code %d. Please check the output above for details.</error>',
-                $command->getCommandLine(),
-                $command->getExitCode()
-            ));
-
-            return self::FAILURE;
-        }
-
-        return self::SUCCESS;
+        return $process->isSuccessful() ? self::SUCCESS : self::FAILURE;
     }
 
     /**

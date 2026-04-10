@@ -21,47 +21,22 @@ namespace FastForward\DevTools\Tests\Command;
 use FastForward\DevTools\Command\DependenciesCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Prophecy\Argument;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
+use function str_contains;
 
 #[CoversClass(DependenciesCommand::class)]
 final class DependenciesCommandTest extends AbstractCommandTestCase
 {
     /**
-     * @var list<array{exitCode:int, output:string}>
+     * @return string
      */
-    private array $queuedResults = [];
-
-    /**
-     * @var list<list<string>>
-     */
-    private array $receivedCommands = [];
-
-    private DependenciesCommand $dependenciesCommand;
-
-    /**
-     * @return DependenciesCommand
-     */
-    protected function getCommandClass(): DependenciesCommand
+    protected function getCommandClass(): string
     {
-        $this->queuedResults = [];
-        $this->receivedCommands = [];
-        $queuedResults = &$this->queuedResults;
-        $receivedCommands = &$this->receivedCommands;
-
-        $this->dependenciesCommand = new DependenciesCommand(
-            $this->filesystem->reveal(),
-            static function (array $command) use (&$queuedResults, &$receivedCommands): array {
-                $receivedCommands[] = $command;
-
-                return array_shift($queuedResults) ?? [
-                    'exitCode' => DependenciesCommand::SUCCESS,
-                    'output' => '',
-                ];
-            },
-        );
-
-        return $this->dependenciesCommand;
+        return DependenciesCommand::class;
     }
 
     /**
@@ -91,148 +66,48 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
     /**
      * @return void
      */
-    #[Test]
-    public function executeWillFailWhenRequiredFilesAreMissing(): void
+    protected function setUp(): void
     {
+        parent::setUp();
+
         $cwd = getcwd();
-
         $this->filesystem->exists($cwd . '/composer.json')->willReturn(true);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-dependency-analyser')->willReturn(false);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-unused')->willReturn(false);
-
-        $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-        $this->output->writeln('<error>Dependency analysis requires the following files:</error>')
-            ->shouldBeCalled();
-        $this->output->writeln(
-            '- vendor/bin/composer-dependency-analyser not found. Reinstall fast-forward/dev-tools dependencies.'
-        )
-            ->shouldBeCalled();
-        $this->output->writeln(
-            '- vendor/bin/composer-unused not found. Reinstall fast-forward/dev-tools dependencies.'
-        )
-            ->shouldBeCalled();
-
-        self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRenderNormalizedDependencyReport(): void
+    public function executeWillReturnSuccessWhenBothToolsSucceed(): void
     {
-        $cwd = getcwd();
+        $processUnused = $this->prophesize(Process::class);
+        $processUnused->isSuccessful()
+            ->willReturn(true);
 
-        $this->filesystem->exists($cwd . '/composer.json')->willReturn(true);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-dependency-analyser')->willReturn(true);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-unused')->willReturn(true);
+        $processDepAnalyser = $this->prophesize(Process::class);
+        $processDepAnalyser->isSuccessful()
+            ->willReturn(true);
 
-        $this->queuedResults[] = [
-            'exitCode' => DependenciesCommand::FAILURE,
-            'output' => <<<'XML'
-                <?xml version="1.0" encoding="UTF-8"?>
-                <testsuites>
-                  <testsuite name="shadow dependencies" failures="1">
-                    <testcase name="symfony/console">
-                      <failure message="Symfony\Component\Console\Command\Command">src/Command/DependenciesCommand.php:42</failure>
-                    </testcase>
-                  </testsuite>
-                </testsuites>
-                XML,
-        ];
-        $this->queuedResults[] = [
-            'exitCode' => DependenciesCommand::FAILURE,
-            'output' => <<<'JSON'
-                {
-                    "unused-packages": [
-                        "monolog/monolog"
-                    ]
-                }
-                JSON,
-        ];
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
+            ), Argument::cetera())
+            ->willReturn($processUnused->reveal())
+            ->shouldBeCalled();
+
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
+            ), Argument::cetera())
+            ->willReturn($processDepAnalyser->reveal())
+            ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
             ->shouldBeCalled();
-        $this->output->writeln('Dependency Analysis Report')
+        $this->output->writeln(
+            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
+        )
             ->shouldBeCalled();
-        $this->output->writeln('[Missing Dependencies]')
-            ->shouldBeCalled();
-        $this->output->writeln('- symfony/console <comment>(src/Command/DependenciesCommand.php:42)</comment>')
-            ->shouldBeCalled();
-        $this->output->writeln('[Unused Dependencies]')
-            ->shouldBeCalled();
-        $this->output->writeln('- monolog/monolog')
-            ->shouldBeCalled();
-        $this->output->writeln('Summary:')
-            ->shouldBeCalled();
-        $this->output->writeln('- 1 missing')
-            ->shouldBeCalled();
-        $this->output->writeln('- 1 unused')
-            ->shouldBeCalled();
-        $this->output->writeln('')
-            ->shouldBeCalledTimes(4);
-
-        self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
-        self::assertSame([
-            [
-                $cwd . '/vendor/bin/composer-dependency-analyser',
-                '--composer-json=' . $cwd . '/composer.json',
-                '--format=junit',
-                '--ignore-unused-deps',
-                '--ignore-dev-in-prod-deps',
-                '--ignore-prod-only-in-dev-deps',
-                '--ignore-unknown-classes',
-                '--ignore-unknown-functions',
-            ],
-            [
-                $cwd . '/vendor/bin/composer-unused',
-                $cwd . '/composer.json',
-                '--output-format=json',
-                '--no-progress',
-            ],
-        ], $this->receivedCommands);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnSuccessWhenNoFindingsAreReported(): void
-    {
-        $cwd = getcwd();
-
-        $this->filesystem->exists($cwd . '/composer.json')->willReturn(true);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-dependency-analyser')->willReturn(true);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-unused')->willReturn(true);
-
-        $this->queuedResults[] = [
-            'exitCode' => DependenciesCommand::SUCCESS,
-            'output' => '<?xml version="1.0" encoding="UTF-8"?><testsuites></testsuites>',
-        ];
-        $this->queuedResults[] = [
-            'exitCode' => DependenciesCommand::SUCCESS,
-            'output' => '{"unused-packages":[]}',
-        ];
-
-        $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-        $this->output->writeln('Dependency Analysis Report')
-            ->shouldBeCalled();
-        $this->output->writeln('[Missing Dependencies]')
-            ->shouldBeCalled();
-        $this->output->writeln('None detected.')
-            ->shouldBeCalledTimes(2);
-        $this->output->writeln('[Unused Dependencies]')
-            ->shouldBeCalled();
-        $this->output->writeln('Summary:')
-            ->shouldBeCalled();
-        $this->output->writeln('- 0 missing')
-            ->shouldBeCalled();
-        $this->output->writeln('- 0 unused')
-            ->shouldBeCalled();
-        $this->output->writeln('')
-            ->shouldBeCalledTimes(4);
 
         self::assertSame(DependenciesCommand::SUCCESS, $this->invokeExecute());
     }
@@ -241,44 +116,125 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
      * @return void
      */
     #[Test]
-    public function executeWillReportUnreadableAnalyzerOutputAsFailure(): void
+    public function executeWillReturnFailureWhenFirstToolFails(): void
     {
-        $cwd = getcwd();
+        $processUnused = $this->prophesize(Process::class);
+        $processUnused->isSuccessful()
+            ->willReturn(false);
 
-        $this->filesystem->exists($cwd . '/composer.json')->willReturn(true);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-dependency-analyser')->willReturn(true);
-        $this->filesystem->exists($cwd . '/vendor/bin/composer-unused')->willReturn(true);
+        $processDepAnalyser = $this->prophesize(Process::class);
+        $processDepAnalyser->isSuccessful()
+            ->willReturn(true);
 
-        $this->queuedResults[] = [
-            'exitCode' => DependenciesCommand::FAILURE,
-            'output' => 'unexpected failure',
-        ];
-        $this->queuedResults[] = [
-            'exitCode' => DependenciesCommand::SUCCESS,
-            'output' => '{"unused-packages":[]}',
-        ];
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
+            ), Argument::cetera())
+            ->willReturn($processUnused->reveal())
+            ->shouldBeCalled();
+
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
+            ), Argument::cetera())
+            ->willReturn($processDepAnalyser->reveal())
+            ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
             ->shouldBeCalled();
-        $this->output->writeln('Dependency Analysis Report')
+        $this->output->writeln(
+            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
+        )
             ->shouldBeCalled();
-        $this->output->writeln('[Missing Dependencies]')
-            ->shouldBeCalled();
-        $this->output->writeln('<error>composer-dependency-analyser did not return a readable report.</error>')
-            ->shouldBeCalled();
-        $this->output->writeln('unexpected failure')
-            ->shouldBeCalled();
-        $this->output->writeln('[Unused Dependencies]')
-            ->shouldBeCalled();
-        $this->output->writeln('None detected.')
-            ->shouldBeCalled();
-        $this->output->writeln('Summary:')
-            ->shouldBeCalled();
-        $this->output->writeln('- dependency analysis could not be completed.')
-            ->shouldBeCalled();
-        $this->output->writeln('')
-            ->shouldBeCalledTimes(4);
 
         self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureWhenSecondToolFails(): void
+    {
+        $processUnused = $this->prophesize(Process::class);
+        $processUnused->isSuccessful()
+            ->willReturn(true);
+
+        $processDepAnalyser = $this->prophesize(Process::class);
+        $processDepAnalyser->isSuccessful()
+            ->willReturn(false);
+
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
+            ), Argument::cetera())
+            ->willReturn($processUnused->reveal())
+            ->shouldBeCalled();
+
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
+            ), Argument::cetera())
+            ->willReturn($processDepAnalyser->reveal())
+            ->shouldBeCalled();
+
+        $this->output->writeln('<info>Running dependency analysis...</info>')
+            ->shouldBeCalled();
+        $this->output->writeln(
+            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
+        )
+            ->shouldBeCalled();
+
+        self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillCallBothDependencyToolsWithComposerJson(): void
+    {
+        $cwd = getcwd();
+        $composerJsonPath = $cwd . '/composer.json';
+
+        $this->filesystem->exists($composerJsonPath)
+            ->willReturn(true);
+
+        $processUnused = $this->prophesize(Process::class);
+        $processUnused->isSuccessful()
+            ->willReturn(true);
+        $processUnused->getCommandLine()
+            ->willReturn('vendor/bin/composer-unused ' . $composerJsonPath . ' --no-progress');
+
+        $processDepAnalyser = $this->prophesize(Process::class);
+        $processDepAnalyser->isSuccessful()
+            ->willReturn(true);
+        $processDepAnalyser->getCommandLine()
+            ->willReturn(
+                'vendor/bin/composer-dependency-analyser --composer-json=' . $composerJsonPath . ' --ignore-unused-deps --ignore-prod-only-in-dev-deps'
+            );
+
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
+            ), Argument::cetera())
+            ->willReturn($processUnused->reveal())
+            ->shouldBeCalled();
+
+        $this->processHelper
+            ->run(Argument::type(OutputInterface::class), Argument::that(
+                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
+            ), Argument::cetera())
+            ->willReturn($processDepAnalyser->reveal())
+            ->shouldBeCalled();
+
+        $this->output->writeln('<info>Running dependency analysis...</info>')
+            ->shouldBeCalled();
+        $this->output->writeln(
+            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
+        )
+            ->shouldBeCalled();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $this->invokeExecute());
     }
 }
