@@ -20,6 +20,7 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 
 use FastForward\DevTools\Command\AbstractCommand;
 use FastForward\DevTools\Command\CodeStyleCommand;
+use FastForward\DevTools\Command\DependenciesCommand;
 use FastForward\DevTools\Command\DocsCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
@@ -43,6 +44,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(CodeStyleCommand::class)]
 #[UsesClass(RefactorCommand::class)]
 #[UsesClass(TestsCommand::class)]
+#[UsesClass(DependenciesCommand::class)]
 #[UsesClass(PhpDocCommand::class)]
 #[UsesClass(DocsCommand::class)]
 #[UsesClass(StandardsCommand::class)]
@@ -77,6 +79,7 @@ final class DevToolsCommandProviderTest extends TestCase
                 new CodeStyleCommand(),
                 new RefactorCommand(),
                 new TestsCommand(),
+                new DependenciesCommand(),
                 new PhpDocCommand(),
                 new DocsCommand(),
                 new StandardsCommand(),

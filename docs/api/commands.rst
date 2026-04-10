@@ -30,6 +30,9 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
    * - ``FastForward\DevTools\Command\TestsCommand``
      - ``tests``
      - Runs PHPUnit with optional coverage output.
+   * - ``FastForward\DevTools\Command\DependenciesCommand``
+     - ``dependencies``
+     - Reports missing and unused Composer dependencies.
    * - ``FastForward\DevTools\Command\DocsCommand``
      - ``docs``
      - Builds the HTML documentation site.
