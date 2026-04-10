@@ -3,7 +3,7 @@ Documentation
 
 FastForward DevTools is infrastructure for Fast Forward libraries. It ships
 shared defaults, registers Composer commands, generates documentation, and
-synchronizes automation into consumer repositories.
+synchronizes automation plus packaged agent skills into consumer repositories.
 
 If you are new to the package, start with :doc:`getting-started/index` and
 :doc:`usage/index`. If you maintain Fast Forward libraries, continue with

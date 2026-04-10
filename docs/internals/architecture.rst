@@ -28,8 +28,12 @@ Consumer Synchronization Lifecycle
 4. After ``composer install`` or ``composer update``, the plugin runs
    ``vendor/bin/dev-tools dev-tools:sync``.
 5. ``FastForward\DevTools\Command\SyncCommand`` updates scripts, GitHub
-   workflow stubs, ``.editorconfig``, ``dependabot.yml``, and the wiki
-   submodule in the consumer repository.
+   workflow stubs, ``.editorconfig``, ``dependabot.yml``, ``.gitignore``, and
+   the wiki submodule in the consumer repository.
+6. ``FastForward\DevTools\Command\SkillsCommand`` synchronizes packaged skill
+   links into the consumer ``.agents/skills`` directory.
+7. ``FastForward\DevTools\Agent\Skills\SkillsSynchronizer`` creates missing
+   links, repairs broken ones, and preserves consumer-owned directories.
 
 Documentation Pipeline
 ----------------------

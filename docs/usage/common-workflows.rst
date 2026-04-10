@@ -22,9 +22,13 @@ Most day-to-day work falls into one of the flows below.
    * - Refresh only the documentation site
      - ``composer dev-tools docs``
      - Runs phpDocumentor using PSR-4 namespaces and the ``docs/`` guide.
+   * - Refresh packaged agent skills only
+     - ``composer dev-tools skills``
+     - Creates or repairs symlinks in ``.agents/skills``.
    * - Publish local automation defaults into a consumer repository
      - ``composer dev-tools:sync``
-     - Updates scripts and copies missing automation assets.
+     - Updates scripts, copies missing automation assets, and refreshes
+       packaged skills.
    * - Regenerate wiki pages
      - ``composer dev-tools wiki``
      - Builds Markdown API pages in ``.github/wiki``.
@@ -42,9 +46,10 @@ A Safe Beginner Routine
 -----------------------
 
 1. Run ``composer dev-tools tests``.
-2. Run ``composer dev-tools docs`` if you changed guides or public APIs.
-3. Run ``composer dev-tools:fix`` when you want automated help.
-4. Run ``composer dev-tools`` before pushing.
+2. Run ``composer dev-tools skills`` if you changed packaged consumer skills.
+3. Run ``composer dev-tools docs`` if you changed guides or public APIs.
+4. Run ``composer dev-tools:fix`` when you want automated help.
+5. Run ``composer dev-tools`` before pushing.
 
 .. tip::
 

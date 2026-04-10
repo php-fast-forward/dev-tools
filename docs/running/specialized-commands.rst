@@ -122,6 +122,23 @@ Important details:
 - it calls ``tests --coverage public/coverage``;
 - it is the reporting stage used by ``standards``.
 
+``skills``
+----------
+
+Synchronizes packaged agent skills into the consumer repository.
+
+.. code-block:: bash
+
+   composer dev-tools skills
+   vendor/bin/dev-tools skills
+
+Important details:
+
+- it verifies the packaged ``.agents/skills`` directory before doing any work;
+- it creates the consumer ``.agents/skills`` directory when missing;
+- it creates missing symlinks and repairs broken ones;
+- it preserves an existing non-symlink directory instead of overwriting it.
+
 ``dev-tools:sync``
 ------------------
 
@@ -138,7 +155,10 @@ Important details:
 - it copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``;
 - it creates ``.github/wiki`` as a git submodule when the directory is
   missing.
-- it calls ``gitignore`` to merge the canonical .gitignore with the project's .gitignore.
+- it calls ``gitignore`` to merge the canonical .gitignore with the project's
+  .gitignore;
+- it calls ``skills`` so ``.agents/skills`` contains links to the packaged
+  skill set.
 
 ``gitignore``
 -------------
