@@ -19,6 +19,11 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Command;
 
 use Composer\Factory;
+use FastForward\DevTools\License\Generator;
+use FastForward\DevTools\License\Reader;
+use FastForward\DevTools\License\Resolver;
+use FastForward\DevTools\License\TemplateLoader;
+use FastForward\DevTools\License\PlaceholderResolver;
 use Composer\Json\JsonManipulator;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -76,6 +81,7 @@ final class SyncCommand extends AbstractCommand
         $this->addRepositoryWikiGitSubmodule();
         $this->runCommand('gitignore', $output);
         $this->runCommand('skills', $output);
+        $this->generateLicense($output);
 
         return self::SUCCESS;
     }
@@ -234,5 +240,44 @@ final class SyncCommand extends AbstractCommand
         $process->mustRun();
 
         return trim($process->getOutput());
+    }
+
+    /**
+     * Generates a LICENSE file if one does not exist and a supported license is declared in composer.json.
+     *
+     * @param OutputInterface $output the console output stream
+     *
+     * @return void
+     */
+    private function generateLicense(OutputInterface $output): void
+    {
+        $targetPath = $this->getConfigFile('LICENSE', true);
+
+        if ($this->filesystem->exists($targetPath)) {
+            $output->writeln('<info>LICENSE file already exists. Skipping generation.</info>');
+
+            return;
+        }
+
+        $composer = $this->requireComposer();
+
+        $reader = new Reader($composer);
+        $resolver = new Resolver();
+        $templateLoader = new TemplateLoader();
+        $placeholderResolver = new PlaceholderResolver();
+
+        $generator = new Generator($reader, $resolver, $templateLoader, $placeholderResolver, $this->filesystem);
+
+        $license = $generator->generate($targetPath);
+
+        if (null === $license) {
+            $output->writeln(
+                '<comment>No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.</comment>'
+            );
+
+            return;
+        }
+
+        $output->writeln('<info>LICENSE file generated successfully.</info>');
     }
 }
