@@ -199,3 +199,22 @@ Important details:
 - duplicates are removed and entries are sorted alphabetically;
 - it uses the Reader, Merger, and Writer components from the GitIgnore
   namespace.
+
+``license``
+----------
+
+Generates a LICENSE file from composer.json license information.
+
+.. code-block:: bash
+
+   composer dev-tools license
+
+Important details:
+
+- it reads the ``license`` field from ``composer.json``;
+- it supports common open-source licenses (MIT, Apache-2.0, BSD-2-Clause,
+  BSD-3-Clause, GPL-3.0, LGPL-3.0, and MPL-2.0);
+- it resolves placeholders such as ``[year]``, ``[author]``, and
+  ``[project]`` using information from ``composer.json``;
+- it uses template files from ``resources/license-templates/``;
+- it skips generation if a LICENSE file already exists.
