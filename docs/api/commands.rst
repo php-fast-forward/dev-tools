@@ -49,6 +49,9 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
      - ``dev-tools:sync``
      - Synchronizes consumer-facing scripts, automation assets, and packaged
        skills.
-   * - ``FastForward\DevTools\Command\GitIgnoreCommand``
-     - ``gitignore``
-     - Merges and synchronizes .gitignore files.
+    * - ``FastForward\DevTools\Command\GitIgnoreCommand``
+      - ``gitignore``
+      - Merges and synchronizes .gitignore files.
+    * - ``FastForward\DevTools\Command\CopyLicenseCommand``
+      - ``license``
+      - Generates a LICENSE file from composer.json license information.

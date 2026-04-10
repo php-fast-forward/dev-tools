@@ -77,6 +77,9 @@ composer dev-tools skills
 # Merges and synchronizes .gitignore files
 composer dev-tools gitignore
 
+# Generates a LICENSE file from composer.json license information
+composer dev-tools license
+
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows,
 # .editorconfig, .gitignore rules, packaged skills, and the repository wiki
 # submodule in .github/wiki

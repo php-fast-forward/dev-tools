@@ -76,6 +76,7 @@ final class SyncCommand extends AbstractCommand
         $this->addRepositoryWikiGitSubmodule();
         $this->runCommand('gitignore', $output);
         $this->runCommand('skills', $output);
+        $this->runCommand('license', $output);
 
         return self::SUCCESS;
     }
