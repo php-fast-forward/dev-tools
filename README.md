@@ -99,7 +99,7 @@ automation assets.
 |---------|---------|
 | `composer dev-tools` | Runs the full `standards` pipeline. |
 | `composer dev-tools tests` | Runs PHPUnit with local-or-packaged configuration. |
-| `composer dependencies` | Reports missing and unused Composer dependencies. |
+| `composer dev-tools dependencies` | Reports missing and unused Composer dependencies. |
 | `composer dev-tools docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer dev-tools skills` | Creates or repairs packaged skill links in `.agents/skills`. |
 | `composer dev-tools:sync` | Updates scripts, workflow stubs, `.editorconfig`, `.gitignore`, wiki setup, and packaged skills. |
