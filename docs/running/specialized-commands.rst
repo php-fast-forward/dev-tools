@@ -33,8 +33,9 @@ Analyzes missing and unused Composer dependencies.
 
 Important details:
 
-- it requires ``shipmonk/composer-dependency-analyser`` and
-  ``icanhazstring/composer-unused`` to be installed in the target project;
+- it ships ``shipmonk/composer-dependency-analyser`` and
+  ``icanhazstring/composer-unused`` as direct dependencies of
+  ``fast-forward/dev-tools``;
 - it uses ``composer-dependency-analyser`` only for missing dependency checks
   and leaves unused-package reporting to ``composer-unused``;
 - it returns a non-zero exit code when missing or unused dependencies are

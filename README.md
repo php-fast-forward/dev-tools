@@ -83,12 +83,9 @@ composer dev-tools gitignore
 composer dev-tools:sync
 ```
 
-The `dependencies` command expects both dependency analyzers to be installed in
-the target project:
-
-```bash
-composer require --dev shipmonk/composer-dependency-analyser icanhazstring/composer-unused
-```
+The `dependencies` command ships with both dependency analyzers as direct
+dependencies of `fast-forward/dev-tools`, so it works without extra
+installation in the consumer project.
 
 The `skills` command keeps `.agents/skills` aligned with the packaged Fast
 Forward skill set. It creates missing links, repairs broken links, and

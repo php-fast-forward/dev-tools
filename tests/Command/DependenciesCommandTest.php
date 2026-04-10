@@ -105,11 +105,11 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
         $this->output->writeln('<error>Dependency analysis requires the following files:</error>')
             ->shouldBeCalled();
         $this->output->writeln(
-            '- vendor/bin/composer-dependency-analyser not found. Install: composer require --dev shipmonk/composer-dependency-analyser'
+            '- vendor/bin/composer-dependency-analyser not found. Reinstall fast-forward/dev-tools dependencies.'
         )
             ->shouldBeCalled();
         $this->output->writeln(
-            '- vendor/bin/composer-unused not found. Install: composer require --dev icanhazstring/composer-unused'
+            '- vendor/bin/composer-unused not found. Reinstall fast-forward/dev-tools dependencies.'
         )
             ->shouldBeCalled();
 

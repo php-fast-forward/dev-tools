@@ -183,11 +183,11 @@ final class DependenciesCommand extends AbstractCommand
         }
 
         if (! $this->filesystem->exists($dependencyAnalyser)) {
-            $missing[] = '- vendor/bin/composer-dependency-analyser not found. Install: composer require --dev shipmonk/composer-dependency-analyser';
+            $missing[] = '- vendor/bin/composer-dependency-analyser not found. Reinstall fast-forward/dev-tools dependencies.';
         }
 
         if (! $this->filesystem->exists($composerUnused)) {
-            $missing[] = '- vendor/bin/composer-unused not found. Install: composer require --dev icanhazstring/composer-unused';
+            $missing[] = '- vendor/bin/composer-unused not found. Reinstall fast-forward/dev-tools dependencies.';
         }
 
         return $missing;
