@@ -20,7 +20,7 @@ namespace FastForward\DevTools\License;
 
 use Symfony\Component\Filesystem\Filesystem;
 
-final readonly class Generator
+final readonly class Generator implements GeneratorInterface
 {
     /**
      * @param Reader $reader

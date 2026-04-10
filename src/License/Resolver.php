@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
-final class Resolver
+final class Resolver implements ResolverInterface
 {
     private const array SUPPORTED_LICENSES = [
         'MIT' => 'mit.txt',

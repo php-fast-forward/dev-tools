@@ -22,7 +22,7 @@ use RuntimeException;
 
 use function Safe\file_get_contents;
 
-final readonly class TemplateLoader
+final readonly class TemplateLoader implements TemplateLoaderInterface
 {
     private string $templatesPath;
 

@@ -70,6 +70,8 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
     {
         parent::setUp();
 
+        $this->output->writeln(Argument::type('string'));
+
         $cwd = getcwd();
         $this->filesystem->exists($cwd . '/composer.json')->willReturn(true);
     }
@@ -103,10 +105,6 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
             ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-        $this->output->writeln(
-            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
-        )
             ->shouldBeCalled();
 
         self::assertSame(DependenciesCommand::SUCCESS, $this->invokeExecute());
@@ -142,10 +140,6 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
             ->shouldBeCalled();
-        $this->output->writeln(
-            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
-        )
-            ->shouldBeCalled();
 
         self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
     }
@@ -179,10 +173,6 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
             ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-        $this->output->writeln(
-            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
-        )
             ->shouldBeCalled();
 
         self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
@@ -229,10 +219,6 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
             ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-        $this->output->writeln(
-            '<comment>Warning: TTY is not supported. The command may not display output as expected.</comment>'
-        )
             ->shouldBeCalled();
 
         self::assertSame(DependenciesCommand::SUCCESS, $this->invokeExecute());

@@ -18,26 +18,49 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
-use Composer\Composer;
-use Composer\Package\RootPackageInterface;
+use Safe\Exceptions\JsonException;
+use SplFileObject;
 
-final readonly class Reader
+use function Safe\json_decode;
+
+final readonly class Reader implements ReaderInterface
 {
+    private array $data;
+
     /**
-     * @param Composer $composer
+     * @param SplFileObject $source The source file to read from, typically composer.json
      */
-    public function __construct(
-        private Composer $composer
-    ) {}
+    public function __construct(SplFileObject $source)
+    {
+        $this->data = $this->readData($source);
+    }
+
+    /**
+     * @param SplFileObject $source The source file to read from, typically composer.json
+     *
+     * @return array
+     *
+     * @throws JsonException if the JSON is invalid
+     */
+    private function readData(SplFileObject $source): array
+    {
+        $content = $source->fread($source->getSize());
+
+        return json_decode($content, true);
+    }
 
     /**
      * @return string|null
      */
     public function getLicense(): ?string
     {
-        $package = $this->composer->getPackage();
+        $license = $this->data['license'] ?? [];
 
-        return $this->extractLicense($package);
+        if (\is_string($license)) {
+            return $license;
+        }
+
+        return $this->extractLicense($license);
     }
 
     /**
@@ -45,9 +68,7 @@ final readonly class Reader
      */
     public function getPackageName(): string
     {
-        $package = $this->composer->getPackage();
-
-        return $package->getName();
+        return $this->data['name'] ?? '';
     }
 
     /**
@@ -55,8 +76,7 @@ final readonly class Reader
      */
     public function getAuthors(): array
     {
-        $package = $this->composer->getPackage();
-        $authors = $package->getAuthors();
+        $authors = $this->data['authors'] ?? [];
 
         if ([] === $authors) {
             return [];
@@ -80,7 +100,7 @@ final readonly class Reader
     {
         $packageName = $this->getPackageName();
 
-        if (null === $packageName) {
+        if ('' === $packageName) {
             return null;
         }
 
@@ -102,14 +122,12 @@ final readonly class Reader
     }
 
     /**
-     * @param RootPackageInterface $package
+     * @param array $license
      *
      * @return string|null
      */
-    private function extractLicense(RootPackageInterface $package): ?string
+    private function extractLicense(array $license): ?string
     {
-        $license = $package->getLicense();
-
         if ([] === $license) {
             return null;
         }

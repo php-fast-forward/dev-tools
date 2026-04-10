@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Composer\Capability;
 use FastForward\DevTools\Command\AbstractCommand;
 use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
 use FastForward\DevTools\Command\CodeStyleCommand;
+use FastForward\DevTools\Command\CopyLicenseCommand;
 use FastForward\DevTools\Command\DependenciesCommand;
 use FastForward\DevTools\Command\DocsCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
@@ -62,6 +63,7 @@ final class DevToolsCommandProvider implements CommandProviderCapability
             new SyncCommand(),
             new GitIgnoreCommand(),
             new SkillsCommand(),
+            new CopyLicenseCommand(),
         ];
     }
 }

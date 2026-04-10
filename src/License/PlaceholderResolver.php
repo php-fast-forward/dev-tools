@@ -20,7 +20,7 @@ namespace FastForward\DevTools\License;
 
 use function Safe\preg_replace;
 
-final class PlaceholderResolver
+final class PlaceholderResolver implements PlaceholderResolverInterface
 {
     /**
      * @param array{year?: int, organization?: string, author?: string, project?: string} $metadata

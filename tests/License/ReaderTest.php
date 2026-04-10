@@ -18,40 +18,38 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\License;
 
-use PHPUnit\Framework\MockObject\MockObject;
 use FastForward\DevTools\License\Reader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Composer\Composer;
-use Composer\Package\RootPackageInterface;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+use SplFileObject;
+
+use function Safe\json_encode;
 
 #[CoversClass(Reader::class)]
 final class ReaderTest extends TestCase
 {
     use ProphecyTrait;
 
-    private Reader $reader;
-
-    private MockObject $composer;
-
-    private MockObject $package;
-
     /**
+     * @param array $data
+     *
      * @return void
      */
-    protected function setUp(): void
+    private function createReader(array $data): Reader
     {
-        parent::setUp();
+        $json = json_encode($data, \JSON_PRETTY_PRINT);
 
-        $this->composer = $this->createMock(Composer::class);
-        $this->package = $this->createMock(RootPackageInterface::class);
+        /** @var ObjectProphecy<SplFileObject> $file */
+        $file = $this->prophesize(SplFileObject::class);
+        $file->getSize()
+            ->willReturn(\strlen($json));
+        $file->fread(\strlen($json))
+            ->willReturn($json);
 
-        $this->composer->method('getPackage')
-            ->willReturn($this->package);
-
-        $this->reader = new Reader($this->composer);
+        return new Reader($file->reveal());
     }
 
     /**
@@ -60,10 +58,26 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getLicenseWithSingleLicenseWillReturnLicenseString(): void
     {
-        $this->package->method('getLicense')
-            ->willReturn(['MIT']);
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+            'license' => ['MIT'],
+        ]);
 
-        self::assertSame('MIT', $this->reader->getLicense());
+        self::assertSame('MIT', $reader->getLicense());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getLicenseWithStringLicenseWillReturnLicenseString(): void
+    {
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+            'license' => 'MIT',
+        ]);
+
+        self::assertSame('MIT', $reader->getLicense());
     }
 
     /**
@@ -72,10 +86,11 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getLicenseWithNoLicenseWillReturnNull(): void
     {
-        $this->package->method('getLicense')
-            ->willReturn([]);
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+        ]);
 
-        self::assertNull($this->reader->getLicense());
+        self::assertNull($reader->getLicense());
     }
 
     /**
@@ -84,10 +99,12 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getLicenseWithMultipleLicensesWillReturnNull(): void
     {
-        $this->package->method('getLicense')
-            ->willReturn(['MIT', 'Apache-2.0']);
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+            'license' => ['MIT', 'Apache-2.0'],
+        ]);
 
-        self::assertNull($this->reader->getLicense());
+        self::assertNull($reader->getLicense());
     }
 
     /**
@@ -96,10 +113,11 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getPackageNameWillReturnPackageName(): void
     {
-        $this->package->method('getName')
-            ->willReturn('fast-forward/dev-tools');
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+        ]);
 
-        self::assertSame('fast-forward/dev-tools', $this->reader->getPackageName());
+        self::assertSame('fast-forward/dev-tools', $reader->getPackageName());
     }
 
     /**
@@ -108,12 +126,11 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getVendorWillExtractVendorFromPackageName(): void
     {
-        $this->package->method('getName')
-            ->willReturn('fast-forward/dev-tools');
-        $this->package->method('getLicense')
-            ->willReturn(['MIT']);
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+        ]);
 
-        self::assertSame('fast-forward', $this->reader->getVendor());
+        self::assertSame('fast-forward', $reader->getVendor());
     }
 
     /**
@@ -122,12 +139,11 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getVendorWithSingleNamePackageWillReturnNull(): void
     {
-        $this->package->method('getName')
-            ->willReturn('dev-tools');
-        $this->package->method('getLicense')
-            ->willReturn(['MIT']);
+        $reader = $this->createReader([
+            'name' => 'dev-tools',
+        ]);
 
-        self::assertNull($this->reader->getVendor());
+        self::assertNull($reader->getVendor());
     }
 
     /**
@@ -145,10 +161,12 @@ final class ReaderTest extends TestCase
             ],
         ];
 
-        $this->package->method('getAuthors')
-            ->willReturn($authors);
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+            'authors' => $authors,
+        ]);
 
-        self::assertSame($authors, $this->reader->getAuthors());
+        self::assertSame($authors, $reader->getAuthors());
     }
 
     /**
@@ -157,10 +175,11 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getAuthorsWithNoAuthorsWillReturnEmptyArray(): void
     {
-        $this->package->method('getAuthors')
-            ->willReturn([]);
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+        ]);
 
-        self::assertSame([], $this->reader->getAuthors());
+        self::assertSame([], $reader->getAuthors());
     }
 
     /**
@@ -169,6 +188,10 @@ final class ReaderTest extends TestCase
     #[Test]
     public function getYearWillReturnCurrentYear(): void
     {
-        self::assertSame((int) date('Y'), $this->reader->getYear());
+        $reader = $this->createReader([
+            'name' => 'fast-forward/dev-tools',
+        ]);
+
+        self::assertSame((int) date('Y'), $reader->getYear());
     }
 }

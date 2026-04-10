@@ -20,6 +20,7 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 
 use FastForward\DevTools\Command\AbstractCommand;
 use FastForward\DevTools\Command\CodeStyleCommand;
+use FastForward\DevTools\Command\CopyLicenseCommand;
 use FastForward\DevTools\Command\DependenciesCommand;
 use FastForward\DevTools\Command\DocsCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
@@ -53,6 +54,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(SyncCommand::class)]
 #[UsesClass(GitIgnoreCommand::class)]
 #[UsesClass(SkillsCommand::class)]
+#[UsesClass(CopyLicenseCommand::class)]
 #[UsesClass(SkillsSynchronizer::class)]
 #[UsesClass(Merger::class)]
 #[UsesClass(Writer::class)]
@@ -88,6 +90,7 @@ final class DevToolsCommandProviderTest extends TestCase
                 new SyncCommand(),
                 new GitIgnoreCommand(),
                 new SkillsCommand(),
+                new CopyLicenseCommand(),
             ],
             $this->commandProvider->getCommands(),
         );
