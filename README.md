@@ -77,6 +77,9 @@ composer dev-tools skills
 # Merges and synchronizes .gitignore files
 composer dev-tools gitignore
 
+# Manages .gitattributes export-ignore rules for leaner package archives
+composer dev-tools gitattributes
+
 # Generates a LICENSE file from composer.json license information
 composer dev-tools license
 
@@ -105,7 +108,8 @@ automation assets.
 | `composer dev-tools dependencies` | Reports missing and unused Composer dependencies. |
 | `composer dev-tools docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer dev-tools skills` | Creates or repairs packaged skill links in `.agents/skills`. |
-| `composer dev-tools:sync` | Updates scripts, workflow stubs, `.editorconfig`, `.gitignore`, wiki setup, and packaged skills. |
+| `composer dev-tools gitattributes` | Manages export-ignore rules in .gitattributes. |
+| `composer dev-tools:sync` | Updates scripts, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
 
 ## 🔌 Integration
 
