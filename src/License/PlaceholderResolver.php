@@ -20,11 +20,31 @@ namespace FastForward\DevTools\License;
 
 use function Safe\preg_replace;
 
+/**
+ * Resolves placeholders in license templates with metadata values.
+ *
+ * This class replaces placeholders like {{ year }}, {{ author }}, {{ project }},
+ * {{ organization }}, and {{ copyright_holder }} with values from metadata.
+ * Unresolved placeholders are removed and excess newlines are normalized.
+ */
 final class PlaceholderResolver implements PlaceholderResolverInterface
 {
     /**
-     * @param array{year?: int, organization?: string, author?: string, project?: string} $metadata
-     * @param string $template
+     * Resolves placeholders in a license template with the provided metadata.
+     *
+     * Supported placeholders:
+     * - {{ year }} - The copyright year (defaults to current year)
+     * - {{ organization }} - The organization or vendor name
+     * - {{ author }} - The primary author name or email
+     * - {{ project }} - The project/package name
+     * - {{ copyright_holder }} - Organization or author (organization takes precedence)
+     *
+     * Unmatched placeholders are removed, and consecutive blank lines are normalized.
+     *
+     * @param string $template The license template content with placeholders
+     * @param array{year?: int, organization?: string, author?: string, project?: string} $metadata The metadata values to use for replacement
+     *
+     * @return string The template with all resolved placeholders
      */
     public function resolve(string $template, array $metadata): string
     {

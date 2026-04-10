@@ -18,17 +18,31 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+/**
+ * Generates LICENSE files from composer.json metadata.
+ *
+ * This interface defines the contract for generating license files
+ * by reading composer.json and producing appropriate license content.
+ */
 interface GeneratorInterface
 {
     /**
-     * @param string $targetPath
+     * Generates a LICENSE file at the specified path.
      *
-     * @return string|null
+     * Reads the license from composer.json, validates it's supported,
+     * loads the appropriate template, resolves placeholders, and writes
+     * the LICENSE file to the target path.
+     *
+     * @param string $targetPath The full path where the LICENSE file should be written
+     *
+     * @return string|null The generated license content, or null if generation failed
      */
     public function generate(string $targetPath): ?string;
 
     /**
-     * @return bool
+     * Checks whether a supported license is present in composer.json.
+     *
+     * @return bool True if a supported license is defined, false otherwise
      */
     public function hasLicense(): bool;
 }

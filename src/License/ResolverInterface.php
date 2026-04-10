@@ -18,19 +18,29 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+/**
+ * Resolves license identifiers to their corresponding template filenames.
+ *
+ * This interface checks whether a given license is supported and maps it
+ * to the appropriate license template file for content generation.
+ */
 interface ResolverInterface
 {
     /**
-     * @param string $license
+     * Checks whether the given license identifier is supported.
      *
-     * @return bool
+     * @param string $license The license identifier to check (e.g., "MIT", "Apache-2.0")
+     *
+     * @return bool True if the license is supported, false otherwise
      */
     public function isSupported(string $license): bool;
 
     /**
-     * @param string $license
+     * Resolves a license identifier to its template filename.
      *
-     * @return string|null
+     * @param string $license The license identifier to resolve
+     *
+     * @return string|null The template filename if supported, or null if not
      */
     public function resolve(string $license): ?string;
 }

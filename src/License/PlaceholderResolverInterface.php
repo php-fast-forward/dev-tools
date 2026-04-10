@@ -18,11 +18,21 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+/**
+ * Resolves placeholders in license templates with metadata values.
+ *
+ * This interface defines the contract for replacing template placeholders
+ * such as [year], [author], [project] with actual values.
+ */
 interface PlaceholderResolverInterface
 {
     /**
-     * @param string $template
-     * @param array{year?: int, organization?: string, author?: string, project?: string} $metadata
+     * Resolves placeholders in a license template with the provided metadata.
+     *
+     * @param string $template The license template content with placeholders
+     * @param array{year?: int, organization?: string, author?: string, project?: string} $metadata The metadata values to use for replacement
+     *
+     * @return string The template with all resolved placeholders
      */
     public function resolve(string $template, array $metadata): string;
 }

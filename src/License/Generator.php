@@ -20,14 +20,29 @@ namespace FastForward\DevTools\License;
 
 use Symfony\Component\Filesystem\Filesystem;
 
+/**
+ * Generates LICENSE files from composer.json metadata.
+ *
+ * This class orchestrates the license generation workflow:
+ * 1. Reads metadata from composer.json via Reader
+ * 2. Resolves the license identifier to a template filename
+ * 3. Loads the license template content
+ * 4. Resolves placeholders with metadata (year, author, project, organization)
+ * 5. Writes the resulting LICENSE file to the target path
+ *
+ * Generation is skipped if a LICENSE file already exists or if the
+ * license is not supported.
+ */
 final readonly class Generator implements GeneratorInterface
 {
     /**
-     * @param Reader $reader
-     * @param Resolver $resolver
-     * @param TemplateLoader $templateLoader
-     * @param PlaceholderResolver $placeholderResolver
-     * @param Filesystem $filesystem
+     * Creates a new Generator instance.
+     *
+     * @param Reader $reader The reader for extracting metadata from composer.json
+     * @param Resolver $resolver The resolver for mapping license identifiers to templates
+     * @param TemplateLoader $templateLoader The loader for reading template files
+     * @param PlaceholderResolver $placeholderResolver The resolver for template placeholders
+     * @param Filesystem $filesystem The filesystem component for file operations
      */
     public function __construct(
         private Reader $reader,
@@ -38,9 +53,11 @@ final readonly class Generator implements GeneratorInterface
     ) {}
 
     /**
-     * @param string $targetPath
+     * Generates a LICENSE file at the specified path.
      *
-     * @return string|null
+     * @param string $targetPath The full path where the LICENSE file should be written
+     *
+     * @return string|null The generated license content, or null if generation failed
      */
     public function generate(string $targetPath): ?string
     {
@@ -84,7 +101,9 @@ final readonly class Generator implements GeneratorInterface
     }
 
     /**
-     * @return bool
+     * Checks whether a supported license is present in composer.json.
+     *
+     * @return bool True if a supported license is defined, false otherwise
      */
     public function hasLicense(): bool
     {
