@@ -1,0 +1,50 @@
+name: PR Label Sync
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+  pull_request:
+    types: [opened, reopened, synchronize]
+  workflow_call:
+    inputs:
+      copy_issue_labels:
+        type: boolean
+        default: true
+        description: "Copy labels from linked issue"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  copy-issue-labels:
+    if: inputs.copy_issue_labels == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract issue number from PR
+        id: extract-issue
+        run: |
+          BODY='${{ github.event.pull_request.body }}'
+          TITLE='${{ github.event.pull_request.title }}'
+          
+          ISSUE=$(echo "$BODY $TITLE" | \
+            grep -oE '(closes|fixes|resolves|addresses)\s+#[[:digit:]]+' | \
+            grep -oE '#[[:digit:]]+' | head -1 | tr -d '#')
+          
+          if [ -n "$ISSUE" ]; then
+            echo "issue_number=$ISSUE" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Copy labels from issue to PR
+        if: steps.extract-issue.outputs.issue_number != ''
+        run: |
+          ISSUE_NUM=${{ steps.extract-issue.outputs.issue_number }}
+          PR_NUM=${{ github.event.pull_request.number }}
+          
+          LABELS=$(gh issue view "$ISSUE_NUM" --json labels --jq '.labels[].name')
+          
+          for label in $LABELS; do
+            gh pr edit "$PR_NUM" --add-label "$label" 2>/dev/null || true
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
