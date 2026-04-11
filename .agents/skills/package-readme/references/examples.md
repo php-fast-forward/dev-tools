@@ -8,7 +8,7 @@ Real examples from Fast Forward packages showing correct structure and formattin
 # FastForward\DevTools
 A Composer plugin that aggregates multiple PHP development tools into a single unified command.
 
-[![PHP Version](https://img.shields.io/badge/php-^8.5-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
+[![PHP Version](https://img.shields.io/badge/php-^8.3-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
 [![Composer Package](https://img.shields.io/badge/composer-fast--forward%2Fdev--tools-F28D1A.svg?logo=composer&logoColor=white)](https://packagist.org/packages/fast-forward/dev-tools)
 [![Tests](https://img.shields.io/github/actions/workflow/status/php-fast-forward/dev-tools/tests.yml?logo=githubactions&logoColor=white&label=tests&color=22C55E)](https://github.com/php-fast-forward/dev-tools/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/badge/coverage-phpunit-4ADE80?logo=php&logoColor=white)](https://php-fast-forward.github.io/dev-tools/coverage/index.html)
@@ -17,7 +17,7 @@ A Composer plugin that aggregates multiple PHP development tools into a single u
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/php-fast-forward?logo=githubsponsors&logoColor=white&color=EC4899)](https://github.com/sponsors/php-fast-forward)
 
 ## ✨ Features
-- 🚀 Modern PHP 8.5+ syntax
+- 🚀 Modern PHP 8.3+ syntax
 - 🔌 PSR-12 compliant code style
 - 🧪 Integrated testing with PHPUnit
 - 📚 Automated documentation generation
@@ -28,7 +28,7 @@ A Composer plugin that aggregates multiple PHP development tools into a single u
 composer require --dev fast-forward/dev-tools:dev-main
 ```
 
-Requirements: PHP 8.5+, Composer
+Requirements: PHP 8.3+, Composer
 
 ## 🛠️ Usage
 ```php
@@ -67,7 +67,7 @@ Contributions welcome! See [CONTRIBUTING.md](CONTRIBUTING.md).
 # FastForward\Http\Message
 PSR-7 HTTP Message implementation and PSR-15 middleware.
 
-[![PHP Version](https://img.shields.io/badge/php-^8.5-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
+[![PHP Version](https://img.shields.io/badge/php-^8.3-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
 [![Composer Package](https://img.shields.io/badge/composer-fast--forward%2Fhttp--message-F28D1A.svg?logo=composer&logoColor=white)](https://packagist.org/packages/fast-forward/http-message)
 [![Tests](https://img.shields.io/github/actions/workflow/status/php-fast-forward/http-message/tests.yml?logo=githubactions&logoColor=white&label=tests&color=22C55E)](https://github.com/php-fast-forward/http-message/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/badge/coverage-phpunit-4ADE80?logo=php&logoColor=white)](https://php-fast-forward.github.io/http-message/coverage/index.html)
@@ -88,7 +88,7 @@ PSR-7 HTTP Message implementation and PSR-15 middleware.
 composer require fast-forward/http-message
 ```
 
-Requirements: PHP 8.5+
+Requirements: PHP 8.3+
 
 ## 🛠️ Usage
 ```php

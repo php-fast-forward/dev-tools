@@ -7,7 +7,7 @@ through Composer as both a plugin and a local binary.
 Requirements
 ------------
 
-- PHP 8.5 or newer.
+- PHP 8.3 or newer.
 - Composer 2.
 - A project with PSR-4 autoload definitions in ``composer.json``.
 - Git, if you want ``dev-tools:sync`` to create the repository wiki submodule.

@@ -21,7 +21,7 @@ Use this order unless the repository has an explicit reason to differ:
 ### Core Row
 
 ```markdown
-[![PHP Version](https://img.shields.io/badge/php-^8.5-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
+[![PHP Version](https://img.shields.io/badge/php-^8.3-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
 [![Composer Package](https://img.shields.io/badge/composer-fast--forward%2Fpackage-F28D1A.svg?logo=composer&logoColor=white)](https://packagist.org/packages/fast-forward/package)
 [![Tests](https://img.shields.io/github/actions/workflow/status/php-fast-forward/package/tests.yml?logo=githubactions&logoColor=white&label=tests&color=22C55E)](https://github.com/php-fast-forward/package/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/badge/coverage-phpunit-4ADE80?logo=php&logoColor=white)](https://php-fast-forward.github.io/package/coverage/index.html)

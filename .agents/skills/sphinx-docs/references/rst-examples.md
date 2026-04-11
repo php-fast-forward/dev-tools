@@ -124,7 +124,7 @@ Installation
 Requirements
 ------------
 
-- PHP 8.5 or higher
+- PHP 8.3 or higher
 - Composer
 
 Install via Composer:

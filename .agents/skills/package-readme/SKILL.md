@@ -50,7 +50,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 
 	Example core row:
 	```markdown
-	[![PHP Version](https://img.shields.io/badge/php-^8.5-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
+	[![PHP Version](https://img.shields.io/badge/php-^8.3-777BB4?logo=php&logoColor=white)](https://www.php.net/releases/)
 	[![Composer Package](https://img.shields.io/badge/composer-fast--forward%2Fcomponent-F28D1A.svg?logo=composer&logoColor=white)](https://packagist.org/packages/fast-forward/component)
 	[![Tests](https://img.shields.io/github/actions/workflow/status/php-fast-forward/component/tests.yml?logo=githubactions&logoColor=white&label=tests&color=22C55E)](https://github.com/php-fast-forward/component/actions/workflows/tests.yml)
 	[![Coverage](https://img.shields.io/badge/coverage-phpunit-4ADE80?logo=php&logoColor=white)](https://php-fast-forward.github.io/component/coverage/index.html)
@@ -64,7 +64,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 	Example:
 	```markdown
 	## ✨ Features
-	- 🚀 Modern PHP 8.5+ syntax
+	- 🚀 Modern PHP 8.3+ syntax
 	- 🔌 PSR-11/PSR-7 compliant
 	- ...
 	```
@@ -77,7 +77,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 	```bash
 	composer require fast-forward/component
 	```
-	Requirements: PHP 8.5+, ...
+	Requirements: PHP 8.3+, ...
 	```
 
 - **Usage**
