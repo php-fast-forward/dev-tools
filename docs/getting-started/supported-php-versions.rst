@@ -1,5 +1,5 @@
 Supported PHP Versions
-=====================
+======================
 
 The package targets modern PHP and ships configuration files that assume PHP
 8.3 language features and tooling support.
