@@ -26,15 +26,23 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Merger::class)]
 final class MergerTest extends TestCase
 {
+    private Merger $merger;
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->merger = new Merger();
+    }
+
     /**
      * @return void
      */
     #[Test]
     public function mergeWillCreateManagedBlockWhenFileIsEmpty(): void
     {
-        $merger = new Merger();
-
-        $result = $merger->merge('', ['/docs/', '/README.md']);
+        $result = $this->merger->merge('', ['/docs/', '/README.md']);
 
         self::assertSame("/docs/ export-ignore\n" . '/README.md export-ignore', $result);
     }
@@ -45,10 +53,9 @@ final class MergerTest extends TestCase
     #[Test]
     public function mergeWillPreserveCustomEntries(): void
     {
-        $merger = new Merger();
         $existingContent = implode("\n", ['*.zip -diff', '*.phar binary']);
 
-        $result = $merger->merge($existingContent, ['/docs/']);
+        $result = $this->merger->merge($existingContent, ['/docs/']);
 
         self::assertSame("*.zip -diff\n*.phar binary\n" . '/docs/ export-ignore', $result);
     }
@@ -59,7 +66,6 @@ final class MergerTest extends TestCase
     #[Test]
     public function mergeWillDeduplicateExistingAndGeneratedEntries(): void
     {
-        $merger = new Merger();
         $existingContent = implode("\n", [
             '*                   text=auto',
             '/.github/           export-ignore',
@@ -80,7 +86,7 @@ final class MergerTest extends TestCase
             '/README.md export-ignore',
         ]);
 
-        $result = $merger->merge($existingContent, [
+        $result = $this->merger->merge($existingContent, [
             '/.github/',
             '/.vscode/',
             '/docs/',
@@ -114,7 +120,6 @@ final class MergerTest extends TestCase
     #[Test]
     public function mergeWillRemoveExistingExportIgnoreRulesForKeptPaths(): void
     {
-        $merger = new Merger();
         $existingContent = implode("\n", [
             '*                   text=auto',
             '/.gitignore         export-ignore',
@@ -122,7 +127,7 @@ final class MergerTest extends TestCase
             '/README.md export-ignore',
         ]);
 
-        $result = $merger->merge($existingContent, ['/README.md'], ['/.gitignore', '/AGENTS.md']);
+        $result = $this->merger->merge($existingContent, ['/README.md'], ['/.gitignore', '/AGENTS.md']);
 
         self::assertSame("* text=auto\n" . '/README.md export-ignore', $result);
     }
@@ -133,7 +138,6 @@ final class MergerTest extends TestCase
     #[Test]
     public function mergeWillSortExportIgnoreEntriesWithDirectoriesBeforeFiles(): void
     {
-        $merger = new Merger();
         $existingContent = implode("\n", [
             '* text=auto',
             '/README.md export-ignore',
@@ -141,7 +145,7 @@ final class MergerTest extends TestCase
             '/AGENTS.md export-ignore',
         ]);
 
-        $result = $merger->merge($existingContent, ['/.vscode/', '/tests/', '/.gitattributes']);
+        $result = $this->merger->merge($existingContent, ['/.vscode/', '/tests/', '/.gitattributes']);
 
         self::assertSame(
             "* text=auto\n"
@@ -153,5 +157,120 @@ final class MergerTest extends TestCase
             . '/README.md export-ignore',
             $result,
         );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillPreserveComments(): void
+    {
+        $existingContent = "# This is a comment\n*.zip -diff";
+
+        $result = $this->merger->merge($existingContent, ['/docs/']);
+
+        self::assertStringStartsWith('#', $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillNormalizeWhitespaceInExistingEntries(): void
+    {
+        $existingContent = '/docs/   export-ignore';
+
+        $result = $this->merger->merge($existingContent, ['/tests/']);
+
+        self::assertStringContainsString('/docs/ export-ignore', $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillDeduplicateNormalizedEntries(): void
+    {
+        $existingContent = '/.github/ export-ignore';
+
+        $result = $this->merger->merge($existingContent, ['/.github/']);
+
+        self::assertCount(1, explode("\n", trim($result)));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWithEmptyExistingContentWillCreateCleanOutput(): void
+    {
+        $result = $this->merger->merge('', ['/docs/', '/tests/']);
+
+        self::assertSame("/docs/ export-ignore\n/tests/ export-ignore", $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillHandleGlobPatternsWithExportIgnore(): void
+    {
+        $existingContent = '*.pdf export-ignore';
+
+        $result = $this->merger->merge($existingContent, ['/docs/']);
+
+        self::assertStringContainsString('*.pdf export-ignore', $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillSortDirectoriesBeforeFiles(): void
+    {
+        $result = $this->merger->merge('', ['/README.md', '/docs/', '/tests/', '/.editorconfig']);
+
+        $lines = explode("\n", $result);
+        self::assertSame('/docs/ export-ignore', $lines[0]);
+        self::assertSame('/tests/ export-ignore', $lines[1]);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillHandleMultipleWhitespaceNormalize(): void
+    {
+        $existingContent = "/docs/    export-ignore\n/tests/  export-ignore";
+
+        $result = $this->merger->merge($existingContent, []);
+
+        self::assertStringContainsString('/docs/ export-ignore', $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillRemoveDuplicateNonExportIgnoreLines(): void
+    {
+        $existingContent = "* text=auto\n* text=auto";
+
+        $result = $this->merger->merge($existingContent, []);
+
+        self::assertSame(1, substr_count($result, '* text=auto'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function mergeWillPreserveLeadingWhitespaceInCustomEntries(): void
+    {
+        $existingContent = '  * text=auto';
+
+        $result = $this->merger->merge($existingContent, []);
+
+        self::assertStringContainsString('* text=auto', $result);
     }
 }

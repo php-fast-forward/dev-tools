@@ -83,6 +83,8 @@ final readonly class DevToolsExtension implements Extension
      *                                        parameters passed by PHPUnit
      *
      * @return void
+     *
+     * @codeCoverageIgnore
      */
     public function bootstrap(Configuration $configuration, Facade $facade, ParameterCollection $parameters): void
     {

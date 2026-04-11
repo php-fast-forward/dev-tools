@@ -94,6 +94,7 @@ final class CandidateProvider implements CandidateProviderInterface
             '/codecov.yml',
             '/composer-normalize.json',
             '/composer-require-checker.json',
+            '/context7.json',
             '/docker-compose.override.yml',
             '/docker-compose.yaml',
             '/docker-compose.yml',
