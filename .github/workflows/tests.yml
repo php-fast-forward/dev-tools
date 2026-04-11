@@ -53,6 +53,7 @@ jobs:
                   COMPOSER_CACHE_DIR: /tmp/composer-cache
               with:
                   php_version: ${{ matrix.php-version }}
+                  args: 'install --prefer-dist --no-progress --no-suggest --no-interaction --no-plugins --no-scripts'
 
             - name: Resolve minimum coverage
               id: minimum-coverage
