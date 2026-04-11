@@ -27,7 +27,9 @@ jobs:
           BODY: ${{ github.event.pull_request.body }}
           TITLE: ${{ github.event.pull_request.title }}
         run: |
-          ISSUE=$(echo "$TITLE $BODY" | grep -oiE '(closes|fixes|resolves|addresses)\s+#[[:digit:]]+')
+          ISSUE=$(echo "$TITLE $BODY" | \
+            grep -oiE '(closes|fixes|resolves|addresses)\s+#[[:digit:]]+' | \
+            grep -oE '#[[:digit:]]+' | head -1 | tr -d '#')
 
           if [ -n "$ISSUE" ]; then
             echo "issue_number=$ISSUE" >> "$GITHUB_OUTPUT"
