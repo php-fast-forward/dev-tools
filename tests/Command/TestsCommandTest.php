@@ -47,10 +47,7 @@ final class TestsCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandClass(): TestsCommand
     {
-        return new TestsCommand(
-            $this->filesystem->reveal(),
-            $this->coverageSummaryLoader->reveal(),
-        );
+        return new TestsCommand($this->filesystem->reveal(), $this->coverageSummaryLoader->reveal());
     }
 
     /**

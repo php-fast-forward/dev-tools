@@ -127,8 +127,8 @@ final class TestsCommand extends AbstractCommand
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
-        } catch (InvalidArgumentException $exception) {
-            $output->writeln('<error>' . $exception->getMessage() . '</error>');
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
 
             return self::FAILURE;
         }
@@ -259,8 +259,8 @@ final class TestsCommand extends AbstractCommand
     ): int {
         try {
             $coverageSummary = $this->coverageSummaryLoader->load($coverageReportPath);
-        } catch (RuntimeException $exception) {
-            $output->writeln('<error>' . $exception->getMessage() . '</error>');
+        } catch (RuntimeException $runtimeException) {
+            $output->writeln('<error>' . $runtimeException->getMessage() . '</error>');
 
             return self::FAILURE;
         }
