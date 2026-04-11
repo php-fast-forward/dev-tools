@@ -34,9 +34,9 @@ final class ExistenceCheckerTest extends TestCase
     /**
      * @property ObjectProphecy<Filesystem> $filesystem
      */
-    private readonly ObjectProphecy $filesystem;
+    private ObjectProphecy $filesystem;
 
-    private readonly ExistenceChecker $checker;
+    private ExistenceChecker $checker;
 
     /**
      * @return void

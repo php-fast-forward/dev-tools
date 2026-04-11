@@ -6,7 +6,7 @@ FastForward\DevTools is a Composer plugin that aggregates multiple PHP developme
 
 **Key Technologies:**
 
-- PHP 8.3+
+- PHP 8.5+
 - Composer plugin
 - PHPUnit 12.5 (testing)
 - Rector 2.x (automated refactoring)

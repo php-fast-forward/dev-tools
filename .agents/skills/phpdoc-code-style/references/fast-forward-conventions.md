@@ -6,7 +6,7 @@ Use this file for repository-specific PHPDoc and formatting decisions.
 
 - Repository PHP files normally begin with `<?php` and `declare(strict_types=1);`.
 - Source files commonly use the standard Fast Forward file header before the namespace.
-- The codebase targets PHP 8.3.
+- The codebase targets PHP 8.5.
 - Source namespaces live under `FastForward\\DevTools\\`; tests live under `FastForward\\DevTools\\Tests\\`.
 
 ## Standard Header Pattern

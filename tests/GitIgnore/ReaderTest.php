@@ -33,7 +33,7 @@ use function Safe\unlink;
 #[UsesClass(GitIgnore::class)]
 final class ReaderTest extends TestCase
 {
-    private readonly Reader $reader;
+    private Reader $reader;
 
     /**
      * @return void

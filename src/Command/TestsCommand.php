@@ -106,36 +106,9 @@ final class TestsCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $arguments = $this->buildBaseArguments($input);
-
-        if (null !== $input->getOption('parallel')) {
-            return $this->runParallel($input, $output, $arguments);
-        }
-
-        $output->writeln('<info>Running PHPUnit tests...</info>');
-
-        $command = new Process([...$arguments, $input->getArgument('path')]);
-
-        return parent::runProcess($command, $output);
-    }
-
-    /**
-     * Builds the base PHPUnit arguments from input options.
-     *
-     * @param InputInterface $input the runtime instruction set from the CLI
-     *
-     * @return list<string> the base arguments for PHPUnit
-     */
-    private function buildBaseArguments(InputInterface $input): array
-    {
         $arguments = [
-            $this->getAbsolutePath('vendor/bin/phpunit'),
             '--configuration=' . parent::getConfigFile(self::CONFIG),
             '--bootstrap=' . $this->resolvePath($input, 'bootstrap'),
-            '--display-deprecations',
-            '--display-phpunit-deprecations',
-            '--display-incomplete',
-            '--display-skipped',
         ];
 
         if (! $input->getOption('no-cache')) {
@@ -160,63 +133,32 @@ final class TestsCommand extends AbstractCommand
             $arguments[] = '--filter=' . $input->getOption('filter');
         }
 
-        return $arguments;
-    }
+        $parallel = null !== $input->getOption('parallel');
 
-    /**
-     * Executes PHPUnit in parallel mode using ParaTest.
-     *
-     * @param InputInterface $input the runtime instruction set from the CLI
-     * @param OutputInterface $output the console feedback relay
-     * @param list<string> $baseArguments the base PHPUnit arguments
-     *
-     * @return int the status integer describing the termination code
-     */
-    private function runParallel(
-        InputInterface $input,
-        OutputInterface $output,
-        array $baseArguments,
-    ): int {
-        $output->writeln('<info>Running PHPUnit tests in parallel mode...</info>');
-
-        $workers = $input->getOption('parallel');
-        $arguments = [
-            $this->getAbsolutePath('vendor/bin/paratest'),
-        ];
-
-        if (null !== $workers && '' !== $workers) {
-            $arguments[] = '--processes=' . (int) $workers;
-        }
-
-        $arguments[] = '--configuration=' . parent::getConfigFile(self::CONFIG);
-        $arguments[] = '--bootstrap=' . $this->resolvePath($input, 'bootstrap');
-
-        if (! $input->getOption('no-cache')) {
-            $arguments[] = '--cache-directory=' . $this->resolvePath($input, 'cache-dir');
-        }
-
-        if (null !== $input->getOption('coverage')) {
-            $coveragePath = $this->getAbsolutePath($input->getOption('coverage'));
-            $output->writeln('<info>Generating code coverage reports on path: ' . $coveragePath . '</info>');
-
-            foreach ($this->getPsr4Namespaces() as $path) {
-                $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
+        if ($parallel) {
+            if (version_compare(PHP_VERSION, '8.5.0', '>=')) {
+                $output->writeln('<warning>--parallel is not compatible with PHP ' . PHP_VERSION . '. Running tests with PHPUnit instead...</warning>');
+                $parallel = false;
             }
-
-            $arguments[] = '--coverage-text';
-            $arguments[] = '--coverage-html=' . $coveragePath;
-            $arguments[] = '--testdox-html=' . $coveragePath . '/testdox.html';
-            $arguments[] = '--coverage-clover=' . $coveragePath . '/clover.xml';
-            $arguments[] = '--coverage-php=' . $coveragePath . '/coverage.php';
         }
 
-        if (null !== $input->getOption('filter')) {
-            $arguments[] = '--filter=' . $input->getOption('filter');
+        $command = $this->getAbsolutePath(sprintf(
+            'vendor/bin/%s',
+            $parallel ? 'paratest' : 'phpunit'
+        ));
+
+        if (!$parallel) {
+            $arguments[] = '--display-deprecations';
+            $arguments[] = '--display-phpunit-deprecations';
+            $arguments[] = '--display-incomplete';
+            $arguments[] = '--display-skipped';
+        } else {
+            $arguments[] = '--processes=' . ($input->getOption('parallel') ?: 'auto');
         }
 
-        $arguments[] = $input->getArgument('path') ?? './tests';
+        $output->writeln('<info>Running tests using ' . ($parallel ? 'ParaTest' : 'PHPUnit') . '...</info>');
 
-        $command = new Process($arguments);
+        $command = new Process([$command, ...$arguments, $input->getArgument('path')]);
 
         return parent::runProcess($command, $output);
     }

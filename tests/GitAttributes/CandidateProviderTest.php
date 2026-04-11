@@ -26,7 +26,7 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(CandidateProvider::class)]
 final class CandidateProviderTest extends TestCase
 {
-    private readonly CandidateProvider $provider;
+    private CandidateProvider $provider;
 
     /**
      * @return void
