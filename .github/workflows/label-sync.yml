@@ -38,13 +38,12 @@ jobs:
       - name: Copy labels from issue to PR
         if: steps.extract-issue.outputs.issue_number != ''
         run: |
-          ISSUE_NUM=${{ steps.extract-issue.outputs.issue_number }}
-          PR_NUM=${{ github.event.pull_request.number }}
-
           LABELS=$(gh issue view "$ISSUE_NUM" --json labels --jq '.labels[].name')
 
           for label in $LABELS; do
             gh pr edit "$PR_NUM" --add-label "$label" 2>/dev/null || true
           done
         env:
+          ISSUE_NUM: ${{ steps.extract-issue.outputs.issue_number }}
+          PR_NUM: ${{ github.event.pull_request.number }}
           GH_TOKEN: ${{ github.token }}
