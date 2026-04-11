@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Command;
 
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
-use FastForward\DevTools\Agent\Skills\SynchronizeResult;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -123,7 +122,6 @@ final class SkillsCommand extends AbstractCommand
 
         $this->synchronizer->setLogger($this->getIO());
 
-        /** @var SynchronizeResult $result */
         $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath);
 
         if ($result->failed()) {

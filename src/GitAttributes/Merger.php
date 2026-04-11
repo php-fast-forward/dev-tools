@@ -79,6 +79,7 @@ final class Merger implements MergerInterface
             if (isset($keptExportLookup[$pathKey])) {
                 continue;
             }
+
             if (isset($exportIgnoreLines[$pathKey])) {
                 continue;
             }
@@ -149,8 +150,8 @@ final class Merger implements MergerInterface
 
         $lines = [];
 
-        foreach (preg_split('/\R/', $content) ?: [] as $line) {
-            $trimmedLine = trim($line);
+        foreach (preg_split('/\R/', $content) as $line) {
+            $trimmedLine = trim((string) $line);
 
             if ('' === $trimmedLine) {
                 continue;

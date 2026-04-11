@@ -135,19 +135,9 @@ final class TestsCommand extends AbstractCommand
 
         $parallel = null !== $input->getOption('parallel');
 
-        if ($parallel) {
-            if (version_compare(PHP_VERSION, '8.5.0', '>=')) {
-                $output->writeln('<warning>--parallel is not compatible with PHP ' . PHP_VERSION . '. Running tests with PHPUnit instead...</warning>');
-                $parallel = false;
-            }
-        }
+        $command = $this->getAbsolutePath(\sprintf('vendor/bin/%s', $parallel ? 'paratest' : 'phpunit'));
 
-        $command = $this->getAbsolutePath(sprintf(
-            'vendor/bin/%s',
-            $parallel ? 'paratest' : 'phpunit'
-        ));
-
-        if (!$parallel) {
+        if (! $parallel) {
             $arguments[] = '--display-deprecations';
             $arguments[] = '--display-phpunit-deprecations';
             $arguments[] = '--display-incomplete';
