@@ -23,10 +23,10 @@ jobs:
     steps:
       - name: Extract issue number from PR
         id: extract-issue
+        env:
+          BODY: ${{ github.event.pull_request.body }}
+          TITLE: ${{ github.event.pull_request.title }}
         run: |
-          BODY='${{ github.event.pull_request.body }}'
-          TITLE='${{ github.event.pull_request.title }}'
-
           ISSUE=$(echo "$BODY $TITLE" | \
             grep -oE '(closes|fixes|resolves|addresses)\s+#[[:digit:]]+' | \
             grep -oE '#[[:digit:]]+' | head -1 | tr -d '#')
