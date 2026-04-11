@@ -41,7 +41,7 @@ jobs:
           COMPOSER_CACHE_DIR: /tmp/composer-cache
         with:
           php_version: '8.3'
-          args: 'install --prefer-dist --no-progress --no-suggest --no-interaction --no-plugins --no-scripts'
+          args: 'install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts'
 
       - name: Create Docs Markdown
         uses: php-actions/composer@v6
