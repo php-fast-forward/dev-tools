@@ -2,7 +2,19 @@ name: Run PHPUnit Tests
 
 on:
     workflow_call:
+        inputs:
+            min-coverage:
+                description: Minimum line coverage percentage enforced by dev-tools tests.
+                required: false
+                type: number
+                default: 80
     workflow_dispatch:
+        inputs:
+            min-coverage:
+                description: Minimum line coverage percentage enforced by dev-tools tests.
+                required: false
+                type: number
+                default: 80
     pull_request:
     push:
         branches: [ "main" ]
@@ -46,13 +58,16 @@ jobs:
               with:
                   php_version: ${{ matrix.php-version }}
 
+            - name: Resolve minimum coverage
+              id: minimum-coverage
+              run: echo "value=${INPUT_MIN_COVERAGE:-80}" >> "$GITHUB_OUTPUT"
+              env:
+                  INPUT_MIN_COVERAGE: ${{ inputs.min-coverage }}
+
             - name: Run PHPUnit tests
               uses: php-actions/composer@v6
               with:
-                php_version: ${{ matrix.php-version }}
-                php_extensions: pcov pcntl
-                command: 'dev-tools'
-                args: 'tests -- --coverage=public/coverage'
-
-            - name: Ensure minimum code coverage
-              run: php vendor/bin/coverage-check ./public/coverage/clover.xml 80
+                  php_version: ${{ matrix.php-version }}
+                  php_extensions: pcov pcntl
+                  command: 'dev-tools'
+                  args: 'tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}'
