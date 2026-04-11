@@ -85,6 +85,18 @@
             "dev-main": "1.x-dev"
         },
         "class": "FastForward\\DevTools\\Composer\\Plugin",
+        "gitattributes": {
+            "keep-in-export": [
+                "/.agents/",
+                "/.editorconfig",
+                "/.gitignore",
+                "/.php-cs-fixer.dist.php",
+                "/ecs.php",
+                "/grumphp.yml",
+                "/phpunit.xml",
+                "/rector.php"
+            ]
+        },
         "grumphp": {
             "config-default-path": "grumphp.yml"
         }

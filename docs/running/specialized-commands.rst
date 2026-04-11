@@ -177,8 +177,30 @@ Important details:
   missing.
 - it calls ``gitignore`` to merge the canonical .gitignore with the project's
   .gitignore;
+- it calls ``gitattributes`` to manage export-ignore rules in .gitattributes;
 - it calls ``skills`` so ``.agents/skills`` contains links to the packaged
   skill set.
+
+``gitattributes``
+----------------
+
+Manages .gitattributes export-ignore rules for leaner Composer package archives.
+
+.. code-block:: bash
+
+   composer dev-tools gitattributes
+
+Important details:
+
+- it adds export-ignore entries for repository-only files and directories;
+- it only adds entries for paths that actually exist in the repository;
+- it respects the ``extra.gitattributes.keep-in-export`` configuration to
+  keep specific paths in exported archives;
+- it preserves existing custom .gitattributes rules;
+- it deduplicates equivalent entries and sorts them with directories before
+  files, then alphabetically;
+- it uses CandidateProvider, ExistenceChecker, ExportIgnoreFilter, Merger,
+  Reader, and Writer components from the GitAttributes namespace.
 
 ``gitignore``
 -------------

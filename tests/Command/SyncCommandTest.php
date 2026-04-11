@@ -20,9 +20,13 @@ namespace FastForward\DevTools\Tests\Command;
 
 use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
+use FastForward\DevTools\GitAttributes\CandidateProvider;
+use FastForward\DevTools\GitAttributes\ExistenceChecker;
+use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
+use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
 use FastForward\DevTools\GitIgnore\Classifier;
 use FastForward\DevTools\GitIgnore\GitIgnore;
-use FastForward\DevTools\GitIgnore\Merger;
+use FastForward\DevTools\GitIgnore\Merger as GitIgnoreMerger;
 use FastForward\DevTools\GitIgnore\Reader;
 use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -35,9 +39,13 @@ use Prophecy\PhpUnit\ProphecyTrait;
 #[UsesClass(Reader::class)]
 #[UsesClass(GitIgnore::class)]
 #[UsesClass(Classifier::class)]
-#[UsesClass(Merger::class)]
+#[UsesClass(GitIgnoreMerger::class)]
 #[UsesClass(Writer::class)]
 #[UsesClass(GitIgnoreCommand::class)]
+#[UsesClass(CandidateProvider::class)]
+#[UsesClass(ExistenceChecker::class)]
+#[UsesClass(ExportIgnoreFilter::class)]
+#[UsesClass(GitAttributesMerger::class)]
 final class SyncCommandTest extends AbstractCommandTestCase
 {
     use ProphecyTrait;
@@ -63,7 +71,7 @@ final class SyncCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandDescription(): string
     {
-        return 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, and .editorconfig in the root project.';
+        return 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.';
     }
 
     /**
@@ -71,7 +79,7 @@ final class SyncCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandHelp(): string
     {
-        return 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, and ensures .editorconfig is present and up to date.';
+        return 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.';
     }
 
     /**

@@ -92,6 +92,8 @@ abstract class AbstractCommandTestCase extends TestCase
             ->willReturn('fast-forward/dev-tools');
         $this->package->getDescription()
             ->willReturn('Fast Forward Dev Tools plugin');
+        $this->package->getExtra()
+            ->willReturn([]);
 
         $this->composer->getPackage()
             ->willReturn($this->package->reveal());

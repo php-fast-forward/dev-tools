@@ -38,17 +38,17 @@ final readonly class Generator implements GeneratorInterface
     /**
      * Creates a new Generator instance.
      *
-     * @param Reader $reader The reader for extracting metadata from composer.json
-     * @param Resolver $resolver The resolver for mapping license identifiers to templates
-     * @param TemplateLoader $templateLoader The loader for reading template files
-     * @param PlaceholderResolver $placeholderResolver The resolver for template placeholders
+     * @param ReaderInterface $reader The reader for extracting metadata from composer.json
+     * @param ResolverInterface $resolver The resolver for mapping license identifiers to templates
+     * @param TemplateLoaderInterface $templateLoader The loader for reading template files
+     * @param PlaceholderResolverInterface $placeholderResolver The resolver for template placeholders
      * @param Filesystem $filesystem The filesystem component for file operations
      */
     public function __construct(
-        private Reader $reader,
-        private Resolver $resolver,
-        private TemplateLoader $templateLoader,
-        private PlaceholderResolver $placeholderResolver,
+        private ReaderInterface $reader,
+        private ResolverInterface $resolver,
+        private TemplateLoaderInterface $templateLoader,
+        private PlaceholderResolverInterface $placeholderResolver,
         private Filesystem $filesystem = new Filesystem()
     ) {}
 
