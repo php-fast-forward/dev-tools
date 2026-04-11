@@ -26,15 +26,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
-
       - name: Cache Composer dependencies
         uses: actions/cache@v5
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
 
@@ -42,8 +38,11 @@ jobs:
         uses: php-actions/composer@v6
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+          COMPOSER_CACHE_DIR: /tmp/composer-cache
         with:
           php_version: '8.3'
+          command: 'install'
+          args: '--prefer-dist --no-progress --no-interaction --no-plugins --no-scripts'
 
       - name: Create Docs Markdown
         uses: php-actions/composer@v6
