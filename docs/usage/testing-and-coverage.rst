@@ -52,6 +52,25 @@ That extension wires together:
   which sends a desktop notification after the run when the local platform
   supports it.
 
+Programmatic Coverage Access
+-----------------------------
+
+The ``CoverageSummaryLoader`` class provides programmatic access to coverage
+data. This is useful when you need to integrate coverage metrics into
+external tooling or build custom reports:
+
+.. code-block:: php
+
+   use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
+
+   $loader = new CoverageSummaryLoader();
+   $summary = $loader->load('public/coverage/coverage.php');
+
+   $summary->executedLines();      // e.g., 142
+   $summary->executableLines();   // e.g., 168
+   $summary->percentage();        // e.g., 84.52
+   $summary->percentageAsString(); // e.g., "84.52%"
+
 When to Override Locally
 ------------------------
 

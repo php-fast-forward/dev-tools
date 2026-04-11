@@ -24,8 +24,10 @@ namespace FastForward\DevTools\PhpUnit\Coverage;
 final readonly class CoverageSummary
 {
     /**
-     * @param int $executedLines the number of executable lines that were covered
-     * @param int $executableLines the total number of executable lines
+     * Initializes a new instance of the CoverageSummary class.
+     *
+     * @param int $executedLines Number of executable lines covered
+     * @param int $executableLines Total executable lines in the analyzed code
      */
     public function __construct(
         private int $executedLines,
@@ -33,7 +35,9 @@ final readonly class CoverageSummary
     ) {}
 
     /**
-     * @return int the number of covered executable lines
+     * Returns the number of executable lines that were executed.
+     *
+     * @return int
      */
     public function executedLines(): int
     {
@@ -41,7 +45,9 @@ final readonly class CoverageSummary
     }
 
     /**
-     * @return int the total number of executable lines
+     * Returns the total number of executable lines.
+     *
+     * @return int
      */
     public function executableLines(): int
     {
@@ -49,7 +55,9 @@ final readonly class CoverageSummary
     }
 
     /**
-     * @return float the executed line coverage percentage
+     * Returns the executed line coverage as a percentage.
+     *
+     * @return float
      */
     public function percentage(): float
     {
@@ -61,7 +69,9 @@ final readonly class CoverageSummary
     }
 
     /**
-     * @return string the formatted executed line coverage percentage
+     * Returns the executed line coverage as a formatted percentage string.
+     *
+     * @return string
      */
     public function percentageAsString(): string
     {

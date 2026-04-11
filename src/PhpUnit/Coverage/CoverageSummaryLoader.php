@@ -29,9 +29,11 @@ use function is_file;
 final readonly class CoverageSummaryLoader implements CoverageSummaryLoaderInterface
 {
     /**
-     * @param string $coverageReportPath the path to the PHPUnit `coverage-php` report
+     * @param string $coverageReportPath Path to the PHPUnit `coverage-php` report file
      *
-     * @return CoverageSummary the extracted line coverage summary
+     * @return CoverageSummary Extracted line coverage summary
+     *
+     * @throws RuntimeException When the report file does not exist or contains invalid data
      */
     public function load(string $coverageReportPath): CoverageSummary
     {

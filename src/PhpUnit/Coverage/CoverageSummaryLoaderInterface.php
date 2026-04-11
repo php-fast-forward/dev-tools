@@ -24,9 +24,13 @@ namespace FastForward\DevTools\PhpUnit\Coverage;
 interface CoverageSummaryLoaderInterface
 {
     /**
-     * @param string $coverageReportPath the path to the PHPUnit `coverage-php` report
+     * Loads the coverage summary from a PHPUnit `coverage-php` report file.
      *
-     * @return CoverageSummary the extracted coverage summary
+     * @param string $coverageReportPath Path to the PHPUnit `coverage-php` report file
+     *
+     * @return CoverageSummary Extracted coverage summary
+     *
+     * @throws RuntimeException When the report file does not exist or contains invalid data
      */
     public function load(string $coverageReportPath): CoverageSummary;
 }
