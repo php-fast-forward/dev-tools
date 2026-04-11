@@ -6,4 +6,5 @@
 /.gitattributes export-ignore
 /.gitmodules    export-ignore
 /AGENTS.md      export-ignore
+/context7.json  export-ignore
 /README.md      export-ignore
