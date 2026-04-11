@@ -42,7 +42,7 @@ jobs:
         with:
           php_version: '8.3'
           command: 'install'
-          args: '--prefer-dist --no-progress --no-interaction --no-plugins --no-scripts'
+          args: '--prefer-dist --no-progress --no-interaction --no-scripts'
 
       - name: Create Docs Markdown
         uses: php-actions/composer@v6
