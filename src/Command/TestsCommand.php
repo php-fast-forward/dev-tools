@@ -22,6 +22,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -84,6 +85,13 @@ final class TestsCommand extends AbstractCommand
                 shortcut: 'f',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Filter which tests to run based on a pattern.',
+            )
+            ->addOption(
+                name: 'parallel',
+                shortcut: 'p',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Run tests in parallel using ParaTest. Optional number of workers.',
+                default: null,
             );
     }
 
@@ -136,7 +144,106 @@ final class TestsCommand extends AbstractCommand
             $arguments[] = '--filter=' . $input->getOption('filter');
         }
 
+        $parallel = $input->getOption('parallel');
+
+        if ($parallel !== null) {
+            return $this->runParallel($input, $output, $parallel, $arguments);
+        }
+
         $command = new Process([...$arguments, $input->getArgument('path')]);
+
+        return parent::runProcess($command, $output);
+    }
+
+    /**
+     * Executes PHPUnit in parallel mode using ParaTest.
+     *
+     * @param InputInterface $input the runtime instruction set from the CLI
+     * @param OutputInterface $output the console feedback relay
+     * @param mixed $workers the number of workers or empty for auto
+     * @param array<int, string> $baseArguments the base PHPUnit arguments
+     *
+     * @return int the status integer describing the termination code
+     */
+    private function runParallel(
+        InputInterface $input,
+        OutputInterface $output,
+        mixed $workers,
+        array $baseArguments,
+    ): int {
+        $output->writeln('<info>Running PHPUnit tests in parallel mode...</info>');
+
+        $validParatestOptions = [
+            '--bootstrap',
+            '--configuration',
+            '--cache-directory',
+            '--filter',
+            '--group',
+            '--exclude-group',
+            '--testsuite',
+            '--no-test-tokens',
+            '--stop-on-defect',
+            '--stop-on-error',
+            '--stop-on-failure',
+            '--stop-on-warning',
+            '--stop-on-risky',
+            '--stop-on-skipped',
+            '--stop-on-incomplete',
+            '--fail-on-incomplete',
+            '--fail-on-risky',
+            '--fail-on-skipped',
+            '--fail-on-warning',
+            '--fail-on-deprecation',
+        ];
+
+        $arguments = [
+            $this->getAbsolutePath('vendor/bin/paratest'),
+        ];
+
+        if ($workers !== null && $workers !== '') {
+            $arguments[] = '--processes=' . (int) $workers;
+        }
+
+        foreach ($baseArguments as $arg) {
+            $isValid = false;
+            foreach ($validParatestOptions as $option) {
+                if (str_starts_with($arg, $option)) {
+                    $isValid = true;
+
+                    break;
+                }
+            }
+
+            if ($isValid) {
+                $arguments[] = $arg;
+            }
+        }
+
+        $coverage = $input->getOption('coverage');
+        if ($coverage !== null) {
+            $output->writeln(
+                '<info>Generating code coverage reports on path: ' . $this->getAbsolutePath($coverage) . '</info>'
+            );
+
+            foreach ($this->getPsr4Namespaces() as $path) {
+                $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
+            }
+
+            $arguments[] = '--coverage-text';
+            $arguments[] = '--coverage-html=' . $this->getAbsolutePath($coverage);
+            $arguments[] = '--testdox-html=' . $this->getAbsolutePath($coverage) . '/testdox.html';
+            $arguments[] = '--coverage-clover=' . $this->getAbsolutePath($coverage) . '/clover.xml';
+            $arguments[] = '--coverage-php=' . $this->getAbsolutePath($coverage) . '/coverage.php';
+        }
+
+        $filter = $input->getOption('filter');
+        if ($filter !== null) {
+            $arguments[] = '--filter=' . $filter;
+        }
+
+        $arguments[] = $input->getArgument('path') ?? './tests';
+
+        $command = new Process($arguments);
 
         return parent::runProcess($command, $output);
     }

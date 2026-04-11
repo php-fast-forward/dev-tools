@@ -54,7 +54,8 @@
         "symfony/var-dumper": "^7.4",
         "symfony/var-exporter": "^7.4",
         "symplify/easy-coding-standard": "^13.0",
-        "thecodingmachine/safe": "^3.4"
+        "thecodingmachine/safe": "^3.4",
+        "brianium/paratest": "^7.17"
     },
     "minimum-stability": "stable",
     "autoload": {
