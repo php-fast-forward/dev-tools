@@ -63,7 +63,7 @@ final readonly class Writer implements WriterInterface
         $rows = [];
         $maxPathSpecLength = 0;
 
-        foreach (preg_split('/\R/', $content) ?: [] as $line) {
+        foreach (preg_split('/\R/', $content) as $line) {
             $trimmedLine = trim((string) $line);
 
             if ('' === $trimmedLine) {

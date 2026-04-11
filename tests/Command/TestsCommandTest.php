@@ -19,24 +19,35 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Command;
 
 use FastForward\DevTools\Command\TestsCommand;
+use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
+use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
+use Prophecy\Argument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
 
 #[CoversClass(TestsCommand::class)]
+#[UsesClass(CoverageSummary::class)]
 final class TestsCommandTest extends AbstractCommandTestCase
 {
     use ProphecyTrait;
 
     /**
-     * @return string
+     * @var ObjectProphecy<CoverageSummaryLoaderInterface>
      */
-    protected function getCommandClass(): string
+    private ObjectProphecy $coverageSummaryLoader;
+
+    /**
+     * @return TestsCommand
+     */
+    protected function getCommandClass(): TestsCommand
     {
-        return TestsCommand::class;
+        return new TestsCommand($this->filesystem->reveal(), $this->coverageSummaryLoader->reveal());
     }
 
     /**
@@ -68,6 +79,8 @@ final class TestsCommandTest extends AbstractCommandTestCase
      */
     protected function setUp(): void
     {
+        $this->coverageSummaryLoader = $this->prophesize(CoverageSummaryLoaderInterface::class);
+
         parent::setUp();
 
         $this->withConfigFile(TestsCommand::CONFIG);
@@ -125,6 +138,100 @@ final class TestsCommandTest extends AbstractCommandTestCase
         $this->input->getOption('coverage')
             ->willReturn('public/coverage');
         $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithMinCoverageWillGenerateCoveragePhpAndValidateIt(): void
+    {
+        $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
+
+        $this->willRunProcessWithCallback(function (Process $process) use ($coverageReportPath): bool {
+            $commandLine = $process->getCommandLine();
+
+            return str_contains($commandLine, '--coverage-php=' . $coverageReportPath)
+                && ! str_contains($commandLine, '--coverage-html=');
+        });
+
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willReturn(new CoverageSummary(85, 100));
+
+        $this->input->getOption('min-coverage')
+            ->willReturn('80');
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithCoverageAndMinCoverageWillValidateGeneratedCoverageReport(): void
+    {
+        $coverageReportPath = getcwd() . '/public/coverage/coverage.php';
+
+        $this->willRunProcessWithCallback(function (Process $process) use ($coverageReportPath): bool {
+            $commandLine = $process->getCommandLine();
+
+            return str_contains($commandLine, '--coverage-html=' . getcwd() . '/public/coverage')
+                && str_contains($commandLine, '--coverage-php=' . $coverageReportPath);
+        });
+
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willReturn(new CoverageSummary(90, 100));
+
+        $this->input->getOption('coverage')
+            ->willReturn('public/coverage');
+        $this->input->getOption('min-coverage')
+            ->willReturn('80');
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithCoverageBelowMinimumWillReturnFailure(): void
+    {
+        $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
+
+        $this->willRunProcessWithCallback(static fn(Process $process): bool => str_contains(
+            $process->getCommandLine(),
+            '--coverage-php=' . getcwd() . '/tmp/cache/phpunit/coverage.php',
+        ));
+
+        $this->output->writeln(Argument::type('string'))
+            ->will(static function (): void {});
+        $this->output->writeln(Argument::containingString('Minimum line coverage'))
+            ->shouldBeCalled();
+
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willReturn(new CoverageSummary(75, 100));
+
+        $this->input->getOption('min-coverage')
+            ->willReturn('80');
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithInvalidMinCoverageWillReturnFailure(): void
+    {
+        $this->output->writeln(Argument::type('string'))
+            ->will(static function (): void {});
+        $this->output->writeln(Argument::containingString('--min-coverage'))
+            ->shouldBeCalled();
+
+        $this->input->getOption('min-coverage')
+            ->willReturn('abc');
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }
 
     /**

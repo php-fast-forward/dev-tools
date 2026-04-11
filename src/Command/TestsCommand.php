@@ -18,11 +18,18 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Command;
 
+use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
+use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
+use InvalidArgumentException;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+
+use function is_numeric;
 
 /**
  * Facilitates the execution of the PHPUnit testing framework.
@@ -34,6 +41,17 @@ final class TestsCommand extends AbstractCommand
      * @var string identifies the local configuration file for PHPUnit processes
      */
     public const string CONFIG = 'phpunit.xml';
+
+    /**
+     * @param Filesystem|null $filesystem the filesystem utility used for path resolution
+     * @param CoverageSummaryLoaderInterface $coverageSummaryLoader the loader used for `coverage-php` summaries
+     */
+    public function __construct(
+        ?Filesystem $filesystem = null,
+        private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader = new CoverageSummaryLoader(),
+    ) {
+        parent::__construct($filesystem);
+    }
 
     /**
      * Configures the testing command input constraints.
@@ -84,6 +102,11 @@ final class TestsCommand extends AbstractCommand
                 shortcut: 'f',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Filter which tests to run based on a pattern.',
+            )
+            ->addOption(
+                name: 'min-coverage',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Minimum line coverage percentage required for a successful run.',
             );
     }
 
@@ -102,6 +125,14 @@ final class TestsCommand extends AbstractCommand
     {
         $output->writeln('<info>Running PHPUnit tests...</info>');
 
+        try {
+            $minimumCoverage = $this->resolveMinimumCoverage($input);
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
+
+            return self::FAILURE;
+        }
+
         $arguments = [
             $this->getAbsolutePath('vendor/bin/phpunit'),
             '--configuration=' . parent::getConfigFile(self::CONFIG),
@@ -116,21 +147,7 @@ final class TestsCommand extends AbstractCommand
             $arguments[] = '--cache-directory=' . $this->resolvePath($input, 'cache-dir');
         }
 
-        if ($input->getOption('coverage')) {
-            $output->writeln(
-                '<info>Generating code coverage reports on path: ' . $this->resolvePath($input, 'coverage') . '</info>'
-            );
-
-            foreach ($this->getPsr4Namespaces() as $path) {
-                $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
-            }
-
-            $arguments[] = '--coverage-text';
-            $arguments[] = '--coverage-html=' . $this->resolvePath($input, 'coverage');
-            $arguments[] = '--testdox-html=' . $this->resolvePath($input, 'coverage') . '/testdox.html';
-            $arguments[] = '--coverage-clover=' . $this->resolvePath($input, 'coverage') . '/clover.xml';
-            $arguments[] = '--coverage-php=' . $this->resolvePath($input, 'coverage') . '/coverage.php';
-        }
+        $coverageReportPath = $this->configureCoverageArguments($input, $arguments, null !== $minimumCoverage);
 
         if ($input->getOption('filter')) {
             $arguments[] = '--filter=' . $input->getOption('filter');
@@ -138,7 +155,13 @@ final class TestsCommand extends AbstractCommand
 
         $command = new Process([...$arguments, $input->getArgument('path')]);
 
-        return parent::runProcess($command, $output);
+        $result = parent::runProcess($command, $output);
+
+        if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
+            return $result;
+        }
+
+        return $this->validateMinimumCoverage($coverageReportPath, $minimumCoverage, $output);
     }
 
     /**
@@ -155,5 +178,110 @@ final class TestsCommand extends AbstractCommand
     private function resolvePath(InputInterface $input, string $option): string
     {
         return $this->getAbsolutePath($input->getOption($option));
+    }
+
+    /**
+     * @param InputInterface $input the raw parameter definitions
+     *
+     * @return float|null the validated minimum coverage percentage, if configured
+     */
+    private function resolveMinimumCoverage(InputInterface $input): ?float
+    {
+        $minimumCoverage = $input->getOption('min-coverage');
+
+        if (null === $minimumCoverage) {
+            return null;
+        }
+
+        if (! is_numeric($minimumCoverage)) {
+            throw new InvalidArgumentException('The --min-coverage option MUST be a numeric percentage.');
+        }
+
+        $minimumCoverage = (float) $minimumCoverage;
+
+        if (0.0 > $minimumCoverage || 100.0 < $minimumCoverage) {
+            throw new InvalidArgumentException('The --min-coverage option MUST be between 0 and 100.');
+        }
+
+        return $minimumCoverage;
+    }
+
+    /**
+     * @param InputInterface $input the raw parameter definitions
+     * @param array<int, string> $arguments the mutable argument list for the PHPUnit process
+     * @param bool $requiresCoverageReport indicates whether a `coverage-php` report is required
+     *
+     * @return string|null the absolute path to the generated `coverage-php` report
+     */
+    private function configureCoverageArguments(
+        InputInterface $input,
+        array &$arguments,
+        bool $requiresCoverageReport,
+    ): ?string {
+        $coverageOption = $input->getOption('coverage');
+
+        if (null === $coverageOption && ! $requiresCoverageReport) {
+            return null;
+        }
+
+        $coveragePath = null !== $coverageOption
+            ? $this->resolvePath($input, 'coverage')
+            : $this->resolvePath($input, 'cache-dir');
+
+        foreach ($this->getPsr4Namespaces() as $path) {
+            $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
+        }
+
+        if (null !== $coverageOption) {
+            $arguments[] = '--coverage-text';
+            $arguments[] = '--coverage-html=' . $coveragePath;
+            $arguments[] = '--testdox-html=' . $coveragePath . '/testdox.html';
+            $arguments[] = '--coverage-clover=' . $coveragePath . '/clover.xml';
+        }
+
+        $coverageReportPath = $coveragePath . '/coverage.php';
+        $arguments[] = '--coverage-php=' . $coverageReportPath;
+
+        return $coverageReportPath;
+    }
+
+    /**
+     * @param string $coverageReportPath the generated `coverage-php` report path
+     * @param float $minimumCoverage the required line coverage percentage
+     * @param OutputInterface $output the output interface to log validation results
+     *
+     * @return int the final status code after validating minimum coverage
+     */
+    private function validateMinimumCoverage(
+        string $coverageReportPath,
+        float $minimumCoverage,
+        OutputInterface $output,
+    ): int {
+        try {
+            $coverageSummary = $this->coverageSummaryLoader->load($coverageReportPath);
+        } catch (RuntimeException $runtimeException) {
+            $output->writeln('<error>' . $runtimeException->getMessage() . '</error>');
+
+            return self::FAILURE;
+        }
+
+        $message = \sprintf(
+            'Minimum line coverage of %01.2F%% %s. Current coverage: %s (%d/%d lines).',
+            $minimumCoverage,
+            $coverageSummary->percentage() >= $minimumCoverage ? 'satisfied' : 'was not met',
+            $coverageSummary->percentageAsString(),
+            $coverageSummary->executedLines(),
+            $coverageSummary->executableLines(),
+        );
+
+        if ($coverageSummary->percentage() >= $minimumCoverage) {
+            $output->writeln('<info>' . $message . '</info>');
+
+            return self::SUCCESS;
+        }
+
+        $output->writeln('<error>' . $message . '</error>');
+
+        return self::FAILURE;
     }
 }
