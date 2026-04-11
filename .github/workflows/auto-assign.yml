@@ -4,9 +4,8 @@ on:
   issues:
     types: [ opened, reopened ]
   pull_request_target:
-    types: [ opened, reopened ]
+    types: [ opened, reopened, synchronize ]
   workflow_call:
-  workflow_dispatch:
 
 permissions:
   issues: write
