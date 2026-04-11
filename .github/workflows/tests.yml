@@ -56,6 +56,12 @@ jobs:
                   command: 'install'
                   args: '--prefer-dist --no-progress --no-interaction --no-plugins --no-scripts'
 
+            - name: Composer Audit
+              uses: php-actions/composer@v6
+              with:
+                  php_version: ${{ matrix.php-version }}
+                  command: 'audit'
+
             - name: Resolve minimum coverage
               id: minimum-coverage
               run: echo "value=${INPUT_MIN_COVERAGE:-80}" >> "$GITHUB_OUTPUT"
