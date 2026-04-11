@@ -1,4 +1,4 @@
-name: PR Label Sync
+name: Pull Request Label Sync
 
 on:
   pull_request_target:
