@@ -1,0 +1,14 @@
+name: Auto assign
+
+on:
+  pull_request_target:
+    types: [opened, reopened]
+  issues:
+    types: [opened, reopened]
+
+jobs:
+  auto-assign:
+    permissions:
+      issues: write
+      pull-requests: write
+    uses: php-fast-forward/dev-tools/.github/workflows/auto-assign.yml@main
