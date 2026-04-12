@@ -31,12 +31,14 @@ use Symfony\Component\Filesystem\Filesystem;
 final class ChangelogCheckCommand extends AbstractCommand
 {
     /**
-     * @param Filesystem|null $filesystem
-     * @param UnreleasedEntryCheckerInterface|null $unreleasedEntryChecker
+     * Initializes the command with necessary dependencies.
+     *
+     * @param Filesystem $filesystem filesystem instance for file operations
+     * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker checker for pending unreleased entries in the changelog
      */
     public function __construct(
-        ?Filesystem $filesystem = null,
-        private readonly ?UnreleasedEntryCheckerInterface $unreleasedEntryChecker = null,
+        Filesystem $filesystem = new Filesystem(),
+        private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker = new UnreleasedEntryChecker(),
     ) {
         parent::__construct($filesystem);
     }
@@ -60,14 +62,16 @@ final class ChangelogCheckCommand extends AbstractCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the command to check for pending unreleased changes in the changelog.
      *
-     * @return int
+     * @param InputInterface $input the input interface for command arguments and options
+     * @param OutputInterface $output the output interface for writing command output
+     *
+     * @return int exit code indicating success (0) or failure (1)
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $hasPendingChanges = ($this->unreleasedEntryChecker ?? new UnreleasedEntryChecker())
+        $hasPendingChanges = $this->unreleasedEntryChecker
             ->hasPendingChanges($this->getCurrentWorkingDirectory(), $input->getOption('against'));
 
         if ($hasPendingChanges) {

@@ -94,7 +94,7 @@ final readonly class UnreleasedEntryChecker implements UnreleasedEntryCheckerInt
      */
     private function extractEntries(string $contents): array
     {
-        if (0 === preg_match('/^## Unreleased\s+-\s+.+?(?=^##\s|\z)/ms', $contents, $matches)) {
+        if (0 === preg_match('/^## \[?Unreleased\]?\s+-\s+.+?(?=^##\s|\z)/ms', $contents, $matches)) {
             return [];
         }
 

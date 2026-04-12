@@ -30,6 +30,7 @@ use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\SyncCommand;
 use FastForward\DevTools\Command\SkillsCommand;
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
+use FastForward\DevTools\Changelog\UnreleasedEntryChecker;
 use FastForward\DevTools\Command\PhpDocCommand;
 use FastForward\DevTools\Command\RefactorCommand;
 use FastForward\DevTools\Command\ReportsCommand;
@@ -76,6 +77,7 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(GitAttributesWriter::class)]
 #[UsesClass(GitIgnoreMerger::class)]
 #[UsesClass(Writer::class)]
+#[UsesClass(UnreleasedEntryChecker::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
     private DevToolsCommandProvider $commandProvider;
