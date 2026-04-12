@@ -28,10 +28,12 @@ use function trim;
 final readonly class GitProcessRunner implements GitProcessRunnerInterface
 {
     /**
-     * @param list<string> $command
-     * @param string $workingDirectory
+     * Executes a git command in the specified working directory and returns the trimmed output.
      *
-     * @return string
+     * @param list<string> $command Git command to execute (e.g., ['git', 'log', '--oneline']).
+     * @param string $workingDirectory Directory in which to execute the command (e.g., repository root).
+     *
+     * @return string trimmed output from the executed command
      */
     public function run(array $command, string $workingDirectory): string
     {

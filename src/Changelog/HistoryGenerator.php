@@ -26,14 +26,16 @@ use function array_values;
 final readonly class HistoryGenerator implements HistoryGeneratorInterface
 {
     /**
-     * @param GitReleaseCollectorInterface $gitReleaseCollector
-     * @param CommitClassifierInterface $commitClassifier
-     * @param MarkdownRenderer|null $markdownRenderer
+     * Initializes the `HistoryGenerator` with optional dependencies.
+     *
+     * @param GitReleaseCollectorInterface $gitReleaseCollector git release collector instance for collecting release metadata and commit subjects
+     * @param CommitClassifierInterface $commitClassifier commit classifier instance for classifying and normalizing commit subjects into changelog sections
+     * @param MarkdownRenderer $markdownRenderer markdown renderer instance for rendering the final changelog markdown from structured release and commit data
      */
     public function __construct(
         private GitReleaseCollectorInterface $gitReleaseCollector = new GitReleaseCollector(),
         private CommitClassifierInterface $commitClassifier = new CommitClassifier(),
-        private ?MarkdownRenderer $markdownRenderer = null,
+        private MarkdownRenderer $markdownRenderer = new MarkdownRenderer(),
     ) {}
 
     /**
@@ -65,7 +67,6 @@ final readonly class HistoryGenerator implements HistoryGeneratorInterface
             ];
         }
 
-        return ($this->markdownRenderer ?? new MarkdownRenderer())
-            ->render($releases);
+        return $this->markdownRenderer->render($releases);
     }
 }

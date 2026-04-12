@@ -20,16 +20,25 @@ namespace FastForward\DevTools\Changelog;
 
 /**
  * Executes git-aware shell commands for changelog automation services.
+ *
+ * The GitProcessRunnerInterface defines a contract for executing git-related commands in the context of changelog automation.
+ * Implementations of this interface MUST run specified git commands in a given working directory and return the trimmed output.
+ * The run method takes a list of command arguments and a working directory as input, and it returns the output from the executed command,
+ * allowing changelog automation services to interact with git repositories effectively.
  */
 interface GitProcessRunnerInterface
 {
     /**
      * Runs a command in the provided working directory and returns stdout.
      *
-     * @param list<string> $command
-     * @param string $workingDirectory
+     * The method SHOULD execute the given command and return the trimmed output.
+     * The implementation MUST handle any necessary process execution and error handling,
+     * ensuring that the command is executed in the context of the specified working directory.
      *
-     * @return string
+     * @param list<string> $command Git command to execute (e.g., ['git', 'log', '--oneline']).
+     * @param string $workingDirectory Directory in which to execute the command (e.g., repository root).
+     *
+     * @return string trimmed output from the executed command
      */
     public function run(array $command, string $workingDirectory): string;
 }

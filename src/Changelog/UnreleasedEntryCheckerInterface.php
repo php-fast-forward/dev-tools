@@ -20,14 +20,23 @@ namespace FastForward\DevTools\Changelog;
 
 /**
  * Verifies that the changelog contains meaningful unreleased changes.
+ *
+ * This is used to prevent merging changes that have not been documented in the changelog.
+ * It compares the unreleased entries in the changelog against the current branch or a specified reference (e.g., a base branch or commit hash).
  */
 interface UnreleasedEntryCheckerInterface
 {
     /**
-     * @param string $workingDirectory
-     * @param string|null $againstReference
+     * Checks if there are pending unreleased entries in the changelog compared to a given reference.
      *
-     * @return bool
+     * This method MUST read the unreleased section of the changelog and compare it against the changes in the current branch or a specified reference.
+     * If there are entries in the unreleased section that are not present in the reference, it indicates that there are pending changes that have not been released yet.
+     * The method MUST return true if there are pending unreleased entries, and false otherwise.
+     *
+     * @param string $workingDirectory the working directory of the repository
+     * @param string|null $againstReference The reference to compare against (e.g., a branch or commit hash).
+     *
+     * @return bool true if there are pending unreleased entries, false otherwise
      */
     public function hasPendingChanges(string $workingDirectory, ?string $againstReference = null): bool;
 }

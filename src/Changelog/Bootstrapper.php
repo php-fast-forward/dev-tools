@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Changelog;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
-use function Safe\file_get_contents;
 use function rtrim;
 use function str_contains;
 use function str_replace;
@@ -34,24 +33,27 @@ use function substr;
 final readonly class Bootstrapper implements BootstrapperInterface
 {
     /**
-     * @param Filesystem|null $filesystem
-     * @param HistoryGeneratorInterface|null $historyGenerator
-     * @param KeepAChangelogConfigRenderer|null $configRenderer
+     * Initializes the `Bootstrapper` with optional dependencies.
+     *
+     * @param Filesystem $filesystem filesystem instance for file operations, allowing for easier testing and potential customization
+     * @param HistoryGeneratorInterface $historyGenerator history generator instance for generating changelog history
+     * @param KeepAChangelogConfigRenderer $configRenderer config renderer instance for rendering keep-a-changelog configuration
      */
     public function __construct(
-        private ?Filesystem $filesystem = null,
-        private ?HistoryGeneratorInterface $historyGenerator = null,
-        private ?KeepAChangelogConfigRenderer $configRenderer = null,
+        private Filesystem $filesystem = new Filesystem(),
+        private HistoryGeneratorInterface $historyGenerator = new HistoryGenerator(),
+        private KeepAChangelogConfigRenderer $configRenderer = new KeepAChangelogConfigRenderer(),
     ) {}
 
     /**
+     * Bootstraps changelog automation assets in the given working directory.
+     *
      * @param string $workingDirectory
      *
      * @return BootstrapResult
      */
     public function bootstrap(string $workingDirectory): BootstrapResult
     {
-        $filesystem = $this->filesystem ?? new Filesystem();
         $configPath = Path::join($workingDirectory, '.keep-a-changelog.ini');
         $changelogPath = Path::join($workingDirectory, 'CHANGELOG.md');
 
@@ -59,26 +61,22 @@ final readonly class Bootstrapper implements BootstrapperInterface
         $changelogCreated = false;
         $unreleasedCreated = false;
 
-        if (! $filesystem->exists($configPath)) {
-            $filesystem->dumpFile($configPath, ($this->configRenderer ?? new KeepAChangelogConfigRenderer())->render());
+        if (! $this->filesystem->exists($configPath)) {
+            $this->filesystem->dumpFile($configPath, $this->configRenderer->render());
             $configCreated = true;
         }
 
-        if (! $filesystem->exists($changelogPath)) {
-            $filesystem->dumpFile(
-                $changelogPath,
-                ($this->historyGenerator ?? new HistoryGenerator())
-                    ->generate($workingDirectory),
-            );
+        if (! $this->filesystem->exists($changelogPath)) {
+            $this->filesystem->dumpFile($changelogPath, $this->historyGenerator->generate($workingDirectory));
             $changelogCreated = true;
 
             return new BootstrapResult($configCreated, $changelogCreated, $unreleasedCreated);
         }
 
-        $contents = file_get_contents($changelogPath);
+        $contents = $this->filesystem->readFile($changelogPath);
 
         if (! str_contains($contents, '## Unreleased - ')) {
-            $filesystem->dumpFile($changelogPath, $this->prependUnreleasedSection($contents));
+            $this->filesystem->dumpFile($changelogPath, $this->prependUnreleasedSection($contents));
             $unreleasedCreated = true;
         }
 

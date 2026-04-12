@@ -24,9 +24,11 @@ namespace FastForward\DevTools\Changelog;
 final readonly class BootstrapResult
 {
     /**
-     * @param bool $configCreated
-     * @param bool $changelogCreated
-     * @param bool $unreleasedCreated
+     * Creates a new instance of `BootstrapResult`.
+     *
+     * @param bool $configCreated indicates whether the configuration file was created during bootstrap
+     * @param bool $changelogCreated Indicates whether the changelog file was created during bootstrap
+     * @param bool $unreleasedCreated Indicates whether the unreleased changelog file was created during bootstrap
      */
     public function __construct(
         public bool $configCreated,

@@ -20,10 +20,17 @@ namespace FastForward\DevTools\Changelog;
 
 /**
  * Bootstraps repository-local changelog automation artifacts.
+ *
+ * The BootstrapperInterface defines a contract for bootstrapping changelog automation assets in a given working directory.
+ * Implementations of this interface are MUST setup necessary files, configurations, or other resources required to enable
+ * changelog automation in a repository. The bootstrap method takes a working directory as input and returns a BootstrapResult
+ * indicating the outcome of the bootstrapping process.
  */
 interface BootstrapperInterface
 {
     /**
+     * Bootstraps changelog automation assets in the given working directory.
+     *
      * @param string $workingDirectory
      *
      * @return BootstrapResult

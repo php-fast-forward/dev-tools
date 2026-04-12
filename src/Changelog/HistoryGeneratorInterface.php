@@ -20,13 +20,23 @@ namespace FastForward\DevTools\Changelog;
 
 /**
  * Builds initial changelog markdown from repository release history.
+ *
+ * The HistoryGeneratorInterface defines a contract for generating changelog markdown based on the release history of a repository.
+ * Implementations of this interface MUST collect release metadata and commit subjects, classify and normalize commit subjects into changelog sections,
+ * and render the final changelog markdown.
  */
 interface HistoryGeneratorInterface
 {
     /**
-     * @param string $workingDirectory
+     * Generates changelog markdown from the release history of the repository in the given working directory.
      *
-     * @return string
+     * The generate method SHOULD collect release metadata and commit subjects using a GitReleaseCollectorInterface implementation,
+     * classify and normalize commit subjects into changelog sections using a CommitClassifierInterface implementation,
+     * and render the final changelog markdown using a MarkdownRenderer implementation. The method MUST return the generated changelog markdown as a string.
+     *
+     * @param string $workingDirectory Directory in which to generate the changelog (e.g., repository root).
+     *
+     * @return string Generated changelog markdown based on the repository's release history
      */
     public function generate(string $workingDirectory): string;
 }

@@ -30,9 +30,11 @@ use function ucfirst;
 final readonly class CommitClassifier implements CommitClassifierInterface
 {
     /**
-     * @param string $subject
+     * Classifies a commit subject into a changelog section based on conventional prefixes and keywords.
      *
-     * @return string
+     * @param string $subject commit subject to classify
+     *
+     * @return string Changelog section name (e.g., "Added", "Changed", "Deprecated", "Removed", "Fixed", "Security", or "Uncategorized").
      */
     public function classify(string $subject): string
     {
@@ -64,9 +66,11 @@ final readonly class CommitClassifier implements CommitClassifierInterface
     }
 
     /**
-     * @param string $subject
+     * Normalizes a commit subject by stripping conventional prefixes, tags, and extra whitespace, while preserving the core message.
      *
-     * @return string
+     * @param string $subject commit subject to normalize
+     *
+     * @return string normalized commit subject
      */
     public function normalize(string $subject): string
     {

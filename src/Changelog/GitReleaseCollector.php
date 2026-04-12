@@ -32,16 +32,20 @@ use function trim;
 final readonly class GitReleaseCollector implements GitReleaseCollectorInterface
 {
     /**
-     * @param GitProcessRunnerInterface $gitProcessRunner
+     * Initializes the GitReleaseCollector with a GitProcessRunner for executing git commands.
+     *
+     * @param GitProcessRunnerInterface $gitProcessRunner git process runner for executing git commands
      */
     public function __construct(
         private GitProcessRunnerInterface $gitProcessRunner = new GitProcessRunner()
     ) {}
 
     /**
-     * @param string $workingDirectory
+     * Collects release information from git tags in the specified working directory.
      *
-     * @return list<array{version: string, tag: string, date: string, commits: list<string>}>
+     * @param string $workingDirectory Directory in which to execute git commands (e.g., repository root).
+     *
+     * @return list<array{version: string, tag: string, date: string, commits: list<string>}> list of releases with version, tag, date, and associated commit subjects
      */
     public function collect(string $workingDirectory): array
     {
@@ -90,10 +94,12 @@ final readonly class GitReleaseCollector implements GitReleaseCollectorInterface
     }
 
     /**
-     * @param string $workingDirectory
-     * @param string $range
+     * Collects commit subjects for a given git range in the specified working directory.
      *
-     * @return list<string>
+     * @param string $workingDirectory Directory in which to execute git commands (e.g., repository root).
+     * @param string $range Git range to collect commits from (e.g., 'v1.0.0..v1.1.0' or 'v1.0.0').
+     *
+     * @return list<string> list of commit subjects for the specified range, excluding merges and ignored subjects
      */
     private function collectCommitSubjects(string $workingDirectory, string $range): array
     {
@@ -116,9 +122,11 @@ final readonly class GitReleaseCollector implements GitReleaseCollectorInterface
     }
 
     /**
-     * @param string $subject
+     * Determines whether a commit subject should be ignored based on common patterns (e.g., merge commits, wiki updates).
      *
-     * @return bool
+     * @param string $subject commit subject to evaluate for ignoring
+     *
+     * @return bool True if the subject should be ignored (e.g., empty, merge commits, wiki updates); false otherwise.
      */
     private function shouldIgnore(string $subject): bool
     {

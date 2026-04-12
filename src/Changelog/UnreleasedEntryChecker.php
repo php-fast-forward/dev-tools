@@ -36,17 +36,21 @@ use function trim;
 final readonly class UnreleasedEntryChecker implements UnreleasedEntryCheckerInterface
 {
     /**
-     * @param GitProcessRunnerInterface $gitProcessRunner
+     * Constructs a new UnreleasedEntryChecker.
+     *
+     * @param GitProcessRunnerInterface $gitProcessRunner the Git process runner
      */
     public function __construct(
         private GitProcessRunnerInterface $gitProcessRunner = new GitProcessRunner()
     ) {}
 
     /**
-     * @param string $workingDirectory
-     * @param string|null $againstReference
+     * Checks if there are pending unreleased entries in the changelog compared to a given reference.
      *
-     * @return bool
+     * @param string $workingDirectory the working directory of the repository
+     * @param string|null $againstReference The reference to compare against (e.g., a branch or commit hash).
+     *
+     * @return bool true if there are pending unreleased entries, false otherwise
      */
     public function hasPendingChanges(string $workingDirectory, ?string $againstReference = null): bool
     {
@@ -82,9 +86,11 @@ final readonly class UnreleasedEntryChecker implements UnreleasedEntryCheckerInt
     }
 
     /**
-     * @param string $contents
+     * Extracts unreleased entries from the given changelog content.
      *
-     * @return list<string>
+     * @param string $contents the changelog content
+     *
+     * @return list<string> the list of unreleased entries
      */
     private function extractEntries(string $contents): array
     {

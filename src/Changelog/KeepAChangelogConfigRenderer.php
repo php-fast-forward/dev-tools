@@ -26,7 +26,9 @@ use function implode;
 final readonly class KeepAChangelogConfigRenderer
 {
     /**
-     * @return string
+     * Renders the content of the keep-a-changelog configuration file.
+     *
+     * @return string the content of the keep-a-changelog configuration file as a string
      */
     public function render(): string
     {

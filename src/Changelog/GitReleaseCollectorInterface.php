@@ -20,13 +20,22 @@ namespace FastForward\DevTools\Changelog;
 
 /**
  * Discovers released tags and the commit subjects they contain.
+ *
+ * The GitReleaseCollectorInterface defines a contract for collecting release information from git tags in a specified working directory.
+ * Implementations of this interface are responsible for executing git commands to read tags and their associated commit subjects, building
+ * a structured list of releases that includes version, tag name, creation date, and commit
  */
 interface GitReleaseCollectorInterface
 {
     /**
-     * @param string $workingDirectory
+     * Collects release information from git tags in the specified working directory.
      *
-     * @return list<array{version: string, tag: string, date: string, commits: list<string>}>
+     * The method SHOULD read git tags and their associated commit subjects to build a structured list of releases.
+     * Each release entry MUST include the version, tag name, creation date, and a list of commit subjects that are part of that release.
+     *
+     * @param string $workingDirectory Directory in which to execute git commands (e.g., repository root).
+     *
+     * @return list<array{version: string, tag: string, date: string, commits: list<string>}> list of releases with version, tag, date, and associated commit subjects
      */
     public function collect(string $workingDirectory): array;
 }

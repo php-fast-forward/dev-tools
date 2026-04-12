@@ -32,9 +32,11 @@ final readonly class MarkdownRenderer
     private const array SECTION_ORDER = ['Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', 'Security'];
 
     /**
-     * @param list<array{version: string, date: string, entries: array<string, list<string>>}> $releases
+     * Renders the changelog markdown content.
      *
-     * @return string
+     * @param list<array{version: string, date: string, entries: array<string, list<string>>}> $releases list of releases with their version, date, and entries
+     *
+     * @return string the generated changelog markdown content
      */
     public function render(array $releases): string
     {
@@ -58,11 +60,13 @@ final readonly class MarkdownRenderer
     }
 
     /**
-     * @param string $version
-     * @param string $date
-     * @param array<string, list<string>> $entries
+     * Renders a section of the changelog for a specific release.
      *
-     * @return list<string>
+     * @param string $version the version of the release
+     * @param string $date the release date
+     * @param array<string, list<string>> $entries the entries for the release, categorized by section
+     *
+     * @return list<string> the rendered lines for the release section
      */
     private function renderSection(string $version, string $date, array $entries): array
     {
