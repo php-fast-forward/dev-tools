@@ -69,7 +69,7 @@ final class BootstrapperTest extends TestCase
             }
         };
 
-        $result = new Bootstrapper($this->filesystem, $historyGenerator)
+        $result = (new Bootstrapper($this->filesystem, $historyGenerator))
             ->bootstrap($workingDirectory);
 
         self::assertTrue($result->configCreated);
