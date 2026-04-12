@@ -53,6 +53,11 @@ jobs:
           BASE_REF: ${{ steps.base_ref.outputs.value }}
 
       - name: Verify unreleased changelog entries
-        run: vendor/bin/dev-tools changelog:check --against="refs/remotes/origin/${BASE_REF}"
+        uses: php-actions/composer@v6
         env:
           BASE_REF: ${{ steps.base_ref.outputs.value }}
+        with:
+          php_version: '8.3'
+          php_extensions: pcov pcntl
+          command: 'dev-tools'
+          args: 'changelog:check -- --against="refs/remotes/origin/${BASE_REF}"'
