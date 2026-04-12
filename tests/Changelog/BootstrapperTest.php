@@ -93,7 +93,7 @@ final class BootstrapperTest extends TestCase
         );
         $this->filesystem->dumpFile($workingDirectory . '/.keep-a-changelog.ini', "[defaults]\n");
 
-        $result = new Bootstrapper($this->filesystem)
+        $result = (new Bootstrapper($this->filesystem))
             ->bootstrap($workingDirectory);
 
         self::assertFalse($result->configCreated);
@@ -116,7 +116,7 @@ final class BootstrapperTest extends TestCase
         );
         $this->filesystem->dumpFile($workingDirectory . '/.keep-a-changelog.ini', "[defaults]\n");
 
-        $result = new Bootstrapper($this->filesystem)
+        $result = (new Bootstrapper($this->filesystem))
             ->bootstrap($workingDirectory);
 
         self::assertFalse($result->configCreated);
