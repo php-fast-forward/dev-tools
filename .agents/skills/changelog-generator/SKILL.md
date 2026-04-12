@@ -11,7 +11,32 @@ Generates and maintains CHANGELOG.md following the Keep a Changelog format with 
 
 - `phly/keep-a-changelog` - Installed in project
 - Git - For analyzing code changes
+- GitHub CLI (`gh`) - For reading PR context
 - Filesystem - For reading/writing CHANGELOG.md
+
+## PR Context Integration
+
+When generating changelog for changes that belong to a PR:
+
+1. Detect PR reference: Check git branch name or recent PR comments
+2. Fetch PR description: Use `gh pr view <pr-number> --json body`
+3. Extract context: Read the PR Summary and Changes sections
+4. Enhance descriptions: Use PR context to write more accurate changelog entries
+
+Example workflow:
+```bash
+# Detect current PR
+BRANCH=$(git branch --show-current)
+PR_NUM=$(echo "$BRANCH" | grep -oE '[0-9]+' | head -1)
+
+# Fetch PR context if exists
+if [ -n "$PR_NUM" ]; then
+  PR_BODY=$(gh pr view "$PR_NUM" --json body --jq '.body')
+  # Use PR body as an extra context to define the changelog descriptions
+fi
+```
+
+This ensures changelog descriptions align with the PR intent and provide better context.
 
 ## Key Commands
 
@@ -82,9 +107,19 @@ Analyze actual code changes, NOT commit messages:
 - **SPECIFIC**: Include class/method names
 - **SELF-SUFFICIENT**: Understand without reading code
 - **FUNCTIONAL**: Describe impact, not implementation
+- **PR-AWARE**: Use PR description to enhance accuracy when available
 
 Good: "Added `Bootstrapper::bootstrap()` to create CHANGELOG.md when missing"
 Bad: "Add bootstrap command"
+
+## PR Context Usage
+
+When a PR number is available:
+
+1. Read PR description for implementation intent
+2. Extract key capabilities mentioned in Summary
+3. Use specific feature names from the PR to write accurate descriptions
+4. Reference PR in changelog: "Added changelog automation (#40)"
 
 ## Integration with keep-a-changelog
 
