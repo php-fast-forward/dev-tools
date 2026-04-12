@@ -1,4 +1,4 @@
 interface:
   display_name: "Fast Forward Changelog Generator"
-  short_description: "Generate and maintain Keep a Changelog entries"
-  default_prompt: "Use $changelog-generator to create CHANGELOG.md from git tags"
+  short_description: "Generate changelog entries from Git diffs"
+  default_prompt: "Use $changelog-generator to generate or refresh CHANGELOG.md from git tags, code diffs, and current unreleased work."

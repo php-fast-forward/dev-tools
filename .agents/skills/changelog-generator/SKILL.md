@@ -1,153 +1,102 @@
 ---
 name: changelog-generator
-description: Generate and maintain CHANGELOG.md following Keep a Changelog format with human-readable descriptions. Use when: (1) Creating initial changelog from git tags, (2) Updating changelog for new releases, (3) Generating unreleased section for pull requests. Rule: NEVER use commit messages as source of truth - analyze code diffs instead.
+description: Generate or refresh human-readable CHANGELOG.md files that follow Keep a Changelog by comparing git tags and code diffs instead of commit messages. Use when Codex needs to bootstrap a changelog for a repository, backfill undocumented tagged releases, update release entries, or rewrite the Unreleased section for current branch work using the phly/keep-a-changelog commands available in the project.
 ---
 
 # Changelog Generator
 
-Generates and maintains CHANGELOG.md following the Keep a Changelog format with clear, specific, and self-sufficient descriptions.
+Generate changelog entries that a reader can understand without opening the code.
 
-## Dependencies
+## Deterministic Helpers
 
-- `phly/keep-a-changelog` - Installed in project
-- Git - For analyzing code changes
-- GitHub CLI (`gh`) - For reading PR context
-- Filesystem - For reading/writing CHANGELOG.md
-
-## PR Context Integration
-
-When generating changelog for changes that belong to a PR:
-
-1. Detect PR reference: Check git branch name or recent PR comments
-2. Fetch PR description: Use `gh pr view <pr-number> --json body`
-3. Extract context: Read the PR Summary and Changes sections
-4. Enhance descriptions: Use PR context to write more accurate changelog entries
-
-Example workflow:
-```bash
-# Detect current PR
-BRANCH=$(git branch --show-current)
-PR_NUM=$(echo "$BRANCH" | grep -oE '[0-9]+' | head -1)
-
-# Fetch PR context if exists
-if [ -n "$PR_NUM" ]; then
-  PR_BODY=$(gh pr view "$PR_NUM" --json body --jq '.body')
-  # Use PR body as an extra context to define the changelog descriptions
-fi
-```
-
-This ensures changelog descriptions align with the PR intent and provide better context.
-
-## Key Commands
+Use the bundled PHP scripts before manual analysis:
 
 ```bash
-vendor/bin/changelog             # Main CLI
-vendor/bin/changelog add:entry   # Add entry to version
-vendor/bin/changelog release    # Create release
+php .agents/skills/changelog-generator/scripts/changelog-state.php
+php .agents/skills/changelog-generator/scripts/diff-inventory.php <from-ref> <to-ref>
 ```
 
-## Execution Pipeline (Deterministic)
+- `changelog-state.php` reports changelog presence, documented versions, discovered tags, undocumented tags, and suggested release ranges as JSON.
+- `diff-inventory.php` reports changed files, line counts, and likely user-visible paths for a specific diff range as JSON.
+- Both scripts auto-discover the repository root and opportunistically load `vendor/autoload.php` when it exists.
 
-### Stage 1: Initial State
+## Workflow
 
-1. Check if CHANGELOG.md exists and has content:
-   ```bash
-   ls -la CHANGELOG.md 2>/dev/null || echo "NO_FILE"
-   ```
+1. Establish current state.
+- Read `CHANGELOG.md` if it exists.
+- Prefer `changelog-state.php` to gather versions and ranges before inspecting files manually.
+- Record documented versions and whether `## Unreleased - TBD` already exists.
+- List tags in ascending semantic order with `git tag --sort=version:refname`, and capture their commit dates when the repository may have retroactive or out-of-sequence tags.
+- Treat commit messages as navigation hints only; never derive final changelog text from them.
 
-### Stage 2: Version Discovery
+2. Choose diff ranges.
+- If `CHANGELOG.md` is missing or empty, analyze each tag range from the first tagged version onward.
+- If `CHANGELOG.md` already documents releases, start at the first tag after the last documented version.
+- When tag publication order differs from semantic order, prefer the actual tag chronology for release ordering and use diffs that follow that real release sequence.
+- Build `Unreleased` from the diff between the latest documented release or tag and `HEAD`.
 
-1. List all tags sorted semantically:
-   ```bash
-   git tag --sort=-version:refname
-   ```
+3. Analyze changes from diffs.
+- Prefer `diff-inventory.php <from> <to>` first so you can focus on the files most likely to affect user-visible behavior.
+- Start with `git diff --name-status <from> <to>` and `git diff --stat <from> <to>`.
+- Open targeted `git diff --unified=0 <from> <to> -- <path>` views for files that define public behavior, commands, config, schemas, workflows, or exposed APIs.
+- Classify entries by observed impact:
+  - `Added`: new files, APIs, commands, options, configuration, workflows, or user-visible capabilities
+  - `Changed`: modified behavior, signature or default changes, renamed flows, or compatibility-preserving refactors with visible impact
+  - `Fixed`: bug fixes, validation corrections, edge-case handling, or broken workflows
+  - `Removed`: deleted APIs, commands, config, or capabilities
+  - `Deprecated`: explicit deprecation notices or migration paths
+  - `Security`: hardening or vulnerability fixes
+- Skip pure churn that a reader would not care about unless it changes behavior or release expectations.
+- Deduplicate multiple file changes that describe the same user-visible outcome.
 
-2. Identify:
-   - Last documented version in CHANGELOG
-   - Tags not yet documented
+4. Write human-readable entries.
+- Write one line per change.
+- Prefer the functional effect over implementation detail.
+- Mention the concrete command, class, option, workflow, or API when that improves comprehension.
+- When a matching PR exists, append it to the line in the format `(#123)` after the diff already supports the entry.
+- Avoid vague phrases such as `misc improvements`, `refactorings`, or `code cleanup`.
 
-### Stage 3: Historical Content Generation
-
-**Case A: No CHANGELOG or Empty**
-
-For each tag (ascending order):
-1. Calculate diff between current tag and previous tag (or first commit for initial version)
-2. Analyze code diff to infer changes (NOT commit messages)
-3. Group changes by type (Added, Changed, Fixed, Removed, Deprecated, Security)
-4. Insert version section
-
-**B: Existing CHANGELOG**
-
-1. Identify last documented version
-2. For each subsequent tag:
-   - Generate diff between versions
-   - Insert new section in changelog
-
-### Stage 4: Unreleased Section
-
-1. Calculate diff between last documented tag and HEAD
-2. Generate [Unreleased] section with current changes
-
-## Change Classification (Inferred from Diff)
-
-Analyze actual code changes, NOT commit messages:
-
-| Pattern | Category |
-|---------|----------|
-| New files, new classes, new methods | Added |
-| Behavior changes, refactors, signature changes | Changed |
-| Bug fixes, validation fixes | Fixed |
-| Deleted classes, removed methods | Removed |
-| @deprecated markers | Deprecated |
-| Security patches | Security |
-
-## Quality Rules
-
-- **SHORT**: One line per change
-- **SPECIFIC**: Include class/method names
-- **SELF-SUFFICIENT**: Understand without reading code
-- **FUNCTIONAL**: Describe impact, not implementation
-- **PR-AWARE**: Use PR description to enhance accuracy when available
-
-Good: "Added `Bootstrapper::bootstrap()` to create CHANGELOG.md when missing"
-Bad: "Add bootstrap command"
-
-## PR Context Usage
-
-When a PR number is available:
-
-1. Read PR description for implementation intent
-2. Extract key capabilities mentioned in Summary
-3. Use specific feature names from the PR to write accurate descriptions
-4. Reference PR in changelog: "Added changelog automation (#40)"
-
-## Integration with keep-a-changelog
-
-Use CLI commands when possible:
+5. Apply changes with project tooling.
+- Prefer the local wrappers when available:
 
 ```bash
-# Add unreleased entry
-vendor/bin/changelog add:entry --unreleased --type=added "Description"
-
-# Add release entry
-vendor/bin/changelog add:entry 1.0.0 --type=added "Description"
-
-# Create release
-vendor/bin/changelog release 1.0.0 --date="2026-04-11"
+composer dev-tools changelog:init
+composer dev-tools changelog:check
 ```
 
-Edit CHANGELOG.md directly if CLI insufficient.
+- Use the official CLI for entries and releases:
 
-## Verification
+```bash
+vendor/bin/keep-a-changelog entry:added "..."
+vendor/bin/keep-a-changelog entry:changed "..."
+vendor/bin/keep-a-changelog entry:fixed "..."
+vendor/bin/keep-a-changelog unreleased:create --no-interaction
+vendor/bin/keep-a-changelog unreleased:promote 1.2.0 --date=2026-04-12 --no-interaction
+vendor/bin/keep-a-changelog version:show 1.2.0
+vendor/bin/keep-a-changelog version:release 1.2.0 --provider-token=...
+```
 
-Valid changelog MUST have:
-- All sections: Added, Changed, Deprecated, Removed, Fixed, Security
-- No "Nothing." placeholders (unless truly empty)
-- Reverse chronological order (newest first)
-- [Unreleased] at top when applicable
+- For large historical backfills, direct markdown editing is acceptable for the first draft. After that, use the CLI to keep `Unreleased` and future entries consistent.
+
+6. Verify the result.
+- Keep `Unreleased` first and released versions in reverse chronological order.
+- Keep section order as `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
+- Do not duplicate the same change across sections or versions.
+- Ensure every documented version maps to a real tag or intentional unreleased state.
+- Run local helpers such as `composer dev-tools changelog:check` when the project provides them.
+
+## PR Context
+
+Use PR descriptions, issue text, or release notes only to refine wording after diff analysis confirms the change. Good uses:
+
+- naming a feature exactly as presented to users
+- adding a stable reference like `(#123)`
+- understanding why a visible change matters when the diff alone is ambiguous
+
+Do not use PR text to invent entries that are not supported by the code diff.
 
 ## Reference Files
 
-- [references/keep-a-changelog-format.md](references/keep-a-changelog-format.md) - Format spec
-- [references/change-categories.md](references/change-categories.md) - Classification guide
-- [references/description-patterns.md](references/description-patterns.md) - Human-readable patterns
+- Read [references/keep-a-changelog-format.md](references/keep-a-changelog-format.md) for heading format, section order, and CLI mapping.
+- Read [references/change-categories.md](references/change-categories.md) when the diff spans multiple change types.
+- Read [references/description-patterns.md](references/description-patterns.md) when the first draft still sounds too internal or vague.

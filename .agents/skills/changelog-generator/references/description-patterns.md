@@ -4,14 +4,12 @@
 
 Rule: Describe the IMPACT, not the IMPLEMENTATION.
 
-## Quality Criteria
+## Checklist
 
-| Criterion | Good | Bad |
-|-----------|------|-----|
-| Specific | "Added `ChangelogCheckCommand` to verifies that the changelog contains pending unreleased notes." | "Added new feature" |
-| Short | One line | Paragraph |
-| Self-sufficient | "Creates CHANGELOG.md with all current version released" | "Bootstrap support" |
-| Actionable | "Added `--filter` option on TestsCommand to be able to filter test pattern classes" | "Improved CLI" |
+- Keep each entry to one line.
+- Name the surface that changed: class, command, option, workflow, API, or config.
+- Describe the user-visible effect first.
+- Avoid implementation verbs such as `extract`, `rename`, `refactor`, or `reorganize` unless the refactor itself changes behavior.
 
 ## Transformation Examples
 
@@ -22,7 +20,7 @@ Bad: "feat: add bootstrap"
 Good: "Added `Bootstrapper` class to create CHANGELOG.md when missing"
 
 Bad: "refactor: extract to new class"
-Good: "Extracted `CommitClassifier` for improved separation of concerns"
+Good: "Changed changelog generation to classify release entries by observed diff impact"
 
 Bad: "fix: validate unreleased notes"
 Good: "Fixed validation of unreleased changelog entries"
@@ -31,34 +29,38 @@ Bad: "chore: update dependencies"
 Good: N/A - Skip infrastructure-only changes
 ```
 
-## Class Names Pattern
+## Description templates
 
-Always include class/method names:
+Use these patterns when they fit the diff:
 
 ```markdown
-- Added `Bootstrapper` to bootstrap changelog assets
-- Added `MarkdownRenderer::render()` for generating output
-- Changed `Config::load()` to accept optional path parameter
-- Fixed `Parser::parse()` handling of empty input
+- Added `<surface>` to `<do what>` for `<benefit>`
+- Changed `<surface>` to `<new behavior>`
+- Fixed `<failure mode>` in `<surface>`
+- Removed deprecated `<surface>`
+- Deprecated `<surface>`; use `<replacement>`
 ```
 
-## API Changes Pattern
+## Concrete examples
 
 ```markdown
-- Added `CommandInterface::execute()` method
-- Changed `Parser::parse($input)` to accept optional `$options` array
+- Added `changelog:init` to bootstrap `.keep-a-changelog.ini` and `CHANGELOG.md`
+- Changed changelog sync to install reusable release-note workflows
+- Fixed bootstrap of the `Unreleased` section for existing changelog files
 - Removed deprecated `LegacyCommand`
-- Deprecated `Parser::process()`, use `Renderer::render()` instead
+- Deprecated `Parser::process()`; use `Renderer::render()` instead
 ```
 
-## Reference Patterns (PR)
+## Optional references
 
-When changes came from a PR:
+Append issue or PR references only when they add useful context and the diff already supports the entry:
 
 ```markdown
-- Added changelog automation (#28)
+- Added changelog automation (#40)
 - Changed workflow to use PHP 8.3 (#31)
 - Fixed validation bug (#42)
 ```
 
-This helps users find more context in PR history.
+When a matching pull request exists, prefer appending the PR reference in the format `(#123)` at the end of the line.
+
+Do not rely on the PR text as the source of truth.
