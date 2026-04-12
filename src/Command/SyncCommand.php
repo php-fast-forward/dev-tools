@@ -105,10 +105,6 @@ final class SyncCommand extends AbstractCommand
         $scripts = [
             'dev-tools' => 'dev-tools',
             'dev-tools:fix' => '@dev-tools --fix',
-            'dev-tools:changelog:init' => '@dev-tools changelog:init',
-            'dev-tools:changelog:check' => '@dev-tools changelog:check',
-            'dev-tools:changelog:promote' => 'keep-a-changelog unreleased:promote',
-            'dev-tools:changelog:release' => 'keep-a-changelog version:release',
         ];
 
         $extra = [

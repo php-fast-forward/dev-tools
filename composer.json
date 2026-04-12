@@ -104,10 +104,6 @@
     },
     "scripts": {
         "dev-tools": "dev-tools",
-        "dev-tools:changelog:check": "@dev-tools changelog:check",
-        "dev-tools:changelog:init": "@dev-tools changelog:init",
-        "dev-tools:changelog:promote": "keep-a-changelog unreleased:promote",
-        "dev-tools:changelog:release": "keep-a-changelog version:release",
         "dev-tools:fix": "@dev-tools --fix"
     }
 }

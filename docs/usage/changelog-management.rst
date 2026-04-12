@@ -50,8 +50,6 @@ for entry creation and release promotion:
 
 The synchronized Composer scripts expose the most common flows:
 
-- ``composer dev-tools:changelog:init``
-- ``composer dev-tools:changelog:check``
 - ``composer dev-tools:changelog:promote -- 1.5.0``
 - ``composer dev-tools:changelog:release -- 1.5.0 --provider-token=...``
 
