@@ -155,3 +155,4 @@ composer dev-tools
 - **Updating PHPDoc / PHP Style**: Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
 - **Drafting / Publishing GitHub Issues**: Use skill `github-issues` in `.agents/skills/github-issues/` to transform a short feature description into a complete, production-ready GitHub issue and create or update it on GitHub when needed
 - **Implementing Issues & PRs**: Use skill `github-pull-request` in `.agents/skills/github-pull-request/` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests
+- **Generating/Updating Changelog**: Use skill `changelog-generator` in `.agents/skills/changelog-generator/` to generate and maintain CHANGELOG.md following Keep a Changelog format with human-readable descriptions

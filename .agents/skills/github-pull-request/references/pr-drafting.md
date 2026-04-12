@@ -31,12 +31,24 @@ If no PR template exists, use the fallback structure below.
 - [Concrete change]
 - [Concrete change]
 
+## Changelog
+- Added `ClassName` for feature description (#PR)
+
 ## Testing
 - [Command and result]
 - [Command and result]
 
 Closes #123
 ```
+
+## Changelog Entry Rule
+
+Every PR that adds functionality MUST include a changelog entry. Use the `changelog-generator` skill to generate proper entries:
+
+- Short: one line per change
+- Specific: include changes human description
+- Self-sufficient: understandable without reading code
+- Reference the PR number: "Added `dev-tool:sync` command to sincronize repository files (#363)."
 
 ## Title Guidance
 

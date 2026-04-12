@@ -21,9 +21,20 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 - Branch from `main` or the repository integration branch, never from another feature branch.
 - Prefer local `git` for checkout, commit, and push.
 - Prefer connector-backed GitHub data for issue and PR context when available.
-- Use `phpunit-tests`, `package-readme`, and `sphinx-docs` when the change clearly affects tests or documentation.
+- Use `phpunit-tests`, `package-readme`, `sphinx-docs`, and `changelog-generator` when the change clearly affects tests or documentation.
 - Never manually close an issue; rely on `Closes #123` style text in the PR body.
 - Do not block waiting for merge. Open or update the PR, then report status and the next action.
+
+## Changelog Updates
+
+When implementing changes that affect functionality, use `changelog-generator` to update CHANGELOG.md:
+
+1. Run `changelog-generator` to analyze code changes since last release
+2. Add clear, specific descriptions following the skill's quality rules
+3. Include PR reference when applicable: "Added changelog automation (#40)"
+4. Update the [Unreleased] section for PR-specific changes
+
+This ensures every PR has proper changelog documentation before merge.
 
 ## Reference Guide
 
