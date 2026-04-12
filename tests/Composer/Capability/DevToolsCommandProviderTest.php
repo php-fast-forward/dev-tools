@@ -19,6 +19,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Composer\Capability;
 
 use FastForward\DevTools\Command\AbstractCommand;
+use FastForward\DevTools\Command\ChangelogCheckCommand;
+use FastForward\DevTools\Command\ChangelogInitCommand;
 use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\CopyLicenseCommand;
 use FastForward\DevTools\Command\DependenciesCommand;
@@ -49,6 +51,8 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(DevToolsCommandProvider::class)]
+#[UsesClass(ChangelogInitCommand::class)]
+#[UsesClass(ChangelogCheckCommand::class)]
 #[UsesClass(CodeStyleCommand::class)]
 #[UsesClass(RefactorCommand::class)]
 #[UsesClass(TestsCommand::class)]
@@ -96,6 +100,8 @@ final class DevToolsCommandProviderTest extends TestCase
                 new RefactorCommand(),
                 new TestsCommand(),
                 new DependenciesCommand(),
+                new ChangelogInitCommand(),
+                new ChangelogCheckCommand(),
                 new PhpDocCommand(),
                 new DocsCommand(),
                 new StandardsCommand(),

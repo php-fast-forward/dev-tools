@@ -36,6 +36,7 @@
         "icanhazstring/composer-unused": "^0.9.6",
         "jolicode/jolinotif": "^3.3",
         "nikic/php-parser": "^5.7",
+        "phly/keep-a-changelog": "^2.13",
         "phpdocumentor/shim": "^3.9",
         "phpro/grumphp": "^2.19",
         "phpspec/prophecy": "^1.26",
@@ -70,6 +71,7 @@
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
+            "php-http/discovery": true,
             "phpdocumentor/shim": true,
             "phpro/grumphp": true,
             "pyrech/composer-changelogs": true
@@ -102,6 +104,10 @@
     },
     "scripts": {
         "dev-tools": "dev-tools",
+        "dev-tools:changelog:check": "@dev-tools changelog:check",
+        "dev-tools:changelog:init": "@dev-tools changelog:init",
+        "dev-tools:changelog:promote": "keep-a-changelog unreleased:promote",
+        "dev-tools:changelog:release": "keep-a-changelog version:release",
         "dev-tools:fix": "@dev-tools --fix"
     }
 }

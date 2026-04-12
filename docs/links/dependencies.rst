@@ -55,6 +55,9 @@ Documentation and Reporting
      - Provides the default HTML theme used by ``docs``.
    * - ``esi/phpunit-coverage-check``
      - Enforces the minimum coverage threshold in the reusable test workflow.
+   * - ``phly/keep-a-changelog``
+     - Powers changelog bootstrapping, unreleased promotion, and release note
+       synchronization.
 
 Testing and Local Developer Experience
 --------------------------------------

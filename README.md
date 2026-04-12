@@ -18,6 +18,8 @@ across Fast Forward libraries.
   single Composer-facing command vocabulary
 - Adds dependency analysis for missing and unused Composer packages through a
   single report entrypoint
+- Bootstraps Keep a Changelog automation, reusable release workflows, and
+  GitHub release note synchronization
 - Ships shared workflow stubs, `.editorconfig`, Dependabot configuration, and
   other onboarding defaults for consumer repositories
 - Synchronizes packaged agent skills into consumer `.agents/skills`
@@ -53,6 +55,10 @@ composer dev-tools tests
 composer dependencies
 vendor/bin/dev-tools dependencies
 
+# Bootstrap and validate Keep a Changelog assets
+composer dev-tools changelog:init
+composer dev-tools changelog:check
+
 # Check and fix code style using ECS and Composer Normalize
 composer dev-tools code-style
 
@@ -84,8 +90,8 @@ composer dev-tools gitattributes
 composer dev-tools license
 
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows,
-# .editorconfig, .gitignore rules, packaged skills, and the repository wiki
-# submodule in .github/wiki
+# changelog automation assets, .editorconfig, .gitignore rules, packaged
+# skills, and the repository wiki submodule in .github/wiki
 composer dev-tools:sync
 ```
 
@@ -106,10 +112,12 @@ automation assets.
 | `composer dev-tools` | Runs the full `standards` pipeline. |
 | `composer dev-tools tests` | Runs PHPUnit with local-or-packaged configuration. |
 | `composer dev-tools dependencies` | Reports missing and unused Composer dependencies. |
+| `composer dev-tools changelog:init` | Creates local changelog automation assets. |
+| `composer dev-tools changelog:check` | Verifies the `Unreleased` changelog section contains new notes. |
 | `composer dev-tools docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer dev-tools skills` | Creates or repairs packaged skill links in `.agents/skills`. |
 | `composer dev-tools gitattributes` | Manages export-ignore rules in .gitattributes. |
-| `composer dev-tools:sync` | Updates scripts, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
+| `composer dev-tools:sync` | Updates scripts, workflow stubs, changelog assets, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
 
 ## 🔌 Integration
 
@@ -117,13 +125,16 @@ DevTools integrates with consumer repositories in two ways. The Composer plugin
 exposes the command set automatically after installation, and the local binary
 keeps the same command vocabulary when you prefer running tools directly from
 `vendor/bin/dev-tools`. The consumer sync flow also refreshes `.agents/skills`
-so agents can discover the packaged skills shipped with this repository.
+so agents can discover the packaged skills shipped with this repository. It
+also bootstraps `.keep-a-changelog.ini`, `CHANGELOG.md`, and reusable release
+workflows for changelog enforcement.
 
 ## 🤝 Contributing
 
 Run `composer dev-tools` before opening a pull request. If you change public
 commands or consumer onboarding behavior, update `README.md` and `docs/`
-together so downstream libraries keep accurate guidance.
+together so downstream libraries keep accurate guidance, and add a note to the
+`Unreleased` section of `CHANGELOG.md`.
 
 ## 📄 License
 

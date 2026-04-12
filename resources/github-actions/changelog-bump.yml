@@ -1,0 +1,15 @@
+name: "Fast Forward Changelog Bootstrap"
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  changelog-bootstrap:
+    uses: php-fast-forward/dev-tools/.github/workflows/changelog-bump.yml@main
+    secrets: inherit

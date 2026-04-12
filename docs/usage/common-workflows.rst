@@ -19,6 +19,13 @@ Most day-to-day work falls into one of the flows below.
    * - Refresh only test results
      - ``composer dev-tools tests``
      - Runs PHPUnit with the resolved ``phpunit.xml``.
+   * - Bootstrap or repair changelog automation
+     - ``composer dev-tools changelog:init``
+     - Creates ``.keep-a-changelog.ini`` and missing ``CHANGELOG.md`` assets.
+   * - Verify a pull request updated the changelog
+     - ``composer dev-tools changelog:check``
+     - Fails when the ``Unreleased`` section does not contain a meaningful
+       note.
    * - Refresh only the documentation site
      - ``composer dev-tools docs``
      - Runs phpDocumentor using PSR-4 namespaces and the ``docs/`` guide.
@@ -46,10 +53,11 @@ A Safe Beginner Routine
 -----------------------
 
 1. Run ``composer dev-tools tests``.
-2. Run ``composer dev-tools skills`` if you changed packaged consumer skills.
-3. Run ``composer dev-tools docs`` if you changed guides or public APIs.
-4. Run ``composer dev-tools:fix`` when you want automated help.
-5. Run ``composer dev-tools`` before pushing.
+2. Run ``composer dev-tools changelog:check`` before opening a pull request.
+3. Run ``composer dev-tools skills`` if you changed packaged consumer skills.
+4. Run ``composer dev-tools docs`` if you changed guides or public APIs.
+5. Run ``composer dev-tools:fix`` when you want automated help.
+6. Run ``composer dev-tools`` before pushing.
 
 .. tip::
 

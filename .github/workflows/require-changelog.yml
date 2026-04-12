@@ -1,0 +1,58 @@
+name: Require Changelog Entry
+
+on:
+  workflow_call:
+    inputs:
+      base-ref:
+        type: string
+        required: false
+        default: main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  require-changelog:
+    name: Require Changelog Update
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+          COMPOSER_CACHE_DIR: /tmp/composer-cache
+        with:
+          php_version: '8.3'
+          command: 'install'
+          args: '--prefer-dist --no-progress --no-interaction --no-scripts'
+
+      - name: Resolve base reference
+        id: base_ref
+        run: echo "value=${INPUT_BASE_REF:-${GITHUB_BASE_REF:-main}}" >> "$GITHUB_OUTPUT"
+        env:
+          INPUT_BASE_REF: ${{ inputs.base-ref }}
+
+      - name: Fetch base reference
+        run: git fetch origin "${BASE_REF}" --depth=1
+        env:
+          BASE_REF: ${{ steps.base_ref.outputs.value }}
+
+      - name: Verify unreleased changelog entries
+        run: vendor/bin/dev-tools changelog:check --against="refs/remotes/origin/${BASE_REF}"
+        env:
+          BASE_REF: ${{ steps.base_ref.outputs.value }}

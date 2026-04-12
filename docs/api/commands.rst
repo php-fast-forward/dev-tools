@@ -33,6 +33,12 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
    * - ``FastForward\DevTools\Command\DependenciesCommand``
      - ``dependencies``
      - Reports missing and unused Composer dependencies.
+   * - ``FastForward\DevTools\Command\ChangelogInitCommand``
+     - ``changelog:init``
+     - Bootstraps ``CHANGELOG.md`` and keep-a-changelog configuration.
+   * - ``FastForward\DevTools\Command\ChangelogCheckCommand``
+     - ``changelog:check``
+     - Verifies that the ``Unreleased`` section contains meaningful notes.
    * - ``FastForward\DevTools\Command\DocsCommand``
      - ``docs``
      - Builds the HTML documentation site.
@@ -47,11 +53,11 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
      - Synchronizes packaged agent skills into ``.agents/skills``.
    * - ``FastForward\DevTools\Command\SyncCommand``
      - ``dev-tools:sync``
-     - Synchronizes consumer-facing scripts, automation assets, and packaged
-       skills.
-    * - ``FastForward\DevTools\Command\GitIgnoreCommand``
-      - ``gitignore``
-      - Merges and synchronizes .gitignore files.
-    * - ``FastForward\DevTools\Command\CopyLicenseCommand``
-      - ``license``
-      - Generates a LICENSE file from composer.json license information.
+     - Synchronizes consumer-facing scripts, automation assets, changelog
+       workflows, and packaged skills.
+   * - ``FastForward\DevTools\Command\GitIgnoreCommand``
+     - ``gitignore``
+     - Merges and synchronizes .gitignore files.
+   * - ``FastForward\DevTools\Command\CopyLicenseCommand``
+     - ``license``
+     - Generates a LICENSE file from composer.json license information.

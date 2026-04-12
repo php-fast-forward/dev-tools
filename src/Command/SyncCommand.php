@@ -47,10 +47,10 @@ final class SyncCommand extends AbstractCommand
         $this
             ->setName('dev-tools:sync')
             ->setDescription(
-                'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.'
+                'Installs and synchronizes dev-tools scripts, reusable workflows, changelog assets, .editorconfig, and archive metadata in the root project.'
             )
             ->setHelp(
-                'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.'
+                'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, bootstraps changelog automation assets, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.'
             );
     }
 
@@ -78,6 +78,7 @@ final class SyncCommand extends AbstractCommand
         $this->runCommand('gitattributes', $output);
         $this->runCommand('skills', $output);
         $this->runCommand('license', $output);
+        $this->runCommand('changelog:init', $output);
 
         return self::SUCCESS;
     }
@@ -104,6 +105,10 @@ final class SyncCommand extends AbstractCommand
         $scripts = [
             'dev-tools' => 'dev-tools',
             'dev-tools:fix' => '@dev-tools --fix',
+            'dev-tools:changelog:init' => '@dev-tools changelog:init',
+            'dev-tools:changelog:check' => '@dev-tools changelog:check',
+            'dev-tools:changelog:promote' => 'keep-a-changelog unreleased:promote',
+            'dev-tools:changelog:release' => 'keep-a-changelog version:release',
         ];
 
         $extra = [

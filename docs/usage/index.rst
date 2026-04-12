@@ -8,6 +8,7 @@ task-oriented guidance instead of class-by-class reference.
    :maxdepth: 1
 
    common-workflows
+   changelog-management
    testing-and-coverage
    documentation-workflows
    syncing-packaged-skills

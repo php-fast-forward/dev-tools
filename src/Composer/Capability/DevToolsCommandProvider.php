@@ -24,6 +24,8 @@ use FastForward\DevTools\Command\CodeStyleCommand;
 use FastForward\DevTools\Command\CopyLicenseCommand;
 use FastForward\DevTools\Command\DependenciesCommand;
 use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Command\ChangelogInitCommand;
+use FastForward\DevTools\Command\ChangelogCheckCommand;
 use FastForward\DevTools\Command\GitAttributesCommand;
 use FastForward\DevTools\Command\GitIgnoreCommand;
 use FastForward\DevTools\Command\PhpDocCommand;
@@ -56,6 +58,8 @@ final class DevToolsCommandProvider implements CommandProviderCapability
             new RefactorCommand(),
             new TestsCommand(),
             new DependenciesCommand(),
+            new ChangelogInitCommand(),
+            new ChangelogCheckCommand(),
             new PhpDocCommand(),
             new DocsCommand(),
             new StandardsCommand(),

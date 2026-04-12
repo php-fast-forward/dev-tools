@@ -1,0 +1,15 @@
+name: "Fast Forward Changelog Gate"
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  require-changelog:
+    uses: php-fast-forward/dev-tools/.github/workflows/require-changelog.yml@main
+    with:
+      base-ref: ${{ github.base_ref || 'main' }}
+    secrets: inherit

@@ -1,0 +1,17 @@
+name: "Fast Forward Release Notes Sync"
+
+on:
+  release:
+    types:
+      - published
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    uses: php-fast-forward/dev-tools/.github/workflows/release.yml@main
+    with:
+      tag-name: ${{ github.event.release.tag_name || github.ref_name }}
+    secrets: inherit

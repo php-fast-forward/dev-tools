@@ -1,0 +1,56 @@
+name: Bootstrap Changelog Automation
+
+on:
+  workflow_call:
+  workflow_dispatch:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: changelog-bootstrap-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  changelog-bootstrap:
+    name: Bootstrap Changelog Assets
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+          COMPOSER_CACHE_DIR: /tmp/composer-cache
+        with:
+          php_version: '8.3'
+          command: 'install'
+          args: '--prefer-dist --no-progress --no-interaction --no-scripts'
+
+      - name: Bootstrap changelog assets
+        run: vendor/bin/dev-tools changelog:init
+
+      - name: Commit changelog assets
+        uses: EndBug/add-and-commit@v10
+        with:
+          add: CHANGELOG.md .keep-a-changelog.ini
+          message: "Bootstrap changelog automation"
+          default_author: github_actions
+          pull: "--rebase --autostash"
+          push: true

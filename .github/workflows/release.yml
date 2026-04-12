@@ -1,0 +1,96 @@
+name: Sync Release Notes from CHANGELOG
+
+on:
+  workflow_call:
+    inputs:
+      tag-name:
+        type: string
+        required: false
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  release-notes:
+    name: Promote CHANGELOG and Sync Release Notes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          token: ${{ github.token }}
+          fetch-depth: 0
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v5
+        with:
+          path: /tmp/composer-cache
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        uses: php-actions/composer@v6
+        env:
+          COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+          COMPOSER_CACHE_DIR: /tmp/composer-cache
+        with:
+          php_version: '8.3'
+          command: 'install'
+          args: '--prefer-dist --no-progress --no-interaction --no-scripts'
+
+      - name: Resolve release metadata
+        id: release
+        run: |
+          TAG="${INPUT_TAG_NAME:-${EVENT_TAG_NAME:-${GITHUB_REF_NAME}}}"
+          VERSION="${TAG#v}"
+          DATE_VALUE="${EVENT_PUBLISHED_AT%%T*}"
+
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "date=${DATE_VALUE:-$(date +%F)}" >> "$GITHUB_OUTPUT"
+        env:
+          INPUT_TAG_NAME: ${{ inputs.tag-name }}
+          EVENT_TAG_NAME: ${{ github.event.release.tag_name }}
+          EVENT_PUBLISHED_AT: ${{ github.event.release.published_at }}
+
+      - name: Promote unreleased changelog entry
+        run: |
+          VERSION="${{ steps.release.outputs.version }}"
+          DATE_VALUE="${{ steps.release.outputs.date }}"
+
+          if grep -q "^## ${VERSION} - " CHANGELOG.md; then
+            echo "Release ${VERSION} already exists in CHANGELOG.md."
+          elif grep -q "^## Unreleased - " CHANGELOG.md; then
+            vendor/bin/keep-a-changelog unreleased:promote "${VERSION}" --date="${DATE_VALUE}" --no-interaction
+          else
+            echo "No Unreleased section found; skipping promotion."
+          fi
+
+      - name: Ensure the next Unreleased section exists
+        run: |
+          if ! grep -q "^## Unreleased - " CHANGELOG.md; then
+            vendor/bin/keep-a-changelog unreleased:create --no-interaction
+          fi
+
+      - name: Commit CHANGELOG updates
+        uses: EndBug/add-and-commit@v10
+        with:
+          add: CHANGELOG.md
+          message: "Sync changelog for ${{ steps.release.outputs.tag }}"
+          default_author: github_actions
+          pull: "--rebase --autostash"
+          push: true
+
+      - name: Export release notes from CHANGELOG
+        run: vendor/bin/keep-a-changelog version:show "${{ steps.release.outputs.version }}" > release-notes.md
+
+      - name: Update GitHub release notes
+        run: gh release edit "${TAG}" --notes-file release-notes.md
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.release.outputs.tag }}

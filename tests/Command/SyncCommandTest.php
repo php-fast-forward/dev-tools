@@ -71,7 +71,7 @@ final class SyncCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandDescription(): string
     {
-        return 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.';
+        return 'Installs and synchronizes dev-tools scripts, reusable workflows, changelog assets, .editorconfig, and archive metadata in the root project.';
     }
 
     /**
@@ -79,7 +79,7 @@ final class SyncCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandHelp(): string
     {
-        return 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.';
+        return 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, bootstraps changelog automation assets, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.';
     }
 
     /**
