@@ -20,7 +20,6 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
-use FastForward\DevTools\Console\Command\CodeStyleCommand;
 use FastForward\DevTools\Console\DevTools;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -31,8 +30,6 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(DevToolsCommandProvider::class)]
 #[UsesClass(DevTools::class)]
@@ -41,6 +38,7 @@ final class DevToolsCommandProviderTest extends TestCase
     use ProphecyTrait;
 
     private ObjectProphecy $container;
+
     private ObjectProphecy $devTools;
 
     private DevToolsCommandProvider $commandProvider;
@@ -57,7 +55,8 @@ final class DevToolsCommandProviderTest extends TestCase
             ->willReturn($this->devTools->reveal())
             ->shouldBeCalledOnce();
 
-        $this->devTools->all()->willReturn([])->shouldBeCalledOnce();
+        $this->devTools->all()
+            ->willReturn([])->shouldBeCalledOnce();
 
         $this->commandProvider = new DevToolsCommandProvider();
 
@@ -65,6 +64,9 @@ final class DevToolsCommandProviderTest extends TestCase
         $property->setValue(null, $this->container->reveal());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function getCommandsWillReturnEmptyArrayWhenNoCommandsAreRegistered(): void
     {
@@ -74,16 +76,17 @@ final class DevToolsCommandProviderTest extends TestCase
         self::assertEmpty($commands);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function getCommandsWillReturnRegisteredBaseCommands(): void
     {
         $composerCommand = $this->prophesize(BaseCommand::class)->reveal();
         $symfonyCommand = $this->prophesize(Command::class)->reveal();
 
-        $this->devTools->all()->willReturn([
-            $composerCommand,
-            $symfonyCommand,
-        ])->shouldBeCalledOnce();
+        $this->devTools->all()
+            ->willReturn([$composerCommand, $symfonyCommand])->shouldBeCalledOnce();
 
         $commands = $this->commandProvider->getCommands();
 

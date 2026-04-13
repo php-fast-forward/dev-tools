@@ -58,7 +58,7 @@ final class DevTools extends ComposerApplication
      */
     public static function create(): self
     {
-        if (self::$container === null) {
+        if (! self::$container instanceof ContainerInterface) {
             $serviceProvider = new DevToolsServiceProvider();
             self::$container = new Container($serviceProvider->getFactories());
         }
