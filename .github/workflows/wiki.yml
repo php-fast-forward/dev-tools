@@ -44,20 +44,20 @@ jobs:
           command: 'install'
           args: '--prefer-dist --no-progress --no-interaction --no-scripts'
 
+      - name: Prepare wiki submodule branch
+        working-directory: .github/wiki
+        run: |
+          git fetch origin master
+          git switch -C master --track origin/master || git switch master
+          git reset --hard origin/master
+          git clean -fd
+
       - name: Create Docs Markdown
         uses: php-actions/composer@v6
         with:
           php_version: '8.3'
           command: 'dev-tools'
           args: 'wiki -- --target=.github/wiki'
-
-      - name: Prepare wiki submodule branch
-        id: wiki_branch
-        working-directory: .github/wiki
-        run: |
-          git fetch origin
-          git checkout master || git checkout -b master
-          echo "branch=master" >> "$GITHUB_OUTPUT"
 
       - name: Commit & push wiki submodule
         id: wiki_commit
