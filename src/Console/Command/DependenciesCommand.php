@@ -28,9 +28,12 @@ use Symfony\Component\Process\Process;
  * This command MUST report missing and unused dependencies using a single,
  * deterministic report that is friendly for local development and CI runs.
  */
-#[AsCommand(name: 'dependencies', description: 'Analyzes missing and unused Composer dependencies.', aliases: [
-    'deps',
-], help: 'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.')]
+#[AsCommand(
+    name: 'dependencies',
+    description: 'Analyzes missing and unused Composer dependencies.',
+    aliases: ['deps'],
+    help: 'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.'
+)]
 final class DependenciesCommand extends AbstractCommand
 {
     /**
