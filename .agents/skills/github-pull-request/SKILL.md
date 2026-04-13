@@ -21,18 +21,25 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 - Branch from `main` or the repository integration branch, never from another feature branch.
 - Prefer local `git` for checkout, commit, and push.
 - Prefer connector-backed GitHub data for issue and PR context when available.
-- Use `phpunit-tests`, `package-readme`, `sphinx-docs`, and `changelog-generator` when the change clearly affects tests or documentation.
+- Use `phpunit-tests`, `package-readme`, `sphinx-docs`, and `changelog-generator` whenever a change affects testable behavior, public APIs, documented usage, or the change history — including adding, modifying, or removing features, bug fixes, or contract changes.
 - Never manually close an issue; rely on `Closes #123` style text in the PR body.
 - Do not block waiting for merge. Open or update the PR, then report status and the next action.
 
 ## Changelog Updates
 
-When implementing changes that affect functionality, use `changelog-generator` to update CHANGELOG.md:
+For any change that is user-visible or affects behavior, use `changelog-generator` to update CHANGELOG.md.
 
-1. Run `changelog-generator` to analyze code changes since last release
-2. Add clear, specific descriptions following the skill's quality rules
-3. Include PR reference when applicable: "Added changelog automation (#40)"
-4. Update the [Unreleased] section for PR-specific changes
+1. Use the `changelog-generator` skill to analyze code changes since last release
+2. Add entries under the [Unreleased] section only for PR-specific changes
+3. Write concise, specific, user-facing descriptions (avoid implementation details) following the skill's quality rules
+4. Include PR reference when applicable: "Added changelog automation (#40)"
+5. Group entries by type if applicable (e.g., Added, Fixed, Changed, Breaking)
+
+**Rules**:
+
+- Do not duplicate existing entries
+- Do not move or modify past releases
+- Every eligible PR must include its changelog entry before merge
 
 This ensures every PR has proper changelog documentation before merge.
 
