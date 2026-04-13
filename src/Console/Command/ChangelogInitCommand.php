@@ -16,9 +16,8 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\Changelog\Bootstrapper;
 use FastForward\DevTools\Changelog\BootstrapperInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,8 +33,8 @@ final class ChangelogInitCommand extends AbstractCommand
      * @param BootstrapperInterface|null $bootstrapper
      */
     public function __construct(
-        ?Filesystem $filesystem = null,
-        private readonly ?BootstrapperInterface $bootstrapper = null,
+        private readonly BootstrapperInterface $bootstrapper,
+        Filesystem $filesystem,
     ) {
         parent::__construct($filesystem);
     }
@@ -61,7 +60,7 @@ final class ChangelogInitCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $result = ($this->bootstrapper ?? new Bootstrapper($this->filesystem))
+        $result = $this->bootstrapper
             ->bootstrap($this->getCurrentWorkingDirectory());
 
         if ($result->configCreated) {

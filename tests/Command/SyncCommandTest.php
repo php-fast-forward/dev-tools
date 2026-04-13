@@ -18,8 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\GitIgnoreCommand;
-use FastForward\DevTools\Command\SyncCommand;
+use FastForward\DevTools\Console\Command\GitIgnoreCommand;
+use FastForward\DevTools\Console\Command\SyncCommand;
 use FastForward\DevTools\GitAttributes\CandidateProvider;
 use FastForward\DevTools\GitAttributes\ExistenceChecker;
 use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;

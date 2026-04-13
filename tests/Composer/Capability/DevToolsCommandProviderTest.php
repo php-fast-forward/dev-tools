@@ -18,68 +18,29 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Composer\Capability;
 
-use FastForward\DevTools\Command\AbstractCommand;
-use FastForward\DevTools\Command\ChangelogCheckCommand;
-use FastForward\DevTools\Command\ChangelogInitCommand;
-use FastForward\DevTools\Command\CodeStyleCommand;
-use FastForward\DevTools\Command\CopyLicenseCommand;
-use FastForward\DevTools\Command\DependenciesCommand;
-use FastForward\DevTools\Command\DocsCommand;
-use FastForward\DevTools\Command\GitAttributesCommand;
-use FastForward\DevTools\Command\GitIgnoreCommand;
-use FastForward\DevTools\Command\SyncCommand;
-use FastForward\DevTools\Command\SkillsCommand;
-use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
-use FastForward\DevTools\Changelog\UnreleasedEntryChecker;
-use FastForward\DevTools\Command\PhpDocCommand;
-use FastForward\DevTools\Command\RefactorCommand;
-use FastForward\DevTools\Command\ReportsCommand;
-use FastForward\DevTools\Command\StandardsCommand;
-use FastForward\DevTools\Command\TestsCommand;
-use FastForward\DevTools\Command\WikiCommand;
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
-use FastForward\DevTools\GitAttributes\CandidateProvider;
-use FastForward\DevTools\GitAttributes\ExistenceChecker;
-use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
-use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
-use FastForward\DevTools\GitAttributes\Reader as GitAttributesReader;
-use FastForward\DevTools\GitAttributes\Writer as GitAttributesWriter;
-use FastForward\DevTools\GitIgnore\Merger as GitIgnoreMerger;
-use FastForward\DevTools\GitIgnore\Writer;
+use FastForward\DevTools\Console\DevTools;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Container\ContainerInterface;
+use ReflectionProperty;
+use Symfony\Component\Console\Command\Command;
 
 #[CoversClass(DevToolsCommandProvider::class)]
-#[UsesClass(ChangelogInitCommand::class)]
-#[UsesClass(ChangelogCheckCommand::class)]
-#[UsesClass(CodeStyleCommand::class)]
-#[UsesClass(RefactorCommand::class)]
-#[UsesClass(TestsCommand::class)]
-#[UsesClass(DependenciesCommand::class)]
-#[UsesClass(PhpDocCommand::class)]
-#[UsesClass(DocsCommand::class)]
-#[UsesClass(StandardsCommand::class)]
-#[UsesClass(ReportsCommand::class)]
-#[UsesClass(WikiCommand::class)]
-#[UsesClass(SyncCommand::class)]
-#[UsesClass(GitIgnoreCommand::class)]
-#[UsesClass(GitAttributesCommand::class)]
-#[UsesClass(SkillsCommand::class)]
-#[UsesClass(CopyLicenseCommand::class)]
-#[UsesClass(SkillsSynchronizer::class)]
-#[UsesClass(CandidateProvider::class)]
-#[UsesClass(ExistenceChecker::class)]
-#[UsesClass(ExportIgnoreFilter::class)]
-#[UsesClass(GitAttributesMerger::class)]
-#[UsesClass(GitAttributesReader::class)]
-#[UsesClass(GitAttributesWriter::class)]
-#[UsesClass(GitIgnoreMerger::class)]
-#[UsesClass(Writer::class)]
-#[UsesClass(UnreleasedEntryChecker::class)]
+#[UsesClass(DevTools::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
+    use ProphecyTrait;
+
+    private ObjectProphecy $container;
+
+    private ObjectProphecy $devTools;
+
     private DevToolsCommandProvider $commandProvider;
 
     /**
@@ -87,46 +48,50 @@ final class DevToolsCommandProviderTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->devTools = $this->prophesize(DevTools::class);
+
+        $this->container->get(DevTools::class)
+            ->willReturn($this->devTools->reveal())
+            ->shouldBeCalledOnce();
+
+        $this->devTools->all()
+            ->willReturn([])->shouldBeCalledOnce();
+
         $this->commandProvider = new DevToolsCommandProvider();
+
+        $property = new ReflectionProperty(DevTools::class, 'container');
+        $property->setValue(null, $this->container->reveal());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function getCommandsWillReturnAllSupportedCommandsInExpectedOrder(): void
+    public function getCommandsWillReturnEmptyArrayWhenNoCommandsAreRegistered(): void
     {
-        self::assertEquals(
-            [
-                new CodeStyleCommand(),
-                new RefactorCommand(),
-                new TestsCommand(),
-                new DependenciesCommand(),
-                new ChangelogInitCommand(),
-                new ChangelogCheckCommand(),
-                new PhpDocCommand(),
-                new DocsCommand(),
-                new StandardsCommand(),
-                new ReportsCommand(),
-                new WikiCommand(),
-                new SyncCommand(),
-                new GitIgnoreCommand(),
-                new GitAttributesCommand(),
-                new SkillsCommand(),
-                new CopyLicenseCommand(),
-            ],
-            $this->commandProvider->getCommands(),
-        );
+        $commands = $this->commandProvider->getCommands();
+
+        self::assertIsArray($commands);
+        self::assertEmpty($commands);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function getCommandsWillReturnOnlyAbstractCommandImplementations(): void
+    public function getCommandsWillReturnRegisteredBaseCommands(): void
     {
-        foreach ($this->commandProvider->getCommands() as $command) {
-            self::assertInstanceOf(AbstractCommand::class, $command);
-        }
+        $composerCommand = $this->prophesize(BaseCommand::class)->reveal();
+        $symfonyCommand = $this->prophesize(Command::class)->reveal();
+
+        $this->devTools->all()
+            ->willReturn([$composerCommand, $symfonyCommand])->shouldBeCalledOnce();
+
+        $commands = $this->commandProvider->getCommands();
+
+        self::assertIsArray($commands);
+        self::assertCount(1, $commands);
+        self::assertSame($composerCommand, $commands[0]);
     }
 }

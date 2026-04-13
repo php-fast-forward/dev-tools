@@ -7,7 +7,7 @@ without forking the whole package.
 Resolution Order
 ----------------
 
-``FastForward\DevTools\Command\AbstractCommand::getConfigFile()`` resolves
+``FastForward\DevTools\Console\Command\AbstractCommand::getConfigFile()`` resolves
 configuration in this order:
 
 1. Check whether the file exists in the current working directory.

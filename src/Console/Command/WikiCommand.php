@@ -16,19 +16,41 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Composer\Json\ComposerJson;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 /**
  * Handles the generation of API documentation for the project.
  * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
  */
+#[AsCommand(
+    name: 'wiki',
+    description: 'Generates API documentation in Markdown format.',
+    help: 'This command generates API documentation in Markdown format using phpDocumentor. '
+    . 'It accepts an optional `--target` option to specify the output directory for the generated documentation.'
+)]
 final class WikiCommand extends AbstractCommand
 {
+    /**
+     * Creates a new WikiCommand instance.
+     *
+     * @param ComposerJson $composerJson the composer.json accessor
+     * @param Filesystem $filesystem the filesystem component
+     */
+    public function __construct(
+        private readonly ComposerJson $composerJson,
+        Filesystem $filesystem
+    ) {
+        return parent::__construct($filesystem);
+    }
+
     /**
      * Configures the command instance.
      *
@@ -40,9 +62,6 @@ final class WikiCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('wiki')
-            ->setDescription('Generates API documentation in Markdown format.')
-            ->setHelp('This command generates API documentation in Markdown format using phpDocumentor.')
             ->addOption(
                 name: 'target',
                 shortcut: 't',
@@ -72,10 +91,10 @@ final class WikiCommand extends AbstractCommand
             '--cache-folder',
             $this->getCurrentWorkingDirectory() . '/tmp/cache/phpdoc',
             '--visibility=public,protected',
-            '--title=' . $this->getProjectDescription(),
+            '--title=' . $this->composerJson->getPackageDescription(),
         ];
 
-        $psr4Namespaces = $this->getPsr4Namespaces();
+        $psr4Namespaces = $this->composerJson->getAutoload();
 
         foreach ($psr4Namespaces as $path) {
             $arguments[] = '--directory';

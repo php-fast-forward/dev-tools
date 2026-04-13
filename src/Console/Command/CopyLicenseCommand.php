@@ -16,16 +16,10 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
-use Composer\Factory;
-use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
-use FastForward\DevTools\License\PlaceholderResolver;
-use FastForward\DevTools\License\Reader;
-use FastForward\DevTools\License\Resolver;
-use FastForward\DevTools\License\TemplateLoader;
-use SplFileObject;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -36,48 +30,24 @@ use Symfony\Component\Filesystem\Filesystem;
  * This command generates a LICENSE file if one does not exist and a supported
  * license is declared in composer.json.
  */
+#[AsCommand(
+    name: 'license',
+    description: 'Generates a LICENSE file from composer.json license information.',
+    help: 'This command generates a LICENSE file if one does not exist and a supported license is declared in composer.json.'
+)]
 final class CopyLicenseCommand extends AbstractCommand
 {
     /**
      * Creates a new CopyLicenseCommand instance.
      *
-     * @param Filesystem|null $filesystem the filesystem component
-     * @param GeneratorInterface|null $generator the generator component
+     * @param GeneratorInterface $generator the generator component
+     * @param Filesystem $filesystem the filesystem component
      */
     public function __construct(
-        ?Filesystem $filesystem = null,
-        private readonly ?GeneratorInterface $generator = null,
+        private readonly GeneratorInterface $generator,
+        Filesystem $filesystem,
     ) {
         parent::__construct($filesystem);
-    }
-
-    /**
-     * @return GeneratorInterface
-     */
-    private function getGenerator(): GeneratorInterface
-    {
-        return $this->generator ?? new Generator(
-            new Reader(new SplFileObject(Factory::getComposerFile())),
-            new Resolver(),
-            new TemplateLoader(),
-            new PlaceholderResolver(),
-            $this->filesystem,
-        );
-    }
-
-    /**
-     * Configures the current command.
-     *
-     * This method MUST define the name, description, and help text for the command.
-     */
-    protected function configure(): void
-    {
-        $this
-            ->setName('license')
-            ->setDescription('Generates a LICENSE file from composer.json license information.')
-            ->setHelp(
-                'This command generates a LICENSE file if one does not exist and a supported license is declared in composer.json.'
-            );
     }
 
     /**
@@ -100,8 +70,7 @@ final class CopyLicenseCommand extends AbstractCommand
             return self::SUCCESS;
         }
 
-        $license = $this->getGenerator()
-            ->generate($targetPath);
+        $license = $this->generator->generate($targetPath);
 
         if (null === $license) {
             $output->writeln(

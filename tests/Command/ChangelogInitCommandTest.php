@@ -20,7 +20,7 @@ namespace FastForward\DevTools\Tests\Command;
 
 use FastForward\DevTools\Changelog\BootstrapperInterface;
 use FastForward\DevTools\Changelog\BootstrapResult;
-use FastForward\DevTools\Command\ChangelogInitCommand;
+use FastForward\DevTools\Console\Command\ChangelogInitCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -54,7 +54,7 @@ final class ChangelogInitCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandClass(): ChangelogInitCommand
     {
-        return new ChangelogInitCommand($this->filesystem->reveal(), $this->bootstrapper->reveal());
+        return new ChangelogInitCommand($this->bootstrapper->reveal(), $this->filesystem->reveal());
     }
 
     /**

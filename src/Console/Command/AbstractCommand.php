@@ -16,7 +16,7 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
 use RuntimeException;
 use Symfony\Component\Console\Helper\ProcessHelper;
@@ -37,21 +37,13 @@ use function Safe\getcwd;
 abstract class AbstractCommand extends BaseCommand
 {
     /**
-     * @var Filesystem The filesystem instance used for file operations. This property MUST be utilized for interacting with the file system securely.
-     */
-    protected readonly Filesystem $filesystem;
-
-    /**
      * Constructs a new AbstractCommand instance.
      *
-     * The method MAY accept a Filesystem instance; if omitted, it SHALL instantiate a new one.
-     *
-     * @param Filesystem|null $filesystem the filesystem utility to use
+     * @param Filesystem $filesystem the filesystem utility to use
      */
-    public function __construct(?Filesystem $filesystem = null)
-    {
-        $this->filesystem = $filesystem ?? new Filesystem();
-
+    public function __construct(
+        protected readonly Filesystem $filesystem
+    ) {
         parent::__construct();
     }
 
@@ -168,7 +160,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     protected function getDevToolsFile(string $filename): string
     {
-        return Path::makeAbsolute($filename, \dirname(__DIR__, 2));
+        return Path::makeAbsolute($filename, \dirname(__DIR__, 3));
     }
 
     /**
@@ -185,54 +177,5 @@ abstract class AbstractCommand extends BaseCommand
     {
         return $this->getApplication()
             ->doRun(new StringInput($command), $output);
-    }
-
-    /**
-     * Retrieves configured PSR-4 namespaces from the composer configuration.
-     *
-     * This method SHALL parse the underlying `composer.json` using the Composer instance,
-     * and MUST provide an empty array if no specific paths exist.
-     *
-     * @return array the PSR-4 namespaces mappings
-     */
-    protected function getPsr4Namespaces(): array
-    {
-        $composer = $this->requireComposer();
-        $autoload = $composer->getPackage()
-            ->getAutoload();
-
-        return $autoload['psr-4'] ?? [];
-    }
-
-    /**
-     * Computes the human-readable title or description of the current application.
-     *
-     * The method SHOULD utilize the package description as the title, but MUST provide
-     * the raw package name as a fallback mechanism.
-     *
-     * @return string the computed title or description string
-     */
-    protected function getProjectName(): string
-    {
-        $composer = $this->requireComposer();
-        $package = $composer->getPackage();
-
-        return $package->getName();
-    }
-
-    /**
-     * Computes the human-readable description of the current application.
-     *
-     * The method SHOULD utilize the package description as the title, but MUST provide
-     * the raw package name as a fallback mechanism.
-     *
-     * @return string the computed title or description string
-     */
-    protected function getProjectDescription(): string
-    {
-        $composer = $this->requireComposer();
-        $package = $composer->getPackage();
-
-        return $package->getDescription();
     }
 }

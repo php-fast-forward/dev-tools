@@ -49,7 +49,7 @@ final readonly class Generator implements GeneratorInterface
         private ResolverInterface $resolver,
         private TemplateLoaderInterface $templateLoader,
         private PlaceholderResolverInterface $placeholderResolver,
-        private Filesystem $filesystem = new Filesystem()
+        private Filesystem $filesystem,
     ) {}
 
     /**

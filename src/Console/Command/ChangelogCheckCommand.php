@@ -16,9 +16,8 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\Changelog\UnreleasedEntryChecker;
 use FastForward\DevTools\Changelog\UnreleasedEntryCheckerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -37,8 +36,8 @@ final class ChangelogCheckCommand extends AbstractCommand
      * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker checker for pending unreleased entries in the changelog
      */
     public function __construct(
-        Filesystem $filesystem = new Filesystem(),
-        private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker = new UnreleasedEntryChecker(),
+        private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker,
+        Filesystem $filesystem,
     ) {
         parent::__construct($filesystem);
     }

@@ -262,9 +262,10 @@ final class SkillsSynchronizerTest extends TestCase
      */
     private function createSynchronizer(): SkillsSynchronizer
     {
-        $synchronizer = new SkillsSynchronizer($this->filesystem->reveal(), $this->finder->reveal());
-        $synchronizer->setLogger($this->logger->reveal());
-
-        return $synchronizer;
+        return new SkillsSynchronizer(
+            $this->filesystem->reveal(),
+            $this->finder->reveal(),
+            $this->logger->reveal(),
+        );
     }
 }

@@ -16,13 +16,16 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Composer\Json\ComposerJson;
 use Throwable;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
 
 use function Safe\file_get_contents;
@@ -31,6 +34,11 @@ use function Safe\file_get_contents;
  * Provides operations to inspect, lint, and repair PHPDoc comments across the project.
  * The class MUST NOT be extended and SHALL coordinate tools like PHP-CS-Fixer and Rector.
  */
+#[AsCommand(
+    name: 'phpdoc',
+    description: 'Checks and fixes PHPDocs.',
+    help: 'This command checks and fixes PHPDocs in your PHP files.',
+)]
 final class PhpDocCommand extends AbstractCommand
 {
     /**
@@ -44,6 +52,19 @@ final class PhpDocCommand extends AbstractCommand
     public const string CONFIG = '.php-cs-fixer.dist.php';
 
     /**
+     * Creates a new PhpDocCommand instance.
+     *
+     * @param ComposerJson $composerJson the composer.json accessor
+     * @param Filesystem $filesystem the filesystem component
+     */
+    public function __construct(
+        private readonly ComposerJson $composerJson,
+        Filesystem $filesystem
+    ) {
+        return parent::__construct($filesystem);
+    }
+
+    /**
      * Configures the PHPDoc command.
      *
      * This method MUST securely configure the expected inputs, such as the `--fix` option.
@@ -53,9 +74,6 @@ final class PhpDocCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('phpdoc')
-            ->setDescription('Checks and fixes PHPDocs.')
-            ->setHelp('This command checks and fixes PHPDocs in your PHP files.')
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',
@@ -170,17 +188,7 @@ final class PhpDocCommand extends AbstractCommand
 
         $repositoryDocHeader = self::getConfigFile(self::FILENAME);
         $docHeader = file_get_contents($repositoryDocHeader);
-
-        try {
-            $composer = $this->requireComposer();
-            $rootPackageName = $composer->getPackage()
-                ->getName();
-
-            if ('' !== $rootPackageName) {
-                $docHeader = str_replace('fast-forward/dev-tools', $rootPackageName, $docHeader);
-            }
-        } catch (Throwable) {
-        }
+        $docHeader = str_replace('fast-forward/dev-tools', $this->composerJson->getPackageName(), $docHeader);
 
         try {
             $this->filesystem->dumpFile($projectDocHeader, $docHeader);

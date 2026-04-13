@@ -19,7 +19,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Command;
 
 use FastForward\DevTools\Changelog\UnreleasedEntryCheckerInterface;
-use FastForward\DevTools\Command\ChangelogCheckCommand;
+use FastForward\DevTools\Console\Command\ChangelogCheckCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\Argument;
@@ -51,7 +51,7 @@ final class ChangelogCheckCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandClass(): ChangelogCheckCommand
     {
-        return new ChangelogCheckCommand($this->filesystem->reveal(), $this->unreleasedEntryChecker->reveal());
+        return new ChangelogCheckCommand($this->unreleasedEntryChecker->reveal(), $this->filesystem->reveal());
     }
 
     /**

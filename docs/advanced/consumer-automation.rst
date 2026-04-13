@@ -52,5 +52,5 @@ Producer Impact
 
 Any change to ``resources/github-actions``, ``resources/dependabot.yml``,
 ``.agents/skills``, ``.github/workflows``, or
-``FastForward\DevTools\Command\SyncCommand`` changes the default onboarding
+``FastForward\DevTools\Console\Command\SyncCommand`` changes the default onboarding
 story for every consumer library.

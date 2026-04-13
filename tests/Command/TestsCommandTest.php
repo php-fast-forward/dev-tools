@@ -18,7 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\TestsCommand;
+use FastForward\DevTools\Console\Command\TestsCommand;
+use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use Prophecy\Argument;
@@ -43,11 +44,20 @@ final class TestsCommandTest extends AbstractCommandTestCase
     private ObjectProphecy $coverageSummaryLoader;
 
     /**
+     * @var ObjectProphecy<ComposerJson>
+     */
+    private ObjectProphecy $composerJson;
+
+    /**
      * @return TestsCommand
      */
     protected function getCommandClass(): TestsCommand
     {
-        return new TestsCommand($this->filesystem->reveal(), $this->coverageSummaryLoader->reveal());
+        return new TestsCommand(
+            $this->coverageSummaryLoader->reveal(),
+            $this->composerJson->reveal(),
+            $this->filesystem->reveal()
+        );
     }
 
     /**
@@ -80,6 +90,11 @@ final class TestsCommandTest extends AbstractCommandTestCase
     protected function setUp(): void
     {
         $this->coverageSummaryLoader = $this->prophesize(CoverageSummaryLoaderInterface::class);
+        $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->composerJson->getAutoload()
+            ->willReturn([
+                'FastForward\\DevTools\\' => 'src/',
+            ]);
 
         parent::setUp();
 
