@@ -38,7 +38,7 @@ final class SkillsSynchronizer implements LoggerAwareInterface
      *
      * @param Filesystem $filesystem Filesystem instance for file operations
      * @param Finder $finder Finder instance for locating skill directories in the package
-     * @param LoggerInterface $logger
+     * @param LoggerInterface $logger Logger for recording synchronization actions and decisions
      */
     public function __construct(
         private readonly Filesystem $filesystem,
