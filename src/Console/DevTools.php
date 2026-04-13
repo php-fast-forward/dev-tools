@@ -33,6 +33,9 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
  */
 final class DevTools extends ComposerApplication
 {
+    /**
+     * @var ContainerInterface holds the static container instance for global access within the DevTools context
+     */
     private static ?ContainerInterface $container = null;
 
     /**

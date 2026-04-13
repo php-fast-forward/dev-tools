@@ -21,9 +21,16 @@ namespace FastForward\DevTools\Psr\Clock;
 use DateTimeImmutable;
 use Psr\Clock\ClockInterface;
 
+/**
+ * A clock implementation that returns the current system time.
+ *
+ * This class implements the ClockInterface and provides a method to get the current time as a DateTimeImmutable object.
+ */
 final class SystemClock implements ClockInterface
 {
     /**
+     * Returns the current time as a DateTimeImmutable Object.
+     *
      * @return DateTimeImmutable
      */
     public function now(): DateTimeImmutable

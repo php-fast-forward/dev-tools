@@ -28,6 +28,12 @@ use Symfony\Component\Finder\Finder;
 final class DevToolsCommandLoader extends ContainerCommandLoader
 {
     /**
+     * Constructs the DevToolsCommandLoader.
+     *
+     * This constructor initializes the command loader by scanning the Command directory for classes that are
+     * instantiable and have the AsCommand attribute.
+     * It builds a command map associating command names with their respective classes.
+     *
      * @param Finder $finder
      * @param ContainerInterface $container
      */
@@ -37,6 +43,8 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
     }
 
     /**
+     * Builds a command map by scanning the Command directory for classes that are instantiable and have the AsCommand attribute.
+     *
      * @param Finder $finder
      *
      * @return array

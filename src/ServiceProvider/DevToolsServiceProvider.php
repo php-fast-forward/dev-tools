@@ -62,6 +62,12 @@ use Symfony\Component\Finder\Finder;
 use function DI\create;
 use function DI\get;
 
+/**
+ * DevToolsServiceProvider registers the services provided by this package.
+ *
+ * This class implements the ServiceProviderInterface from the PHP-Interop container package,
+ * allowing it to be used with any compatible dependency injection container.
+ */
 final class DevToolsServiceProvider implements ServiceProviderInterface
 {
     /**
