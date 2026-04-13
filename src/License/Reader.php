@@ -20,7 +20,6 @@ namespace FastForward\DevTools\License;
 
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use Psr\Clock\ClockInterface;
-use Safe\Exceptions\JsonException;
 
 /**
  * Reads composer.json and exposes metadata for license generation.
@@ -35,10 +34,8 @@ final readonly class Reader implements ReaderInterface
      * Creates a new Reader instance.
      *
      * @param ComposerJson $source The source file to read from, typically composer.json
-     * @param ClockInterface $clock
-     * @param ComposerJson $composerJson
-     *
-     * @throws JsonException if the JSON content is invalid
+     * @param ClockInterface $clock Clock instance for obtaining the current year if needed
+     * @param ComposerJson $composerJson the composer.json accessor for extracting metadata
      */
     public function __construct(
         private ClockInterface $clock,
