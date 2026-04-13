@@ -16,11 +16,14 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Composer\Json\ComposerJson;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Process\Process;
 
@@ -34,8 +37,20 @@ use function strtr;
  * Handles the generation of API documentation for the project.
  * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
  */
+#[AsCommand(
+    name: 'docs',
+    description: 'Generates API documentation.',
+    help: 'This command generates API documentation using phpDocumentor.',
+)]
 final class DocsCommand extends AbstractCommand
 {
+    public function __construct(
+        private readonly ComposerJson $composerJson,
+        Filesystem $filesystem
+    ) {
+        return parent::__construct($filesystem);
+    }
+
     /**
      * Configures the command instance.
      *
@@ -47,9 +62,6 @@ final class DocsCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('docs')
-            ->setDescription('Generates API documentation.')
-            ->setHelp('This command generates API documentation using phpDocumentor.')
             ->addOption(
                 name: 'target',
                 shortcut: 't',
@@ -133,7 +145,7 @@ final class DocsCommand extends AbstractCommand
             $this->filesystem->mkdir($configDirectory);
         }
 
-        $psr4Namespaces = $this->getPsr4Namespaces();
+        $psr4Namespaces = $this->composerJson->getAutoload();
         $paths = implode("\n", array_map(
             fn(string $path): string => \sprintf(
                 '<path>%s</path>',
@@ -148,7 +160,7 @@ final class DocsCommand extends AbstractCommand
         $templateContents = file_get_contents($templateFile);
 
         $this->filesystem->dumpFile($configFile, strtr($templateContents, [
-            '%%TITLE%%' => $this->getProjectDescription(),
+            '%%TITLE%%' => $this->composerJson->getPackageDescription(),
             '%%TEMPLATE%%' => $template,
             '%%TARGET%%' => $target,
             '%%WORKING_DIRECTORY%%' => $workingDirectory,

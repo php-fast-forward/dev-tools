@@ -20,6 +20,7 @@ namespace FastForward\DevTools\Agent\Skills;
 
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -34,21 +35,24 @@ use Symfony\Component\Filesystem\Path;
  */
 final class SkillsSynchronizer implements LoggerAwareInterface
 {
-    use LoggerAwareTrait;
-
     /**
-     * Initializes the synchronizer with an optional filesystem instance.
+     * Initializes the synchronizer with a filesystem and finder instance.
      *
-     * If no filesystem is provided, a default {@see Filesystem} instance is created.
-     *
-     * @param Filesystem|null $filesystem Filesystem instance for file operations
+     * @param Filesystem $filesystem Filesystem instance for file operations
      * @param Finder $finder Finder instance for locating skill directories in the package
      */
     public function __construct(
-        private readonly Filesystem $filesystem = new Filesystem(),
-        private readonly Finder $finder = new Finder(),
-    ) {
-        $this->logger = new NullLogger();
+        private readonly Filesystem $filesystem,
+        private readonly Finder $finder,
+        private LoggerInterface $logger,
+    ) {}
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
     }
 
     /**

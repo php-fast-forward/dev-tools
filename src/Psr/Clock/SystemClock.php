@@ -16,15 +16,14 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools;
+namespace FastForward\DevTools\Psr\Clock;
 
-use FastForward\DevTools\Psr\Container\Container;
-use Symfony\Component\Console\Input\ArgvInput;
+use Psr\Clock\ClockInterface;
 
-$projectVendorAutoload = \dirname(__DIR__, 4) . '/vendor/autoload.php';
-$pluginVendorAutoload = \dirname(__DIR__) . '/vendor/autoload.php';
-
-require_once file_exists($projectVendorAutoload) ? $projectVendorAutoload : $pluginVendorAutoload;
-
-$application = Container::get(Console\DevTools::class);
-$application->run(new ArgvInput([...$argv, '--no-plugins']));
+final class SystemClock implements ClockInterface
+{
+    public function now(): \DateTimeImmutable
+    {
+        return new \DateTimeImmutable();
+    }
+}

@@ -18,54 +18,21 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Composer\Capability;
 
-use FastForward\DevTools\Command\AbstractCommand;
-use Composer\Plugin\Capability\CommandProvider as CommandProviderCapability;
-use FastForward\DevTools\Command\CodeStyleCommand;
-use FastForward\DevTools\Command\CopyLicenseCommand;
-use FastForward\DevTools\Command\DependenciesCommand;
-use FastForward\DevTools\Command\DocsCommand;
-use FastForward\DevTools\Command\GitAttributesCommand;
-use FastForward\DevTools\Command\GitIgnoreCommand;
-use FastForward\DevTools\Command\PhpDocCommand;
-use FastForward\DevTools\Command\RefactorCommand;
-use FastForward\DevTools\Command\ReportsCommand;
-use FastForward\DevTools\Command\StandardsCommand;
-use FastForward\DevTools\Command\TestsCommand;
-use FastForward\DevTools\Command\WikiCommand;
-use FastForward\DevTools\Command\SyncCommand;
-use FastForward\DevTools\Command\SkillsCommand;
+use Composer\Plugin\Capability\CommandProvider;
+use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Psr\Container\Container;
 
 /**
  * Provides a registry of custom dev-tools commands mapped for Composer integration.
- * This capability struct MUST implement the defined `CommandProviderCapability`.
+ * This capability struct MUST implement the defined `CommandProvider`.
  */
-final class DevToolsCommandProvider implements CommandProviderCapability
+final class DevToolsCommandProvider implements CommandProvider
 {
     /**
-     * Dispatches the comprehensive collection of CLI commands.
-     *
-     * The method MUST yield an array of instantiated command classes representing the tools.
-     * It SHALL be queried by the Composer plugin dynamically during runtime execution.
-     *
-     * @return array<int, AbstractCommand> the commands defined within the toolset
+     * {@inheritDoc}
      */
     public function getCommands()
     {
-        return [
-            new CodeStyleCommand(),
-            new RefactorCommand(),
-            new TestsCommand(),
-            new DependenciesCommand(),
-            new PhpDocCommand(),
-            new DocsCommand(),
-            new StandardsCommand(),
-            new ReportsCommand(),
-            new WikiCommand(),
-            new SyncCommand(),
-            new GitIgnoreCommand(),
-            new GitAttributesCommand(),
-            new SkillsCommand(),
-            new CopyLicenseCommand(),
-        ];
+        return Container::get(DevTools::class)->getCommands();
     }
 }

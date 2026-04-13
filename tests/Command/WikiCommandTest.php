@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\WikiCommand;
+use FastForward\DevTools\Console\Command\WikiCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\PhpUnit\ProphecyTrait;

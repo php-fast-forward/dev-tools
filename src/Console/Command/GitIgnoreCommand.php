@@ -16,14 +16,12 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\GitIgnore\Merger;
 use FastForward\DevTools\GitIgnore\MergerInterface;
-use FastForward\DevTools\GitIgnore\Reader;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
-use FastForward\DevTools\GitIgnore\Writer;
 use FastForward\DevTools\GitIgnore\WriterInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,29 +36,28 @@ use Symfony\Component\Filesystem\Filesystem;
  * The command accepts two options: --source and --target to specify the paths
  * to the canonical and project .gitignore files respectively.
  */
+#[AsCommand(
+    name: 'gitignore',
+    description: 'Merges and synchronizes .gitignore files.',
+    help: 'This command merges the canonical .gitignore from dev-tools with the project\'s existing .gitignore.'
+)]
 final class GitIgnoreCommand extends AbstractCommand
 {
     /**
-     * @param WriterInterface $writer the writer component for handling .gitignore file writing
-     */
-    private readonly WriterInterface $writer;
-
-    /**
      * Creates a new GitIgnoreCommand instance.
      *
-     * @param Filesystem|null $filesystem the filesystem component
      * @param MergerInterface $merger the merger component
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface|null $writer the writer component
+     * @param Filesystem $filesystem the filesystem component
      */
     public function __construct(
-        ?Filesystem $filesystem = null,
-        private readonly MergerInterface $merger = new Merger(),
-        private readonly ReaderInterface $reader = new Reader(),
-        ?WriterInterface $writer = null
+        private readonly MergerInterface $merger,
+        private readonly ReaderInterface $reader,
+        private readonly WriterInterface $writer,
+        Filesystem $filesystem,
     ) {
         parent::__construct($filesystem);
-        $this->writer = $writer ?? new Writer($this->filesystem);
     }
 
     /**
@@ -72,11 +69,6 @@ final class GitIgnoreCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('gitignore')
-            ->setDescription('Merges and synchronizes .gitignore files.')
-            ->setHelp(
-                "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore."
-            )
             ->addOption(
                 name: 'source',
                 shortcut: 's',

@@ -18,7 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\AbstractCommand;
+use FastForward\DevTools\Console\Command\AbstractCommand;
+use FastForward\DevTools\Console\Command\AbstractCommand as AbstractCommandBase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,11 +29,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class AbstractCommandTest extends AbstractCommandTestCase
 {
     /**
-     * @return string
+     * @return AbstractCommand
      */
-    protected function getCommandClass(): string
+    protected function getCommandClass(): AbstractCommand
     {
-        return AbstractCommandStub::class;
+        return new AbstractCommandStub($this->filesystem->reveal());
     }
 
     /**

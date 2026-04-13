@@ -16,8 +16,9 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,6 +28,12 @@ use Symfony\Component\Process\Process;
  * Provides functionality to execute automated code refactoring using Rector.
  * This class MUST NOT be extended and SHALL encapsulate the logic for Rector invocation.
  */
+#[AsCommand(
+    name: 'refactor',
+    description: 'Runs Rector for code refactoring.',
+    help: 'This command runs Rector to refactor your code.',
+    aliases: ['rector']
+)]
 final class RefactorCommand extends AbstractCommand
 {
     /**
@@ -45,9 +52,6 @@ final class RefactorCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('refactor')
-            ->setDescription('Runs Rector for code refactoring.')
-            ->setHelp('This command runs Rector to refactor your code.')
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',

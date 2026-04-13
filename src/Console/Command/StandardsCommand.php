@@ -16,8 +16,9 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -26,6 +27,11 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Executes the full suite of Fast Forward code standard checks.
  * This class MUST NOT be modified through inheritance and SHALL streamline code validation workflows.
  */
+#[AsCommand(
+    name: 'standards',
+    description: 'Runs Fast Forward code standards checks.',
+    help: 'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.'
+)]
 final class StandardsCommand extends AbstractCommand
 {
     /**
@@ -39,12 +45,6 @@ final class StandardsCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('standards')
-            ->setDescription('Runs Fast Forward code standards checks.')
-            ->setHelp(
-                'This command runs all Fast Forward code standards checks, including code refactoring, '
-                . 'PHPDoc validation, code style checks, documentation generation, and tests execution.'
-            )
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',

@@ -22,7 +22,7 @@ use Composer\Composer;
 use Composer\Package\RootPackageInterface;
 use Composer\Console\Application;
 use ReflectionMethod;
-use FastForward\DevTools\Command\AbstractCommand;
+use FastForward\DevTools\Console\Command\AbstractCommand;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -101,6 +101,7 @@ abstract class AbstractCommandTestCase extends TestCase
         $this->application->getComposer(Argument::cetera())->willReturn($this->composer->reveal());
 
         $this->filesystem->isAbsolutePath(Argument::any())->willReturn(false);
+        $this->filesystem->exists(Argument::any())->willReturn(false);
 
         $this->processHelper->getName()
             ->willReturn('process');

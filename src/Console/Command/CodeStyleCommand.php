@@ -16,8 +16,9 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -27,6 +28,11 @@ use Symfony\Component\Process\Process;
  * Represents the command responsible for checking and fixing code style issues.
  * This class MUST NOT be overridden and SHALL rely on external tools like ECS and Composer Normalize.
  */
+#[AsCommand(
+    name: 'code-style',
+    description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.',
+    help: 'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.'
+)]
 final class CodeStyleCommand extends AbstractCommand
 {
     /**
@@ -45,9 +51,6 @@ final class CodeStyleCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('code-style')
-            ->setDescription('Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.')
-            ->setHelp('This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.')
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',

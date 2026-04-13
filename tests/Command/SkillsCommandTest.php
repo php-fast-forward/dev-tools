@@ -21,7 +21,7 @@ namespace FastForward\DevTools\Tests\Command;
 use Composer\IO\IOInterface;
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
 use FastForward\DevTools\Agent\Skills\SynchronizeResult;
-use FastForward\DevTools\Command\SkillsCommand;
+use FastForward\DevTools\Console\Command\SkillsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;

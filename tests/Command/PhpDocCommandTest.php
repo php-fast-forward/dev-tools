@@ -20,8 +20,8 @@ namespace FastForward\DevTools\Tests\Command;
 
 use Prophecy\Argument;
 use RuntimeException;
-use FastForward\DevTools\Command\PhpDocCommand;
-use FastForward\DevTools\Command\RefactorCommand;
+use FastForward\DevTools\Console\Command\PhpDocCommand;
+use FastForward\DevTools\Console\Command\RefactorCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\PhpUnit\ProphecyTrait;

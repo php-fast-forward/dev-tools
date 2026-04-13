@@ -18,11 +18,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\DocsCommand;
+use FastForward\DevTools\Console\Command\DocsCommand;
+use FastForward\DevTools\Composer\Json\ComposerJson;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
@@ -33,11 +35,19 @@ final class DocsCommandTest extends AbstractCommandTestCase
     use ProphecyTrait;
 
     /**
-     * @return string
+     * @var ObjectProphecy<ComposerJson>
      */
-    protected function getCommandClass(): string
+    private ObjectProphecy $composerJson;
+
+    /**
+     * @return DocsCommand
+     */
+    protected function getCommandClass(): DocsCommand
     {
-        return DocsCommand::class;
+        return new DocsCommand(
+            $this->composerJson->reveal(),
+            $this->filesystem->reveal()
+        );
     }
 
     /**
@@ -62,6 +72,16 @@ final class DocsCommandTest extends AbstractCommandTestCase
     protected function getCommandHelp(): string
     {
         return 'This command generates API documentation using phpDocumentor.';
+    }
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->composerJson = $this->prophesize(ComposerJson::class);
+
+        parent::setUp();
     }
 
     /**

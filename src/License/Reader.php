@@ -18,10 +18,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+use FastForward\DevTools\Composer\Json\ComposerJson;
+use Psr\Clock\ClockInterface;
 use Safe\Exceptions\JsonException;
-use SplFileObject;
-
-use function Safe\json_decode;
 
 /**
  * Reads composer.json and exposes metadata for license generation.
@@ -37,29 +36,15 @@ final readonly class Reader implements ReaderInterface
     /**
      * Creates a new Reader instance.
      *
-     * @param SplFileObject $source The source file to read from, typically composer.json
+     * @param ComposerJson $source The source file to read from, typically composer.json
      *
      * @throws JsonException if the JSON content is invalid
      */
-    public function __construct(SplFileObject $source)
-    {
-        $this->data = $this->readData($source);
-    }
-
-    /**
-     * Reads and parses the JSON content from the source file.
-     *
-     * @param SplFileObject $source The source file to read from
-     *
-     * @return array The parsed JSON data as an associative array
-     *
-     * @throws JsonException if the JSON is invalid
-     */
-    private function readData(SplFileObject $source): array
-    {
-        $content = $source->fread($source->getSize());
-
-        return json_decode($content, true);
+    public function __construct(
+        private readonly ClockInterface $clock,
+        private readonly ComposerJson $composerJson,
+    ) {
+        $this->data = $composerJson->read();
     }
 
     /**
@@ -73,13 +58,7 @@ final readonly class Reader implements ReaderInterface
      */
     public function getLicense(): ?string
     {
-        $license = $this->data['license'] ?? [];
-
-        if (\is_string($license)) {
-            return $license;
-        }
-
-        return $this->extractLicense($license);
+        return $this->composerJson->getPackageLicense();
     }
 
     /**
@@ -89,7 +68,7 @@ final readonly class Reader implements ReaderInterface
      */
     public function getPackageName(): string
     {
-        return $this->data['name'] ?? '';
+        return $this->composerJson->getPackageName();
     }
 
     /**
@@ -102,7 +81,7 @@ final readonly class Reader implements ReaderInterface
      */
     public function getAuthors(): array
     {
-        $authors = $this->data['authors'] ?? [];
+        $authors = $this->composerJson->getAuthors();
 
         if ([] === $authors) {
             return [];
@@ -151,29 +130,8 @@ final readonly class Reader implements ReaderInterface
      */
     public function getYear(): int
     {
-        return (int) date('Y');
-    }
+        $now = $this->clock->now();
 
-    /**
-     * Extracts a single license from an array of licenses.
-     *
-     * Returns the first license if exactly one element exists.
-     * Returns null if the array is empty or contains multiple licenses.
-     *
-     * @param array<string> $license The license array to extract from
-     *
-     * @return string|null a single license string, or null if extraction is not possible
-     */
-    private function extractLicense(array $license): ?string
-    {
-        if ([] === $license) {
-            return null;
-        }
-
-        if (1 === \count($license)) {
-            return $license[0];
-        }
-
-        return null;
+        return (int) $now->format('Y');
     }
 }

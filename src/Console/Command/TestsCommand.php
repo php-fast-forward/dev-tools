@@ -16,12 +16,14 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use InvalidArgumentException;
 use RuntimeException;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,6 +37,11 @@ use function is_numeric;
  * Facilitates the execution of the PHPUnit testing framework.
  * This class MUST NOT be overridden and SHALL configure testing parameters dynamically.
  */
+#[AsCommand(
+    name: 'tests',
+    description: 'Runs PHPUnit tests.',
+    help: 'This command runs PHPUnit to execute your tests.'
+)]
 final class TestsCommand extends AbstractCommand
 {
     /**
@@ -43,12 +50,14 @@ final class TestsCommand extends AbstractCommand
     public const string CONFIG = 'phpunit.xml';
 
     /**
-     * @param Filesystem|null $filesystem the filesystem utility used for path resolution
      * @param CoverageSummaryLoaderInterface $coverageSummaryLoader the loader used for `coverage-php` summaries
+     * @param ComposerJson $composerJson the composer.json reader for autoload information
+     * @param Filesystem $filesystem the filesystem utility used for path resolution
      */
     public function __construct(
-        ?Filesystem $filesystem = null,
-        private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader = new CoverageSummaryLoader(),
+        private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
+        private readonly ComposerJson $composerJson,
+        Filesystem $filesystem,
     ) {
         parent::__construct($filesystem);
     }
@@ -64,9 +73,6 @@ final class TestsCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
-            ->setName('tests')
-            ->setDescription('Runs PHPUnit tests.')
-            ->setHelp('This command runs PHPUnit to execute your tests.')
             ->addArgument(
                 name: 'path',
                 mode: InputArgument::OPTIONAL,
@@ -228,7 +234,7 @@ final class TestsCommand extends AbstractCommand
             ? $this->resolvePath($input, 'coverage')
             : $this->resolvePath($input, 'cache-dir');
 
-        foreach ($this->getPsr4Namespaces() as $path) {
+        foreach ($this->composerJson->getAutoload() as $path) {
             $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
         }
 

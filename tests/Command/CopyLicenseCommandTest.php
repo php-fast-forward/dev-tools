@@ -18,8 +18,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\CopyLicenseCommand;
+use FastForward\DevTools\Console\Command\CopyLicenseCommand;
 use FastForward\DevTools\License\Generator;
+use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\License\PlaceholderResolver;
 use FastForward\DevTools\License\Reader;
 use FastForward\DevTools\License\Resolver;
@@ -29,6 +30,9 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+
+use function Safe\getcwd;
 
 #[CoversClass(CopyLicenseCommand::class)]
 #[UsesClass(Reader::class)]
@@ -41,11 +45,19 @@ final class CopyLicenseCommandTest extends AbstractCommandTestCase
     use ProphecyTrait;
 
     /**
-     * @return string
+     * @var ObjectProphecy<GeneratorInterface>
      */
-    protected function getCommandClass(): string
+    private ObjectProphecy $generator;
+
+    /**
+     * @return CopyLicenseCommand
+     */
+    protected function getCommandClass(): CopyLicenseCommand
     {
-        return CopyLicenseCommand::class;
+        return new CopyLicenseCommand(
+            $this->generator->reveal(),
+            $this->filesystem->reveal()
+        );
     }
 
     /**
@@ -75,14 +87,22 @@ final class CopyLicenseCommandTest extends AbstractCommandTestCase
     /**
      * @return void
      */
+    protected function setUp(): void
+    {
+        $this->generator = $this->prophesize(GeneratorInterface::class);
+
+        parent::setUp();
+    }
+
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillReturnSuccessAndWriteInfo(): void
     {
-        $this->filesystem->exists(Argument::type('string'))->willReturn(false);
-        $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
-
-        $this->output->writeln(Argument::type('string'))
-            ->shouldBeCalled();
+        $targetPath = getcwd() . '/LICENSE';
+        $this->filesystem->exists($targetPath)->willReturn(false);
+        $this->generator->generate($targetPath)->willReturn(null);
 
         self::assertSame(CopyLicenseCommand::SUCCESS, $this->invokeExecute());
     }
@@ -93,10 +113,8 @@ final class CopyLicenseCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillSkipWhenLicenseFileExists(): void
     {
-        $this->filesystem->exists(Argument::type('string'))->willReturn(true);
-
-        $this->output->writeln(Argument::type('string'))
-            ->shouldBeCalled();
+        $targetPath = getcwd() . '/LICENSE';
+        $this->filesystem->exists($targetPath)->willReturn(true);
 
         self::assertSame(CopyLicenseCommand::SUCCESS, $this->invokeExecute());
     }

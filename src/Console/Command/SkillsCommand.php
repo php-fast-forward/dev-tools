@@ -16,9 +16,10 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -37,48 +38,28 @@ use Symfony\Component\Filesystem\Filesystem;
  * target paths, triggers synchronization, and translates the resulting status
  * into Symfony Console output and process exit codes.
  */
+#[AsCommand(
+    name: 'skills',
+    description: 'Synchronizes Fast Forward skills into .agents/skills directory.',
+    help: 'This command ensures the consumer repository contains linked Fast Forward skills by creating symlinks to the packaged skills and removing broken links.'
+)]
 final class SkillsCommand extends AbstractCommand
 {
     /**
      * Initializes the command with an optional skills synchronizer instance.
      *
-     * If no synchronizer is provided, the command SHALL instantiate the default
-     * {@see SkillsSynchronizer} implementation. Consumers MAY inject a custom
-     * synchronizer for testing or alternative synchronization behavior, provided
-     * it preserves the expected contract.
-     *
-     * @param SkillsSynchronizer|null $synchronizer the synchronizer responsible
-     *                                              for applying the skills
-     *                                              synchronization process
-     * @param Filesystem|null $filesystem filesystem used to resolve
-     *                                    and manage the skills
-     *                                    directory structure
+     * @param SkillsSynchronizer $synchronizer the synchronizer responsible
+     *                                         for applying the skills
+     *                                         synchronization process
+     * @param Filesystem $filesystem filesystem used to resolve
+     *                               and manage the skills
+     *                               directory structure
      */
     public function __construct(
-        private readonly SkillsSynchronizer $synchronizer = new SkillsSynchronizer(),
-        ?Filesystem $filesystem = null
+        private readonly SkillsSynchronizer $synchronizer,
+        Filesystem $filesystem,
     ) {
         parent::__construct($filesystem);
-    }
-
-    /**
-     * Configures the command name, description, and help text.
-     *
-     * The command metadata MUST clearly describe that the operation synchronizes
-     * Fast Forward skills into the `.agents/skills` directory and that it manages
-     * link-based synchronization for packaged skills.
-     *
-     * @return void
-     */
-    protected function configure(): void
-    {
-        $this
-            ->setName('skills')
-            ->setDescription('Synchronizes Fast Forward skills into .agents/skills directory.')
-            ->setHelp(
-                'This command ensures the consumer repository contains linked Fast Forward skills '
-                . 'by creating symlinks to the packaged skills and removing broken links.'
-            );
     }
 
     /**

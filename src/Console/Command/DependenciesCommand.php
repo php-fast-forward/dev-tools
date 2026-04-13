@@ -16,8 +16,9 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -27,28 +28,14 @@ use Symfony\Component\Process\Process;
  * This command MUST report missing and unused dependencies using a single,
  * deterministic report that is friendly for local development and CI runs.
  */
+#[AsCommand(
+    name: 'dependencies',
+    description: 'Analyzes missing and unused Composer dependencies.',
+    help: 'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.',
+    aliases: ['deps']
+)]
 final class DependenciesCommand extends AbstractCommand
 {
-    /**
-     * Configures the dependency analysis command metadata.
-     *
-     * The command MUST expose the `dependencies` name so it can run via both
-     * Composer and the local `dev-tools` binary.
-     *
-     * @return void
-     */
-    protected function configure(): void
-    {
-        $this
-            ->setName('dependencies')
-            ->setAliases(['deps'])
-            ->setDescription('Analyzes missing and unused Composer dependencies.')
-            ->setHelp(
-                'This command runs composer-dependency-analyser and composer-unused to report '
-                . 'missing and unused Composer dependencies.'
-            );
-    }
-
     /**
      * Executes the dependency analysis workflow.
      *
