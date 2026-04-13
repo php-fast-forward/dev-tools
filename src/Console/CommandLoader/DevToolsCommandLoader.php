@@ -25,6 +25,21 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
 use Symfony\Component\Finder\Finder;
 
+/**
+ * Responsible for dynamically discovering and loading Symfony Console commands
+ * within the DevTools context. This class extends the ContainerCommandLoader
+ * and integrates with a PSR-11 compatible container to lazily instantiate commands.
+ *
+ * The implementation MUST scan a predefined directory for PHP classes representing
+ * console commands and SHALL only register classes that:
+ * - Are instantiable
+ * - Extend the Symfony\Component\Console\Command\Command base class
+ * - Declare the Symfony\Component\Console\Attribute\AsCommand attribute
+ *
+ * The command name MUST be extracted from the AsCommand attribute metadata and
+ * used as the key in the command map. Classes that do not meet these criteria
+ * MUST NOT be included in the command map.
+ */
 final class DevToolsCommandLoader extends ContainerCommandLoader
 {
     /**
