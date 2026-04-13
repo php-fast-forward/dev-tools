@@ -16,7 +16,7 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Tests\Command;
+namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -159,7 +159,7 @@ final class CodeStyleCommandTest extends AbstractCommandTestCase
     {
         $this->willRunProcessWithCallback(function (Process $process): bool {
             $commandLine = $process->getCommandLine();
-            $path = \dirname(__DIR__, 2) . '/ecs.php';
+            $path = getcwd() . '/ecs.php';
 
             return str_contains($commandLine, 'vendor/bin/ecs')
                 && str_contains($commandLine, '--config=' . $path)
@@ -181,7 +181,7 @@ final class CodeStyleCommandTest extends AbstractCommandTestCase
 
         $this->willRunProcessWithCallback(function (Process $process): bool {
             $commandLine = $process->getCommandLine();
-            $path = \dirname(__DIR__, 2) . '/ecs.php';
+            $path = getcwd() . '/ecs.php';
 
             return str_contains($commandLine, 'vendor/bin/ecs')
                 && str_contains($commandLine, '--config=' . $path)

@@ -16,7 +16,7 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Tests\Command;
+namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\RefactorCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -106,7 +106,7 @@ final class RefactorCommandTest extends AbstractCommandTestCase
 
         $this->willRunProcessWithCallback(function (Process $process): bool {
             $commandLine = $process->getCommandLine();
-            $path = \dirname(__DIR__, 2) . '/' . RefactorCommand::CONFIG;
+            $path = getcwd() . '/' . RefactorCommand::CONFIG;
 
             return str_contains($commandLine, 'vendor/bin/rector')
                 && str_contains($commandLine, 'process')
