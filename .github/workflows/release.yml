@@ -63,9 +63,9 @@ jobs:
           VERSION="${{ steps.release.outputs.version }}"
           DATE_VALUE="${{ steps.release.outputs.date }}"
 
-          if grep -q "^## ${VERSION} - " CHANGELOG.md; then
+          if grep -q "^## \\[${VERSION}\\] - " CHANGELOG.md; then
             echo "Release ${VERSION} already exists in CHANGELOG.md."
-          elif grep -q "^## Unreleased - " CHANGELOG.md; then
+          elif grep -q "^## \\[Unreleased\\]$" CHANGELOG.md; then
             vendor/bin/keep-a-changelog unreleased:promote "${VERSION}" --date="${DATE_VALUE}" --no-interaction
           else
             echo "No Unreleased section found; skipping promotion."
@@ -73,7 +73,7 @@ jobs:
 
       - name: Ensure the next Unreleased section exists
         run: |
-          if ! grep -q "^## Unreleased - " CHANGELOG.md; then
+          if ! grep -q "^## \\[Unreleased\\]$" CHANGELOG.md; then
             vendor/bin/keep-a-changelog unreleased:create --no-interaction
           fi
 

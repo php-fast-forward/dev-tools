@@ -116,6 +116,6 @@ final class UnreleasedEntryCheckerTest extends TestCase
      */
     private function createChangelog(string $entry): string
     {
-        return "# Changelog\n\nAll notable changes to this project will be documented in this file, in reverse chronological order by release.\n\n## Unreleased - TBD\n\n### Added\n\n{$entry}\n\n## 1.0.0 - 2026-04-08\n\n### Added\n\n- Initial release.\n";
+        return "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [Unreleased]\n\n### Added\n\n{$entry}\n\n## [1.0.0] - 2026-04-08\n\n### Added\n\n- Initial release.\n\n[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.0...HEAD\n[1.0.0]: https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.0\n";
     }
 }

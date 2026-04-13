@@ -25,7 +25,7 @@ php .agents/skills/changelog-generator/scripts/diff-inventory.php <from-ref> <to
 1. Establish current state.
 - Read `CHANGELOG.md` if it exists.
 - Prefer `changelog-state.php` to gather versions and ranges before inspecting files manually.
-- Record documented versions and whether `## Unreleased - TBD` already exists.
+- Record documented versions and whether the official `## [Unreleased]` heading already exists.
 - List tags in ascending semantic order with `git tag --sort=version:refname`, and capture their commit dates when the repository may have retroactive or out-of-sequence tags.
 - Treat commit messages as navigation hints only; never derive final changelog text from them.
 
@@ -55,6 +55,8 @@ php .agents/skills/changelog-generator/scripts/diff-inventory.php <from-ref> <to
 - Mention the concrete command, class, option, workflow, or API when that improves comprehension.
 - When a matching PR exists, append it to the line in the format `(#123)` after the diff already supports the entry.
 - Avoid vague phrases such as `misc improvements`, `refactorings`, or `code cleanup`.
+- Keep the file structure compliant with Keep a Changelog 1.0.0: bracketed version headings, the official intro paragraph, and footer references for `Unreleased` and each version.
+- Omit empty sections instead of inserting placeholder entries such as `Nothing.`.
 
 5. Apply changes with project tooling.
 - Prefer the local wrappers when available:
@@ -83,6 +85,7 @@ vendor/bin/keep-a-changelog version:release 1.2.0 --provider-token=...
 - Keep section order as `Added`, `Changed`, `Deprecated`, `Removed`, `Fixed`, `Security`.
 - Do not duplicate the same change across sections or versions.
 - Ensure every documented version maps to a real tag or intentional unreleased state.
+- Ensure footer references exist in the official style: `[unreleased]: ...`, `[1.2.0]: ...`.
 - Run local helpers such as `composer dev-tools changelog:check` when the project provides them.
 
 ## PR Context
@@ -98,5 +101,6 @@ Do not use PR text to invent entries that are not supported by the code diff.
 ## Reference Files
 
 - Read [references/keep-a-changelog-format.md](references/keep-a-changelog-format.md) for heading format, section order, and CLI mapping.
+- Read [references/official-example-template.md](references/official-example-template.md) when you want a local template that mirrors the official Keep a Changelog example.
 - Read [references/change-categories.md](references/change-categories.md) when the diff spans multiple change types.
 - Read [references/description-patterns.md](references/description-patterns.md) when the first draft still sounds too internal or vague.

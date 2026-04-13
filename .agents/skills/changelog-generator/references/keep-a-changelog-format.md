@@ -1,43 +1,60 @@
-# Keep a Changelog Format
+# Keep a Changelog 1.0.0 Format
 
-## Required heading shape
+Use the official Keep a Changelog 1.0.0 structure as the default target format:
 
-Use this shape unless the repository already has a stronger house style:
+- Official guidance: `https://keepachangelog.com/en/1.0.0/`
+- Official example: `https://keepachangelog.com/en/1.0.0/#how-do-i-make-a-good-changelog`
+
+## Required introduction
+
+Mirror the official introduction exactly unless the repository already has an approved custom introduction:
 
 ```markdown
 # Changelog
 
-All notable changes to this project will be documented in this file, in reverse chronological order by release.
+All notable changes to this project will be documented in this file.
 
-## Unreleased - TBD
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+```
+
+## Required heading shape
+
+Use bracketed headings and footer references exactly like the official example:
+
+```markdown
+## [Unreleased]
 
 ### Added
 - ...
+
+## [1.4.0] - 2026-04-11
 
 ### Changed
 - ...
-
-### Deprecated
-- ...
-
-### Removed
-- ...
-
-### Fixed
-- ...
-
-### Security
-- ...
-
-## 1.4.0 - 2026-04-11
-
-### Added
-- ...
 ```
+
+## Footer references
+
+Versions and `Unreleased` SHOULD be linkable through footer references in the official style:
+
+```markdown
+[unreleased]: https://github.com/<owner>/<repo>/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/<owner>/<repo>/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/<owner>/<repo>/compare/v1.2.0...v1.3.0
+[1.2.0]: https://github.com/<owner>/<repo>/releases/tag/v1.2.0
+```
+
+Rules:
+
+- `Unreleased` compares the latest documented tag to `HEAD`.
+- Each released version compares the previous documented release tag to the current tag.
+- The oldest documented release links to its release page when no older release exists in the changelog.
+- When tags were published out of semantic order, keep the changelog ordered by actual release chronology and generate comparison links between adjacent displayed releases.
 
 ## Section order
 
-Always keep sections in this order:
+Keep change types grouped in this order:
 
 1. `Added`
 2. `Changed`
@@ -46,15 +63,16 @@ Always keep sections in this order:
 5. `Fixed`
 6. `Security`
 
-Preserve the repository's existing convention for empty sections. In Fast Forward repositories, `Unreleased` may keep placeholders while released versions usually keep only populated sections.
+## Compliance rules from the official guidance
 
-## Version rules
-
-- Keep `Unreleased` first.
-- Keep released versions in reverse chronological order.
-- When version numbers were tagged out of sequence, prefer actual tag chronology over semantic version sorting for final section order.
-- Use ISO 8601 dates: `YYYY-MM-DD`.
-- Match version headings to real tags whenever possible.
+- Changelogs are for humans, not machines.
+- There SHOULD be an entry for every single version.
+- The same types of changes SHOULD be grouped.
+- Versions and sections SHOULD be linkable.
+- The latest version SHOULD come first.
+- The release date of each version SHOULD be displayed in ISO 8601 format: `YYYY-MM-DD`.
+- Mention whether the project follows Semantic Versioning.
+- Omit empty sections instead of filling them with placeholders such as `Nothing.`.
 
 ## CLI mapping
 

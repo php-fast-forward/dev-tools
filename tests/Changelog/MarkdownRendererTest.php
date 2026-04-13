@@ -50,6 +50,10 @@ final class MarkdownRendererTest extends TestCase
             'All notable changes to this project will be documented in this file',
             $output
         );
+        self::assertStringContainsString(
+            'The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),',
+            $output
+        );
     }
 
     /**
@@ -60,16 +64,29 @@ final class MarkdownRendererTest extends TestCase
     {
         $output = $this->renderer->render([]);
 
-        self::assertStringContainsString('## Unreleased - TBD', $output);
+        self::assertStringContainsString('## [Unreleased]', $output);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function renderWillIncludeAllSectionTypes(): void
+    public function renderWillIncludeAllSectionTypesWhenEntriesExist(): void
     {
-        $output = $this->renderer->render([]);
+        $output = $this->renderer->render([
+            [
+                'version' => '1.0.0',
+                'date' => '2026-04-01',
+                'entries' => [
+                    'Added' => ['Feature A'],
+                    'Changed' => ['Feature B'],
+                    'Deprecated' => ['Feature C'],
+                    'Removed' => ['Feature D'],
+                    'Fixed' => ['Feature E'],
+                    'Security' => ['Feature F'],
+                ],
+            ],
+        ]);
 
         self::assertStringContainsString('### Added', $output);
         self::assertStringContainsString('### Changed', $output);
@@ -104,8 +121,8 @@ final class MarkdownRendererTest extends TestCase
 
         $output = $this->renderer->render($releases);
 
-        self::assertStringContainsString('## 0.9.0 - 2026-03-01', $output);
-        self::assertStringContainsString('## 1.0.0 - 2026-04-01', $output);
+        self::assertStringContainsString('## [0.9.0] - 2026-03-01', $output);
+        self::assertStringContainsString('## [1.0.0] - 2026-04-01', $output);
     }
 
     /**
@@ -135,7 +152,7 @@ final class MarkdownRendererTest extends TestCase
      * @return void
      */
     #[Test]
-    public function renderWillShowNothingWhenNoEntriesForReleasedVersion(): void
+    public function renderWillOmitEmptySectionPlaceholders(): void
     {
         $releases = [
             [
@@ -147,6 +164,46 @@ final class MarkdownRendererTest extends TestCase
 
         $output = $this->renderer->render($releases);
 
-        self::assertStringContainsString('- Nothing.', $output);
+        self::assertStringNotContainsString('- Nothing.', $output);
+        self::assertStringContainsString('## [1.0.0] - 2026-04-01', $output);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function renderWillAppendOfficialFooterReferencesWhenRepositoryUrlIsKnown(): void
+    {
+        $output = $this->renderer->render([
+            [
+                'version' => '1.0.0',
+                'tag' => 'v1.0.0',
+                'date' => '2026-04-01',
+                'entries' => [
+                    'Added' => ['Feature A'],
+                ],
+            ],
+            [
+                'version' => '1.1.0',
+                'tag' => 'v1.1.0',
+                'date' => '2026-04-02',
+                'entries' => [
+                    'Changed' => ['Feature B'],
+                ],
+            ],
+        ], 'git@github.com:php-fast-forward/dev-tools.git');
+
+        self::assertStringContainsString(
+            '[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.1.0...HEAD',
+            $output
+        );
+        self::assertStringContainsString(
+            '[1.1.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.0...v1.1.0',
+            $output
+        );
+        self::assertStringContainsString(
+            '[1.0.0]: https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.0',
+            $output
+        );
     }
 }

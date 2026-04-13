@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Changelog;
 
+use Throwable;
+
 use function array_values;
 
 /**
@@ -31,11 +33,13 @@ final readonly class HistoryGenerator implements HistoryGeneratorInterface
      * @param GitReleaseCollectorInterface $gitReleaseCollector git release collector instance for collecting release metadata and commit subjects
      * @param CommitClassifierInterface $commitClassifier commit classifier instance for classifying and normalizing commit subjects into changelog sections
      * @param MarkdownRenderer $markdownRenderer markdown renderer instance for rendering the final changelog markdown from structured release and commit data
+     * @param GitProcessRunnerInterface $gitProcessRunner git process runner used to resolve repository metadata required by the rendered changelog footer
      */
     public function __construct(
         private GitReleaseCollectorInterface $gitReleaseCollector = new GitReleaseCollector(),
         private CommitClassifierInterface $commitClassifier = new CommitClassifier(),
         private MarkdownRenderer $markdownRenderer = new MarkdownRenderer(),
+        private GitProcessRunnerInterface $gitProcessRunner = new GitProcessRunner(),
     ) {}
 
     /**
@@ -46,6 +50,7 @@ final readonly class HistoryGenerator implements HistoryGeneratorInterface
     public function generate(string $workingDirectory): string
     {
         $releases = [];
+        $repositoryUrl = $this->resolveRepositoryUrl($workingDirectory);
 
         foreach ($this->gitReleaseCollector->collect($workingDirectory) as $release) {
             $entries = [];
@@ -62,11 +67,33 @@ final readonly class HistoryGenerator implements HistoryGeneratorInterface
 
             $releases[] = [
                 'version' => $release['version'],
+                'tag' => $release['tag'],
                 'date' => $release['date'],
                 'entries' => $entries,
             ];
         }
 
-        return $this->markdownRenderer->render($releases);
+        return $this->markdownRenderer->render($releases, $repositoryUrl);
+    }
+
+    /**
+     * @param string $workingDirectory
+     *
+     * @return string|null
+     */
+    private function resolveRepositoryUrl(string $workingDirectory): ?string
+    {
+        try {
+            $repositoryUrl = $this->gitProcessRunner->run([
+                'git',
+                'config',
+                '--get',
+                'remote.origin.url',
+            ], $workingDirectory);
+        } catch (Throwable) {
+            return null;
+        }
+
+        return '' === $repositoryUrl ? null : $repositoryUrl;
     }
 }

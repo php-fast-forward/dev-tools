@@ -127,12 +127,12 @@ final class BootstrapperTest extends TestCase
         $this->givenFilesExist();
         $this->filesystem->readFile('/tmp/fake-dir/CHANGELOG.md')
             ->willReturn(
-                "# Changelog\n\nAll notable changes to this project will be documented in this file, in reverse chronological order by release.\n\n## 1.0.0 - 2026-04-08\n\n### Added\n\n- Initial release.\n"
+                "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n## [1.0.0] - 2026-04-08\n\n### Added\n\n- Initial release.\n"
             )
             ->shouldBeCalled();
         $this->filesystem->dumpFile(
             '/tmp/fake-dir/CHANGELOG.md',
-            Argument::that(fn(string $content): bool => str_contains($content, '## Unreleased - TBD'))
+            Argument::that(fn(string $content): bool => str_contains($content, '## [Unreleased]'))
         )->shouldBeCalled();
 
         $result = $this->bootstrapper->bootstrap($this->workingDirectory);
@@ -151,7 +151,7 @@ final class BootstrapperTest extends TestCase
         $this->givenFilesExist();
         $this->filesystem->readFile('/tmp/fake-dir/CHANGELOG.md')
             ->willReturn(
-                "# Changelog\n\nProject-specific introduction.\n\n## 1.0.0 - 2026-04-08\n\n### Added\n\n- Initial release.\n"
+                "# Changelog\n\nProject-specific introduction.\n\n## [1.0.0] - 2026-04-08\n\n### Added\n\n- Initial release.\n"
             )
             ->shouldBeCalled();
         $this->filesystem->dumpFile(
@@ -159,7 +159,7 @@ final class BootstrapperTest extends TestCase
             Argument::that(
                 fn(string $content): bool => str_contains(
                     $content,
-                    "Project-specific introduction.\n\n## Unreleased - TBD\n\n### Added"
+                    "Project-specific introduction.\n\n## [Unreleased]\n\n## [1.0.0] - 2026-04-08"
                 )
             )
         )->shouldBeCalled();

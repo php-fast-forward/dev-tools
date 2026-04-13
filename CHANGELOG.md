@@ -1,13 +1,11 @@
 # Changelog
 
-All notable changes to this project will be documented in this file, in reverse chronological order by release.
+All notable changes to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## Unreleased - TBD
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.4.0...HEAD)
+## [Unreleased]
 
 ### Added
 
@@ -23,25 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed changelog bootstrap and validation workflows to run Composer-based dev-tools commands on PHP 8.3 instead of legacy script shims (#40)
 - Changed changelog guidance to derive entries from code diffs and append related pull request references in the format `(#123)` when a matching PR exists (#40)
 
-### Deprecated
-
-- Nothing.
-
-### Removed
-
-- Nothing.
-
-### Fixed
-
-- Nothing.
-
-### Security
-
-- Nothing.
-
-## 1.4.0 - 2026-04-11
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.3.0...v1.4.0)
+## [1.4.0] - 2026-04-11
 
 ### Added
 
@@ -55,9 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed Symfony component constraints to support version 8.0
 
-## 1.3.0 - 2026-04-11
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.2.1...v1.3.0)
+## [1.3.0] - 2026-04-11
 
 ### Added
 
@@ -68,9 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed Git attribute synchronization into a dedicated command instead of implicit sync logic
 
-## 1.2.1 - 2026-04-10
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.2.0...v1.2.1)
+## [1.2.1] - 2026-04-10
 
 ### Added
 
@@ -80,9 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Changed `.gitattributes` to export the packaging metadata introduced with license generation (#26)
 
-## 1.2.0 - 2026-04-10
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.1.0...v1.2.0)
+## [1.2.0] - 2026-04-10
 
 ### Added
 
@@ -97,9 +71,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed dependency analysis reporting for missing and unused Composer packages
 
-## 1.1.0 - 2026-04-09
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.0...v1.1.0)
+## [1.1.0] - 2026-04-09
 
 ### Added
 
@@ -116,9 +88,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed the reports workflow trigger, PHPDoc cleanup, skill file endings, and `.editorconfig` synchronization
 
-## 1.0.0 - 2026-04-08
-
-[View release](https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.0)
+## [1.0.0] - 2026-04-08
 
 ### Added
 
@@ -138,9 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Fixed GitHub Pages metadata, workflow PHP extension declarations, wiki submodule path handling, and phpdoc command arguments
 
-## 1.2.2 - 2026-03-26
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.4...v1.2.2)
+## [1.2.2] - 2026-03-26
 
 ### Added
 
@@ -156,33 +124,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Removed `InstallScriptsCommand` and `ScriptsInstallerTrait` in favor of the unified install command
 
-## 1.0.4 - 2026-03-26
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.3...v1.0.4)
+## [1.0.4] - 2026-03-26
 
 ### Changed
 
 - Changed `DocsCommand` to resolve configuration files relative to the project root, including consumer-friendly relative paths
 
-## 1.0.3 - 2026-03-26
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.2...v1.0.3)
+## [1.0.3] - 2026-03-26
 
 ### Added
 
 - Added package name validation to install scripts before updating consumer repositories
 
-## 1.0.2 - 2026-03-26
-
-[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.1...v1.0.2)
+## [1.0.2] - 2026-03-26
 
 ### Changed
 
 - Changed Composer plugin metadata to declare `composer/composer` as a required dependency during installation
 
-## 1.0.1 - 2026-03-26
-
-[View release](https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.1)
+## [1.0.1] - 2026-03-26
 
 ### Added
 
@@ -198,3 +158,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Fixed command argument handling, bin registration, path resolution, deploy wiring, and coverage configuration for the initial packaged release
+
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.4.0...HEAD
+[1.4.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.2.1...v1.3.0
+[1.2.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.0...v1.1.0
+[1.0.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.2.2...v1.0.0
+[1.2.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.4...v1.2.2
+[1.0.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.1

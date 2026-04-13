@@ -20,6 +20,7 @@ namespace FastForward\DevTools\Tests\Changelog;
 
 use FastForward\DevTools\Changelog\CommitClassifierInterface;
 use FastForward\DevTools\Changelog\GitReleaseCollectorInterface;
+use FastForward\DevTools\Changelog\GitProcessRunnerInterface;
 use FastForward\DevTools\Changelog\HistoryGenerator;
 use FastForward\DevTools\Changelog\MarkdownRenderer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -45,6 +46,11 @@ final class HistoryGeneratorTest extends TestCase
      */
     private ObjectProphecy $commitClassifier;
 
+    /**
+     * @var ObjectProphecy<GitProcessRunnerInterface>
+     */
+    private ObjectProphecy $gitProcessRunner;
+
     private HistoryGenerator $historyGenerator;
 
     /**
@@ -56,9 +62,12 @@ final class HistoryGeneratorTest extends TestCase
 
         $this->gitReleaseCollector = $this->prophesize(GitReleaseCollectorInterface::class);
         $this->commitClassifier = $this->prophesize(CommitClassifierInterface::class);
+        $this->gitProcessRunner = $this->prophesize(GitProcessRunnerInterface::class);
         $this->historyGenerator = new HistoryGenerator(
             $this->gitReleaseCollector->reveal(),
             $this->commitClassifier->reveal(),
+            new MarkdownRenderer(),
+            $this->gitProcessRunner->reveal(),
         );
     }
 
@@ -77,6 +86,8 @@ final class HistoryGeneratorTest extends TestCase
                     'commits' => ['feat: add bootstrap', 'fix: validate changelog'],
                 ],
             ]);
+        $this->gitProcessRunner->run(['git', 'config', '--get', 'remote.origin.url'], '/tmp/project')
+            ->willReturn('git@github.com:php-fast-forward/dev-tools.git');
         $this->commitClassifier->classify('feat: add bootstrap')
             ->willReturn('Added');
         $this->commitClassifier->normalize('feat: add bootstrap')
@@ -88,9 +99,17 @@ final class HistoryGeneratorTest extends TestCase
 
         $markdown = $this->historyGenerator->generate('/tmp/project');
 
-        self::assertStringContainsString('## Unreleased - TBD', $markdown);
-        self::assertStringContainsString('## 1.0.0 - 2026-04-08', $markdown);
+        self::assertStringContainsString('## [Unreleased]', $markdown);
+        self::assertStringContainsString('## [1.0.0] - 2026-04-08', $markdown);
         self::assertStringContainsString('- Add bootstrap', $markdown);
         self::assertStringContainsString('- Validate changelog', $markdown);
+        self::assertStringContainsString(
+            '[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.0...HEAD',
+            $markdown
+        );
+        self::assertStringContainsString(
+            '[1.0.0]: https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.0',
+            $markdown
+        );
     }
 }

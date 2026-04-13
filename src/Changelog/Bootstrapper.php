@@ -32,6 +32,10 @@ use function substr;
  */
 final readonly class Bootstrapper implements BootstrapperInterface
 {
+    private const string STANDARD_INTRODUCTION = "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),\nand this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).\n\n";
+
+    private const string UNRELEASED_SECTION = "## [Unreleased]\n\n";
+
     /**
      * Initializes the `Bootstrapper` with optional dependencies.
      *
@@ -75,7 +79,7 @@ final readonly class Bootstrapper implements BootstrapperInterface
 
         $contents = $this->filesystem->readFile($changelogPath);
 
-        if (! str_contains($contents, '## Unreleased - ')) {
+        if (! str_contains($contents, '## [Unreleased]') && ! str_contains($contents, '## Unreleased - ')) {
             $this->filesystem->dumpFile($changelogPath, $this->prependUnreleasedSection($contents));
             $unreleasedCreated = true;
         }
@@ -90,10 +94,11 @@ final readonly class Bootstrapper implements BootstrapperInterface
      */
     private function prependUnreleasedSection(string $contents): string
     {
-        $heading = "# Changelog\n\nAll notable changes to this project will be documented in this file, in reverse chronological order by release.\n\n";
-        $unreleasedSection = "## Unreleased - TBD\n\n### Added\n\n- Nothing.\n\n### Changed\n\n- Nothing.\n\n### Deprecated\n\n- Nothing.\n\n### Removed\n\n- Nothing.\n\n### Fixed\n\n- Nothing.\n\n### Security\n\n- Nothing.\n\n";
-
-        $updatedContents = str_replace($heading, $heading . $unreleasedSection, $contents);
+        $updatedContents = str_replace(
+            self::STANDARD_INTRODUCTION,
+            self::STANDARD_INTRODUCTION . self::UNRELEASED_SECTION,
+            $contents
+        );
 
         if ($updatedContents !== $contents) {
             return $updatedContents;
@@ -102,11 +107,11 @@ final readonly class Bootstrapper implements BootstrapperInterface
         $firstSecondaryHeadingOffset = strpos($contents, "\n## ");
 
         if (false === $firstSecondaryHeadingOffset) {
-            return rtrim($contents) . "\n\n" . $unreleasedSection;
+            return rtrim($contents) . "\n\n" . self::UNRELEASED_SECTION;
         }
 
         return substr($contents, 0, $firstSecondaryHeadingOffset + 1)
-            . $unreleasedSection
+            . self::UNRELEASED_SECTION
             . substr($contents, $firstSecondaryHeadingOffset + 1);
     }
 }
