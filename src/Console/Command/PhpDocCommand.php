@@ -52,8 +52,10 @@ final class PhpDocCommand extends AbstractCommand
     public const string CONFIG = '.php-cs-fixer.dist.php';
 
     /**
-     * @param ComposerJson $composerJson
-     * @param Filesystem $filesystem
+     * Creates a new PhpDocCommand instance.
+     *
+     * @param ComposerJson $composerJson the composer.json accessor
+     * @param Filesystem $filesystem the filesystem component
      */
     public function __construct(
         private readonly ComposerJson $composerJson,
