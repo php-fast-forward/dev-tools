@@ -32,7 +32,9 @@ use function Safe\preg_replace;
 final readonly class PlaceholderResolver implements PlaceholderResolverInterface
 {
     /**
-     * @param ClockInterface $clock
+     * Initializes the resolver with a clock for obtaining the current year if needed.
+     *
+     * @param ClockInterface $clock Clock instance for obtaining the current year if needed
      */
     public function __construct(
         private ClockInterface $clock,
