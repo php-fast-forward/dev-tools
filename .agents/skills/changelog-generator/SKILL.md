@@ -1,6 +1,6 @@
 ---
 name: changelog-generator
-description: Generate or refresh human-readable CHANGELOG.md files that follow Keep a Changelog by comparing git tags and code diffs instead of commit messages. Use when Codex needs to bootstrap a changelog for a repository, backfill undocumented tagged releases, update release entries, or rewrite the Unreleased section for current branch work using the phly/keep-a-changelog commands available in the project.
+description: Generate or refresh human-readable CHANGELOG.md files that follow Keep a Changelog by comparing git tags and code diffs instead of commit messages. Use when an agent needs to bootstrap a changelog for a repository, backfill undocumented tagged releases, update release entries, or rewrite the Unreleased section for current branch work using the phly/keep-a-changelog commands available in the project.
 ---
 
 # Changelog Generator
@@ -55,7 +55,7 @@ php .agents/skills/changelog-generator/scripts/diff-inventory.php <from-ref> <to
 - Mention the concrete command, class, option, workflow, or API when that improves comprehension.
 - When a matching PR exists, append it to the line in the format `(#123)` after the diff already supports the entry.
 - Avoid vague phrases such as `misc improvements`, `refactorings`, or `code cleanup`.
-- Keep the file structure compliant with Keep a Changelog 1.0.0: bracketed version headings, the official intro paragraph, and footer references for `Unreleased` and each version.
+- Keep the file structure compliant with Keep a Changelog 1.1.0: bracketed version headings, the official intro paragraph, and footer references for `Unreleased` and each version.
 - Omit empty sections instead of inserting placeholder entries such as `Nothing.`.
 
 5. Apply changes with project tooling.
