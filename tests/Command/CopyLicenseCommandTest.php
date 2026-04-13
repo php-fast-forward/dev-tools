@@ -28,7 +28,6 @@ use FastForward\DevTools\License\TemplateLoader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
@@ -54,10 +53,7 @@ final class CopyLicenseCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandClass(): CopyLicenseCommand
     {
-        return new CopyLicenseCommand(
-            $this->generator->reveal(),
-            $this->filesystem->reveal()
-        );
+        return new CopyLicenseCommand($this->generator->reveal(), $this->filesystem->reveal());
     }
 
     /**
@@ -101,8 +97,10 @@ final class CopyLicenseCommandTest extends AbstractCommandTestCase
     public function executeWillReturnSuccessAndWriteInfo(): void
     {
         $targetPath = getcwd() . '/LICENSE';
-        $this->filesystem->exists($targetPath)->willReturn(false);
-        $this->generator->generate($targetPath)->willReturn(null);
+        $this->filesystem->exists($targetPath)
+            ->willReturn(false);
+        $this->generator->generate($targetPath)
+            ->willReturn(null);
 
         self::assertSame(CopyLicenseCommand::SUCCESS, $this->invokeExecute());
     }
@@ -114,7 +112,8 @@ final class CopyLicenseCommandTest extends AbstractCommandTestCase
     public function executeWillSkipWhenLicenseFileExists(): void
     {
         $targetPath = getcwd() . '/LICENSE';
-        $this->filesystem->exists($targetPath)->willReturn(true);
+        $this->filesystem->exists($targetPath)
+            ->willReturn(true);
 
         self::assertSame(CopyLicenseCommand::SUCCESS, $this->invokeExecute());
     }

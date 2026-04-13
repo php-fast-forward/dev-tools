@@ -18,62 +18,28 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Composer\Capability;
 
-use FastForward\DevTools\Console\Command\AbstractCommand;
-use FastForward\DevTools\Console\Command\CodeStyleCommand;
-use FastForward\DevTools\Console\Command\CopyLicenseCommand;
-use FastForward\DevTools\Console\Command\DependenciesCommand;
-use FastForward\DevTools\Console\Command\DocsCommand;
-use FastForward\DevTools\Console\Command\GitAttributesCommand;
-use FastForward\DevTools\Console\Command\GitIgnoreCommand;
-use FastForward\DevTools\Console\Command\SyncCommand;
-use FastForward\DevTools\Console\Command\SkillsCommand;
-use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
-use FastForward\DevTools\Console\Command\PhpDocCommand;
-use FastForward\DevTools\Console\Command\RefactorCommand;
-use FastForward\DevTools\Console\Command\ReportsCommand;
-use FastForward\DevTools\Console\Command\StandardsCommand;
-use FastForward\DevTools\Console\Command\TestsCommand;
-use FastForward\DevTools\Console\Command\WikiCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
-use FastForward\DevTools\GitAttributes\CandidateProvider;
-use FastForward\DevTools\GitAttributes\ExistenceChecker;
-use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
-use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
-use FastForward\DevTools\GitAttributes\Reader as GitAttributesReader;
-use FastForward\DevTools\GitAttributes\Writer as GitAttributesWriter;
-use FastForward\DevTools\GitIgnore\Merger as GitIgnoreMerger;
-use FastForward\DevTools\GitIgnore\Writer;
+use FastForward\DevTools\Console\Command\CodeStyleCommand;
+use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Psr\Container\Container as StaticContainer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Psr\Container\ContainerInterface;
+use ReflectionProperty;
+use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(DevToolsCommandProvider::class)]
 #[UsesClass(CodeStyleCommand::class)]
-#[UsesClass(RefactorCommand::class)]
-#[UsesClass(TestsCommand::class)]
-#[UsesClass(DependenciesCommand::class)]
-#[UsesClass(PhpDocCommand::class)]
-#[UsesClass(DocsCommand::class)]
-#[UsesClass(StandardsCommand::class)]
-#[UsesClass(ReportsCommand::class)]
-#[UsesClass(WikiCommand::class)]
-#[UsesClass(SyncCommand::class)]
-#[UsesClass(GitIgnoreCommand::class)]
-#[UsesClass(GitAttributesCommand::class)]
-#[UsesClass(SkillsCommand::class)]
-#[UsesClass(CopyLicenseCommand::class)]
-#[UsesClass(SkillsSynchronizer::class)]
-#[UsesClass(CandidateProvider::class)]
-#[UsesClass(ExistenceChecker::class)]
-#[UsesClass(ExportIgnoreFilter::class)]
-#[UsesClass(GitAttributesMerger::class)]
-#[UsesClass(GitAttributesReader::class)]
-#[UsesClass(GitAttributesWriter::class)]
-#[UsesClass(GitIgnoreMerger::class)]
-#[UsesClass(Writer::class)]
+#[UsesClass(DevTools::class)]
+#[UsesClass(StaticContainer::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
+    use ProphecyTrait;
+
     private DevToolsCommandProvider $commandProvider;
 
     /**
@@ -82,43 +48,80 @@ final class DevToolsCommandProviderTest extends TestCase
     protected function setUp(): void
     {
         $this->commandProvider = new DevToolsCommandProvider();
+        $this->setStaticContainer(null);
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $this->setStaticContainer(null);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function getCommandsWillReturnAllSupportedCommandsInExpectedOrder(): void
+    public function getCommandsWillReturnCommandsFromConfiguredDevToolsApplication(): void
     {
-        self::assertEquals(
-            [
-                new CodeStyleCommand(),
-                new RefactorCommand(),
-                new TestsCommand(),
-                new DependenciesCommand(),
-                new PhpDocCommand(),
-                new DocsCommand(),
-                new StandardsCommand(),
-                new ReportsCommand(),
-                new WikiCommand(),
-                new SyncCommand(),
-                new GitIgnoreCommand(),
-                new GitAttributesCommand(),
-                new SkillsCommand(),
-                new CopyLicenseCommand(),
-            ],
-            $this->commandProvider->getCommands(),
-        );
+        $customCommand = new CodeStyleCommand(new Filesystem());
+
+        $commandLoader = $this->prophesize(CommandLoaderInterface::class);
+        $commandLoader->getNames()
+            ->willReturn(['code-style']);
+        $commandLoader->has('code-style')
+            ->willReturn(true);
+        $commandLoader->get('code-style')
+            ->willReturn($customCommand);
+
+        $container = $this->prophesize(ContainerInterface::class);
+        $container->get(DevTools::class)
+            ->willReturn(new DevTools($commandLoader->reveal()))
+            ->shouldBeCalledOnce();
+
+        $this->setStaticContainer($container->reveal());
+
+        $commands = $this->commandProvider->getCommands();
+
+        self::assertCount(1, $commands);
+        self::assertSame($customCommand, $commands[0]);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function getCommandsWillReturnOnlyAbstractCommandImplementations(): void
+    public function getCommandsWillReturnOnlyCommandInstances(): void
     {
+        $customCommand = new CodeStyleCommand(new Filesystem());
+
+        $commandLoader = $this->prophesize(CommandLoaderInterface::class);
+        $commandLoader->getNames()
+            ->willReturn(['code-style']);
+        $commandLoader->has('code-style')
+            ->willReturn(true);
+        $commandLoader->get('code-style')
+            ->willReturn($customCommand);
+
+        $container = $this->prophesize(ContainerInterface::class);
+        $container->get(DevTools::class)->willReturn(new DevTools($commandLoader->reveal()));
+
+        $this->setStaticContainer($container->reveal());
+
         foreach ($this->commandProvider->getCommands() as $command) {
-            self::assertInstanceOf(AbstractCommand::class, $command);
+            self::assertInstanceOf(CodeStyleCommand::class, $command);
         }
+    }
+
+    /**
+     * @param ContainerInterface|null $container
+     *
+     * @return void
+     */
+    private function setStaticContainer(?ContainerInterface $container): void
+    {
+        $property = new ReflectionProperty(StaticContainer::class, 'container');
+        $property->setValue(null, $container);
     }
 }

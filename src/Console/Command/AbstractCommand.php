@@ -36,7 +36,6 @@ use function Safe\getcwd;
  */
 abstract class AbstractCommand extends BaseCommand
 {
-
     /**
      * Constructs a new AbstractCommand instance.
      *
@@ -161,7 +160,7 @@ abstract class AbstractCommand extends BaseCommand
      */
     protected function getDevToolsFile(string $filename): string
     {
-        return Path::makeAbsolute($filename, \dirname(__DIR__, 2));
+        return Path::makeAbsolute($filename, \dirname(__DIR__, 3));
     }
 
     /**

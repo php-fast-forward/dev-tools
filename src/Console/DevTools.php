@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console;
 
+use Override;
 use Composer\Console\Application as ComposerApplication;
 use ReflectionMethod;
 use Symfony\Component\Console\Application;
@@ -37,9 +38,8 @@ final class DevTools extends ComposerApplication
      *
      * @param CommandLoaderInterface $commandLoader the command loader responsible for providing command instances
      */
-    public function __construct(
-        CommandLoaderInterface $commandLoader,
-    ) {
+    public function __construct(CommandLoaderInterface $commandLoader)
+    {
         parent::__construct('Fast Forward Dev Tools');
 
         $this->setDefaultCommand('standards');
@@ -54,6 +54,7 @@ final class DevTools extends ComposerApplication
      *
      * @return array
      */
+    #[Override]
     protected function getDefaultCommands(): array
     {
         $reflectionMethod = new ReflectionMethod(Application::class, __FUNCTION__);

@@ -44,6 +44,10 @@ use function strtr;
 )]
 final class DocsCommand extends AbstractCommand
 {
+    /**
+     * @param ComposerJson $composerJson
+     * @param Filesystem $filesystem
+     */
     public function __construct(
         private readonly ComposerJson $composerJson,
         Filesystem $filesystem

@@ -29,10 +29,13 @@ use function Safe\preg_replace;
  * {{ organization }}, and {{ copyright_holder }} with values from metadata.
  * Unresolved placeholders are removed and excess newlines are normalized.
  */
-final class PlaceholderResolver implements PlaceholderResolverInterface
+final readonly class PlaceholderResolver implements PlaceholderResolverInterface
 {
+    /**
+     * @param ClockInterface $clock
+     */
     public function __construct(
-        private readonly ClockInterface $clock,
+        private ClockInterface $clock,
     ) {}
 
     /**

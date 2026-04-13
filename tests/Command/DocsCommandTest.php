@@ -44,10 +44,7 @@ final class DocsCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandClass(): DocsCommand
     {
-        return new DocsCommand(
-            $this->composerJson->reveal(),
-            $this->filesystem->reveal()
-        );
+        return new DocsCommand($this->composerJson->reveal(), $this->filesystem->reveal());
     }
 
     /**
@@ -80,6 +77,12 @@ final class DocsCommandTest extends AbstractCommandTestCase
     protected function setUp(): void
     {
         $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->composerJson->getAutoload()
+            ->willReturn([
+                'FastForward\\DevTools\\' => getcwd() . '/src',
+            ]);
+        $this->composerJson->getPackageDescription()
+            ->willReturn('Fast Forward Dev Tools plugin');
 
         parent::setUp();
     }

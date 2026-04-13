@@ -61,6 +61,7 @@ final class GitAttributesCommand extends AbstractCommand
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface $writer the writer component
      * @param Filesystem $filesystem the filesystem component
+     * @param ComposerJson $composerJson
      */
     public function __construct(
         private readonly CandidateProviderInterface $candidateProvider,

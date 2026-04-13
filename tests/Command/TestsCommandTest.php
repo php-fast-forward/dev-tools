@@ -91,6 +91,10 @@ final class TestsCommandTest extends AbstractCommandTestCase
     {
         $this->coverageSummaryLoader = $this->prophesize(CoverageSummaryLoaderInterface::class);
         $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->composerJson->getAutoload()
+            ->willReturn([
+                'FastForward\\DevTools\\' => 'src/',
+            ]);
 
         parent::setUp();
 

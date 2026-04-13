@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Composer\Capability;
 
+use Composer\Command\BaseCommand;
 use Composer\Plugin\Capability\CommandProvider;
 use FastForward\DevTools\Console\DevTools;
 use FastForward\DevTools\Psr\Container\Container;
@@ -33,6 +34,9 @@ final class DevToolsCommandProvider implements CommandProvider
      */
     public function getCommands()
     {
-        return Container::get(DevTools::class)->getCommands();
+        return array_values(array_filter(
+            Container::get(DevTools::class)->all(),
+            static fn(object $command): bool => $command instanceof BaseCommand,
+        ));
     }
 }

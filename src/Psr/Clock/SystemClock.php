@@ -18,12 +18,16 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Psr\Clock;
 
+use DateTimeImmutable;
 use Psr\Clock\ClockInterface;
 
 final class SystemClock implements ClockInterface
 {
-    public function now(): \DateTimeImmutable
+    /**
+     * @return DateTimeImmutable
+     */
+    public function now(): DateTimeImmutable
     {
-        return new \DateTimeImmutable();
+        return new DateTimeImmutable();
     }
 }

@@ -18,14 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use Composer\Factory;
-use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
-use FastForward\DevTools\License\PlaceholderResolver;
-use FastForward\DevTools\License\Reader;
-use FastForward\DevTools\License\Resolver;
-use FastForward\DevTools\License\TemplateLoader;
-use SplFileObject;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;

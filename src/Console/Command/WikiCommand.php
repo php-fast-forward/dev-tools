@@ -38,6 +38,10 @@ use Symfony\Component\Process\Process;
 )]
 final class WikiCommand extends AbstractCommand
 {
+    /**
+     * @param ComposerJson $composerJson
+     * @param Filesystem $filesystem
+     */
     public function __construct(
         private readonly ComposerJson $composerJson,
         Filesystem $filesystem

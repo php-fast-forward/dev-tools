@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJson;
-use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use InvalidArgumentException;
 use RuntimeException;

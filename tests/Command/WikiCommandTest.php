@@ -18,10 +18,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
+use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Console\Command\WikiCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(WikiCommand::class)]
@@ -30,11 +32,16 @@ final class WikiCommandTest extends AbstractCommandTestCase
     use ProphecyTrait;
 
     /**
-     * @return string
+     * @var ObjectProphecy<ComposerJson>
      */
-    protected function getCommandClass(): string
+    private ObjectProphecy $composerJson;
+
+    /**
+     * @return WikiCommand
+     */
+    protected function getCommandClass(): WikiCommand
     {
-        return WikiCommand::class;
+        return new WikiCommand($this->composerJson->reveal(), $this->filesystem->reveal());
     }
 
     /**
@@ -58,7 +65,24 @@ final class WikiCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandHelp(): string
     {
-        return 'This command generates API documentation in Markdown format using phpDocumentor.';
+        return 'This command generates API documentation in Markdown format using phpDocumentor. '
+            . 'It accepts an optional `--target` option to specify the output directory for the generated documentation.';
+    }
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->composerJson->getPackageDescription()
+            ->willReturn('Fast Forward Dev Tools plugin');
+        $this->composerJson->getAutoload()
+            ->willReturn([
+                'FastForward\\DevTools\\' => 'src/',
+            ]);
+
+        parent::setUp();
     }
 
     /**

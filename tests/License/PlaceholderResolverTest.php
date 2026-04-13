@@ -18,14 +18,19 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\License;
 
+use DateTimeImmutable;
 use FastForward\DevTools\License\PlaceholderResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Psr\Clock\ClockInterface;
 
 #[CoversClass(PlaceholderResolver::class)]
 final class PlaceholderResolverTest extends TestCase
 {
+    use ProphecyTrait;
+
     private PlaceholderResolver $resolver;
 
     /**
@@ -35,7 +40,11 @@ final class PlaceholderResolverTest extends TestCase
     {
         parent::setUp();
 
-        $this->resolver = new PlaceholderResolver();
+        $clock = $this->prophesize(ClockInterface::class);
+        $clock->now()
+            ->willReturn(new DateTimeImmutable('2026-01-01 00:00:00'));
+
+        $this->resolver = new PlaceholderResolver($clock->reveal());
     }
 
     /**

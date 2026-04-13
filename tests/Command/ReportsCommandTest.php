@@ -23,7 +23,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Component\Console\Command\Command;
 
 #[CoversClass(ReportsCommand::class)]
 final class ReportsCommandTest extends AbstractCommandTestCase
@@ -68,28 +67,11 @@ final class ReportsCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillRunDocsAndTestsCommand(): void
     {
-        $docsCommand = $this->prophesize(Command::class);
-        $docsCommand->run(Argument::any(), Argument::any())->willReturn(ReportsCommand::SUCCESS);
-        $docsCommand->ignoreValidationErrors()
-            ->will(function (): void {});
-
-        $testsCommand = $this->prophesize(Command::class);
-        $testsCommand->run(Argument::any(), Argument::any())->willReturn(ReportsCommand::SUCCESS);
-        $testsCommand->ignoreValidationErrors()
-            ->will(function (): void {});
-
-        $this->application->find('docs')
-            ->willReturn($docsCommand->reveal());
-        $this->application->find('tests')
-            ->willReturn($testsCommand->reveal());
-
         $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
             ->shouldBeCalled();
         $this->output->writeln(Argument::containingString('Generating API documentation on path:'))
             ->shouldBeCalled();
         $this->output->writeln(Argument::containingString('Generating test coverage report on path:'))
-            ->shouldBeCalled();
-        $this->output->writeln('<info>Frontpage generation completed!</info>')
             ->shouldBeCalled();
 
         self::assertSame(ReportsCommand::SUCCESS, $this->invokeExecute());

@@ -39,7 +39,7 @@ use Symfony\Component\Filesystem\Filesystem;
 #[AsCommand(
     name: 'gitignore',
     description: 'Merges and synchronizes .gitignore files.',
-    help: 'This command merges the canonical .gitignore from dev-tools with the project\'s existing .gitignore.'
+    help: "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore."
 )]
 final class GitIgnoreCommand extends AbstractCommand
 {

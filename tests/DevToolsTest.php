@@ -18,8 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests;
 
-use Composer\Plugin\Capability\CommandProvider;
-use FastForward\DevTools\DevTools;
+use FastForward\DevTools\Console\DevTools;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -32,6 +31,7 @@ use Symfony\Component\Console\Command\CompleteCommand;
 use Symfony\Component\Console\Command\DumpCompletionCommand;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
+use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
 #[CoversClass(DevTools::class)]
 final class DevToolsTest extends TestCase
@@ -39,9 +39,9 @@ final class DevToolsTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy<CommandProvider>
+     * @var ObjectProphecy<CommandLoaderInterface>
      */
-    private ObjectProphecy $commandProvider;
+    private ObjectProphecy $commandLoader;
 
     private DevTools $devTools;
 
@@ -51,43 +51,50 @@ final class DevToolsTest extends TestCase
     #[Override]
     protected function setUp(): void
     {
-        $this->commandProvider = $this->prophesize(CommandProvider::class);
-        $this->devTools = new DevTools($this->commandProvider->reveal());
+        $this->commandLoader = $this->prophesize(CommandLoaderInterface::class);
+        $this->commandLoader->getNames()
+            ->willReturn([]);
+        $this->devTools = new DevTools($this->commandLoader->reveal());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function getDefaultCommandsWillMergeProvidedCommandsWithFrameworkDefaults(): void
+    public function getDefaultCommandsWillReturnFrameworkDefaultsOnly(): void
     {
-        $firstCommand = new class extends Command {};
-
-        $secondCommand = new class extends Command {};
-
-        $this->commandProvider
-            ->getCommands()
-            ->willReturn([$firstCommand, $secondCommand])
-            ->shouldBeCalledOnce();
-
         $commands = $this->invokeGetDefaultCommands($this->devTools);
 
-        self::assertCount(6, $commands);
-        self::assertSame($firstCommand, $commands[0]);
-        self::assertSame($secondCommand, $commands[1]);
-        self::assertInstanceOf(HelpCommand::class, $commands[2]);
-        self::assertInstanceOf(ListCommand::class, $commands[3]);
-        self::assertInstanceOf(CompleteCommand::class, $commands[4]);
-        self::assertInstanceOf(DumpCompletionCommand::class, $commands[5]);
+        self::assertCount(4, $commands);
+        self::assertInstanceOf(HelpCommand::class, $commands[0]);
+        self::assertInstanceOf(ListCommand::class, $commands[1]);
+        self::assertInstanceOf(CompleteCommand::class, $commands[2]);
+        self::assertInstanceOf(DumpCompletionCommand::class, $commands[3]);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function constructorWillSetApplicationName(): void
+    public function constructorWillSetApplicationNameAndExposeLoaderCommands(): void
     {
+        $customCommand = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('custom');
+            }
+        };
+
+        $this->commandLoader->getNames()
+            ->willReturn(['custom']);
+        $this->commandLoader->has('custom')
+            ->willReturn(true);
+        $this->commandLoader->get('custom')
+            ->willReturn($customCommand);
+
         self::assertSame('Fast Forward Dev Tools', $this->devTools->getName());
+        self::assertTrue($this->devTools->has('custom'));
+        self::assertSame($customCommand, $this->devTools->get('custom'));
     }
 
     /**

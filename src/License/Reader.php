@@ -31,21 +31,19 @@ use Safe\Exceptions\JsonException;
  */
 final readonly class Reader implements ReaderInterface
 {
-    private array $data;
-
     /**
      * Creates a new Reader instance.
      *
      * @param ComposerJson $source The source file to read from, typically composer.json
+     * @param ClockInterface $clock
+     * @param ComposerJson $composerJson
      *
      * @throws JsonException if the JSON content is invalid
      */
     public function __construct(
-        private readonly ClockInterface $clock,
-        private readonly ComposerJson $composerJson,
-    ) {
-        $this->data = $composerJson->read();
-    }
+        private ClockInterface $clock,
+        private ComposerJson $composerJson
+    ) {}
 
     /**
      * Retrieves the license identifier from composer.json.
