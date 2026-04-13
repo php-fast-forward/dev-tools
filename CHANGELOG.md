@@ -2,7 +2,12 @@
 
 All notable changes to this project will be documented in this file, in reverse chronological order by release.
 
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
 ## Unreleased - TBD
+
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.4.0...HEAD)
 
 ### Added
 
@@ -36,6 +41,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 1.4.0 - 2026-04-11
 
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.3.0...v1.4.0)
+
 ### Added
 
 - Added `CoverageSummary` and `CoverageSummaryLoader` so PHPUnit coverage data can be reused programmatically in tooling and reports
@@ -50,6 +57,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 1.3.0 - 2026-04-11
 
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.2.1...v1.3.0)
+
 ### Added
 
 - Added `GitAttributesCommand` and supporting reader, merger, and writer services to keep `export-ignore` rules synchronized with packaged files
@@ -61,6 +70,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 1.2.1 - 2026-04-10
 
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.2.0...v1.2.1)
+
 ### Added
 
 - Added fuller PHPDoc coverage for license generation services and interfaces (#26)
@@ -70,6 +81,8 @@ All notable changes to this project will be documented in this file, in reverse 
 - Changed `.gitattributes` to export the packaging metadata introduced with license generation (#26)
 
 ## 1.2.0 - 2026-04-10
+
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.1.0...v1.2.0)
 
 ### Added
 
@@ -85,6 +98,8 @@ All notable changes to this project will be documented in this file, in reverse 
 - Fixed dependency analysis reporting for missing and unused Composer packages
 
 ## 1.1.0 - 2026-04-09
+
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.0...v1.1.0)
 
 ### Added
 
@@ -103,8 +118,11 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 1.0.0 - 2026-04-08
 
+[View release](https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.0)
+
 ### Added
 
+- Initial public release of `fast-forward/dev-tools` as a Composer plugin that exposes a unified `dev-tools` workflow for tests, code style, refactoring, PHPDoc, reports, and wiki automation
 - Added PHPUnit desktop notification support through `DevToolsExtension`, `ByPassfinalsStartedSubscriber`, `JoliNotifExecutionFinishedSubscriber`, and bundled notifier assets
 - Added expanded Sphinx guides, FAQ content, project links, and README badges for installation, configuration, and usage
 - Added Dependabot and funding templates plus the phpDocumentor bootstrap template and Composer changelog plugin to the packaged tooling
@@ -122,6 +140,8 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 1.2.2 - 2026-03-26
 
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.4...v1.2.2)
+
 ### Added
 
 - Added `install` command to synchronize dev-tools scripts, reusable GitHub workflow-call templates, `.editorconfig`, and GrumPHP defaults into consumer repositories
@@ -138,11 +158,15 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 1.0.4 - 2026-03-26
 
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.3...v1.0.4)
+
 ### Changed
 
 - Changed `DocsCommand` to resolve configuration files relative to the project root, including consumer-friendly relative paths
 
 ## 1.0.3 - 2026-03-26
+
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.2...v1.0.3)
 
 ### Added
 
@@ -150,11 +174,15 @@ All notable changes to this project will be documented in this file, in reverse 
 
 ## 1.0.2 - 2026-03-26
 
+[Compare changes](https://github.com/php-fast-forward/dev-tools/compare/v1.0.1...v1.0.2)
+
 ### Changed
 
 - Changed Composer plugin metadata to declare `composer/composer` as a required dependency during installation
 
 ## 1.0.1 - 2026-03-26
+
+[View release](https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.1)
 
 ### Added
 
