@@ -71,7 +71,7 @@ final class SyncCommandTest extends AbstractCommandTestCase
      */
     protected function getCommandDescription(): string
     {
-        return 'Installs and synchronizes dev-tools scripts, reusable workflows, changelog assets, .editorconfig, and archive metadata in the root project.';
+        return 'Installs and synchronizes dev-tools scripts, GitHub Actions reusable workflows, changelog assets, .editorconfig, and .gitattributes in the root project.';
     }
 
     /**
