@@ -16,7 +16,7 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Tests\Command;
+namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Composer\Json\ComposerJson;
