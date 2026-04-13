@@ -28,9 +28,12 @@ use Symfony\Component\Process\Process;
  * Provides functionality to execute automated code refactoring using Rector.
  * This class MUST NOT be extended and SHALL encapsulate the logic for Rector invocation.
  */
-#[AsCommand(name: 'refactor', description: 'Runs Rector for code refactoring.', aliases: [
-    'rector',
-], help: 'This command runs Rector to refactor your code.')]
+#[AsCommand(
+    name: 'refactor',
+    description: 'Runs Rector for code refactoring.',
+    aliases: ['rector'],
+    help: 'This command runs Rector to refactor your code.'
+)]
 final class RefactorCommand extends AbstractCommand
 {
     /**
