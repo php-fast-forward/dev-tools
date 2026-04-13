@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools;
 
 use FastForward\DevTools\Console\DevTools;
-use FastForward\DevTools\Psr\Container\Container;
 use Symfony\Component\Console\Input\ArgvInput;
 
 $projectVendorAutoload = \dirname(__DIR__, 4) . '/vendor/autoload.php';
@@ -27,5 +26,4 @@ $pluginVendorAutoload = \dirname(__DIR__) . '/vendor/autoload.php';
 
 require_once file_exists($projectVendorAutoload) ? $projectVendorAutoload : $pluginVendorAutoload;
 
-$application = Container::get(DevTools::class);
-$application->run(new ArgvInput([...$argv, '--no-plugins']));
+DevTools::create()->run(new ArgvInput([...$argv, '--no-plugins']));

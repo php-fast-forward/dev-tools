@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Composer\Capability;
 use Composer\Command\BaseCommand;
 use Composer\Plugin\Capability\CommandProvider;
 use FastForward\DevTools\Console\DevTools;
-use FastForward\DevTools\Psr\Container\Container;
 
 /**
  * Provides a registry of custom dev-tools commands mapped for Composer integration.
@@ -35,7 +34,7 @@ final class DevToolsCommandProvider implements CommandProvider
     public function getCommands()
     {
         return array_values(array_filter(
-            Container::get(DevTools::class)->all(),
+            DevTools::create()->all(),
             static fn(object $command): bool => $command instanceof BaseCommand,
         ));
     }

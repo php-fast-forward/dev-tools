@@ -27,6 +27,7 @@
         "php": "^8.3",
         "composer-plugin-api": "^2.0",
         "composer/composer": "^2.9",
+        "container-interop/service-provider": "^0.4.1",
         "dg/bypass-finals": "^1.9",
         "ergebnis/composer-normalize": "^2.50",
         "ergebnis/rector-rules": "^1.14",

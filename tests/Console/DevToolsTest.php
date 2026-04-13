@@ -16,7 +16,7 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Tests;
+namespace FastForward\DevTools\Tests\Console;
 
 use FastForward\DevTools\Console\DevTools;
 use Override;

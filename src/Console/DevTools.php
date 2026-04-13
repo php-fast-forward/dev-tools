@@ -18,8 +18,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console;
 
+use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use Composer\Console\Application as ComposerApplication;
+use DI\Container;
+use Psr\Container\ContainerInterface;
 use ReflectionMethod;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
@@ -30,6 +33,8 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
  */
 final class DevTools extends ComposerApplication
 {
+    private static ?ContainerInterface $container = null;
+
     /**
      * Initializes the DevTools global context and dependency graph.
      *
@@ -44,6 +49,21 @@ final class DevTools extends ComposerApplication
 
         $this->setDefaultCommand('standards');
         $this->setCommandLoader($commandLoader);
+    }
+
+    /**
+     * Create DevTools instance from container.
+     *
+     * @return DevTools
+     */
+    public static function create(): self
+    {
+        if (self::$container === null) {
+            $serviceProvider = new DevToolsServiceProvider();
+            self::$container = new Container($serviceProvider->getFactories());
+        }
+
+        return self::$container->get(self::class);
     }
 
     /**

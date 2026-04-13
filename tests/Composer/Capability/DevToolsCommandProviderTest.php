@@ -18,27 +18,30 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Composer\Capability;
 
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
 use FastForward\DevTools\Console\DevTools;
-use FastForward\DevTools\Psr\Container\Container as StaticContainer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(DevToolsCommandProvider::class)]
-#[UsesClass(CodeStyleCommand::class)]
 #[UsesClass(DevTools::class)]
-#[UsesClass(StaticContainer::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
     use ProphecyTrait;
+
+    private ObjectProphecy $container;
+    private ObjectProphecy $devTools;
 
     private DevToolsCommandProvider $commandProvider;
 
@@ -47,81 +50,45 @@ final class DevToolsCommandProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->commandProvider = new DevToolsCommandProvider();
-        $this->setStaticContainer(null);
-    }
+        $this->container = $this->prophesize(ContainerInterface::class);
+        $this->devTools = $this->prophesize(DevTools::class);
 
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        $this->setStaticContainer(null);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function getCommandsWillReturnCommandsFromConfiguredDevToolsApplication(): void
-    {
-        $customCommand = new CodeStyleCommand(new Filesystem());
-
-        $commandLoader = $this->prophesize(CommandLoaderInterface::class);
-        $commandLoader->getNames()
-            ->willReturn(['code-style']);
-        $commandLoader->has('code-style')
-            ->willReturn(true);
-        $commandLoader->get('code-style')
-            ->willReturn($customCommand);
-
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get(DevTools::class)
-            ->willReturn(new DevTools($commandLoader->reveal()))
+        $this->container->get(DevTools::class)
+            ->willReturn($this->devTools->reveal())
             ->shouldBeCalledOnce();
 
-        $this->setStaticContainer($container->reveal());
+        $this->devTools->all()->willReturn([])->shouldBeCalledOnce();
+
+        $this->commandProvider = new DevToolsCommandProvider();
+
+        $property = new ReflectionProperty(DevTools::class, 'container');
+        $property->setValue(null, $this->container->reveal());
+    }
+
+    #[Test]
+    public function getCommandsWillReturnEmptyArrayWhenNoCommandsAreRegistered(): void
+    {
+        $commands = $this->commandProvider->getCommands();
+
+        self::assertIsArray($commands);
+        self::assertEmpty($commands);
+    }
+
+    #[Test]
+    public function getCommandsWillReturnRegisteredBaseCommands(): void
+    {
+        $composerCommand = $this->prophesize(BaseCommand::class)->reveal();
+        $symfonyCommand = $this->prophesize(Command::class)->reveal();
+
+        $this->devTools->all()->willReturn([
+            $composerCommand,
+            $symfonyCommand,
+        ])->shouldBeCalledOnce();
 
         $commands = $this->commandProvider->getCommands();
 
+        self::assertIsArray($commands);
         self::assertCount(1, $commands);
-        self::assertSame($customCommand, $commands[0]);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function getCommandsWillReturnOnlyCommandInstances(): void
-    {
-        $customCommand = new CodeStyleCommand(new Filesystem());
-
-        $commandLoader = $this->prophesize(CommandLoaderInterface::class);
-        $commandLoader->getNames()
-            ->willReturn(['code-style']);
-        $commandLoader->has('code-style')
-            ->willReturn(true);
-        $commandLoader->get('code-style')
-            ->willReturn($customCommand);
-
-        $container = $this->prophesize(ContainerInterface::class);
-        $container->get(DevTools::class)->willReturn(new DevTools($commandLoader->reveal()));
-
-        $this->setStaticContainer($container->reveal());
-
-        foreach ($this->commandProvider->getCommands() as $command) {
-            self::assertInstanceOf(CodeStyleCommand::class, $command);
-        }
-    }
-
-    /**
-     * @param ContainerInterface|null $container
-     *
-     * @return void
-     */
-    private function setStaticContainer(?ContainerInterface $container): void
-    {
-        $property = new ReflectionProperty(StaticContainer::class, 'container');
-        $property->setValue(null, $container);
+        self::assertSame($composerCommand, $commands[0]);
     }
 }
