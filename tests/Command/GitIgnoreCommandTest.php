@@ -18,7 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\GitIgnoreCommand;
+use FastForward\DevTools\Console\Command\GitIgnoreCommand;
 use FastForward\DevTools\GitIgnore\GitIgnore;
 use FastForward\DevTools\GitIgnore\GitIgnoreInterface;
 use FastForward\DevTools\GitIgnore\Merger;
@@ -112,10 +112,10 @@ final class GitIgnoreCommandTest extends AbstractCommandTestCase
     protected function getCommandClass(): GitIgnoreCommand
     {
         return new GitIgnoreCommand(
-            $this->filesystem->reveal(),
             $this->merger->reveal(),
             $this->reader->reveal(),
-            $this->writer->reveal()
+            $this->writer->reveal(),
+            $this->filesystem->reveal()
         );
     }
 

@@ -16,7 +16,7 @@ Local Command Lifecycle
    is given.
 5. Individual commands resolve local configuration first and packaged
    fallbacks second through
-   ``FastForward\DevTools\Command\AbstractCommand::getConfigFile()``.
+   ``FastForward\DevTools\Console\Command\AbstractCommand::getConfigFile()``.
 
 Consumer Synchronization Lifecycle
 ----------------------------------
@@ -27,10 +27,10 @@ Consumer Synchronization Lifecycle
    ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
 4. After ``composer install`` or ``composer update``, the plugin runs
    ``vendor/bin/dev-tools dev-tools:sync``.
-5. ``FastForward\DevTools\Command\SyncCommand`` updates scripts, GitHub
+5. ``FastForward\DevTools\Console\Command\SyncCommand`` updates scripts, GitHub
    workflow stubs, ``.editorconfig``, ``dependabot.yml``, ``.gitignore``, and
    the wiki submodule in the consumer repository.
-6. ``FastForward\DevTools\Command\SkillsCommand`` synchronizes packaged skill
+6. ``FastForward\DevTools\Console\Command\SkillsCommand`` synchronizes packaged skill
    links into the consumer ``.agents/skills`` directory.
 7. ``FastForward\DevTools\Agent\Skills\SkillsSynchronizer`` creates missing
    links, repairs broken ones, and preserves consumer-owned directories.
@@ -38,20 +38,20 @@ Consumer Synchronization Lifecycle
 Documentation Pipeline
 ----------------------
 
-1. ``FastForward\DevTools\Command\DocsCommand`` reads PSR-4 paths from
+1. ``FastForward\DevTools\Console\Command\DocsCommand`` reads PSR-4 paths from
    ``composer.json``.
 2. It generates a temporary ``phpdocumentor.xml`` file in
    ``tmp/cache/phpdoc``.
 3. phpDocumentor builds API pages from those PSR-4 paths.
 4. phpDocumentor also builds the guide from the selected ``docs/`` source
    directory.
-5. ``FastForward\DevTools\Command\ReportsCommand`` combines that
+5. ``FastForward\DevTools\Console\Command\ReportsCommand`` combines that
    documentation build with PHPUnit coverage generation.
 
 Key Abstraction
 ---------------
 
-``FastForward\DevTools\Command\AbstractCommand`` is the main shared layer. It
+``FastForward\DevTools\Console\Command\AbstractCommand`` is the main shared layer. It
 centralizes:
 
 - current working directory detection;

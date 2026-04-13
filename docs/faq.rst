@@ -33,13 +33,13 @@ after deleting a packaged skill link locally.
 Why does ``code-style`` touch ``composer.lock``?
 ------------------------------------------------
 
-Because ``FastForward\DevTools\Command\CodeStyleCommand`` always runs
+Because ``FastForward\DevTools\Console\Command\CodeStyleCommand`` always runs
 ``composer update --lock --quiet`` before Composer Normalize and ECS.
 
 Where did ``.docheader`` come from?
 -----------------------------------
 
-``FastForward\DevTools\Command\PhpDocCommand`` creates it automatically when it
+``FastForward\DevTools\Console\Command\PhpDocCommand`` creates it automatically when it
 is missing. The template comes from the packaged file and is rewritten with the
 current package name when possible.
 

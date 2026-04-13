@@ -18,7 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use FastForward\DevTools\Command\GitAttributesCommand;
+use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Console\Command\GitAttributesCommand;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
 use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
@@ -66,6 +67,11 @@ final class GitAttributesCommandTest extends AbstractCommandTestCase
     private ObjectProphecy $writer;
 
     /**
+     * @var ObjectProphecy<ComposerJson>
+     */
+    private ObjectProphecy $composerJson;
+
+    /**
      * @return void
      */
     protected function setUp(): void
@@ -76,6 +82,9 @@ final class GitAttributesCommandTest extends AbstractCommandTestCase
         $this->merger = $this->prophesize(MergerInterface::class);
         $this->reader = $this->prophesize(ReaderInterface::class);
         $this->writer = $this->prophesize(WriterInterface::class);
+        $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->composerJson->getExtra()
+            ->willReturn([]);
 
         parent::setUp();
 
@@ -89,13 +98,14 @@ final class GitAttributesCommandTest extends AbstractCommandTestCase
     protected function getCommandClass(): GitAttributesCommand
     {
         return new GitAttributesCommand(
-            $this->filesystem->reveal(),
             $this->candidateProvider->reveal(),
             $this->existenceChecker->reveal(),
             $this->exportIgnoreFilter->reveal(),
             $this->merger->reveal(),
             $this->reader->reveal(),
             $this->writer->reveal(),
+            $this->composerJson->reveal(),
+            $this->filesystem->reveal(),
         );
     }
 
@@ -177,7 +187,7 @@ final class GitAttributesCommandTest extends AbstractCommandTestCase
         $filteredFiles = ['/.editorconfig'];
         $entries = ['/docs/', '/.editorconfig'];
 
-        $this->package->getExtra()
+        $this->composerJson->getExtra()
             ->willReturn([
                 'gitattributes' => [
                     'keep-in-export' => $keepInExportPaths,

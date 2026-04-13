@@ -18,38 +18,61 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\License;
 
+use DateTimeImmutable;
+use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\License\Reader;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
-use SplFileObject;
+use Psr\Clock\ClockInterface;
 
+use function Safe\file_put_contents;
 use function Safe\json_encode;
+use function Safe\tempnam;
+use function Safe\unlink;
 
 #[CoversClass(Reader::class)]
+#[UsesClass(ComposerJson::class)]
 final class ReaderTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
+     * @var list<string>
+     */
+    private array $temporaryFiles = [];
+
+    /**
      * @param array $data
      *
-     * @return void
+     * @return Reader
      */
     private function createReader(array $data): Reader
     {
-        $json = json_encode($data, \JSON_PRETTY_PRINT);
+        $temporaryFile = tempnam(sys_get_temp_dir(), 'composer-reader-');
+        $this->temporaryFiles[] = $temporaryFile;
 
-        /** @var ObjectProphecy<SplFileObject> $file */
-        $file = $this->prophesize(SplFileObject::class);
-        $file->getSize()
-            ->willReturn(\strlen($json));
-        $file->fread(\strlen($json))
-            ->willReturn($json);
+        file_put_contents($temporaryFile, json_encode($data, \JSON_PRETTY_PRINT));
 
-        return new Reader($file->reveal());
+        $clock = $this->prophesize(ClockInterface::class);
+        $clock->now()
+            ->willReturn(new DateTimeImmutable('2026-01-01 00:00:00'));
+
+        return new Reader($clock->reveal(), new ComposerJson($temporaryFile));
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        foreach ($this->temporaryFiles as $temporaryFile) {
+            if (file_exists($temporaryFile)) {
+                unlink($temporaryFile);
+            }
+        }
     }
 
     /**
@@ -192,6 +215,6 @@ final class ReaderTest extends TestCase
             'name' => 'fast-forward/dev-tools',
         ]);
 
-        self::assertSame((int) date('Y'), $reader->getYear());
+        self::assertSame(2026, $reader->getYear());
     }
 }

@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+use Psr\Clock\ClockInterface;
+
 use function Safe\preg_replace;
 
 /**
@@ -27,8 +29,17 @@ use function Safe\preg_replace;
  * {{ organization }}, and {{ copyright_holder }} with values from metadata.
  * Unresolved placeholders are removed and excess newlines are normalized.
  */
-final class PlaceholderResolver implements PlaceholderResolverInterface
+final readonly class PlaceholderResolver implements PlaceholderResolverInterface
 {
+    /**
+     * Initializes the resolver with a clock for obtaining the current year if needed.
+     *
+     * @param ClockInterface $clock Clock instance for obtaining the current year if needed
+     */
+    public function __construct(
+        private ClockInterface $clock,
+    ) {}
+
     /**
      * Resolves placeholders in a license template with the provided metadata.
      *
@@ -48,8 +59,10 @@ final class PlaceholderResolver implements PlaceholderResolverInterface
      */
     public function resolve(string $template, array $metadata): string
     {
+        $now = $this->clock->now();
+
         $replacements = [
-            '{{ year }}' => (string) ($metadata['year'] ?? date('Y')),
+            '{{ year }}' => (string) ($metadata['year'] ?? $now->format('Y')),
             '{{ organization }}' => $metadata['organization'] ?? '',
             '{{ author }}' => $metadata['author'] ?? '',
             '{{ project }}' => $metadata['project'] ?? '',

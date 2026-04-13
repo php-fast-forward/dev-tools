@@ -16,8 +16,9 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -25,25 +26,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Coordinates the generation of Fast Forward documentation frontpage and related reports.
  * This class MUST NOT be overridden and SHALL securely combine docs and testing commands.
  */
+#[AsCommand(
+    name: 'reports',
+    description: 'Generates the frontpage for Fast Forward documentation.',
+    help: 'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.'
+)]
 final class ReportsCommand extends AbstractCommand
 {
-    /**
-     * Configures the metadata for the reports generation command.
-     *
-     * The method MUST identify the command correctly and describe its intent broadly.
-     *
-     * @return void
-     */
-    protected function configure(): void
-    {
-        $this
-            ->setName('reports')
-            ->setDescription('Generates the frontpage for Fast Forward documentation.')
-            ->setHelp(
-                'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.'
-            );
-    }
-
     /**
      * Executes the generation logic for diverse reports.
      *
@@ -69,8 +58,6 @@ final class ReportsCommand extends AbstractCommand
 
         $output->writeln('<info>Generating test coverage report on path: ' . $coveragePath . '</info>');
         $results[] = $this->runCommand('tests --coverage=' . $coveragePath, $output);
-
-        $output->writeln('<info>Frontpage generation completed!</info>');
 
         return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
     }

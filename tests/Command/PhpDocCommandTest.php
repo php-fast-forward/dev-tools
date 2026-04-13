@@ -18,13 +18,15 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Command;
 
-use Prophecy\Argument;
-use RuntimeException;
-use FastForward\DevTools\Command\PhpDocCommand;
-use FastForward\DevTools\Command\RefactorCommand;
+use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Console\Command\PhpDocCommand;
+use FastForward\DevTools\Console\Command\RefactorCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+use RuntimeException;
 
 use function Safe\getcwd;
 
@@ -34,11 +36,16 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
     use ProphecyTrait;
 
     /**
-     * @return string
+     * @var ObjectProphecy<ComposerJson>
      */
-    protected function getCommandClass(): string
+    private ObjectProphecy $composerJson;
+
+    /**
+     * @return PhpDocCommand
+     */
+    protected function getCommandClass(): PhpDocCommand
     {
-        return PhpDocCommand::class;
+        return new PhpDocCommand($this->composerJson->reveal(), $this->filesystem->reveal());
     }
 
     /**
@@ -70,6 +77,10 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
      */
     protected function setUp(): void
     {
+        $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->composerJson->getPackageName()
+            ->willReturn('fast-forward/dev-tools');
+
         parent::setUp();
 
         $this->withConfigFile(PhpDocCommand::CONFIG);
@@ -124,13 +135,8 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
      * @return void
      */
     #[Test]
-    public function executeWillHandleComposerExceptionDuringDocheaderCreation(): void
+    public function executeWillSkipDocHeaderCreationWhenProjectDocHeaderAlreadyExists(): void
     {
-        // Mock getComposer to return null, which makes requireComposer return null (swallowed)
-        $this->application->getComposer()
-            ->willReturn(null);
-
-        // Mock exists to return true for the project header so it returns early
         $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(true);
 
         $this->willRunProcessWithCallback(static fn(): bool => true);
@@ -138,5 +144,3 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }
 }
-
-// VDI

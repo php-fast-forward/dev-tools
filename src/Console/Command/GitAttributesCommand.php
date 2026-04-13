@@ -16,20 +16,16 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\GitAttributes\CandidateProvider;
+use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
-use FastForward\DevTools\GitAttributes\ExistenceChecker;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
-use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
 use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
-use FastForward\DevTools\GitAttributes\Merger;
 use FastForward\DevTools\GitAttributes\MergerInterface;
-use FastForward\DevTools\GitAttributes\Reader;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
-use FastForward\DevTools\GitAttributes\Writer;
 use FastForward\DevTools\GitAttributes\WriterInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -41,6 +37,12 @@ use Symfony\Component\Filesystem\Path;
  * This command adds export-ignore entries for repository-only files and directories
  * to keep them out of Composer package archives.
  */
+#[AsCommand(
+    name: 'gitattributes',
+    description: 'Manages .gitattributes export-ignore rules for leaner package archives.',
+    help: 'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. '
+    . 'Only paths that exist in the repository are added, existing custom rules are preserved, and "extra.gitattributes.keep-in-export" paths stay in exported archives.'
+)]
 final class GitAttributesCommand extends AbstractCommand
 {
     private const string EXTRA_NAMESPACE = 'gitattributes';
@@ -49,50 +51,29 @@ final class GitAttributesCommand extends AbstractCommand
 
     private const string EXTRA_NO_EXPORT_IGNORE = 'no-export-ignore';
 
-    private readonly WriterInterface $writer;
-
     /**
      * Creates a new GitAttributesCommand instance.
      *
-     * @param Filesystem|null $filesystem the filesystem component
      * @param CandidateProviderInterface $candidateProvider the candidate provider
      * @param ExistenceCheckerInterface $existenceChecker the repository path existence checker
      * @param ExportIgnoreFilterInterface $exportIgnoreFilter the configured candidate filter
      * @param MergerInterface $merger the merger component
      * @param ReaderInterface $reader the reader component
-     * @param WriterInterface|null $writer the writer component
+     * @param WriterInterface $writer the writer component
+     * @param Filesystem $filesystem the filesystem component
+     * @param ComposerJson $composerJson the composer.json accessor
      */
     public function __construct(
-        ?Filesystem $filesystem = null,
-        private readonly CandidateProviderInterface $candidateProvider = new CandidateProvider(),
-        private readonly ExistenceCheckerInterface $existenceChecker = new ExistenceChecker(),
-        private readonly ExportIgnoreFilterInterface $exportIgnoreFilter = new ExportIgnoreFilter(),
-        private readonly MergerInterface $merger = new Merger(),
-        private readonly ReaderInterface $reader = new Reader(),
-        ?WriterInterface $writer = null,
+        private readonly CandidateProviderInterface $candidateProvider,
+        private readonly ExistenceCheckerInterface $existenceChecker,
+        private readonly ExportIgnoreFilterInterface $exportIgnoreFilter,
+        private readonly MergerInterface $merger,
+        private readonly ReaderInterface $reader,
+        private readonly WriterInterface $writer,
+        private readonly ComposerJson $composerJson,
+        Filesystem $filesystem,
     ) {
         parent::__construct($filesystem);
-        $this->writer = $writer ?? new Writer($this->filesystem);
-    }
-
-    /**
-     * Configures the current command.
-     *
-     * This method MUST define the name, description, and help text for the command.
-     *
-     * @return void
-     */
-    protected function configure(): void
-    {
-        $this
-            ->setName('gitattributes')
-            ->setDescription('Manages .gitattributes export-ignore rules for leaner package archives.')
-            ->setHelp(
-                'This command adds export-ignore entries for repository-only files and directories '
-                . 'to keep them out of Composer package archives. Only paths that exist in the '
-                . 'repository are added, existing custom rules are preserved, and '
-                . '"extra.gitattributes.keep-in-export" paths stay in exported archives.'
-            );
     }
 
     /**
@@ -150,9 +131,7 @@ final class GitAttributesCommand extends AbstractCommand
      */
     private function configuredKeepInExportPaths(): array
     {
-        $extra = $this->requireComposer()
-            ->getPackage()
-            ->getExtra();
+        $extra = $this->composerJson->getExtra();
 
         $gitattributesConfig = $extra[self::EXTRA_NAMESPACE] ?? null;
 

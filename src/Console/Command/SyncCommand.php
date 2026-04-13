@@ -16,10 +16,11 @@ declare(strict_types=1);
  * @see       https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Command;
+namespace FastForward\DevTools\Console\Command;
 
 use Composer\Factory;
 use Composer\Json\JsonManipulator;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
@@ -30,30 +31,15 @@ use function Safe\file_get_contents;
 
 /**
  * Represents the command responsible for installing development scripts into `composer.json`.
- * This class MUST NOT be overridden and SHALL rely on the `ScriptsInstallerTrait`.
  */
+#[AsCommand(
+    name: 'dev-tools:sync',
+    description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.',
+    help: 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, '
+    . 'and manages .gitattributes export-ignore rules.'
+)]
 final class SyncCommand extends AbstractCommand
 {
-    /**
-     * Configures the current command.
-     *
-     * This method MUST define the name, description, and help text for the command.
-     * It SHALL identify the tool as the mechanism for script synchronization.
-     *
-     * @return void
-     */
-    protected function configure(): void
-    {
-        $this
-            ->setName('dev-tools:sync')
-            ->setDescription(
-                'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.'
-            )
-            ->setHelp(
-                'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.'
-            );
-    }
-
     /**
      * Executes the script installation block.
      *
