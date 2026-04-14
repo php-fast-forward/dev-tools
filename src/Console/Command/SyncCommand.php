@@ -64,6 +64,7 @@ final class SyncCommand extends AbstractCommand
         $this->runCommand('gitattributes', $output);
         $this->runCommand('skills', $output);
         $this->runCommand('license', $output);
+        $this->copyGitHooks($output);
 
         return self::SUCCESS;
     }
@@ -222,5 +223,37 @@ final class SyncCommand extends AbstractCommand
         $process->mustRun();
 
         return trim($process->getOutput());
+    }
+
+    /**
+     * Copies git hooks from resources to .git/hooks for vendor synchronization.
+     *
+     * This method copies post-checkout and post-merge hooks from the package resources to .git/hooks,
+     * ensuring vendor dependencies stay synchronized when switching branches.
+     *
+     * @param OutputInterface $output the output interface
+     *
+     * @return void
+     */
+    private function copyGitHooks(OutputInterface $output): void
+    {
+        $hooksDir = parent::getDevToolsFile('resources/git-hooks');
+        $targetDir = Path::join($this->getCurrentWorkingDirectory(), '.git', 'hooks');
+
+        $finder = Finder::create()
+            ->files()
+            ->in($hooksDir)
+            ->name('post-checkout')
+            ->name('post-merge');
+
+        foreach ($finder as $file) {
+            $targetPath = Path::join($targetDir, $file->getFilename());
+
+            $content = file_get_contents($file->getRealPath());
+            $this->filesystem->dumpFile($targetPath, $content);
+            chmod($targetPath, 0o755);
+
+            $output->writeln("<info>Installed {$file->getFilename()} hook</info>");
+        }
     }
 }

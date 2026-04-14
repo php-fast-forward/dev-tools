@@ -1,31 +1,37 @@
 grumphp:
     stop_on_failure: true
+    ignore_unstaged_changes: false
     process_timeout: 120
+
+    ascii:
+        succeeded: succeeded.txt
+        failed: failed.txt
 
     tasks:
         composer_script:
             script: 'dev-tools'
             triggered_by: ['php']
+
         composer:
             no_check_lock: true
-        composer_normalize:
-            use_standalone: true
+
         jsonlint: ~
         yamllint: ~
-        phplint: ~
+        phplint:
+            exclude: ['vendor']
+            triggered_by: ['php']
 
     testsuites:
         git_pre_commit:
             tasks:
-                - composer_script
                 - composer
-                - composer_normalize
+                - phplint
                 - jsonlint
                 - yamllint
-                - phplint
+                - composer_script
 
     parallel:
         enabled: true
-        max_workers: 4
+        max_workers: 5
 
     hooks_preset: local
