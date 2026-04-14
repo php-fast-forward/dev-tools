@@ -2,12 +2,12 @@
 
 #
 # DevTools post-merge hook
-# Runs composer install if composer.lock was modified after merge
+# Runs composer update if composer.json was modified after merge
 #
 
-if git diff --cached --name-only --diff-filter=M | grep -q "^composer.lock$"; then
-    echo "DevTools: composer.lock modified in merge, running composer install..."
-    (cd "$(git rev-parse --show-toplevel)" && composer install --no-interaction) || true
+if git diff --cached --name-only --diff-filter=M | grep -q "^composer.json$"; then
+    echo "DevTools: composer.json modified in merge, running composer update..."
+    (cd "$(git rev-parse --show-toplevel)" && composer update --minimal-changes --no-interaction) || true
 fi
 
 exit 0
