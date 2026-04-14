@@ -39,7 +39,7 @@
         "nikic/php-parser": "^5.7",
         "php-di/php-di": "^7.1",
         "phpdocumentor/shim": "^3.9",
-        "phpro/grumphp": "^2.19",
+        "phpro/grumphp-shim": "^2.19",
         "phpspec/prophecy": "^1.26",
         "phpspec/prophecy-phpunit": "^2.5",
         "phpunit/phpunit": "^12.5",
@@ -74,7 +74,7 @@
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
             "phpdocumentor/shim": true,
-            "phpro/grumphp": true,
+            "phpro/grumphp-shim": true,
             "pyrech/composer-changelogs": true
         },
         "platform": {
