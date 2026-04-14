@@ -96,7 +96,7 @@ final class SyncCommand extends AbstractCommand
         $extra = [
             'grumphp' => [
                 'config-default-path' => Path::makeRelative(
-                    \dirname(__DIR__, 2) . '/grumphp.yml',
+                    \dirname(__DIR__, 3) . '/grumphp.yml',
                     $this->getCurrentWorkingDirectory(),
                 ),
             ],
@@ -242,18 +242,15 @@ final class SyncCommand extends AbstractCommand
 
         $finder = Finder::create()
             ->files()
-            ->in($hooksDir)
-            ->name('post-checkout')
-            ->name('post-merge');
+            ->in($hooksDir);
 
         foreach ($finder as $file) {
             $targetPath = Path::join($targetDir, $file->getFilename());
 
-            $content = file_get_contents($file->getRealPath());
-            $this->filesystem->dumpFile($targetPath, $content);
-            chmod($targetPath, 0o755);
+            $this->filesystem->copy($file->getRealPath(), $targetPath, true);
+            $this->filesystem->chmod($targetPath, 755, 0o755);
 
-            $output->writeln("<info>Installed {$file->getFilename()} hook</info>");
+            $output->writeln(\sprintf('<info>Installed %s hook</info>', $file->getFilename()));
         }
     }
 }
