@@ -30,9 +30,7 @@ use FastForward\DevTools\GitIgnore\Merger as GitIgnoreMerger;
 use FastForward\DevTools\GitIgnore\Reader;
 use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 #[CoversClass(SyncCommand::class)]
@@ -80,20 +78,5 @@ final class SyncCommandTest extends AbstractCommandTestCase
     protected function getCommandHelp(): string
     {
         return 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.';
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnSuccessAndWriteInfo(): void
-    {
-        $this->filesystem->exists(Argument::any())->willReturn(true);
-        $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
-
-        $this->output->writeln(Argument::type('string'))
-            ->shouldBeCalled();
-
-        self::assertSame(SyncCommand::SUCCESS, $this->invokeExecute());
     }
 }

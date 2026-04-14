@@ -1,0 +1,13 @@
+#!/bin/sh
+
+#
+# DevTools post-merge hook
+# Runs composer update if composer.json was modified after merge
+#
+
+if git diff --cached --name-only --diff-filter=M | grep -q "^composer.json$"; then
+    echo "DevTools: composer.json modified in merge, running composer update..."
+    (cd "$(git rev-parse --show-toplevel)" && composer update --minimal-changes --no-interaction) || true
+fi
+
+exit 0

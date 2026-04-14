@@ -64,6 +64,7 @@ final class SyncCommand extends AbstractCommand
         $this->runCommand('gitattributes', $output);
         $this->runCommand('skills', $output);
         $this->runCommand('license', $output);
+        $this->copyGitHooks($output);
 
         return self::SUCCESS;
     }
@@ -95,7 +96,7 @@ final class SyncCommand extends AbstractCommand
         $extra = [
             'grumphp' => [
                 'config-default-path' => Path::makeRelative(
-                    \dirname(__DIR__, 2) . '/grumphp.yml',
+                    \dirname(__DIR__, 3) . '/grumphp.yml',
                     $this->getCurrentWorkingDirectory(),
                 ),
             ],
@@ -222,5 +223,34 @@ final class SyncCommand extends AbstractCommand
         $process->mustRun();
 
         return trim($process->getOutput());
+    }
+
+    /**
+     * Copies git hooks from resources to .git/hooks for vendor synchronization.
+     *
+     * This method copies post-checkout and post-merge hooks from the package resources to .git/hooks,
+     * ensuring vendor dependencies stay synchronized when switching branches.
+     *
+     * @param OutputInterface $output the output interface
+     *
+     * @return void
+     */
+    private function copyGitHooks(OutputInterface $output): void
+    {
+        $hooksDir = parent::getDevToolsFile('resources/git-hooks');
+        $targetDir = Path::join($this->getCurrentWorkingDirectory(), '.git', 'hooks');
+
+        $finder = Finder::create()
+            ->files()
+            ->in($hooksDir);
+
+        foreach ($finder as $file) {
+            $targetPath = Path::join($targetDir, $file->getFilename());
+
+            $this->filesystem->copy($file->getRealPath(), $targetPath, true);
+            $this->filesystem->chmod($targetPath, 755, 0o755);
+
+            $output->writeln(\sprintf('<info>Installed %s hook</info>', $file->getFilename()));
+        }
     }
 }

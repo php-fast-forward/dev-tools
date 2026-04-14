@@ -1,0 +1,23 @@
+#!/bin/sh
+
+#
+# DevTools post-checkout hook
+# Runs composer update if composer.json was modified after checkout
+#
+
+PREV_HEAD="$1"
+NEW_HEAD="$2"
+CHECKOUT_TYPE="$3"
+
+if [ "$CHECKOUT_TYPE" = "1" ]; then
+    if git diff --quiet --cached "$PREV_HEAD" "$NEW_HEAD" -- composer.json; then
+        if git diff --quiet "$PREV_HEAD" "$NEW_HEAD" -- composer.json; then
+            exit 0
+        fi
+    fi
+
+    echo "DevTools: composer.json changed, running composer update..."
+    (cd "$(git rev-parse --show-toplevel)" && composer update --minimal-changes --no-interaction) || true
+fi
+
+exit 0
