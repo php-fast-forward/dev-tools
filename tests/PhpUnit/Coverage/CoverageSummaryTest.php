@@ -24,7 +24,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
 #[CoversClass(CoverageSummary::class)]
-class CoverageSummaryTest extends TestCase
+final class CoverageSummaryTest extends TestCase
 {
     /**
      * @return array
@@ -47,5 +47,7 @@ class CoverageSummaryTest extends TestCase
     {
         $summary = new CoverageSummary($executed, $executable);
         self::assertSame($executed, $summary->executedLines());
+        self::assertSame($executable, $summary->executableLines());
+        self::assertSame($expectedPercentage, $summary->percentage());
     }
 }
