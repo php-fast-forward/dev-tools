@@ -53,12 +53,19 @@ use FastForward\DevTools\GitAttributes\Writer as GitAttributesWriter;
 use FastForward\DevTools\GitAttributes\WriterInterface as GitAttributesWriterInterface;
 use FastForward\DevTools\License\Reader as LicenseReader;
 use FastForward\DevTools\License\ReaderInterface as LicenseReaderInterface;
+use FastForward\DevTools\Process\ProcessBuilder;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueue;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Finder\Finder;
 
+use function Safe\getcwd;
 use function DI\create;
 use function DI\get;
 
@@ -76,8 +83,13 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
+            // Process
+            ProcessBuilderInterface::class => get(ProcessBuilder::class),
+            ProcessQueueInterface::class => get(ProcessQueue::class),
+
             // Symfony Components
             Finder::class => create(Finder::class),
+            FileLocatorInterface::class => create(FileLocator::class)->constructor([getcwd(), \dirname(__DIR__, 2)]),
 
             // PSR
             LoggerInterface::class => get(NullLogger::class),

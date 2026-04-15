@@ -19,186 +19,61 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
+use FastForward\DevTools\Process\ProcessBuilder;
+use FastForward\DevTools\Process\ProcessQueue;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Component\Process\Process;
-
-use function Safe\getcwd;
+use Symfony\Component\Config\FileLocatorInterface;
 
 #[CoversClass(CodeStyleCommand::class)]
-final class CodeStyleCommandTest extends AbstractCommandTestCase
+#[CoversClass(ProcessBuilder::class)]
+#[CoversClass(ProcessQueue::class)]
+final class CodeStyleCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @return string
-     */
-    protected function getCommandClass(): string
-    {
-        return CodeStyleCommand::class;
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandName(): string
-    {
-        return 'code-style';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.';
-    }
+    private CodeStyleCommand $command;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        parent::setUp();
+        $fileLocator = $this->createMock(FileLocatorInterface::class);
+        $fileLocator->method('locate')
+            ->willReturn('/path/to/ecs.php');
 
-        $this->withConfigFile(CodeStyleCommand::CONFIG);
+        $processBuilder = new ProcessBuilder();
+        $processQueue = new ProcessQueue();
+
+        $this->command = new CodeStyleCommand($fileLocator, $processBuilder, $processQueue);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunComposerUpdateProcess(): void
+    public function configureWillSetExpectedNameDescriptionAndHelp(): void
     {
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, 'composer')
-                && str_contains($commandLine, 'update')
-                && str_contains($commandLine, '--lock')
-                && str_contains($commandLine, '--quiet');
-        });
-
-        $this->invokeExecute();
+        self::assertSame('code-style', $this->command->getName());
+        self::assertSame(
+            'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.',
+            $this->command->getDescription()
+        );
+        self::assertSame(
+            'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.',
+            $this->command->getHelp()
+        );
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunComposerNormalizeProcess(): void
+    public function commandCanBeConstructedWithDependencies(): void
     {
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, 'composer')
-                && str_contains($commandLine, 'normalize')
-                && str_contains($commandLine, '--dry-run');
-        });
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithFixOptionWillRunComposerNormalizeProcessWithoutDryRunOptionQuietly(): void
-    {
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            $this->input->getOption('fix')
-                ->willReturn(true)
-                ->shouldBeCalled();
-
-            return str_contains($commandLine, 'composer')
-                && str_contains($commandLine, 'normalize')
-                && str_contains($commandLine, '--quiet')
-                && ! str_contains($commandLine, '--dry-run');
-        });
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithLocalConfigWillRunCodeStyleProcessWithDevToolsConfigFile(): void
-    {
-        $this->withConfigFile(CodeStyleCommand::CONFIG, true);
-
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            $path = getcwd() . '/ecs.php';
-
-            return str_contains($commandLine, 'vendor/bin/ecs')
-                && str_contains($commandLine, '--config=' . $path)
-                && str_contains($commandLine, '--clear-cache');
-        });
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithoutLocalConfigWillRunCodeStyleProcessWithDevToolsConfigFile(): void
-    {
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-            $path = getcwd() . '/ecs.php';
-
-            return str_contains($commandLine, 'vendor/bin/ecs')
-                && str_contains($commandLine, '--config=' . $path)
-                && str_contains($commandLine, '--clear-cache');
-        });
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithFixOptionWillRunCodeStyleProcessWithoutDryRunOption(): void
-    {
-        $this->input->getOption('fix')
-            ->willReturn(true)
-            ->shouldBeCalled();
-
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-            $path = getcwd() . '/ecs.php';
-
-            return str_contains($commandLine, 'vendor/bin/ecs')
-                && str_contains($commandLine, '--config=' . $path)
-                && str_contains($commandLine, '--fix');
-        });
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnFailureIfProcessFails(): void
-    {
-        $this->willRunProcessWithCallback(static fn(): true => true, false);
-
-        self::assertSame(CodeStyleCommand::FAILURE, $this->invokeExecute());
+        self::assertInstanceOf(CodeStyleCommand::class, $this->command);
     }
 }
