@@ -39,6 +39,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class DependenciesCommand extends BaseCommand
 {
+    /**
+     * @param ProcessBuilderInterface $processBuilder
+     * @param ProcessQueueInterface $processQueue
+     * @param FileLocatorInterface $fileLocator
+     */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
