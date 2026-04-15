@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -34,12 +38,27 @@ use Symfony\Component\Process\Process;
     aliases: ['rector'],
     help: 'This command runs Rector to refactor your code.'
 )]
-final class RefactorCommand extends AbstractCommand
+final class RefactorCommand extends BaseCommand
 {
     /**
      * @var string the default Rector configuration file
      */
     public const string CONFIG = 'rector.php';
+
+    /**
+     * Creates a new RefactorCommand instance.
+     *
+     * @param FileLocatorInterface $fileLocator the file locator
+     * @param ProcessBuilderInterface $processBuilder the process builder
+     * @param ProcessQueueInterface $processQueue the process queue
+     */
+    public function __construct(
+        private readonly FileLocatorInterface $fileLocator,
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
+    ) {
+        parent::__construct();
+    }
 
     /**
      * Configures the refactor command options and description.
@@ -57,6 +76,13 @@ final class RefactorCommand extends AbstractCommand
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
                 description: 'Automatically fix code refactoring issues.'
+            )
+            ->addOption(
+                name: 'config',
+                shortcut: 'c',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'The path to the Rector configuration file.',
+                default: self::CONFIG
             );
     }
 
@@ -75,14 +101,19 @@ final class RefactorCommand extends AbstractCommand
     {
         $output->writeln('<info>Running Rector for code refactoring...</info>');
 
-        $command = new Process([
-            $this->getAbsolutePath('vendor/bin/rector'),
-            'process',
-            '--config',
-            parent::getConfigFile(self::CONFIG),
-            $input->getOption('fix') ? null : '--dry-run',
-        ]);
+        $processBuilder = $this->processBuilder
+            ->withArgument('process')
+            ->withArgument('--config')
+            ->withArgument($this->fileLocator->locate(self::CONFIG));
 
-        return parent::runProcess($command, $output);
+        if (! $input->getOption('fix')) {
+            $processBuilder = $processBuilder->withArgument('--dry-run');
+        }
+
+        $this->processQueue->add(
+            $processBuilder->build('vendor/bin/rector')
+        );
+
+        return $this->processQueue->run($output);
     }
 }
