@@ -18,10 +18,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 /**
  * Orchestrates dependency analysis across the supported Composer analyzers.
@@ -34,8 +37,16 @@ use Symfony\Component\Process\Process;
     aliases: ['deps'],
     help: 'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.'
 )]
-final class DependenciesCommand extends AbstractCommand
+final class DependenciesCommand extends BaseCommand
 {
+    public function __construct(
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
+        private readonly FileLocatorInterface $fileLocator,
+    ) {
+        return parent::__construct();
+    }
+
     /**
      * Executes the dependency analysis workflow.
      *
@@ -52,19 +63,22 @@ final class DependenciesCommand extends AbstractCommand
     {
         $output->writeln('<info>Running dependency analysis...</info>');
 
-        $composerJson = $this->getConfigFile('composer.json');
+        $composerJson = $this->fileLocator->locate('composer.json');
 
-        $results[] = $this->runProcess(
-            new Process(['vendor/bin/composer-unused', $composerJson, '--no-progress']),
-            $output
-        );
-        $results[] = $this->runProcess(new Process([
-            'vendor/bin/composer-dependency-analyser',
-            '--composer-json=' . $composerJson,
-            '--ignore-unused-deps',
-            '--ignore-prod-only-in-dev-deps',
-        ]), $output);
+        $composerUnused = $this->processBuilder
+            ->withArgument($composerJson)
+            ->withArgument('--no-progress')
+            ->build('vendor/bin/composer-unused');
 
-        return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
+        $composerDependencyAnalyser = $this->processBuilder
+            ->withArgument('--composer-json', $composerJson)
+            ->withArgument('--ignore-unused-deps')
+            ->withArgument('--ignore-prod-only-in-dev-deps')
+            ->build('vendor/bin/composer-dependency-analyser');
+
+        $this->processQueue->add($composerUnused);
+        $this->processQueue->add($composerDependencyAnalyser);
+
+        return $this->processQueue->run($output);
     }
 }
