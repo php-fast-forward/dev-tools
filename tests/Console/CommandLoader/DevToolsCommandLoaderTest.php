@@ -29,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Container\ContainerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -46,7 +47,7 @@ final class DevToolsCommandLoaderTest extends TestCase
     public function constructorWillRegisterOnlyInstantiableCommands(): void
     {
         $commandDirectory = \dirname(__DIR__, 3) . '/src/Console/Command';
-        $command = $this->prophesize(CodeStyleCommand::class);
+        $command = $this->prophesize(Command::class);
 
         $finder = $this->prophesize(Finder::class);
         $finder->files()
