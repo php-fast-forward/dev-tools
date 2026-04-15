@@ -18,98 +18,173 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Console\Command\WikiCommand;
+use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(WikiCommand::class)]
-final class WikiCommandTest extends AbstractCommandTestCase
+final class WikiCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<ComposerJson>
-     */
+    private ObjectProphecy $processBuilder;
+
+    private ObjectProphecy $processQueue;
+
     private ObjectProphecy $composerJson;
 
-    /**
-     * @return WikiCommand
-     */
-    protected function getCommandClass(): WikiCommand
-    {
-        return new WikiCommand($this->composerJson->reveal(), $this->filesystem->reveal());
-    }
+    private ObjectProphecy $input;
 
-    /**
-     * @return string
-     */
-    protected function getCommandName(): string
-    {
-        return 'wiki';
-    }
+    private ObjectProphecy $output;
 
-    /**
-     * @return string
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Generates API documentation in Markdown format.';
-    }
+    private ObjectProphecy $process;
 
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command generates API documentation in Markdown format using phpDocumentor. '
-            . 'It accepts an optional `--target` option to specify the output directory for the generated documentation.';
-    }
+    private WikiCommand $command;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+        $this->process = $this->prophesize(Process::class);
+
         $this->composerJson->getPackageDescription()
             ->willReturn('Fast Forward Dev Tools plugin');
         $this->composerJson->getAutoload()
-            ->willReturn([
-                'FastForward\\DevTools\\' => 'src/',
-            ]);
+            ->willReturn(['FastForward\\DevTools\\' => 'src/']);
 
-        parent::setUp();
+        $this->processBuilder->withArgument(Argument::any())
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument(Argument::any(), Argument::any())
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->build(Argument::any())
+            ->willReturn($this->process->reveal());
+
+        $this->command = new WikiCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->composerJson->reveal(),
+        );
     }
 
-    /**
-     * @return void
-     */
     #[Test]
-    public function executeWillRunProcessWithPhpdocMarkdownArguments(): void
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, 'vendor/bin/phpdoc')
-                && str_contains($commandLine, '--target')
-                && str_contains($commandLine, '.github/wiki');
-        });
-
-        self::assertSame(WikiCommand::SUCCESS, $this->invokeExecute());
+        self::assertSame('wiki', $this->command->getName());
+        self::assertSame(
+            'Generates API documentation in Markdown format.',
+            $this->command->getDescription()
+        );
+        self::assertSame(
+            'This command generates API documentation in Markdown format using phpDocumentor. '
+            . 'It accepts an optional `--target` option to specify the output directory for the generated documentation.',
+            $this->command->getHelp()
+        );
     }
 
-    /**
-     * @return void
-     */
     #[Test]
-    public function executeWillReturnFailureIfProcessFails(): void
+    public function commandWillHaveExpectedOptions(): void
     {
-        $this->willRunProcessWithCallback(static fn(): bool => true, false);
+        $definition = $this->command->getDefinition();
 
-        self::assertSame(WikiCommand::FAILURE, $this->invokeExecute());
+        self::assertTrue($definition->hasOption('target'));
+        self::assertTrue($definition->hasOption('cache-dir'));
+    }
+
+    #[Test]
+    public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
+    {
+        $this->input->getOption('target')
+            ->willReturn('.github/wiki');
+        $this->input->getOption('cache-dir')
+            ->willReturn('tmp/cache/phpdoc');
+
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalled();
+
+        $this->processQueue->run()
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalled();
+
+        $this->output->writeln('<info>Generating API documentation...</info>')
+            ->shouldBeCalled();
+
+        $result = $this->executeCommand();
+
+        self::assertSame(WikiCommand::SUCCESS, $result);
+    }
+
+    #[Test]
+    public function executeWillReturnFailureWhenProcessQueueFails(): void
+    {
+        $this->input->getOption('target')
+            ->willReturn('.github/wiki');
+        $this->input->getOption('cache-dir')
+            ->willReturn('tmp/cache/phpdoc');
+
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalled();
+
+        $this->processQueue->run()
+            ->willReturn(ProcessQueueInterface::FAILURE)
+            ->shouldBeCalled();
+
+        $this->output->writeln('<info>Generating API documentation...</info>')
+            ->shouldBeCalled();
+
+        $result = $this->executeCommand();
+
+        self::assertSame(WikiCommand::FAILURE, $result);
+    }
+
+    #[Test]
+    public function executeWillBuildProcessWithCorrectArguments(): void
+    {
+        $this->input->getOption('target')
+            ->willReturn('.github/wiki');
+        $this->input->getOption('cache-dir')
+            ->willReturn('tmp/cache/phpdoc');
+
+        $this->processBuilder->withArgument('--visibility', 'public,protected')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--template', Argument::any())
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument(Argument::any(), Argument::any())
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalled();
+
+        $this->processQueue->run()
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalled();
+
+        $this->output->writeln(Argument::type('string'))
+            ->shouldBeCalled();
+
+        $result = $this->executeCommand();
+
+        self::assertSame(WikiCommand::SUCCESS, $result);
+    }
+
+    private function executeCommand(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

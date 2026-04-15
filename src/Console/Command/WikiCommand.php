@@ -18,13 +18,14 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 
 /**
  * Handles the generation of API documentation for the project.
@@ -36,19 +37,19 @@ use Symfony\Component\Process\Process;
     help: 'This command generates API documentation in Markdown format using phpDocumentor. '
     . 'It accepts an optional `--target` option to specify the output directory for the generated documentation.'
 )]
-final class WikiCommand extends AbstractCommand
+final class WikiCommand extends BaseCommand
 {
     /**
      * Creates a new WikiCommand instance.
      *
      * @param ComposerJson $composerJson the composer.json accessor
-     * @param Filesystem $filesystem the filesystem component
      */
     public function __construct(
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
         private readonly ComposerJson $composerJson,
-        Filesystem $filesystem
     ) {
-        return parent::__construct($filesystem);
+        return parent::__construct();
     }
 
     /**
@@ -68,6 +69,12 @@ final class WikiCommand extends AbstractCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated Markdown documentation.',
                 default: '.github/wiki'
+            )
+            ->addOption(
+                name: 'cache-dir',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Path to the cache directory for phpDocumentor.',
+                default: 'tmp/cache/phpdoc'
             );
     }
 
@@ -86,34 +93,27 @@ final class WikiCommand extends AbstractCommand
     {
         $output->writeln('<info>Generating API documentation...</info>');
 
-        $arguments = [
-            $this->getAbsolutePath('vendor/bin/phpdoc'),
-            '--cache-folder',
-            $this->getCurrentWorkingDirectory() . '/tmp/cache/phpdoc',
-            '--visibility=public,protected',
-            '--title=' . $this->composerJson->getPackageDescription(),
-        ];
+        $processBuilder = $this->processBuilder
+            ->withArgument('--visibility', 'public,protected')
+            ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
+            ->withArgument('--title', $this->composerJson->getPackageDescription())
+            ->withArgument('--target', $input->getOption('target'))
+            ->withArgument('--cache-folder', $input->getOption('cache-dir'));
 
         $psr4Namespaces = $this->composerJson->getAutoload();
 
         foreach ($psr4Namespaces as $path) {
-            $arguments[] = '--directory';
-            $arguments[] = $path;
+            $processBuilder = $processBuilder->withArgument('--directory', $path);
         }
 
         if ($defaultPackageName = array_key_first($psr4Namespaces)) {
-            $arguments[] = '--defaultpackagename';
-            $arguments[] = $defaultPackageName;
+            $processBuilder = $processBuilder->withArgument('--defaultpackagename', $defaultPackageName);
         }
 
-        $command = new Process([
-            ...$arguments,
-            '--target',
-            $this->getAbsolutePath($input->getOption('target')),
-            '--template',
-            'vendor/saggre/phpdocumentor-markdown/themes/markdown',
-        ]);
+        $this->processQueue->add(
+            $processBuilder->build('vendor/bin/phpdoc')
+        );
 
-        return parent::runProcess($command, $output);
+        return $this->processQueue->run();
     }
 }
