@@ -18,14 +18,18 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console;
 
+use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
+use ReflectionProperty;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\CompleteCommand;
 use Symfony\Component\Console\Command\DumpCompletionCommand;
@@ -34,6 +38,8 @@ use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
 #[CoversClass(DevTools::class)]
+#[UsesClass(DevToolsCommandLoader::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
 final class DevToolsTest extends TestCase
 {
     use ProphecyTrait;
@@ -95,6 +101,21 @@ final class DevToolsTest extends TestCase
         self::assertSame('Fast Forward Dev Tools', $this->devTools->getName());
         self::assertTrue($this->devTools->has('custom'));
         self::assertSame($customCommand, $this->devTools->get('custom'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function createWillReturnInstanceOfDevTools(): void
+    {
+        $reflectionProperty = new ReflectionProperty(DevTools::class, 'container');
+        $reflectionProperty->setValue(null, null);
+
+        $devTools = DevTools::create();
+
+        self::assertInstanceOf(DevTools::class, $devTools);
+        self::assertSame($devTools, DevTools::create());
     }
 
     /**
