@@ -35,11 +35,16 @@ use Symfony\Component\Process\Process;
  * added but do not block subsequent entries.
  *
  * A detached process that starts successfully is considered dispatched. Because
- * this implementation does not wait for detached processes to finish, their
- * eventual runtime exit status cannot be incorporated into the final queue
+ * this implementation does not wait for detached processes to finish during `run()`,
+ * their eventual runtime exit status cannot be incorporated into the final queue
  * result. However, a detached process that cannot be started at all is treated
  * as a startup failure and MAY affect the final status code unless its failure
  * is explicitly configured to be ignored.
+ *
+ * To ensure detached processes finish gracefully without being killed when the
+ * main PHP script ends, the queue automatically registers a shutdown handler
+ * during instantiation that implicitly awaits all detached processes. They can
+ * also be awaited explicitly via `wait()`.
  */
 final class ProcessQueue implements ProcessQueueInterface
 {
@@ -57,6 +62,16 @@ final class ProcessQueue implements ProcessQueueInterface
      * @var list<Process>
      */
     private array $runningDetachedProcesses = [];
+
+    /**
+     * Initializes the queue and secures child processes from early termination.
+     */
+    public function __construct()
+    {
+        \register_shutdown_function(function (): void {
+            $this->wait();
+        });
+    }
 
     /**
      * Adds a process to the queue.
@@ -86,8 +101,8 @@ final class ProcessQueue implements ProcessQueueInterface
      * The returned status code represents the first non-zero exit code observed
      * among non-ignored blocking processes, or among non-ignored detached
      * processes that fail to start. Detached processes that start successfully
-     * are not awaited and therefore do not contribute their eventual runtime
-     * exit code to the returned result.
+     * are not awaited iteratively inside run() and therefore do not contribute
+     * their eventual runtime exit code to the returned result.
      *
      * @param OutputInterface $output the output used during execution
      *
@@ -133,6 +148,23 @@ final class ProcessQueue implements ProcessQueueInterface
         $this->drainDetachedProcessesOutput($output, true);
 
         return $statusCode;
+    }
+
+    /**
+     * Waits for all detached processes to finish execution.
+     *
+     * @param ?OutputInterface $output the output interface to which process output and diagnostics MAY be written
+     */
+    public function wait(?OutputInterface $output = new NullOutput()): void
+    {
+        $output = $output ?? new NullOutput();
+
+        while ([] !== $this->runningDetachedProcesses) {
+            $this->drainDetachedProcessesOutput($output, true);
+            if ([] !== $this->runningDetachedProcesses) {
+                \usleep(10000);
+            }
+        }
     }
 
     /**

@@ -19,61 +19,124 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\ReportsCommand;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
-final class ReportsCommandTest extends AbstractCommandTestCase
+final class ReportsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @return string
-     */
-    protected function getCommandClass(): string
+    /** @var ObjectProphecy<ProcessBuilderInterface> */
+    private ObjectProphecy $processBuilder;
+
+    /** @var ObjectProphecy<ProcessQueueInterface> */
+    private ObjectProphecy $processQueue;
+
+    /** @var ObjectProphecy<InputInterface> */
+    private ObjectProphecy $input;
+
+    /** @var ObjectProphecy<OutputInterface> */
+    private ObjectProphecy $output;
+
+    /** @var ObjectProphecy<Process> */
+    private ObjectProphecy $docsProcess;
+
+    /** @var ObjectProphecy<Process> */
+    private ObjectProphecy $testsProcess;
+
+    private ReportsCommand $command;
+
+    protected function setUp(): void
     {
-        return ReportsCommand::class;
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+        $this->docsProcess = $this->prophesize(Process::class);
+        $this->testsProcess = $this->prophesize(Process::class);
+
+        $this->input->getOption('target')->willReturn('public');
+        $this->input->getOption('coverage')->willReturn('public/coverage');
+
+        $this->processBuilder->withArgument(Argument::cetera())
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->build('composer dev-tools docs')
+            ->willReturn($this->docsProcess->reveal());
+
+        $this->processBuilder->build('composer dev-tools tests')
+            ->willReturn($this->testsProcess->reveal());
+
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS);
+
+        $this->command = new ReportsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal()
+        );
     }
 
-    /**
-     * @return string
-     */
-    protected function getCommandName(): string
-    {
-        return 'reports';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Generates the frontpage for Fast Forward documentation.';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.';
-    }
-
-    /**
-     * @return void
-     */
     #[Test]
-    public function executeWillRunDocsAndTestsCommand(): void
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
+    {
+        self::assertSame('reports', $this->command->getName());
+        self::assertSame('Generates the frontpage for Fast Forward documentation.', $this->command->getDescription());
+        self::assertSame('This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.', $this->command->getHelp());
+    }
+
+    #[Test]
+    public function commandWillHaveExpectedOptions(): void
+    {
+        $definition = $this->command->getDefinition();
+
+        self::assertTrue($definition->hasOption('target'));
+        self::assertTrue($definition->hasOption('coverage'));
+    }
+
+    #[Test]
+    public function executeWillRunDocsAndTestsCommandAsDetachedProcesses(): void
     {
         $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
-            ->shouldBeCalled();
-        $this->output->writeln(Argument::containingString('Generating API documentation on path:'))
-            ->shouldBeCalled();
-        $this->output->writeln(Argument::containingString('Generating test coverage report on path:'))
-            ->shouldBeCalled();
+            ->shouldBeCalledOnce();
 
-        self::assertSame(ReportsCommand::SUCCESS, $this->invokeExecute());
+        $this->processBuilder->withArgument('--ansi')
+            ->shouldBeCalled()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->withArgument('--target', 'public')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->withArgument('--coverage', 'public/coverage')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processQueue->add($this->docsProcess->reveal(), false, true)
+            ->shouldBeCalledOnce();
+
+        $this->processQueue->add($this->testsProcess->reveal(), false, true)
+            ->shouldBeCalledOnce();
+
+        $result = $this->executeCommand();
+
+        self::assertSame(ReportsCommand::SUCCESS, $result);
+    }
+
+    private function executeCommand(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

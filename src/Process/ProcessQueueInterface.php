@@ -98,4 +98,16 @@ interface ProcessQueueInterface
      * @return int the final exit status code produced by the queue execution
      */
     public function run(?OutputInterface $output = null): int;
+
+    /**
+     * Waits for all detached processes to finish execution.
+     *
+     * Implementations MUST block the execution thread until all previously
+     * started detached processes complete. This ensures the main process
+     * does not exit prematurely, preventing detached children from being
+     * abruptly terminated.
+     *
+     * @param ?OutputInterface $output the output interface to which process output and diagnostics MAY be written
+     */
+    public function wait(?OutputInterface $output = null): void;
 }

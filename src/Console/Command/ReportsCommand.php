@@ -18,6 +18,10 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
+use Composer\Console\Input\InputOption;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -31,8 +35,39 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Generates the frontpage for Fast Forward documentation.',
     help: 'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.'
 )]
-final class ReportsCommand extends AbstractCommand
+final class ReportsCommand extends BaseCommand
 {
+    /**
+     * Initializes the command with required dependencies.
+     *
+     * @param ProcessBuilderInterface $processBuilder the builder instance used to construct execution processes
+     * @param ProcessQueueInterface $processQueue the execution queue mechanism for running sub-processes
+     */
+    public function __construct(
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
+    ) {
+        parent::__construct();
+    }
+
+    public function configure(): void
+    {
+        $this
+            ->addOption(
+                name: 'target',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'The target directory for the generated reports.',
+                default: 'public',
+            )
+            ->addOption(
+                name: 'coverage',
+                shortcut: 'c',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'The target directory for the generated test coverage report.',
+                default: 'public/coverage',
+            );
+    }
+
     /**
      * Executes the generation logic for diverse reports.
      *
@@ -48,17 +83,19 @@ final class ReportsCommand extends AbstractCommand
     {
         $output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>');
 
-        $docsPath = $this->getAbsolutePath('public');
-        $coveragePath = $this->getAbsolutePath('public/coverage');
+        $docs = $this->processBuilder
+            ->withArgument('--ansi')
+            ->withArgument('--target', $input->getOption('target'))
+            ->build('composer dev-tools docs');
 
-        $results = [];
+        $coverage = $this->processBuilder
+            ->withArgument('--ansi')
+            ->withArgument('--coverage', $input->getOption('coverage'))
+            ->build('composer dev-tools tests');
 
-        $output->writeln('<info>Generating API documentation on path: ' . $docsPath . '</info>');
-        $results[] = $this->runCommand('docs --target=' . $docsPath, $output);
+        $this->processQueue->add(process: $docs, detached: true);
+        $this->processQueue->add(process: $coverage, detached: true);
 
-        $output->writeln('<info>Generating test coverage report on path: ' . $coveragePath . '</info>');
-        $results[] = $this->runCommand('tests --coverage=' . $coveragePath, $output);
-
-        return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
+        return $this->processQueue->run($output);
     }
 }

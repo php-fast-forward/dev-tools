@@ -203,7 +203,8 @@ final class ProcessQueueTest extends TestCase
     #[Test]
     public function runDetachedProcessStartsWithoutBlocking(): void
     {
-        $detachedProcess = $this->createDetachedProcessMock(isRunning: true);
+        $detachedProcess = $this->createDetachedProcessMock();
+        $detachedProcess->isRunning()->willReturn(true, false);
         $blockingProcess = $this->createProcessMock();
 
         $this->queue->add($detachedProcess->reveal(), false, true);
@@ -350,5 +351,25 @@ final class ProcessQueueTest extends TestCase
         $this->queue->add($process->reveal(), false, false);
 
         $this->queue->run($this->output->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function waitWillBlockUntilDetachedProcessesFinish(): void
+    {
+        $detachedProcess = $this->createDetachedProcessMock();
+        $detachedProcess->isRunning()->willReturn(true, false);
+        
+        $this->queue->add($detachedProcess->reveal(), false, true);
+        $this->queue->run($this->output->reveal());
+
+        // Call wait explicitly. It should retrieve the process from tracking
+        // and loop exactly once before it exits because isRunning returns false.
+        $this->queue->wait($this->output->reveal());
+
+        // The assertion simply verifies the test completes and doesn't run infinitely.
+        self::assertTrue(true);
     }
 }
