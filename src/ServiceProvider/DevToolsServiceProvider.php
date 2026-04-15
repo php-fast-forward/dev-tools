@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\ServiceProvider;
 
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Interop\Container\ServiceProviderInterface;
 use FastForward\DevTools\Psr\Clock\SystemClock;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
@@ -45,6 +46,7 @@ use FastForward\DevTools\License\TemplateLoaderInterface;
 use FastForward\DevTools\License\TemplateLoader;
 use Composer\Plugin\Capability\CommandProvider;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
+use FastForward\DevTools\Filesystem\Filesystem;
 use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
 use FastForward\DevTools\GitAttributes\MergerInterface as GitAttributesMergerInterface;
 use FastForward\DevTools\GitAttributes\Reader as GitAttributesReader;
@@ -86,6 +88,9 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             // Process
             ProcessBuilderInterface::class => get(ProcessBuilder::class),
             ProcessQueueInterface::class => get(ProcessQueue::class),
+
+            // Filesystem
+            FilesystemInterface::class => get(Filesystem::class),
 
             // Symfony Components
             Finder::class => create(Finder::class),
