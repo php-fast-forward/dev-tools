@@ -2,73 +2,108 @@
 
 declare(strict_types=1);
 
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
 namespace FastForward\DevTools\Filesystem;
 
+/**
+ * Defines a standard file system interface with enhanced path resolution.
+ *
+ * This interface extends common filesystem operations by ensuring paths
+ * can be deterministically resolved to absolute paths before interaction.
+ */
 interface FilesystemInterface
 {
     /**
-     * @param string|iterable $files
-     * @param string|null $basePath
+     * Checks whether a file or directory exists.
      *
-     * @return bool
+     * @param iterable<string>|string $files the file(s) or directory(ies) to check
+     * @param string|null $basePath the base path used to resolve relative paths
+     *
+     * @return bool true if the path exists, false otherwise
      */
     public function exists(string|iterable $files, ?string $basePath = null): bool;
 
     /**
-     * @param string $filename
-     * @param string|null $path
+     * Reads the entire content of a file.
      *
-     * @return string
+     * @param string $filename the target filename to read
+     * @param string|null $path the optional base path to resolve the filename against
+     *
+     * @return string the content of the file
      */
     public function readFile(string $filename, ?string $path = null): string;
 
     /**
-     * @param string $filename
-     * @param mixed $content
-     * @param string|null $path
+     * Writes content to a file, overriding it if it already exists.
      *
-     * @return void
+     * @param string $filename the filename to write to
+     * @param mixed $content the content to write
+     * @param string|null $path the optional base path to resolve the filename against
      */
-    public function dumpFile(string $filename, $content, ?string $path = null): void;
+    public function dumpFile(string $filename, mixed $content, ?string $path = null): void;
 
     /**
-     * @param string|iterable $files
-     * @param string|null $basePath
+     * Resolves a path or iterable of paths into their absolute path representation.
      *
-     * @return string|iterable
+     * If a relative path is provided, it SHALL be evaluated against the current
+     * working directory or the provided $basePath if one is supplied.
+     *
+     * @param iterable<string>|string $files the path(s) to resolve
+     * @param string|null $basePath the base path for relative path resolution
+     *
+     * @return iterable<string>|string the resolved absolute path(s)
      */
     public function getAbsolutePath(string|iterable $files, ?string $basePath = null): string|iterable;
 
     /**
-     * @param string|iterable $dirs
-     * @param int $mode
-     * @param string|null $basePath
+     * Creates a directory recursively.
      *
-     * @return void
+     * @param iterable<string>|string $dirs the directory path(s) to create
+     * @param int $mode the permissions mode (defaults to 0777)
+     * @param string|null $basePath the base path for relative path resolution
      */
     public function mkdir(string|iterable $dirs, int $mode = 0777, ?string $basePath = null): void;
 
     /**
-     * @param string $path
-     * @param string|null $basePath
+     * Computes the relative path from the base path to the target path.
      *
-     * @return string
+     * @param string $path the target absolute or relative path
+     * @param string|null $basePath the origin point; defaults to the current working directory
+     *
+     * @return string the computed relative path
      */
     public function makePathRelative(string $path, ?string $basePath = null): string;
 
     /**
-     * @param string $path
-     * @param string $suffix
+     * Returns the trailing name component of a path.
      *
-     * @return string
+     * @param string $path the path to process
+     * @param string $suffix an optional suffix to strip from the returned basename
+     *
+     * @return string the base name of the given path
      */
     public function basename(string $path, string $suffix = ''): string;
 
     /**
-     * @param string $path
-     * @param int $levels
+     * Returns a parent directory's path.
      *
-     * @return string
+     * @param string $path the path to evaluate
+     * @param int $levels the number of parent directories to go up
+     *
+     * @return string the parent path name
      */
     public function dirname(string $path, int $levels = 1): string;
 }
