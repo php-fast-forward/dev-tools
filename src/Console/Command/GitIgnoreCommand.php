@@ -18,14 +18,15 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Provides functionality to merge and synchronize .gitignore files.
@@ -41,23 +42,28 @@ use Symfony\Component\Filesystem\Filesystem;
     description: 'Merges and synchronizes .gitignore files.',
     help: "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore."
 )]
-final class GitIgnoreCommand extends AbstractCommand
+final class GitIgnoreCommand extends BaseCommand
 {
+    /**
+     * @var string the default filename for .gitignore files
+     */
+    public const string FILENAME = '.gitignore';
+
     /**
      * Creates a new GitIgnoreCommand instance.
      *
      * @param MergerInterface $merger the merger component
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface|null $writer the writer component
-     * @param Filesystem $filesystem the filesystem component
+     * @param FilelocatorInterface $fileLocator the file locator
      */
     public function __construct(
         private readonly MergerInterface $merger,
         private readonly ReaderInterface $reader,
         private readonly WriterInterface $writer,
-        Filesystem $filesystem,
+        private readonly FileLocatorInterface $fileLocator,
     ) {
-        parent::__construct($filesystem);
+        parent::__construct();
     }
 
     /**
@@ -74,14 +80,14 @@ final class GitIgnoreCommand extends AbstractCommand
                 shortcut: 's',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the source .gitignore file (canonical)',
-                default: parent::getDevToolsFile('.gitignore'),
+                default: $this->fileLocator->locate(self::FILENAME, dirname(__DIR__, 3)),
             )
             ->addOption(
                 name: 'target',
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the target .gitignore file (project)',
-                default: parent::getConfigFile('.gitignore', true)
+                default: $this->fileLocator->locate(self::FILENAME)
             );
     }
 

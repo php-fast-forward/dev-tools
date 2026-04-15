@@ -19,163 +19,141 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\GitIgnoreCommand;
-use FastForward\DevTools\GitIgnore\GitIgnore;
 use FastForward\DevTools\GitIgnore\GitIgnoreInterface;
-use FastForward\DevTools\GitIgnore\Merger;
 use FastForward\DevTools\GitIgnore\MergerInterface;
-use FastForward\DevTools\GitIgnore\Reader;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
-use FastForward\DevTools\GitIgnore\Writer;
 use FastForward\DevTools\GitIgnore\WriterInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
-/**
- * Test suite for the GitIgnoreCommand.
- *
- * This test class verifies that the GitIgnoreCommand correctly merges and
- * synchronizes .gitignore files using the Reader, Merger, and Writer components.
- */
 #[CoversClass(GitIgnoreCommand::class)]
-#[UsesClass(Reader::class)]
-#[UsesClass(GitIgnore::class)]
-#[UsesClass(Merger::class)]
-#[UsesClass(Writer::class)]
-final class GitIgnoreCommandTest extends AbstractCommandTestCase
+final class GitIgnoreCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<ReaderInterface>
-     */
-    private ObjectProphecy $reader;
-
-    /**
-     * @var ObjectProphecy<MergerInterface>
-     */
+    /** @var ObjectProphecy<MergerInterface> */
     private ObjectProphecy $merger;
 
-    /**
-     * @var ObjectProphecy<WriterInterface>
-     */
+    /** @var ObjectProphecy<ReaderInterface> */
+    private ObjectProphecy $reader;
+
+    /** @var ObjectProphecy<WriterInterface> */
     private ObjectProphecy $writer;
 
-    /**
-     * @var ObjectProphecy<GitIgnoreInterface>
-     */
+    /** @var ObjectProphecy<FileLocatorInterface> */
+    private ObjectProphecy $fileLocator;
+
+    /** @var ObjectProphecy<InputInterface> */
+    private ObjectProphecy $input;
+
+    /** @var ObjectProphecy<OutputInterface> */
+    private ObjectProphecy $output;
+
+    /** @var ObjectProphecy<GitIgnoreInterface> */
     private ObjectProphecy $gitIgnoreSource;
 
-    /**
-     * @var ObjectProphecy<GitIgnoreInterface>
-     */
-    private ObjectProphecy $gitIgnoreMerge;
+    /** @var ObjectProphecy<GitIgnoreInterface> */
+    private ObjectProphecy $gitIgnoreTarget;
 
-    /**
-     * @var string The source .gitignore path.
-     */
-    private string $sourcePath;
+    /** @var ObjectProphecy<GitIgnoreInterface> */
+    private ObjectProphecy $gitIgnoreMerged;
 
-    /**
-     * @var string The target .gitignore path.
-     */
-    private string $targetPath;
+    private GitIgnoreCommand $command;
 
-    /**
-     * Sets up the test fixtures.
-     */
+    private const string SOURCE_PATH = '/path/to/source/.gitignore';
+    private const string TARGET_PATH = '/path/to/target/.gitignore';
+
     protected function setUp(): void
     {
-        $this->reader = $this->prophesize(ReaderInterface::class);
+        $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->fileLocator->locate(Argument::cetera())
+            ->willReturn('/default/path/to/.gitignore');
+
         $this->merger = $this->prophesize(MergerInterface::class);
+        $this->reader = $this->prophesize(ReaderInterface::class);
         $this->writer = $this->prophesize(WriterInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+
         $this->gitIgnoreSource = $this->prophesize(GitIgnoreInterface::class);
-        $this->gitIgnoreMerge = $this->prophesize(GitIgnoreInterface::class);
+        $this->gitIgnoreTarget = $this->prophesize(GitIgnoreInterface::class);
+        $this->gitIgnoreMerged = $this->prophesize(GitIgnoreInterface::class);
 
-        $this->sourcePath = uniqid('source_', true) . '/.gitignore';
-        $this->targetPath = uniqid('target_', true) . '/.gitignore';
+        $this->input->getOption('source')
+            ->willReturn(self::SOURCE_PATH);
+        $this->input->getOption('target')
+            ->willReturn(self::TARGET_PATH);
 
-        $this->reader->read($this->sourcePath)
+        $this->reader->read(self::SOURCE_PATH)
             ->willReturn($this->gitIgnoreSource->reveal());
-        $this->reader->read($this->targetPath)
-            ->willReturn($this->gitIgnoreMerge->reveal());
+        $this->reader->read(self::TARGET_PATH)
+            ->willReturn($this->gitIgnoreTarget->reveal());
 
-        parent::setUp();
-    }
+        $this->merger->merge($this->gitIgnoreSource->reveal(), $this->gitIgnoreTarget->reveal())
+            ->willReturn($this->gitIgnoreMerged->reveal());
 
-    /**
-     * Returns the command class under test.
-     */
-    protected function getCommandClass(): GitIgnoreCommand
-    {
-        return new GitIgnoreCommand(
+        $this->writer->write(Argument::any());
+        $this->output->writeln(Argument::any());
+
+        $this->command = new GitIgnoreCommand(
             $this->merger->reveal(),
             $this->reader->reveal(),
             $this->writer->reveal(),
-            $this->filesystem->reveal()
+            $this->fileLocator->reveal(),
         );
     }
 
-    /**
-     * Returns the expected command name.
-     */
-    protected function getCommandName(): string
-    {
-        return 'gitignore';
-    }
-
-    /**
-     * Returns the expected command description.
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Merges and synchronizes .gitignore files.';
-    }
-
-    /**
-     * Returns the expected command help text.
-     */
-    protected function getCommandHelp(): string
-    {
-        return "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.";
-    }
-
-    /**
-     * Tests that execute() returns SUCCESS and correctly merges files.
-     */
     #[Test]
-    public function executeWillReturnSuccessAndMergeFiles(): void
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        $this->gitIgnoreSource->entries()
-            ->willReturn(['# Canonical', 'vendor/', 'node_modules/']);
-        $this->gitIgnoreMerge->entries()
-            ->willReturn(['# Project', '*.log', 'tmp/']);
+        self::assertSame('gitignore', $this->command->getName());
+        self::assertSame(
+            'Merges and synchronizes .gitignore files.',
+            $this->command->getDescription()
+        );
+        self::assertSame(
+            "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.",
+            $this->command->getHelp()
+        );
+    }
 
-        $this->merger->merge($this->gitIgnoreSource->reveal(), $this->gitIgnoreMerge->reveal())
-            ->willReturn(new GitIgnore($this->targetPath, ['vendor/', 'node_modules/', '*.log', 'tmp/']));
+    #[Test]
+    public function commandWillHaveExpectedOptions(): void
+    {
+        $definition = $this->command->getDefinition();
 
-        $this->writer->write(Argument::that(
-            static fn($gitIgnore): bool => $gitIgnore instanceof GitIgnore && $gitIgnore->entries() === [
-                'vendor/',
-                'node_modules/',
-                '*.log',
-                'tmp/',
-            ]
-        ))->shouldBeCalled();
+        self::assertTrue($definition->hasOption('source'));
+        self::assertTrue($definition->hasOption('target'));
+    }
+
+    #[Test]
+    public function executeWillReturnSuccessWhenMergeSucceeds(): void
+    {
+        $this->writer->write($this->gitIgnoreMerged->reveal())
+            ->shouldBeCalled();
 
         $this->output->writeln('<info>Merging .gitignore files...</info>')
             ->shouldBeCalled();
         $this->output->writeln('<info>Successfully merged .gitignore file.</info>')
             ->shouldBeCalled();
 
-        $this->input->getOption('source')
-            ->willReturn($this->sourcePath);
-        $this->input->getOption('target')
-            ->willReturn($this->targetPath);
+        $result = $this->executeCommand();
 
-        self::assertSame(GitIgnoreCommand::SUCCESS, $this->invokeExecute());
+        self::assertSame(GitIgnoreCommand::SUCCESS, $result);
+    }
+
+    private function executeCommand(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }
