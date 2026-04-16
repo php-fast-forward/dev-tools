@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use ECSPrefix202601\Symfony\Component\Console\Input\InputOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -51,6 +52,20 @@ final class SyncCommand extends BaseCommand
     }
 
     /**
+     * {@inheritDoc}
+     */
+    protected function configure(): void
+    {
+        $this
+            ->addOption(
+                name: 'overwrite',
+                shortcut: 'o',
+                mode: InputOption::VALUE_NONE,
+                description: 'Overwrite existing target files.',
+            );
+    }
+
+    /**
      * Queues and executes synchronization commands.
      *
      * @param InputInterface $input the input interface
@@ -64,12 +79,30 @@ final class SyncCommand extends BaseCommand
 
         $this->queueDevToolsCommand(['composer-json:update']);
         $this->queueDevToolsCommand(
-            ['copy-resource', '--source=resources/github-actions', '--target=.github/workflows'],
+            [
+                'copy-resource',
+                '--source=resources/github-actions',
+                '--target=.github/workflows',
+                $input->getOption('overwrite') ? '--overwrite' : null,
+            ],
             true
         );
-        $this->queueDevToolsCommand(['copy-resource', '--source=.editorconfig', '--target=.editorconfig'], true);
         $this->queueDevToolsCommand(
-            ['copy-resource', '--source=resources/dependabot.yml', '--target=.github/dependabot.yml'],
+            [
+                'copy-resource',
+                '--source=.editorconfig',
+                '--target=.editorconfig',
+                $input->getOption('overwrite') ? '--overwrite' : null,
+            ],
+            true
+        );
+        $this->queueDevToolsCommand(
+            [
+                'copy-resource',
+                '--source=resources/dependabot.yml',
+                '--target=.github/dependabot.yml',
+                $input->getOption('overwrite') ? '--overwrite' : null,
+            ],
             true
         );
         $this->queueDevToolsCommand(['wiki', '--init'], true);
@@ -93,6 +126,10 @@ final class SyncCommand extends BaseCommand
         $processBuilder = $this->processBuilder;
 
         foreach ($arguments as $argument) {
+            if (empty($argument)) {
+                continue;
+            }
+
             $processBuilder = $processBuilder->withArgument($argument);
         }
 
