@@ -130,10 +130,7 @@ so agents can discover the packaged skills shipped with this repository.
 
 ## 🏗️ Architecture
 
-Commands no longer extend a shared abstract base. Each command is self-contained
-and receives its dependencies through constructor injection, following
-the :abbr:`DI` pattern. The ``ProcessBuilder`` and ``ProcessQueue`` classes
-provide a fluent API for constructing and executing system processes in sequence.
+Each command is self-contained and receives its dependencies through constructor injection, following the :abbr:`DI` pattern. The ``ProcessBuilder`` and ``ProcessQueue`` classes provide a fluent API for constructing and executing system processes in sequence.
 
 - ``ProcessBuilderInterface`` - Builds process commands with arguments
 - ``ProcessQueueInterface`` - Manages and executes process queues
