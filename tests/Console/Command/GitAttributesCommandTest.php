@@ -3,23 +3,26 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use Prophecy\Argument;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\GitAttributesCommand;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
 use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
@@ -31,17 +34,16 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+use function Safe\getcwd;
 
 #[CoversClass(GitAttributesCommand::class)]
 final class GitAttributesCommandTest extends TestCase
 {
     use ProphecyTrait;
-
-    private $application;
-
-    public $filesystem;
-
-    public $output;
 
     /**
      * @var ObjectProphecy<CandidateProviderInterface>
@@ -54,14 +56,14 @@ final class GitAttributesCommandTest extends TestCase
     private ObjectProphecy $existenceChecker;
 
     /**
-     * @var ObjectProphecy<MergerInterface>
-     */
-    private ObjectProphecy $merger;
-
-    /**
      * @var ObjectProphecy<ExportIgnoreFilterInterface>
      */
     private ObjectProphecy $exportIgnoreFilter;
+
+    /**
+     * @var ObjectProphecy<MergerInterface>
+     */
+    private ObjectProphecy $merger;
 
     /**
      * @var ObjectProphecy<ReaderInterface>
@@ -74,9 +76,26 @@ final class GitAttributesCommandTest extends TestCase
     private ObjectProphecy $writer;
 
     /**
-     * @var ObjectProphecy<ComposerJson>
+     * @var ObjectProphecy<ComposerJsonInterface>
      */
     private ObjectProphecy $composerJson;
+
+    /**
+     * @var ObjectProphecy<FilesystemInterface>
+     */
+    private ObjectProphecy $filesystem;
+
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
+    private ObjectProphecy $input;
+
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
+    private ObjectProphecy $output;
+
+    private GitAttributesCommand $command;
 
     /**
      * @return void
@@ -89,22 +108,15 @@ final class GitAttributesCommandTest extends TestCase
         $this->merger = $this->prophesize(MergerInterface::class);
         $this->reader = $this->prophesize(ReaderInterface::class);
         $this->writer = $this->prophesize(WriterInterface::class);
-        $this->composerJson = $this->prophesize(ComposerJson::class);
-        $this->composerJson->getExtra()
+        $this->composerJson = $this->prophesize(ComposerJsonInterface::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+
+        $this->composerJson->getExtra('gitattributes')
             ->willReturn([]);
 
-        parent::setUp();
-
-        $this->application->getInitialWorkingDirectory()
-            ->willReturn('/project');
-    }
-
-    /**
-     * @return GitAttributesCommand
-     */
-    protected function getCommandClass(): GitAttributesCommand
-    {
-        return new GitAttributesCommand(
+        $this->command = new GitAttributesCommand(
             $this->candidateProvider->reveal(),
             $this->existenceChecker->reveal(),
             $this->exportIgnoreFilter->reveal(),
@@ -117,27 +129,20 @@ final class GitAttributesCommandTest extends TestCase
     }
 
     /**
-     * @return string
+     * @return void
      */
-    protected function getCommandName(): string
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        return 'gitattributes';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Manages .gitattributes export-ignore rules for leaner package archives.';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. Only paths that exist in the repository are added, existing custom rules are preserved, and "extra.gitattributes.keep-in-export" paths stay in exported archives.';
+        self::assertSame('gitattributes', $this->command->getName());
+        self::assertSame(
+            'Manages .gitattributes export-ignore rules for leaner package archives.',
+            $this->command->getDescription()
+        );
+        self::assertSame(
+            'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. Only paths that exist in the repository are added, existing custom rules are preserved, and "extra.gitattributes.keep-in-export" paths stay in exported archives.',
+            $this->command->getHelp()
+        );
     }
 
     /**
@@ -149,6 +154,7 @@ final class GitAttributesCommandTest extends TestCase
         $folders = ['/docs/', '/.github/'];
         $files = ['/README.md', '/.editorconfig'];
         $entries = ['/docs/', '/.github/', '/README.md', '/.editorconfig'];
+        $gitattributesPath = getcwd() . '/.gitattributes';
 
         $this->candidateProvider->folders()
             ->willReturn($folders);
@@ -158,19 +164,17 @@ final class GitAttributesCommandTest extends TestCase
             ->willReturn($folders);
         $this->exportIgnoreFilter->filter($files, [])
             ->willReturn($files);
-
-        $this->existenceChecker->filterExisting('/project', $folders)
+        $this->existenceChecker->filterExisting(getcwd(), $folders)
             ->willReturn($folders);
-        $this->existenceChecker->filterExisting('/project', $files)
+        $this->existenceChecker->filterExisting(getcwd(), $files)
             ->willReturn($files);
-
-        $this->reader->read('/project/.gitattributes')
+        $this->filesystem->getAbsolutePath('.gitattributes')
+            ->willReturn($gitattributesPath);
+        $this->reader->read($gitattributesPath)
             ->willReturn("custom-entry\n");
-
         $this->merger->merge("custom-entry\n", $entries, [])
             ->willReturn("custom-entry\n/.github/ export-ignore");
-
-        $this->writer->write('/project/.gitattributes', "custom-entry\n/.github/ export-ignore")
+        $this->writer->write($gitattributesPath, "custom-entry\n/.github/ export-ignore")
             ->shouldBeCalledOnce();
 
         $this->output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>')
@@ -193,14 +197,12 @@ final class GitAttributesCommandTest extends TestCase
         $filteredFolders = ['/docs/'];
         $filteredFiles = ['/.editorconfig'];
         $entries = ['/docs/', '/.editorconfig'];
+        $gitattributesPath = getcwd() . '/.gitattributes';
 
-        $this->composerJson->getExtra()
+        $this->composerJson->getExtra('gitattributes')
             ->willReturn([
-                'gitattributes' => [
-                    'keep-in-export' => $keepInExportPaths,
-                ],
+                'keep-in-export' => $keepInExportPaths,
             ]);
-
         $this->candidateProvider->folders()
             ->willReturn($folders);
         $this->candidateProvider->files()
@@ -209,19 +211,17 @@ final class GitAttributesCommandTest extends TestCase
             ->willReturn($filteredFolders);
         $this->exportIgnoreFilter->filter($files, $keepInExportPaths)
             ->willReturn($filteredFiles);
-
-        $this->existenceChecker->filterExisting('/project', $filteredFolders)
+        $this->existenceChecker->filterExisting(getcwd(), $filteredFolders)
             ->willReturn($filteredFolders);
-        $this->existenceChecker->filterExisting('/project', $filteredFiles)
+        $this->existenceChecker->filterExisting(getcwd(), $filteredFiles)
             ->willReturn($filteredFiles);
-
-        $this->reader->read('/project/.gitattributes')
+        $this->filesystem->getAbsolutePath('.gitattributes')
+            ->willReturn($gitattributesPath);
+        $this->reader->read($gitattributesPath)
             ->willReturn('');
-
         $this->merger->merge('', $entries, $keepInExportPaths)
             ->willReturn("/docs/ export-ignore\n/.editorconfig export-ignore");
-
-        $this->writer->write('/project/.gitattributes', "/docs/ export-ignore\n/.editorconfig export-ignore")
+        $this->writer->write($gitattributesPath, "/docs/ export-ignore\n/.editorconfig export-ignore")
             ->shouldBeCalledOnce();
 
         self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
@@ -244,15 +244,14 @@ final class GitAttributesCommandTest extends TestCase
             ->willReturn([]);
         $this->exportIgnoreFilter->filter($files, [])
             ->willReturn([]);
-
-        $this->existenceChecker->filterExisting('/project', [])
+        $this->existenceChecker->filterExisting(getcwd(), [])
             ->willReturn([]);
 
-        $this->reader->read('/project/.gitattributes')
+        $this->reader->read(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->merger->merge('', [], [])
+        $this->merger->merge(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->writer->write('/project/.gitattributes', '')
+        $this->writer->write(Argument::cetera())
             ->shouldNotBeCalled();
 
         $this->output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>')
@@ -263,5 +262,15 @@ final class GitAttributesCommandTest extends TestCase
             ->shouldBeCalled();
 
         self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return int
+     */
+    private function invokeExecute(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

@@ -3,17 +3,18 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
@@ -31,6 +32,11 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
+
+use function Safe\mkdir;
+use function Safe\file_put_contents;
+use function Safe\unlink;
+use function Safe\rmdir;
 
 #[CoversClass(CopyResourceCommand::class)]
 final class CopyResourceCommandTest extends TestCase
@@ -89,7 +95,10 @@ final class CopyResourceCommandTest extends TestCase
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
         self::assertSame('copy-resource', $this->command->getName());
-        self::assertSame('Copies a file or directory resource into the current project.', $this->command->getDescription());
+        self::assertSame(
+            'Copies a file or directory resource into the current project.',
+            $this->command->getDescription()
+        );
         self::assertSame(
             'This command copies a configured source file or every file in a source directory into the target path.',
             $this->command->getHelp()
@@ -102,9 +111,12 @@ final class CopyResourceCommandTest extends TestCase
     #[Test]
     public function executeWillCopyDirectoryContentsIntoTarget(): void
     {
-        $this->input->getOption('source')->willReturn('resources/github-actions');
-        $this->input->getOption('target')->willReturn('.github/workflows');
-        $this->input->getOption('overwrite')->willReturn(false);
+        $this->input->getOption('source')
+            ->willReturn('resources/github-actions');
+        $this->input->getOption('target')
+            ->willReturn('.github/workflows');
+        $this->input->getOption('overwrite')
+            ->willReturn(false);
 
         $this->fileLocator->locate('resources/github-actions')
             ->willReturn($this->sourceDirectory);

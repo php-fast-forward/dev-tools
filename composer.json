@@ -21,8 +21,8 @@
     "homepage": "https://github.com/php-fast-forward/",
     "support": {
         "issues": "https://github.com/php-fast-forward/dev-tools/issues",
-        "source": "https://github.com/php-fast-forward/dev-tools",
         "wiki": "https://github.com/php-fast-forward/dev-tools/wiki",
+        "source": "https://github.com/php-fast-forward/dev-tools",
         "docs": "https://php-fast-forward.github.io/dev-tools/"
     },
     "require": {

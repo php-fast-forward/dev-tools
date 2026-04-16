@@ -1,14 +1,13 @@
 /**
-{% if description %} * {{ description|raw }}
+{% if description %} * {{ description|raw }}.
  *
 {% endif %}
  * This file is part of {{ package }} project.
  *
- * @package  {{ package }}
  * @author   {{ copyright_holder|raw }}
 {% if license %} * @license  https://opensource.org/licenses/{{ license }} {{ license }} License
 {% endif %}
  *
-{% for link in links %} * @link     {{ link }}
+{% for link in links %} * @see      {{ link }}
 {% endfor %}
  */
