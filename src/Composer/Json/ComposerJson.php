@@ -58,6 +58,16 @@ final class ComposerJson implements ComposerJsonInterface
      */
     private array $data;
 
+    /**
+     * Stores the installed packages configuration.
+     *
+     * This property MUST contain the data read from the installed packages
+     * configuration file during construction. Consumers SHOULD treat the
+     * structure as internal implementation detail and SHALL rely on accessor
+     * methods instead of direct access.
+     *
+     * @var array<string, mixed>
+     */
     private array $installed;
 
     /**
