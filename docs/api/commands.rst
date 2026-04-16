@@ -1,9 +1,9 @@
 Command Classes
 ===============
 
-All public CLI commands extend
-``FastForward\DevTools\Console\Command\AbstractCommand``, which provides path
-resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
+All public CLI commands extend ``Composer\Command\BaseCommand`` and receive
+dependencies through constructor injection. The architecture uses
+``ProcessBuilder`` and ``ProcessQueue`` for fluent process management.
 
 .. list-table::
    :header-rows: 1
@@ -11,10 +11,6 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
    * - Class
      - CLI command
      - Responsibility
-   * - ``FastForward\DevTools\Console\Command\AbstractCommand``
-     - n/a
-     - Shared helpers for path resolution, packaged fallback files, PSR-4
-       discovery, and subcommand execution.
    * - ``FastForward\DevTools\Console\Command\StandardsCommand``
      - ``standards``
      - Runs the full quality pipeline.
@@ -52,6 +48,18 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
    * - ``FastForward\DevTools\Console\Command\GitIgnoreCommand``
      - ``gitignore``
      - Merges and synchronizes .gitignore files.
+   * - ``FastForward\DevTools\Console\Command\GitAttributesCommand``
+     - ``gitattributes``
+     - Manages export-ignore rules in .gitattributes.
    * - ``FastForward\DevTools\Console\Command\LicenseCommand``
      - ``license``
      - Generates a LICENSE file from composer.json license information.
+   * - ``FastForward\DevTools\Console\Command\CopyResourceCommand``
+     - ``copy-resource``
+     - Copies packaged or local resources into the consumer repository.
+   * - ``FastForward\DevTools\Console\Command\GitHooksCommand``
+     - ``git-hooks``
+     - Installs Fast Forward Git hooks.
+   * - ``FastForward\DevTools\Console\Command\UpdateComposerJsonCommand``
+     - ``update-composer-json``
+     - Updates the composer.json file to match the packaged schema.

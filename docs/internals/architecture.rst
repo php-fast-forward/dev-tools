@@ -1,5 +1,5 @@
 Architecture and Command Lifecycle
-==================================
+=================================
 
 The package has two connected execution models: local command execution and
 consumer repository synchronization.
@@ -14,9 +14,8 @@ Local Command Lifecycle
    ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
 4. ``standards`` is used as the default command when no explicit command name
    is given.
-5. Individual commands resolve local configuration first and packaged
-   fallbacks second through
-   ``FastForward\DevTools\Console\Command\AbstractCommand::getConfigFile()``.
+5. Commands receive dependencies through constructor injection from
+   ``DevToolsServiceProvider``.
 
 Consumer Synchronization Lifecycle
 ----------------------------------
@@ -39,24 +38,33 @@ Documentation Pipeline
 ----------------------
 
 1. ``FastForward\DevTools\Console\Command\DocsCommand`` reads PSR-4 paths from
-   ``composer.json``.
-2. It generates a temporary ``phpdocumentor.xml`` file in
-   ``tmp/cache/phpdoc``.
+   ``composer.json`` via ``ComposerJsonInterface``.
+2. It generates a temporary ``phpdocumentor.xml`` file in the configured cache
+   directory.
 3. phpDocumentor builds API pages from those PSR-4 paths.
 4. phpDocumentor also builds the guide from the selected ``docs/`` source
    directory.
 5. ``FastForward\DevTools\Console\Command\ReportsCommand`` combines that
    documentation build with PHPUnit coverage generation.
 
-Key Abstraction
----------------
+Dependency Injection
+--------------------
 
-``FastForward\DevTools\Console\Command\AbstractCommand`` is the main shared layer. It
-centralizes:
+Commands receive their dependencies through constructor injection provided by
+``DevToolsServiceProvider``.
 
-- current working directory detection;
-- absolute path resolution;
-- local-versus-packaged config lookup;
-- command-to-command dispatch inside the same application;
-- access to Composer package metadata such as PSR-4 namespaces and project
-  description.
+.. list-table::
+   :header-rows: 1
+
+   * - Interface
+     - Purpose
+   * - ``FastForward\DevTools\Process\ProcessBuilderInterface``
+     - Builds process commands with a fluent API for arguments.
+   * - ``FastForward\DevTools\Process\ProcessQueueInterface``
+     - Queues and executes multiple processes in sequence.
+   * - ``FastForward\DevTools\Filesystem\FilesystemInterface``
+     - Abstracts filesystem operations.
+   * - ``FastForward\DevTools\Composer\Json\ComposerJsonInterface``
+     - Reads and validates ``composer.json`` metadata.
+   * - ``Symfony\Component\Config\FileLocatorInterface``
+     - Locates configuration files.

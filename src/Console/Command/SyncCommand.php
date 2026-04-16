@@ -77,7 +77,7 @@ final class SyncCommand extends BaseCommand
     {
         $output->writeln('<info>Starting dev-tools synchronization...</info>');
 
-        $this->queueDevToolsCommand(['composer-json:update']);
+        $this->queueDevToolsCommand(['update-composer-json']);
         $this->queueDevToolsCommand(
             [
                 'copy-resource',

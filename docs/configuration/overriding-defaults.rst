@@ -7,12 +7,15 @@ without forking the whole package.
 Resolution Order
 ----------------
 
-``FastForward\DevTools\Console\Command\AbstractCommand::getConfigFile()`` resolves
-configuration in this order:
+Commands use ``Symfony\Component\Config\FileLocatorInterface`` to locate
+configuration files. The locator resolves configuration in this order:
 
 1. Check whether the file exists in the current working directory.
 2. Use the local file when it exists.
 3. Otherwise fall back to the packaged file inside ``fast-forward/dev-tools``.
+
+This behavior is consistent across all commands through the DI container
+and ``FileLocatorInterface``.
 
 Commands and Their Configuration Files
 --------------------------------------

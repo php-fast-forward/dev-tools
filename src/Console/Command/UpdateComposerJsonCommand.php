@@ -36,7 +36,7 @@ use function Safe\getcwd;
  * Updates composer.json with the Fast Forward dev-tools integration metadata.
  */
 #[AsCommand(
-    name: 'composer-json:update',
+    name: 'update-composer-json',
     description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
     help: 'This command adds or updates composer.json scripts and GrumPHP extra configuration required by dev-tools.'
 )]

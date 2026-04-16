@@ -66,7 +66,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('composer-json:update', $this->command->getName());
+        self::assertSame('update-composer-json', $this->command->getName());
         self::assertSame(
             'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
             $this->command->getDescription()
