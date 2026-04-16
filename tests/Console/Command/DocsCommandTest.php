@@ -77,10 +77,10 @@ final class DocsCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
 
-        $this->composerJson->getAutoload()->willReturn([
+        $this->composerJson->getAutoload('psr-4')->willReturn([
             'FastForward\\DevTools\\' => 'src/',
         ]);
-        $this->composerJson->getPackageName()->willReturn('fast-forward/dev-tools');
+        $this->composerJson->getName()->willReturn('fast-forward/dev-tools');
 
         $this->input->getOption('source')->willReturn('docs');
         $this->input->getOption('target')->willReturn('public');

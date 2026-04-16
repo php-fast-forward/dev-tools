@@ -20,6 +20,7 @@ namespace FastForward\DevTools\Tests\License;
 
 use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
 use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\ResolverInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -92,7 +93,7 @@ final class GeneratorTest extends TestCase
     #[Test]
     public function generateWithUnsupportedLicenseWillReturnNull(): void
     {
-        $this->composer->getPackageLicense()
+        $this->composer->getLicense()
             ->willReturn('GPL-3.0-only');
         $this->resolver->resolve('GPL-3.0-only')
             ->willReturn(null);
@@ -110,15 +111,16 @@ final class GeneratorTest extends TestCase
     {
         $targetPath = '/tmp/LICENSE';
 
-        $this->composer->getPackageLicense()
+        $this->composer->getLicense()
             ->willReturn('MIT');
         
         $this->resolver->resolve('MIT')
             ->willReturn('mit.txt');
 
-        $this->composer->getAuthors()->willReturn([
-            ['name' => 'Test Author', 'email' => 'test@example.com'],
-        ]);
+        $author = $this->prophesize(AuthorInterface::class);
+        $author->__toString()->willReturn('Test Author');
+
+        $this->composer->getAuthors(true)->willReturn($author->reveal());
 
         $now = new DateTimeImmutable('2026-04-16');
         $this->clock->now()->willReturn($now);
@@ -144,7 +146,7 @@ final class GeneratorTest extends TestCase
     {
         $this->composer->getPackageLicense()->willReturn('MIT');
         $this->resolver->resolve('MIT')->willReturn('mit.txt');
-        $this->composer->getAuthors()->willReturn([]);
+        $this->composer->getAuthors(true)->willReturn([]);
         $this->clock->now()->willReturn(new DateTimeImmutable());
 
         $this->renderer->render(Argument::cetera())->willThrow(new \Exception('Twig error'));

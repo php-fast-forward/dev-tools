@@ -18,8 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\WikiCommand;
-use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -42,7 +42,7 @@ final class WikiCommandTest extends TestCase
 
     private ObjectProphecy $processQueue;
 
-    private ObjectProphecy $composerJson;
+    private ObjectProphecy $composer;
 
     private ObjectProphecy $input;
 
@@ -56,14 +56,14 @@ final class WikiCommandTest extends TestCase
     {
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
-        $this->composerJson = $this->prophesize(ComposerJson::class);
+        $this->composer = $this->prophesize(ComposerJsonInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
 
-        $this->composerJson->getPackageDescription()
+        $this->composer->getDescription()
             ->willReturn('Fast Forward Dev Tools plugin');
-        $this->composerJson->getAutoload()
+        $this->composer->getAutoload('psr-4')
             ->willReturn(['FastForward\\DevTools\\' => 'src/']);
 
         $this->processBuilder->withArgument(Argument::any())
@@ -77,7 +77,7 @@ final class WikiCommandTest extends TestCase
         $this->command = new WikiCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->composerJson->reveal(),
+            $this->composer->reveal(),
         );
     }
 

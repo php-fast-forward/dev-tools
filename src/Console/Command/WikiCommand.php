@@ -20,6 +20,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -42,12 +43,12 @@ final class WikiCommand extends BaseCommand
     /**
      * Creates a new WikiCommand instance.
      *
-     * @param ComposerJson $composerJson the composer.json accessor
+     * @param ComposerJsonInterface $composer the composer.json accessor
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly ComposerJson $composerJson,
+        private readonly ComposerJsonInterface $composer,
     ) {
         return parent::__construct();
     }
@@ -96,11 +97,11 @@ final class WikiCommand extends BaseCommand
         $processBuilder = $this->processBuilder
             ->withArgument('--visibility', 'public,protected')
             ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
-            ->withArgument('--title', $this->composerJson->getPackageDescription())
+            ->withArgument('--title', $this->composer->getDescription())
             ->withArgument('--target', $input->getOption('target'))
             ->withArgument('--cache-folder', $input->getOption('cache-dir'));
 
-        $psr4Namespaces = $this->composerJson->getAutoload();
+        $psr4Namespaces = $this->composer->getAutoload('psr-4');
 
         foreach ($psr4Namespaces as $path) {
             $processBuilder = $processBuilder->withArgument('--directory', $path);

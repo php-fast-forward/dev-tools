@@ -61,7 +61,7 @@ final readonly class Generator implements GeneratorInterface
      */
     public function generate(string $targetPath): ?string
     {
-        $templateFilename = $this->resolver->resolve($this->composer->getPackageLicense());
+        $templateFilename = $this->resolver->resolve($this->composer->getLicense());
 
         if (null === $templateFilename) {
             return null;
@@ -69,7 +69,7 @@ final readonly class Generator implements GeneratorInterface
 
         try {
             $content = $this->renderer->render('licenses/' . $templateFilename, [
-                'copyright_holder' => $this->getCopyrightHolder(),
+                'copyright_holder' => (string) $this->composer->getAuthors(true),
                 'year' => $this->clock->now()->format('Y'),
             ]);
         } catch (\Throwable $throwable) {
@@ -79,23 +79,5 @@ final readonly class Generator implements GeneratorInterface
         $this->filesystem->dumpFile($targetPath, $content);
 
         return $content;
-    }
-
-    /**
-     * Gets the copyright holder name from composer.json.
-     *
-     * @return string The copyright holder name
-     */
-    private function getCopyrightHolder(): string
-    {
-        $authors = $this->composer->getAuthors();
-
-        if ([] === $authors) {
-            return '';
-        }
-
-        $firstAuthor = $authors[0];
-
-        return $firstAuthor['name'] ?? $firstAuthor['email'] ?? '';
     }
 }

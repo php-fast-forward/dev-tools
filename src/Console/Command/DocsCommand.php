@@ -56,14 +56,14 @@ final class DocsCommand extends BaseCommand
      * @param ProcessQueueInterface $processQueue the process queue for managing execution
      * @param Environment $renderer 
      * @param FilesystemInterface $filesystem the filesystem for handling file operations
-     * @param ComposerJsonInterface $composerJson the composer.json handler for accessing project metadata
+     * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly Environment $renderer,
         private readonly FilesystemInterface $filesystem,
-        private readonly ComposerJsonInterface $composerJson,
+        private readonly ComposerJsonInterface $composer,
     ) {
         parent::__construct();
     }
@@ -165,17 +165,17 @@ final class DocsCommand extends BaseCommand
     private function createPhpDocumentorConfig(string $source, string $target, string $template, string $cacheDir): string
     {
         $workingDirectory = \getcwd();
-        $psr4Namespaces = $this->composerJson->getAutoload();
+        $autoload = $this->composer->getAutoload('psr-4');
         $guidePath = $this->filesystem->makePathRelative($source);
-        $defaultPackageName = array_key_first($psr4Namespaces) ?: '';
+        $defaultPackageName = array_key_first($autoload) ?: '';
 
         $content = $this->renderer->render('phpdocumentor.xml', [
-            'title' => $this->composerJson->getPackageName(),
+            'title' => $this->composer->getName(),
             'template' => $template,
             'target' => $target,
             'cacheDir' => $cacheDir,
             'workingDirectory' => $workingDirectory,
-            'paths' => $psr4Namespaces,
+            'paths' => $autoload,
             'guidePath' => $guidePath,
             'defaultPackageName' => rtrim($defaultPackageName, '\\'),
         ]);

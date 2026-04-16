@@ -18,10 +18,15 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Composer\Json;
 
+use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
+use FastForward\DevTools\Composer\Json\Schema\Funding;
+use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use UnderflowException;
 
 use function Safe\file_put_contents;
 use function Safe\json_encode;
@@ -52,69 +57,298 @@ final class ComposerJsonTest extends TestCase
      * @return void
      */
     #[Test]
-    public function accessorsWillReturnConfiguredComposerData(): void
+    public function identificationAccessorsWillReturnConfiguredData(): void
     {
         $composerJson = $this->createComposerJson([
             'name' => 'fast-forward/dev-tools',
-            'description' => 'Fast Forward Development Tools for PHP projects',
-            'license' => 'MIT',
+            'description' => 'Fast Forward Development Tools',
+            'version' => '1.2.3',
+            'type' => 'composer-plugin',
+        ]);
+
+        self::assertSame('fast-forward/dev-tools', $composerJson->getName());
+        self::assertSame('Fast Forward Development Tools', $composerJson->getDescription());
+        self::assertSame('1.2.3', $composerJson->getVersion());
+        self::assertSame('composer-plugin', $composerJson->getType());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function typeWillDefaultToLibrary(): void
+    {
+        $composerJson = $this->createComposerJson(['name' => 'foo/bar']);
+
+        self::assertSame('library', $composerJson->getType());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function metadataAccessorsWillReturnConfiguredData(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'name' => 'fast-forward/dev-tools',
+            'keywords' => ['php', 'devtools'],
+            'homepage' => 'https://github.com/php-fast-forward/dev-tools',
+            'readme' => 'README.md',
+            'time' => '2026-01-01 10:00:00',
+        ]);
+
+        self::assertSame(['php', 'devtools'], $composerJson->getKeywords());
+        self::assertSame('https://github.com/php-fast-forward/dev-tools', $composerJson->getHomepage());
+        self::assertSame('README.md', $composerJson->getReadme());
+        self::assertInstanceOf(DateTimeImmutable::class, $composerJson->getTime());
+        self::assertSame('2026-01-01T10:00:00+00:00', $composerJson->getTime()?->format('c'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getLicenseWillReturnResolvedValue(): void
+    {
+        $composerJson = $this->createComposerJson(['license' => 'MIT']);
+        self::assertSame('MIT', $composerJson->getLicense());
+
+        $composerJson = $this->createComposerJson(['license' => ['MIT']]);
+        self::assertSame('MIT', $composerJson->getLicense());
+
+        $composerJson = $this->createComposerJson(['license' => ['MIT', 'Apache-2.0']]);
+        self::assertNull($composerJson->getLicense());
+
+        $composerJson = $this->createComposerJson([]);
+        self::assertNull($composerJson->getLicense());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getAuthorsWillReturnNormalizedAuthorEntries(): void
+    {
+        $composerJson = $this->createComposerJson([
             'authors' => [
                 [
                     'name' => 'Felipe',
+                    'email' => 'github@mentordosnerds.com',
                 ],
             ],
-            'extra' => [
-                'gitattributes' => [
-                    'keep-in-export' => ['/.github/'],
+        ]);
+
+        $authors = $composerJson->getAuthors();
+        self::assertIsIterable($authors);
+        $authorsArray = is_array($authors) ? $authors : iterator_to_array($authors);
+        self::assertCount(1, $authorsArray);
+        self::assertInstanceOf(AuthorInterface::class, $authorsArray[0]);
+        self::assertSame('Felipe', $authorsArray[0]->getName());
+
+        $firstAuthor = $composerJson->getAuthors(true);
+        self::assertInstanceOf(AuthorInterface::class, $firstAuthor);
+        self::assertSame('Felipe', $firstAuthor->getName());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getAuthorsWithOnlyFirstAuthorWillThrowExceptionWhenNoAuthorsAreDefined(): void
+    {
+        $composerJson = $this->createComposerJson([]);
+
+        $this->expectException(UnderflowException::class);
+        $this->expectExceptionMessage('No author entries were declared in the Composer file.');
+
+        $composerJson->getAuthors(true);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getSupportWillReturnSupportObject(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'support' => [
+                'issues' => 'https://github.com/php-fast-forward/dev-tools/issues',
+            ],
+        ]);
+
+        $support = $composerJson->getSupport();
+        self::assertInstanceOf(SupportInterface::class, $support);
+        self::assertSame('https://github.com/php-fast-forward/dev-tools/issues', $support->getIssues());
+        self::assertSame('', $support->getEmail());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getFundingWillReturnFundingEntries(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'funding' => [
+                [
+                    'type' => 'github',
+                    'url' => 'https://github.com/sponsors/mentordosnerds',
                 ],
             ],
+        ]);
+
+        $funding = $composerJson->getFunding();
+        self::assertIsArray($funding);
+        self::assertCount(1, $funding);
+        self::assertInstanceOf(Funding::class, $funding[0]);
+        self::assertSame('github', $funding[0]->getType());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getAutoloadWillReturnConfiguredMappings(): void
+    {
+        $composerJson = $this->createComposerJson([
             'autoload' => [
-                'psr-4' => [
-                    'FastForward\\DevTools\\' => 'src/',
-                ],
+                'psr-4' => ['Foo\\' => 'src/'],
+                'files' => ['src/functions.php'],
             ],
         ]);
 
-        self::assertSame('fast-forward/dev-tools', $composerJson->getPackageName());
-        self::assertSame('Fast Forward Development Tools for PHP projects', $composerJson->getPackageDescription());
-        self::assertSame('MIT', $composerJson->getPackageLicense());
-        self::assertSame([[
-            'name' => 'Felipe',
-        ]], $composerJson->getAuthors());
-        self::assertSame([
-            'gitattributes' => [
-                'keep-in-export' => ['/.github/'],
-            ],
-        ], $composerJson->getExtra(),);
-        self::assertSame([
-            'FastForward\\DevTools\\' => 'src/',
-        ], $composerJson->getAutoload());
+        self::assertSame(['psr-4' => ['Foo\\' => 'src/'], 'files' => ['src/functions.php']], $composerJson->getAutoload());
+        self::assertSame(['Foo\\' => 'src/'], $composerJson->getAutoload('psr-4'));
+        self::assertSame([], $composerJson->getAutoload('invalid'));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function getPackageLicenseWillReturnSingleLicenseFromArray(): void
+    public function getAutoloadDevWillReturnConfiguredMappings(): void
     {
         $composerJson = $this->createComposerJson([
-            'license' => ['MIT'],
+            'autoload-dev' => [
+                'psr-4' => ['Foo\\Tests\\' => 'tests/'],
+            ],
         ]);
 
-        self::assertSame('MIT', $composerJson->getPackageLicense());
+        self::assertSame(['psr-4' => ['Foo\\Tests\\' => 'tests/']], $composerJson->getAutoloadDev());
+        self::assertSame(['Foo\\Tests\\' => 'tests/'], $composerJson->getAutoloadDev('psr-4'));
+        self::assertSame([], $composerJson->getAutoloadDev('files'));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function getPackageLicenseWillReturnNullForMultipleLicenses(): void
+    public function getMinimumStabilityWillReturnConfiguredValue(): void
+    {
+        $composerJson = $this->createComposerJson(['minimum-stability' => 'dev']);
+        self::assertSame('dev', $composerJson->getMinimumStability());
+
+        $composerJson = $this->createComposerJson([]);
+        self::assertSame('stable', $composerJson->getMinimumStability());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getConfigWillReturnValuesFromConfigSection(): void
     {
         $composerJson = $this->createComposerJson([
-            'license' => ['MIT', 'Apache-2.0'],
+            'config' => [
+                'vendor-dir' => 'custom-vendor',
+                'preferred-install' => ['*' => 'dist'],
+                'process-timeout' => 300,
+            ],
         ]);
 
-        self::assertNull($composerJson->getPackageLicense());
+        self::assertSame([
+            'vendor-dir' => 'custom-vendor',
+            'preferred-install' => ['*' => 'dist'],
+            'process-timeout' => 300,
+        ], $composerJson->getConfig(null));
+
+        self::assertSame('custom-vendor', $composerJson->getConfig('vendor-dir'));
+        self::assertSame(['*' => 'dist'], $composerJson->getConfig('preferred-install'));
+        self::assertSame('300', $composerJson->getConfig('process-timeout'));
+        self::assertSame('', $composerJson->getConfig('non-existent'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getScriptsWillReturnScriptsSection(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'scripts' => [
+                'test' => 'phpunit',
+            ],
+        ]);
+
+        self::assertSame(['test' => 'phpunit'], $composerJson->getScripts());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getExtraWillReturnExtraSectionOrSpecificKey(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'extra' => [
+                'foo' => ['bar' => 'baz'],
+            ],
+        ]);
+
+        self::assertSame(['foo' => ['bar' => 'baz']], $composerJson->getExtra());
+        self::assertSame(['bar' => 'baz'], $composerJson->getExtra('foo'));
+        self::assertSame([], $composerJson->getExtra('invalid'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getBinWillReturnConfiguredBinaries(): void
+    {
+        $composerJson = $this->createComposerJson(['bin' => 'bin/tool']);
+        self::assertSame('bin/tool', $composerJson->getBin());
+
+        $composerJson = $this->createComposerJson(['bin' => ['bin/tool1', 'bin/tool2']]);
+        self::assertSame(['bin/tool1', 'bin/tool2'], $composerJson->getBin());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getSuggestWillReturnPackageSuggestions(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'suggest' => [
+                'foo/bar' => 'For extra features',
+            ],
+        ]);
+
+        self::assertSame(['foo/bar' => 'For extra features'], $composerJson->getSuggest());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommentsWillReturnCommentData(): void
+    {
+        $composerJson = $this->createComposerJson(['_comment' => 'This is a comment']);
+        self::assertSame(['This is a comment'], $composerJson->getComments());
+
+        $composerJson = $this->createComposerJson(['_comment' => ['Comment 1', 'Comment 2']]);
+        self::assertSame(['Comment 1', 'Comment 2'], $composerJson->getComments());
     }
 
     /**
