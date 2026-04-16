@@ -5,18 +5,20 @@
     xmlns="https://www.phpdoc.org"
     xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/phpDocumentor/phpDocumentor/master/data/xsd/phpdoc.xsd"
 >
-    <title>%%TITLE%%</title>
-    <template name="%%TEMPLATE%%" />
+    <title>{{ title }}</title>
+    <template name="{{ template }}" />
 
     <paths>
-        <output>%%TARGET%%</output>
-        <cache>%%WORKING_DIRECTORY%%/tmp/cache/phpdoc</cache>
+        <output>{{ target }}</output>
+        <cache>{{ cacheDir }}</cache>
     </paths>
 
     <version number="latest">
         <api>
-            <source dsn="%%WORKING_DIRECTORY%%">
-                %%PATHS%%
+            <source dsn="{{ workingDirectory }}">
+{% for path in paths %}
+                <path>{{ path }}</path>
+{% endfor %}
             </source>
             <ignore hidden="true" symlinks="true">
                 <path>tests/**/*</path>
@@ -27,11 +29,11 @@
             <extensions>
                 <extension>php</extension>
             </extensions>
-            <default-package-name>%%DEFAULT_PACKAGE_NAME%%</default-package-name>
+            <default-package-name>{{ defaultPackageName }}</default-package-name>
         </api>
         <guide>
-            <source dsn="%%WORKING_DIRECTORY%%">
-                <path>%%GUIDE_PATH%%</path>
+            <source dsn="{{ workingDirectory }}">
+                <path>{{ guidePath }}</path>
             </source>
             <output>guide</output>
         </guide>

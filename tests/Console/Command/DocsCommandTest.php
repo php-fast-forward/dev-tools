@@ -19,133 +19,149 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DocsCommand;
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-
-use function Safe\getcwd;
+use Twig\Environment;
 
 #[CoversClass(DocsCommand::class)]
-final class DocsCommandTest extends AbstractCommandTestCase
+final class DocsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<ComposerJson>
-     */
+    /** @var ObjectProphecy<ProcessBuilderInterface> */
+    private ObjectProphecy $processBuilder;
+
+    /** @var ObjectProphecy<ProcessQueueInterface> */
+    private ObjectProphecy $processQueue;
+
+    /** @var ObjectProphecy<Environment> */
+    private ObjectProphecy $renderer;
+
+    /** @var ObjectProphecy<FilesystemInterface> */
+    private ObjectProphecy $filesystem;
+
+    /** @var ObjectProphecy<ComposerJsonInterface> */
     private ObjectProphecy $composerJson;
 
-    /**
-     * @return DocsCommand
-     */
-    protected function getCommandClass(): DocsCommand
-    {
-        return new DocsCommand($this->composerJson->reveal(), $this->filesystem->reveal());
-    }
+    /** @var ObjectProphecy<InputInterface> */
+    private ObjectProphecy $input;
 
-    /**
-     * @return string
-     */
-    protected function getCommandName(): string
-    {
-        return 'docs';
-    }
+    /** @var ObjectProphecy<OutputInterface> */
+    private ObjectProphecy $output;
 
-    /**
-     * @return string
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Generates API documentation.';
-    }
+    /** @var ObjectProphecy<Process> */
+    private ObjectProphecy $process;
 
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command generates API documentation using phpDocumentor.';
-    }
+    private DocsCommand $command;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
-        $this->composerJson = $this->prophesize(ComposerJson::class);
-        $this->composerJson->getAutoload()
-            ->willReturn([
-                'FastForward\\DevTools\\' => getcwd() . '/src',
-            ]);
-        $this->composerJson->getPackageDescription()
-            ->willReturn('Fast Forward Dev Tools plugin');
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->renderer = $this->prophesize(Environment::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->composerJson = $this->prophesize(ComposerJsonInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+        $this->process = $this->prophesize(Process::class);
 
-        parent::setUp();
+        $this->composerJson->getAutoload()->willReturn([
+            'FastForward\\DevTools\\' => 'src/',
+        ]);
+        $this->composerJson->getPackageName()->willReturn('fast-forward/dev-tools');
+
+        $this->input->getOption('source')->willReturn('docs');
+        $this->input->getOption('target')->willReturn('public');
+        $this->input->getOption('template')->willReturn('default');
+        $this->input->getOption('cache-dir')->willReturn('tmp/cache/phpdoc');
+
+        $this->command = new DocsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->renderer->reveal(),
+            $this->filesystem->reveal(),
+            $this->composerJson->reveal()
+        );
     }
 
-    /**
-     * @return void
-     */
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
+    {
+        self::assertSame('docs', $this->command->getName());
+        self::assertSame('Generates API documentation.', $this->command->getDescription());
+        self::assertSame('This command generates API documentation using phpDocumentor.', $this->command->getHelp());
+    }
+
     #[Test]
     public function executeWillFailIfSourceDirectoryNotFound(): void
     {
-        $this->filesystem->exists(Argument::any())->willReturn(false);
+        $this->output->writeln('<info>Generating API documentation...</info>')->shouldBeCalled();
 
-        self::assertSame(DocsCommand::FAILURE, $this->invokeExecute());
+        $this->filesystem->getAbsolutePath('docs')->willReturn('/app/docs');
+        $this->filesystem->exists('/app/docs')->willReturn(false);
+
+        $this->output->writeln('<error>Source directory not found: /app/docs</error>')->shouldBeCalled();
+
+        $result = $this->executeCommand();
+
+        self::assertSame(DocsCommand::FAILURE, $result);
     }
 
-    /**
-     * @return void
-     */
     #[Test]
     public function executeWillGeneratePhpDocumentorConfigAndRunProcess(): void
     {
-        $this->filesystem->exists(Argument::any())->willReturn(true);
-        // O template agora é resolvido via getConfigFile, então precisamos garantir que o mock aceite o caminho relativo
-        $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
+        $this->output->writeln('<info>Generating API documentation...</info>')->shouldBeCalled();
 
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
+        $this->filesystem->getAbsolutePath('docs')->willReturn('/app/docs');
+        $this->filesystem->exists('/app/docs')->willReturn(true);
+        $this->filesystem->getAbsolutePath('public')->willReturn('/app/public');
+        $this->filesystem->getAbsolutePath('tmp/cache/phpdoc')->willReturn('/app/tmp/cache/phpdoc');
+        
+        $this->filesystem->makePathRelative('/app/docs')->willReturn('docs/');
 
-            return str_contains($commandLine, 'vendor/bin/phpdoc')
-                && str_contains($commandLine, '--config');
-        });
+        $this->renderer->render('phpdocumentor.xml', Argument::type('array'))
+            ->willReturn('RenderedXML');
 
-        self::assertSame(DocsCommand::SUCCESS, $this->invokeExecute());
+        $this->filesystem->dumpFile('phpdocumentor.xml', 'RenderedXML', '/app/tmp/cache/phpdoc')->shouldBeCalled();
+        $this->filesystem->getAbsolutePath('phpdocumentor.xml', '/app/tmp/cache/phpdoc')
+            ->willReturn('/app/tmp/cache/phpdoc/phpdocumentor.xml');
+
+        $this->processBuilder->withArgument('--config', '/app/tmp/cache/phpdoc/phpdocumentor.xml')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--ansi')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--no-progress')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--markers', 'TODO,FIXME,BUG,HACK')
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->build('vendor/bin/phpdoc')
+            ->willReturn($this->process->reveal());
+
+        $this->processQueue->add($this->process->reveal())->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())->willReturn(DocsCommand::SUCCESS);
+
+        $result = $this->executeCommand();
+
+        self::assertSame(DocsCommand::SUCCESS, $result);
     }
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnFailureIfProcessFails(): void
+    private function executeCommand(): int
     {
-        $this->filesystem->exists(Argument::any())->willReturn(true);
-        $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
 
-        $this->willRunProcessWithCallback(static fn(): bool => true, false);
-
-        self::assertSame(DocsCommand::FAILURE, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillCreateConfigDirectoryIfItDoesNotExist(): void
-    {
-        $this->filesystem->exists(Argument::any())->willReturn(true);
-        $this->filesystem->exists(getcwd() . '/tmp/cache/phpdoc')->willReturn(false);
-
-        $this->filesystem->mkdir(Argument::any())->shouldBeCalled();
-        $this->filesystem->dumpFile(Argument::cetera())->shouldBeCalled();
-
-        $this->willRunProcessWithCallback(static fn(): bool => true);
-
-        self::assertSame(DocsCommand::SUCCESS, $this->invokeExecute());
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }
