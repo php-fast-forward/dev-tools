@@ -18,17 +18,20 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use Composer\Command\BaseCommand;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
 use RuntimeException;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 
 use function is_numeric;
 
@@ -41,7 +44,7 @@ use function is_numeric;
     description: 'Runs PHPUnit tests.',
     help: 'This command runs PHPUnit to execute your tests.'
 )]
-final class TestsCommand extends AbstractCommand
+final class TestsCommand extends BaseCommand
 {
     /**
      * @var string identifies the local configuration file for PHPUnit processes
@@ -50,15 +53,21 @@ final class TestsCommand extends AbstractCommand
 
     /**
      * @param CoverageSummaryLoaderInterface $coverageSummaryLoader the loader used for `coverage-php` summaries
-     * @param ComposerJson $composerJson the composer.json reader for autoload information
-     * @param Filesystem $filesystem the filesystem utility used for path resolution
+     * @param ComposerJsonInterface $composer the composer.json reader for autoload information
+     * @param FilesystemInterface $filesystem the filesystem utility used for path resolution
+     * @param FileLocatorInterface $fileLocator the file locator used to resolve PHPUnit configuration
+     * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
+     * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
-        private readonly ComposerJson $composerJson,
-        Filesystem $filesystem,
+        private readonly ComposerJsonInterface $composer,
+        private readonly FilesystemInterface $filesystem,
+        private readonly FileLocatorInterface $fileLocator,
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
     ) {
-        parent::__construct($filesystem);
+        parent::__construct();
     }
 
     /**
@@ -138,29 +147,38 @@ final class TestsCommand extends AbstractCommand
             return self::FAILURE;
         }
 
-        $arguments = [
-            $this->getAbsolutePath('vendor/bin/phpunit'),
-            '--configuration=' . parent::getConfigFile(self::CONFIG),
-            '--bootstrap=' . $this->resolvePath($input, 'bootstrap'),
-            '--display-deprecations',
-            '--display-phpunit-deprecations',
-            '--display-incomplete',
-            '--display-skipped',
-        ];
+        $processBuilder = $this->processBuilder
+            ->withArgument('--configuration', $this->fileLocator->locate(self::CONFIG))
+            ->withArgument('--bootstrap', $this->resolvePath($input, 'bootstrap'))
+            ->withArgument('--display-deprecations')
+            ->withArgument('--display-phpunit-deprecations')
+            ->withArgument('--display-incomplete')
+            ->withArgument('--display-skipped');
 
         if (! $input->getOption('no-cache')) {
-            $arguments[] = '--cache-directory=' . $this->resolvePath($input, 'cache-dir');
+            $processBuilder = $processBuilder->withArgument(
+                '--cache-directory',
+                $this->resolvePath($input, 'cache-dir')
+            );
         }
 
-        $coverageReportPath = $this->configureCoverageArguments($input, $arguments, null !== $minimumCoverage);
+        [$processBuilder, $coverageReportPath] = $this->configureCoverageArguments(
+            $input,
+            $processBuilder,
+            null !== $minimumCoverage,
+        );
 
         if ($input->getOption('filter')) {
-            $arguments[] = '--filter=' . $input->getOption('filter');
+            $processBuilder = $processBuilder->withArgument('--filter', $input->getOption('filter'));
         }
 
-        $command = new Process([...$arguments, $input->getArgument('path')]);
+        $this->processQueue->add(
+            $processBuilder
+                ->withArgument($input->getArgument('path'))
+                ->build('vendor/bin/phpunit')
+        );
 
-        $result = parent::runProcess($command, $output);
+        $result = $this->processQueue->run($output);
 
         if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
             return $result;
@@ -182,7 +200,7 @@ final class TestsCommand extends AbstractCommand
      */
     private function resolvePath(InputInterface $input, string $option): string
     {
-        return $this->getAbsolutePath($input->getOption($option));
+        return $this->filesystem->getAbsolutePath($input->getOption($option));
     }
 
     /**
@@ -213,41 +231,45 @@ final class TestsCommand extends AbstractCommand
 
     /**
      * @param InputInterface $input the raw parameter definitions
-     * @param array<int, string> $arguments the mutable argument list for the PHPUnit process
+     * @param ProcessBuilderInterface $processBuilder the process builder to extend with coverage arguments
      * @param bool $requiresCoverageReport indicates whether a `coverage-php` report is required
      *
-     * @return string|null the absolute path to the generated `coverage-php` report
+     * @return array{ProcessBuilderInterface, string|null} the extended builder and generated `coverage-php` report path
      */
     private function configureCoverageArguments(
         InputInterface $input,
-        array &$arguments,
+        ProcessBuilderInterface $processBuilder,
         bool $requiresCoverageReport,
-    ): ?string {
+    ): array {
         $coverageOption = $input->getOption('coverage');
 
         if (null === $coverageOption && ! $requiresCoverageReport) {
-            return null;
+            return [$processBuilder, null];
         }
 
         $coveragePath = null !== $coverageOption
             ? $this->resolvePath($input, 'coverage')
             : $this->resolvePath($input, 'cache-dir');
 
-        foreach ($this->composerJson->getAutoload() as $path) {
-            $arguments[] = '--coverage-filter=' . $this->getAbsolutePath($path);
+        foreach ($this->composer->getAutoload('psr-4') as $path) {
+            $processBuilder = $processBuilder->withArgument(
+                '--coverage-filter',
+                $this->filesystem->getAbsolutePath($path)
+            );
         }
 
         if (null !== $coverageOption) {
-            $arguments[] = '--coverage-text';
-            $arguments[] = '--coverage-html=' . $coveragePath;
-            $arguments[] = '--testdox-html=' . $coveragePath . '/testdox.html';
-            $arguments[] = '--coverage-clover=' . $coveragePath . '/clover.xml';
+            $processBuilder = $processBuilder
+                ->withArgument('--coverage-text')
+                ->withArgument('--coverage-html', $coveragePath)
+                ->withArgument('--testdox-html', $coveragePath . '/testdox.html')
+                ->withArgument('--coverage-clover', $coveragePath . '/clover.xml');
         }
 
         $coverageReportPath = $coveragePath . '/coverage.php';
-        $arguments[] = '--coverage-php=' . $coverageReportPath;
+        $processBuilder = $processBuilder->withArgument('--coverage-php', $coverageReportPath);
 
-        return $coverageReportPath;
+        return [$processBuilder, $coverageReportPath];
     }
 
     /**

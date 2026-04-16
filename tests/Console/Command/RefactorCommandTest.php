@@ -38,28 +38,43 @@ final class RefactorCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectProphecy<FileLocatorInterface> */
+    /**
+     * @var ObjectProphecy<FileLocatorInterface>
+     */
     private ObjectProphecy $fileLocator;
 
-    /** @var ObjectProphecy<ProcessBuilderInterface> */
+    /**
+     * @var ObjectProphecy<ProcessBuilderInterface>
+     */
     private ObjectProphecy $processBuilder;
 
-    /** @var ObjectProphecy<ProcessQueueInterface> */
+    /**
+     * @var ObjectProphecy<ProcessQueueInterface>
+     */
     private ObjectProphecy $processQueue;
 
-    /** @var ObjectProphecy<InputInterface> */
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
     private ObjectProphecy $input;
 
-    /** @var ObjectProphecy<OutputInterface> */
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
     private ObjectProphecy $output;
 
-    /** @var ObjectProphecy<Process> */
+    /**
+     * @var ObjectProphecy<Process>
+     */
     private ObjectProphecy $process;
 
     private RefactorCommand $command;
 
     private const string CONFIG_PATH = '/path/to/rector.php';
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
@@ -72,7 +87,8 @@ final class RefactorCommandTest extends TestCase
         $this->fileLocator->locate(RefactorCommand::CONFIG)
             ->willReturn(self::CONFIG_PATH);
 
-        $this->input->getOption('fix')->willReturn(false);
+        $this->input->getOption('fix')
+            ->willReturn(false);
 
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
@@ -90,6 +106,9 @@ final class RefactorCommandTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
@@ -99,6 +118,9 @@ final class RefactorCommandTest extends TestCase
         self::assertSame(['rector'], $this->command->getAliases());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillHaveExpectedOptions(): void
     {
@@ -108,6 +130,9 @@ final class RefactorCommandTest extends TestCase
         self::assertTrue($definition->hasOption('config'));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillRunRectorProcessWithDryRunWhenFixIsFalse(): void
     {
@@ -135,6 +160,9 @@ final class RefactorCommandTest extends TestCase
         self::assertSame(RefactorCommand::SUCCESS, $result);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillRunRectorProcessWithoutDryRunWhenFixIsTrue(): void
     {
@@ -152,6 +180,9 @@ final class RefactorCommandTest extends TestCase
         self::assertSame(RefactorCommand::SUCCESS, $result);
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

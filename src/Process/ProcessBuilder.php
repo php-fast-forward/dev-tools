@@ -93,6 +93,6 @@ final readonly class ProcessBuilder implements ProcessBuilderInterface
      */
     public function build(string $command): Process
     {
-        return new Process([...explode(' ', $command), ...$this->arguments]);
+        return new Process(command: [...explode(' ', $command), ...$this->arguments], timeout: 0);
     }
 }

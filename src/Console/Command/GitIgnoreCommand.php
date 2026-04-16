@@ -55,7 +55,7 @@ final class GitIgnoreCommand extends BaseCommand
      * @param MergerInterface $merger the merger component
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface|null $writer the writer component
-     * @param FilelocatorInterface $fileLocator the file locator
+     * @param FileLocatorInterface $fileLocator the file locator
      */
     public function __construct(
         private readonly MergerInterface $merger,
@@ -80,7 +80,7 @@ final class GitIgnoreCommand extends BaseCommand
                 shortcut: 's',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the source .gitignore file (canonical)',
-                default: $this->fileLocator->locate(self::FILENAME, dirname(__DIR__, 3)),
+                default: $this->fileLocator->locate(self::FILENAME, \dirname(__DIR__, 3)),
             )
             ->addOption(
                 name: 'target',

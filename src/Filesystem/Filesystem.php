@@ -19,9 +19,10 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Filesystem;
 
 use Override;
-use function Safe\getcwd;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path;
+
+use function Safe\getcwd;
 
 /**
  * Concrete implementation of the standard filesystem interface.
@@ -74,6 +75,33 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
     }
 
     /**
+     * Copies a file to a target path.
+     *
+     * @param string $originFile the source file path to copy
+     * @param string $targetFile the target file path to create
+     * @param bool $overwriteNewerFiles whether newer target files MAY be overwritten
+     */
+    #[Override]
+    public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void
+    {
+        parent::copy($this->getAbsolutePath($originFile), $this->getAbsolutePath($targetFile), $overwriteNewerFiles);
+    }
+
+    /**
+     * Changes the permission mode for one or more files.
+     *
+     * @param iterable<string>|string $files the target file paths
+     * @param int $mode the permission mode to apply
+     * @param int $umask the umask to apply
+     * @param bool $recursive whether permissions SHOULD be applied recursively
+     */
+    #[Override]
+    public function chmod(string|iterable $files, int $mode, int $umask = 0o000, bool $recursive = false): void
+    {
+        parent::chmod($this->getAbsolutePath($files), $mode, $umask, $recursive);
+    }
+
+    /**
      * Resolves a path or iterable of paths into their absolute path representation.
      *
      * @param iterable<string>|string $files the path(s) to resolve
@@ -89,11 +117,11 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
             $basePath = Path::makeAbsolute($basePath, getcwd());
         }
 
-        if (is_string($files)) {
+        if (\is_string($files)) {
             return Path::makeAbsolute($files, $basePath);
         }
 
-        return array_map(static fn (string $file): string => Path::makeAbsolute($file, $basePath), $files);
+        return array_map(static fn(string $file): string => Path::makeAbsolute($file, $basePath), $files);
     }
 
     /**
@@ -104,7 +132,7 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      * @param string|null $basePath the base path for relative path resolution
      */
     #[Override]
-    public function mkdir(string|iterable $dirs, int $mode = 0777, ?string $basePath = null): void
+    public function mkdir(string|iterable $dirs, int $mode = 0o777, ?string $basePath = null): void
     {
         parent::mkdir($this->getAbsolutePath($dirs, $basePath), $mode);
     }
@@ -120,10 +148,7 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
     #[Override]
     public function makePathRelative(string $path, ?string $basePath = null): string
     {
-        return parent::makePathRelative(
-            $this->getAbsolutePath($path, $basePath),
-            $basePath ?? getcwd(),
-        );
+        return parent::makePathRelative($this->getAbsolutePath($path, $basePath), $basePath ?? getcwd());
     }
 
     /**
@@ -136,7 +161,7 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      */
     public function basename(string $path, string $suffix = ''): string
     {
-        return \basename($path, $suffix);
+        return basename($path, $suffix);
     }
 
     /**

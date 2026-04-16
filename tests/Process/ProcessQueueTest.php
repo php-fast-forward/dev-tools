@@ -204,7 +204,8 @@ final class ProcessQueueTest extends TestCase
     public function runDetachedProcessStartsWithoutBlocking(): void
     {
         $detachedProcess = $this->createDetachedProcessMock();
-        $detachedProcess->isRunning()->willReturn(true, false);
+        $detachedProcess->isRunning()
+            ->willReturn(true, false);
         $blockingProcess = $this->createProcessMock();
 
         $this->queue->add($detachedProcess->reveal(), false, true);
@@ -360,8 +361,9 @@ final class ProcessQueueTest extends TestCase
     public function waitWillBlockUntilDetachedProcessesFinish(): void
     {
         $detachedProcess = $this->createDetachedProcessMock();
-        $detachedProcess->isRunning()->willReturn(true, false);
-        
+        $detachedProcess->isRunning()
+            ->willReturn(true, false);
+
         $this->queue->add($detachedProcess->reveal(), false, true);
         $this->queue->run($this->output->reveal());
 

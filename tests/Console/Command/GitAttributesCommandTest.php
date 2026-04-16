@@ -28,13 +28,20 @@ use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
 #[CoversClass(GitAttributesCommand::class)]
-final class GitAttributesCommandTest extends AbstractCommandTestCase
+final class GitAttributesCommandTest extends TestCase
 {
     use ProphecyTrait;
+
+    private $application;
+
+    public $filesystem;
+
+    public $output;
 
     /**
      * @var ObjectProphecy<CandidateProviderInterface>

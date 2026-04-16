@@ -38,7 +38,6 @@ final class ResolverTest extends TestCase
         $this->resolver = new Resolver();
     }
 
-
     /**
      * @return void
      */

@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\License;
 
+use Exception;
 use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
@@ -113,17 +114,20 @@ final class GeneratorTest extends TestCase
 
         $this->composer->getLicense()
             ->willReturn('MIT');
-        
+
         $this->resolver->resolve('MIT')
             ->willReturn('mit.txt');
 
         $author = $this->prophesize(AuthorInterface::class);
-        $author->__toString()->willReturn('Test Author');
+        $author->__toString()
+            ->willReturn('Test Author');
 
-        $this->composer->getAuthors(true)->willReturn($author->reveal());
+        $this->composer->getAuthors(true)
+            ->willReturn($author->reveal());
 
         $now = new DateTimeImmutable('2026-04-16');
-        $this->clock->now()->willReturn($now);
+        $this->clock->now()
+            ->willReturn($now);
 
         $renderedContent = 'MIT License\n\nCopyright (c) 2026 Test Author';
         $this->renderer->render('licenses/mit.txt', [
@@ -131,7 +135,8 @@ final class GeneratorTest extends TestCase
             'year' => '2026',
         ])->willReturn($renderedContent);
 
-        $this->filesystem->dumpFile($targetPath, $renderedContent)->shouldBeCalled();
+        $this->filesystem->dumpFile($targetPath, $renderedContent)
+            ->shouldBeCalled();
 
         $result = $this->generator->generate($targetPath);
 
@@ -144,12 +149,16 @@ final class GeneratorTest extends TestCase
     #[Test]
     public function generateWillReturnNullOnTemplateError(): void
     {
-        $this->composer->getPackageLicense()->willReturn('MIT');
-        $this->resolver->resolve('MIT')->willReturn('mit.txt');
-        $this->composer->getAuthors(true)->willReturn([]);
-        $this->clock->now()->willReturn(new DateTimeImmutable());
+        $this->composer->getPackageLicense()
+            ->willReturn('MIT');
+        $this->resolver->resolve('MIT')
+            ->willReturn('mit.txt');
+        $this->composer->getAuthors(true)
+            ->willReturn([]);
+        $this->clock->now()
+            ->willReturn(new DateTimeImmutable());
 
-        $this->renderer->render(Argument::cetera())->willThrow(new \Exception('Twig error'));
+        $this->renderer->render(Argument::cetera())->willThrow(new Exception('Twig error'));
 
         $result = $this->generator->generate('/tmp/LICENSE');
 

@@ -39,38 +39,60 @@ final class GitIgnoreCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectProphecy<MergerInterface> */
+    /**
+     * @var ObjectProphecy<MergerInterface>
+     */
     private ObjectProphecy $merger;
 
-    /** @var ObjectProphecy<ReaderInterface> */
+    /**
+     * @var ObjectProphecy<ReaderInterface>
+     */
     private ObjectProphecy $reader;
 
-    /** @var ObjectProphecy<WriterInterface> */
+    /**
+     * @var ObjectProphecy<WriterInterface>
+     */
     private ObjectProphecy $writer;
 
-    /** @var ObjectProphecy<FileLocatorInterface> */
+    /**
+     * @var ObjectProphecy<FileLocatorInterface>
+     */
     private ObjectProphecy $fileLocator;
 
-    /** @var ObjectProphecy<InputInterface> */
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
     private ObjectProphecy $input;
 
-    /** @var ObjectProphecy<OutputInterface> */
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
     private ObjectProphecy $output;
 
-    /** @var ObjectProphecy<GitIgnoreInterface> */
+    /**
+     * @var ObjectProphecy<GitIgnoreInterface>
+     */
     private ObjectProphecy $gitIgnoreSource;
 
-    /** @var ObjectProphecy<GitIgnoreInterface> */
+    /**
+     * @var ObjectProphecy<GitIgnoreInterface>
+     */
     private ObjectProphecy $gitIgnoreTarget;
 
-    /** @var ObjectProphecy<GitIgnoreInterface> */
+    /**
+     * @var ObjectProphecy<GitIgnoreInterface>
+     */
     private ObjectProphecy $gitIgnoreMerged;
 
     private GitIgnoreCommand $command;
 
     private const string SOURCE_PATH = '/path/to/source/.gitignore';
+
     private const string TARGET_PATH = '/path/to/target/.gitignore';
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
@@ -111,20 +133,23 @@ final class GitIgnoreCommandTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
         self::assertSame('gitignore', $this->command->getName());
-        self::assertSame(
-            'Merges and synchronizes .gitignore files.',
-            $this->command->getDescription()
-        );
+        self::assertSame('Merges and synchronizes .gitignore files.', $this->command->getDescription());
         self::assertSame(
             "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.",
             $this->command->getHelp()
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillHaveExpectedOptions(): void
     {
@@ -134,6 +159,9 @@ final class GitIgnoreCommandTest extends TestCase
         self::assertTrue($definition->hasOption('target'));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillReturnSuccessWhenMergeSucceeds(): void
     {
@@ -150,6 +178,9 @@ final class GitIgnoreCommandTest extends TestCase
         self::assertSame(GitIgnoreCommand::SUCCESS, $result);
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

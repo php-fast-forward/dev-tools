@@ -18,76 +18,75 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use FastForward\DevTools\Console\Command\PhpDocCommand;
-use FastForward\DevTools\Console\Command\RefactorCommand;
+use FastForward\DevTools\Template\EngineInterface;
+use FastForward\DevTools\Template\VariablesFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use Prophecy\Argument;
+use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
-
-use function Safe\getcwd;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use ReflectionMethod;
 
 #[CoversClass(PhpDocCommand::class)]
-final class PhpDocCommandTest extends AbstractCommandTestCase
+final class PhpDocCommandTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy<ComposerJson>
+     * @var ObjectProphecy<EngineInterface>
      */
-    private ObjectProphecy $composerJson;
+    private ObjectProphecy $engine;
 
     /**
-     * @return PhpDocCommand
+     * @var ObjectProphecy<VariablesFactoryInterface>
      */
-    protected function getCommandClass(): PhpDocCommand
-    {
-        return new PhpDocCommand($this->composerJson->reveal(), $this->filesystem->reveal());
-    }
+    private ObjectProphecy $variablesFactory;
 
     /**
-     * @return string
+     * @var ObjectProphecy<FileLocatorInterface>
      */
-    protected function getCommandName(): string
-    {
-        return 'phpdoc';
-    }
+    private ObjectProphecy $fileLocator;
 
     /**
-     * @return string
+     * @var ObjectProphecy<Filesystem>
      */
-    protected function getCommandDescription(): string
-    {
-        return 'Checks and fixes PHPDocs.';
-    }
+    private ObjectProphecy $filesystem;
 
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command checks and fixes PHPDocs in your PHP files.';
-    }
+    private PhpDocCommand $command;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->composerJson = $this->prophesize(ComposerJson::class);
-        $this->composerJson->getPackageName()
-            ->willReturn('fast-forward/dev-tools');
+        $this->engine = $this->prophesize(EngineInterface::class);
+        $this->variablesFactory = $this->prophesize(VariablesFactoryInterface::class);
+        $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->filesystem = $this->prophesize(Filesystem::class);
 
-        parent::setUp();
+        $this->command = new PhpDocCommand(
+            $this->engine->reveal(),
+            $this->variablesFactory->reveal(),
+            $this->fileLocator->reveal(),
+            $this->filesystem->reveal()
+        );
+    }
 
-        $this->withConfigFile(PhpDocCommand::CONFIG);
-        $this->withConfigFile(RefactorCommand::CONFIG);
-
-        $this->withConfigFile(PhpDocCommand::FILENAME);
-        $this->withConfigFile(PhpDocCommand::FILENAME, true);
+    /**
+     * @return void
+     */
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
+    {
+        self::assertSame('phpdoc', $this->command->getName());
+        self::assertSame('Checks and fixes PHPDocs.', $this->command->getDescription());
+        self::assertSame('This command checks and fixes PHPDocs in your PHP files.', $this->command->getHelp());
     }
 
     /**
@@ -96,12 +95,27 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillCopyDocHeaderWhenMissing(): void
     {
-        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
-        $this->filesystem->dumpFile(Argument::any(), Argument::any())->shouldBeCalled();
+        $input = $this->prophesize(InputInterface::class);
+        $output = $this->prophesize(OutputInterface::class);
 
-        $this->willRunProcessWithCallback(static fn(): bool => true);
+        $input->getOption('fix')
+            ->willReturn(false);
 
-        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+        // Path is missing because it's not base path scenario
+        $this->fileLocator->locate(PhpDocCommand::FILENAME)->willReturn('/vendor/packaged/.docheader');
+
+        $variables = [
+            '{{ project }}' => 'fast-forward/dev-tools',
+        ];
+        $this->variablesFactory->getVariables()
+            ->willReturn($variables);
+
+        $this->engine->render('resources/dockblock/.docheader', $variables)
+            ->willReturn('Content');
+        $this->filesystem->dumpFile('/vendor/packaged/.docheader', 'Content')
+            ->shouldBeCalled();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute($input->reveal(), $output->reveal()));
     }
 
     /**
@@ -110,37 +124,34 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillHandleDumpFileException(): void
     {
-        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
-        $this->filesystem->dumpFile(Argument::any(), Argument::any())->willThrow(
-            new RuntimeException('dump error')
-        );
+        $input = $this->prophesize(InputInterface::class);
+        $output = $this->prophesize(OutputInterface::class);
 
-        $this->willRunProcessWithCallback(static fn(): bool => true);
+        $input->getOption('fix')
+            ->willReturn(false);
 
-        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+        $this->fileLocator->locate(PhpDocCommand::FILENAME)->willReturn('/vendor/packaged/.docheader');
+
+        $this->variablesFactory->getVariables()
+            ->willReturn([]);
+        $this->engine->render('resources/dockblock/.docheader', [])->willReturn('Content');
+
+        $this->filesystem->dumpFile('/vendor/packaged/.docheader', 'Content')
+            ->willThrow(new RuntimeException('dump error'));
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute($input->reveal(), $output->reveal()));
     }
 
     /**
-     * @return void
+     * @param mixed $input
+     * @param mixed $output
+     *
+     * @return int
      */
-    #[Test]
-    public function executeWillReturnFailureIfProcessFails(): void
+    private function invokeExecute($input, $output): int
     {
-        $this->willRunProcessWithCallback(static fn(): bool => true, false);
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
 
-        self::assertSame(PhpDocCommand::FAILURE, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillSkipDocHeaderCreationWhenProjectDocHeaderAlreadyExists(): void
-    {
-        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(true);
-
-        $this->willRunProcessWithCallback(static fn(): bool => true);
-
-        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+        return $reflectionMethod->invoke($this->command, $input, $output);
     }
 }

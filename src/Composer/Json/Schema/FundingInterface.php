@@ -1,5 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
 namespace FastForward\DevTools\Composer\Json\Schema;
 
 /**
@@ -38,7 +54,7 @@ interface FundingInterface
      * Implementations SHOULD return a normalized and meaningful value, such as
      * "patreon", "opencollective", "tidelift", "github", or "other".
      *
-     * @return string The funding type identifier.
+     * @return string the funding type identifier
      */
     public function getType(): string;
 
@@ -51,7 +67,7 @@ interface FundingInterface
      * Implementations SHOULD return a fully qualified URL and MUST preserve the
      * semantic meaning of the configured funding destination.
      *
-     * @return string The funding URL.
+     * @return string the funding URL
      */
     public function getUrl(): string;
 }

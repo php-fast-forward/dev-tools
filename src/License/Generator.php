@@ -18,6 +18,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+use Throwable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -41,8 +42,10 @@ final readonly class Generator implements GeneratorInterface
      * Creates a new Generator instance.
      *
      * @param ResolverInterface $resolver The resolver for mapping license identifiers to templates
-     * @param ComposerJsonInterface $composer 
+     * @param ComposerJsonInterface $composer
      * @param Filesystem $filesystem The filesystem component for file operations
+     * @param ClockInterface $clock
+     * @param Environment $renderer
      */
     public function __construct(
         private ResolverInterface $resolver,
@@ -70,9 +73,10 @@ final readonly class Generator implements GeneratorInterface
         try {
             $content = $this->renderer->render('licenses/' . $templateFilename, [
                 'copyright_holder' => (string) $this->composer->getAuthors(true),
-                'year' => $this->clock->now()->format('Y'),
+                'year' => $this->clock->now()
+                    ->format('Y'),
             ]);
-        } catch (\Throwable $throwable) {
+        } catch (Throwable) {
             return null;
         }
 

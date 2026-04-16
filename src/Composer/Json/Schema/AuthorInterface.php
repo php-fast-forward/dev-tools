@@ -1,5 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
 namespace FastForward\DevTools\Composer\Json\Schema;
 
 use Stringable;
@@ -26,7 +42,7 @@ interface AuthorInterface extends Stringable
      * This method MUST return a non-empty string representing the author's name.
      * Implementations SHOULD ensure that the name is human-readable and properly formatted.
      *
-     * @return string The full name of the author.
+     * @return string the full name of the author
      */
     public function getName(): string;
 
@@ -36,7 +52,7 @@ interface AuthorInterface extends Stringable
      * This method MUST return a valid email address string.
      * Implementations SHOULD validate the format according to RFC standards where applicable.
      *
-     * @return string The email address of the author.
+     * @return string the email address of the author
      */
     public function getEmail(): string;
 
@@ -47,7 +63,7 @@ interface AuthorInterface extends Stringable
      * Implementations MAY return an empty string if no homepage is defined,
      * but SHOULD prefer a fully qualified URL when available.
      *
-     * @return string The homepage URL of the author.
+     * @return string the homepage URL of the author
      */
     public function getHomepage(): string;
 
@@ -57,7 +73,7 @@ interface AuthorInterface extends Stringable
      * This method MUST describe the role of the author in the project (e.g., "Developer", "Maintainer").
      * Implementations SHOULD use consistent and meaningful role definitions.
      *
-     * @return string The role of the author.
+     * @return string the role of the author
      */
     public function getRole(): string;
 }

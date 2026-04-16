@@ -89,10 +89,7 @@ final class DependenciesCommandTest extends TestCase
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
         self::assertSame('dependencies', $this->command->getName());
-        self::assertSame(
-            'Analyzes missing and unused Composer dependencies.',
-            $this->command->getDescription()
-        );
+        self::assertSame('Analyzes missing and unused Composer dependencies.', $this->command->getDescription());
         self::assertSame(
             'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.',
             $this->command->getHelp()

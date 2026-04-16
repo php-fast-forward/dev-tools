@@ -18,6 +18,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Composer\Json;
 
+use RuntimeException;
+use UnexpectedValueException;
 use Composer\Factory;
 use Composer\InstalledVersions;
 use Composer\Json\JsonFile;
@@ -28,6 +30,8 @@ use FastForward\DevTools\Composer\Json\Schema\Funding;
 use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
 use UnderflowException;
+
+use function Safe\realpath;
 
 /**
  * Represents a specialized reader for a Composer JSON file.
@@ -66,16 +70,16 @@ final class ComposerJson implements ComposerJsonInterface
      * @param string|null $path The absolute or relative path to a
      *                          Composer JSON file. When omitted, the
      *                          default Composer file path SHALL be used.
-     * 
-     * @throws \RuntimeException when $path is'nt provided and COMPOSER environment variable is set to a directory
-     * @throws \UnexpectedValueException when composer.json can't be parsed
+     *
+     * @throws RuntimeException when $path is'nt provided and COMPOSER environment variable is set to a directory
+     * @throws UnexpectedValueException when composer.json can't be parsed
      */
     public function __construct(?string $path = null)
     {
         $pathLocal = realpath(Factory::getComposerFile());
-        
+
         $path ??= $pathLocal;
-        $installedJsonPath = dirname($pathLocal) . '/vendor/composer/installed.json';
+        $installedJsonPath = \dirname($pathLocal) . '/vendor/composer/installed.json';
 
         $this->data = (new JsonFile($path))->read();
         $this->installed = (new JsonFile($installedJsonPath))->read();
@@ -88,7 +92,7 @@ final class ComposerJson implements ComposerJsonInterface
      * If the package name is not defined, the method MUST return an
      * empty string.
      *
-     * @return string The package name, or an empty string when undefined.
+     * @return string the package name, or an empty string when undefined
      */
     public function getName(): string
     {
@@ -102,7 +106,7 @@ final class ComposerJson implements ComposerJsonInterface
      * present. If the description is not defined, the method MUST return
      * an empty string.
      *
-     * @return string The package description, or an empty string when undefined.
+     * @return string the package description, or an empty string when undefined
      */
     public function getDescription(): string
     {
@@ -118,7 +122,7 @@ final class ComposerJson implements ComposerJsonInterface
      * declared in the Composer file. If neither source provides a usable value,
      * the method MUST return an empty string.
      *
-     * @return string The package version, or an empty string when undefined.
+     * @return string the package version, or an empty string when undefined
      */
     public function getVersion(): string
     {
@@ -132,7 +136,7 @@ final class ComposerJson implements ComposerJsonInterface
      * If the package type is not defined, the method MUST return an empty
      * string.
      *
-     * @return string The package type, or an empty string when undefined.
+     * @return string the package type, or an empty string when undefined
      */
     public function getType(): string
     {
@@ -146,7 +150,7 @@ final class ComposerJson implements ComposerJsonInterface
      * whenever available. Non-string values MUST be ignored. If the section
      * is absent, the method MUST return an empty array.
      *
-     * @return array<int, string> The package keywords, or an empty array when undefined.
+     * @return array<int, string> the package keywords, or an empty array when undefined
      */
     public function getKeywords(): array
     {
@@ -159,7 +163,7 @@ final class ComposerJson implements ComposerJsonInterface
      * This method SHALL return the value of the `homepage` key when present.
      * If the homepage is not defined, the method MUST return an empty string.
      *
-     * @return string The homepage URL, or an empty string when undefined.
+     * @return string the homepage URL, or an empty string when undefined
      */
     public function getHomepage(): string
     {
@@ -173,7 +177,7 @@ final class ComposerJson implements ComposerJsonInterface
      * If the readme value is not defined, the method MUST return an empty
      * string.
      *
-     * @return string The readme value, or an empty string when undefined.
+     * @return string the readme value, or an empty string when undefined
      */
     public function getReadme(): string
     {
@@ -187,7 +191,7 @@ final class ComposerJson implements ComposerJsonInterface
      * `time` field. When the field is not present or is not a valid date-time
      * string, the current immutable date-time SHALL be returned.
      *
-     * @return DateTimeImmutable|null The package time metadata as an immutable date-time value.
+     * @return DateTimeImmutable|null the package time metadata as an immutable date-time value
      */
     public function getTime(): ?DateTimeImmutable
     {
@@ -213,8 +217,8 @@ final class ComposerJson implements ComposerJsonInterface
      * present, is empty, or cannot be resolved to exactly one string
      * value, the method MUST return null.
      *
-     * @return string|null The resolved license identifier, or null when no
-     *                     single license value can be determined.
+     * @return string|null the resolved license identifier, or null when no
+     *                     single license value can be determined
      */
     public function getLicense(): ?string
     {
@@ -240,21 +244,21 @@ final class ComposerJson implements ComposerJsonInterface
      * SHALL be thrown. When `$onlyFirstAuthor` is `false`, all normalized
      * authors MUST be returned as an iterable.
      *
-     * @param bool $onlyFirstAuthor Determines whether only the first declared
+     * @param bool $onlyFirstAuthor determines whether only the first declared
      *                              author SHALL be returned instead of the full
-     *                              author list.
+     *                              author list
      *
-     * @return AuthorInterface|iterable<int, AuthorInterface> The first declared
+     * @return AuthorInterface|iterable<int, AuthorInterface> the first declared
      *                                                        author when
      *                                                        `$onlyFirstAuthor`
      *                                                        is `true`, or the full
      *                                                        authors list when
      *                                                        `$onlyFirstAuthor`
-     *                                                        is `false`.
+     *                                                        is `false`
      */
     public function getAuthors(bool $onlyFirstAuthor = false): AuthorInterface|iterable
     {
-        $authors = array_map(static fn(array $author) => new Author(
+        $authors = array_map(static fn(array $author): Author => new Author(
             $author['name'] ?? '',
             $author['email'] ?? '',
             $author['homepage'] ?? '',
@@ -262,7 +266,7 @@ final class ComposerJson implements ComposerJsonInterface
         ), $this->data['authors'] ?? []);
 
         if ($onlyFirstAuthor) {
-            if ($authors === []) {
+            if ([] === $authors) {
                 throw new UnderflowException('No author entries were declared in the Composer file.');
             }
 
@@ -279,7 +283,7 @@ final class ComposerJson implements ComposerJsonInterface
      * the `support` section. When the section is absent, an empty support
      * object MUST be returned.
      *
-     * @return SupportInterface The support metadata object.
+     * @return SupportInterface the support metadata object
      */
     public function getSupport(): SupportInterface
     {
@@ -310,7 +314,7 @@ final class ComposerJson implements ComposerJsonInterface
      * object. Invalid or non-array entries MUST be ignored. If the section
      * is absent, the method MUST return an empty array.
      *
-     * @return array<int, Funding> The funding entries, or an empty array when undefined.
+     * @return array<int, Funding> the funding entries, or an empty array when undefined
      */
     public function getFunding(): array
     {
@@ -327,10 +331,7 @@ final class ComposerJson implements ComposerJsonInterface
                 continue;
             }
 
-            $entries[] = new Funding(
-                $entry['type'] ?? '',
-                $entry['url'] ?? '',
-            );
+            $entries[] = new Funding($entry['type'] ?? '', $entry['url'] ?? '');
         }
 
         return $entries;
@@ -347,8 +348,8 @@ final class ComposerJson implements ComposerJsonInterface
      * @param string|null $type The autoload mapping type to retrieve. This
      *                          defaults to the complete section when null.
      *
-     * @return array<string, mixed> The autoload configuration for the requested
-     *                              type, or an empty array when unavailable.
+     * @return array<string, mixed> the autoload configuration for the requested
+     *                              type, or an empty array when unavailable
      */
     public function getAutoload(?string $type = null): array
     {
@@ -358,7 +359,7 @@ final class ComposerJson implements ComposerJsonInterface
             return [];
         }
 
-        if ($type === null) {
+        if (null === $type) {
             return $autoload;
         }
 
@@ -378,8 +379,8 @@ final class ComposerJson implements ComposerJsonInterface
      *                          retrieve. This defaults to the complete section
      *                          when null.
      *
-     * @return array<string, mixed> The autoload-dev configuration for the
-     *                              requested type, or an empty array when unavailable.
+     * @return array<string, mixed> the autoload-dev configuration for the
+     *                              requested type, or an empty array when unavailable
      */
     public function getAutoloadDev(?string $type = null): array
     {
@@ -389,7 +390,7 @@ final class ComposerJson implements ComposerJsonInterface
             return [];
         }
 
-        if ($type === null) {
+        if (null === $type) {
             return $autoloadDev;
         }
 
@@ -404,7 +405,7 @@ final class ComposerJson implements ComposerJsonInterface
      * This method SHALL return the value of the `minimum-stability` key when
      * present. If the key is absent, the method MUST return an empty string.
      *
-     * @return string The minimum stability value.
+     * @return string the minimum stability value
      */
     public function getMinimumStability(): string
     {
@@ -421,22 +422,22 @@ final class ComposerJson implements ComposerJsonInterface
      * empty array SHALL be returned when `$config` is null, otherwise an
      * empty string SHALL be returned.
      *
-     * @param string|null $config The configuration key to retrieve, or null
-     *                            to retrieve the complete config section.
+     * @param string|null $config the configuration key to retrieve, or null
+     *                            to retrieve the complete config section
      *
-     * @return array<string, mixed>|string The requested config value or the full
+     * @return array<string, mixed>|string the requested config value or the full
      *                                     config structure, depending on the
-     *                                     requested key.
+     *                                     requested key
      */
     public function getConfig(?string $config): array|string
     {
         $configuration = $this->data['config'] ?? [];
 
         if (! \is_array($configuration)) {
-            return $config === null ? [] : '';
+            return null === $config ? [] : '';
         }
 
-        if ($config === null) {
+        if (null === $config) {
             return $configuration;
         }
 
@@ -455,7 +456,7 @@ final class ComposerJson implements ComposerJsonInterface
      * This method SHALL return the `scripts` section when present. If the
      * section is absent or invalid, the method MUST return an empty array.
      *
-     * @return array<string, mixed> The Composer scripts configuration.
+     * @return array<string, mixed> the Composer scripts configuration
      */
     public function getScripts(): array
     {
@@ -472,11 +473,11 @@ final class ComposerJson implements ComposerJsonInterface
      * the matching value only when that value is an array. If the section or
      * requested key is absent, the method MUST return an empty array.
      *
-     * @param string|null $extra The extra configuration key to retrieve, or
-     *                           null to retrieve the complete extra section.
+     * @param string|null $extra the extra configuration key to retrieve, or
+     *                           null to retrieve the complete extra section
      *
-     * @return array<string, mixed> The extra configuration data, or an empty
-     *                              array when undefined.
+     * @return array<string, mixed> the extra configuration data, or an empty
+     *                              array when undefined
      */
     public function getExtra(?string $extra = null): array
     {
@@ -486,7 +487,7 @@ final class ComposerJson implements ComposerJsonInterface
             return [];
         }
 
-        if ($extra === null) {
+        if (null === $extra) {
             return $extraConfiguration;
         }
 
@@ -502,7 +503,7 @@ final class ComposerJson implements ComposerJsonInterface
      * string or an array. If the section is absent or invalid, the method
      * MUST return an empty array.
      *
-     * @return string|array<int, string> The declared binary path or paths.
+     * @return string|array<int, string> the declared binary path or paths
      */
     public function getBin(): string|array
     {
@@ -516,12 +517,7 @@ final class ComposerJson implements ComposerJsonInterface
             return [];
         }
 
-        return \array_values(
-            \array_filter(
-                $bin,
-                static fn (mixed $entry): bool => \is_string($entry)
-            )
-        );
+        return array_values(array_filter($bin, \is_string(...)));
     }
 
     /**
@@ -531,7 +527,7 @@ final class ComposerJson implements ComposerJsonInterface
      * Non-string keys or values MUST be ignored. If the section is absent,
      * the method MUST return an empty array.
      *
-     * @return array<string, string> The package suggestion map.
+     * @return array<string, string> the package suggestion map
      */
     public function getSuggest(): array
     {
@@ -544,7 +540,11 @@ final class ComposerJson implements ComposerJsonInterface
         $result = [];
 
         foreach ($suggest as $package => $description) {
-            if (! \is_string($package) || ! \is_string($description)) {
+            if (! \is_string($package)) {
+                continue;
+            }
+
+            if (! \is_string($description)) {
                 continue;
             }
 
@@ -561,7 +561,7 @@ final class ComposerJson implements ComposerJsonInterface
      * method SHALL return the `_comment` key when present and valid. When
      * comment metadata is unavailable, the method MUST return an empty array.
      *
-     * @return array<int|string, mixed> The comment metadata, or an empty array when unavailable.
+     * @return array<int|string, mixed> the comment metadata, or an empty array when unavailable
      */
     public function getComments(): array
     {

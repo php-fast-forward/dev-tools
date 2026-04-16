@@ -18,9 +18,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -32,7 +34,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Runs Fast Forward code standards checks.',
     help: 'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.'
 )]
-final class StandardsCommand extends AbstractCommand
+final class StandardsCommand extends BaseCommand
 {
     /**
      * Configures constraints and arguments for the collective standard runner.
@@ -80,5 +82,19 @@ final class StandardsCommand extends AbstractCommand
         $output->writeln('<info>All code standards checks completed!</info>');
 
         return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
+    }
+
+    /**
+     * Runs a registered command through the current console application.
+     *
+     * @param string $command the command line to execute
+     * @param OutputInterface $output the output that receives command feedback
+     *
+     * @return int the dispatched command status code
+     */
+    private function runCommand(string $command, OutputInterface $output): int
+    {
+        return $this->getApplication()
+            ->doRun(new StringInput($command), $output);
     }
 }

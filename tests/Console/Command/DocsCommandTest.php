@@ -40,32 +40,51 @@ final class DocsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectProphecy<ProcessBuilderInterface> */
+    /**
+     * @var ObjectProphecy<ProcessBuilderInterface>
+     */
     private ObjectProphecy $processBuilder;
 
-    /** @var ObjectProphecy<ProcessQueueInterface> */
+    /**
+     * @var ObjectProphecy<ProcessQueueInterface>
+     */
     private ObjectProphecy $processQueue;
 
-    /** @var ObjectProphecy<Environment> */
+    /**
+     * @var ObjectProphecy<Environment>
+     */
     private ObjectProphecy $renderer;
 
-    /** @var ObjectProphecy<FilesystemInterface> */
+    /**
+     * @var ObjectProphecy<FilesystemInterface>
+     */
     private ObjectProphecy $filesystem;
 
-    /** @var ObjectProphecy<ComposerJsonInterface> */
+    /**
+     * @var ObjectProphecy<ComposerJsonInterface>
+     */
     private ObjectProphecy $composerJson;
 
-    /** @var ObjectProphecy<InputInterface> */
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
     private ObjectProphecy $input;
 
-    /** @var ObjectProphecy<OutputInterface> */
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
     private ObjectProphecy $output;
 
-    /** @var ObjectProphecy<Process> */
+    /**
+     * @var ObjectProphecy<Process>
+     */
     private ObjectProphecy $process;
 
     private DocsCommand $command;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
@@ -77,15 +96,21 @@ final class DocsCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
 
-        $this->composerJson->getAutoload('psr-4')->willReturn([
-            'FastForward\\DevTools\\' => 'src/',
-        ]);
-        $this->composerJson->getName()->willReturn('fast-forward/dev-tools');
+        $this->composerJson->getAutoload('psr-4')
+            ->willReturn([
+                'FastForward\\DevTools\\' => 'src/',
+            ]);
+        $this->composerJson->getName()
+            ->willReturn('fast-forward/dev-tools');
 
-        $this->input->getOption('source')->willReturn('docs');
-        $this->input->getOption('target')->willReturn('public');
-        $this->input->getOption('template')->willReturn('default');
-        $this->input->getOption('cache-dir')->willReturn('tmp/cache/phpdoc');
+        $this->input->getOption('source')
+            ->willReturn('docs');
+        $this->input->getOption('target')
+            ->willReturn('public');
+        $this->input->getOption('template')
+            ->willReturn('default');
+        $this->input->getOption('cache-dir')
+            ->willReturn('tmp/cache/phpdoc');
 
         $this->command = new DocsCommand(
             $this->processBuilder->reveal(),
@@ -96,6 +121,9 @@ final class DocsCommandTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
@@ -104,37 +132,54 @@ final class DocsCommandTest extends TestCase
         self::assertSame('This command generates API documentation using phpDocumentor.', $this->command->getHelp());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillFailIfSourceDirectoryNotFound(): void
     {
-        $this->output->writeln('<info>Generating API documentation...</info>')->shouldBeCalled();
+        $this->output->writeln('<info>Generating API documentation...</info>')
+            ->shouldBeCalled();
 
-        $this->filesystem->getAbsolutePath('docs')->willReturn('/app/docs');
-        $this->filesystem->exists('/app/docs')->willReturn(false);
+        $this->filesystem->getAbsolutePath('docs')
+            ->willReturn('/app/docs');
+        $this->filesystem->exists('/app/docs')
+            ->willReturn(false);
 
-        $this->output->writeln('<error>Source directory not found: /app/docs</error>')->shouldBeCalled();
+        $this->output->writeln('<error>Source directory not found: /app/docs</error>')
+            ->shouldBeCalled();
 
         $result = $this->executeCommand();
 
         self::assertSame(DocsCommand::FAILURE, $result);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillGeneratePhpDocumentorConfigAndRunProcess(): void
     {
-        $this->output->writeln('<info>Generating API documentation...</info>')->shouldBeCalled();
+        $this->output->writeln('<info>Generating API documentation...</info>')
+            ->shouldBeCalled();
 
-        $this->filesystem->getAbsolutePath('docs')->willReturn('/app/docs');
-        $this->filesystem->exists('/app/docs')->willReturn(true);
-        $this->filesystem->getAbsolutePath('public')->willReturn('/app/public');
-        $this->filesystem->getAbsolutePath('tmp/cache/phpdoc')->willReturn('/app/tmp/cache/phpdoc');
-        
-        $this->filesystem->makePathRelative('/app/docs')->willReturn('docs/');
+        $this->filesystem->getAbsolutePath('docs')
+            ->willReturn('/app/docs');
+        $this->filesystem->exists('/app/docs')
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('public')
+            ->willReturn('/app/public');
+        $this->filesystem->getAbsolutePath('tmp/cache/phpdoc')
+            ->willReturn('/app/tmp/cache/phpdoc');
+
+        $this->filesystem->makePathRelative('/app/docs')
+            ->willReturn('docs/');
 
         $this->renderer->render('phpdocumentor.xml', Argument::type('array'))
             ->willReturn('RenderedXML');
 
-        $this->filesystem->dumpFile('phpdocumentor.xml', 'RenderedXML', '/app/tmp/cache/phpdoc')->shouldBeCalled();
+        $this->filesystem->dumpFile('phpdocumentor.xml', 'RenderedXML', '/app/tmp/cache/phpdoc')
+            ->shouldBeCalled();
         $this->filesystem->getAbsolutePath('phpdocumentor.xml', '/app/tmp/cache/phpdoc')
             ->willReturn('/app/tmp/cache/phpdoc/phpdocumentor.xml');
 
@@ -150,14 +195,19 @@ final class DocsCommandTest extends TestCase
         $this->processBuilder->build('vendor/bin/phpdoc')
             ->willReturn($this->process->reveal());
 
-        $this->processQueue->add($this->process->reveal())->shouldBeCalled();
-        $this->processQueue->run($this->output->reveal())->willReturn(DocsCommand::SUCCESS);
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(DocsCommand::SUCCESS);
 
         $result = $this->executeCommand();
 
         self::assertSame(DocsCommand::SUCCESS, $result);
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

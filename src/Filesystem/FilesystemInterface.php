@@ -56,6 +56,25 @@ interface FilesystemInterface
     public function dumpFile(string $filename, mixed $content, ?string $path = null): void;
 
     /**
+     * Copies a file to a target path.
+     *
+     * @param string $originFile the source file path to copy
+     * @param string $targetFile the target file path to create
+     * @param bool $overwriteNewerFiles whether newer target files MAY be overwritten
+     */
+    public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void;
+
+    /**
+     * Changes the permission mode for one or more files.
+     *
+     * @param iterable<string>|string $files the target file paths
+     * @param int $mode the permission mode to apply
+     * @param int $umask the umask to apply
+     * @param bool $recursive whether permissions SHOULD be applied recursively
+     */
+    public function chmod(string|iterable $files, int $mode, int $umask = 0o000, bool $recursive = false): void;
+
+    /**
      * Resolves a path or iterable of paths into their absolute path representation.
      *
      * If a relative path is provided, it SHALL be evaluated against the current
@@ -75,7 +94,7 @@ interface FilesystemInterface
      * @param int $mode the permissions mode (defaults to 0777)
      * @param string|null $basePath the base path for relative path resolution
      */
-    public function mkdir(string|iterable $dirs, int $mode = 0777, ?string $basePath = null): void;
+    public function mkdir(string|iterable $dirs, int $mode = 0o777, ?string $basePath = null): void;
 
     /**
      * Computes the relative path from the base path to the target path.

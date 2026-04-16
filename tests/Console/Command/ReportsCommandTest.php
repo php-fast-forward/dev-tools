@@ -37,26 +37,41 @@ final class ReportsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /** @var ObjectProphecy<ProcessBuilderInterface> */
+    /**
+     * @var ObjectProphecy<ProcessBuilderInterface>
+     */
     private ObjectProphecy $processBuilder;
 
-    /** @var ObjectProphecy<ProcessQueueInterface> */
+    /**
+     * @var ObjectProphecy<ProcessQueueInterface>
+     */
     private ObjectProphecy $processQueue;
 
-    /** @var ObjectProphecy<InputInterface> */
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
     private ObjectProphecy $input;
 
-    /** @var ObjectProphecy<OutputInterface> */
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
     private ObjectProphecy $output;
 
-    /** @var ObjectProphecy<Process> */
+    /**
+     * @var ObjectProphecy<Process>
+     */
     private ObjectProphecy $docsProcess;
 
-    /** @var ObjectProphecy<Process> */
+    /**
+     * @var ObjectProphecy<Process>
+     */
     private ObjectProphecy $testsProcess;
 
     private ReportsCommand $command;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
@@ -66,8 +81,10 @@ final class ReportsCommandTest extends TestCase
         $this->docsProcess = $this->prophesize(Process::class);
         $this->testsProcess = $this->prophesize(Process::class);
 
-        $this->input->getOption('target')->willReturn('public');
-        $this->input->getOption('coverage')->willReturn('public/coverage');
+        $this->input->getOption('target')
+            ->willReturn('public');
+        $this->input->getOption('coverage')
+            ->willReturn('public/coverage');
 
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
@@ -81,20 +98,26 @@ final class ReportsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ReportsCommand::SUCCESS);
 
-        $this->command = new ReportsCommand(
-            $this->processBuilder->reveal(),
-            $this->processQueue->reveal()
-        );
+        $this->command = new ReportsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
         self::assertSame('reports', $this->command->getName());
         self::assertSame('Generates the frontpage for Fast Forward documentation.', $this->command->getDescription());
-        self::assertSame('This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.', $this->command->getHelp());
+        self::assertSame(
+            'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.',
+            $this->command->getHelp()
+        );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillHaveExpectedOptions(): void
     {
@@ -104,6 +127,9 @@ final class ReportsCommandTest extends TestCase
         self::assertTrue($definition->hasOption('coverage'));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillRunDocsAndTestsCommandAsDetachedProcesses(): void
     {
@@ -133,6 +159,9 @@ final class ReportsCommandTest extends TestCase
         self::assertSame(ReportsCommand::SUCCESS, $result);
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

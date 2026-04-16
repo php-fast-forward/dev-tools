@@ -20,6 +20,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\WikiCommand;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -44,6 +45,8 @@ final class WikiCommandTest extends TestCase
 
     private ObjectProphecy $composer;
 
+    private ObjectProphecy $filesystem;
+
     private ObjectProphecy $input;
 
     private ObjectProphecy $output;
@@ -52,11 +55,15 @@ final class WikiCommandTest extends TestCase
 
     private WikiCommand $command;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -64,7 +71,9 @@ final class WikiCommandTest extends TestCase
         $this->composer->getDescription()
             ->willReturn('Fast Forward Dev Tools plugin');
         $this->composer->getAutoload('psr-4')
-            ->willReturn(['FastForward\\DevTools\\' => 'src/']);
+            ->willReturn([
+                'FastForward\\DevTools\\' => 'src/',
+            ]);
 
         $this->processBuilder->withArgument(Argument::any())
             ->willReturn($this->processBuilder->reveal());
@@ -78,24 +87,28 @@ final class WikiCommandTest extends TestCase
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->composer->reveal(),
+            $this->filesystem->reveal(),
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
         self::assertSame('wiki', $this->command->getName());
-        self::assertSame(
-            'Generates API documentation in Markdown format.',
-            $this->command->getDescription()
-        );
+        self::assertSame('Generates API documentation in Markdown format.', $this->command->getDescription());
         self::assertSame(
             'This command generates API documentation in Markdown format using phpDocumentor. '
-            . 'It accepts an optional `--target` option to specify the output directory for the generated documentation.',
+            . 'It accepts an optional `--target` option to specify the output directory and `--init` to initialize the wiki submodule.',
             $this->command->getHelp()
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillHaveExpectedOptions(): void
     {
@@ -103,8 +116,12 @@ final class WikiCommandTest extends TestCase
 
         self::assertTrue($definition->hasOption('target'));
         self::assertTrue($definition->hasOption('cache-dir'));
+        self::assertTrue($definition->hasOption('init'));
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
@@ -112,6 +129,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
             ->willReturn('tmp/cache/phpdoc');
+        $this->input->getOption('init')
+            ->willReturn(false);
 
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalled();
@@ -128,6 +147,9 @@ final class WikiCommandTest extends TestCase
         self::assertSame(WikiCommand::SUCCESS, $result);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
@@ -135,6 +157,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
             ->willReturn('tmp/cache/phpdoc');
+        $this->input->getOption('init')
+            ->willReturn(false);
 
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalled();
@@ -151,6 +175,9 @@ final class WikiCommandTest extends TestCase
         self::assertSame(WikiCommand::FAILURE, $result);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillBuildProcessWithCorrectArguments(): void
     {
@@ -158,6 +185,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
             ->willReturn('tmp/cache/phpdoc');
+        $this->input->getOption('init')
+            ->willReturn(false);
 
         $this->processBuilder->withArgument('--visibility', 'public,protected')
             ->willReturn($this->processBuilder->reveal());
@@ -181,6 +210,34 @@ final class WikiCommandTest extends TestCase
         self::assertSame(WikiCommand::SUCCESS, $result);
     }
 
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithInitWillSkipExistingWikiSubmodule(): void
+    {
+        $this->input->getOption('target')
+            ->willReturn('.github/wiki');
+        $this->input->getOption('init')
+            ->willReturn(true);
+
+        $this->filesystem->getAbsolutePath('.github/wiki')
+            ->willReturn('/app/.github/wiki');
+        $this->filesystem->exists('/app/.github/wiki')
+            ->willReturn(true);
+
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        $this->output->writeln(Argument::containingString('already exists'))
+            ->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

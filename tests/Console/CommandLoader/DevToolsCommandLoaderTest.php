@@ -19,7 +19,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\CommandLoader;
 
 use ArrayIterator;
-use FastForward\DevTools\Console\Command\AbstractCommand;
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -34,7 +33,6 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 #[CoversClass(DevToolsCommandLoader::class)]
-#[UsesClass(AbstractCommand::class)]
 #[UsesClass(CodeStyleCommand::class)]
 final class DevToolsCommandLoaderTest extends TestCase
 {
@@ -59,7 +57,6 @@ final class DevToolsCommandLoaderTest extends TestCase
             ->shouldBeCalled();
         $finder->getIterator()
             ->willReturn(new ArrayIterator([
-                new SplFileInfo($commandDirectory . '/AbstractCommand.php', '', 'AbstractCommand.php'),
                 new SplFileInfo($commandDirectory . '/CodeStyleCommand.php', '', 'CodeStyleCommand.php'),
             ]))->shouldBeCalled();
 
@@ -69,7 +66,6 @@ final class DevToolsCommandLoaderTest extends TestCase
 
         $loader = new DevToolsCommandLoader($finder->reveal(), $container->reveal());
 
-        self::assertFalse($loader->has('abstract'));
         self::assertTrue($loader->has('code-style'));
         self::assertSame($command->reveal(), $loader->get('code-style'));
     }

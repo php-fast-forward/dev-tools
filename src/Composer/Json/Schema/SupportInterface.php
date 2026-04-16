@@ -1,5 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
 namespace FastForward\DevTools\Composer\Json\Schema;
 
 /**
@@ -31,7 +47,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no support email is defined.
      * Implementations SHOULD return a syntactically valid email address.
      *
-     * @return string The support email address.
+     * @return string the support email address
      */
     public function getEmail(): string;
 
@@ -43,7 +59,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no issue tracker is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The issue tracker URL.
+     * @return string the issue tracker URL
      */
     public function getIssues(): string;
 
@@ -55,7 +71,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no forum is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The forum URL.
+     * @return string the forum URL
      */
     public function getForum(): string;
 
@@ -67,7 +83,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no wiki is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The wiki URL.
+     * @return string the wiki URL
      */
     public function getWiki(): string;
 
@@ -78,7 +94,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no IRC channel is defined.
      * Implementations SHOULD return the value in the format "irc://server/channel".
      *
-     * @return string The IRC support channel.
+     * @return string the IRC support channel
      */
     public function getIrc(): string;
 
@@ -89,7 +105,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no source URL is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The source code URL.
+     * @return string the source code URL
      */
     public function getSource(): string;
 
@@ -101,7 +117,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no documentation URL is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The documentation URL.
+     * @return string the documentation URL
      */
     public function getDocs(): string;
 
@@ -112,7 +128,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no RSS feed is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The RSS feed URL.
+     * @return string the RSS feed URL
      */
     public function getRss(): string;
 
@@ -124,7 +140,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no chat channel is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The chat channel URL.
+     * @return string the chat channel URL
      */
     public function getChat(): string;
 
@@ -136,7 +152,7 @@ interface SupportInterface
      * Implementations MAY return an empty string when no security policy is defined.
      * Implementations SHOULD return a fully qualified URL.
      *
-     * @return string The vulnerability disclosure policy URL.
+     * @return string the vulnerability disclosure policy URL
      */
     public function getSecurity(): string;
 }

@@ -1,5 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
 namespace FastForward\DevTools\Composer\Json\Schema;
 
 /**
@@ -25,14 +41,13 @@ final readonly class Funding implements FundingInterface
      *
      * The provided values SHALL be stored exactly as received.
      *
-     * @param string $type The funding platform or mechanism identifier.
-     * @param string $url The URL that provides funding details and support options.
+     * @param string $type the funding platform or mechanism identifier
+     * @param string $url the URL that provides funding details and support options
      */
     public function __construct(
         private string $type,
         private string $url,
-    ) {
-    }
+    ) {}
 
     /**
      * Retrieves the funding type.
@@ -40,7 +55,7 @@ final readonly class Funding implements FundingInterface
      * This method MUST return the funding platform or mechanism identifier
      * associated with this entry.
      *
-     * @return string The funding type identifier.
+     * @return string the funding type identifier
      */
     public function getType(): string
     {
@@ -53,7 +68,7 @@ final readonly class Funding implements FundingInterface
      * This method MUST return the URL that provides funding details and a way
      * to financially support the package.
      *
-     * @return string The funding URL.
+     * @return string the funding URL
      */
     public function getUrl(): string
     {

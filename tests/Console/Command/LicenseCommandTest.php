@@ -77,10 +77,7 @@ final class LicenseCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
 
-        $this->command = new LicenseCommand(
-            $this->generator->reveal(),
-            $this->filesystem->reveal()
-        );
+        $this->command = new LicenseCommand($this->generator->reveal(), $this->filesystem->reveal());
     }
 
     /**
@@ -90,8 +87,14 @@ final class LicenseCommandTest extends TestCase
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
         self::assertSame('license', $this->command->getName());
-        self::assertSame('Generates a LICENSE file from composer.json license information.', $this->command->getDescription());
-        self::assertSame('This command generates a LICENSE file if one does not exist and a supported license is declared in composer.json.', $this->command->getHelp());
+        self::assertSame(
+            'Generates a LICENSE file from composer.json license information.',
+            $this->command->getDescription()
+        );
+        self::assertSame(
+            'This command generates a LICENSE file if one does not exist and a supported license is declared in composer.json.',
+            $this->command->getHelp()
+        );
     }
 
     /**
@@ -101,9 +104,11 @@ final class LicenseCommandTest extends TestCase
     public function executeWillReturnSuccessAndWriteInfo(): void
     {
         $targetPath = getcwd() . '/LICENSE';
-        
-        $this->input->getOption('target')->willReturn('LICENSE');
-        $this->filesystem->getAbsolutePath('LICENSE')->willReturn($targetPath);
+
+        $this->input->getOption('target')
+            ->willReturn('LICENSE');
+        $this->filesystem->getAbsolutePath('LICENSE')
+            ->willReturn($targetPath);
         $this->filesystem->exists($targetPath)
             ->willReturn(false);
         $this->generator->generate($targetPath)
@@ -121,9 +126,11 @@ final class LicenseCommandTest extends TestCase
     public function executeWillSkipWhenLicenseFileExists(): void
     {
         $targetPath = getcwd() . '/LICENSE';
-        
-        $this->input->getOption('target')->willReturn('LICENSE');
-        $this->filesystem->getAbsolutePath('LICENSE')->willReturn($targetPath);
+
+        $this->input->getOption('target')
+            ->willReturn('LICENSE');
+        $this->filesystem->getAbsolutePath('LICENSE')
+            ->willReturn($targetPath);
         $this->filesystem->exists($targetPath)
             ->willReturn(true);
 
@@ -140,10 +147,14 @@ final class LicenseCommandTest extends TestCase
     {
         $targetPath = getcwd() . '/LICENSE';
 
-        $this->input->getOption('target')->willReturn('LICENSE');
-        $this->filesystem->getAbsolutePath('LICENSE')->willReturn($targetPath);
-        $this->filesystem->exists($targetPath)->willReturn(false);
-        $this->generator->generate($targetPath)->willReturn(null);
+        $this->input->getOption('target')
+            ->willReturn('LICENSE');
+        $this->filesystem->getAbsolutePath('LICENSE')
+            ->willReturn($targetPath);
+        $this->filesystem->exists($targetPath)
+            ->willReturn(false);
+        $this->generator->generate($targetPath)
+            ->willReturn(null);
 
         $this->output->writeln(
             Argument::containingString('No supported license found in composer.json')

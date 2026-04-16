@@ -68,7 +68,7 @@ final class ProcessQueue implements ProcessQueueInterface
      */
     public function __construct()
     {
-        \register_shutdown_function(function (): void {
+        register_shutdown_function(function (): void {
             $this->wait();
         });
     }
@@ -157,12 +157,12 @@ final class ProcessQueue implements ProcessQueueInterface
      */
     public function wait(?OutputInterface $output = new NullOutput()): void
     {
-        $output = $output ?? new NullOutput();
+        $output ??= new NullOutput();
 
         while ([] !== $this->runningDetachedProcesses) {
             $this->drainDetachedProcessesOutput($output, true);
             if ([] !== $this->runningDetachedProcesses) {
-                \usleep(10000);
+                usleep(10000);
             }
         }
     }

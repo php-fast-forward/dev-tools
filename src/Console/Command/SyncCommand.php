@@ -18,33 +18,39 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use Composer\Factory;
-use Composer\Json\JsonManipulator;
+use Composer\Command\BaseCommand;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
-use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
-
-use function Safe\file_get_contents;
 
 /**
- * Represents the command responsible for installing development scripts into `composer.json`.
+ * Orchestrates dev-tools synchronization commands for the consumer repository.
  */
 #[AsCommand(
     name: 'dev-tools:sync',
     description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.',
-    help: 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, '
-    . 'and manages .gitattributes export-ignore rules.'
+    help: 'This command runs the dedicated synchronization commands for composer.json, resources, wiki, Git metadata, skills, license, and Git hooks.'
 )]
-final class SyncCommand extends AbstractCommand
+final class SyncCommand extends BaseCommand
 {
     /**
-     * Executes the script installation block.
+     * Creates a new SyncCommand instance.
      *
-     * The method MUST leverage the `ScriptsInstallerTrait` to update the configuration.
-     * It SHALL return `self::SUCCESS` upon completion.
+     * @param ProcessBuilderInterface $processBuilder the builder used to assemble dev-tools processes
+     * @param ProcessQueueInterface $processQueue the queue used to execute synchronization commands
+     */
+    public function __construct(
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
+    ) {
+        parent::__construct();
+    }
+
+    /**
+     * Queues and executes synchronization commands.
      *
      * @param InputInterface $input the input interface
      * @param OutputInterface $output the output interface
@@ -53,204 +59,46 @@ final class SyncCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Starting script installation...</info>');
+        $output->writeln('<info>Starting dev-tools synchronization...</info>');
 
-        $this->updateComposerJson();
-        $this->createGitHubActionWorkflows();
-        $this->copyEditorConfig();
-        $this->copyDependabotConfig();
-        $this->addRepositoryWikiGitSubmodule();
-        $this->runCommand('gitignore', $output);
-        $this->runCommand('gitattributes', $output);
-        $this->runCommand('skills', $output);
-        $this->runCommand('license', $output);
-        $this->copyGitHooks($output);
+        $this->queueDevToolsCommand(['composer-json:update']);
+        $this->queueDevToolsCommand(['copy-resource', '--source=resources/github-actions', '--target=.github/workflows'], true);
+        $this->queueDevToolsCommand(['copy-resource', '--source=.editorconfig', '--target=.editorconfig'], true);
+        $this->queueDevToolsCommand(['copy-resource', '--source=resources/dependabot.yml', '--target=.github/dependabot.yml'], true);
+        $this->queueDevToolsCommand(['wiki', '--init'], true);
+        $this->queueDevToolsCommand(['gitignore'], true);
+        $this->queueDevToolsCommand(['gitattributes'], true);
+        $this->queueDevToolsCommand(['skills'], true);
+        $this->queueDevToolsCommand(['license'], true);
+        $this->queueDevToolsCommand(['git-hooks'], true);
 
-        return self::SUCCESS;
+        return $this->processQueue->run($output);
     }
 
     /**
-     * Updates the root composer.json file with required scripts and extra configuration.
+     * Adds a dev-tools command invocation to the process queue.
      *
-     * This method adds or updates the dev-tools scripts and extra configuration for tools like grumphp.
-     * It does nothing if the composer.json file does not exist.
-     *
-     * @return void
+     * @param list<string> $arguments the dev-tools command arguments
+     * @param bool $detached whether the command MAY run detached from subsequent queue entries
      */
-    private function updateComposerJson(): void
+    private function queueDevToolsCommand(array $arguments, bool $detached = false): void
     {
-        $file = Factory::getComposerFile();
+        $processBuilder = $this->processBuilder;
 
-        if (! $this->filesystem->exists($file)) {
-            return;
+        foreach ($arguments as $argument) {
+            $processBuilder = $processBuilder->withArgument($argument);
         }
 
-        $contents = file_get_contents($file);
-        $manipulator = new JsonManipulator($contents);
-
-        $scripts = [
-            'dev-tools' => 'dev-tools',
-            'dev-tools:fix' => '@dev-tools --fix',
-        ];
-
-        $extra = [
-            'grumphp' => [
-                'config-default-path' => Path::makeRelative(
-                    \dirname(__DIR__, 3) . '/grumphp.yml',
-                    $this->getCurrentWorkingDirectory(),
-                ),
-            ],
-        ];
-
-        foreach ($scripts as $name => $command) {
-            $manipulator->addSubNode('scripts', $name, $command);
-        }
-
-        foreach ($extra as $name => $config) {
-            $manipulator->addSubNode('extra', $name, $config, true);
-        }
-
-        $this->filesystem->dumpFile($file, $manipulator->getContents());
+        $this->processQueue->add($processBuilder->build($this->devToolsBinary()), detached: $detached);
     }
 
     /**
-     * Creates GitHub Actions workflow templates in the consumer repository.
+     * Resolves the packaged dev-tools binary path.
      *
-     * This method copies all .yml workflow templates from resources/github-actions to .github/workflows,
-     * unless the target file already exists. It is intended to provide reusable workflow_call templates for consumers.
-     *
-     * @return void
+     * @return string the absolute binary path
      */
-    private function createGitHubActionWorkflows(): void
+    private function devToolsBinary(): string
     {
-        $finder = Finder::create()
-            ->files()
-            ->in(parent::getDevToolsFile('resources/github-actions'))
-            ->name('*.yml');
-
-        foreach ($finder as $file) {
-            $targetPath = Path::join('.github', 'workflows', $file->getFilename());
-
-            if ($this->filesystem->exists($targetPath)) {
-                continue;
-            }
-
-            $content = file_get_contents($file->getRealPath());
-            $this->filesystem->dumpFile($targetPath, $content);
-        }
-    }
-
-    /**
-     * Installs or updates the .editorconfig file in the root project directory.
-     *
-     * This method copies the .editorconfig from the package resources to the project root,
-     * always overwriting to ensure it is up to date.
-     *
-     * @return void
-     */
-    private function copyEditorConfig(): void
-    {
-        $source = parent::getDevToolsFile('.editorconfig');
-        $target = parent::getConfigFile('.editorconfig', true);
-
-        if ($this->filesystem->exists($target)) {
-            return;
-        }
-
-        $content = file_get_contents($source);
-        $this->filesystem->dumpFile($target, $content);
-    }
-
-    /**
-     * Installs the dependabot.yml configuration file in the .github directory if it does not exist.
-     *
-     * This method copies the dependabot.yml from the package resources to .github/dependabot.yml if it is not already present.
-     *
-     * @return void
-     */
-    private function copyDependabotConfig(): void
-    {
-        $source = parent::getDevToolsFile('resources/dependabot.yml');
-        $target = parent::getConfigFile('.github/dependabot.yml', true);
-
-        if ($this->filesystem->exists($target)) {
-            return;
-        }
-
-        $content = file_get_contents($source);
-        $this->filesystem->dumpFile($target, $content);
-    }
-
-    /**
-     * Ensures the repository wiki is added as a git submodule in .github/wiki.
-     *
-     * This method checks if the .github/wiki directory exists. If not, it adds the repository's wiki as a submodule
-     * using the remote origin URL, replacing .git with .wiki.git. This allows automated documentation and wiki updates.
-     *
-     * @return void
-     */
-    private function addRepositoryWikiGitSubmodule(): void
-    {
-        $wikiSubmodulePath = parent::getConfigFile('.github/wiki', true);
-
-        if ($this->filesystem->exists($wikiSubmodulePath)) {
-            return;
-        }
-
-        $repositoryUrl = $this->getGitRepositoryUrl();
-        $wikiRepoUrl = str_replace('.git', '.wiki.git', $repositoryUrl);
-
-        $process = new Process([
-            'git',
-            'submodule',
-            'add',
-            $wikiRepoUrl,
-            Path::makeRelative($wikiSubmodulePath, $this->getCurrentWorkingDirectory()),
-        ]);
-        $process->mustRun();
-    }
-
-    /**
-     * Retrieves the git remote origin URL for the current repository.
-     *
-     * This method runs 'git config --get remote.origin.url' and returns the trimmed output.
-     *
-     * @return string The remote origin URL of the repository
-     */
-    private function getGitRepositoryUrl(): string
-    {
-        $process = new Process(['git', 'config', '--get', 'remote.origin.url']);
-        $process->mustRun();
-
-        return trim($process->getOutput());
-    }
-
-    /**
-     * Copies git hooks from resources to .git/hooks for vendor synchronization.
-     *
-     * This method copies post-checkout and post-merge hooks from the package resources to .git/hooks,
-     * ensuring vendor dependencies stay synchronized when switching branches.
-     *
-     * @param OutputInterface $output the output interface
-     *
-     * @return void
-     */
-    private function copyGitHooks(OutputInterface $output): void
-    {
-        $hooksDir = parent::getDevToolsFile('resources/git-hooks');
-        $targetDir = Path::join($this->getCurrentWorkingDirectory(), '.git', 'hooks');
-
-        $finder = Finder::create()
-            ->files()
-            ->in($hooksDir);
-
-        foreach ($finder as $file) {
-            $targetPath = Path::join($targetDir, $file->getFilename());
-
-            $this->filesystem->copy($file->getRealPath(), $targetPath, true);
-            $this->filesystem->chmod($targetPath, 755, 0o755);
-
-            $output->writeln(\sprintf('<info>Installed %s hook</info>', $file->getFilename()));
-        }
+        return Path::makeAbsolute('bin/dev-tools', \dirname(__DIR__, 3));
     }
 }

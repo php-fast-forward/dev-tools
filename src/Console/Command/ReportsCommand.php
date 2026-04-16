@@ -50,7 +50,10 @@ final class ReportsCommand extends BaseCommand
         parent::__construct();
     }
 
-    public function configure(): void
+    /**
+     * @return void
+     */
+    protected function configure(): void
     {
         $this
             ->addOption(

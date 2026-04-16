@@ -18,17 +18,20 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Clock\ClockInterface;
+use Twig\Environment;
+use Composer\Command\BaseCommand;
 use Throwable;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
-
-use function Safe\file_get_contents;
 
 /**
  * Provides operations to inspect, lint, and repair PHPDoc comments across the project.
@@ -39,7 +42,7 @@ use function Safe\file_get_contents;
     description: 'Checks and fixes PHPDocs.',
     help: 'This command checks and fixes PHPDocs in your PHP files.',
 )]
-final class PhpDocCommand extends AbstractCommand
+final class PhpDocCommand extends BaseCommand
 {
     /**
      * @var string determines the template filename for docheaders
@@ -52,16 +55,32 @@ final class PhpDocCommand extends AbstractCommand
     public const string CONFIG = '.php-cs-fixer.dist.php';
 
     /**
+     * @var string defines the cache file name for PHP-CS-Fixer results
+     */
+    public const string CACHE_FILE = '.php-cs-fixer.cache';
+
+    /**
      * Creates a new PhpDocCommand instance.
      *
-     * @param ComposerJson $composerJson the composer.json accessor
-     * @param Filesystem $filesystem the filesystem component
+     * @param ProcessBuilderInterface
+     * @param FileLocatorInterface $fileLocator the locator for template resources
+     * @param FilesystemInterface $filesystem the filesystem component
+     * @param ProcessBuilderInterface $processBuilder
+     * @param ProcessQueueInterface $processQueue
+     * @param ComposerJsonInterface $composer
+     * @param Environment $renderer
+     * @param ClockInterface $clock
      */
     public function __construct(
-        private readonly ComposerJson $composerJson,
-        Filesystem $filesystem
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
+        private readonly ComposerJsonInterface $composer,
+        private readonly FileLocatorInterface $fileLocator,
+        private readonly FilesystemInterface $filesystem,
+        private readonly Environment $renderer,
+        private readonly ClockInterface $clock,
     ) {
-        return parent::__construct($filesystem);
+        parent::__construct();
     }
 
     /**
@@ -74,11 +93,23 @@ final class PhpDocCommand extends AbstractCommand
     protected function configure(): void
     {
         $this
+            ->addArgument(
+                name: 'path',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Path to the file or directory to check.',
+                default: ['.'],
+            )
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
                 description: 'Whether to fix the PHPDoc issues automatically.',
+            )
+            ->addOption(
+                name: 'cache-dir',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Path to the cache directory for PHP-CS-Fixer.',
+                default: 'tmp/cache/php-cs-fixer',
             );
     }
 
@@ -99,73 +130,36 @@ final class PhpDocCommand extends AbstractCommand
 
         $this->ensureDocHeaderExists($output);
 
-        $phpCsFixerResult = $this->runPhpCsFixer($input, $output);
-        $rectorResult = $this->runRector($input, $output);
-
-        return self::SUCCESS === $phpCsFixerResult && self::SUCCESS === $rectorResult ? self::SUCCESS : self::FAILURE;
-    }
-
-    /**
-     * Executes the PHP-CS-Fixer checks internally.
-     *
-     * The method SHOULD run in dry-run mode unless the fix flag is explicitly provided.
-     * It MUST return an integer describing the exit code.
-     *
-     * @param InputInterface $input the parsed console inputs
-     * @param OutputInterface $output the configured outputs
-     *
-     * @return int the status result of the underlying process
-     */
-    private function runPhpCsFixer(InputInterface $input, OutputInterface $output): int
-    {
-        $arguments = [
-            $this->getAbsolutePath('vendor/bin/php-cs-fixer'),
-            'fix',
-            '--config=' . parent::getConfigFile(self::CONFIG),
-            '--cache-file=' . $this->getCurrentWorkingDirectory() . '/tmp/cache/.php-cs-fixer.cache',
-            '--diff',
-        ];
+        $processBuilder = $this->processBuilder
+            ->withArgument('--ansi')
+            ->withArgument('--diff')
+            ->withArgument('--config', $this->fileLocator->locate(self::CONFIG))
+            ->withArgument(
+                '--cache-file',
+                $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
+            );
 
         if (! $input->getOption('fix')) {
-            $arguments[] = '--dry-run';
+            $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        $command = new Process($arguments);
+        $phpCsFixer = $processBuilder->build('vendor/bin/php-cs-fixer fix');
 
-        return parent::runProcess($command, $output);
-    }
-
-    /**
-     * Runs Rector to insert missing method block comments automatically.
-     *
-     * The method MUST apply the `AddMissingMethodPhpDocRector` constraint locally.
-     * It SHALL strictly return an integer denoting success or failure.
-     *
-     * @param InputInterface $input the incoming console parameters
-     * @param OutputInterface $output the outgoing console display
-     *
-     * @return int the code indicating the process result
-     */
-    private function runRector(InputInterface $input, OutputInterface $output): int
-    {
-        $arguments = [
-            $this->getAbsolutePath('vendor/bin/rector'),
-            'process',
-            '--config',
-            parent::getConfigFile(RefactorCommand::CONFIG),
-            '--autoload-file',
-            $this->getAbsolutePath('vendor/autoload.php'),
-            '--only',
-            '\\' . AddMissingMethodPhpDocRector::class,
-        ];
+        $processBuilder = $this->processBuilder
+            ->withArgument('--config', $this->fileLocator->locate(RefactorCommand::CONFIG))
+            ->withArgument('--autoload-file', 'vendor/autoload.php')
+            ->withArgument('--only', AddMissingMethodPhpDocRector::class);
 
         if (! $input->getOption('fix')) {
-            $arguments[] = '--dry-run';
+            $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        $command = new Process($arguments);
+        $rector = $processBuilder->build('vendor/bin/rector process');
 
-        return parent::runProcess($command, $output);
+        $this->processQueue->add($phpCsFixer);
+        $this->processQueue->add($rector);
+
+        return $this->processQueue->run($output);
     }
 
     /**
@@ -180,18 +174,27 @@ final class PhpDocCommand extends AbstractCommand
      */
     private function ensureDocHeaderExists(OutputInterface $output): void
     {
-        $projectDocHeader = self::getConfigFile(self::FILENAME, true);
+        $support = $this->composer->getSupport();
 
-        if ($this->filesystem->exists($projectDocHeader)) {
-            return;
-        }
+        $links = array_unique(array_filter([
+            'homepage' => $this->composer->getHomepage(),
+            'source' => $support->getSource(),
+            'issues' => $support->getIssues(),
+            'docs' => $support->getDocs() ?? $support->getWiki(),
+            'rfc2119' => 'https://datatracker.ietf.org/doc/html/rfc2119',
+        ]));
 
-        $repositoryDocHeader = self::getConfigFile(self::FILENAME);
-        $docHeader = file_get_contents($repositoryDocHeader);
-        $docHeader = str_replace('fast-forward/dev-tools', $this->composerJson->getPackageName(), $docHeader);
+        $docHeader = $this->renderer->render('docblock/.docheader', [
+            'package' => $this->composer->getName(),
+            'description' => $this->composer->getDescription(),
+            'year' => $this->clock->now()->format('Y'),
+            'copyright_holder' => (string) $this->composer->getAuthors(true),
+            'license' => $this->composer->getLicense(),
+            'links' => $links,
+        ]);
 
         try {
-            $this->filesystem->dumpFile($projectDocHeader, $docHeader);
+            $this->filesystem->dumpFile(self::FILENAME, $docHeader);
         } catch (Throwable) {
             $output->writeln(
                 '<comment>Skipping .docheader creation because the destination file could not be written.</comment>'

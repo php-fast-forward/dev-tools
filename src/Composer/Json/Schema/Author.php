@@ -1,5 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
 namespace FastForward\DevTools\Composer\Json\Schema;
 
 /**
@@ -23,10 +39,10 @@ final readonly class Author implements AuthorInterface
      * All parameters MUST be provided as strings. Implementations SHOULD validate
      * the correctness of email and URL formats before assignment if strict validation is required.
      *
-     * @param string $name The name of the author.
-     * @param string $email The email address of the author.
-     * @param string $homepage The homepage URL of the author.
-     * @param string $role The role of the author.
+     * @param string $name the name of the author
+     * @param string $email the email address of the author
+     * @param string $homepage the homepage URL of the author
+     * @param string $role the role of the author
      */
     public function __construct(
         private string $name = '',
@@ -73,7 +89,7 @@ final readonly class Author implements AuthorInterface
      * This method SHALL return a formatted string combining the author's name and email.
      * Implementations MAY extend this format but SHOULD maintain readability.
      *
-     * @return string The string representation of the author.
+     * @return string the string representation of the author
      */
     public function __toString(): string
     {
@@ -89,10 +105,6 @@ final readonly class Author implements AuthorInterface
             return $this->email;
         }
 
-        return sprintf(
-            '%s <%s>',
-            $this->name,
-            $this->email
-        );
+        return \sprintf('%s <%s>', $this->name, $this->email);
     }
 }

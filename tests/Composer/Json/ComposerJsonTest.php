@@ -78,7 +78,9 @@ final class ComposerJsonTest extends TestCase
     #[Test]
     public function typeWillDefaultToLibrary(): void
     {
-        $composerJson = $this->createComposerJson(['name' => 'foo/bar']);
+        $composerJson = $this->createComposerJson([
+            'name' => 'foo/bar',
+        ]);
 
         self::assertSame('library', $composerJson->getType());
     }
@@ -110,13 +112,19 @@ final class ComposerJsonTest extends TestCase
     #[Test]
     public function getLicenseWillReturnResolvedValue(): void
     {
-        $composerJson = $this->createComposerJson(['license' => 'MIT']);
+        $composerJson = $this->createComposerJson([
+            'license' => 'MIT',
+        ]);
         self::assertSame('MIT', $composerJson->getLicense());
 
-        $composerJson = $this->createComposerJson(['license' => ['MIT']]);
+        $composerJson = $this->createComposerJson([
+            'license' => ['MIT'],
+        ]);
         self::assertSame('MIT', $composerJson->getLicense());
 
-        $composerJson = $this->createComposerJson(['license' => ['MIT', 'Apache-2.0']]);
+        $composerJson = $this->createComposerJson([
+            'license' => ['MIT', 'Apache-2.0'],
+        ]);
         self::assertNull($composerJson->getLicense());
 
         $composerJson = $this->createComposerJson([]);
@@ -140,7 +148,7 @@ final class ComposerJsonTest extends TestCase
 
         $authors = $composerJson->getAuthors();
         self::assertIsIterable($authors);
-        $authorsArray = is_array($authors) ? $authors : iterator_to_array($authors);
+        $authorsArray = \is_array($authors) ? $authors : iterator_to_array($authors);
         self::assertCount(1, $authorsArray);
         self::assertInstanceOf(AuthorInterface::class, $authorsArray[0]);
         self::assertSame('Felipe', $authorsArray[0]->getName());
@@ -212,13 +220,22 @@ final class ComposerJsonTest extends TestCase
     {
         $composerJson = $this->createComposerJson([
             'autoload' => [
-                'psr-4' => ['Foo\\' => 'src/'],
+                'psr-4' => [
+                    'Foo\\' => 'src/',
+                ],
                 'files' => ['src/functions.php'],
             ],
         ]);
 
-        self::assertSame(['psr-4' => ['Foo\\' => 'src/'], 'files' => ['src/functions.php']], $composerJson->getAutoload());
-        self::assertSame(['Foo\\' => 'src/'], $composerJson->getAutoload('psr-4'));
+        self::assertSame([
+            'psr-4' => [
+                'Foo\\' => 'src/',
+            ],
+            'files' => ['src/functions.php'],
+        ], $composerJson->getAutoload());
+        self::assertSame([
+            'Foo\\' => 'src/',
+        ], $composerJson->getAutoload('psr-4'));
         self::assertSame([], $composerJson->getAutoload('invalid'));
     }
 
@@ -230,12 +247,20 @@ final class ComposerJsonTest extends TestCase
     {
         $composerJson = $this->createComposerJson([
             'autoload-dev' => [
-                'psr-4' => ['Foo\\Tests\\' => 'tests/'],
+                'psr-4' => [
+                    'Foo\\Tests\\' => 'tests/',
+                ],
             ],
         ]);
 
-        self::assertSame(['psr-4' => ['Foo\\Tests\\' => 'tests/']], $composerJson->getAutoloadDev());
-        self::assertSame(['Foo\\Tests\\' => 'tests/'], $composerJson->getAutoloadDev('psr-4'));
+        self::assertSame([
+            'psr-4' => [
+                'Foo\\Tests\\' => 'tests/',
+            ],
+        ], $composerJson->getAutoloadDev());
+        self::assertSame([
+            'Foo\\Tests\\' => 'tests/',
+        ], $composerJson->getAutoloadDev('psr-4'));
         self::assertSame([], $composerJson->getAutoloadDev('files'));
     }
 
@@ -245,7 +270,9 @@ final class ComposerJsonTest extends TestCase
     #[Test]
     public function getMinimumStabilityWillReturnConfiguredValue(): void
     {
-        $composerJson = $this->createComposerJson(['minimum-stability' => 'dev']);
+        $composerJson = $this->createComposerJson([
+            'minimum-stability' => 'dev',
+        ]);
         self::assertSame('dev', $composerJson->getMinimumStability());
 
         $composerJson = $this->createComposerJson([]);
@@ -261,19 +288,25 @@ final class ComposerJsonTest extends TestCase
         $composerJson = $this->createComposerJson([
             'config' => [
                 'vendor-dir' => 'custom-vendor',
-                'preferred-install' => ['*' => 'dist'],
+                'preferred-install' => [
+                    '*' => 'dist',
+                ],
                 'process-timeout' => 300,
             ],
         ]);
 
         self::assertSame([
             'vendor-dir' => 'custom-vendor',
-            'preferred-install' => ['*' => 'dist'],
+            'preferred-install' => [
+                '*' => 'dist',
+            ],
             'process-timeout' => 300,
         ], $composerJson->getConfig(null));
 
         self::assertSame('custom-vendor', $composerJson->getConfig('vendor-dir'));
-        self::assertSame(['*' => 'dist'], $composerJson->getConfig('preferred-install'));
+        self::assertSame([
+            '*' => 'dist',
+        ], $composerJson->getConfig('preferred-install'));
         self::assertSame('300', $composerJson->getConfig('process-timeout'));
         self::assertSame('', $composerJson->getConfig('non-existent'));
     }
@@ -290,7 +323,9 @@ final class ComposerJsonTest extends TestCase
             ],
         ]);
 
-        self::assertSame(['test' => 'phpunit'], $composerJson->getScripts());
+        self::assertSame([
+            'test' => 'phpunit',
+        ], $composerJson->getScripts());
     }
 
     /**
@@ -301,12 +336,20 @@ final class ComposerJsonTest extends TestCase
     {
         $composerJson = $this->createComposerJson([
             'extra' => [
-                'foo' => ['bar' => 'baz'],
+                'foo' => [
+                    'bar' => 'baz',
+                ],
             ],
         ]);
 
-        self::assertSame(['foo' => ['bar' => 'baz']], $composerJson->getExtra());
-        self::assertSame(['bar' => 'baz'], $composerJson->getExtra('foo'));
+        self::assertSame([
+            'foo' => [
+                'bar' => 'baz',
+            ],
+        ], $composerJson->getExtra());
+        self::assertSame([
+            'bar' => 'baz',
+        ], $composerJson->getExtra('foo'));
         self::assertSame([], $composerJson->getExtra('invalid'));
     }
 
@@ -316,10 +359,14 @@ final class ComposerJsonTest extends TestCase
     #[Test]
     public function getBinWillReturnConfiguredBinaries(): void
     {
-        $composerJson = $this->createComposerJson(['bin' => 'bin/tool']);
+        $composerJson = $this->createComposerJson([
+            'bin' => 'bin/tool',
+        ]);
         self::assertSame('bin/tool', $composerJson->getBin());
 
-        $composerJson = $this->createComposerJson(['bin' => ['bin/tool1', 'bin/tool2']]);
+        $composerJson = $this->createComposerJson([
+            'bin' => ['bin/tool1', 'bin/tool2'],
+        ]);
         self::assertSame(['bin/tool1', 'bin/tool2'], $composerJson->getBin());
     }
 
@@ -335,7 +382,9 @@ final class ComposerJsonTest extends TestCase
             ],
         ]);
 
-        self::assertSame(['foo/bar' => 'For extra features'], $composerJson->getSuggest());
+        self::assertSame([
+            'foo/bar' => 'For extra features',
+        ], $composerJson->getSuggest());
     }
 
     /**
@@ -344,10 +393,14 @@ final class ComposerJsonTest extends TestCase
     #[Test]
     public function getCommentsWillReturnCommentData(): void
     {
-        $composerJson = $this->createComposerJson(['_comment' => 'This is a comment']);
+        $composerJson = $this->createComposerJson([
+            '_comment' => 'This is a comment',
+        ]);
         self::assertSame(['This is a comment'], $composerJson->getComments());
 
-        $composerJson = $this->createComposerJson(['_comment' => ['Comment 1', 'Comment 2']]);
+        $composerJson = $this->createComposerJson([
+            '_comment' => ['Comment 1', 'Comment 2'],
+        ]);
         self::assertSame(['Comment 1', 'Comment 2'], $composerJson->getComments());
     }
 

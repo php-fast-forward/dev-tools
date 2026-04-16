@@ -19,24 +19,17 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use Random\Engine;
 use Twig\Environment;
-use function Safe\getcwd;
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use FastForward\DevTools\Template\EngineInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-use function array_map;
-use function implode;
-use function ltrim;
-use function strtr;
+use function Safe\getcwd;
 
 /**
  * Handles the generation of API documentation for the project.
@@ -54,7 +47,7 @@ final class DocsCommand extends BaseCommand
      *
      * @param ProcessBuilderInterface $processBuilder the process builder for executing phpDocumentor
      * @param ProcessQueueInterface $processQueue the process queue for managing execution
-     * @param Environment $renderer 
+     * @param Environment $renderer
      * @param FilesystemInterface $filesystem the filesystem for handling file operations
      * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
      */
@@ -162,9 +155,13 @@ final class DocsCommand extends BaseCommand
      *
      * @return string the absolute path to the generated configuration
      */
-    private function createPhpDocumentorConfig(string $source, string $target, string $template, string $cacheDir): string
-    {
-        $workingDirectory = \getcwd();
+    private function createPhpDocumentorConfig(
+        string $source,
+        string $target,
+        string $template,
+        string $cacheDir
+    ): string {
+        $workingDirectory = getcwd();
         $autoload = $this->composer->getAutoload('psr-4');
         $guidePath = $this->filesystem->makePathRelative($source);
         $defaultPackageName = array_key_first($autoload) ?: '';
@@ -180,11 +177,7 @@ final class DocsCommand extends BaseCommand
             'defaultPackageName' => rtrim($defaultPackageName, '\\'),
         ]);
 
-        $this->filesystem->dumpFile(
-            filename: 'phpdocumentor.xml',
-            content: $content,
-            path: $cacheDir,
-        );
+        $this->filesystem->dumpFile(filename: 'phpdocumentor.xml', content: $content, path: $cacheDir);
 
         return $this->filesystem->getAbsolutePath('phpdocumentor.xml', $cacheDir);
     }

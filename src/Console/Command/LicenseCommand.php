@@ -81,7 +81,11 @@ final class LicenseCommand extends BaseCommand
         $targetPath = $this->filesystem->getAbsolutePath($input->getOption('target'));
 
         if ($this->filesystem->exists($targetPath)) {
-            $output->writeln(sprintf('<info>%s file already exists at %s. Skipping generation.</info>', basename($targetPath), $targetPath));
+            $output->writeln(
+                \sprintf('<info>%s file already exists at %s. Skipping generation.</info>', basename(
+                    $targetPath
+                ), $targetPath)
+            );
 
             return self::SUCCESS;
         }
@@ -96,7 +100,9 @@ final class LicenseCommand extends BaseCommand
             return self::SUCCESS;
         }
 
-        $output->writeln(sprintf('<info>%s file generated successfully at %s.</info>', basename($targetPath), $targetPath));
+        $output->writeln(
+            \sprintf('<info>%s file generated successfully at %s.</info>', basename($targetPath), $targetPath)
+        );
 
         return self::SUCCESS;
     }

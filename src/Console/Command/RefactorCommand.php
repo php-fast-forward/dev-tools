@@ -26,7 +26,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Process\Process;
 
 /**
  * Provides functionality to execute automated code refactoring using Rector.
@@ -110,9 +109,7 @@ final class RefactorCommand extends BaseCommand
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        $this->processQueue->add(
-            $processBuilder->build('vendor/bin/rector')
-        );
+        $this->processQueue->add($processBuilder->build('vendor/bin/rector'));
 
         return $this->processQueue->run($output);
     }

@@ -1,5 +1,21 @@
 <?php
 
+declare(strict_types=1);
+
+/**
+ * This file is part of fast-forward/dev-tools.
+ *
+ * This source file is subject to the license bundled
+ * with this source code in the file LICENSE.
+ *
+ * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license   https://opensource.org/licenses/MIT MIT License
+ *
+ * @see       https://github.com/php-fast-forward/dev-tools
+ * @see       https://github.com/php-fast-forward
+ * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ */
+
 namespace FastForward\DevTools\Composer\Json\Schema;
 
 /**
@@ -51,15 +67,14 @@ final readonly class Support implements SupportInterface
         private string $rss = '',
         private string $chat = '',
         private string $security = '',
-    ) {
-    }
+    ) {}
 
     /**
      * Retrieves the support email address.
      *
      * This method MUST return the support email value exactly as stored by the instance.
      *
-     * @return string The support email address.
+     * @return string the support email address
      */
     public function getEmail(): string
     {
@@ -71,7 +86,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the issue tracker value exactly as stored by the instance.
      *
-     * @return string The issue tracker URL.
+     * @return string the issue tracker URL
      */
     public function getIssues(): string
     {
@@ -83,7 +98,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the forum value exactly as stored by the instance.
      *
-     * @return string The forum URL.
+     * @return string the forum URL
      */
     public function getForum(): string
     {
@@ -95,7 +110,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the wiki value exactly as stored by the instance.
      *
-     * @return string The wiki URL.
+     * @return string the wiki URL
      */
     public function getWiki(): string
     {
@@ -107,7 +122,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the IRC value exactly as stored by the instance.
      *
-     * @return string The IRC support channel.
+     * @return string the IRC support channel
      */
     public function getIrc(): string
     {
@@ -119,7 +134,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the source URL value exactly as stored by the instance.
      *
-     * @return string The source code URL.
+     * @return string the source code URL
      */
     public function getSource(): string
     {
@@ -131,7 +146,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the documentation URL value exactly as stored by the instance.
      *
-     * @return string The documentation URL.
+     * @return string the documentation URL
      */
     public function getDocs(): string
     {
@@ -143,7 +158,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the RSS feed URL value exactly as stored by the instance.
      *
-     * @return string The RSS feed URL.
+     * @return string the RSS feed URL
      */
     public function getRss(): string
     {
@@ -155,7 +170,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the chat channel URL value exactly as stored by the instance.
      *
-     * @return string The chat channel URL.
+     * @return string the chat channel URL
      */
     public function getChat(): string
     {
@@ -167,7 +182,7 @@ final readonly class Support implements SupportInterface
      *
      * This method MUST return the security policy URL value exactly as stored by the instance.
      *
-     * @return string The vulnerability disclosure policy URL.
+     * @return string the vulnerability disclosure policy URL
      */
     public function getSecurity(): string
     {
