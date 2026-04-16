@@ -52,6 +52,6 @@ resolution, configuration fallback, PSR-4 lookup, and child-command dispatch.
     * - ``FastForward\DevTools\Console\Command\GitIgnoreCommand``
       - ``gitignore``
       - Merges and synchronizes .gitignore files.
-    * - ``FastForward\DevTools\Console\Command\CopyLicenseCommand``
+    * - ``FastForward\DevTools\Console\Command\LicenseCommand``
       - ``license``
       - Generates a LICENSE file from composer.json license information.

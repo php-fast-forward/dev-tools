@@ -38,68 +38,6 @@ final class ResolverTest extends TestCase
         $this->resolver = new Resolver();
     }
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithMITWillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('MIT'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithBSD3ClauseWillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('BSD-3-Clause'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithApache20WillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('Apache-2.0'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithApache2WillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('Apache-2'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithGPL3WillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('GPL-3.0'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithGPL3PlusWillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('GPL-3+'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithUnknownLicenseWillReturnFalse(): void
-    {
-        self::assertFalse($this->resolver->isSupported('Unknown-License'));
-    }
 
     /**
      * @return void

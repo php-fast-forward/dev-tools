@@ -18,7 +18,10 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\License;
 
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Twig\Environment;
 
 /**
  * Generates LICENSE files from composer.json metadata.
@@ -26,9 +29,8 @@ use Symfony\Component\Filesystem\Filesystem;
  * This class orchestrates the license generation workflow:
  * 1. Reads metadata from composer.json via Reader
  * 2. Resolves the license identifier to a template filename
- * 3. Loads the license template content
- * 4. Resolves placeholders with metadata (year, author, project, organization)
- * 5. Writes the resulting LICENSE file to the target path
+ * 3. Uses the central Template Engine and VariablesFactory to map out the substitutions
+ * 4. Writes the resulting LICENSE file to the target path
  *
  * Generation is skipped if a LICENSE file already exists or if the
  * license is not supported.
@@ -38,17 +40,15 @@ final readonly class Generator implements GeneratorInterface
     /**
      * Creates a new Generator instance.
      *
-     * @param ReaderInterface $reader The reader for extracting metadata from composer.json
      * @param ResolverInterface $resolver The resolver for mapping license identifiers to templates
-     * @param TemplateLoaderInterface $templateLoader The loader for reading template files
-     * @param PlaceholderResolverInterface $placeholderResolver The resolver for template placeholders
+     * @param ComposerJsonInterface $composer 
      * @param Filesystem $filesystem The filesystem component for file operations
      */
     public function __construct(
-        private ReaderInterface $reader,
         private ResolverInterface $resolver,
-        private TemplateLoaderInterface $templateLoader,
-        private PlaceholderResolverInterface $placeholderResolver,
+        private ComposerJsonInterface $composer,
+        private ClockInterface $clock,
+        private Environment $renderer,
         private Filesystem $filesystem,
     ) {}
 
@@ -61,39 +61,20 @@ final readonly class Generator implements GeneratorInterface
      */
     public function generate(string $targetPath): ?string
     {
-        $license = $this->reader->getLicense();
-
-        if (null === $license) {
-            return null;
-        }
-
-        if (! $this->resolver->isSupported($license)) {
-            return null;
-        }
-
-        if ($this->filesystem->exists($targetPath)) {
-            return null;
-        }
-
-        $templateFilename = $this->resolver->resolve($license);
+        $templateFilename = $this->resolver->resolve($this->composer->getPackageLicense());
 
         if (null === $templateFilename) {
             return null;
         }
 
-        $template = $this->templateLoader->load($templateFilename);
-
-        $authors = $this->reader->getAuthors();
-        $firstAuthor = $authors[0] ?? null;
-
-        $metadata = [
-            'year' => $this->reader->getYear(),
-            'organization' => $this->reader->getVendor(),
-            'author' => null !== $firstAuthor ? ($firstAuthor['name'] ?: ($firstAuthor['email'] ?? '')) : '',
-            'project' => $this->reader->getPackageName(),
-        ];
-
-        $content = $this->placeholderResolver->resolve($template, $metadata);
+        try {
+            $content = $this->renderer->render('licenses/' . $templateFilename, [
+                'copyright_holder' => $this->getCopyrightHolder(),
+                'year' => $this->clock->now()->format('Y'),
+            ]);
+        } catch (\Throwable $throwable) {
+            return null;
+        }
 
         $this->filesystem->dumpFile($targetPath, $content);
 
@@ -101,18 +82,20 @@ final readonly class Generator implements GeneratorInterface
     }
 
     /**
-     * Checks whether a supported license is present in composer.json.
+     * Gets the copyright holder name from composer.json.
      *
-     * @return bool True if a supported license is defined, false otherwise
+     * @return string The copyright holder name
      */
-    public function hasLicense(): bool
+    private function getCopyrightHolder(): string
     {
-        $license = $this->reader->getLicense();
+        $authors = $this->composer->getAuthors();
 
-        if (null === $license) {
-            return false;
+        if ([] === $authors) {
+            return '';
         }
 
-        return $this->resolver->isSupported($license);
+        $firstAuthor = $authors[0];
+
+        return $firstAuthor['name'] ?? $firstAuthor['email'] ?? '';
     }
 }

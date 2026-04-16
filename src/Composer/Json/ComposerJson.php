@@ -31,7 +31,7 @@ use Composer\Json\JsonFile;
  * contents returned by the underlying JSON file reader at construction
  * time.
  */
-final class ComposerJson extends JsonFile
+final class ComposerJson extends JsonFile implements ComposerJsonInterface
 {
     /**
      * Stores the decoded Composer JSON document contents.

@@ -38,11 +38,4 @@ interface GeneratorInterface
      * @return string|null The generated license content, or null if generation failed
      */
     public function generate(string $targetPath): ?string;
-
-    /**
-     * Checks whether a supported license is present in composer.json.
-     *
-     * @return bool True if a supported license is defined, false otherwise
-     */
-    public function hasLicense(): bool;
 }

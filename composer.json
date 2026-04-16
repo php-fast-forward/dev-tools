@@ -57,7 +57,8 @@
         "symfony/var-dumper": "^7.4 || ^8.0",
         "symfony/var-exporter": "^7.4 || ^8.0",
         "symplify/easy-coding-standard": "^13.0",
-        "thecodingmachine/safe": "^3.4"
+        "thecodingmachine/safe": "^3.4",
+        "twig/twig": "^3.0"
     },
     "minimum-stability": "stable",
     "autoload": {

@@ -182,4 +182,4 @@ this License in Source Code Form:
 This License applies to all files in the Source Code Form that contain
 modifications made by You.
 
-Copyright {{ year }} {{ organization }}{{ author }}
+Copyright {{ year }} {{ copyright_holder }}

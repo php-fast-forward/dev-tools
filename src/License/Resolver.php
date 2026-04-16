@@ -44,20 +44,6 @@ final class Resolver implements ResolverInterface
     ];
 
     /**
-     * Checks whether the given license identifier is supported.
-     *
-     * The check is case-insensitive and handles common license variants.
-     *
-     * @param string $license The license identifier to check
-     *
-     * @return bool True if the license is supported, false otherwise
-     */
-    public function isSupported(string $license): bool
-    {
-        return isset(self::SUPPORTED_LICENSES[$this->normalize($license)]);
-    }
-
-    /**
      * Resolves a license identifier to its template filename.
      *
      * @param string $license The license identifier to resolve

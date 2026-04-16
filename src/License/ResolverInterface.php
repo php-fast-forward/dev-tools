@@ -27,15 +27,6 @@ namespace FastForward\DevTools\License;
 interface ResolverInterface
 {
     /**
-     * Checks whether the given license identifier is supported.
-     *
-     * @param string $license The license identifier to check (e.g., "MIT", "Apache-2.0")
-     *
-     * @return bool True if the license is supported, false otherwise
-     */
-    public function isSupported(string $license): bool;
-
-    /**
      * Resolves a license identifier to its template filename.
      *
      * @param string $license The license identifier to resolve
