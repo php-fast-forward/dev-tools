@@ -38,6 +38,13 @@ jobs:
         steps:
             - uses: actions/checkout@v6
 
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: ${{ matrix.php-version }}
+                extensions: pcov, pcntl
+                coverage: pcov
+
             - name: Cache Composer dependencies
               uses: actions/cache@v5
               with:
@@ -46,21 +53,20 @@ jobs:
                 restore-keys: |
                   ${{ runner.os }}-composer-
 
+            - name: Mark workspace as safe for git
+              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
             - name: Install dependencies
-              uses: php-actions/composer@v6
               env:
-                  COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                  COMPOSER_CACHE_DIR: /tmp/composer-cache
-              with:
-                  php_version: ${{ matrix.php-version }}
-                  command: 'install'
-                  args: '--prefer-dist --no-progress --no-interaction --no-plugins --no-scripts'
+                COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+                COMPOSER_CACHE_DIR: /tmp/composer-cache
+                COMPOSER_ROOT_VERSION: dev-main
+              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Composer Audit
-              uses: php-actions/composer@v6
-              with:
-                  php_version: ${{ matrix.php-version }}
-                  command: 'audit'
+              env:
+                COMPOSER_ROOT_VERSION: dev-main
+              run: composer audit
 
             - name: Resolve minimum coverage
               id: minimum-coverage
@@ -69,9 +75,6 @@ jobs:
                   INPUT_MIN_COVERAGE: ${{ inputs.min-coverage }}
 
             - name: Run PHPUnit tests
-              uses: php-actions/composer@v6
-              with:
-                  php_version: ${{ matrix.php-version }}
-                  php_extensions: pcov pcntl
-                  command: 'dev-tools'
-                  args: 'tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}'
+              env:
+                COMPOSER_ROOT_VERSION: dev-main
+              run: php bin/dev-tools tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}

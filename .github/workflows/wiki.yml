@@ -26,6 +26,11 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+
       - name: Cache Composer dependencies
         uses: actions/cache@v5
         with:
@@ -34,15 +39,17 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-composer-
 
+      - name: Mark workspace as safe for git
+        run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+          git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
+
       - name: Install dependencies
-        uses: php-actions/composer@v6
         env:
           COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
           COMPOSER_CACHE_DIR: /tmp/composer-cache
-        with:
-          php_version: '8.3'
-          command: 'install'
-          args: '--prefer-dist --no-progress --no-interaction --no-scripts'
+          COMPOSER_ROOT_VERSION: dev-main
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
 
       - name: Prepare wiki submodule branch
         working-directory: .github/wiki
@@ -53,11 +60,9 @@ jobs:
           git clean -fd
 
       - name: Create Docs Markdown
-        uses: php-actions/composer@v6
-        with:
-          php_version: '8.3'
-          command: 'dev-tools'
-          args: 'wiki -- --target=.github/wiki'
+        env:
+          COMPOSER_ROOT_VERSION: dev-main
+        run: php bin/dev-tools wiki -- --target=.github/wiki
 
       - name: Commit & push wiki submodule
         id: wiki_commit
