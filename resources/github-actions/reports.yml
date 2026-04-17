@@ -1,6 +1,8 @@
 name: "Fast Forward Reports"
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened]
   push:
     branches:
       - main
