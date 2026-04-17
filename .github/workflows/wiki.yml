@@ -150,3 +150,7 @@ jobs:
           message: "Publish wiki docs from PR #${{ github.event.pull_request.number }}"
           default_author: github_actions
           push: origin HEAD:${{ env.WIKI_PUBLISH_BRANCH }}
+
+      - name: Delete wiki preview branch
+        working-directory: .github/wiki
+        run: git push origin --delete "${WIKI_PREVIEW_BRANCH}"
