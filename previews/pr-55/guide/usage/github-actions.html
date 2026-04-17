@@ -4,8 +4,9 @@
     <meta charset="utf-8">
             <title>fast-forward/dev-tools</title>
     
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="../">
+    <base href="../../">
 
             <!-- Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -208,14 +209,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-guide-usage-index-html"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-controls="sidebar-guide-usage-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-guide-usage-index-html" class="collapse">
+            <div id="sidebar-guide-usage-index-html" class="collapse show">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -297,7 +298,7 @@
     <div class="d-flex align-items-center">
         <a
             href="guide/usage/github-actions.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
             GitHub Actions Workflows
         </a>
@@ -2258,434 +2259,147 @@
                         <div class="container-fluid">
                             
                             <div class="row g-4">
-                                <div class="col-12 col-xl-9">
+                                <div class="col-12">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item">
-            <a href="" class="text-decoration-none">
-                <i class="fas fa-home text-primary me-1"></i>
-                <span>Home</span>
-            </a>
-        </li>
+                                            <section class="section " id="github-actions-workflows">
+            <h1>GitHub Actions Workflows</h1>
 
-            </ol>
-</nav>
-    <article class="phpdocumentor-element">
-        <div class="mb-4">
-            <div class="mb-5">
-    <div class="d-flex align-items-center gap-3 mb-3">
-        <div class="bg-primary-subtle text-primary rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
-            <i class="fas fa-file-code"></i>
-        </div>
-        <div>
-            <h2 class="display-5 mb-1">SyncCommand.php</h2>
-            <div class="text-body-secondary">File</div>
-        </div>
-    </div>
-</div>
+            
+    <p>FastForward DevTools provides a set of reusable GitHub Actions workflows that automate testing, documentation generation, and wiki synchronization. These workflows are synchronized into consumer repositories via the <code>dev-tools:sync</code>
+ command.</p>
 
-        </div>
+            <section class="section " id="workflow-inheritance">
+            <h2>Workflow Inheritance</h2>
 
-        <div class="d-grid gap-4">
-            <section class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Fast Forward Development Tools for PHP projects.</p>
-    </div>
+            
+    <p>Workflows in consumer repositories (located in <code>.github/workflows/</code>
+) are typically &quot;thin wrappers&quot; that inherit logic from the central <code>dev-tools</code>
+ repository.</p>
 
-                    
-                    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
+            
+    <p>Example of an inherited workflow:</p>
 
-                    <div>
-                        <p>This file is part of fast-forward/dev-tools project.</p>
+            <pre><code class="language-yaml">name: &quot;Fast Forward Reports&quot;
+uses: php-fast-forward/dev-tools/.github/workflows/reports.yml@main
+secrets: inherit</code></pre>
 
-                    </div>
-                </div>
-            </div>
-            </section>
+            
+    <p>This approach ensures that all libraries in the ecosystem benefit from infrastructure updates without requiring manual changes to every repository.</p>
 
-                    
-    <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-tags text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0" id="tags">
-                Tags
-                <a
-    href="files/src-console-command-synccommand.html#tags"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                                                <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">author</span>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                            </div>
-
-                                                            <div>
-                                    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>Felipe Sayão Lobato Abreu <a href="mailto:github@mentordosnerds.com">github@mentordosnerds.com</a></p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-                                </div>
-                                                    </div>
-                    </div>
-                                                                <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">license</span>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                            </div>
-
-                                                            <div>
-                                    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>https://opensource.org/licenses/MIT MIT License</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-                                </div>
-                                                    </div>
-                    </div>
-                                                                <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">see</span>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                                    <span class="badge text-bg-light border">
-                                        <a href="https://github.com/php-fast-forward/">https://github.com/php-fast-forward/</a>
-                                    </span>
-                                                            </div>
-
-                                                            <div>
-                                    
-
-                                </div>
-                                                    </div>
-                    </div>
-                                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">see</span>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                                    <span class="badge text-bg-light border">
-                                        <a href="https://github.com/php-fast-forward/dev-tools">https://github.com/php-fast-forward/dev-tools</a>
-                                    </span>
-                                                            </div>
-
-                                                            <div>
-                                    
-
-                                </div>
-                                                    </div>
-                    </div>
-                                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">see</span>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                                    <span class="badge text-bg-light border">
-                                        <a href="https://github.com/php-fast-forward/dev-tools/issues">https://github.com/php-fast-forward/dev-tools/issues</a>
-                                    </span>
-                                                            </div>
-
-                                                            <div>
-                                    
-
-                                </div>
-                                                    </div>
-                    </div>
-                                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">see</span>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                                    <span class="badge text-bg-light border">
-                                        <a href="https://php-fast-forward.github.io/dev-tools/">https://php-fast-forward.github.io/dev-tools/</a>
-                                    </span>
-                                                            </div>
-
-                                                            <div>
-                                    
-
-                                </div>
-                                                    </div>
-                    </div>
-                                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">see</span>
-                            </div>
-
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                                    <span class="badge text-bg-light border">
-                                        <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
-                                    </span>
-                                                            </div>
-
-                                                            <div>
-                                    
-
-                                </div>
-                                                    </div>
-                    </div>
-                                    </div>
     </section>
 
-                </div>
-            </section>
+            <section class="section " id="fast-forward-reports">
+            <h2>Fast Forward Reports</h2>
 
-            <section class="card border-0 shadow-sm">
-                <div class="card-body p-4">
-                    
-<section class="mt-5">
-    <div class="d-flex align-items-center gap-2 mb-4">
-        <i class="fas fa-list-ul text-primary"></i>
-        <h3 id="toc" class="h4 mb-0">
-            Table of Contents
-            <a
-    href="files/src-console-command-synccommand.html#toc"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-        </h3>
-    </div>
-
-    <div class="d-grid gap-4">
-        
-        
-        
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-cube text-primary"></i>
-                    <h4 id="toc-classes" class="h6 mb-0 fw-semibold">Classes</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Command-SyncCommand.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Command-SyncCommand.html"><abbr title="\FastForward\DevTools\Console\Command\SyncCommand">SyncCommand</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Orchestrates dev-tools synchronization commands for the consumer repository.</p>
-                                                    </div>
-                                    </div>
-            </section>
-        
-        
-        
-        
-        
-        
-        
-            </div>
-</section>
-                </div>
-            </section>
-
-                        
             
-                    </div>
+    <p>The <code>reports.yml</code>
+ workflow is responsible for generating technical documentation and quality reports.</p>
 
-        <div class="modal fade" id="source-view" tabindex="-1" aria-labelledby="source-view-label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-xl">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center gap-2" id="source-view-label">
-                    <i class="fas fa-code text-primary"></i>
-                    <span>Source View</span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            
+    <p><strong>Triggers:</strong>
 
-            <div class="modal-body p-0">
-                <pre
-                    class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
-                    style="max-height: 70vh; overflow-y: auto;"
-                    data-src="files/src/Console/Command/SyncCommand.php.txt"
-                ></pre>
-            </div>
-        </div>
+<em>   Push to ``main``.
+</em>
+   Pull Request (opened, synchronized, reopened, closed).
+*   Manual trigger (workflow_dispatch).</p>
+
+            
+    <p><strong>Behavior:</strong>
+
+<em>   **Main Branch**: Runs all checks and deploys the final reports to the root of the ``gh-pages`` branch.
+</em>
+   <strong>Pull Requests</strong>
+:
+    <em>   Generates a **Preview** of the documentation and coverage.
+    </em>
+   Deploys the preview to <code>gh-pages</code>
+ under <code>previews/pr-{number}/</code>
+.
+    <em>   Posts a **Sticky Comment** on the PR with links to the live preview and coverage report.
+</em>
+   <strong>Cleanup</strong>
+: When a PR is closed, the workflow automatically removes the preview directory from the <code>gh-pages</code>
+ branch to keep the repository clean.</p>
+
+    </section>
+
+            <section class="section " id="fast-forward-wiki">
+            <h2>Fast Forward Wiki</h2>
+
+            
+    <p>The <code>wiki.yml</code>
+ workflow synchronizes the documentation generated by the <code>dev-tools wiki</code>
+ command with the GitHub Wiki repository.</p>
+
+            
+    <p><strong>Behavior:</strong>
+
+<em>   **Submodule Management**: It manages a submodule at ``.github/wiki`` that points to the actual wiki repository.
+</em>
+   <strong>Pull Requests</strong>
+: Pushes documentation changes to a dedicated branch (e.g., <code>pr-123</code>
+) in the wiki repository for review.
+*   <strong>Merge</strong>
+: When a PR is merged into <code>main</code>
+, it pushes the changes to the <code>master</code>
+ branch of the wiki, making them live.</p>
+
+            
+        
+<div class="alert alert-info d-flex align-items-start gap-3" role="alert">
+    <div class="fs-5">
+        <i class="fas fa-sticky-note"></i>
     </div>
-</div>
 
-<script>
-    (function () {
-        function loadExternalCodeSnippet(el, url, line) {
-            const pre = el.querySelector('pre[data-src]');
-            if (!pre) return;
-
-            const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
-            const language = 'php';
-
-            const code = document.createElement('code');
-            code.className = 'language-' + language;
-
-            pre.textContent = '';
-            if (line) {
-                pre.setAttribute('data-line', line);
-            } else {
-                pre.removeAttribute('data-line');
-            }
-
-            code.textContent = 'Loading…';
-            pre.appendChild(code);
-
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', src, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
-
-                if (xhr.status < 400 && xhr.responseText) {
-                    code.textContent = xhr.responseText;
-                    Prism.highlightElement(code);
-
-                    if (line) {
-                        const lineElement = pre.querySelector('.line-numbers-rows > span:nth-child(' + line + ')');
-                        if (lineElement) {
-                            pre.scrollTop = lineElement.offsetTop - (pre.offsetHeight / 2);
-                        }
-                    }
-
-                    return;
-                }
-
-                if (xhr.status === 404) {
-                    code.textContent = '✖ Error: File could not be found';
-                    return;
-                }
-
-                if (xhr.status >= 400) {
-                    code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                    return;
-                }
-
-                code.textContent = '✖ Error: An unknown error occurred';
-            };
-
-            xhr.send(null);
-        }
-
-        document.querySelectorAll('[data-modal]').forEach(function (trigger) {
-            trigger.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                const modalId = this.dataset.modal;
-                const modalEl = document.getElementById(modalId);
-
-                if (!modalEl) return;
-
-                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-                modal.show();
-
-                loadExternalCodeSnippet(
-                    modalEl,
-                    this.dataset.src || null,
-                    this.dataset.line || null
-                );
-            });
-        });
-    })();
-</script>
+    <article class="mb-0 flex-grow-1">
+        
+    <p>See <a href="guide/configuration/repository-setup.html">Repository Setup</a> for mandatory initial setup required for the Wiki workflow to function.</p>
 
     </article>
+</div>
+    </section>
+
+            <section class="section " id="fast-forward-tests">
+            <h2>Fast Forward Tests</h2>
+
+            
+    <p>The <code>tests.yml</code>
+ workflow provides standard Continuous Integration.</p>
+
+            
+
+<ul>
+    <li>Runs PHPUnit tests across supported PHP versions (defaults to 8.3).</li>
+
+    <li>Validates code style using ECS.</li>
+
+    <li>Performs static analysis.</li>
+
+</ul>
+
+    </section>
+
+            <section class="section " id="maintenance-workflows">
+            <h2>Maintenance Workflows</h2>
+
+            
+
+<ul>
+    <li><strong>Auto Assign</strong>
+: Automatically assigns reviewers to PRs.</li>
+
+    <li><strong>Label Sync</strong>
+: Synchronizes repository labels with ecosystem standards.</li>
+
+</ul>
+
+    </section>
+
+    </section>
+
                                     </div>
                                 </div>
 
-                                                                    <aside class="col-12 col-xl-3 d-none d-xl-block">
-                                        <div class="position-sticky" style="top: 2rem;">
-                                            <div class="bg-body-tertiary border rounded-4 p-3 shadow-sm">
-                                                <div class="d-flex align-items-center gap-2 text-uppercase fw-semibold small text-body-secondary mb-3">
-                                                    <i class="fas fa-list-ul text-primary"></i>
-                                                    <span>On this page</span>
-                                                </div>
-
-                                                        
-    <section>
-        <div class="d-grid gap-4">
-            <div>
-                <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
-                <div class="list-group list-group-flush">
-                                                                                                        <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="files/src-console-command-synccommand.html#toc-classes">
-                            Classes
-                        </a>
-                                                                                                                    </div>
-            </div>
-
-            
-                    </div>
-    </section>
-
-                                            </div>
-                                        </div>
-                                    </aside>
                                                             </div>
                         </div>
                     </div>
