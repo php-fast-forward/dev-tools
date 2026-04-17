@@ -90,12 +90,12 @@ final class ReportsCommand extends BaseCommand
         $docs = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--target', $input->getOption('target'))
-            ->build('composer dev-tools docs');
+            ->build('composer dev-tools docs --');
 
         $coverage = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--coverage', $input->getOption('coverage'))
-            ->build('composer dev-tools tests');
+            ->build('composer dev-tools tests --');
 
         $this->processQueue->add(process: $docs, detached: true);
         $this->processQueue->add(process: $coverage, detached: true);
