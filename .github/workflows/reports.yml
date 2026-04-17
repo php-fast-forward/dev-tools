@@ -57,7 +57,7 @@ jobs:
             - name: Generate reports
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.REPORTS_ROOT_VERSION }}
-              run: composer dev-tools reports
+              run: composer dev-tools reports -- --target=tmp/reports --coverage=tmp/reports/coverage
 
             - name: Fix permissions
               run: |
