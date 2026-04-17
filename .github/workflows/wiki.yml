@@ -142,14 +142,9 @@ jobs:
           git reset --hard "origin/${WIKI_PREVIEW_BRANCH}"
           git clean -fd
 
-      - name: Commit & push wiki publish branch
-        uses: EndBug/add-and-commit@v10
-        with:
-          cwd: .github/wiki
-          add: .
-          message: "Publish wiki docs from PR #${{ github.event.pull_request.number }}"
-          default_author: github_actions
-          push: origin HEAD:${{ env.WIKI_PUBLISH_BRANCH }}
+      - name: Push wiki publish branch
+        working-directory: .github/wiki
+        run: git push --force-with-lease origin HEAD:"${WIKI_PUBLISH_BRANCH}"
 
       - name: Delete wiki preview branch
         working-directory: .github/wiki
