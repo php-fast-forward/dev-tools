@@ -3,8 +3,8 @@ update-composer-json
 
 Updates composer.json with Fast Forward dev-tools scripts and metadata.
 
-.. versionadded:: 2.0
-   This command was introduced in version 2.0.
+.. versionadded:: 1.6
+   This command was introduced in version 1.6.
 
 Description
 -----------
