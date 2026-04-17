@@ -1,15 +1,19 @@
 name: "Fast Forward Wiki Update"
 
 on:
-  push:
-    branches:
-      - main
+  pull_request:
+    types: [opened, synchronize, reopened]
+  pull_request_target:
+    types: [closed]
   workflow_dispatch:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
+  pull-requests: read
+
+concurrency:
+  group: fast-forward-wiki-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   wiki:
