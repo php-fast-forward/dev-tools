@@ -16,6 +16,12 @@ on:
                 type: number
                 default: 80
     pull_request:
+        paths:
+          - 'src/**'
+          - 'tests/**'
+          - 'composer.json'
+          - 'composer.lock'
+          - '.github/workflows/tests.yml'
     push:
         branches: [ "main" ]
 
