@@ -21,11 +21,14 @@ namespace FastForward\DevTools\Tests\Composer\Json;
 
 use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Composer\Json\Schema\Author;
 use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
 use FastForward\DevTools\Composer\Json\Schema\Funding;
+use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use UnderflowException;
 
@@ -35,6 +38,9 @@ use function Safe\tempnam;
 use function Safe\unlink;
 
 #[CoversClass(ComposerJson::class)]
+#[UsesClass(Author::class)]
+#[UsesClass(Funding::class)]
+#[UsesClass(Support::class)]
 final class ComposerJsonTest extends TestCase
 {
     /**
