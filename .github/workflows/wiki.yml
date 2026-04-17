@@ -112,11 +112,12 @@ jobs:
           push: true
 
   publish:
-    name: Publish Wiki Main
+    name: Publish Wiki Master
     if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
 
     env:
+      WIKI_PUBLISH_BRANCH: master
       WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
 
     steps:
@@ -133,19 +134,19 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
 
-      - name: Prepare wiki main branch from preview branch
+      - name: Prepare wiki publish branch from preview branch
         working-directory: .github/wiki
         run: |
-          git fetch origin main "${WIKI_PREVIEW_BRANCH}"
-          git switch -C main --track origin/main || git switch main
+          git fetch origin "${WIKI_PUBLISH_BRANCH}" "${WIKI_PREVIEW_BRANCH}"
+          git switch -C "${WIKI_PUBLISH_BRANCH}" --track "origin/${WIKI_PUBLISH_BRANCH}" || git switch "${WIKI_PUBLISH_BRANCH}"
           git reset --hard "origin/${WIKI_PREVIEW_BRANCH}"
           git clean -fd
 
-      - name: Commit & push wiki main branch
+      - name: Commit & push wiki publish branch
         uses: EndBug/add-and-commit@v10
         with:
           cwd: .github/wiki
           add: .
           message: "Publish wiki docs from PR #${{ github.event.pull_request.number }}"
           default_author: github_actions
-          push: origin HEAD:main
+          push: origin HEAD:${{ env.WIKI_PUBLISH_BRANCH }}
