@@ -22,6 +22,13 @@ jobs:
         steps:
             - uses: actions/checkout@v6
 
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '8.3'
+                extensions: pcov, pcntl
+                coverage: pcov
+
             - name: Cache Composer dependencies
               uses: actions/cache@v5
               with:
@@ -31,22 +38,19 @@ jobs:
                   ${{ runner.os }}-composer-
 
             - name: Install dependencies
-              uses: php-actions/composer@v6
               env:
-                  COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                  COMPOSER_CACHE_DIR: /tmp/composer-cache
-              with:
-                  php_version: '8.3'
-                  command: 'install'
-                  args: '--prefer-dist --no-progress --no-interaction --no-scripts'
+                COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+                COMPOSER_CACHE_DIR: /tmp/composer-cache
+                COMPOSER_ROOT_VERSION: dev-main
+              run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
+
+            - name: Mark workspace as safe for git
+              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
 
             - name: Generate reports
-              uses: php-actions/composer@v6
-              with:
-                php_version: '8.3'
-                php_extensions: pcov pcntl
-                command: 'dev-tools'
-                args: 'reports'
+              env:
+                COMPOSER_ROOT_VERSION: dev-main
+              run: php bin/dev-tools reports
 
             - name: Fix permissions
               run: |
