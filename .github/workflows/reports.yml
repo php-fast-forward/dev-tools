@@ -75,7 +75,8 @@ jobs:
                 publish_branch: gh-pages
                 publish_dir: ./public
                 destination_dir: .
-                keep_files: true
+                keep_files: false
+                exclude_assets: 'previews'
                 force_orphan: false
 
             - name: Deploy PR preview
@@ -86,7 +87,7 @@ jobs:
                 publish_branch: gh-pages
                 publish_dir: ./public
                 destination_dir: previews/pr-${{ github.event.pull_request.number }}
-                keep_files: true
+                keep_files: false
                 force_orphan: false
 
     cleanup_preview:
