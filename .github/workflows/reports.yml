@@ -67,6 +67,22 @@ jobs:
             - name: Add .nojekyll
               run: touch public/.nojekyll
 
+            - name: Restore previews from gh-pages
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+              uses: actions/checkout@v6
+              continue-on-error: true
+              with:
+                ref: gh-pages
+                path: gh-pages-current
+
+            - name: Copy existing previews into publish directory
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+              run: |
+                if [ -d "gh-pages-current/previews" ]; then
+                    mkdir -p public/previews
+                    cp -R gh-pages-current/previews/. public/previews/
+                fi
+
             - name: Deploy main reports
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               uses: peaceiris/actions-gh-pages@v4
@@ -76,7 +92,6 @@ jobs:
                 publish_dir: ./public
                 destination_dir: .
                 keep_files: false
-                exclude_assets: 'previews'
                 force_orphan: false
 
             - name: Deploy PR preview
