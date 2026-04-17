@@ -3,13 +3,14 @@ name: Generate Reports and Deploy to GitHub Pages
 on:
     workflow_call:
     workflow_dispatch:
+    pull_request:
+        types: [ "opened", "synchronize", "reopened", "closed" ]
     push:
         branches: [ "main" ]
 
 permissions:
     contents: write
-    pages: write
-    id-token: write
+    pull-requests: write
 
 concurrency:
     group: "pages"
@@ -17,8 +18,14 @@ concurrency:
 
 jobs:
     reports:
+        if: github.event_name != 'pull_request' || github.event.action != 'closed'
         name: Generate Reports
         runs-on: ubuntu-latest
+
+        env:
+            PAGES_ARTIFACT_NAME: ${{ github.event_name == 'pull_request' && format('github-pages-pr-{0}', github.event.pull_request.number) || 'github-pages' }}
+            REPORTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
+
         steps:
             - uses: actions/checkout@v6
 
@@ -41,7 +48,7 @@ jobs:
               env:
                 COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
                 COMPOSER_CACHE_DIR: /tmp/composer-cache
-                COMPOSER_ROOT_VERSION: dev-main
+                COMPOSER_ROOT_VERSION: ${{ env.REPORTS_ROOT_VERSION }}
               run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
 
             - name: Mark workspace as safe for git
@@ -49,37 +56,90 @@ jobs:
 
             - name: Generate reports
               env:
-                COMPOSER_ROOT_VERSION: dev-main
-              run: composer dev-tools reports
+                COMPOSER_ROOT_VERSION: ${{ env.REPORTS_ROOT_VERSION }}
+              run: composer dev-tools reports -- --target=tmp/reports --coverage=tmp/reports/coverage
 
             - name: Fix permissions
               run: |
-                chmod -c -R +rX "public/" | while read line; do
+                chmod -c -R +rX "tmp/reports/" | while read line; do
                     echo "::warning title=Invalid file permissions automatically fixed::$line"
                 done
 
-            - name: Upload artifact
-              if: github.ref == 'refs/heads/main'
-              uses: actions/upload-pages-artifact@v5
+            - name: Add .nojekyll
+              run: touch tmp/reports/.nojekyll
+
+            - name: Restore previews from gh-pages
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+              uses: actions/checkout@v6
+              continue-on-error: true
               with:
-                path: public/
+                ref: gh-pages
+                path: gh-pages-current
 
-    deploy:
-        if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+            - name: Copy existing previews into publish directory
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+              run: |
+                if [ -d "gh-pages-current/previews" ]; then
+                    mkdir -p tmp/reports/previews
+                    cp -R gh-pages-current/previews/. tmp/reports/previews/
+                fi
 
-        name: Deploy to GitHub Pages
-        needs: reports
+            - name: Deploy main reports
+              if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_branch: gh-pages
+                publish_dir: ./tmp/reports/
+                destination_dir: .
+                keep_files: false
+                force_orphan: false
 
-        permissions:
-            pages: write
-            id-token: write
+            - name: Deploy PR preview
+              if: github.event_name == 'pull_request'
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                github_token: ${{ secrets.GITHUB_TOKEN }}
+                publish_branch: gh-pages
+                publish_dir: ./tmp/reports/
+                destination_dir: previews/pr-${{ github.event.pull_request.number }}
+                keep_files: false
+                force_orphan: false
 
-        environment:
-            name: github-pages
-            url: ${{ steps.deployment.outputs.page_url }}
+            - name: Comment preview URLs on pull request
+              if: github.event_name == 'pull_request'
+              uses: marocchino/sticky-pull-request-comment@v2
+              with:
+                header: pr-preview
+                message: |
+                  🚀 Preview is available for this pull request.
 
+                  - Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/
+                  - Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/
+
+    cleanup_preview:
+        if: github.event_name == 'pull_request' && github.event.action == 'closed'
+        name: Cleanup Pull Request Preview
         runs-on: ubuntu-latest
+
         steps:
-            - name: Deploy to GitHub Pages
-              id: deployment
-              uses: actions/deploy-pages@v5
+            - name: Checkout gh-pages
+              uses: actions/checkout@v6
+              with:
+                ref: gh-pages
+                path: gh-pages
+
+            - name: Remove preview directory
+              run: |
+                rm -rf "gh-pages/previews/pr-${{ github.event.pull_request.number }}"
+                cd gh-pages
+                touch .nojekyll
+                git config user.name "github-actions[bot]"
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git add -A
+                git diff --cached --quiet || git commit -m "chore: remove preview for PR #${{ github.event.pull_request.number }}"
+
+            - name: Push changes
+              run: |
+                cd gh-pages
+                git push

@@ -10,3 +10,4 @@ command supports them.
 
    tooling-defaults
    overriding-defaults
+   repository-setup

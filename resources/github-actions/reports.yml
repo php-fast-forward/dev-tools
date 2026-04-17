@@ -1,6 +1,8 @@
 name: "Fast Forward Reports"
 
 on:
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
   push:
     branches:
       - main
@@ -8,8 +10,7 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
+  pull-requests: write
 
 jobs:
   reports:
