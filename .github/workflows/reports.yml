@@ -61,12 +61,12 @@ jobs:
 
             - name: Fix permissions
               run: |
-                chmod -c -R +rX "public/" | while read line; do
+                chmod -c -R +rX "tmp/reports/" | while read line; do
                     echo "::warning title=Invalid file permissions automatically fixed::$line"
                 done
 
             - name: Add .nojekyll
-              run: touch public/.nojekyll
+              run: touch tmp/reports/.nojekyll
 
             - name: Restore previews from gh-pages
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -80,8 +80,8 @@ jobs:
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
               run: |
                 if [ -d "gh-pages-current/previews" ]; then
-                    mkdir -p public/previews
-                    cp -R gh-pages-current/previews/. public/previews/
+                    mkdir -p tmp/reports/previews
+                    cp -R gh-pages-current/previews/. tmp/reports/previews/
                 fi
 
             - name: Deploy main reports
