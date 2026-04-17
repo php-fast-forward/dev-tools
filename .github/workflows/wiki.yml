@@ -75,8 +75,17 @@ jobs:
           pull: "--rebase --autostash"
           push: true
 
+      - name: Check submodule pointer changes
+        id: submodule_status
+        run: |
+          if git diff --quiet -- .github/wiki; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Commit parent repo submodule pointer
-        if: steps.wiki_commit.outputs.committed == 'true'
+        if: steps.submodule_status.outputs.changed == 'true'
         id: parent_commit
         uses: EndBug/add-and-commit@v10
         with:
