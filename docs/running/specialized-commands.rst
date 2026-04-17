@@ -11,8 +11,8 @@ Runs PHPUnit with the resolved ``phpunit.xml``.
 
 .. code-block:: bash
 
-   composer dev-tools tests
-   composer dev-tools tests -- --filter=EventTracerTest
+   composer tests
+   composer tests -- --filter=EventTracerTest
 
 Important details:
 
@@ -29,7 +29,6 @@ Analyzes missing and unused Composer dependencies.
 .. code-block:: bash
 
    composer dependencies
-   vendor/bin/dev-tools dependencies
 
 Important details:
 
@@ -48,8 +47,8 @@ Runs Composer Normalize and ECS.
 
 .. code-block:: bash
 
-   composer dev-tools code-style
-   composer dev-tools code-style -- --fix
+   composer code-style
+   composer code-style --fix
 
 Important details:
 
@@ -64,8 +63,7 @@ Runs Rector against the current project.
 
 .. code-block:: bash
 
-   composer dev-tools refactor
-   composer dev-tools refactor -- --fix
+   composer refactor --fix
 
 Important details:
 
@@ -81,8 +79,8 @@ Coordinates PHP-CS-Fixer and a focused Rector pass for missing method PHPDoc.
 
 .. code-block:: bash
 
-   composer dev-tools phpdoc
-   composer dev-tools phpdoc -- --fix
+   composer phpdoc
+   composer phpdoc --fix
 
 Important details:
 
@@ -100,8 +98,7 @@ Builds the HTML documentation site with phpDocumentor.
 
 .. code-block:: bash
 
-   composer dev-tools docs
-   vendor/bin/dev-tools docs --source=docs --target=public
+   composer docs --source=docs --target=public
 
 Important details:
 
@@ -118,7 +115,7 @@ Builds Markdown API pages for a GitHub wiki.
 
 .. code-block:: bash
 
-   composer dev-tools wiki
+   composer wiki
 
 Important details:
 
@@ -134,7 +131,7 @@ Runs the documentation and test-report pipeline used by GitHub Pages.
 
 .. code-block:: bash
 
-   composer dev-tools reports
+   composer reports
 
 Important details:
 
@@ -149,8 +146,7 @@ Synchronizes packaged agent skills into the consumer repository.
 
 .. code-block:: bash
 
-   composer dev-tools skills
-   vendor/bin/dev-tools skills
+   composer skills
 
 Important details:
 
@@ -188,7 +184,7 @@ Manages .gitattributes export-ignore rules for leaner Composer package archives.
 
 .. code-block:: bash
 
-   composer dev-tools gitattributes
+   composer gitattributes
 
 Important details:
 
@@ -209,8 +205,7 @@ Merges and synchronizes .gitignore files.
 
 .. code-block:: bash
 
-   composer dev-tools gitignore
-   composer dev-tools gitignore -- --source=/path/to/source/.gitignore --target=/path/to/target/.gitignore
+   composer gitignore --source=/path/to/source/.gitignore --target=/path/to/target/.gitignore
 
 Important details:
 
@@ -229,7 +224,7 @@ Generates a LICENSE file from composer.json license information.
 
 .. code-block:: bash
 
-   composer dev-tools license
+   composer license
 
 Important details:
 
@@ -240,3 +235,55 @@ Important details:
   ``[project]`` using information from ``composer.json``;
 - it uses template files from ``resources/license-templates/``;
 - it skips generation if a LICENSE file already exists.
+
+``copy-resource``
+-----------------
+
+Copies packaged or local resources into the consumer repository.
+
+.. code-block:: bash
+
+   composer copy-resource --source <path> --target <path> --overwrite
+
+Important details:
+
+- source is resolved using ``FileLocatorInterface``;
+- target is resolved to an absolute path using ``FilesystemInterface``;
+- both ``--source`` and ``--target`` are required options;
+- without ``--overwrite``, existing target files are skipped;
+- supports both files and directories as sources.
+
+``git-hooks``
+-------------
+
+Installs Fast Forward Git hooks and initializes GrumPHP.
+
+.. code-block:: bash
+
+   composer git-hooks --skip-grumphp-init
+
+Important details:
+
+- runs ``grumphp git:init`` to register hooks with GrumPHP by default;
+- copies hook files from source to target directory;
+- sets executable permissions on copied hooks;
+- ``--source`` defaults to ``resources/git-hooks``;
+- ``--target`` defaults to ``.git/hooks``;
+- ``--no-overwrite`` preserves existing hook files.
+
+``update-composer-json``
+-------------------------
+
+Updates composer.json with Fast Forward dev-tools scripts and metadata.
+
+.. code-block:: bash
+
+   composer update-composer-json --file=composer.json
+
+Important details:
+
+- adds ``dev-tools`` script entrypoint to composer.json;
+- adds ``dev-tools:fix`` script for automated fixing;
+- adds GrumPHP extra configuration pointing to packaged ``grumphp.yml``;
+- if the target file does not exist, exits silently with code 0;
+- existing scripts with the same name are overwritten.

@@ -3,38 +3,46 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Composer\Console\Application;
 use Composer\IO\IOInterface;
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
 use FastForward\DevTools\Agent\Skills\SynchronizeResult;
 use FastForward\DevTools\Console\Command\SkillsCommand;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
 
 #[CoversClass(SkillsCommand::class)]
 #[UsesClass(SkillsSynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
-final class SkillsCommandTest extends AbstractCommandTestCase
+final class SkillsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -44,9 +52,31 @@ final class SkillsCommandTest extends AbstractCommandTestCase
     private ObjectProphecy $synchronizer;
 
     /**
+     * @var ObjectProphecy<FilesystemInterface>
+     */
+    private ObjectProphecy $filesystem;
+
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
+    private ObjectProphecy $input;
+
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
+    private ObjectProphecy $output;
+
+    /**
+     * @var ObjectProphecy<Application>
+     */
+    private ObjectProphecy $application;
+
+    /**
      * @var ObjectProphecy<IOInterface>
      */
     private ObjectProphecy $io;
+
+    private SkillsCommand $command;
 
     /**
      * @return void
@@ -54,45 +84,41 @@ final class SkillsCommandTest extends AbstractCommandTestCase
     protected function setUp(): void
     {
         $this->synchronizer = $this->prophesize(SkillsSynchronizer::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+        $this->application = $this->prophesize(Application::class);
         $this->io = $this->prophesize(IOInterface::class);
 
-        parent::setUp();
+        $this->application->getHelperSet()
+            ->willReturn(new HelperSet());
+
+        $this->command = new SkillsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
+        $this->command->setApplication($this->application->reveal());
 
         $this->application->getIO()
             ->willReturn($this->io->reveal());
+        $this->filesystem->getAbsolutePath('.agents/skills', \dirname(__DIR__, 3))
+            ->willReturn(getcwd() . '/.agents/skills');
+        $this->filesystem->getAbsolutePath('.agents/skills')
+            ->willReturn(getcwd() . '/.agents/skills');
     }
 
     /**
-     * @return SkillsCommand
+     * @return void
      */
-    protected function getCommandClass(): SkillsCommand
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        return new SkillsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandName(): string
-    {
-        return 'skills';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Synchronizes Fast Forward skills into .agents/skills directory.';
-    }
-
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command ensures the consumer repository contains linked Fast Forward skills '
-            . 'by creating symlinks to the packaged skills and removing broken links.';
+        self::assertSame('skills', $this->command->getName());
+        self::assertSame(
+            'Synchronizes Fast Forward skills into .agents/skills directory.',
+            $this->command->getDescription()
+        );
+        self::assertSame(
+            'This command ensures the consumer repository contains linked Fast Forward skills by creating symlinks to the packaged skills and removing broken links.',
+            $this->command->getHelp()
+        );
     }
 
     /**
@@ -168,5 +194,15 @@ final class SkillsCommandTest extends AbstractCommandTestCase
             ->shouldBeCalledOnce();
 
         self::assertSame(SkillsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return int
+     */
+    private function invokeExecute(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

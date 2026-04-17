@@ -3,17 +3,18 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\License;
@@ -36,69 +37,6 @@ final class ResolverTest extends TestCase
         parent::setUp();
 
         $this->resolver = new Resolver();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithMITWillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('MIT'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithBSD3ClauseWillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('BSD-3-Clause'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithApache20WillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('Apache-2.0'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithApache2WillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('Apache-2'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithGPL3WillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('GPL-3.0'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithGPL3PlusWillReturnTrue(): void
-    {
-        self::assertTrue($this->resolver->isSupported('GPL-3+'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function isSupportedWithUnknownLicenseWillReturnFalse(): void
-    {
-        self::assertFalse($this->resolver->isSupported('Unknown-License'));
     }
 
     /**

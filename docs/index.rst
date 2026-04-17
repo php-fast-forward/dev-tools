@@ -19,6 +19,7 @@ fit together.
    usage/index
    configuration/index
    running/index
+   commands/index
    advanced/index
    api/index
    internals/index

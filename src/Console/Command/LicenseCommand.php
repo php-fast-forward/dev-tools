@@ -3,26 +3,29 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\GeneratorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Generates and copies LICENSE files to projects.
@@ -35,19 +38,33 @@ use Symfony\Component\Filesystem\Filesystem;
     description: 'Generates a LICENSE file from composer.json license information.',
     help: 'This command generates a LICENSE file if one does not exist and a supported license is declared in composer.json.'
 )]
-final class CopyLicenseCommand extends AbstractCommand
+final class LicenseCommand extends BaseCommand
 {
     /**
-     * Creates a new CopyLicenseCommand instance.
+     * Creates a new LicenseCommand instance.
      *
      * @param GeneratorInterface $generator the generator component
-     * @param Filesystem $filesystem the filesystem component
+     * @param FilesystemInterface $filesystem the filesystem component
      */
     public function __construct(
         private readonly GeneratorInterface $generator,
-        Filesystem $filesystem,
+        private readonly FilesystemInterface $filesystem,
     ) {
-        parent::__construct($filesystem);
+        parent::__construct();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    protected function configure(): void
+    {
+        $this
+            ->addOption(
+                name: 'target',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'The target path for the generated LICENSE file.',
+                default: 'LICENSE',
+            );
     }
 
     /**
@@ -62,10 +79,14 @@ final class CopyLicenseCommand extends AbstractCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $targetPath = $this->getConfigFile('LICENSE', true);
+        $targetPath = $this->filesystem->getAbsolutePath($input->getOption('target'));
 
         if ($this->filesystem->exists($targetPath)) {
-            $output->writeln('<info>LICENSE file already exists. Skipping generation.</info>');
+            $output->writeln(
+                \sprintf('<info>%s file already exists at %s. Skipping generation.</info>', basename(
+                    $targetPath
+                ), $targetPath)
+            );
 
             return self::SUCCESS;
         }
@@ -80,7 +101,9 @@ final class CopyLicenseCommand extends AbstractCommand
             return self::SUCCESS;
         }
 
-        $output->writeln('<info>LICENSE file generated successfully.</info>');
+        $output->writeln(
+            \sprintf('<info>%s file generated successfully at %s.</info>', basename($targetPath), $targetPath)
+        );
 
         return self::SUCCESS;
     }

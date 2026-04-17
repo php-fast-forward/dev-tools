@@ -19,18 +19,18 @@ The packaged test configuration includes a small integration layer under
    * - ``FastForward\DevTools\PhpUnit\Event\TestSuite\ByPassfinalsStartedSubscriber``
      - Enables ``DG\BypassFinals``
      - Allows tests to work with final constructs.
-    * - ``FastForward\DevTools\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber``
-      - Sends desktop notifications
-      - Summarizes pass, failure, error, runtime, and memory data.
-    * - ``FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface``
-      - Loads PHPUnit coverage reports
-      - Contract for loading serialized PHP coverage data.
-    * - ``FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader``
-      - Loads PHPUnit coverage reports
-      - Implementation that reads ``coverage-php`` output.
-    * - ``FastForward\DevTools\PhpUnit\Coverage\CoverageSummary``
-      - Represents line coverage metrics
-      - Provides executed lines, total executable lines, and percentage calculations.
+   * - ``FastForward\DevTools\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber``
+     - Sends desktop notifications
+     - Summarizes pass, failure, error, runtime, and memory data.
+   * - ``FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface``
+     - Loads PHPUnit coverage reports
+     - Contract for loading serialized PHP coverage data.
+   * - ``FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader``
+     - Loads PHPUnit coverage reports
+     - Implementation that reads ``coverage-php`` output.
+   * - ``FastForward\DevTools\PhpUnit\Coverage\CoverageSummary``
+     - Represents line coverage metrics
+     - Provides executed lines, total executable lines, and percentage calculations.
 
 Coverage Report Loading
 -----------------------

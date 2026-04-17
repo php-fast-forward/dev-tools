@@ -83,6 +83,15 @@ composer dev-tools gitattributes
 # Generates a LICENSE file from composer.json license information
 composer dev-tools license
 
+# Copies packaged or local resources into the consumer repository
+composer dev-tools copy-resource --source resources/docblock --target .docheader
+
+# Installs Fast Forward Git hooks
+composer dev-tools git-hooks
+
+# Updates the composer.json file to match the packaged schema
+composer dev-tools update-composer-json --force
+
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows,
 # .editorconfig, .gitignore rules, packaged skills, and the repository wiki
 # submodule in .github/wiki
@@ -118,6 +127,14 @@ exposes the command set automatically after installation, and the local binary
 keeps the same command vocabulary when you prefer running tools directly from
 `vendor/bin/dev-tools`. The consumer sync flow also refreshes `.agents/skills`
 so agents can discover the packaged skills shipped with this repository.
+
+## 🏗️ Architecture
+
+Each command is self-contained and receives its dependencies through constructor injection, following the :abbr:`DI` pattern. The ``ProcessBuilder`` and ``ProcessQueue`` classes provide a fluent API for constructing and executing system processes in sequence.
+
+- ``ProcessBuilderInterface`` - Builds process commands with arguments
+- ``ProcessQueueInterface`` - Manages and executes process queues
+- ``FilesystemInterface`` - Abstracts filesystem operations
 
 ## 🤝 Contributing
 

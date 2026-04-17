@@ -3,22 +3,25 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
 use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
@@ -29,7 +32,8 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path;
+
+use function Safe\getcwd;
 
 /**
  * Provides functionality to manage .gitattributes export-ignore rules.
@@ -43,8 +47,10 @@ use Symfony\Component\Filesystem\Path;
     help: 'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. '
     . 'Only paths that exist in the repository are added, existing custom rules are preserved, and "extra.gitattributes.keep-in-export" paths stay in exported archives.'
 )]
-final class GitAttributesCommand extends AbstractCommand
+final class GitAttributesCommand extends BaseCommand
 {
+    private const string FILENAME = '.gitattributes';
+
     private const string EXTRA_NAMESPACE = 'gitattributes';
 
     private const string EXTRA_KEEP_IN_EXPORT = 'keep-in-export';
@@ -61,7 +67,7 @@ final class GitAttributesCommand extends AbstractCommand
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface $writer the writer component
      * @param Filesystem $filesystem the filesystem component
-     * @param ComposerJson $composerJson the composer.json accessor
+     * @param ComposerJsonInterface $composer the composer.json accessor
      */
     public function __construct(
         private readonly CandidateProviderInterface $candidateProvider,
@@ -70,10 +76,10 @@ final class GitAttributesCommand extends AbstractCommand
         private readonly MergerInterface $merger,
         private readonly ReaderInterface $reader,
         private readonly WriterInterface $writer,
-        private readonly ComposerJson $composerJson,
-        Filesystem $filesystem,
+        private readonly ComposerJsonInterface $composer,
+        private readonly FilesystemInterface $filesystem,
     ) {
-        parent::__construct($filesystem);
+        parent::__construct();
     }
 
     /**
@@ -88,7 +94,7 @@ final class GitAttributesCommand extends AbstractCommand
     {
         $output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>');
 
-        $basePath = $this->getCurrentWorkingDirectory();
+        $basePath = getcwd();
         $keepInExportPaths = $this->configuredKeepInExportPaths();
 
         $folderCandidates = $this->exportIgnoreFilter->filter($this->candidateProvider->folders(), $keepInExportPaths);
@@ -107,7 +113,7 @@ final class GitAttributesCommand extends AbstractCommand
             return self::SUCCESS;
         }
 
-        $gitattributesPath = Path::join($basePath, '.gitattributes');
+        $gitattributesPath = $this->filesystem->getAbsolutePath(self::FILENAME);
         $existingContent = $this->reader->read($gitattributesPath);
         $content = $this->merger->merge($existingContent, $entries, $keepInExportPaths);
         $this->writer->write($gitattributesPath, $content);
@@ -131,34 +137,11 @@ final class GitAttributesCommand extends AbstractCommand
      */
     private function configuredKeepInExportPaths(): array
     {
-        $extra = $this->composerJson->getExtra();
+        $extra = $this->composer->getExtra(self::EXTRA_NAMESPACE);
 
-        $gitattributesConfig = $extra[self::EXTRA_NAMESPACE] ?? null;
-
-        if (! \is_array($gitattributesConfig)) {
-            return [];
-        }
-
-        $configuredPaths = [];
-
-        foreach ([self::EXTRA_KEEP_IN_EXPORT, self::EXTRA_NO_EXPORT_IGNORE] as $key) {
-            $values = $gitattributesConfig[$key] ?? [];
-
-            if (\is_string($values)) {
-                $values = [$values];
-            }
-
-            if (! \is_array($values)) {
-                continue;
-            }
-
-            foreach ($values as $value) {
-                if (\is_string($value)) {
-                    $configuredPaths[] = $value;
-                }
-            }
-        }
-
-        return array_values(array_unique($configuredPaths));
+        return array_unique(array_merge(
+            $extra[self::EXTRA_KEEP_IN_EXPORT] ?? [],
+            $extra[self::EXTRA_NO_EXPORT_IGNORE] ?? [],
+        ));
     }
 }

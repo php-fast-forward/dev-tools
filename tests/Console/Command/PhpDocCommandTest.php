@@ -3,119 +3,163 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use DateTimeImmutable;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Composer\Json\Schema\Author;
+use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Console\Command\PhpDocCommand;
 use FastForward\DevTools\Console\Command\RefactorCommand;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Process\ProcessBuilder;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Clock\ClockInterface;
+use ReflectionMethod;
 use RuntimeException;
-
-use function Safe\getcwd;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
+use Twig\Environment;
 
 #[CoversClass(PhpDocCommand::class)]
-final class PhpDocCommandTest extends AbstractCommandTestCase
+#[UsesClass(Author::class)]
+#[UsesClass(ProcessBuilder::class)]
+#[UsesClass(Support::class)]
+final class PhpDocCommandTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy<ComposerJson>
+     * @var ObjectProphecy<ProcessQueueInterface>
      */
-    private ObjectProphecy $composerJson;
+    private ObjectProphecy $processQueue;
 
     /**
-     * @return PhpDocCommand
+     * @var ObjectProphecy<ComposerJsonInterface>
      */
-    protected function getCommandClass(): PhpDocCommand
-    {
-        return new PhpDocCommand($this->composerJson->reveal(), $this->filesystem->reveal());
-    }
+    private ObjectProphecy $composer;
 
     /**
-     * @return string
+     * @var ObjectProphecy<FileLocatorInterface>
      */
-    protected function getCommandName(): string
-    {
-        return 'phpdoc';
-    }
+    private ObjectProphecy $fileLocator;
 
     /**
-     * @return string
+     * @var ObjectProphecy<FilesystemInterface>
      */
-    protected function getCommandDescription(): string
-    {
-        return 'Checks and fixes PHPDocs.';
-    }
+    private ObjectProphecy $filesystem;
 
     /**
-     * @return string
+     * @var ObjectProphecy<Environment>
      */
-    protected function getCommandHelp(): string
-    {
-        return 'This command checks and fixes PHPDocs in your PHP files.';
-    }
+    private ObjectProphecy $renderer;
+
+    /**
+     * @var ObjectProphecy<ClockInterface>
+     */
+    private ObjectProphecy $clock;
+
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
+    private ObjectProphecy $input;
+
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
+    private ObjectProphecy $output;
+
+    private PhpDocCommand $command;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->composerJson = $this->prophesize(ComposerJson::class);
-        $this->composerJson->getPackageName()
-            ->willReturn('fast-forward/dev-tools');
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->composer = $this->prophesize(ComposerJsonInterface::class);
+        $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->renderer = $this->prophesize(Environment::class);
+        $this->clock = $this->prophesize(ClockInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
 
-        parent::setUp();
-
-        $this->withConfigFile(PhpDocCommand::CONFIG);
-        $this->withConfigFile(RefactorCommand::CONFIG);
-
-        $this->withConfigFile(PhpDocCommand::FILENAME);
-        $this->withConfigFile(PhpDocCommand::FILENAME, true);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillCopyDocHeaderWhenMissing(): void
-    {
-        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
-        $this->filesystem->dumpFile(Argument::any(), Argument::any())->shouldBeCalled();
-
-        $this->willRunProcessWithCallback(static fn(): bool => true);
-
-        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillHandleDumpFileException(): void
-    {
-        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(false);
-        $this->filesystem->dumpFile(Argument::any(), Argument::any())->willThrow(
-            new RuntimeException('dump error')
+        $this->command = new PhpDocCommand(
+            new ProcessBuilder(),
+            $this->processQueue->reveal(),
+            $this->composer->reveal(),
+            $this->fileLocator->reveal(),
+            $this->filesystem->reveal(),
+            $this->renderer->reveal(),
+            $this->clock->reveal(),
         );
 
-        $this->willRunProcessWithCallback(static fn(): bool => true);
+        $this->input->getOption('fix')
+            ->willReturn(false);
+        $this->input->getOption('cache-dir')
+            ->willReturn('tmp/cache/php-cs-fixer');
+        $this->fileLocator->locate(PhpDocCommand::CONFIG)
+            ->willReturn('/app/.php-cs-fixer.dist.php');
+        $this->fileLocator->locate(RefactorCommand::CONFIG)
+            ->willReturn('/app/rector.php');
+        $this->filesystem->getAbsolutePath(PhpDocCommand::CACHE_FILE, 'tmp/cache/php-cs-fixer')
+            ->willReturn('/app/tmp/cache/php-cs-fixer/.php-cs-fixer.cache');
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
+    {
+        self::assertSame('phpdoc', $this->command->getName());
+        self::assertSame('Checks and fixes PHPDocs.', $this->command->getDescription());
+        self::assertSame('This command checks and fixes PHPDocs in your PHP files.', $this->command->getHelp());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillCreateDocHeaderAndRunPhpDocProcesses(): void
+    {
+        $this->willRenderDocHeader();
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'Content')
+            ->shouldBeCalledOnce();
+        $this->processQueue->add(Argument::type(Process::class))
+            ->shouldBeCalledTimes(2);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<info>Checking and fixing PHPDocs...</info>')
+            ->shouldBeCalled();
+        $this->output->writeln('<info>Created .docheader from repository template.</info>')
+            ->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }
@@ -124,23 +168,67 @@ final class PhpDocCommandTest extends AbstractCommandTestCase
      * @return void
      */
     #[Test]
-    public function executeWillReturnFailureIfProcessFails(): void
+    public function executeWillHandleDumpFileExceptionAndContinueRunningProcesses(): void
     {
-        $this->willRunProcessWithCallback(static fn(): bool => true, false);
+        $this->willRenderDocHeader();
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'Content')
+            ->willThrow(new RuntimeException('dump error'));
+        $this->processQueue->add(Argument::type(Process::class))
+            ->shouldBeCalledTimes(2);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalledOnce();
 
-        self::assertSame(PhpDocCommand::FAILURE, $this->invokeExecute());
+        $this->output->writeln('<info>Checking and fixing PHPDocs...</info>')
+            ->shouldBeCalled();
+        $this->output->writeln(
+            '<comment>Skipping .docheader creation because the destination file could not be written.</comment>'
+        )
+            ->shouldBeCalled();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**
      * @return void
      */
-    #[Test]
-    public function executeWillSkipDocHeaderCreationWhenProjectDocHeaderAlreadyExists(): void
+    private function willRenderDocHeader(): void
     {
-        $this->filesystem->exists(getcwd() . '/' . PhpDocCommand::FILENAME)->willReturn(true);
+        $this->composer->getSupport()
+            ->willReturn(new Support(
+                issues: 'https://github.com/php-fast-forward/dev-tools/issues',
+                wiki: 'https://github.com/php-fast-forward/dev-tools/wiki',
+                source: 'https://github.com/php-fast-forward/dev-tools',
+                docs: 'https://php-fast-forward.github.io/dev-tools/',
+            ));
+        $this->composer->getHomepage()
+            ->willReturn('https://github.com/php-fast-forward/');
+        $this->composer->getName()
+            ->willReturn('fast-forward/dev-tools');
+        $this->composer->getDescription()
+            ->willReturn('Fast Forward Development Tools for PHP projects');
+        $this->composer->getAuthors(true)
+            ->willReturn(new Author('Felipe Sayão Lobato Abreu', 'github@mentordosnerds.com'));
+        $this->composer->getLicense()
+            ->willReturn('MIT');
+        $this->clock->now()
+            ->willReturn(new DateTimeImmutable('2026-01-01 00:00:00'));
+        $this->renderer->render(
+            'docblock/.docheader',
+            Argument::that(static fn(array $variables): bool => 'fast-forward/dev-tools' === $variables['package']
+                && '2026' === $variables['year']
+                && isset($variables['links']['rfc2119'])),
+        )
+            ->willReturn('Content');
+    }
 
-        $this->willRunProcessWithCallback(static fn(): bool => true);
+    /**
+     * @return int
+     */
+    private function invokeExecute(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
 
-        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

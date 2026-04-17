@@ -3,38 +3,48 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\TestsCommand;
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
-use Prophecy\Argument;
+use FastForward\DevTools\Process\ProcessBuilder;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
 
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(CoverageSummary::class)]
-final class TestsCommandTest extends AbstractCommandTestCase
+#[UsesClass(ProcessBuilder::class)]
+final class TestsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
@@ -44,45 +54,36 @@ final class TestsCommandTest extends AbstractCommandTestCase
     private ObjectProphecy $coverageSummaryLoader;
 
     /**
-     * @var ObjectProphecy<ComposerJson>
+     * @var ObjectProphecy<ComposerJsonInterface>
      */
     private ObjectProphecy $composerJson;
 
     /**
-     * @return TestsCommand
+     * @var ObjectProphecy<FilesystemInterface>
      */
-    protected function getCommandClass(): TestsCommand
-    {
-        return new TestsCommand(
-            $this->coverageSummaryLoader->reveal(),
-            $this->composerJson->reveal(),
-            $this->filesystem->reveal()
-        );
-    }
+    private ObjectProphecy $filesystem;
 
     /**
-     * @return string
+     * @var ObjectProphecy<FileLocatorInterface>
      */
-    protected function getCommandName(): string
-    {
-        return 'tests';
-    }
+    private ObjectProphecy $fileLocator;
 
     /**
-     * @return string
+     * @var ObjectProphecy<ProcessQueueInterface>
      */
-    protected function getCommandDescription(): string
-    {
-        return 'Runs PHPUnit tests.';
-    }
+    private ObjectProphecy $processQueue;
 
     /**
-     * @return string
+     * @var ObjectProphecy<InputInterface>
      */
-    protected function getCommandHelp(): string
-    {
-        return 'This command runs PHPUnit to execute your tests.';
-    }
+    private ObjectProphecy $input;
+
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
+    private ObjectProphecy $output;
+
+    private TestsCommand $command;
 
     /**
      * @return void
@@ -90,48 +91,72 @@ final class TestsCommandTest extends AbstractCommandTestCase
     protected function setUp(): void
     {
         $this->coverageSummaryLoader = $this->prophesize(CoverageSummaryLoaderInterface::class);
-        $this->composerJson = $this->prophesize(ComposerJson::class);
-        $this->composerJson->getAutoload()
+        $this->composerJson = $this->prophesize(ComposerJsonInterface::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+
+        $this->command = new TestsCommand(
+            $this->coverageSummaryLoader->reveal(),
+            $this->composerJson->reveal(),
+            $this->filesystem->reveal(),
+            $this->fileLocator->reveal(),
+            new ProcessBuilder(),
+            $this->processQueue->reveal(),
+        );
+
+        $this->composerJson->getAutoload('psr-4')
             ->willReturn([
                 'FastForward\\DevTools\\' => 'src/',
             ]);
 
-        parent::setUp();
+        $this->fileLocator->locate(TestsCommand::CONFIG)
+            ->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
 
-        $this->withConfigFile(TestsCommand::CONFIG);
+        $this->filesystem->getAbsolutePath('./vendor/autoload.php')
+            ->willReturn(getcwd() . '/vendor/autoload.php');
+        $this->filesystem->getAbsolutePath('./tmp/cache/phpunit')
+            ->willReturn(getcwd() . '/tmp/cache/phpunit');
+        $this->filesystem->getAbsolutePath('public/coverage')
+            ->willReturn(getcwd() . '/public/coverage');
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src');
+
+        foreach ($this->command->getDefinition()->getArguments() as $argument) {
+            $this->input->getArgument($argument->getName())
+                ->willReturn($argument->getDefault());
+        }
+
+        foreach ($this->command->getDefinition()->getOptions() as $option) {
+            $this->input->getOption($option->getName())
+                ->willReturn($option->getDefault());
+        }
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWithLocalConfigWillRunPhpUnitProcessWithDevToolsConfigFile(): void
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        $this->withConfigFile(TestsCommand::CONFIG, true);
-
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, 'vendor/bin/phpunit')
-                && str_contains($commandLine, '--configuration')
-                && str_contains($commandLine, getcwd() . '/' . TestsCommand::CONFIG);
-        });
-
-        $this->invokeExecute();
+        self::assertSame('tests', $this->command->getName());
+        self::assertSame('Runs PHPUnit tests.', $this->command->getDescription());
+        self::assertSame('This command runs PHPUnit to execute your tests.', $this->command->getHelp());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWithoutLocalConfigWillRunPhpUnitProcessWithDevToolsConfigFile(): void
+    public function executeWillRunPhpUnitProcessWithConfigFile(): void
     {
-        $this->willRunProcessWithCallback(function (Process $process): bool {
+        $this->willQueueProcessMatching(function (Process $process): bool {
             $commandLine = $process->getCommandLine();
 
             return str_contains($commandLine, 'vendor/bin/phpunit')
-                && str_contains($commandLine, '--configuration')
-                && str_contains($commandLine, getcwd() . '/' . TestsCommand::CONFIG);
+                && str_contains($commandLine, '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG);
         });
 
         $this->invokeExecute();
@@ -143,15 +168,16 @@ final class TestsCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWithCoverageWillIncludeCoverageArguments(): void
     {
-        $this->willRunProcessWithCallback(function (Process $process): bool {
+        $this->willQueueProcessMatching(function (Process $process): bool {
             $commandLine = $process->getCommandLine();
 
             return str_contains($commandLine, '--coverage-text')
-                && str_contains($commandLine, '--coverage-html=');
+                && str_contains($commandLine, '--coverage-html=' . getcwd() . '/public/coverage');
         });
 
         $this->input->getOption('coverage')
             ->willReturn('public/coverage');
+
         $this->invokeExecute();
     }
 
@@ -163,7 +189,7 @@ final class TestsCommandTest extends AbstractCommandTestCase
     {
         $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
 
-        $this->willRunProcessWithCallback(function (Process $process) use ($coverageReportPath): bool {
+        $this->willQueueProcessMatching(function (Process $process) use ($coverageReportPath): bool {
             $commandLine = $process->getCommandLine();
 
             return str_contains($commandLine, '--coverage-php=' . $coverageReportPath)
@@ -187,7 +213,7 @@ final class TestsCommandTest extends AbstractCommandTestCase
     {
         $coverageReportPath = getcwd() . '/public/coverage/coverage.php';
 
-        $this->willRunProcessWithCallback(function (Process $process) use ($coverageReportPath): bool {
+        $this->willQueueProcessMatching(function (Process $process) use ($coverageReportPath): bool {
             $commandLine = $process->getCommandLine();
 
             return str_contains($commandLine, '--coverage-html=' . getcwd() . '/public/coverage')
@@ -213,9 +239,9 @@ final class TestsCommandTest extends AbstractCommandTestCase
     {
         $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
 
-        $this->willRunProcessWithCallback(static fn(Process $process): bool => str_contains(
+        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
             $process->getCommandLine(),
-            '--coverage-php=' . getcwd() . '/tmp/cache/phpunit/coverage.php',
+            '--coverage-php=' . $coverageReportPath,
         ));
 
         $this->output->writeln(Argument::type('string'))
@@ -253,10 +279,35 @@ final class TestsCommandTest extends AbstractCommandTestCase
      * @return void
      */
     #[Test]
-    public function executeWillReturnFailureIfProcessFails(): void
+    public function executeWillReturnFailureIfProcessQueueFails(): void
     {
-        $this->willRunProcessWithCallback(static fn(): bool => true, false);
+        $this->willQueueProcessMatching(static fn(): bool => true, TestsCommand::FAILURE);
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @param callable $callback
+     * @param int $result
+     *
+     * @return void
+     */
+    private function willQueueProcessMatching(callable $callback, int $result = TestsCommand::SUCCESS): void
+    {
+        $this->processQueue->add(Argument::that($callback))
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn($result)
+            ->shouldBeCalledOnce();
+    }
+
+    /**
+     * @return int
+     */
+    private function invokeExecute(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

@@ -18,10 +18,12 @@
             "email": "github@mentordosnerds.com"
         }
     ],
-    "homepage": "https://php-fast-forward.github.io/dev-tools/",
+    "homepage": "https://github.com/php-fast-forward/",
     "support": {
         "issues": "https://github.com/php-fast-forward/dev-tools/issues",
-        "source": "https://github.com/php-fast-forward/dev-tools"
+        "wiki": "https://github.com/php-fast-forward/dev-tools/wiki",
+        "source": "https://github.com/php-fast-forward/dev-tools",
+        "docs": "https://php-fast-forward.github.io/dev-tools/"
     },
     "require": {
         "php": "^8.3",
@@ -43,13 +45,16 @@
         "phpro/grumphp-shim": "^2.19",
         "phpspec/prophecy": "^1.26",
         "phpspec/prophecy-phpunit": "^2.5",
+        "phpunit/php-code-coverage": "^12.5",
         "phpunit/phpunit": "^12.5",
         "psr/clock": "^1.0",
+        "psr/container": "^2.0",
         "psr/log": "^3.0",
         "pyrech/composer-changelogs": "^2.2",
         "rector/rector": "^2.3",
         "saggre/phpdocumentor-markdown": "^1.0",
         "shipmonk/composer-dependency-analyser": "^1.8.4",
+        "symfony/config": "^7.4",
         "symfony/console": "^7.4 || ^8.0",
         "symfony/filesystem": "^7.4 || ^8.0",
         "symfony/finder": "^7.4 || ^8.0",
@@ -57,7 +62,8 @@
         "symfony/var-dumper": "^7.4 || ^8.0",
         "symfony/var-exporter": "^7.4 || ^8.0",
         "symplify/easy-coding-standard": "^13.0",
-        "thecodingmachine/safe": "^3.4"
+        "thecodingmachine/safe": "^3.4",
+        "twig/twig": "^3.0"
     },
     "minimum-stability": "stable",
     "autoload": {

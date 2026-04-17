@@ -3,77 +3,107 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DependenciesCommand;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-use function Safe\getcwd;
-use function str_contains;
-
 #[CoversClass(DependenciesCommand::class)]
-final class DependenciesCommandTest extends AbstractCommandTestCase
+final class DependenciesCommandTest extends TestCase
 {
-    /**
-     * @return string
-     */
-    protected function getCommandClass(): string
-    {
-        return DependenciesCommand::class;
-    }
+    use ProphecyTrait;
 
-    /**
-     * @return string
-     */
-    protected function getCommandName(): string
-    {
-        return 'dependencies';
-    }
+    private ObjectProphecy $fileLocator;
 
-    /**
-     * @return string
-     */
-    protected function getCommandDescription(): string
-    {
-        return 'Analyzes missing and unused Composer dependencies.';
-    }
+    private ObjectProphecy $processBuilder;
 
-    /**
-     * @return string
-     */
-    protected function getCommandHelp(): string
-    {
-        return 'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.';
-    }
+    private ObjectProphecy $processQueue;
+
+    private ObjectProphecy $input;
+
+    private ObjectProphecy $output;
+
+    private ObjectProphecy $processUnused;
+
+    private ObjectProphecy $processDepAnalyser;
+
+    private DependenciesCommand $command;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+        $this->processUnused = $this->prophesize(Process::class);
+        $this->processDepAnalyser = $this->prophesize(Process::class);
 
-        $this->output->writeln(Argument::type('string'));
+        $this->processBuilder->withArgument(Argument::any())
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument(Argument::any(), Argument::any())
+            ->willReturn($this->processBuilder->reveal());
 
-        $cwd = getcwd();
-        $this->filesystem->exists($cwd . '/composer.json')->willReturn(true);
+        $this->processBuilder->build(Argument::any())
+            ->willReturn($this->processUnused->reveal());
+
+        $this->command = new DependenciesCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->fileLocator->reveal(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
+    {
+        self::assertSame('dependencies', $this->command->getName());
+        self::assertSame('Analyzes missing and unused Composer dependencies.', $this->command->getDescription());
+        self::assertSame(
+            'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.',
+            $this->command->getHelp()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function commandCanBeConstructedWithDependencies(): void
+    {
+        self::assertInstanceOf(DependenciesCommand::class, $this->command);
     }
 
     /**
@@ -82,100 +112,60 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillReturnSuccessWhenBothToolsSucceed(): void
     {
-        $processUnused = $this->prophesize(Process::class);
-        $processUnused->isSuccessful()
-            ->willReturn(true);
+        $this->fileLocator->locate('composer.json')
+            ->willReturn('/path/to/composer.json');
 
-        $processDepAnalyser = $this->prophesize(Process::class);
-        $processDepAnalyser->isSuccessful()
-            ->willReturn(true);
+        $this->processBuilder->build('vendor/bin/composer-unused')
+            ->willReturn($this->processUnused->reveal());
+        $this->processBuilder->build('vendor/bin/composer-dependency-analyser')
+            ->willReturn($this->processDepAnalyser->reveal());
 
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
-            ), Argument::cetera())
-            ->willReturn($processUnused->reveal())
+        $this->processQueue->add($this->processUnused->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalled();
 
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
-            ), Argument::cetera())
-            ->willReturn($processDepAnalyser->reveal())
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)
             ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
             ->shouldBeCalled();
 
-        self::assertSame(DependenciesCommand::SUCCESS, $this->invokeExecute());
+        $result = $this->executeCommand();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $result);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillReturnFailureWhenFirstToolFails(): void
+    public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
-        $processUnused = $this->prophesize(Process::class);
-        $processUnused->isSuccessful()
-            ->willReturn(false);
+        $this->fileLocator->locate('composer.json')
+            ->willReturn('/path/to/composer.json');
 
-        $processDepAnalyser = $this->prophesize(Process::class);
-        $processDepAnalyser->isSuccessful()
-            ->willReturn(true);
+        $this->processBuilder->build('vendor/bin/composer-unused')
+            ->willReturn($this->processUnused->reveal());
+        $this->processBuilder->build('vendor/bin/composer-dependency-analyser')
+            ->willReturn($this->processDepAnalyser->reveal());
 
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
-            ), Argument::cetera())
-            ->willReturn($processUnused->reveal())
+        $this->processQueue->add($this->processUnused->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalled();
 
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
-            ), Argument::cetera())
-            ->willReturn($processDepAnalyser->reveal())
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::FAILURE)
             ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
             ->shouldBeCalled();
 
-        self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
-    }
+        $result = $this->executeCommand();
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnFailureWhenSecondToolFails(): void
-    {
-        $processUnused = $this->prophesize(Process::class);
-        $processUnused->isSuccessful()
-            ->willReturn(true);
-
-        $processDepAnalyser = $this->prophesize(Process::class);
-        $processDepAnalyser->isSuccessful()
-            ->willReturn(false);
-
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
-            ), Argument::cetera())
-            ->willReturn($processUnused->reveal())
-            ->shouldBeCalled();
-
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
-            ), Argument::cetera())
-            ->willReturn($processDepAnalyser->reveal())
-            ->shouldBeCalled();
-
-        $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-
-        self::assertSame(DependenciesCommand::FAILURE, $this->invokeExecute());
+        self::assertSame(DependenciesCommand::FAILURE, $result);
     }
 
     /**
@@ -184,43 +174,50 @@ final class DependenciesCommandTest extends AbstractCommandTestCase
     #[Test]
     public function executeWillCallBothDependencyToolsWithComposerJson(): void
     {
-        $cwd = getcwd();
-        $composerJsonPath = $cwd . '/composer.json';
+        $composerJsonPath = '/path/to/composer.json';
 
-        $this->filesystem->exists($composerJsonPath)
-            ->willReturn(true);
+        $this->fileLocator->locate('composer.json')
+            ->willReturn($composerJsonPath);
 
         $processUnused = $this->prophesize(Process::class);
-        $processUnused->isSuccessful()
-            ->willReturn(true);
         $processUnused->getCommandLine()
             ->willReturn('vendor/bin/composer-unused ' . $composerJsonPath . ' --no-progress');
 
         $processDepAnalyser = $this->prophesize(Process::class);
-        $processDepAnalyser->isSuccessful()
-            ->willReturn(true);
         $processDepAnalyser->getCommandLine()
             ->willReturn(
                 'vendor/bin/composer-dependency-analyser --composer-json=' . $composerJsonPath . ' --ignore-unused-deps --ignore-prod-only-in-dev-deps'
             );
 
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-unused')
-            ), Argument::cetera())
-            ->willReturn($processUnused->reveal())
+        $this->processBuilder->build('vendor/bin/composer-unused')
+            ->willReturn($processUnused->reveal());
+        $this->processBuilder->build('vendor/bin/composer-dependency-analyser')
+            ->willReturn($processDepAnalyser->reveal());
+
+        $this->processQueue->add($processUnused->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($processDepAnalyser->reveal())
             ->shouldBeCalled();
 
-        $this->processHelper
-            ->run(Argument::type(OutputInterface::class), Argument::that(
-                static fn(Process $p): bool => str_contains($p->getCommandLine(), 'composer-dependency-analyser')
-            ), Argument::cetera())
-            ->willReturn($processDepAnalyser->reveal())
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)
             ->shouldBeCalled();
 
         $this->output->writeln('<info>Running dependency analysis...</info>')
             ->shouldBeCalled();
 
-        self::assertSame(DependenciesCommand::SUCCESS, $this->invokeExecute());
+        $result = $this->executeCommand();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $result);
+    }
+
+    /**
+     * @return int
+     */
+    private function executeCommand(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

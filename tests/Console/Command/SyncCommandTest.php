@@ -3,80 +3,103 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use FastForward\DevTools\Console\Command\GitIgnoreCommand;
 use FastForward\DevTools\Console\Command\SyncCommand;
-use FastForward\DevTools\GitAttributes\CandidateProvider;
-use FastForward\DevTools\GitAttributes\ExistenceChecker;
-use FastForward\DevTools\GitAttributes\ExportIgnoreFilter;
-use FastForward\DevTools\GitAttributes\Merger as GitAttributesMerger;
-use FastForward\DevTools\GitIgnore\Classifier;
-use FastForward\DevTools\GitIgnore\GitIgnore;
-use FastForward\DevTools\GitIgnore\Merger as GitIgnoreMerger;
-use FastForward\DevTools\GitIgnore\Reader;
-use FastForward\DevTools\GitIgnore\Writer;
+use FastForward\DevTools\Process\ProcessBuilder;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 #[CoversClass(SyncCommand::class)]
-#[UsesClass(Reader::class)]
-#[UsesClass(GitIgnore::class)]
-#[UsesClass(Classifier::class)]
-#[UsesClass(GitIgnoreMerger::class)]
-#[UsesClass(Writer::class)]
-#[UsesClass(GitIgnoreCommand::class)]
-#[UsesClass(CandidateProvider::class)]
-#[UsesClass(ExistenceChecker::class)]
-#[UsesClass(ExportIgnoreFilter::class)]
-#[UsesClass(GitAttributesMerger::class)]
-final class SyncCommandTest extends AbstractCommandTestCase
+#[UsesClass(ProcessBuilder::class)]
+final class SyncCommandTest extends TestCase
 {
     use ProphecyTrait;
 
+    private ObjectProphecy $processQueue;
+
+    private ObjectProphecy $input;
+
+    private ObjectProphecy $output;
+
+    private SyncCommand $command;
+
     /**
-     * @return string
+     * @return void
      */
-    protected function getCommandClass(): string
+    protected function setUp(): void
     {
-        return SyncCommand::class;
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+        $this->command = new SyncCommand(new ProcessBuilder(), $this->processQueue->reveal());
     }
 
     /**
-     * @return string
+     * @return void
      */
-    protected function getCommandName(): string
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        return 'dev-tools:sync';
+        self::assertSame('dev-tools:sync', $this->command->getName());
+        self::assertSame(
+            'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.',
+            $this->command->getDescription()
+        );
+        self::assertSame(
+            'This command runs the dedicated synchronization commands for composer.json, resources, wiki, Git metadata, skills, license, and Git hooks.',
+            $this->command->getHelp()
+        );
     }
 
     /**
-     * @return string
+     * @return void
      */
-    protected function getCommandDescription(): string
+    #[Test]
+    public function executeWillQueueDedicatedSynchronizationCommands(): void
     {
-        return 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.';
+        $this->processQueue->add(Argument::type(Process::class), false, false)
+            ->shouldBeCalledOnce();
+        $this->processQueue->add(Argument::type(Process::class), false, true)
+            ->shouldBeCalledTimes(9);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(SyncCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(SyncCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
-     * @return string
+     * @return int
      */
-    protected function getCommandHelp(): string
+    private function executeCommand(): int
     {
-        return 'This command adds or updates dev-tools scripts in composer.json, copies reusable GitHub Actions workflows, ensures .editorconfig is present and up to date, and manages .gitattributes export-ignore rules.';
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

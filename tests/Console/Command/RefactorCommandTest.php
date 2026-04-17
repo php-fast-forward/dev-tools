@@ -3,154 +3,191 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\RefactorCommand;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
+use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-use function Safe\getcwd;
-
 #[CoversClass(RefactorCommand::class)]
-final class RefactorCommandTest extends AbstractCommandTestCase
+final class RefactorCommandTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
-     * @return string
+     * @var ObjectProphecy<FileLocatorInterface>
      */
-    protected function getCommandClass(): string
-    {
-        return RefactorCommand::class;
-    }
+    private ObjectProphecy $fileLocator;
 
     /**
-     * @return string
+     * @var ObjectProphecy<ProcessBuilderInterface>
      */
-    protected function getCommandName(): string
-    {
-        return 'refactor';
-    }
+    private ObjectProphecy $processBuilder;
 
     /**
-     * @return string
+     * @var ObjectProphecy<ProcessQueueInterface>
      */
-    protected function getCommandDescription(): string
-    {
-        return 'Runs Rector for code refactoring.';
-    }
+    private ObjectProphecy $processQueue;
 
     /**
-     * @return string
+     * @var ObjectProphecy<InputInterface>
      */
-    protected function getCommandHelp(): string
-    {
-        return 'This command runs Rector to refactor your code.';
-    }
+    private ObjectProphecy $input;
+
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
+    private ObjectProphecy $output;
+
+    /**
+     * @var ObjectProphecy<Process>
+     */
+    private ObjectProphecy $process;
+
+    private RefactorCommand $command;
+
+    private const string CONFIG_PATH = '/path/to/rector.php';
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        parent::setUp();
+        $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->input = $this->prophesize(InputInterface::class);
+        $this->output = $this->prophesize(OutputInterface::class);
+        $this->process = $this->prophesize(Process::class);
 
-        $this->withConfigFile(RefactorCommand::CONFIG);
-    }
+        $this->fileLocator->locate(RefactorCommand::CONFIG)
+            ->willReturn(self::CONFIG_PATH);
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithLocalConfigWillRunRectorProcessWithDevToolsConfigFile(): void
-    {
-        $this->withConfigFile(RefactorCommand::CONFIG, true);
-
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            $path = getcwd() . '/' . RefactorCommand::CONFIG;
-
-            return str_contains($commandLine, 'vendor/bin/rector')
-                && str_contains($commandLine, 'process')
-                && str_contains($commandLine, '--config')
-                && str_contains($commandLine, $path)
-                && str_contains($commandLine, '--dry-run');
-        });
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithoutLocalConfigWillRunRectorProcessWithDevToolsConfigFile(): void
-    {
-        $this->withConfigFile(RefactorCommand::CONFIG);
-
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-            $path = getcwd() . '/' . RefactorCommand::CONFIG;
-
-            return str_contains($commandLine, 'vendor/bin/rector')
-                && str_contains($commandLine, 'process')
-                && str_contains($commandLine, '--config')
-                && str_contains($commandLine, $path)
-                && str_contains($commandLine, '--dry-run');
-        });
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithFixOptionWillRunRectorProcessWithoutDryRunOption(): void
-    {
         $this->input->getOption('fix')
-            ->willReturn(true)
+            ->willReturn(false);
+
+        $this->processBuilder->withArgument(Argument::cetera())
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->build('vendor/bin/rector')
+            ->willReturn($this->process->reveal());
+
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(RefactorCommand::SUCCESS);
+
+        $this->command = new RefactorCommand(
+            $this->fileLocator->reveal(),
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function commandWillSetExpectedNameDescriptionAndHelp(): void
+    {
+        self::assertSame('refactor', $this->command->getName());
+        self::assertSame('Runs Rector for code refactoring.', $this->command->getDescription());
+        self::assertSame('This command runs Rector to refactor your code.', $this->command->getHelp());
+        self::assertSame(['rector'], $this->command->getAliases());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function commandWillHaveExpectedOptions(): void
+    {
+        $definition = $this->command->getDefinition();
+
+        self::assertTrue($definition->hasOption('fix'));
+        self::assertTrue($definition->hasOption('config'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRunRectorProcessWithDryRunWhenFixIsFalse(): void
+    {
+        $this->processBuilder->withArgument('process')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->withArgument('--config')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->withArgument(self::CONFIG_PATH)
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->withArgument('--dry-run')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processQueue->add($this->process->reveal())
             ->shouldBeCalledOnce();
 
-        $this->withConfigFile(RefactorCommand::CONFIG, true);
+        $result = $this->executeCommand();
 
-        $this->willRunProcessWithCallback(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, 'vendor/bin/rector')
-                && str_contains($commandLine, 'process')
-                && str_contains($commandLine, '--config')
-                && str_contains($commandLine, getcwd() . '/' . RefactorCommand::CONFIG)
-                && ! str_contains($commandLine, '--dry-run');
-        });
-
-        $this->invokeExecute();
+        self::assertSame(RefactorCommand::SUCCESS, $result);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillReturnFailureIfProcessFails(): void
+    public function executeWillRunRectorProcessWithoutDryRunWhenFixIsTrue(): void
     {
-        $this->willRunProcessWithCallback(static fn(): true => true, false);
+        $this->input->getOption('fix')
+            ->willReturn(true);
 
-        self::assertSame(RefactorCommand::FAILURE, $this->invokeExecute());
+        $this->processBuilder->withArgument('--dry-run')
+            ->shouldNotBeCalled();
+
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalledOnce();
+
+        $result = $this->executeCommand();
+
+        self::assertSame(RefactorCommand::SUCCESS, $result);
+    }
+
+    /**
+     * @return int
+     */
+    private function executeCommand(): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
+
+        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

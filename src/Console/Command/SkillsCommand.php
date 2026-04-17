@@ -3,26 +3,28 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 /**
  * Synchronizes packaged Fast Forward skills into the consumer repository.
@@ -43,7 +45,7 @@ use Symfony\Component\Filesystem\Filesystem;
     description: 'Synchronizes Fast Forward skills into .agents/skills directory.',
     help: 'This command ensures the consumer repository contains linked Fast Forward skills by creating symlinks to the packaged skills and removing broken links.'
 )]
-final class SkillsCommand extends AbstractCommand
+final class SkillsCommand extends BaseCommand
 {
     /**
      * Initializes the command with an optional skills synchronizer instance.
@@ -51,15 +53,15 @@ final class SkillsCommand extends AbstractCommand
      * @param SkillsSynchronizer $synchronizer the synchronizer responsible
      *                                         for applying the skills
      *                                         synchronization process
-     * @param Filesystem $filesystem filesystem used to resolve
-     *                               and manage the skills
-     *                               directory structure
+     * @param FilesystemInterface $filesystem filesystem used to resolve
+     *                                        and manage the skills
+     *                                        directory structure
      */
     public function __construct(
         private readonly SkillsSynchronizer $synchronizer,
-        Filesystem $filesystem,
+        private readonly FilesystemInterface $filesystem,
     ) {
-        parent::__construct($filesystem);
+        parent::__construct();
     }
 
     /**
@@ -87,8 +89,8 @@ final class SkillsCommand extends AbstractCommand
     {
         $output->writeln('<info>Starting skills synchronization...</info>');
 
-        $packageSkillsPath = $this->getDevToolsFile('.agents/skills');
-        $skillsDir = $this->getConfigFile('.agents/skills', true);
+        $packageSkillsPath = $this->filesystem->getAbsolutePath('.agents/skills', \dirname(__DIR__, 3));
+        $skillsDir = $this->filesystem->getAbsolutePath('.agents/skills');
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
             $output->writeln('<comment>No packaged skills found at: ' . $packageSkillsPath . '</comment>');

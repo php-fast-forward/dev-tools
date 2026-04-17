@@ -3,35 +3,34 @@
 declare(strict_types=1);
 
 /**
- * This file is part of fast-forward/dev-tools.
+ * Fast Forward Development Tools for PHP projects.
  *
- * This source file is subject to the license bundled
- * with this source code in the file LICENSE.
+ * This file is part of fast-forward/dev-tools project.
  *
- * @copyright Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
- * @license   https://opensource.org/licenses/MIT MIT License
+ * @author   Felipe Sayão Lobato Abreu <github@mentordosnerds.com>
+ * @license  https://opensource.org/licenses/MIT MIT License
  *
- * @see       https://github.com/php-fast-forward/dev-tools
- * @see       https://github.com/php-fast-forward
- * @see       https://datatracker.ietf.org/doc/html/rfc2119
+ * @see      https://github.com/php-fast-forward/
+ * @see      https://github.com/php-fast-forward/dev-tools
+ * @see      https://github.com/php-fast-forward/dev-tools/issues
+ * @see      https://php-fast-forward.github.io/dev-tools/
+ * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
 namespace FastForward\DevTools\Console\Command;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use Twig\Environment;
+use Composer\Command\BaseCommand;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Filesystem\Path;
-use Symfony\Component\Process\Process;
 
-use function Safe\file_get_contents;
-use function array_map;
-use function implode;
-use function ltrim;
-use function strtr;
+use function Safe\getcwd;
 
 /**
  * Handles the generation of API documentation for the project.
@@ -42,17 +41,25 @@ use function strtr;
     description: 'Generates API documentation.',
     help: 'This command generates API documentation using phpDocumentor.',
 )]
-final class DocsCommand extends AbstractCommand
+final class DocsCommand extends BaseCommand
 {
     /**
-     * @param ComposerJson $composerJson
-     * @param Filesystem $filesystem
+     * Creates a new DocsCommand instance.
+     *
+     * @param ProcessBuilderInterface $processBuilder the process builder for executing phpDocumentor
+     * @param ProcessQueueInterface $processQueue the process queue for managing execution
+     * @param Environment $renderer
+     * @param FilesystemInterface $filesystem the filesystem for handling file operations
+     * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
      */
     public function __construct(
-        private readonly ComposerJson $composerJson,
-        Filesystem $filesystem
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
+        private readonly Environment $renderer,
+        private readonly FilesystemInterface $filesystem,
+        private readonly ComposerJsonInterface $composer,
     ) {
-        return parent::__construct($filesystem);
+        parent::__construct();
     }
 
     /**
@@ -85,6 +92,12 @@ final class DocsCommand extends AbstractCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the template directory for the generated HTML documentation.',
                 default: 'vendor/fast-forward/phpdoc-bootstrap-template',
+            )
+            ->addOption(
+                name: 'cache-dir',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Path to the cache directory for phpDocumentor.',
+                default: 'tmp/cache/phpdoc',
             );
     }
 
@@ -103,7 +116,7 @@ final class DocsCommand extends AbstractCommand
     {
         $output->writeln('<info>Generating API documentation...</info>');
 
-        $source = $this->getAbsolutePath($input->getOption('source'));
+        $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
 
         if (! $this->filesystem->exists($source)) {
             $output->writeln(\sprintf('<error>Source directory not found: %s</error>', $source));
@@ -111,20 +124,26 @@ final class DocsCommand extends AbstractCommand
             return self::FAILURE;
         }
 
-        $target = $this->getAbsolutePath($input->getOption('target'));
-        $template = $input->getOption('template');
+        $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
+        $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
 
-        $htmlConfig = $this->createPhpDocumentorConfig(source: $source, target: $target, template: $template);
+        $config = $this->createPhpDocumentorConfig(
+            source: $source,
+            target: $target,
+            template: $input->getOption('template'),
+            cacheDir: $cacheDir
+        );
 
-        $command = new Process([
-            $this->getAbsolutePath('vendor/bin/phpdoc'),
-            '--config',
-            $htmlConfig,
-            '--markers',
-            'TODO,FIXME,BUG,HACK',
-        ]);
+        $phpdoc = $this->processBuilder
+            ->withArgument('--config', $config)
+            ->withArgument('--ansi')
+            ->withArgument('--no-progress')
+            ->withArgument('--markers', 'TODO,FIXME,BUG,HACK')
+            ->build('vendor/bin/phpdoc');
 
-        return parent::runProcess($command, $output);
+        $this->processQueue->add($phpdoc);
+
+        return $this->processQueue->run($output);
     }
 
     /**
@@ -133,46 +152,34 @@ final class DocsCommand extends AbstractCommand
      * @param string $source the source directory for the generated documentation
      * @param string $target the output directory for the generated documentation
      * @param string $template the phpDocumentor template name or path
+     * @param string $cacheDir the cache directory for phpDocumentor
      *
      * @return string the absolute path to the generated configuration
      */
-    private function createPhpDocumentorConfig(string $source, string $target, string $template): string
-    {
-        $workingDirectory = $this->getCurrentWorkingDirectory();
+    private function createPhpDocumentorConfig(
+        string $source,
+        string $target,
+        string $template,
+        string $cacheDir
+    ): string {
+        $workingDirectory = getcwd();
+        $autoload = $this->composer->getAutoload('psr-4');
+        $guidePath = $this->filesystem->makePathRelative($source);
+        $defaultPackageName = array_key_first($autoload) ?: '';
 
-        $templateFile = parent::getDevToolsFile('resources/phpdocumentor.xml');
+        $content = $this->renderer->render('phpdocumentor.xml', [
+            'title' => $this->composer->getName(),
+            'template' => $template,
+            'target' => $target,
+            'cacheDir' => $cacheDir,
+            'workingDirectory' => $workingDirectory,
+            'paths' => $autoload,
+            'guidePath' => $guidePath,
+            'defaultPackageName' => rtrim($defaultPackageName, '\\'),
+        ]);
 
-        $configDirectory = $this->getAbsolutePath('tmp/cache/phpdoc');
-        $configFile = $configDirectory . '/phpdocumentor.xml';
+        $this->filesystem->dumpFile(filename: 'phpdocumentor.xml', content: $content, path: $cacheDir);
 
-        if (! $this->filesystem->exists($configDirectory)) {
-            $this->filesystem->mkdir($configDirectory);
-        }
-
-        $psr4Namespaces = $this->composerJson->getAutoload();
-        $paths = implode("\n", array_map(
-            fn(string $path): string => \sprintf(
-                '<path>%s</path>',
-                ltrim(str_replace($workingDirectory, '', $path), '/')
-            ),
-            $psr4Namespaces,
-        ));
-
-        $guidePath = Path::makeRelative($source, $workingDirectory);
-
-        $defaultPackageName = array_key_first($psr4Namespaces) ?: '';
-        $templateContents = file_get_contents($templateFile);
-
-        $this->filesystem->dumpFile($configFile, strtr($templateContents, [
-            '%%TITLE%%' => $this->composerJson->getPackageDescription(),
-            '%%TEMPLATE%%' => $template,
-            '%%TARGET%%' => $target,
-            '%%WORKING_DIRECTORY%%' => $workingDirectory,
-            '%%PATHS%%' => $paths,
-            '%%GUIDE_PATH%%' => $guidePath,
-            '%%DEFAULT_PACKAGE_NAME%%' => $defaultPackageName,
-        ]));
-
-        return $configFile;
+        return $this->filesystem->getAbsolutePath('phpdocumentor.xml', $cacheDir);
     }
 }
