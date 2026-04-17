@@ -90,7 +90,7 @@ jobs:
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_branch: gh-pages
-                publish_dir: ./public
+                publish_dir: ./tmp/reports/
                 destination_dir: .
                 keep_files: false
                 force_orphan: false
@@ -101,7 +101,7 @@ jobs:
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_branch: gh-pages
-                publish_dir: ./public
+                publish_dir: ./tmp/reports/
                 destination_dir: previews/pr-${{ github.event.pull_request.number }}
                 keep_files: false
                 force_orphan: false
