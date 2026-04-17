@@ -3,12 +3,6 @@ refactor
 
 Runs Rector for code refactoring.
 
-.. versionadded:: 1.0
-   Original command.
-
-.. versionchanged:: 1.6
-   Refactored to use ProcessBuilder and ProcessQueue.
-
 Description
 -----------
 

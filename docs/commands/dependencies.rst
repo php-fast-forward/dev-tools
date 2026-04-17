@@ -3,12 +3,6 @@ dependencies
 
 Analyzes missing and unused Composer dependencies.
 
-.. versionadded:: 1.0
-   Original command.
-
-.. versionchanged:: 1.6
-   Refactored to use ProcessBuilder and ProcessQueue.
-
 Description
 -----------
 

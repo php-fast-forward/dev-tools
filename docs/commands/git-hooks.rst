@@ -3,9 +3,6 @@ git-hooks
 
 Installs Fast Forward Git hooks and initializes GrumPHP.
 
-.. versionadded:: 1.6
-   This command was introduced in version 1.6.
-
 Description
 -----------
 

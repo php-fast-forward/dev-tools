@@ -3,9 +3,6 @@ copy-resource
 
 Copies packaged or local resources into the consumer repository.
 
-.. versionadded:: 1.6
-   This command was introduced in version 1.6.
-
 Description
 -----------
 
