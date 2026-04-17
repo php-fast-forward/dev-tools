@@ -62,7 +62,7 @@ jobs:
       - name: Create Docs Markdown
         env:
           COMPOSER_ROOT_VERSION: dev-main
-        run: php bin/dev-tools wiki -- --target=.github/wiki
+        run: composer dev-tools wiki -- --target=.github/wiki
 
       - name: Commit & push wiki submodule
         id: wiki_commit

@@ -77,4 +77,4 @@ jobs:
             - name: Run PHPUnit tests
               env:
                 COMPOSER_ROOT_VERSION: dev-main
-              run: php bin/dev-tools tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
+              run: composer dev-tools tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}

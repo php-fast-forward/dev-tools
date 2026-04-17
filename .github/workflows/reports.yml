@@ -50,7 +50,7 @@ jobs:
             - name: Generate reports
               env:
                 COMPOSER_ROOT_VERSION: dev-main
-              run: php bin/dev-tools reports
+              run: composer dev-tools reports
 
             - name: Fix permissions
               run: |
