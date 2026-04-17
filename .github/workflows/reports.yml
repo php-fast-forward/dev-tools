@@ -10,6 +10,7 @@ on:
 
 permissions:
     contents: write
+    pull-requests: write
 
 concurrency:
     group: "pages"
@@ -104,6 +105,17 @@ jobs:
                 destination_dir: previews/pr-${{ github.event.pull_request.number }}
                 keep_files: false
                 force_orphan: false
+
+            - name: Comment preview URLs on pull request
+              if: github.event_name == 'pull_request'
+              uses: marocchino/sticky-pull-request-comment@v2
+              with:
+                header: pr-preview
+                message: |
+                  🚀 Preview is available for this pull request.
+
+                  - Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/
+                  - Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/
 
     cleanup_preview:
         if: github.event_name == 'pull_request' && github.event.action == 'closed'
