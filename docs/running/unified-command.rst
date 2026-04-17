@@ -29,7 +29,7 @@ To allow the tools to modify files, use one of the following entry points:
 .. code-block:: bash
 
    composer dev-tools:fix
-   vendor/bin/dev-tools standards --fix
+   vendor/bin/dev-tools --fix
 
 The flag mainly affects ``refactor``, ``phpdoc``, and ``code-style``. The
 reporting steps still run, but they do not use the flag themselves.
