@@ -90,10 +90,10 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->build('composer dev-tools docs')
+        $this->processBuilder->build('composer dev-tools docs --')
             ->willReturn($this->docsProcess->reveal());
 
-        $this->processBuilder->build('composer dev-tools tests')
+        $this->processBuilder->build('composer dev-tools tests --')
             ->willReturn($this->testsProcess->reveal());
 
         $this->processQueue->run($this->output->reveal())
