@@ -2369,8 +2369,8 @@
                 </a>
             </li>
                     <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools-license.html" class="text-decoration-none">
-                    License
+                <a href="namespaces/fastforward-devtools-filesystem.html" class="text-decoration-none">
+                    Filesystem
                 </a>
             </li>
             </ol>
@@ -2383,7 +2383,7 @@
             <i class="fas fa-cube"></i>
         </div>
         <div>
-            <h2 class="display-5 mb-1">Generator</h2>
+            <h2 class="display-5 mb-1">FinderFactory</h2>
             <div class="text-body-secondary">Class</div>
         </div>
     </div>
@@ -2405,17 +2405,13 @@
                     <div class="d-flex flex-wrap align-items-center gap-2">
                 <span class="text-body-secondary">implements</span>
                                     <span class="badge rounded-pill text-bg-info">
-                        <a href="classes/FastForward-DevTools-License-GeneratorInterface.html"><abbr title="\FastForward\DevTools\License\GeneratorInterface">GeneratorInterface</abbr></a>
+                        <a href="classes/FastForward-DevTools-Filesystem-FinderFactoryInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FinderFactoryInterface">FinderFactoryInterface</abbr></a>
                     </span>
                             </div>
         
             </div>
 
     <div class="mt-4 d-flex flex-wrap gap-2">
-                    <span class="badge text-bg-secondary px-3 py-2">
-    <span class="fw-normal">Read only:</span>
-    <span class="fw-semibold ms-1">Yes</span>
-</span>
         
                     <span class="badge text-bg-danger px-3 py-2">
     <span class="fw-normal">Final:</span>
@@ -2432,47 +2428,24 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
+    <abbr title="src/Filesystem/FinderFactory.php" class="text-decoration-none mb-0">
+        <a href="files/src-filesystem-finderfactory.html"><abbr title="src/Filesystem/FinderFactory.php">FinderFactory.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">40</span>
+    <span class="badge text-bg-light border">27</span>
 
     </aside>
         </div>
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Generates LICENSE files from composer.json metadata.</p>
+        <p class="lead text-body-secondary mb-0">Default factory for Symfony Finder instances.</p>
     </div>
 
 
 
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>This class orchestrates the license generation workflow:</p>
-<ol>
-<li>Reads metadata from composer.json via Reader</li>
-<li>Resolves the license identifier to a template filename</li>
-<li>Uses the central Template Engine and VariablesFactory to map out the substitutions</li>
-<li>Writes the resulting LICENSE file to the target path</li>
-</ol>
-<p>Generation is skipped if a LICENSE file already exists or if the
-license is not supported.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
 
 
@@ -2484,7 +2457,7 @@ license is not supported.</p>
         <h3 id="toc" class="h4 mb-0">
             Table of Contents
             <a
-    href="classes/FastForward-DevTools-License-Generator.html#toc"
+    href="classes/FastForward-DevTools-Filesystem-FinderFactory.html#toc"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -2504,10 +2477,10 @@ license is not supported.</p>
                 </div>
                 <div class="list-group list-group-flush">
                                             <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-License-GeneratorInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-License-GeneratorInterface.html"><abbr title="\FastForward\DevTools\License\GeneratorInterface">GeneratorInterface</abbr></a>
+                            <a href="classes/FastForward-DevTools-Filesystem-FinderFactoryInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Filesystem-FinderFactoryInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FinderFactoryInterface">FinderFactoryInterface</abbr></a>
                             </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Generates LICENSE files from composer.json metadata.</p>
+                                                            <p class="text-body-secondary mb-0 mt-1">Creates fresh Symfony Finder instances for each filesystem scan.</p>
                                                     </div>
                                     </div>
             </section>
@@ -2517,94 +2490,6 @@ license is not supported.</p>
         
         
         
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-sliders-h text-info"></i>
-                    <h4 id="toc-properties" class="h6 mb-0 fw-semibold">Properties</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-License-Generator.html#property_clock"
-        >
-            $clock
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <abbr title="\Psr\Clock\ClockInterface">ClockInterface</abbr>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-License-Generator.html#property_composer"
-        >
-            $composer
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <a href="classes/FastForward-DevTools-Composer-Json-ComposerJsonInterface.html"><abbr title="\FastForward\DevTools\Composer\Json\ComposerJsonInterface">ComposerJsonInterface</abbr></a>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-License-Generator.html#property_filesystem"
-        >
-            $filesystem
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-License-Generator.html#property_renderer"
-        >
-            $renderer
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <abbr title="\Twig\Environment">Environment</abbr>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-License-Generator.html#property_resolver"
-        >
-            $resolver
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <a href="classes/FastForward-DevTools-License-ResolverInterface.html"><abbr title="\FastForward\DevTools\License\ResolverInterface">ResolverInterface</abbr></a>            </span>
-</div>
-                        </div>
-                                    </div>
-            </section>
         
                     <section class="card border-0 shadow-sm">
                 <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
@@ -2617,37 +2502,18 @@ license is not supported.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-License-Generator.html#method___construct"
+            href="classes/FastForward-DevTools-Filesystem-FinderFactory.html#method_create"
         >
-            __construct()
+            create()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Creates a new Generator instance.
+                Creates a new mutable Finder instance.
             </p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                                &nbsp;: mixed    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-License-Generator.html#method_generate"
-        >
-            generate()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Generates a LICENSE file at the specified path.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string|null    </span>
+                                &nbsp;: <abbr title="\Symfony\Component\Finder\Finder">Finder</abbr>    </span>
 </div>
                         </div>
                                     </div>
@@ -2661,375 +2527,6 @@ license is not supported.</p>
         <div class="d-grid gap-4">
                                     
             
-                            <section class="card border-0 shadow-sm">
-                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                        <i class="fas fa-sliders-h text-info"></i>
-                        <span class="fw-semibold">
-                            Properties
-                            <a
-    href="classes/FastForward-DevTools-License-Generator.html#properties"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-                        </span>
-                    </div>
-                    <div class="card-body p-4">
-                        
-    <section>
-        <div class="d-grid gap-4">
-                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_clock">
-                <span class="text-primary">$clock</span>
-                <a
-    href="classes/FastForward-DevTools-License-Generator.html#property_clock"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">54</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <abbr title="\Psr\Clock\ClockInterface">ClockInterface</abbr>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $clock
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_composer">
-                <span class="text-primary">$composer</span>
-                <a
-    href="classes/FastForward-DevTools-License-Generator.html#property_composer"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">53</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <a href="classes/FastForward-DevTools-Composer-Json-ComposerJsonInterface.html"><abbr title="\FastForward\DevTools\Composer\Json\ComposerJsonInterface">ComposerJsonInterface</abbr></a>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $composer
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_filesystem">
-                <span class="text-primary">$filesystem</span>
-                <a
-    href="classes/FastForward-DevTools-License-Generator.html#property_filesystem"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">56</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $filesystem
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_renderer">
-                <span class="text-primary">$renderer</span>
-                <a
-    href="classes/FastForward-DevTools-License-Generator.html#property_renderer"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">55</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <abbr title="\Twig\Environment">Environment</abbr>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $renderer
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_resolver">
-                <span class="text-primary">$resolver</span>
-                <a
-    href="classes/FastForward-DevTools-License-Generator.html#property_resolver"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">52</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <a href="classes/FastForward-DevTools-License-ResolverInterface.html"><abbr title="\FastForward\DevTools\License\ResolverInterface">ResolverInterface</abbr></a>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $resolver
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                    </div>
-    </section>
-
-                    </div>
-                </section>
             
                             <section class="card border-0 shadow-sm">
                     <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
@@ -3037,7 +2534,7 @@ license is not supported.</p>
                         <span class="fw-semibold">
                             Methods
                             <a
-    href="classes/FastForward-DevTools-License-Generator.html#methods"
+    href="classes/FastForward-DevTools-Filesystem-FinderFactory.html#methods"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3053,10 +2550,10 @@ license is not supported.</p>
                             <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="method___construct">
-                <span class="text-primary">__construct()</span>
+            <h4 class="h5 mb-2" id="method_create">
+                <span class="text-primary">create()</span>
                 <a
-    href="classes/FastForward-DevTools-License-Generator.html#method___construct"
+    href="classes/FastForward-DevTools-Filesystem-FinderFactory.html#method_create"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3080,17 +2577,17 @@ license is not supported.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
+    <abbr title="src/Filesystem/FinderFactory.php" class="text-decoration-none mb-0">
+        <a href="files/src-filesystem-finderfactory.html"><abbr title="src/Filesystem/FinderFactory.php">FinderFactory.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">51</span>
+    <span class="badge text-bg-light border">32</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Creates a new Generator instance.</p>
+        <p class="lead text-body-secondary mb-0">Creates a new mutable Finder instance.</p>
     </div>
 
 
@@ -3102,12 +2599,7 @@ license is not supported.</p>
     
     
     
-    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-License-ResolverInterface.html"><abbr title="\FastForward\DevTools\License\ResolverInterface">ResolverInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$resolver</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Composer-Json-ComposerJsonInterface.html"><abbr title="\FastForward\DevTools\Composer\Json\ComposerJsonInterface">ComposerJsonInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$composer</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Psr\Clock\ClockInterface">ClockInterface</abbr>&nbsp;
-                </span><span class="text-primary">$clock</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Twig\Environment">Environment</abbr>&nbsp;
-                </span><span class="text-primary">$renderer</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$filesystem</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+    <span class="text-primary fw-semibold">create</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Finder\Finder">Finder</abbr></span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3116,247 +2608,7 @@ license is not supported.</p>
     
     
 
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$resolver</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-License-ResolverInterface.html"><abbr title="\FastForward\DevTools\License\ResolverInterface">ResolverInterface</abbr></a>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>The resolver for mapping license identifiers to templates</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$composer</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Composer-Json-ComposerJsonInterface.html"><abbr title="\FastForward\DevTools\Composer\Json\ComposerJsonInterface">ComposerJsonInterface</abbr></a>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$clock</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\Psr\Clock\ClockInterface">ClockInterface</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$renderer</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\Twig\Environment">Environment</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$filesystem</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>The filesystem component for file operations</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
-    </section>
-
     
-
-        
-    
-    
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_generate">
-                <span class="text-primary">generate()</span>
-                <a
-    href="classes/FastForward-DevTools-License-Generator.html#method_generate"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/License/Generator.php" class="text-decoration-none mb-0">
-        <a href="files/src-license-generator.html"><abbr title="src/License/Generator.php">Generator.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">66</span>
-
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Generates a LICENSE file at the specified path.</p>
-    </div>
-
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">public</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">generate</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$targetPath</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$targetPath</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                string
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>The full path where the LICENSE file should be written</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
-    </section>
-
     
 
         
@@ -3371,7 +2623,7 @@ license is not supported.</p>
             <div class="card-body p-3">
                                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         <span class="badge text-bg-light border text-dark">
-                            string|null
+                            <abbr title="\Symfony\Component\Finder\Finder">Finder</abbr>
                         </span>
                     </div>
                 
@@ -3385,7 +2637,7 @@ license is not supported.</p>
                 </div>
 
                 <div>
-                    <p>The generated license content, or null if generation failed</p>
+                    <p>a Finder instance that callers MAY configure for one scan</p>
 
                 </div>
             </div>
@@ -3418,7 +2670,7 @@ license is not supported.</p>
                 <pre
                     class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
                     style="max-height: 70vh; overflow-y: auto;"
-                    data-src="files/src/License/Generator.php.txt"
+                    data-src="files/src/Filesystem/FinderFactory.php.txt"
                 ></pre>
             </div>
         </div>
@@ -3522,55 +2774,13 @@ license is not supported.</p>
             <div>
                 <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
                 <div class="list-group list-group-flush">
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-License-Generator.html#toc-properties">
-                            Properties
-                        </a>
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-License-Generator.html#toc-methods">
+                                                                                    <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Filesystem-FinderFactory.html#toc-methods">
                             Methods
                         </a>
                                     </div>
             </div>
 
             
-                            <div>
-                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
-                        <i class="fas fa-sliders-h text-info"></i>
-                        <span>Properties</span>
-                    </div>
-
-                    <div class="list-group list-group-flush">
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-License-Generator.html#property_clock"
-                            >
-                                <span class="text-truncate">$clock</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-License-Generator.html#property_composer"
-                            >
-                                <span class="text-truncate">$composer</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-License-Generator.html#property_filesystem"
-                            >
-                                <span class="text-truncate">$filesystem</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-License-Generator.html#property_renderer"
-                            >
-                                <span class="text-truncate">$renderer</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-License-Generator.html#property_resolver"
-                            >
-                                <span class="text-truncate">$resolver</span>
-                                                            </a>
-                                            </div>
-                </div>
             
                             <div>
                     <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
@@ -3581,15 +2791,9 @@ license is not supported.</p>
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-License-Generator.html#method___construct"
+                                href="classes/FastForward-DevTools-Filesystem-FinderFactory.html#method_create"
                             >
-                                <span class="text-truncate">__construct()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-License-Generator.html#method_generate"
-                            >
-                                <span class="text-truncate">generate()</span>
+                                <span class="text-truncate">create()</span>
                                                             </a>
                                             </div>
                 </div>

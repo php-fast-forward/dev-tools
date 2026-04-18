@@ -2517,6 +2517,58 @@ them.</p>
 
     </section>
 
+            <section class="section " id="workflow-permission-scope">
+            <h2>Workflow Permission Scope</h2>
+
+            
+    <p>The reusable workflows default to read-only repository access and grant write
+permissions at the job level when generated content must be pushed or pull
+requests must be updated.</p>
+
+            
+    <p><code>tests.yml</code>
+ only needs <code>contents: read</code>
+ because it checks out code, installs
+dependencies, and runs PHPUnit.</p>
+
+            
+    <p><code>reports.yml</code>
+ keeps <code>contents: write</code>
+ on jobs that publish or clean
+<code>gh-pages</code>
+ content. The pull request preview comment runs as a separate job
+with <code>pull-requests: write</code>
+ because it posts or updates the sticky preview
+comment. Scheduled preview cleanup uses <code>pull-requests: read</code>
+ so it can
+distinguish open pull requests from closed or merged ones before deleting
+<code>previews/pr-&lt;number&gt;</code>
+ directories.</p>
+
+            
+    <p><code>wiki.yml</code>
+ keeps <code>contents: write</code>
+ on preview, publish, and cleanup jobs
+because the workflow pushes wiki branches, updates the parent repository
+submodule pointer, promotes preview content to wiki <code>master</code>
+, and deletes
+stale preview branches. Jobs that inspect pull request state keep
+<code>pull-requests: read</code>
+.</p>
+
+            
+    <p>The label synchronization workflow declares <code>issues: read</code>
+ to copy labels from
+the linked issue and <code>pull-requests: write</code>
+ to apply those labels to the pull
+request. The auto-assign workflow keeps <code>issues: write</code>
+ and
+<code>pull-requests: write</code>
+ because assignment is a write operation on both event
+types.</p>
+
+    </section>
+
             <section class="section " id="resolving-github-wiki-pointer-conflicts">
             <h2>Resolving <code>.github/wiki</code>
  Pointer Conflicts</h2>

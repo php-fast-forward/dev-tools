@@ -8,7 +8,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Initializes\u0020the\u0020synchronizer\u0020with\u0020a\u0020filesystem\u0020and\u0020finder\u0020instance.",
+            "summary": "Initializes\u0020the\u0020synchronizer\u0020with\u0020a\u0020filesystem\u0020and\u0020finder\u0020factory.",
             "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method___construct"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003AsetLogger\u0028\u0029",
@@ -61,10 +61,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_filesystem"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A\u0024finder",
-            "name": "finder",
+            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A\u0024finderFactory",
+            "name": "finderFactory",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_finder"
+            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_finderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A\u0024logger",
             "name": "logger",
@@ -801,10 +801,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_fileLocator"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024finder",
-            "name": "finder",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024finderFactory",
+            "name": "finderFactory",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_finder"
+            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_finderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
             "name": "DependenciesCommand",
@@ -1006,10 +1006,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_processQueue"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024finder",
-            "name": "finder",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024finderFactory",
+            "name": "finderFactory",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_finder"
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_finderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
             "name": "GitIgnoreCommand",
@@ -1551,6 +1551,21 @@ Search.appendIndex(
             "summary": "Changes\u0020the\u0020permission\u0020mode\u0020for\u0020one\u0020or\u0020more\u0020files.",
             "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_chmod"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Aremove\u0028\u0029",
+            "name": "remove",
+            "summary": "Removes\u0020files,\u0020symbolic\u0020links,\u0020or\u0020directories.",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_remove"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Asymlink\u0028\u0029",
+            "name": "symlink",
+            "summary": "Creates\u0020a\u0020symbolic\u0020link.",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_symlink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Areadlink\u0028\u0029",
+            "name": "readlink",
+            "summary": "Reads\u0020a\u0020symbolic\u0020link\u0020target.",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_readlink"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003AgetAbsolutePath\u0028\u0029",
             "name": "getAbsolutePath",
             "summary": "Resolves\u0020a\u0020path\u0020or\u0020iterable\u0020of\u0020paths\u0020into\u0020their\u0020absolute\u0020path\u0020representation.",
@@ -1606,6 +1621,21 @@ Search.appendIndex(
             "summary": "Changes\u0020the\u0020permission\u0020mode\u0020for\u0020one\u0020or\u0020more\u0020files.",
             "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_chmod"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Aremove\u0028\u0029",
+            "name": "remove",
+            "summary": "Removes\u0020files,\u0020symbolic\u0020links,\u0020or\u0020directories.",
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_remove"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Asymlink\u0028\u0029",
+            "name": "symlink",
+            "summary": "Creates\u0020a\u0020symbolic\u0020link.",
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_symlink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Areadlink\u0028\u0029",
+            "name": "readlink",
+            "summary": "Reads\u0020a\u0020symbolic\u0020link\u0020target.",
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_readlink"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003AgetAbsolutePath\u0028\u0029",
             "name": "getAbsolutePath",
             "summary": "Resolves\u0020a\u0020path\u0020or\u0020iterable\u0020of\u0020paths\u0020into\u0020their\u0020absolute\u0020path\u0020representation.",
@@ -1630,6 +1660,26 @@ Search.appendIndex(
             "name": "dirname",
             "summary": "Returns\u0020a\u0020parent\u0020directory\u0027s\u0020path.",
             "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_dirname"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FinderFactory",
+            "name": "FinderFactory",
+            "summary": "Default\u0020factory\u0020for\u0020Symfony\u0020Finder\u0020instances.",
+            "url": "classes/FastForward-DevTools-Filesystem-FinderFactory.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FinderFactory\u003A\u003Acreate\u0028\u0029",
+            "name": "create",
+            "summary": "Creates\u0020a\u0020new\u0020mutable\u0020Finder\u0020instance.",
+            "url": "classes/FastForward-DevTools-Filesystem-FinderFactory.html#method_create"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "name": "FinderFactoryInterface",
+            "summary": "Creates\u0020fresh\u0020Symfony\u0020Finder\u0020instances\u0020for\u0020each\u0020filesystem\u0020scan.",
+            "url": "classes/FastForward-DevTools-Filesystem-FinderFactoryInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface\u003A\u003Acreate\u0028\u0029",
+            "name": "create",
+            "summary": "Creates\u0020a\u0020new\u0020mutable\u0020Finder\u0020instance.",
+            "url": "classes/FastForward-DevTools-Filesystem-FinderFactoryInterface.html#method_create"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitAttributes\\CandidateProvider",
             "name": "CandidateProvider",

@@ -2,7 +2,7 @@
 <html lang="en">
  <head>
   <meta charset="UTF-8">
-  <title>Code Coverage for /home/runner/work/dev-tools/dev-tools/src/GitAttributes/ExportIgnoreFilterInterface.php</title>
+  <title>Code Coverage for /home/runner/work/dev-tools/dev-tools/src/Filesystem/FinderFactoryInterface.php</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="../_css/bootstrap.min.css?v=12.5.6" rel="stylesheet" type="text/css">
   <link href="../_css/octicons.css?v=12.5.6" rel="stylesheet" type="text/css">
@@ -17,8 +17,8 @@
       <nav aria-label="breadcrumb">
        <ol class="breadcrumb">
          <li class="breadcrumb-item"><a href="../index.html">/home/runner/work/dev-tools/dev-tools/src</a></li>
-         <li class="breadcrumb-item"><a href="index.html">GitAttributes</a></li>
-         <li class="breadcrumb-item active">ExportIgnoreFilterInterface.php</li>
+         <li class="breadcrumb-item"><a href="index.html">Filesystem</a></li>
+         <li class="breadcrumb-item active">FinderFactoryInterface.php</li>
 
        </ol>
       </nav>
@@ -81,27 +81,22 @@
     <tr class=" d-flex"><td  class="col-1 text-end"><a id="17" href="#17">17</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*&nbsp;@see&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;https://datatracker.ietf.org/doc/html/rfc2119</span></td></tr>
     <tr class=" d-flex"><td  class="col-1 text-end"><a id="18" href="#18">18</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*/</span></td></tr>
     <tr class=" d-flex"><td  class="col-1 text-end"><a id="19" href="#19">19</a></td><td class="col-11 codeLine"></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="20" href="#20">20</a></td><td class="col-11 codeLine"><span class="keyword">namespace</span><span class="default">&nbsp;</span><span class="default">FastForward\DevTools\GitAttributes</span><span class="keyword">;</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="20" href="#20">20</a></td><td class="col-11 codeLine"><span class="keyword">namespace</span><span class="default">&nbsp;</span><span class="default">FastForward\DevTools\Filesystem</span><span class="keyword">;</span></td></tr>
     <tr class=" d-flex"><td  class="col-1 text-end"><a id="21" href="#21">21</a></td><td class="col-11 codeLine"></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="22" href="#22">22</a></td><td class="col-11 codeLine"><span class="comment">/**</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="23" href="#23">23</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*&nbsp;Filters&nbsp;canonical&nbsp;export-ignore&nbsp;candidates&nbsp;against&nbsp;consumer&nbsp;keep&nbsp;rules.</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="24" href="#24">24</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="25" href="#25">25</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*&nbsp;Implementations&nbsp;MUST&nbsp;remove&nbsp;any&nbsp;candidate&nbsp;path&nbsp;explicitly&nbsp;configured&nbsp;to&nbsp;stay</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="26" href="#26">26</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*&nbsp;in&nbsp;the&nbsp;exported&nbsp;package&nbsp;archive,&nbsp;while&nbsp;preserving&nbsp;the&nbsp;order&nbsp;of&nbsp;the&nbsp;remaining</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="27" href="#27">27</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*&nbsp;candidates.</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="28" href="#28">28</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*/</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="29" href="#29">29</a></td><td class="col-11 codeLine"><span class="keyword">interface</span><span class="default">&nbsp;</span><span class="default">ExportIgnoreFilterInterface</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="30" href="#30">30</a></td><td class="col-11 codeLine"><span class="keyword">{</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="31" href="#31">31</a></td><td class="col-11 codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="32" href="#32">32</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Filters&nbsp;export-ignore&nbsp;candidates&nbsp;using&nbsp;the&nbsp;configured&nbsp;keep-in-export&nbsp;paths.</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="33" href="#33">33</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="34" href="#34">34</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;list&lt;string&gt;&nbsp;$candidates&nbsp;the&nbsp;canonical&nbsp;candidate&nbsp;paths</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="35" href="#35">35</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@param&nbsp;list&lt;string&gt;&nbsp;$keepInExportPaths&nbsp;the&nbsp;paths&nbsp;that&nbsp;MUST&nbsp;remain&nbsp;exportable</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="36" href="#36">36</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="37" href="#37">37</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;list&lt;string&gt;&nbsp;the&nbsp;filtered&nbsp;export-ignore&nbsp;candidates</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="38" href="#38">38</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="39" href="#39">39</a></td><td class="col-11 codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public</span><span class="default">&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">filter</span><span class="keyword">(</span><span class="keyword">array</span><span class="default">&nbsp;</span><span class="default">$candidates</span><span class="keyword">,</span><span class="default">&nbsp;</span><span class="keyword">array</span><span class="default">&nbsp;</span><span class="default">$keepInExportPaths</span><span class="keyword">)</span><span class="keyword">:</span><span class="default">&nbsp;</span><span class="keyword">array</span><span class="keyword">;</span></td></tr>
-    <tr class=" d-flex"><td  class="col-1 text-end"><a id="40" href="#40">40</a></td><td class="col-11 codeLine"><span class="keyword">}</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="22" href="#22">22</a></td><td class="col-11 codeLine"><span class="keyword">use</span><span class="default">&nbsp;</span><span class="default">Symfony\Component\Finder\Finder</span><span class="keyword">;</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="23" href="#23">23</a></td><td class="col-11 codeLine"></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="24" href="#24">24</a></td><td class="col-11 codeLine"><span class="comment">/**</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="25" href="#25">25</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*&nbsp;Creates&nbsp;fresh&nbsp;Symfony&nbsp;Finder&nbsp;instances&nbsp;for&nbsp;each&nbsp;filesystem&nbsp;scan.</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="26" href="#26">26</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;*/</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="27" href="#27">27</a></td><td class="col-11 codeLine"><span class="keyword">interface</span><span class="default">&nbsp;</span><span class="default">FinderFactoryInterface</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="28" href="#28">28</a></td><td class="col-11 codeLine"><span class="keyword">{</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="29" href="#29">29</a></td><td class="col-11 codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="comment">/**</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="30" href="#30">30</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;Creates&nbsp;a&nbsp;new&nbsp;mutable&nbsp;Finder&nbsp;instance.</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="31" href="#31">31</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="32" href="#32">32</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;@return&nbsp;Finder&nbsp;a&nbsp;Finder&nbsp;instance&nbsp;that&nbsp;callers&nbsp;MAY&nbsp;configure&nbsp;for&nbsp;one&nbsp;scan</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="33" href="#33">33</a></td><td class="col-11 codeLine"><span class="comment">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*/</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="34" href="#34">34</a></td><td class="col-11 codeLine"><span class="default">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="keyword">public</span><span class="default">&nbsp;</span><span class="keyword">function</span><span class="default">&nbsp;</span><span class="default">create</span><span class="keyword">(</span><span class="keyword">)</span><span class="keyword">:</span><span class="default">&nbsp;</span><span class="default">Finder</span><span class="keyword">;</span></td></tr>
+    <tr class=" d-flex"><td  class="col-1 text-end"><a id="35" href="#35">35</a></td><td class="col-11 codeLine"><span class="keyword">}</span></td></tr>
 
 </tbody>
 </table>
