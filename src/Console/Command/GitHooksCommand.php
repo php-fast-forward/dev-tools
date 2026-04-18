@@ -110,7 +110,7 @@ final class GitHooksCommand extends BaseCommand
             }
 
             $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite);
-            $this->filesystem->chmod($hookPath, 0o755, 0o755);
+            $this->filesystem->chmod($hookPath, 755, 0o755);
 
             $output->writeln(\sprintf('<info>Installed %s hook.</info>', $file->getFilename()));
         }

@@ -127,7 +127,7 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn('/app/.git/hooks');
         $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', true)
             ->shouldBeCalledOnce();
-        $this->filesystem->chmod('/app/.git/hooks/post-merge', 0o755, 0o755)
+        $this->filesystem->chmod('/app/.git/hooks/post-merge', 755, 0o755)
             ->shouldBeCalledOnce();
 
         self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
