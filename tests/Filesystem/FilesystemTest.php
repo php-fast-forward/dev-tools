@@ -27,6 +27,7 @@ use Symfony\Component\Filesystem\Path;
 
 use function Safe\file_put_contents;
 use function Safe\getcwd;
+use function Safe\realpath;
 
 #[CoversClass(Filesystem::class)]
 final class FilesystemTest extends TestCase
@@ -180,6 +181,6 @@ final class FilesystemTest extends TestCase
         $this->filesystem->mkdir($origin);
         $this->filesystem->symlink($origin, $target);
 
-        self::assertSame($origin, $this->filesystem->readlink($target, true));
+        self::assertSame(realpath($origin), $this->filesystem->readlink($target, true));
     }
 }
