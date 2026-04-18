@@ -113,6 +113,11 @@ final class TestsCommand extends BaseCommand
                 description: 'Whether to generate code coverage reports.',
             )
             ->addOption(
+                name: 'coverage-summary',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to show only the summary for text coverage output.',
+            )
+            ->addOption(
                 name: 'filter',
                 shortcut: 'f',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -122,6 +127,11 @@ final class TestsCommand extends BaseCommand
                 name: 'min-coverage',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Minimum line coverage percentage required for a successful run.',
+            )
+            ->addOption(
+                name: 'no-progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to disable progress output from PHPUnit.',
             );
     }
 
@@ -155,6 +165,10 @@ final class TestsCommand extends BaseCommand
             ->withArgument('--display-phpunit-deprecations')
             ->withArgument('--display-incomplete')
             ->withArgument('--display-skipped');
+
+        if ($input->getOption('no-progress')) {
+            $processBuilder = $processBuilder->withArgument('--no-progress');
+        }
 
         if (! $input->getOption('no-cache')) {
             $processBuilder = $processBuilder->withArgument(
@@ -265,6 +279,10 @@ final class TestsCommand extends BaseCommand
                 ->withArgument('--coverage-html', $coveragePath)
                 ->withArgument('--testdox-html', $coveragePath . '/testdox.html')
                 ->withArgument('--coverage-clover', $coveragePath . '/clover.xml');
+
+            if ($input->getOption('coverage-summary')) {
+                $processBuilder = $processBuilder->withArgument('--only-summary-for-coverage-text');
+            }
         }
 
         $coverageReportPath = $coveragePath . '/coverage.php';

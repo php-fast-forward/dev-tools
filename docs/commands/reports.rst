@@ -66,5 +66,7 @@ Behavior
 ---------
 
 - Runs ``docs`` and ``tests --coverage`` in parallel.
+- Runs tests with ``--no-progress`` and ``--coverage-summary`` so report builds
+  keep PHPUnit output concise.
 - Used by the ``standards`` command as the final phase.
 - This is the reporting stage used by GitHub Pages.

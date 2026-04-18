@@ -94,6 +94,8 @@ final class ReportsCommand extends BaseCommand
 
         $coverage = $this->processBuilder
             ->withArgument('--ansi')
+            ->withArgument('--no-progress')
+            ->withArgument('--coverage-summary')
             ->withArgument('--coverage', $input->getOption('coverage'))
             ->build('composer dev-tools tests --');
 

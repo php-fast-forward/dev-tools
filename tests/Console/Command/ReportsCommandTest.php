@@ -149,6 +149,14 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
+        $this->processBuilder->withArgument('--no-progress')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processBuilder->withArgument('--coverage-summary')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
         $this->processQueue->add($this->docsProcess->reveal(), false, true)
             ->shouldBeCalledOnce();
 
