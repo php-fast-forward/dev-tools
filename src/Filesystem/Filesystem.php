@@ -103,6 +103,44 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
     }
 
     /**
+     * Removes files, symbolic links, or directories.
+     *
+     * @param iterable<string>|string $files the file(s), link(s), or directory(ies) to remove
+     */
+    #[Override]
+    public function remove(string|iterable $files): void
+    {
+        parent::remove($this->getAbsolutePath($files));
+    }
+
+    /**
+     * Creates a symbolic link.
+     *
+     * @param string $originDir the origin path the link MUST point to
+     * @param string $targetDir the link path to create
+     * @param bool $copyOnWindows whether directories SHOULD be copied on Windows instead of linked
+     */
+    #[Override]
+    public function symlink(string $originDir, string $targetDir, bool $copyOnWindows = false): void
+    {
+        parent::symlink($this->getAbsolutePath($originDir), $this->getAbsolutePath($targetDir), $copyOnWindows);
+    }
+
+    /**
+     * Reads a symbolic link target.
+     *
+     * @param string $path the symbolic link path
+     * @param bool $canonicalize whether the returned path SHOULD be canonicalized
+     *
+     * @return string|null the link target, or null when the path is not a symbolic link
+     */
+    #[Override]
+    public function readlink(string $path, bool $canonicalize = false): ?string
+    {
+        return parent::readlink($this->getAbsolutePath($path), $canonicalize);
+    }
+
+    /**
      * Resolves a path or iterable of paths into their absolute path representation.
      *
      * @param iterable<string>|string $files the path(s) to resolve

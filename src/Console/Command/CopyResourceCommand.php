@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -27,7 +28,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Copies packaged or local resources into the consumer repository.
@@ -44,12 +44,12 @@ final class CopyResourceCommand extends BaseCommand
      *
      * @param FilesystemInterface $filesystem the filesystem used for copy operations
      * @param FileLocatorInterface $fileLocator the locator used to resolve source resources
-     * @param Finder $finder the finder used to iterate directory resources
+     * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
-        private readonly Finder $finder,
+        private readonly FinderFactoryInterface $finderFactory,
     ) {
         parent::__construct();
     }
@@ -126,7 +126,8 @@ final class CopyResourceCommand extends BaseCommand
         bool $overwrite,
         OutputInterface $output
     ): int {
-        $files = $this->finder
+        $files = $this->finderFactory
+            ->create()
             ->files()
             ->in($sourcePath);
 

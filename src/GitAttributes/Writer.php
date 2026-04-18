@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\GitAttributes;
 
-use Symfony\Component\Filesystem\Filesystem;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 
 use function Safe\preg_split;
 
@@ -33,10 +33,10 @@ use function Safe\preg_split;
 final readonly class Writer implements WriterInterface
 {
     /**
-     * @param Filesystem $filesystem the filesystem service responsible for writing the file
+     * @param FilesystemInterface $filesystem the filesystem service responsible for writing the file
      */
     public function __construct(
-        private Filesystem $filesystem
+        private FilesystemInterface $filesystem
     ) {}
 
     /**

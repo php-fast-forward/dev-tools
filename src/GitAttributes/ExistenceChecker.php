@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\GitAttributes;
 
-use Symfony\Component\Filesystem\Filesystem;
+use FastForward\DevTools\Filesystem\Filesystem;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 
 /**
  * Checks the existence of files and directories in a given base path.
@@ -30,10 +31,10 @@ use Symfony\Component\Filesystem\Filesystem;
 final readonly class ExistenceChecker implements ExistenceCheckerInterface
 {
     /**
-     * @param Filesystem $filesystem
+     * @param FilesystemInterface $filesystem
      */
     public function __construct(
-        private Filesystem $filesystem = new Filesystem()
+        private FilesystemInterface $filesystem = new Filesystem()
     ) {}
 
     /**

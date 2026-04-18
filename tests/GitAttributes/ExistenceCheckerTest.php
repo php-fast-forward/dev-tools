@@ -19,13 +19,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\GitAttributes;
 
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\ExistenceChecker;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(ExistenceChecker::class)]
 final class ExistenceCheckerTest extends TestCase
@@ -33,7 +33,7 @@ final class ExistenceCheckerTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @property ObjectProphecy<Filesystem> $filesystem
+     * @property ObjectProphecy<FilesystemInterface> $filesystem
      */
     private readonly ObjectProphecy $filesystem;
 
@@ -44,7 +44,7 @@ final class ExistenceCheckerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->checker = new ExistenceChecker($this->filesystem->reveal());
     }
 

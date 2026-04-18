@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\CommandLoader;
 use ArrayIterator;
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -48,7 +49,11 @@ final class DevToolsCommandLoaderTest extends TestCase
         $commandDirectory = \dirname(__DIR__, 3) . '/src/Console/Command';
         $command = $this->prophesize(Command::class);
 
+        $finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $finder = $this->prophesize(Finder::class);
+        $finderFactory->create()
+            ->willReturn($finder->reveal())
+            ->shouldBeCalledOnce();
         $finder->files()
             ->willReturn($finder->reveal())
             ->shouldBeCalled();
@@ -65,7 +70,7 @@ final class DevToolsCommandLoaderTest extends TestCase
         $container->has(CodeStyleCommand::class)->willReturn(true)->shouldBeCalled();
         $container->get(CodeStyleCommand::class)->willReturn($command->reveal())->shouldBeCalled();
 
-        $loader = new DevToolsCommandLoader($finder->reveal(), $container->reveal());
+        $loader = new DevToolsCommandLoader($finderFactory->reveal(), $container->reveal());
 
         self::assertTrue($loader->has('code-style'));
         self::assertSame($command->reveal(), $loader->get('code-style'));

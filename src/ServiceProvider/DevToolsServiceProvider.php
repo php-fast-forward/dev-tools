@@ -24,6 +24,8 @@ use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
+use FastForward\DevTools\Filesystem\FinderFactory;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\CandidateProvider;
@@ -62,7 +64,6 @@ use Psr\Log\NullLogger;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
-use Symfony\Component\Finder\Finder;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 
@@ -89,13 +90,13 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             ProcessQueueInterface::class => get(ProcessQueue::class),
 
             // Filesystem
+            FinderFactoryInterface::class => get(FinderFactory::class),
             FilesystemInterface::class => get(Filesystem::class),
 
             // Composer
             ComposerJsonInterface::class => get(ComposerJson::class),
 
             // Symfony Components
-            Finder::class => create(Finder::class),
             FileLocatorInterface::class => create(FileLocator::class)->constructor([getcwd(), \dirname(__DIR__, 2)]),
 
             // PSR

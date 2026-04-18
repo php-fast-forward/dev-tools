@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console;
 
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -40,6 +41,7 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
 #[CoversClass(DevTools::class)]
 #[UsesClass(DevToolsCommandLoader::class)]
+#[UsesClass(FinderFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
 final class DevToolsTest extends TestCase
 {

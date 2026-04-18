@@ -19,13 +19,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\GitAttributes;
 
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(Writer::class)]
 final class WriterTest extends TestCase
@@ -33,7 +33,7 @@ final class WriterTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy<Filesystem>
+     * @var ObjectProphecy<FilesystemInterface>
      */
     private ObjectProphecy $filesystem;
 
@@ -44,7 +44,7 @@ final class WriterTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->writer = new Writer($this->filesystem->reveal());
     }
 

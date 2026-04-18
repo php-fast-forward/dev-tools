@@ -22,6 +22,8 @@ namespace FastForward\DevTools\Tests\Agent\Skills;
 use ArrayIterator;
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
 use FastForward\DevTools\Agent\Skills\SynchronizeResult;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -29,7 +31,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
@@ -44,9 +45,14 @@ final class SkillsSynchronizerTest extends TestCase
     private const string CONSUMER_SKILLS_PATH = '/consumer/.agents/skills';
 
     /**
-     * @var ObjectProphecy<Filesystem>
+     * @var ObjectProphecy<FilesystemInterface>
      */
     private ObjectProphecy $filesystem;
+
+    /**
+     * @var ObjectProphecy<FinderFactoryInterface>
+     */
+    private ObjectProphecy $finderFactory;
 
     /**
      * @var ObjectProphecy<Finder>
@@ -63,7 +69,8 @@ final class SkillsSynchronizerTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->finder = $this->prophesize(Finder::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
     }
@@ -230,6 +237,9 @@ final class SkillsSynchronizerTest extends TestCase
     {
         $finder = $this->finder->reveal();
 
+        $this->finderFactory->create()
+            ->willReturn($finder)
+            ->shouldBeCalledOnce();
         $this->finder->directories()
             ->willReturn($finder)
             ->shouldBeCalledOnce();
@@ -265,7 +275,7 @@ final class SkillsSynchronizerTest extends TestCase
     {
         return new SkillsSynchronizer(
             $this->filesystem->reveal(),
-            $this->finder->reveal(),
+            $this->finderFactory->reveal(),
             $this->logger->reveal(),
         );
     }

@@ -19,12 +19,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\CommandLoader;
 
-use ReflectionClass;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use Psr\Container\ContainerInterface;
+use ReflectionClass;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Responsible for dynamically discovering and loading Symfony Console commands
@@ -50,26 +50,27 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
      * instantiable and have the AsCommand attribute.
      * It builds a command map associating command names with their respective classes.
      *
-     * @param Finder $finder
+     * @param FinderFactoryInterface $finderFactory
      * @param ContainerInterface $container
      */
-    public function __construct(Finder $finder, ContainerInterface $container)
+    public function __construct(FinderFactoryInterface $finderFactory, ContainerInterface $container)
     {
-        parent::__construct($container, $this->getCommandMap($finder));
+        parent::__construct($container, $this->getCommandMap($finderFactory));
     }
 
     /**
      * Builds a command map by scanning the Command directory for classes that are instantiable and have the AsCommand attribute.
      *
-     * @param Finder $finder
+     * @param FinderFactoryInterface $finderFactory
      *
      * @return array
      */
-    private function getCommandMap(Finder $finder): array
+    private function getCommandMap(FinderFactoryInterface $finderFactory): array
     {
         $commandMap = [];
 
-        $commandsDirectory = $finder
+        $commandsDirectory = $finderFactory
+            ->create()
             ->files()
             ->in(__DIR__ . '/../Command')
             ->name('*.php');

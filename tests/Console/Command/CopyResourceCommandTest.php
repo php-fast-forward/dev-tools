@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\CopyResourceCommand;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -47,6 +48,8 @@ final class CopyResourceCommandTest extends TestCase
 
     private ObjectProphecy $fileLocator;
 
+    private ObjectProphecy $finderFactory;
+
     private ObjectProphecy $input;
 
     private ObjectProphecy $output;
@@ -66,13 +69,14 @@ final class CopyResourceCommandTest extends TestCase
 
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
 
         $this->command = new CopyResourceCommand(
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
-            new Finder(),
+            $this->finderFactory->reveal(),
         );
     }
 
@@ -120,6 +124,9 @@ final class CopyResourceCommandTest extends TestCase
 
         $this->fileLocator->locate('resources/github-actions')
             ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
         $this->filesystem->getAbsolutePath('.github/workflows')
             ->willReturn('/app/.github/workflows');
         $this->filesystem->exists('/app/.github/workflows/nested/example.yml')
