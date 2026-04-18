@@ -1017,14 +1017,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-guide-advanced-index-html"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-controls="sidebar-guide-advanced-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-guide-advanced-index-html" class="collapse">
+            <div id="sidebar-guide-advanced-index-html" class="collapse show">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -1062,7 +1062,7 @@
     <div class="d-flex align-items-center">
         <a
             href="guide/advanced/branch-protection-and-bot-commits.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
             Branch Protection and Bot Commits
         </a>
@@ -1142,14 +1142,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-guide-api-index-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-guide-api-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-guide-api-index-html" class="collapse show">
+            <div id="sidebar-guide-api-index-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -1231,7 +1231,7 @@
     <div class="d-flex align-items-center">
         <a
             href="guide/api/rector-rules.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Rector Rules
         </a>
@@ -2327,58 +2327,211 @@
                             <div class="row g-4">
                                 <div class="col-12">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            <section class="section " id="rector-rules">
-            <h1>Rector Rules</h1>
+                                            <section class="section " id="branch-protection-and-bot-commits">
+            <h1>Branch Protection and Bot Commits</h1>
 
             
-    <p>FastForward DevTools ships custom Rector rules in <code>src/Rector/</code>
- to support
-the PHPDoc and cleanup workflow.</p>
-
-            <table>
-                <thead>
-            <tr>
-                            <th>Class</th>
-                            <th>Enabled by default</th>
-                            <th>Summary</th>
-                    </tr>
-        </thead>
-    <tbody>
-    <tr>
-            <td><code>FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
-</td>
-            <td>Yes</td>
-            <td>Infers <code>@param</code>
-, <code>@return</code>
-, and <code>@throws</code>
- tags.</td>
-    </tr>
-    <tr>
-            <td><code>FastForward\DevTools\Rector\RemoveEmptyDocBlockRector</code>
-</td>
-            <td>Yes</td>
-            <td>Removes empty class and method docblocks.</td>
-    </tr>
-    <tr>
-            <td><code>FastForward\DevTools\Rector\AddMissingClassPhpDocRector</code>
-</td>
-            <td>No</td>
-            <td>Generates a basic class docblock with an optional <code>@package</code>
- tag.</td>
-    </tr>
-</tbody>
-</table>
+    <p>Fast Forward repositories keep generated documentation out of protected
+branches until the related pull request is merged. This keeps <code>main</code>
+ stable,
+lets maintainers review generated output before it becomes canonical, and
+avoids requiring automation to bypass branch protection for normal preview
+updates.</p>
 
             
-    <p>The packaged <code>rector.php</code>
- enables only
-<code>FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
- and
-<code>FastForward\DevTools\Rector\RemoveEmptyDocBlockRector</code>
-.
-<code>FastForward\DevTools\Rector\AddMissingClassPhpDocRector</code>
- is available for
-explicit opt-in in projects that want it.</p>
+    <p>The model has two publishing lanes:</p>
+
+            
+
+<ul>
+    <li class="dash">pull requests publish isolated previews;</li>
+
+    <li class="dash">merges into <code>main</code>
+ publish the final wiki and reports.</li>
+
+</ul>
+
+            <section class="section " id="wiki-preview-lifecycle">
+            <h2>Wiki Preview Lifecycle</h2>
+
+            
+    <p>The wiki workflow writes generated Markdown to the GitHub wiki repository, but
+it does not publish pull request content directly to the wiki <code>master</code>
+ branch.
+Instead, each pull request receives a dedicated wiki branch.</p>
+
+            
+    <p>For pull request <code>123</code>
+ the workflow:</p>
+
+            
+    
+<ol start="1" type="1">
+    <li value="1">runs <code>composer dev-tools wiki -- --target=.github/wiki</code>
+;</li>
+
+    <li value="2">commits the generated wiki content to the wiki branch <code>pr-123</code>
+;</li>
+
+    <li value="3">updates the parent repository submodule pointer at <code>.github/wiki</code>
+;</li>
+
+    <li value="4">commits that pointer update back to the pull request branch.</li>
+
+</ol>
+
+            
+    <p>The parent repository commit is important because reviewers can see exactly
+which generated wiki revision belongs to the pull request. The bot commit SHOULD
+stay on the pull request branch because protected <code>main</code>
+ branches usually
+reject direct commits.</p>
+
+            
+    <p>After the pull request is merged into <code>main</code>
+, the publish job copies the
+content from the wiki preview branch, such as <code>pr-123</code>
+, to the wiki
+<code>master</code>
+ branch. That makes the reviewed wiki content live only after the
+source code merge is complete.</p>
+
+    </section>
+
+            <section class="section " id="reports-preview-lifecycle">
+            <h2>Reports Preview Lifecycle</h2>
+
+            
+    <p>Reports use the same review-before-publish idea, but the output is served from
+GitHub Pages instead of the wiki repository.</p>
+
+            
+    <p>On pull requests, the reports workflow:</p>
+
+            
+
+<ul>
+    <li class="dash">generates docs, coverage, and report assets from the pull request code;</li>
+
+    <li class="dash">publishes them under <code>previews/pr-&lt;number&gt;/</code>
+ in the Pages branch;</li>
+
+    <li class="dash">comments on the pull request with preview links when possible;</li>
+
+    <li class="dash">keeps workflow artifacts available as a fallback when Pages publishing or the
+comment update is unavailable.</li>
+
+</ul>
+
+            
+    <p>On <code>main</code>
+, the reports workflow publishes the final site at the root of the
+Pages branch. Pull request previews use PR-specific directories, so multiple
+open pull requests can have independent previews without overwriting each other.</p>
+
+            
+    <p>When a pull request is closed, the workflow SHOULD remove its preview directory.
+This prevents stale documentation and coverage reports from looking like active
+review artifacts.</p>
+
+    </section>
+
+            <section class="section " id="branch-protection-interactions">
+            <h2>Branch Protection Interactions</h2>
+
+            
+    <p>Protected branches usually block direct pushes, require status checks, and may
+require signed commits or linear history. The preview workflows are designed to
+respect those rules:</p>
+
+            
+
+<ul>
+    <li class="dash">bot commits update the pull request branch, not <code>main</code>
+;</li>
+
+    <li class="dash">final wiki publication runs after the merge into <code>main</code>
+;</li>
+
+    <li class="dash">final reports publication runs from the already-accepted <code>main</code>
+ revision;</li>
+
+    <li class="dash">preview branches such as <code>pr-123</code>
+ are temporary review targets.</li>
+
+</ul>
+
+            
+    <p>If a repository restricts bot pushes to pull request branches, maintainers
+should either allow the workflow token to update PR branches or require authors
+to refresh generated pointers manually. The preferred path is to allow bot
+updates on PR branches while keeping <code>main</code>
+ protected.</p>
+
+            
+    <p>At a high level, the workflows need permission to read repository contents,
+write generated preview commits, update pull request comments, and publish Pages
+content. Keep those permissions scoped to the workflow jobs that actually need
+them.</p>
+
+    </section>
+
+            <section class="section " id="resolving-github-wiki-pointer-conflicts">
+            <h2>Resolving <code>.github/wiki</code>
+ Pointer Conflicts</h2>
+
+            
+    <p>Submodule pointer conflicts happen when <code>main</code>
+ and the pull request point to
+different generated wiki commits. Resolve them by rebasing the pull request and
+choosing the preview wiki commit that belongs to the pull request.</p>
+
+            
+    <p>For pull request <code>123</code>
+:</p>
+
+            <pre><code class="language-bash">git fetch origin main
+git rebase origin/main
+git -C .github/wiki fetch origin master pr-123
+git -C .github/wiki switch --detach origin/pr-123
+git add .github/wiki
+git rebase --continue
+git push --force-with-lease</code></pre>
+
+            
+    <p>If the conflict appears after the preview job has already produced a newer bot
+commit, prefer the latest <code>pr-123</code>
+ wiki commit. If the wiki branch no longer
+exists because the pull request was closed or merged, rerun the wiki workflow or
+regenerate the wiki locally before updating the pointer.</p>
+
+    </section>
+
+            <section class="section " id="operational-checklist">
+            <h2>Operational Checklist</h2>
+
+            
+
+<ul>
+    <li class="dash">Keep source changes and generated pointer updates in the same pull request.</li>
+
+    <li class="dash">Review PR preview links before merging documentation-heavy changes.</li>
+
+    <li class="dash">Merge only through the protected <code>main</code>
+ flow.</li>
+
+    <li class="dash">Let the post-merge wiki job publish to <code>master</code>
+.</li>
+
+    <li class="dash">Let closed pull requests clean up their report preview directories.</li>
+
+</ul>
+
+            
+    <p>See <a href="guide/advanced/consumer-automation.html">Consumer Automation</a> for how reusable workflows and consumer stubs fit
+into this model, and <a href="guide/usage/github-actions.html">GitHub Actions Workflows</a> for the workflow summary.</p>
+
+    </section>
 
     </section>
 

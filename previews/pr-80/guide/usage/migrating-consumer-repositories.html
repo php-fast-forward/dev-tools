@@ -209,14 +209,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-guide-usage-index-html"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-controls="sidebar-guide-usage-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-guide-usage-index-html" class="collapse">
+            <div id="sidebar-guide-usage-index-html" class="collapse show">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -320,7 +320,7 @@
     <div class="d-flex align-items-center">
         <a
             href="guide/usage/migrating-consumer-repositories.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
             Migrating Consumer Repositories
         </a>
@@ -1142,14 +1142,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-guide-api-index-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-guide-api-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-guide-api-index-html" class="collapse show">
+            <div id="sidebar-guide-api-index-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -1231,7 +1231,7 @@
     <div class="d-flex align-items-center">
         <a
             href="guide/api/rector-rules.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Rector Rules
         </a>
@@ -2327,58 +2327,259 @@
                             <div class="row g-4">
                                 <div class="col-12">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            <section class="section " id="rector-rules">
-            <h1>Rector Rules</h1>
+                                            <section class="section " id="migrating-consumer-repositories">
+            <h1>Migrating Consumer Repositories</h1>
 
             
-    <p>FastForward DevTools ships custom Rector rules in <code>src/Rector/</code>
- to support
-the PHPDoc and cleanup workflow.</p>
+    <p>Use this guide when an existing PHP package repository is adopting
+<code>fast-forward/dev-tools</code>
+ for the first time. The goal is to introduce the
+shared Composer scripts, workflow stubs, wiki setup, skills, and repository
+defaults in a reviewable pull request.</p>
+
+            
+    <p>This page complements <a href="guide/usage/syncing-consumer-projects.html">Syncing Consumer Projects</a>; it focuses on the
+migration path instead of the full command reference.</p>
+
+            <section class="section " id="preflight-checks">
+            <h2>Preflight Checks</h2>
+
+            
+    <p>Before installing DevTools, confirm the repository has:</p>
+
+            
+
+<ul>
+    <li class="dash">a committed <code>composer.json</code>
+ with the package name, PHP constraint, license,
+and autoload settings already reviewed;</li>
+
+    <li class="dash">a clean working tree;</li>
+
+    <li class="dash">a configured <code>origin</code>
+ remote that points to the GitHub repository;</li>
+
+    <li class="dash">agreement on whether the repository should publish GitHub Pages reports and a
+GitHub Wiki;</li>
+
+    <li class="dash">a maintainer who can review workflow, Dependabot, and branch protection
+changes.</li>
+
+</ul>
+
+            
+    <p>If the repository already has custom workflows or generated documentation, list
+the files that must be preserved before running sync. The sync command protects
+many existing files by default, but maintainers should still review the outcome
+as infrastructure code.</p>
+
+    </section>
+
+            <section class="section " id="install-devtools">
+            <h2>Install DevTools</h2>
+
+            
+    <p>Install the package as a development dependency:</p>
+
+            <pre><code class="language-bash">composer require --dev fast-forward/dev-tools</code></pre>
+
+            
+    <p>Commit the Composer changes separately only if the repository prefers very small
+review steps. For most migrations, it is reasonable to keep the Composer update
+and generated sync changes in the same pull request so reviewers can understand
+the complete automation model.</p>
+
+    </section>
+
+            <section class="section " id="run-sync-safely">
+            <h2>Run Sync Safely</h2>
+
+            
+    <p>Run the sync command from the repository root:</p>
+
+            <pre><code class="language-bash">composer dev-tools:sync</code></pre>
+
+            
+    <p>Then inspect the result before staging anything:</p>
+
+            <pre><code class="language-bash">git status --short
+git diff</code></pre>
+
+            
+    <p>Expected changes can include:</p>
 
             <table>
                 <thead>
             <tr>
-                            <th>Class</th>
-                            <th>Enabled by default</th>
-                            <th>Summary</th>
+                            <th>Area</th>
+                            <th>Expected change</th>
+                            <th>Review focus</th>
                     </tr>
         </thead>
     <tbody>
     <tr>
-            <td><code>FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
+            <td><code>composer.json</code>
 </td>
-            <td>Yes</td>
-            <td>Infers <code>@param</code>
-, <code>@return</code>
-, and <code>@throws</code>
- tags.</td>
+            <td>Adds shared <code>dev-tools</code>
+ scripts and GrumPHP defaults.</td>
+            <td>Keep existing package metadata, scripts, and project-specific settings.</td>
     </tr>
     <tr>
-            <td><code>FastForward\DevTools\Rector\RemoveEmptyDocBlockRector</code>
+            <td><code>.github/workflows/*.yml</code>
 </td>
-            <td>Yes</td>
-            <td>Removes empty class and method docblocks.</td>
+            <td>Adds thin workflow stubs that call reusable Fast Forward workflows.</td>
+            <td>Compare with any existing CI, release, docs, or Pages workflows.</td>
     </tr>
     <tr>
-            <td><code>FastForward\DevTools\Rector\AddMissingClassPhpDocRector</code>
+            <td><code>.editorconfig</code>
 </td>
-            <td>No</td>
-            <td>Generates a basic class docblock with an optional <code>@package</code>
- tag.</td>
+            <td>Adds the shared editor defaults when missing.</td>
+            <td>Confirm indentation and line-ending expectations match the project.</td>
+    </tr>
+    <tr>
+            <td><code>.github/dependabot.yml</code>
+</td>
+            <td>Adds the shared Dependabot template when missing.</td>
+            <td>Confirm update cadence and ecosystem coverage.</td>
+    </tr>
+    <tr>
+            <td><code>.github/wiki</code>
+</td>
+            <td>Adds the wiki submodule when missing.</td>
+            <td>Confirm the wiki repository exists and branch protection is compatible.</td>
+    </tr>
+    <tr>
+            <td><code>.agents/skills</code>
+</td>
+            <td>Links packaged skills for issue, PR, tests, docs, README, and style work.</td>
+            <td>Preserve existing custom skills and non-symlink directories.</td>
+    </tr>
+    <tr>
+            <td><code>LICENSE</code>
+</td>
+            <td>Adds the packaged license file when missing.</td>
+            <td>Confirm it matches the package metadata.</td>
+    </tr>
+    <tr>
+            <td><code>.gitignore</code>
+ and <code>.gitattributes</code>
+</td>
+            <td>Adds repository defaults when missing.</td>
+            <td>Keep existing project-specific ignores and export rules.</td>
     </tr>
 </tbody>
 </table>
 
+    </section>
+
+            <section class="section " id="handling-existing-custom-files">
+            <h2>Handling Existing Custom Files</h2>
+
             
-    <p>The packaged <code>rector.php</code>
- enables only
-<code>FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
- and
-<code>FastForward\DevTools\Rector\RemoveEmptyDocBlockRector</code>
-.
-<code>FastForward\DevTools\Rector\AddMissingClassPhpDocRector</code>
- is available for
-explicit opt-in in projects that want it.</p>
+    <p>When a target file already exists, treat the migration as a comparison exercise:</p>
+
+            
+    
+<ol start="1" type="1">
+    <li value="1">keep the existing file in place;</li>
+
+    <li value="2">compare it with the corresponding packaged file or workflow stub;</li>
+
+    <li value="3">copy only the entries that make sense for the repository;</li>
+
+    <li value="4">leave a pull request note explaining any intentional divergence.</li>
+
+</ol>
+
+            
+    <p>This is especially important for custom CI workflows, release automation,
+repository-specific <code>.gitignore</code>
+ rules, and existing Dependabot policies.
+Shared defaults are meant to reduce repeated maintenance, not erase local
+constraints.</p>
+
+    </section>
+
+            <section class="section " id="branch-protection-and-bot-commits">
+            <h2>Branch Protection and Bot Commits</h2>
+
+            
+    <p>Consumer repositories commonly protect <code>main</code>
+. That is compatible with the
+Fast Forward model:</p>
+
+            
+
+<ul>
+    <li class="dash">pull requests receive generated previews and bot updates on the PR branch;</li>
+
+    <li class="dash">report previews are published under PR-specific Pages paths;</li>
+
+    <li class="dash">wiki previews use branches such as <code>pr-123</code>
+ before merge;</li>
+
+    <li class="dash">post-merge jobs publish final reports and wiki content from <code>main</code>
+.</li>
+
+</ul>
+
+            
+    <p>If branch protection blocks bot commits to pull request branches, either adjust
+the repository policy to allow workflow updates on PR branches or document that
+maintainers must refresh generated pointers manually before merge.</p>
+
+    </section>
+
+            <section class="section " id="suggested-pull-request-rollout">
+            <h2>Suggested Pull Request Rollout</h2>
+
+            
+    <p>Use one migration pull request per consumer repository:</p>
+
+            
+    
+<ol start="1" type="1">
+    <li value="1">install <code>fast-forward/dev-tools</code>
+;</li>
+
+    <li value="2">run <code>composer dev-tools:sync</code>
+;</li>
+
+    <li value="3">review and adapt generated files;</li>
+
+    <li value="4">run the smallest relevant local verification command;</li>
+
+    <li value="5">open the pull request and let GitHub Actions create previews;</li>
+
+    <li value="6">verify report and wiki preview links before merge;</li>
+
+    <li value="7">merge through the protected <code>main</code>
+ branch.</li>
+
+</ol>
+
+            
+    <p>After merge, confirm that the final reports and wiki pages reflect the merged
+revision. If they do not, inspect the workflow logs before making follow-up
+changes.</p>
+
+    </section>
+
+            <section class="section " id="related-references">
+            <h2>Related References</h2>
+
+            
+
+<ul>
+    <li class="dash"><a href="guide/usage/syncing-consumer-projects.html">Syncing Consumer Projects</a></li>
+
+    <li class="dash"><a href="guide/usage/syncing-packaged-skills.html">Syncing Packaged Skills</a></li>
+
+    <li class="dash"><a href="guide/usage/github-actions.html">GitHub Actions Workflows</a></li>
+
+</ul>
+
+    </section>
 
     </section>
 
