@@ -2380,6 +2380,12 @@ composer tests -- --filter=EventTracerTest</code></pre>
     <li class="dash"><code>--coverage=&lt;path&gt;</code>
  creates HTML, Testdox, Clover, and raw coverage output;</li>
 
+    <li class="dash"><code>--coverage-summary</code>
+ keeps coverage text output to PHPUnit&#039;s summary;</li>
+
+    <li class="dash"><code>--no-progress</code>
+ disables PHPUnit progress output;</li>
+
     <li class="dash"><code>--no-cache</code>
  disables <code>tmp/cache/phpunit</code>
 ;</li>
@@ -2594,7 +2600,7 @@ local-first fallback logic;</li>
     <li class="dash">it calls <code>docs --target public</code>
 ;</li>
 
-    <li class="dash">it calls <code>tests --coverage public/coverage</code>
+    <li class="dash">it calls <code>tests --coverage public/coverage --no-progress --coverage-summary</code>
 ;</li>
 
     <li class="dash">it is the reporting stage used by <code>standards</code>

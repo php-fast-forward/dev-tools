@@ -2376,6 +2376,8 @@ It supports:</p>
 
     <li class="dash">Cache management</li>
 
+    <li class="dash">Optional progress and coverage-text verbosity control</li>
+
 </ul>
 
     </section>
@@ -2421,11 +2423,19 @@ vendor/bin/dev-tools tests [path] [options]</code></pre>
 </dt>
         
         <dd>Disable PHPUnit caching.</dd>
+                                <dt><code>--no-progress</code>
+</dt>
+        
+        <dd>Disable PHPUnit progress output.</dd>
                                 <dt><code>--coverage, -c</code>
  (optional)</dt>
         
         <dd>Generate code coverage reports. If a path is provided, reports are saved there.
 Without a path, reports are saved to the cache directory.</dd>
+                                <dt><code>--coverage-summary</code>
+</dt>
+        
+        <dd>When coverage text is generated, show only the summary table.</dd>
                                 <dt><code>--filter, -f</code>
  (optional)</dt>
         
@@ -2457,6 +2467,11 @@ Without a path, reports are saved to the cache directory.</dd>
             <pre><code class="language-bash">composer tests --coverage=public/coverage</code></pre>
 
             
+    <p>Run with concise coverage text output:</p>
+
+            <pre><code class="language-bash">composer tests --coverage=public/coverage --coverage-summary</code></pre>
+
+            
     <p>Run tests matching a pattern:</p>
 
             <pre><code class="language-bash">composer tests -- --filter=EventTracerTest</code></pre>
@@ -2470,6 +2485,11 @@ Without a path, reports are saved to the cache directory.</dd>
     <p>Run without cache:</p>
 
             <pre><code class="language-bash">composer tests --no-cache</code></pre>
+
+            
+    <p>Run without PHPUnit progress output:</p>
+
+            <pre><code class="language-bash">composer tests --no-progress</code></pre>
 
     </section>
 
@@ -2513,6 +2533,11 @@ Without a path, reports are saved to the cache directory.</dd>
     <li class="dash">Coverage filters are automatically applied to all PSR-4 paths from composer.json.</li>
 
     <li class="dash">Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.</li>
+
+    <li class="dash"><code>--coverage-summary</code>
+ forwards PHPUnit&#039;s <code>--only-summary-for-coverage-text</code>
+
+only when coverage text output is generated.</li>
 
     <li class="dash">The command fails if minimum coverage is not met (when <code>--min-coverage</code>
  is set).</li>

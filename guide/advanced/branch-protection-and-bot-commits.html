@@ -2416,7 +2416,20 @@ content from the wiki preview branch, such as <code>pr-123</code>
 , to the wiki
 <code>master</code>
  branch. That makes the reviewed wiki content live only after the
-source code merge is complete.</p>
+source code merge is complete. The workflow validates that remote <code>master</code>
+
+points to the expected preview commit before it deletes the <code>pr-123</code>
+ branch
+because the preview branch is the last rollback source for that generated
+content.</p>
+
+            
+    <p>If the pull request is closed without merge, the workflow deletes the matching
+wiki preview branch without promoting it to <code>master</code>
+. A scheduled cleanup also
+scans existing <code>pr-&lt;number&gt;</code>
+ wiki branches and removes branches whose pull
+requests are already closed.</p>
 
     </section>
 
@@ -2544,6 +2557,8 @@ regenerate the wiki locally before updating the pointer.</p>
 
     <li class="dash">Let the post-merge wiki job publish to <code>master</code>
 .</li>
+
+    <li class="dash">Let closed pull requests and scheduled cleanup remove wiki preview branches.</li>
 
     <li class="dash">Let closed pull requests clean up their report preview directories.</li>
 

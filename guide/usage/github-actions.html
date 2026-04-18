@@ -2431,10 +2431,11 @@ secrets: inherit</code></pre>
    <strong>Pull Requests</strong>
 : Pushes documentation changes to a dedicated branch (e.g., <code>pr-123</code>
 ) in the wiki repository for review.
-*   <strong>Merge</strong>
-: When a PR is merged into <code>main</code>
-, it pushes the changes to the <code>master</code>
- branch of the wiki, making them live.</p>
+<em>   **Merge**: When a PR is merged into ``main``, it pushes the changes to the ``master`` branch of the wiki, validates the remote branch SHA, and makes them live.
+</em>
+   <strong>Cleanup</strong>
+: When a PR is closed, the workflow deletes the matching wiki preview branch. A scheduled cleanup also removes stale <code>pr-{number}</code>
+ branches for already closed pull requests.</p>
 
             
         
