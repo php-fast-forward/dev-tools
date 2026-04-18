@@ -9,5 +9,6 @@ custom Rector and PHPDoc behavior.
    :maxdepth: 1
 
    consumer-automation
+   branch-protection-and-bot-commits
    phpunit-extension
    rector-and-phpdoc
