@@ -1039,6 +1039,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="guide/advanced/branch-protection-and-bot-commits.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Branch Protection and Bot Commits
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="guide/advanced/phpunit-extension.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2465,11 +2487,12 @@ in consumer repositories.</td>
  runs <code>composer dev-tools reports</code>
 .</li>
 
-    <li class="dash">The workflow uploads <code>public/</code>
- as the Pages artifact.</li>
+    <li class="dash">Pull requests publish previews under <code>previews/pr-&lt;number&gt;/</code>
+.</li>
 
     <li class="dash">On the <code>main</code>
- branch, GitHub Pages serves the generated site.</li>
+ branch, GitHub Pages serves the generated site from the root
+of the Pages branch.</li>
 
 </ul>
 
@@ -2486,11 +2509,22 @@ in consumer repositories.</td>
 <code>composer dev-tools wiki -- --target=.github/wiki</code>
 .</li>
 
-    <li class="dash">The workflow commits the wiki submodule contents.</li>
+    <li class="dash">Pull requests publish generated wiki content to branches such as
+<code>pr-123</code>
+.</li>
 
-    <li class="dash">The parent repository then commits the updated submodule pointer.</li>
+    <li class="dash">The parent repository then commits the updated submodule pointer to the pull
+request branch.</li>
+
+    <li class="dash">After merge, the preview content is promoted to the wiki <code>master</code>
+ branch.</li>
 
 </ul>
+
+            
+    <p>See <a href="guide/advanced/branch-protection-and-bot-commits.html">Branch Protection and Bot Commits</a> for the branch protection model,
+bot commit behavior, and <code>.github/wiki</code>
+ conflict resolution steps.</p>
 
     </section>
 

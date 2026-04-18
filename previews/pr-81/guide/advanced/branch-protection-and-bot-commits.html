@@ -4,8 +4,9 @@
     <meta charset="utf-8">
             <title>fast-forward/dev-tools</title>
     
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="../">
+    <base href="../../">
 
             <!-- Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -994,14 +995,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-guide-advanced-index-html"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-controls="sidebar-guide-advanced-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-guide-advanced-index-html" class="collapse">
+            <div id="sidebar-guide-advanced-index-html" class="collapse show">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -1039,7 +1040,7 @@
     <div class="d-flex align-items-center">
         <a
             href="guide/advanced/branch-protection-and-bot-commits.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
             Branch Protection and Bot Commits
         </a>
@@ -2405,1151 +2406,219 @@
                         <div class="container-fluid">
                             
                             <div class="row g-4">
-                                <div class="col-12 col-xl-9">
+                                <div class="col-12">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item">
-            <a href="" class="text-decoration-none">
-                <i class="fas fa-home text-primary me-1"></i>
-                <span>Home</span>
-            </a>
-        </li>
+                                            <section class="section " id="branch-protection-and-bot-commits">
+            <h1>Branch Protection and Bot Commits</h1>
 
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward.html" class="text-decoration-none">
-                    FastForward
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools.html" class="text-decoration-none">
-                    DevTools
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools-phpunit.html" class="text-decoration-none">
-                    PhpUnit
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools-phpunit-runner.html" class="text-decoration-none">
-                    Runner
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools-phpunit-runner-extension.html" class="text-decoration-none">
-                    Extension
-                </a>
-            </li>
-            </ol>
-</nav>
-    <article class="phpdocumentor-element">
-        <div class="mb-4">
-            <div class="mb-5">
-    <div class="d-flex align-items-center gap-3 mb-3">
-        <div class="bg-primary-subtle text-primary rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
-            <i class="fas fa-cube"></i>
-        </div>
-        <div>
-            <h2 class="display-5 mb-1">DevToolsExtension</h2>
-            <div class="text-body-secondary">Class</div>
-        </div>
-    </div>
-
-    
-            <nav aria-label="breadcrumb" class="mb-3">
-            <ol class="breadcrumb mb-0">
-                <li class="breadcrumb-item text-body-secondary">in package</li>
-                                    <li class="breadcrumb-item">
-                        <a href="packages/FastForward.html" class="text-decoration-none">FastForward</a>
-                    </li>
-                                    <li class="breadcrumb-item">
-                        <a href="packages/FastForward-DevTools.html" class="text-decoration-none">DevTools</a>
-                    </li>
-                            </ol>
-        </nav>
-    
-    <div class="d-grid gap-2">
-                    <div class="d-flex flex-wrap align-items-center gap-2">
-                <span class="text-body-secondary">implements</span>
-                                    <span class="badge rounded-pill text-bg-info">
-                        <abbr title="\PHPUnit\Runner\Extension\Extension">Extension</abbr>
-                    </span>
-                            </div>
-        
-            </div>
-
-    <div class="mt-4 d-flex flex-wrap gap-2">
-                    <span class="badge text-bg-secondary px-3 py-2">
-    <span class="fw-normal">Read only:</span>
-    <span class="fw-semibold ms-1">Yes</span>
-</span>
-        
-                    <span class="badge text-bg-danger px-3 py-2">
-    <span class="fw-normal">Final:</span>
-    <span class="fw-semibold ms-1">Yes</span>
-</span>
-        
-            </div>
-</div>
-        </div>
-
-        <div class="mb-4">
-            <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php" class="text-decoration-none mb-0">
-        <a href="files/src-phpunit-runner-extension-devtoolsextension.html"><abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php">DevToolsExtension.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">44</span>
-
-    </aside>
-        </div>
-
-        <div class="mb-4">
-                <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Registers the Joli notification tracer within the PHPUnit extension lifecycle.</p>
-    </div>
-
-
-
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>This extension MUST register a tracer capable of observing PHPUnit events so
-that desktop notifications can be dispatched when the test execution
-finishes.</p>
-<p>The tracer dependency MAY be overridden to allow alternative notification
-strategies or custom tracing behavior, but any provided implementation MUST
-satisfy PHPUnit's tracer contract.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-
-
-    
-    
-<section class="mt-5">
-    <div class="d-flex align-items-center gap-2 mb-4">
-        <i class="fas fa-list-ul text-primary"></i>
-        <h3 id="toc" class="h4 mb-0">
-            Table of Contents
-            <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#toc"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-        </h3>
-    </div>
-
-    <div class="d-grid gap-4">
-        
-        
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-plug text-primary"></i>
-                    <h4 id="toc-interfaces" class="h6 mb-0 fw-semibold">Interfaces</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <a href="classes/PHPUnit-Runner-Extension-Extension.html" class="fw-semibold text-decoration-none">
-                                <abbr title="\PHPUnit\Runner\Extension\Extension">Extension</abbr>
-                            </a>
-                                                    </div>
-                                    </div>
-            </section>
-        
-        
-        
-        
-        
-        
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-sliders-h text-info"></i>
-                    <h4 id="toc-properties" class="h6 mb-0 fw-semibold">Properties</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_executionFinishedSubscriber"
-        >
-            $executionFinishedSubscriber
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <abbr title="\PHPUnit\Event\TestRunner\ExecutionFinishedSubscriber">ExecutionFinishedSubscriber</abbr>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_startedSubscriber"
-        >
-            $startedSubscriber
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <abbr title="\PHPUnit\Event\TestSuite\StartedSubscriber">StartedSubscriber</abbr>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_tracer"
-        >
-            $tracer
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <abbr title="\PHPUnit\Event\Tracer\Tracer">Tracer</abbr>            </span>
-</div>
-                        </div>
-                                    </div>
-            </section>
-        
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-code text-primary"></i>
-                    <h4 id="toc-methods" class="h6 mb-0 fw-semibold">Methods</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#method___construct"
-        >
-            __construct()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Creates a new extension instance.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: mixed    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#method_bootstrap"
-        >
-            bootstrap()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Bootstraps the extension and registers its tracer with PHPUnit.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: void    </span>
-</div>
-                        </div>
-                                    </div>
-            </section>
-        
-            </div>
-</section>
-
-        </div>
-
-        <div class="d-grid gap-4">
-                                    
             
-                            <section class="card border-0 shadow-sm">
-                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                        <i class="fas fa-sliders-h text-info"></i>
-                        <span class="fw-semibold">
-                            Properties
-                            <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#properties"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-                        </span>
-                    </div>
-                    <div class="card-body p-4">
-                        
-    <section>
-        <div class="d-grid gap-4">
-                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_executionFinishedSubscriber">
-                <span class="text-primary">$executionFinishedSubscriber</span>
-                <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_executionFinishedSubscriber"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
+    <p>Fast Forward repositories keep generated documentation out of protected
+branches until the related pull request is merged. This keeps <code>main</code>
+ stable,
+lets maintainers review generated output before it becomes canonical, and
+avoids requiring automation to bypass branch protection for normal preview
+updates.</p>
 
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php" class="text-decoration-none mb-0">
-        <a href="files/src-phpunit-runner-extension-devtoolsextension.html"><abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php">DevToolsExtension.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">46</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <abbr title="\PHPUnit\Event\TestRunner\ExecutionFinishedSubscriber">ExecutionFinishedSubscriber</abbr>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $executionFinishedSubscriber
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_startedSubscriber">
-                <span class="text-primary">$startedSubscriber</span>
-                <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_startedSubscriber"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php" class="text-decoration-none mb-0">
-        <a href="files/src-phpunit-runner-extension-devtoolsextension.html"><abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php">DevToolsExtension.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">61</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <abbr title="\PHPUnit\Event\TestSuite\StartedSubscriber">StartedSubscriber</abbr>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $startedSubscriber
-    </span>
-
-            <span class="text-body-secondary">=</span>
-        <span class="text-success-emphasis">
-            new ByPassfinalsStartedSubscriber()
-        </span>
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_tracer">
-                <span class="text-primary">$tracer</span>
-                <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_tracer"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php" class="text-decoration-none mb-0">
-        <a href="files/src-phpunit-runner-extension-devtoolsextension.html"><abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php">DevToolsExtension.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">60</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <abbr title="\PHPUnit\Event\Tracer\Tracer">Tracer</abbr>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $tracer
-    </span>
-
-            <span class="text-body-secondary">=</span>
-        <span class="text-success-emphasis">
-            new EventTracer()
-        </span>
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                    </div>
-    </section>
-
-                    </div>
-                </section>
             
-                            <section class="card border-0 shadow-sm">
-                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                        <i class="fas fa-code text-primary"></i>
-                        <span class="fw-semibold">
-                            Methods
-                            <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#methods"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-                        </span>
-                    </div>
-                    <div class="card-body p-4">
-                        
-    <section>
-        <div class="d-grid gap-4">
-                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method___construct">
-                <span class="text-primary">__construct()</span>
-                <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#method___construct"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
+    <p>The model has two publishing lanes:</p>
 
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
+            
 
-                
-                
-                
-                            </div>
-        </div>
-    </div>
+<ul>
+    <li class="dash">pull requests publish isolated previews;</li>
 
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
+    <li class="dash">merges into <code>main</code>
+ publish the final wiki and reports.</li>
 
-    <span>Defined in</span>
+</ul>
 
-    <abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php" class="text-decoration-none mb-0">
-        <a href="files/src-phpunit-runner-extension-devtoolsextension.html"><abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php">DevToolsExtension.php</abbr></a>
-    </abbr>
+            <section class="section " id="wiki-preview-lifecycle">
+            <h2>Wiki Preview Lifecycle</h2>
 
-    <span class="text-body-tertiary">:</span>
+            
+    <p>The wiki workflow writes generated Markdown to the GitHub wiki repository, but
+it does not publish pull request content directly to the wiki <code>master</code>
+ branch.
+Instead, each pull request receives a dedicated wiki branch.</p>
 
-    <span class="badge text-bg-light border">59</span>
+            
+    <p>For pull request <code>123</code>
+ the workflow:</p>
 
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Creates a new extension instance.</p>
-    </div>
-
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">public</span>
-
+            
     
-    
-    
-    
-    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-body-secondary">[</span><span class="text-info-emphasis"><abbr title="\PHPUnit\Event\Tracer\Tracer">Tracer</abbr>&nbsp;
-                </span><span class="text-primary">$tracer</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">new <a href="classes/FastForward-DevTools-PhpUnit-Event-EventTracer.html"><abbr title="\FastForward\DevTools\PhpUnit\Event\EventTracer">EventTracer</abbr></a>()</span><span class="text-body-secondary">]</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\PHPUnit\Event\TestSuite\StartedSubscriber">StartedSubscriber</abbr>&nbsp;
-                </span><span class="text-primary">$startedSubscriber</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">new <a href="classes/FastForward-DevTools-PhpUnit-Event-TestSuite-ByPassfinalsStartedSubscriber.html"><abbr title="\FastForward\DevTools\PhpUnit\Event\TestSuite\ByPassfinalsStartedSubscriber">ByPassfinalsStartedSubscriber</abbr></a>()</span><span class="text-body-secondary">]</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\PHPUnit\Event\TestRunner\ExecutionFinishedSubscriber">ExecutionFinishedSubscriber</abbr>|null&nbsp;
-                </span><span class="text-primary">$executionFinishedSubscriber</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
-    </div>
+<ol start="1" type="1">
+    <li value="1">runs <code>composer dev-tools wiki -- --target=.github/wiki</code>
+;</li>
 
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
+    <li value="2">commits the generated wiki content to the wiki branch <code>pr-123</code>
+;</li>
 
-    
-    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
+    <li value="3">updates the parent repository submodule pointer at <code>.github/wiki</code>
+;</li>
 
-                    <div>
-                        <p>When no tracer is explicitly provided, the default Joli notification
-tracer SHALL be used.</p>
+    <li value="4">commits that pointer update back to the pull request branch.</li>
 
-                    </div>
-                </div>
-            </div>
-            </section>
+</ol>
 
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
+            
+    <p>The parent repository commit is important because reviewers can see exactly
+which generated wiki revision belongs to the pull request. The bot commit SHOULD
+stay on the pull request branch because protected <code>main</code>
+ branches usually
+reject direct commits.</p>
 
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$tracer</code>
+            
+    <p>After the pull request is merged into <code>main</code>
+, the publish job copies the
+content from the wiki preview branch, such as <code>pr-123</code>
+, to the wiki
+<code>master</code>
+ branch. That makes the reviewed wiki content live only after the
+source code merge is complete.</p>
 
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\PHPUnit\Event\Tracer\Tracer">Tracer</abbr>
-                            </span>
-
-                                                            <span class="text-body-secondary">=</span>
-                                <code class="text-success-emphasis mb-0">new <a href="classes/FastForward-DevTools-PhpUnit-Event-EventTracer.html"><abbr title="\FastForward\DevTools\PhpUnit\Event\EventTracer">EventTracer</abbr></a>()</code>
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the tracer instance responsible for collecting
-PHPUnit events and producing notifications</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$startedSubscriber</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\PHPUnit\Event\TestSuite\StartedSubscriber">StartedSubscriber</abbr>
-                            </span>
-
-                                                            <span class="text-body-secondary">=</span>
-                                <code class="text-success-emphasis mb-0">new <a href="classes/FastForward-DevTools-PhpUnit-Event-TestSuite-ByPassfinalsStartedSubscriber.html"><abbr title="\FastForward\DevTools\PhpUnit\Event\TestSuite\ByPassfinalsStartedSubscriber">ByPassfinalsStartedSubscriber</abbr></a>()</code>
-                                                    </div>
-
-                        <div>
-                            
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$executionFinishedSubscriber</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\PHPUnit\Event\TestRunner\ExecutionFinishedSubscriber">ExecutionFinishedSubscriber</abbr>|null
-                            </span>
-
-                                                            <span class="text-body-secondary">=</span>
-                                <code class="text-success-emphasis mb-0">null</code>
-                                                    </div>
-
-                        <div>
-                            
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
     </section>
 
-    
+            <section class="section " id="reports-preview-lifecycle">
+            <h2>Reports Preview Lifecycle</h2>
 
-        
-    
-    
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_bootstrap">
-                <span class="text-primary">bootstrap()</span>
-                <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#method_bootstrap"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
+            
+    <p>Reports use the same review-before-publish idea, but the output is served from
+GitHub Pages instead of the wiki repository.</p>
 
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
+            
+    <p>On pull requests, the reports workflow:</p>
 
-                
-                
-                
-                            </div>
-        </div>
-    </div>
+            
 
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
+<ul>
+    <li class="dash">generates docs, coverage, and report assets from the pull request code;</li>
 
-    <span>Defined in</span>
+    <li class="dash">publishes them under <code>previews/pr-&lt;number&gt;/</code>
+ in the Pages branch;</li>
 
-    <abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php" class="text-decoration-none mb-0">
-        <a href="files/src-phpunit-runner-extension-devtoolsextension.html"><abbr title="src/PhpUnit/Runner/Extension/DevToolsExtension.php">DevToolsExtension.php</abbr></a>
-    </abbr>
+    <li class="dash">comments on the pull request with preview links when possible;</li>
 
-    <span class="text-body-tertiary">:</span>
+    <li class="dash">keeps workflow artifacts available as a fallback when Pages publishing or the
+comment update is unavailable.</li>
 
-    <span class="badge text-bg-light border">90</span>
+</ul>
 
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Bootstraps the extension and registers its tracer with PHPUnit.</p>
-    </div>
+            
+    <p>On <code>main</code>
+, the reports workflow publishes the final site at the root of the
+Pages branch. Pull request previews use PR-specific directories, so multiple
+open pull requests can have independent previews without overwriting each other.</p>
 
+            
+    <p>When a pull request is closed, the workflow SHOULD remove its preview directory.
+This prevents stale documentation and coverage reports from looking like active
+review artifacts.</p>
 
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">public</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">bootstrap</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\PHPUnit\TextUI\Configuration\Configuration">Configuration</abbr>&nbsp;
-                </span><span class="text-primary">$configuration</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\PHPUnit\Runner\Extension\Facade">Facade</abbr>&nbsp;
-                </span><span class="text-primary">$facade</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\PHPUnit\Runner\Extension\ParameterCollection">ParameterCollection</abbr>&nbsp;
-                </span><span class="text-primary">$parameters</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>This method MUST register the configured tracer with the provided facade
-so that the tracer can receive PHPUnit execution events during the test
-run.
-The configuration and parameter collection are part of the extension
-contract and MAY be used by future implementations, even though they are
-not currently required by this implementation.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$configuration</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\PHPUnit\TextUI\Configuration\Configuration">Configuration</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the resolved PHPUnit runtime
-configuration</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$facade</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\PHPUnit\Runner\Extension\Facade">Facade</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the PHPUnit extension facade used to register
-runtime integrations</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$parameters</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\PHPUnit\Runner\Extension\ParameterCollection">ParameterCollection</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the user-defined extension
-parameters passed by PHPUnit</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
     </section>
 
-    
-    <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-tags text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0" id="tags">
-                Tags
-                <a
-    href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#method_bootstrap#tags"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h5>
-        </div>
+            <section class="section " id="branch-protection-interactions">
+            <h2>Branch Protection Interactions</h2>
 
-        <div class="d-grid gap-3">
-                                                <div class="card border-0 bg-body-tertiary shadow-sm">
-                        <div class="card-body p-3">
-                            <div class="mb-2">
-                                <span class="badge text-bg-info">codeCoverageIgnore</span>
-                            </div>
+            
+    <p>Protected branches usually block direct pushes, require status checks, and may
+require signed commits or linear history. The preview workflows are designed to
+respect those rules:</p>
 
-                            <div class="d-flex flex-wrap gap-2 mb-2">
-                                
-                                
-                                                            </div>
+            
 
-                                                            <div>
-                                    
+<ul>
+    <li class="dash">bot commits update the pull request branch, not <code>main</code>
+;</li>
 
-                                </div>
-                                                    </div>
-                    </div>
-                                                                </div>
+    <li class="dash">final wiki publication runs after the merge into <code>main</code>
+;</li>
+
+    <li class="dash">final reports publication runs from the already-accepted <code>main</code>
+ revision;</li>
+
+    <li class="dash">preview branches such as <code>pr-123</code>
+ are temporary review targets.</li>
+
+</ul>
+
+            
+    <p>If a repository restricts bot pushes to pull request branches, maintainers
+should either allow the workflow token to update PR branches or require authors
+to refresh generated pointers manually. The preferred path is to allow bot
+updates on PR branches while keeping <code>main</code>
+ protected.</p>
+
+            
+    <p>At a high level, the workflows need permission to read repository contents,
+write generated preview commits, update pull request comments, and publish Pages
+content. Keep those permissions scoped to the workflow jobs that actually need
+them.</p>
+
     </section>
 
-        
-    
-    
-</article>                    </div>
+            <section class="section " id="resolving-github-wiki-pointer-conflicts">
+            <h2>Resolving <code>.github/wiki</code>
+ Pointer Conflicts</h2>
+
+            
+    <p>Submodule pointer conflicts happen when <code>main</code>
+ and the pull request point to
+different generated wiki commits. Resolve them by rebasing the pull request and
+choosing the preview wiki commit that belongs to the pull request.</p>
+
+            
+    <p>For pull request <code>123</code>
+:</p>
+
+            <pre><code class="language-bash">git fetch origin main
+git rebase origin/main
+git -C .github/wiki fetch origin master pr-123
+git -C .github/wiki switch --detach origin/pr-123
+git add .github/wiki
+git rebase --continue
+git push --force-with-lease</code></pre>
+
+            
+    <p>If the conflict appears after the preview job has already produced a newer bot
+commit, prefer the latest <code>pr-123</code>
+ wiki commit. If the wiki branch no longer
+exists because the pull request was closed or merged, rerun the wiki workflow or
+regenerate the wiki locally before updating the pointer.</p>
+
     </section>
 
-                    </div>
-                </section>
-                    </div>
+            <section class="section " id="operational-checklist">
+            <h2>Operational Checklist</h2>
 
-        <div class="modal fade" id="source-view" tabindex="-1" aria-labelledby="source-view-label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-xl">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center gap-2" id="source-view-label">
-                    <i class="fas fa-code text-primary"></i>
-                    <span>Source View</span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            
 
-            <div class="modal-body p-0">
-                <pre
-                    class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
-                    style="max-height: 70vh; overflow-y: auto;"
-                    data-src="files/src/PhpUnit/Runner/Extension/DevToolsExtension.php.txt"
-                ></pre>
-            </div>
-        </div>
-    </div>
-</div>
+<ul>
+    <li class="dash">Keep source changes and generated pointer updates in the same pull request.</li>
 
-<script>
-    (function () {
-        function loadExternalCodeSnippet(el, url, line) {
-            const pre = el.querySelector('pre[data-src]');
-            if (!pre) return;
+    <li class="dash">Review PR preview links before merging documentation-heavy changes.</li>
 
-            const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
-            const language = 'php';
+    <li class="dash">Merge only through the protected <code>main</code>
+ flow.</li>
 
-            const code = document.createElement('code');
-            code.className = 'language-' + language;
+    <li class="dash">Let the post-merge wiki job publish to <code>master</code>
+.</li>
 
-            pre.textContent = '';
-            if (line) {
-                pre.setAttribute('data-line', line);
-            } else {
-                pre.removeAttribute('data-line');
-            }
+    <li class="dash">Let closed pull requests clean up their report preview directories.</li>
 
-            code.textContent = 'Loading…';
-            pre.appendChild(code);
+</ul>
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', src, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
+            
+    <p>See <a href="guide/advanced/consumer-automation.html">Consumer Automation</a> for how reusable workflows and consumer stubs fit
+into this model, and <a href="guide/usage/github-actions.html">GitHub Actions Workflows</a> for the workflow summary.</p>
 
-                if (xhr.status < 400 && xhr.responseText) {
-                    code.textContent = xhr.responseText;
-                    Prism.highlightElement(code);
+    </section>
 
-                    if (line) {
-                        const lineElement = pre.querySelector('.line-numbers-rows > span:nth-child(' + line + ')');
-                        if (lineElement) {
-                            pre.scrollTop = lineElement.offsetTop - (pre.offsetHeight / 2);
-                        }
-                    }
+    </section>
 
-                    return;
-                }
-
-                if (xhr.status === 404) {
-                    code.textContent = '✖ Error: File could not be found';
-                    return;
-                }
-
-                if (xhr.status >= 400) {
-                    code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                    return;
-                }
-
-                code.textContent = '✖ Error: An unknown error occurred';
-            };
-
-            xhr.send(null);
-        }
-
-        document.querySelectorAll('[data-modal]').forEach(function (trigger) {
-            trigger.addEventListener('click', function (event) {
-                event.preventDefault();
-
-                const modalId = this.dataset.modal;
-                const modalEl = document.getElementById(modalId);
-
-                if (!modalEl) return;
-
-                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-                modal.show();
-
-                loadExternalCodeSnippet(
-                    modalEl,
-                    this.dataset.src || null,
-                    this.dataset.line || null
-                );
-            });
-        });
-    })();
-</script>
-
-    </article>
                                     </div>
                                 </div>
 
-                                                                    <aside class="col-12 col-xl-3 d-none d-xl-block">
-                                        <div class="position-sticky" style="top: 2rem;">
-                                            <div class="bg-body-tertiary border rounded-4 p-3 shadow-sm">
-                                                <div class="d-flex align-items-center gap-2 text-uppercase fw-semibold small text-body-secondary mb-3">
-                                                    <i class="fas fa-list-ul text-primary"></i>
-                                                    <span>On this page</span>
-                                                </div>
-
-                                                            
-    <section>
-        <div class="d-grid gap-4">
-            <div>
-                <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
-                <div class="list-group list-group-flush">
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#toc-properties">
-                            Properties
-                        </a>
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#toc-methods">
-                            Methods
-                        </a>
-                                    </div>
-            </div>
-
-            
-                            <div>
-                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
-                        <i class="fas fa-sliders-h text-info"></i>
-                        <span>Properties</span>
-                    </div>
-
-                    <div class="list-group list-group-flush">
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_executionFinishedSubscriber"
-                            >
-                                <span class="text-truncate">$executionFinishedSubscriber</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_startedSubscriber"
-                            >
-                                <span class="text-truncate">$startedSubscriber</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_tracer"
-                            >
-                                <span class="text-truncate">$tracer</span>
-                                                            </a>
-                                            </div>
-                </div>
-            
-                            <div>
-                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
-                        <i class="fas fa-code text-primary"></i>
-                        <span>Methods</span>
-                    </div>
-
-                    <div class="list-group list-group-flush">
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#method___construct"
-                            >
-                                <span class="text-truncate">__construct()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#method_bootstrap"
-                            >
-                                <span class="text-truncate">bootstrap()</span>
-                                                            </a>
-                                            </div>
-                </div>
-                    </div>
-    </section>
-
-                                            </div>
-                                        </div>
-                                    </aside>
                                                             </div>
                         </div>
                     </div>
