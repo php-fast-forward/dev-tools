@@ -2453,6 +2453,9 @@ GitHub Pages instead of the wiki repository.</p>
 
     <li class="dash">comments on the pull request with preview links when possible;</li>
 
+    <li class="dash">cancels older in-progress preview runs when a newer push updates the same
+pull request;</li>
+
     <li class="dash">keeps workflow artifacts available as a fallback when Pages publishing or the
 comment update is unavailable.</li>
 
@@ -2467,7 +2470,10 @@ open pull requests can have independent previews without overwriting each other.
             
     <p>When a pull request is closed, the workflow SHOULD remove its preview directory.
 This prevents stale documentation and coverage reports from looking like active
-review artifacts.</p>
+review artifacts. A scheduled cleanup also scans <code>previews/pr-&lt;number&gt;/</code>
+
+directories and removes preview directories whose pull requests are already
+closed.</p>
 
     </section>
 
@@ -2560,7 +2566,8 @@ regenerate the wiki locally before updating the pointer.</p>
 
     <li class="dash">Let closed pull requests and scheduled cleanup remove wiki preview branches.</li>
 
-    <li class="dash">Let closed pull requests clean up their report preview directories.</li>
+    <li class="dash">Let closed pull requests and scheduled cleanup remove report preview
+directories.</li>
 
 </ul>
 

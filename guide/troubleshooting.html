@@ -2748,6 +2748,9 @@ output directly; it should reflect source files and templates.</p>
 
     <li class="dash">a preview was removed after the comment was posted.</li>
 
+    <li class="dash">a reports preview cleanup run skipped a preview because the pull request
+number could not be resolved.</li>
+
     <li class="dash">the wiki publish validation detected that remote <code>master</code>
  does not match
 the preview branch SHA.</li>
@@ -2768,6 +2771,11 @@ request is closed or merged;</li>
     <li class="dash">use the scheduled wiki cleanup workflow to remove leftover <code>pr-&lt;number&gt;</code>
 
 branches for pull requests that are already closed;</li>
+
+    <li class="dash">use the scheduled reports cleanup workflow to remove leftover
+<code>previews/pr-&lt;number&gt;/</code>
+ directories for pull requests that are already
+closed;</li>
 
     <li class="dash">keep the wiki preview branch until the publish validation log shows matching
 expected and actual SHAs;</li>

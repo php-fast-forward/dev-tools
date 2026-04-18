@@ -2408,10 +2408,15 @@ secrets: inherit</code></pre>
  under <code>previews/pr-{number}/</code>
 .
     <em>   Posts a **Sticky Comment** on the PR with links to the live preview and coverage report.
-</em>
+    </em>
    <strong>Cleanup</strong>
 : When a PR is closed, the workflow automatically removes the preview directory from the <code>gh-pages</code>
- branch to keep the repository clean.</p>
+ branch to keep the repository clean.
+    <em>   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
+</em>
+   <strong>Scheduled Cleanup</strong>
+: A scheduled/manual cleanup removes stale <code>previews/pr-{number}/</code>
+ directories for already closed pull requests.</p>
 
     </section>
 
