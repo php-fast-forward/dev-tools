@@ -5,6 +5,8 @@ The ``dev-tools:sync`` command is the bridge between this repository and the
 libraries that consume it.
 
 For the focused skills-only workflow, see :doc:`syncing-packaged-skills`.
+For a first-time adoption path, see
+:doc:`migrating-consumer-repositories`.
 
 What the Command Changes
 ------------------------
