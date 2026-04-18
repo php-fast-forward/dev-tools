@@ -10,3 +10,4 @@ step.
 
    architecture
    adr/index
+   release-publishing
