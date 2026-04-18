@@ -11,8 +11,7 @@ on:
     types: [closed]
 
 permissions:
-  contents: write
-  pull-requests: read
+  contents: read
 
 concurrency:
   group: update-wiki-${{ github.event.pull_request.number || github.ref }}
@@ -23,6 +22,9 @@ jobs:
     name: Update Wiki Preview
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
 
     env:
       WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
@@ -117,6 +119,9 @@ jobs:
     name: Publish Wiki Master
     if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
 
     env:
       WIKI_PUBLISH_BRANCH: master
@@ -186,6 +191,8 @@ jobs:
     name: Delete Closed PR Wiki Preview
     if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == false
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     env:
       WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
@@ -215,6 +222,9 @@ jobs:
     name: Delete Orphaned Wiki Previews
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: read
 
     steps:
       - name: Checkout main branch
