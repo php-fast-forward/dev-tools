@@ -2,7 +2,21 @@ name: Generate Reports and Deploy to GitHub Pages
 
 on:
     workflow_call:
+        inputs:
+            cleanup-previews:
+                description: Remove stale pull request previews without publishing production reports.
+                required: false
+                type: boolean
+                default: false
     workflow_dispatch:
+        inputs:
+            cleanup-previews:
+                description: Remove stale pull request previews without publishing production reports.
+                required: false
+                type: boolean
+                default: false
+    schedule:
+        - cron: '41 3 * * *'
     pull_request:
         types: [ "opened", "synchronize", "reopened", "closed" ]
     push:
@@ -13,12 +27,12 @@ permissions:
     pull-requests: write
 
 concurrency:
-    group: "pages"
-    cancel-in-progress: false
+    group: ${{ github.event_name == 'pull_request' && format('reports-preview-pr-{0}', github.event.pull_request.number) || 'reports-pages' }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
 
 jobs:
     reports:
-        if: github.event_name != 'pull_request' || github.event.action != 'closed'
+        if: github.event_name != 'schedule' && !(github.event_name == 'workflow_dispatch' && inputs.cleanup-previews) && (github.event_name != 'pull_request' || github.event.action != 'closed')
         name: Generate Reports
         runs-on: ubuntu-latest
 
@@ -138,6 +152,75 @@ jobs:
                 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
                 git add -A
                 git diff --cached --quiet || git commit -m "chore: remove preview for PR #${{ github.event.pull_request.number }}"
+
+            - name: Push changes
+              run: |
+                cd gh-pages
+                git push
+
+    cleanup_orphaned_previews:
+        if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.cleanup-previews)
+        name: Cleanup Orphaned Pull Request Previews
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout gh-pages
+              uses: actions/checkout@v6
+              with:
+                ref: gh-pages
+                path: gh-pages
+
+            - name: Remove previews for closed pull requests
+              env:
+                GH_TOKEN: ${{ github.token }}
+              run: |
+                cd gh-pages
+
+                deleted=0
+                skipped=0
+                unresolved=0
+
+                if [ ! -d previews ]; then
+                    echo "No previews directory exists. Nothing to clean."
+                    exit 0
+                fi
+
+                while read -r preview_dir; do
+                    branch="${preview_dir#previews/}"
+                    pull_request_number="${branch#pr-}"
+
+                    if ! [[ "${pull_request_number}" =~ ^[0-9]+$ ]]; then
+                        echo "Skipping preview directory ${preview_dir}: name does not match pr-<number>."
+                        skipped=$((skipped + 1))
+                        continue
+                    fi
+
+                    state="$(gh pr view "${pull_request_number}" --repo "${GITHUB_REPOSITORY}" --json state --jq '.state' 2>/dev/null || echo UNKNOWN)"
+
+                    case "${state}" in
+                        CLOSED|MERGED)
+                            echo "Deleting preview directory ${preview_dir} for ${state} pull request #${pull_request_number}."
+                            rm -rf "${preview_dir}"
+                            deleted=$((deleted + 1))
+                            ;;
+                        OPEN)
+                            echo "Keeping preview directory ${preview_dir} for open pull request #${pull_request_number}."
+                            skipped=$((skipped + 1))
+                            ;;
+                        *)
+                            echo "Could not resolve pull request #${pull_request_number} for preview directory ${preview_dir}. Keeping it."
+                            unresolved=$((unresolved + 1))
+                            ;;
+                    esac
+                done < <(find previews -mindepth 1 -maxdepth 1 -type d -name 'pr-*' | sort)
+
+                echo "Preview cleanup summary: deleted=${deleted}, skipped=${skipped}, unresolved=${unresolved}."
+
+                touch .nojekyll
+                git config user.name "github-actions[bot]"
+                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+                git add -A
+                git diff --cached --quiet || git commit -m "chore: remove orphaned pull request previews"
 
             - name: Push changes
               run: |

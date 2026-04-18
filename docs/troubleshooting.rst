@@ -221,6 +221,8 @@ Likely causes:
 - the cleanup workflow did not run on the pull request close event;
 - the workflow token lacks permission to update Pages or the wiki repository;
 - a preview was removed after the comment was posted.
+- a reports preview cleanup run skipped a preview because the pull request
+  number could not be resolved.
 - the wiki publish validation detected that remote ``master`` does not match
   the preview branch SHA.
 
@@ -231,6 +233,9 @@ Recovery:
   request is closed or merged;
 - use the scheduled wiki cleanup workflow to remove leftover ``pr-<number>``
   branches for pull requests that are already closed;
+- use the scheduled reports cleanup workflow to remove leftover
+  ``previews/pr-<number>/`` directories for pull requests that are already
+  closed;
 - keep the wiki preview branch until the publish validation log shows matching
   expected and actual SHAs;
 - check the reports and wiki workflow logs before deleting artifacts manually.

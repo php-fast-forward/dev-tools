@@ -55,6 +55,8 @@ On pull requests, the reports workflow:
 - generates docs, coverage, and report assets from the pull request code;
 - publishes them under ``previews/pr-<number>/`` in the Pages branch;
 - comments on the pull request with preview links when possible;
+- cancels older in-progress preview runs when a newer push updates the same
+  pull request;
 - keeps workflow artifacts available as a fallback when Pages publishing or the
   comment update is unavailable.
 
@@ -64,7 +66,9 @@ open pull requests can have independent previews without overwriting each other.
 
 When a pull request is closed, the workflow SHOULD remove its preview directory.
 This prevents stale documentation and coverage reports from looking like active
-review artifacts.
+review artifacts. A scheduled cleanup also scans ``previews/pr-<number>/``
+directories and removes preview directories whose pull requests are already
+closed.
 
 Branch Protection Interactions
 ------------------------------
@@ -120,7 +124,8 @@ Operational Checklist
 - Merge only through the protected ``main`` flow.
 - Let the post-merge wiki job publish to ``master``.
 - Let closed pull requests and scheduled cleanup remove wiki preview branches.
-- Let closed pull requests clean up their report preview directories.
+- Let closed pull requests and scheduled cleanup remove report preview
+  directories.
 
 See :doc:`consumer-automation` for how reusable workflows and consumer stubs fit
 into this model, and :doc:`../usage/github-actions` for the workflow summary.

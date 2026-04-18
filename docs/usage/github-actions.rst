@@ -38,6 +38,8 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
     *   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.
     *   Posts a **Sticky Comment** on the PR with links to the live preview and coverage report.
     *   **Cleanup**: When a PR is closed, the workflow automatically removes the preview directory from the ``gh-pages`` branch to keep the repository clean.
+    *   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
+*   **Scheduled Cleanup**: A scheduled/manual cleanup removes stale ``previews/pr-{number}/`` directories for already closed pull requests.
 
 Fast Forward Wiki
 -----------------
