@@ -23,6 +23,7 @@ use Exception;
 use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\ResolverInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -32,7 +33,6 @@ use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Clock\ClockInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 
 #[CoversClass(Generator::class)]
@@ -61,7 +61,7 @@ final class GeneratorTest extends TestCase
     private ObjectProphecy $renderer;
 
     /**
-     * @var ObjectProphecy<Filesystem>
+     * @var ObjectProphecy<FilesystemInterface>
      */
     private ObjectProphecy $filesystem;
 
@@ -78,7 +78,7 @@ final class GeneratorTest extends TestCase
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
         $this->clock = $this->prophesize(ClockInterface::class);
         $this->renderer = $this->prophesize(Environment::class);
-        $this->filesystem = $this->prophesize(Filesystem::class);
+        $this->filesystem = $this->prophesize(FilesystemInterface::class);
 
         $this->generator = new Generator(
             $this->resolver->reveal(),

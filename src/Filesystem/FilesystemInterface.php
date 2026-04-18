@@ -76,6 +76,32 @@ interface FilesystemInterface
     public function chmod(string|iterable $files, int $mode, int $umask = 0o000, bool $recursive = false): void;
 
     /**
+     * Removes files, symbolic links, or directories.
+     *
+     * @param iterable<string>|string $files the file(s), link(s), or directory(ies) to remove
+     */
+    public function remove(string|iterable $files): void;
+
+    /**
+     * Creates a symbolic link.
+     *
+     * @param string $originDir the origin path the link MUST point to
+     * @param string $targetDir the link path to create
+     * @param bool $copyOnWindows whether directories SHOULD be copied on Windows instead of linked
+     */
+    public function symlink(string $originDir, string $targetDir, bool $copyOnWindows = false): void;
+
+    /**
+     * Reads a symbolic link target.
+     *
+     * @param string $path the symbolic link path
+     * @param bool $canonicalize whether the returned path SHOULD be canonicalized
+     *
+     * @return string|null the link target, or null when the path is not a symbolic link
+     */
+    public function readlink(string $path, bool $canonicalize = false): ?string;
+
+    /**
      * Resolves a path or iterable of paths into their absolute path representation.
      *
      * If a relative path is provided, it SHALL be evaluated against the current

@@ -21,8 +21,8 @@ namespace FastForward\DevTools\License;
 
 use Throwable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Clock\ClockInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Twig\Environment;
 
 /**
@@ -44,7 +44,7 @@ final readonly class Generator implements GeneratorInterface
      *
      * @param ResolverInterface $resolver The resolver for mapping license identifiers to templates
      * @param ComposerJsonInterface $composer
-     * @param Filesystem $filesystem The filesystem component for file operations
+     * @param FilesystemInterface $filesystem The filesystem component for file operations
      * @param ClockInterface $clock
      * @param Environment $renderer
      */
@@ -53,7 +53,7 @@ final readonly class Generator implements GeneratorInterface
         private ComposerJsonInterface $composer,
         private ClockInterface $clock,
         private Environment $renderer,
-        private Filesystem $filesystem,
+        private FilesystemInterface $filesystem,
     ) {}
 
     /**

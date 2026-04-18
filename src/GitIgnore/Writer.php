@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\GitIgnore;
 
-use Symfony\Component\Filesystem\Filesystem;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 
 /**
  * Renders and persists normalized .gitignore content.
@@ -37,11 +37,11 @@ final readonly class Writer implements WriterInterface
      * The provided filesystem implementation MUST support writing file contents
      * to the target path returned by a GitIgnoreInterface instance.
      *
-     * @param Filesystem $filesystem The filesystem service responsible for
-     *                               writing the rendered .gitignore content.
+     * @param FilesystemInterface $filesystem The filesystem service responsible for
+     *                                        writing the rendered .gitignore content.
      */
     public function __construct(
-        private Filesystem $filesystem
+        private FilesystemInterface $filesystem
     ) {}
 
     /**

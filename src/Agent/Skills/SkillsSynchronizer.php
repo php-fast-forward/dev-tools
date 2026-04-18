@@ -20,9 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Agent\Skills;
 
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -37,12 +37,12 @@ final class SkillsSynchronizer implements LoggerAwareInterface
     /**
      * Initializes the synchronizer with a filesystem and finder factory.
      *
-     * @param Filesystem $filesystem Filesystem instance for file operations
+     * @param FilesystemInterface $filesystem Filesystem instance for file operations
      * @param FinderFactoryInterface $finderFactory Factory for locating skill directories in the package
      * @param LoggerInterface $logger Logger for recording synchronization actions and decisions
      */
     public function __construct(
-        private readonly Filesystem $filesystem,
+        private readonly FilesystemInterface $filesystem,
         private readonly FinderFactoryInterface $finderFactory,
         private LoggerInterface $logger,
     ) {}

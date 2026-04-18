@@ -19,9 +19,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
 use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
@@ -31,7 +31,6 @@ use FastForward\DevTools\GitAttributes\WriterInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
 
 use function Safe\getcwd;
 
@@ -66,7 +65,7 @@ final class GitAttributesCommand extends BaseCommand
      * @param MergerInterface $merger the merger component
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface $writer the writer component
-     * @param Filesystem $filesystem the filesystem component
+     * @param FilesystemInterface $filesystem the filesystem component
      * @param ComposerJsonInterface $composer the composer.json accessor
      */
     public function __construct(

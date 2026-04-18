@@ -25,6 +25,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Path;
 
+use function Safe\file_put_contents;
 use function Safe\getcwd;
 
 #[CoversClass(Filesystem::class)]
@@ -151,5 +152,34 @@ final class FilesystemTest extends TestCase
 
         self::assertTrue($this->filesystem->exists($dirName, $this->tempDir));
         self::assertDirectoryExists($this->tempDir . '/' . $dirName);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function removeWillDeleteRelativePathAgainstCurrentWorkingDirectory(): void
+    {
+        $filename = $this->tempDir . '/remove-me.txt';
+        file_put_contents($filename, 'temporary');
+
+        $this->filesystem->remove($filename);
+
+        self::assertFileDoesNotExist($filename);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function symlinkAndReadlinkWillUseAbsolutePaths(): void
+    {
+        $origin = $this->tempDir . '/origin';
+        $target = $this->tempDir . '/target';
+
+        $this->filesystem->mkdir($origin);
+        $this->filesystem->symlink($origin, $target);
+
+        self::assertSame($origin, $this->filesystem->readlink($target, true));
     }
 }

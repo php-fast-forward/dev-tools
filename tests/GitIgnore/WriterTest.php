@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\GitIgnore;
 
+use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitIgnore\GitIgnore;
 use FastForward\DevTools\GitIgnore\Writer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -27,7 +28,6 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
-use Symfony\Component\Filesystem\Filesystem;
 
 #[CoversClass(Writer::class)]
 #[UsesClass(GitIgnore::class)]
@@ -41,7 +41,7 @@ final class WriterTest extends TestCase
     #[Test]
     public function writeDumpsContentToFile(): void
     {
-        $filesystem = $this->prophesize(Filesystem::class);
+        $filesystem = $this->prophesize(FilesystemInterface::class);
         $gitignore = new GitIgnore('/project/.gitignore', ['vendor/', '*.log']);
 
         $writer = new Writer($filesystem->reveal());
@@ -57,7 +57,7 @@ final class WriterTest extends TestCase
     #[Test]
     public function writeWithEmptyEntriesDumpsEmptyString(): void
     {
-        $filesystem = $this->prophesize(Filesystem::class);
+        $filesystem = $this->prophesize(FilesystemInterface::class);
         $gitignore = new GitIgnore('/project/.gitignore', []);
 
         $writer = new Writer($filesystem->reveal());
@@ -73,7 +73,7 @@ final class WriterTest extends TestCase
     #[Test]
     public function writeWithMultipleEntriesJoinsWithNewline(): void
     {
-        $filesystem = $this->prophesize(Filesystem::class);
+        $filesystem = $this->prophesize(FilesystemInterface::class);
         $gitignore = new GitIgnore('/project/.gitignore', ['vendor/', 'node_modules/', '*.log']);
 
         $writer = new Writer($filesystem->reveal());
