@@ -63,7 +63,7 @@ Fast Forward Tests
 The ``tests.yml`` workflow provides standard Continuous Integration.
 
 *   Runs PHPUnit tests across supported PHP versions (defaults to 8.3).
-*   Validates code style using ECS.
+*   Validates code style using Easy Coding Standard (ECS).
 *   Performs static analysis.
 
 Maintenance Workflows
