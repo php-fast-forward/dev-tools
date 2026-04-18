@@ -4,6 +4,9 @@ Architecture and Command Lifecycle
 The package has two connected execution models: local command execution and
 consumer repository synchronization.
 
+For durable context behind major workflow and synchronization choices, see
+:doc:`adr/index`.
+
 Local Command Lifecycle
 -----------------------
 

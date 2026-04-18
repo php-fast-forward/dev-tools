@@ -9,3 +9,4 @@ step.
    :maxdepth: 1
 
    architecture
+   adr/index
