@@ -968,7 +968,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
             "name": "GitHooksCommand",
-            "summary": "Installs\u0020Git\u0020hooks\u0020and\u0020initializes\u0020GrumPHP\u0020hooks\u0020for\u0020the\u0020consumer\u0020repository.",
+            "summary": "Installs\u0020packaged\u0020Git\u0020hooks\u0020for\u0020the\u0020consumer\u0020repository.",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A__construct\u0028\u0029",
@@ -983,7 +983,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Initializes\u0020GrumPHP\u0020hooks\u0020and\u0020copies\u0020packaged\u0020hooks.",
+            "summary": "Copies\u0020packaged\u0020Git\u0020hooks.",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#method_execute"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024filesystem",
@@ -995,16 +995,6 @@ Search.appendIndex(
             "name": "fileLocator",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_fileLocator"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024processBuilder",
-            "name": "processBuilder",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_processBuilder"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024processQueue",
-            "name": "processQueue",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_processQueue"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024finderFactory",
             "name": "finderFactory",

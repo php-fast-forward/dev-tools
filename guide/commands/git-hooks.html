@@ -2353,26 +2353,23 @@
             <h1>git-hooks</h1>
 
             
-    <p>Installs Fast Forward Git hooks and initializes GrumPHP.</p>
+    <p>Installs packaged Fast Forward Git hooks.</p>
 
             <section class="section " id="description">
             <h2>Description</h2>
 
             
     <p>The <code>git-hooks</code>
- command installs Git hooks into the repository and optionally
-runs GrumPHP initialization. It:</p>
+ command installs the hook templates maintained in
+<code>resources/git-hooks</code>
+ into the repository. It:</p>
 
             
     
 <ol start="1" type="1">
-    <li value="1">Runs <code>grumphp git:init</code>
- to register hooks with GrumPHP (unless <code>--skip-grumphp-init</code>
-)</li>
+    <li value="1">Copies hook files from a source directory to the target hooks directory</li>
 
-    <li value="2">Copies hook files from a source directory to the target hooks directory</li>
-
-    <li value="3">Sets executable permissions on copied hooks</li>
+    <li value="2">Sets executable permissions on copied hooks</li>
 
 </ol>
 
@@ -2402,11 +2399,6 @@ vendor/bin/dev-tools git-hooks [options]</code></pre>
         
         <dd>Path to the target Git hooks directory. Default: <code>.git/hooks</code>
 .</dd>
-                                <dt><code>--skip-grumphp-init</code>
-</dt>
-        
-        <dd>Skip running <code>grumphp git:init</code>
- before copying hooks.</dd>
                                 <dt><code>--no-overwrite</code>
 </dt>
         
@@ -2422,11 +2414,6 @@ vendor/bin/dev-tools git-hooks [options]</code></pre>
     <p>Install hooks with defaults:</p>
 
             <pre><code class="language-bash">composer git-hooks</code></pre>
-
-            
-    <p>Install hooks without running GrumPHP init:</p>
-
-            <pre><code class="language-bash">composer git-hooks --skip-grumphp-init</code></pre>
 
             
     <p>Install hooks without overwriting existing ones:</p>
@@ -2452,7 +2439,7 @@ vendor/bin/dev-tools git-hooks [options]</code></pre>
     </tr>
     <tr>
             <td>1</td>
-            <td>Failure. GrumPHP init failed or copy error.</td>
+            <td>Failure. Copy error.</td>
     </tr>
 </tbody>
 </table>
