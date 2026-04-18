@@ -1551,6 +1551,21 @@ Search.appendIndex(
             "summary": "Changes\u0020the\u0020permission\u0020mode\u0020for\u0020one\u0020or\u0020more\u0020files.",
             "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_chmod"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Aremove\u0028\u0029",
+            "name": "remove",
+            "summary": "Removes\u0020files,\u0020symbolic\u0020links,\u0020or\u0020directories.",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_remove"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Asymlink\u0028\u0029",
+            "name": "symlink",
+            "summary": "Creates\u0020a\u0020symbolic\u0020link.",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_symlink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Areadlink\u0028\u0029",
+            "name": "readlink",
+            "summary": "Reads\u0020a\u0020symbolic\u0020link\u0020target.",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_readlink"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003AgetAbsolutePath\u0028\u0029",
             "name": "getAbsolutePath",
             "summary": "Resolves\u0020a\u0020path\u0020or\u0020iterable\u0020of\u0020paths\u0020into\u0020their\u0020absolute\u0020path\u0020representation.",
@@ -1605,6 +1620,21 @@ Search.appendIndex(
             "name": "chmod",
             "summary": "Changes\u0020the\u0020permission\u0020mode\u0020for\u0020one\u0020or\u0020more\u0020files.",
             "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_chmod"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Aremove\u0028\u0029",
+            "name": "remove",
+            "summary": "Removes\u0020files,\u0020symbolic\u0020links,\u0020or\u0020directories.",
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_remove"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Asymlink\u0028\u0029",
+            "name": "symlink",
+            "summary": "Creates\u0020a\u0020symbolic\u0020link.",
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_symlink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Areadlink\u0028\u0029",
+            "name": "readlink",
+            "summary": "Reads\u0020a\u0020symbolic\u0020link\u0020target.",
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_readlink"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003AgetAbsolutePath\u0028\u0029",
             "name": "getAbsolutePath",
