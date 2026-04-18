@@ -14,6 +14,7 @@ It supports:
 - Enforcing minimum coverage thresholds
 - Filtering tests by pattern
 - Cache management
+- Optional progress and coverage-text verbosity control
 
 Usage
 -----
@@ -43,9 +44,15 @@ Options
 ``--no-cache``
    Disable PHPUnit caching.
 
+``--no-progress``
+   Disable PHPUnit progress output.
+
 ``--coverage, -c`` (optional)
    Generate code coverage reports. If a path is provided, reports are saved there.
    Without a path, reports are saved to the cache directory.
+
+``--coverage-summary``
+   When coverage text is generated, show only the summary table.
 
 ``--filter, -f`` (optional)
    Filter which tests to run based on a pattern (regex supported).
@@ -74,6 +81,12 @@ Run with coverage report:
 
    composer tests --coverage=public/coverage
 
+Run with concise coverage text output:
+
+.. code-block:: bash
+
+   composer tests --coverage=public/coverage --coverage-summary
+
 Run tests matching a pattern:
 
 .. code-block:: bash
@@ -91,6 +104,12 @@ Run without cache:
 .. code-block:: bash
 
    composer tests --no-cache
+
+Run without PHPUnit progress output:
+
+.. code-block:: bash
+
+   composer tests --no-progress
 
 Exit Codes
 ---------
@@ -113,5 +132,7 @@ Behavior
 - Local ``phpunit.xml`` is preferred over the packaged default.
 - Coverage filters are automatically applied to all PSR-4 paths from composer.json.
 - Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.
+- ``--coverage-summary`` forwards PHPUnit's ``--only-summary-for-coverage-text``
+  only when coverage text output is generated.
 - The command fails if minimum coverage is not met (when ``--min-coverage`` is set).
 - The packaged configuration registers the DevTools PHPUnit extension.

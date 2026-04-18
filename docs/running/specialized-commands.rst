@@ -18,6 +18,8 @@ Important details:
 
 - local ``phpunit.xml`` is preferred over the packaged default;
 - ``--coverage=<path>`` creates HTML, Testdox, Clover, and raw coverage output;
+- ``--coverage-summary`` keeps coverage text output to PHPUnit's summary;
+- ``--no-progress`` disables PHPUnit progress output;
 - ``--no-cache`` disables ``tmp/cache/phpunit``;
 - the packaged configuration registers the DevTools PHPUnit extension.
 
@@ -136,7 +138,7 @@ Runs the documentation and test-report pipeline used by GitHub Pages.
 Important details:
 
 - it calls ``docs --target public``;
-- it calls ``tests --coverage public/coverage``;
+- it calls ``tests --coverage public/coverage --no-progress --coverage-summary``;
 - it is the reporting stage used by ``standards``.
 
 ``skills``

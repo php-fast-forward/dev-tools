@@ -150,6 +150,18 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function commandWillHaveExpectedOutputOptions(): void
+    {
+        $definition = $this->command->getDefinition();
+
+        self::assertTrue($definition->hasOption('no-progress'));
+        self::assertTrue($definition->hasOption('coverage-summary'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWillRunPhpUnitProcessWithConfigFile(): void
     {
         $this->willQueueProcessMatching(function (Process $process): bool {
@@ -172,11 +184,69 @@ final class TestsCommandTest extends TestCase
             $commandLine = $process->getCommandLine();
 
             return str_contains($commandLine, '--coverage-text')
+                && ! str_contains($commandLine, '--only-summary-for-coverage-text')
                 && str_contains($commandLine, '--coverage-html=' . getcwd() . '/public/coverage');
         });
 
         $this->input->getOption('coverage')
             ->willReturn('public/coverage');
+
+        $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithNoProgressWillForwardNoProgressToPhpUnit(): void
+    {
+        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
+            $process->getCommandLine(),
+            '--no-progress',
+        ));
+
+        $this->input->getOption('no-progress')
+            ->willReturn(true);
+
+        $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithCoverageSummaryWillIncludeCoverageTextSummaryArgument(): void
+    {
+        $this->willQueueProcessMatching(function (Process $process): bool {
+            $commandLine = $process->getCommandLine();
+
+            return str_contains($commandLine, '--coverage-text')
+                && str_contains($commandLine, '--only-summary-for-coverage-text');
+        });
+
+        $this->input->getOption('coverage')
+            ->willReturn('public/coverage');
+        $this->input->getOption('coverage-summary')
+            ->willReturn(true);
+
+        $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithCoverageSummaryWithoutCoverageWillNotGenerateCoverageTextSummary(): void
+    {
+        $this->willQueueProcessMatching(static function (Process $process): bool {
+            $commandLine = $process->getCommandLine();
+
+            return ! str_contains($commandLine, '--coverage-text')
+                && ! str_contains($commandLine, '--only-summary-for-coverage-text');
+        });
+
+        $this->input->getOption('coverage-summary')
+            ->willReturn(true);
 
         $this->invokeExecute();
     }

@@ -11,7 +11,7 @@ What the Command Runs
 ``reports`` executes the following steps:
 
 1. ``docs --target public``
-2. ``tests --coverage public/coverage``
+2. ``tests --coverage public/coverage --no-progress --coverage-summary``
 
 Outputs
 -------
