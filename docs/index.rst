@@ -24,4 +24,5 @@ fit together.
    api/index
    internals/index
    links/index
+   troubleshooting
    faq
