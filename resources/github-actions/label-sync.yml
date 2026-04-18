@@ -9,5 +9,7 @@ on:
 jobs:
   label-sync:
     permissions:
+      contents: read
+      issues: read
       pull-requests: write
     uses: php-fast-forward/dev-tools/.github/workflows/label-sync.yml@main

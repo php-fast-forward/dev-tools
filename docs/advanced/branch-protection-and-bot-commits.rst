@@ -92,6 +92,35 @@ write generated preview commits, update pull request comments, and publish Pages
 content. Keep those permissions scoped to the workflow jobs that actually need
 them.
 
+Workflow Permission Scope
+-------------------------
+
+The reusable workflows default to read-only repository access and grant write
+permissions at the job level when generated content must be pushed or pull
+requests must be updated.
+
+``tests.yml`` only needs ``contents: read`` because it checks out code, installs
+dependencies, and runs PHPUnit.
+
+``reports.yml`` keeps ``contents: write`` on jobs that publish or clean
+``gh-pages`` content. The pull request preview comment runs as a separate job
+with ``pull-requests: write`` because it posts or updates the sticky preview
+comment. Scheduled preview cleanup uses ``pull-requests: read`` so it can
+distinguish open pull requests from closed or merged ones before deleting
+``previews/pr-<number>`` directories.
+
+``wiki.yml`` keeps ``contents: write`` on preview, publish, and cleanup jobs
+because the workflow pushes wiki branches, updates the parent repository
+submodule pointer, promotes preview content to wiki ``master``, and deletes
+stale preview branches. Jobs that inspect pull request state keep
+``pull-requests: read``.
+
+The label synchronization workflow declares ``issues: read`` to copy labels from
+the linked issue and ``pull-requests: write`` to apply those labels to the pull
+request. The auto-assign workflow keeps ``issues: write`` and
+``pull-requests: write`` because assignment is a write operation on both event
+types.
+
 Resolving ``.github/wiki`` Pointer Conflicts
 --------------------------------------------
 
