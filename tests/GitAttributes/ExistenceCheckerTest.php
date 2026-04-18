@@ -33,7 +33,7 @@ final class ExistenceCheckerTest extends TestCase
     use ProphecyTrait;
 
     /**
-     * @property ObjectProphecy<FilesystemInterface> $filesystem
+     * @var ObjectProphecy<FilesystemInterface>
      */
     private readonly ObjectProphecy $filesystem;
 
