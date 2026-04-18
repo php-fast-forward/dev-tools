@@ -2,22 +2,35 @@
 
 #
 # DevTools post-checkout hook
-# Runs composer update if composer.json was modified after checkout
+# Runs composer update if composer.json or composer.lock changed after checkout
 #
 
 PREV_HEAD="$1"
 NEW_HEAD="$2"
 CHECKOUT_TYPE="$3"
 
-if [ "$CHECKOUT_TYPE" = "1" ]; then
-    if git diff --quiet --cached "$PREV_HEAD" "$NEW_HEAD" -- composer.json; then
-        if git diff --quiet "$PREV_HEAD" "$NEW_HEAD" -- composer.json; then
-            exit 0
-        fi
-    fi
+GIT_TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+GIT_DIR=$(git rev-parse --git-dir 2>/dev/null) || exit 0
 
-    echo "DevTools: composer.json changed, running composer update..."
-    (cd "$(git rev-parse --show-toplevel)" && composer update --minimal-changes --no-interaction) || true
+export DEVTOOLS_GIT_WORKING_DIR="$GIT_TOPLEVEL"
+export DEVTOOLS_GIT_DIR="$GIT_DIR"
+export DEVTOOLS_GIT_HOOK="post-checkout"
+export DEVTOOLS_GIT_PREV_HEAD="$PREV_HEAD"
+export DEVTOOLS_GIT_NEW_HEAD="$NEW_HEAD"
+export DEVTOOLS_GIT_CHECKOUT_TYPE="$CHECKOUT_TYPE"
+
+if [ "$CHECKOUT_TYPE" != "1" ]; then
+    exit 0
+fi
+
+CHANGED_FILES=$(git diff --name-only "$PREV_HEAD" "$NEW_HEAD" 2>/dev/null || true)
+
+if printf '%s\n' "$CHANGED_FILES" | grep -Eq '^(composer\.json|composer\.lock)$'; then
+    echo "DevTools: composer manifest changed after checkout, running composer update..."
+    (
+        cd "$GIT_TOPLEVEL" || exit 1
+        composer update --minimal-changes --no-interaction
+    ) || true
 fi
 
 exit 0

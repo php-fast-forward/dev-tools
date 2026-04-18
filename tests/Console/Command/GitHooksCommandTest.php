@@ -22,11 +22,8 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Console\Command\GitHooksCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Process\ProcessBuilder;
-use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -36,7 +33,6 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
-use Symfony\Component\Process\Process;
 
 use function Safe\mkdir;
 use function Safe\file_put_contents;
@@ -44,7 +40,6 @@ use function Safe\unlink;
 use function Safe\rmdir;
 
 #[CoversClass(GitHooksCommand::class)]
-#[UsesClass(ProcessBuilder::class)]
 final class GitHooksCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -54,8 +49,6 @@ final class GitHooksCommandTest extends TestCase
     private ObjectProphecy $fileLocator;
 
     private ObjectProphecy $finderFactory;
-
-    private ObjectProphecy $processQueue;
 
     private ObjectProphecy $input;
 
@@ -77,15 +70,12 @@ final class GitHooksCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
-        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
 
         $this->command = new GitHooksCommand(
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
-            new ProcessBuilder(),
-            $this->processQueue->reveal(),
             $this->finderFactory->reveal(),
         );
     }
@@ -110,7 +100,7 @@ final class GitHooksCommandTest extends TestCase
         self::assertSame('git-hooks', $this->command->getName());
         self::assertSame('Installs Fast Forward Git hooks.', $this->command->getDescription());
         self::assertSame(
-            'This command runs GrumPHP hook initialization and copies packaged Git hooks into the current repository.',
+            'This command copies packaged Git hooks into the current repository.',
             $this->command->getHelp()
         );
     }
@@ -119,22 +109,14 @@ final class GitHooksCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillRunGrumPhpInitAndCopyHooks(): void
+    public function executeWillCopyPackagedHooks(): void
     {
-        $this->input->getOption('skip-grumphp-init')
-            ->willReturn(false);
         $this->input->getOption('source')
             ->willReturn('resources/git-hooks');
         $this->input->getOption('target')
             ->willReturn('.git/hooks');
         $this->input->getOption('no-overwrite')
             ->willReturn(false);
-
-        $this->processQueue->add(Argument::type(Process::class))
-            ->shouldBeCalledOnce();
-        $this->processQueue->run($this->output->reveal())
-            ->willReturn(GitHooksCommand::SUCCESS)
-            ->shouldBeCalledOnce();
 
         $this->fileLocator->locate('resources/git-hooks')
             ->willReturn($this->sourceDirectory);

@@ -2,12 +2,25 @@
 
 #
 # DevTools post-merge hook
-# Runs composer update if composer.json was modified after merge
+# Runs composer update if composer.json or composer.lock changed after merge
 #
 
-if git diff --cached --name-only --diff-filter=M | grep -q "^composer.json$"; then
-    echo "DevTools: composer.json modified in merge, running composer update..."
-    (cd "$(git rev-parse --show-toplevel)" && composer update --minimal-changes --no-interaction) || true
+GIT_TOPLEVEL=$(git rev-parse --show-toplevel 2>/dev/null) || exit 0
+GIT_DIR=$(git rev-parse --git-dir 2>/dev/null) || exit 0
+
+export DEVTOOLS_GIT_WORKING_DIR="$GIT_TOPLEVEL"
+export DEVTOOLS_GIT_DIR="$GIT_DIR"
+export DEVTOOLS_GIT_HOOK="post-merge"
+export DEVTOOLS_GIT_POST_MERGE_SQUASH=${1:-0}
+
+CHANGED_FILES=$(git diff --name-only ORIG_HEAD HEAD 2>/dev/null || true)
+
+if printf '%s\n' "$CHANGED_FILES" | grep -Eq '^(composer\.json|composer\.lock)$'; then
+    echo "DevTools: composer manifest changed after merge, running composer update..."
+    (
+        cd "$GIT_TOPLEVEL" || exit 1
+        composer update --minimal-changes --no-interaction
+    ) || true
 fi
 
 exit 0
