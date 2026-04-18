@@ -36,16 +36,23 @@ How GitHub Pages Publishing Works
 ---------------------------------
 
 - ``.github/workflows/reports.yml`` runs ``composer dev-tools reports``.
-- The workflow uploads ``public/`` as the Pages artifact.
-- On the ``main`` branch, GitHub Pages serves the generated site.
+- Pull requests publish previews under ``previews/pr-<number>/``.
+- On the ``main`` branch, GitHub Pages serves the generated site from the root
+  of the Pages branch.
 
 How Wiki Publishing Works
 -------------------------
 
 - ``.github/workflows/wiki.yml`` runs
   ``composer dev-tools wiki -- --target=.github/wiki``.
-- The workflow commits the wiki submodule contents.
-- The parent repository then commits the updated submodule pointer.
+- Pull requests publish generated wiki content to branches such as
+  ``pr-123``.
+- The parent repository then commits the updated submodule pointer to the pull
+  request branch.
+- After merge, the preview content is promoted to the wiki ``master`` branch.
+
+See :doc:`branch-protection-and-bot-commits` for the branch protection model,
+bot commit behavior, and ``.github/wiki`` conflict resolution steps.
 
 Producer Impact
 ---------------
