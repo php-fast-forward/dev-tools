@@ -1416,6 +1416,11 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020Composer\u0020scripts\u0020managed\u0020by\u0020this\u0020command.",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#method_scripts"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024composer",
+            "name": "composer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_composer"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024filesystem",
             "name": "filesystem",
             "summary": "",
