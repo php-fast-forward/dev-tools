@@ -5,6 +5,8 @@ on:
     types: [opened, synchronize, reopened]
   pull_request_target:
     types: [closed]
+  schedule:
+    - cron: '17 3 * * *'
   workflow_dispatch:
 
 permissions:
