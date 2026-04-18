@@ -137,9 +137,14 @@ jobs:
           git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
 
       - name: Prepare wiki publish branch from preview branch
+        id: prepare_publish
         working-directory: .github/wiki
         run: |
           git fetch origin "${WIKI_PUBLISH_BRANCH}" "${WIKI_PREVIEW_BRANCH}"
+          expected_preview_sha="$(git rev-parse "origin/${WIKI_PREVIEW_BRANCH}")"
+          echo "expected_preview_sha=${expected_preview_sha}" >> "$GITHUB_OUTPUT"
+          echo "Expected wiki preview SHA: ${expected_preview_sha}"
+
           git switch -C "${WIKI_PUBLISH_BRANCH}" --track "origin/${WIKI_PUBLISH_BRANCH}" || git switch "${WIKI_PUBLISH_BRANCH}"
           git reset --hard "origin/${WIKI_PREVIEW_BRANCH}"
           git clean -fd
@@ -147,6 +152,26 @@ jobs:
       - name: Push wiki publish branch
         working-directory: .github/wiki
         run: git push --force-with-lease origin HEAD:"${WIKI_PUBLISH_BRANCH}"
+
+      - name: Validate wiki publish branch
+        working-directory: .github/wiki
+        env:
+          EXPECTED_PREVIEW_SHA: ${{ steps.prepare_publish.outputs.expected_preview_sha }}
+        run: |
+          actual_publish_sha="$(git ls-remote origin "refs/heads/${WIKI_PUBLISH_BRANCH}" | awk '{print $1}')"
+
+          echo "Expected wiki publish SHA: ${EXPECTED_PREVIEW_SHA}"
+          echo "Actual wiki publish SHA: ${actual_publish_sha}"
+
+          if [ -z "${actual_publish_sha}" ]; then
+            echo "Remote wiki publish branch ${WIKI_PUBLISH_BRANCH} was not found after push." >&2
+            exit 1
+          fi
+
+          if [ "${actual_publish_sha}" != "${EXPECTED_PREVIEW_SHA}" ]; then
+            echo "Remote wiki publish branch ${WIKI_PUBLISH_BRANCH} does not match preview branch ${WIKI_PREVIEW_BRANCH}." >&2
+            exit 1
+          fi
 
       - name: Delete wiki preview branch
         working-directory: .github/wiki

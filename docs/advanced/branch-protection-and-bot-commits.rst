@@ -34,8 +34,10 @@ reject direct commits.
 After the pull request is merged into ``main``, the publish job copies the
 content from the wiki preview branch, such as ``pr-123``, to the wiki
 ``master`` branch. That makes the reviewed wiki content live only after the
-source code merge is complete. The workflow then deletes the ``pr-123`` branch
-because it is no longer needed.
+source code merge is complete. The workflow validates that remote ``master``
+points to the expected preview commit before it deletes the ``pr-123`` branch
+because the preview branch is the last rollback source for that generated
+content.
 
 If the pull request is closed without merge, the workflow deletes the matching
 wiki preview branch without promoting it to ``master``. A scheduled cleanup also
