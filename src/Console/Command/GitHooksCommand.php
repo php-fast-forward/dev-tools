@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -29,7 +30,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
-use Symfony\Component\Finder\Finder;
 
 /**
  * Installs Git hooks and initializes GrumPHP hooks for the consumer repository.
@@ -48,14 +48,14 @@ final class GitHooksCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble GrumPHP processes
      * @param ProcessQueueInterface $processQueue the queue used to execute GrumPHP initialization
-     * @param Finder $finder the finder used to iterate hook files
+     * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly Finder $finder,
+        private readonly FinderFactoryInterface $finderFactory,
     ) {
         parent::__construct();
     }
@@ -118,7 +118,8 @@ final class GitHooksCommand extends BaseCommand
         $targetPath = (string) $this->filesystem->getAbsolutePath((string) $input->getOption('target'));
         $overwrite = ! $input->getOption('no-overwrite');
 
-        $files = $this->finder
+        $files = $this->finderFactory
+            ->create()
             ->files()
             ->in($sourcePath);
 

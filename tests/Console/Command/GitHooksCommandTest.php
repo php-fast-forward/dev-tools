@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\GitHooksCommand;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -52,6 +53,8 @@ final class GitHooksCommandTest extends TestCase
 
     private ObjectProphecy $fileLocator;
 
+    private ObjectProphecy $finderFactory;
+
     private ObjectProphecy $processQueue;
 
     private ObjectProphecy $input;
@@ -73,6 +76,7 @@ final class GitHooksCommandTest extends TestCase
 
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -82,7 +86,7 @@ final class GitHooksCommandTest extends TestCase
             $this->fileLocator->reveal(),
             new ProcessBuilder(),
             $this->processQueue->reveal(),
-            new Finder(),
+            $this->finderFactory->reveal(),
         );
     }
 
@@ -134,6 +138,9 @@ final class GitHooksCommandTest extends TestCase
 
         $this->fileLocator->locate('resources/git-hooks')
             ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
         $this->filesystem->getAbsolutePath('.git/hooks')
             ->willReturn('/app/.git/hooks');
         $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', true)
