@@ -118,7 +118,7 @@ final class SyncCommand extends BaseCommand
     /**
      * Adds a dev-tools command invocation to the process queue.
      *
-     * @param list<string> $arguments the dev-tools command arguments
+     * @param list<string|null> $arguments the dev-tools command arguments
      * @param bool $detached whether the command MAY run detached from subsequent queue entries
      */
     private function queueDevToolsCommand(array $arguments, bool $detached = false): void
@@ -126,7 +126,7 @@ final class SyncCommand extends BaseCommand
         $processBuilder = $this->processBuilder;
 
         foreach ($arguments as $argument) {
-            if (empty($argument)) {
+            if ($argument === null) {
                 continue;
             }
 
