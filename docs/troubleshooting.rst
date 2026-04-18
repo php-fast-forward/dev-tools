@@ -227,6 +227,8 @@ Recovery:
 - rerun the cleanup workflow for the closed pull request when available;
 - remove stale preview directories or branches only after confirming the pull
   request is closed or merged;
+- use the scheduled wiki cleanup workflow to remove leftover ``pr-<number>``
+  branches for pull requests that are already closed;
 - check the reports and wiki workflow logs before deleting artifacts manually.
 
 Related References

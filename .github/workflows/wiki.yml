@@ -3,6 +3,8 @@ name: Update Wiki
 on:
   workflow_call:
   workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *'
   pull_request:
     types: [opened, synchronize, reopened]
   pull_request_target:
@@ -148,4 +150,87 @@ jobs:
 
       - name: Delete wiki preview branch
         working-directory: .github/wiki
-        run: git push origin --delete "${WIKI_PREVIEW_BRANCH}"
+        run: |
+          if git ls-remote --exit-code --heads origin "${WIKI_PREVIEW_BRANCH}" >/dev/null 2>&1; then
+            git push origin --delete "${WIKI_PREVIEW_BRANCH}"
+          else
+            echo "Wiki preview branch ${WIKI_PREVIEW_BRANCH} does not exist. Nothing to delete."
+          fi
+
+  cleanup_closed_preview:
+    name: Delete Closed PR Wiki Preview
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == false
+    runs-on: ubuntu-latest
+
+    env:
+      WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v6
+        with:
+          token: ${{ github.token }}
+          ref: main
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Mark wiki workspace as safe for git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
+
+      - name: Delete wiki preview branch
+        working-directory: .github/wiki
+        run: |
+          if git ls-remote --exit-code --heads origin "${WIKI_PREVIEW_BRANCH}" >/dev/null 2>&1; then
+            git push origin --delete "${WIKI_PREVIEW_BRANCH}"
+          else
+            echo "Wiki preview branch ${WIKI_PREVIEW_BRANCH} does not exist. Nothing to delete."
+          fi
+
+  cleanup_orphaned_previews:
+    name: Delete Orphaned Wiki Previews
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v6
+        with:
+          token: ${{ github.token }}
+          ref: main
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Mark wiki workspace as safe for git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
+
+      - name: Delete wiki branches for closed pull requests
+        working-directory: .github/wiki
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git fetch origin '+refs/heads/pr-*:refs/remotes/origin/pr-*' || true
+
+          git for-each-ref --format='%(refname:short)' refs/remotes/origin/pr-* | while read -r remote_branch; do
+            branch="${remote_branch#origin/}"
+            pull_request_number="${branch#pr-}"
+
+            if ! [[ "${pull_request_number}" =~ ^[0-9]+$ ]]; then
+              echo "Skipping non-PR wiki preview branch ${branch}."
+              continue
+            fi
+
+            state="$(gh pr view "${pull_request_number}" --repo "${GITHUB_REPOSITORY}" --json state --jq '.state' 2>/dev/null || echo UNKNOWN)"
+
+            case "${state}" in
+              CLOSED|MERGED)
+                echo "Deleting wiki preview branch ${branch} for ${state} pull request #${pull_request_number}."
+                git push origin --delete "${branch}" || true
+                ;;
+              OPEN)
+                echo "Keeping wiki preview branch ${branch} for open pull request #${pull_request_number}."
+                ;;
+              *)
+                echo "Could not resolve pull request #${pull_request_number} for wiki preview branch ${branch}. Keeping it."
+                ;;
+            esac
+          done
