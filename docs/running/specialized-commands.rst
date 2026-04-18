@@ -258,15 +258,14 @@ Important details:
 ``git-hooks``
 -------------
 
-Installs Fast Forward Git hooks and initializes GrumPHP.
+Installs packaged Fast Forward Git hooks.
 
 .. code-block:: bash
 
-   composer git-hooks --skip-grumphp-init
+   composer git-hooks
 
 Important details:
 
-- runs ``grumphp git:init`` to register hooks with GrumPHP by default;
 - copies hook files from source to target directory;
 - sets executable permissions on copied hooks;
 - ``--source`` defaults to ``resources/git-hooks``;

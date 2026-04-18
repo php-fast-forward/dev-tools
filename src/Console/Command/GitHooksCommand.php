@@ -22,8 +22,6 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Process\ProcessBuilderInterface;
-use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -32,12 +30,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 
 /**
- * Installs Git hooks and initializes GrumPHP hooks for the consumer repository.
+ * Installs packaged Git hooks for the consumer repository.
  */
 #[AsCommand(
     name: 'git-hooks',
     description: 'Installs Fast Forward Git hooks.',
-    help: 'This command runs GrumPHP hook initialization and copies packaged Git hooks into the current repository.'
+    help: 'This command copies packaged Git hooks into the current repository.'
 )]
 final class GitHooksCommand extends BaseCommand
 {
@@ -46,15 +44,11 @@ final class GitHooksCommand extends BaseCommand
      *
      * @param FilesystemInterface $filesystem the filesystem used to copy hooks
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
-     * @param ProcessBuilderInterface $processBuilder the builder used to assemble GrumPHP processes
-     * @param ProcessQueueInterface $processQueue the queue used to execute GrumPHP initialization
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
-        private readonly ProcessBuilderInterface $processBuilder,
-        private readonly ProcessQueueInterface $processQueue,
         private readonly FinderFactoryInterface $finderFactory,
     ) {
         parent::__construct();
@@ -81,11 +75,6 @@ final class GitHooksCommand extends BaseCommand
                 default: '.git/hooks',
             )
             ->addOption(
-                name: 'skip-grumphp-init',
-                mode: InputOption::VALUE_NONE,
-                description: 'Skip running grumphp git:init before copying hooks.',
-            )
-            ->addOption(
                 name: 'no-overwrite',
                 mode: InputOption::VALUE_NONE,
                 description: 'Do not overwrite existing hook files.',
@@ -93,7 +82,7 @@ final class GitHooksCommand extends BaseCommand
     }
 
     /**
-     * Initializes GrumPHP hooks and copies packaged hooks.
+     * Copies packaged Git hooks.
      *
      * @param InputInterface $input the command input
      * @param OutputInterface $output the command output
@@ -102,18 +91,6 @@ final class GitHooksCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if (! $input->getOption('skip-grumphp-init')) {
-            $this->processQueue->add(
-                $this->processBuilder
-                    ->withArgument('git:init')
-                    ->build('vendor/bin/grumphp')
-            );
-
-            if (self::SUCCESS !== $this->processQueue->run($output)) {
-                return self::FAILURE;
-            }
-        }
-
         $sourcePath = $this->fileLocator->locate((string) $input->getOption('source'));
         $targetPath = (string) $this->filesystem->getAbsolutePath((string) $input->getOption('target'));
         $overwrite = ! $input->getOption('no-overwrite');
@@ -133,7 +110,7 @@ final class GitHooksCommand extends BaseCommand
             }
 
             $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite);
-            $this->filesystem->chmod($hookPath, 0o755, 0o755);
+            $this->filesystem->chmod($hookPath, 755, 0o755);
 
             $output->writeln(\sprintf('<info>Installed %s hook.</info>', $file->getFilename()));
         }
