@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use Composer\Factory;
 use Composer\Json\JsonManipulator;
+use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -45,10 +46,12 @@ final class UpdateComposerJsonCommand extends BaseCommand
     /**
      * Creates a new UpdateComposerJsonCommand instance.
      *
+     * @param ComposerJsonInterface $composer the composer.json metadata accessor
      * @param FilesystemInterface $filesystem the filesystem used to read and write composer.json
      * @param FileLocatorInterface $fileLocator the locator used to resolve packaged configuration files
      */
     public function __construct(
+        private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
     ) {
@@ -93,6 +96,10 @@ final class UpdateComposerJsonCommand extends BaseCommand
 
         foreach ($this->scripts() as $name => $command) {
             $manipulator->addSubNode('scripts', $name, $command);
+        }
+
+        if ('' === $this->composer->getReadme() && $this->filesystem->exists('README.md', \dirname($file))) {
+            $manipulator->addProperty('readme', 'README.md');
         }
 
         $manipulator->addSubNode('extra', 'grumphp', [

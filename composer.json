@@ -12,6 +12,7 @@
         "ecs",
         "fast-forward"
     ],
+    "readme": "README.md",
     "authors": [
         {
             "name": "Felipe Sayão Lobato Abreu",
