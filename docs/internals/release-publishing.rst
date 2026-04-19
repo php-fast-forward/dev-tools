@@ -2,8 +2,9 @@ Release and Publishing Workflow
 ===============================
 
 This guide is for maintainers preparing a Fast Forward DevTools release. It
-documents the current manual release flow and the publishing surfaces affected
-by a merge or tag. It does not add release automation.
+documents the changelog-driven release flow, the automated GitHub Actions
+sequence that supports it, and the publishing surfaces affected by a merge or
+tag.
 
 Release Surfaces
 ----------------
@@ -19,7 +20,7 @@ Release Surfaces
      - Pull requests merge into ``main`` after required checks pass.
    * - Git tags
      - Immutable release markers consumed by Composer and maintainers.
-     - Created manually when maintainers decide to publish a release.
+     - Created by the changelog release workflow when a prepared release pull request is merged.
    * - Packagist
      - Composer package discovery for ``fast-forward/dev-tools``.
      - Reads repository tags and metadata for installable versions.
@@ -31,25 +32,28 @@ Release Surfaces
      - Updated by the wiki workflow after changes land on ``main``.
    * - GitHub Releases
      - Human-facing release notes and changelog summary.
-     - Created manually when a tagged version should be announced.
+     - Published by the changelog release workflow from the released changelog section.
 
 Versioning and Branch Flow
 --------------------------
 
-Use pull requests for all release-bound changes. The release candidate should
-land on ``main`` before any tag is created.
+Use pull requests for all release-bound changes. The release candidate SHOULD
+land on ``main`` through a dedicated release-preparation pull request before the
+tag or GitHub release is published.
 
 The expected flow is:
 
-1. merge feature, bug fix, and documentation pull requests into ``main``;
+1. merge feature, bug fix, and documentation pull requests into ``main`` while keeping ``Unreleased`` current;
 2. run the release verification checklist against the current ``main``;
-3. prepare changelog or release notes from merged work;
-4. create a version tag from the verified ``main`` commit;
-5. publish the GitHub release notes for that tag;
-6. confirm Packagist, reports, and wiki publication.
+3. trigger the changelog workflow manually through ``workflow_dispatch`` to infer the next version or accept an explicit version;
+4. review the release notes preview written to ``.dev-tools/release-notes.md`` in the release-preparation branch;
+5. review and merge the release-preparation pull request created from that workflow;
+6. let the merged release workflow create or update the GitHub release and tag from the released changelog section;
+7. confirm Packagist, reports, and wiki publication.
 
 Do not retag an existing published version. If a release needs correction,
-create a follow-up commit and publish a new version tag.
+prepare a follow-up changelog entry, open a new release-preparation pull
+request, and publish a new version tag.
 
 Pre-Release Verification
 ------------------------
@@ -82,7 +86,16 @@ The working tree should be clean, and the release commit should already be on
 Tagging and GitHub Release Notes
 --------------------------------
 
-Create the tag from the verified ``main`` commit:
+The changelog workflow now handles the tag and GitHub release publication after
+the release-preparation pull request is merged. Manual tagging SHOULD only be
+used for recovery or exceptional maintenance.
+
+The same workflow also owns pull-request changelog validation. Regular feature
+and fix pull requests SHOULD expect ``changelog:check`` to run against the base
+branch and fail when no meaningful ``Unreleased`` entry is added.
+
+If maintainers must recover the release manually, create the tag from the
+verified ``main`` commit:
 
 .. code-block:: bash
 
@@ -91,8 +104,8 @@ Create the tag from the verified ``main`` commit:
     git tag <version>
     git push origin <version>
 
-Use the GitHub release page for the pushed tag to publish release notes. The
-notes SHOULD include:
+When the workflow publishes the GitHub release, the notes come from the
+matching released changelog section. Those notes SHOULD include:
 
 - user-facing changes;
 - breaking changes or migration notes;
@@ -146,12 +159,14 @@ After the tag and release notes are published:
 7. open follow-up issues for any release automation or changelog improvements
    discovered during the process.
 
-Current Manual Steps Versus Future Automation
----------------------------------------------
+Current Automation and Remaining Manual Checks
+----------------------------------------------
 
-Maintainers currently choose the release commit, create the tag, and write
-release notes manually. That keeps release intent explicit.
+Maintainers still decide when to prepare a release and when to merge the
+release-preparation pull request. After that merge, the workflow owns the tag
+and GitHub release publication so branch protection rules remain intact.
 
-Future automation could help generate changelog drafts, validate Packagist
-publication, or summarize post-release checks. Those improvements should remain
-separate from this guide unless the release process itself changes.
+Further automation may still help validate Packagist publication, summarize
+post-release checks, or backfill historical changelog sections. Those
+improvements should remain separate from this guide unless the release process
+itself changes again.

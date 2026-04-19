@@ -9,7 +9,7 @@ Description
 The ``dev-tools:sync`` command synchronizes consumer-facing automation and defaults:
 
 1. ``update-composer-json`` - adds dev-tools scripts to composer.json
-2. ``copy-resource`` - copies GitHub Actions workflows
+2. ``copy-resource`` - copies GitHub Actions workflows, including changelog automation
 3. ``copy-resource`` - copies .editorconfig
 4. ``copy-resource`` - copies dependabot.yml
 5. ``funding`` - synchronizes ``composer.json`` funding metadata with ``.github/FUNDING.yml``
@@ -92,7 +92,8 @@ Behavior
 
 - Updates ``composer.json`` scripts, extra configuration, and managed funding
   metadata.
-- Copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``.
+- Copies missing workflow stubs, including tests, reports, wiki, and changelog
+  automation, plus ``.editorconfig`` and ``dependabot.yml``.
 - Synchronizes supported funding metadata between ``composer.json`` and
   ``.github/FUNDING.yml``.
 - When ``--overwrite`` is enabled, replaced text resources emit a unified diff

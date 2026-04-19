@@ -32,30 +32,39 @@ use function Safe\json_decode;
 #[UsesClass(FundingProfile::class)]
 final class ComposerFundingCodecTest extends TestCase
 {
+    /**
+     * @return void
+     */
     #[Test]
     public function parseWillNormalizeSupportedAndUnsupportedFundingEntries(): void
     {
         $codec = new ComposerFundingCodec();
 
         $profile = $codec->parse(<<<'JSON'
-{
-  "name": "example/package",
-  "funding": [
-    {"type": "github", "url": "https://github.com/sponsors/foo"},
-    {"type": "custom", "url": "https://example.com/support"},
-    {"type": "patreon", "url": "https://patreon.com/example"}
-  ]
-}
-JSON);
+            {
+              "name": "example/package",
+              "funding": [
+                {"type": "github", "url": "https://github.com/sponsors/foo"},
+                {"type": "custom", "url": "https://example.com/support"},
+                {"type": "patreon", "url": "https://patreon.com/example"}
+              ]
+            }
+            JSON);
 
         self::assertSame(['foo'], $profile->getGithubSponsors());
         self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
         self::assertSame(
-            [['type' => 'patreon', 'url' => 'https://patreon.com/example']],
+            [[
+                'type' => 'patreon',
+                'url' => 'https://patreon.com/example',
+            ]],
             $profile->getUnsupportedComposerEntries(),
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function dumpWillWriteSupportedFundingAndPreserveUnsupportedEntries(): void
     {
@@ -66,7 +75,10 @@ JSON);
             new FundingProfile(
                 ['bar'],
                 ['https://example.com/support'],
-                unsupportedComposerEntries: [['type' => 'patreon', 'url' => 'https://patreon.com/example']],
+                unsupportedComposerEntries: [[
+                    'type' => 'patreon',
+                    'url' => 'https://patreon.com/example',
+                ]],
             ),
         );
 
@@ -74,9 +86,18 @@ JSON);
 
         self::assertSame(
             [
-                ['type' => 'github', 'url' => 'https://github.com/sponsors/bar'],
-                ['type' => 'custom', 'url' => 'https://example.com/support'],
-                ['type' => 'patreon', 'url' => 'https://patreon.com/example'],
+                [
+                    'type' => 'github',
+                    'url' => 'https://github.com/sponsors/bar',
+                ],
+                [
+                    'type' => 'custom',
+                    'url' => 'https://example.com/support',
+                ],
+                [
+                    'type' => 'patreon',
+                    'url' => 'https://patreon.com/example',
+                ],
             ],
             $decoded['funding'],
         );

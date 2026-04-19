@@ -71,6 +71,45 @@ The ``tests.yml`` workflow provides standard Continuous Integration.
 *   Runs dependency health as a separate non-blocking job when enabled.
 *   Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.
 
+Fast Forward Changelog
+----------------------
+
+The ``changelog.yml`` workflow validates pull-request changelog updates and
+automates the release-preparation flow for repositories that use the local
+changelog commands. Consumer repositories typically expose it through the thin
+wrapper in ``resources/github-actions/changelog.yml``.
+
+**Triggers:**
+*   Pull Request (opened, synchronized, reopened).
+*   Pull Request Target (closed) for merged release-preparation pull requests.
+*   Manual trigger (workflow_dispatch).
+
+**Behavior:**
+*   **Pull Requests**:
+    *   Resolves the workflow PHP version from ``composer.lock`` or
+        ``composer.json`` before installing dependencies.
+    *   Uses ``fetch-depth: 0`` so the base branch reference can be compared
+        safely.
+    *   Fetches the base branch changelog reference.
+    *   Runs ``vendor/bin/dev-tools changelog:check`` against the base ref.
+    *   Fails when the current branch does not add a meaningful ``Unreleased`` change.
+*   **Manual Release Preparation**:
+    *   Checks out the repository default branch with full history.
+    *   Resolves the next version from ``Unreleased`` unless a version input is provided.
+    *   Promotes ``Unreleased`` into the selected version with the current UTC release date.
+    *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
+        ``vendor/bin/dev-tools changelog:show``.
+    *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
+*   **Merged Release Pull Requests**:
+    *   Detects merged branches that match the configured release branch prefix.
+    *   Renders the released changelog section with ``vendor/bin/dev-tools changelog:show``.
+    *   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
+
+**Inputs:**
+*   ``changelog-file``: managed changelog path, default ``CHANGELOG.md``.
+*   ``version``: optional explicit version for manual release preparation.
+*   ``release-branch-prefix``: release branch prefix, default ``release/v``.
+
 Maintenance Workflows
 ---------------------
 

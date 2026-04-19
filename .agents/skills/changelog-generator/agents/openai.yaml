@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward Changelog"
+  short_description: "Manage Keep a Changelog release notes"
+  default_prompt: "Use $changelog-generator to add, validate, promote, or export changelog entries for this repository."

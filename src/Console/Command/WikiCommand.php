@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -51,12 +52,14 @@ final class WikiCommand extends BaseCommand
      * @param ProcessBuilderInterface $processBuilder
      * @param ProcessQueueInterface $processQueue
      * @param FilesystemInterface $filesystem the filesystem used to inspect the wiki target
+     * @param GitClientInterface $gitClient
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
+        private readonly GitClientInterface $gitClient,
     ) {
         return parent::__construct();
     }
@@ -173,14 +176,6 @@ final class WikiCommand extends BaseCommand
      */
     private function getGitRepositoryUrl(): string
     {
-        $process = $this->processBuilder
-            ->withArgument('config')
-            ->withArgument('--get')
-            ->withArgument('remote.origin.url')
-            ->build('git');
-
-        $process->mustRun();
-
-        return trim($process->getOutput());
+        return $this->gitClient->getConfig('remote.origin.url', getcwd());
     }
 }

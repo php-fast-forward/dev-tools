@@ -23,9 +23,6 @@ use Symfony\Component\Yaml\Yaml;
 
 use function array_filter;
 use function array_values;
-use function count;
-use function is_array;
-use function is_string;
 use function trim;
 
 /**
@@ -48,14 +45,14 @@ final readonly class FundingYamlCodec
 
         $data = Yaml::parse($contents);
 
-        if (! is_array($data)) {
+        if (! \is_array($data)) {
             return new FundingProfile();
         }
 
         $unsupported = array_filter(
             $data,
             static fn(string $key): bool => ! \in_array($key, ['github', 'custom'], true),
-            ARRAY_FILTER_USE_KEY,
+            \ARRAY_FILTER_USE_KEY,
         );
 
         return new FundingProfile(
@@ -96,17 +93,17 @@ final readonly class FundingYamlCodec
      */
     private function normalizeList(mixed $value): array
     {
-        if (is_string($value) && '' !== trim($value)) {
+        if (\is_string($value) && '' !== trim($value)) {
             return [trim($value)];
         }
 
-        if (! is_array($value)) {
+        if (! \is_array($value)) {
             return [];
         }
 
         return array_values(array_filter(
             array_map(
-                static fn(mixed $entry): ?string => is_string($entry) && '' !== trim($entry) ? trim($entry) : null,
+                static fn(mixed $entry): ?string => \is_string($entry) && '' !== trim($entry) ? trim($entry) : null,
                 $value,
             ),
         ));
@@ -121,6 +118,6 @@ final readonly class FundingYamlCodec
      */
     private function denormalizeList(array $values): string|array
     {
-        return 1 === count($values) ? $values[0] : $values;
+        return 1 === \count($values) ? $values[0] : $values;
     }
 }

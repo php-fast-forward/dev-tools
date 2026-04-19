@@ -19,6 +19,8 @@ across Fast Forward libraries.
   single Composer-facing command vocabulary
 - Adds dependency analysis for missing and unused Composer packages through a
   single report entrypoint
+- Manages Keep a Changelog 1.1.0 files with local authoring, validation,
+  version inference, release promotion, and release-note rendering commands
 - Ships shared workflow stubs, `.editorconfig`, Dependabot configuration, and
   other onboarding defaults for consumer repositories
 - Synchronizes packaged agent skills into consumer `.agents/skills`
@@ -61,6 +63,23 @@ composer dependencies --upgrade --dev
 composer metrics
 composer metrics --target=.dev-tools/metrics
 composer --working-dir=packages/example metrics
+
+# Add one changelog entry to Unreleased or a published version
+composer changelog:entry "Add changelog automation for release workflows (#28)"
+composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
+
+# Verify that the current branch added a meaningful Unreleased entry
+composer changelog:check
+composer changelog:check --against=origin/main
+
+# Infer the next semantic version from Unreleased
+composer changelog:next-version
+
+# Promote Unreleased into a published version
+composer changelog:promote 1.3.0
+
+# Render one published section as release notes
+composer changelog:show 1.3.0
 
 # Check and fix code style using ECS and Composer Normalize
 composer code-style
@@ -121,6 +140,20 @@ The `metrics` command ships with `phpmetrics/phpmetrics` as a direct
 dependency of `fast-forward/dev-tools`, so consumer repositories can generate
 metrics reports without extra setup.
 
+The changelog commands manage Keep a Changelog 1.1.0 files without requiring
+extra tooling in the consumer repository. `changelog:entry` bootstraps a
+missing changelog file on first use, `changelog:check` enforces meaningful
+`Unreleased` entries in pull requests, `changelog:next-version` infers the
+next semantic version from pending changes, `changelog:promote` publishes the
+current `Unreleased` section into a tagged version, and `changelog:show`
+renders one published section for GitHub release notes.
+
+When the packaged changelog workflow is synchronized into a consumer
+repository, pull requests are expected to add a notable changelog entry before
+merge. The same workflow can be triggered manually to prepare a release bump
+pull request from `Unreleased`, and merged release branches publish GitHub
+releases from the exact changelog section body.
+
 The `funding` command keeps supported `composer.json` funding entries aligned
 with `.github/FUNDING.yml`, including GitHub Sponsors handles and `custom`
 URLs, while preserving unsupported providers in place and re-running
@@ -131,6 +164,11 @@ Forward skill set. It creates missing links, repairs broken links, and
 preserves existing non-symlink directories. The `dev-tools:sync` command calls
 `skills` automatically after refreshing the rest of the consumer-facing
 automation assets.
+
+The packaged workflow stubs synchronized by `dev-tools:sync` now also include
+changelog automation for pull-request validation and release preparation, so
+consumer repositories can adopt the same changelog-driven release flow without
+copying workflow logic by hand.
 
 This repository also keeps role-based project agents in `.agents/agents`. They
 are mirrored through `.github/agents` for GitHub-oriented discovery, while the
@@ -145,6 +183,11 @@ source of truth.
 | `composer tests` | Runs PHPUnit with local-or-packaged configuration. |
 | `composer dependencies` | Previews Jack dependency updates, then reports missing, unused, and overly outdated Composer dependencies. |
 | `composer metrics` | Runs PhpMetrics for the current project and generates requested report artifacts. |
+| `composer changelog:entry` | Adds one categorized changelog entry to `Unreleased` or a published release section. |
+| `composer changelog:check` | Verifies that a changelog file contains meaningful `Unreleased` notes, optionally against a git base reference. |
+| `composer changelog:next-version` | Infers the next semantic version from the current changelog state. |
+| `composer changelog:promote` | Moves `Unreleased` entries into a published version section and records the release date. |
+| `composer changelog:show` | Renders one published changelog section for release notes and automation. |
 | `composer docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer skills` | Creates or repairs packaged skill links in `.agents/skills`. |
 | `composer funding` | Synchronizes managed funding metadata between `composer.json` and `.github/FUNDING.yml`. |
@@ -172,6 +215,29 @@ Each command is self-contained and receives its dependencies through constructor
 Run `composer dev-tools` before opening a pull request. If you change public
 commands or consumer onboarding behavior, update `README.md` and `docs/`
 together so downstream libraries keep accurate guidance.
+
+Notable pull requests are also expected to add a changelog entry before
+review is complete. A typical contributor flow looks like this:
+
+```bash
+# Record the user-visible change
+composer changelog:entry --type=changed "Refine changelog automation for release publication (#28)"
+
+# Validate that the branch added meaningful Unreleased notes
+composer changelog:check --against=origin/main
+```
+
+For release preparation, maintainers can infer and promote the next version
+locally before using the packaged GitHub workflow:
+
+```bash
+# Inspect the version that Unreleased implies
+composer changelog:next-version
+
+# Publish Unreleased into the selected version and review the resulting notes
+composer changelog:promote 1.3.0
+composer changelog:show 1.3.0
+```
 
 ## 📄 License
 

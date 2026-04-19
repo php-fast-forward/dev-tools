@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\WikiCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -48,6 +49,8 @@ final class WikiCommandTest extends TestCase
 
     private ObjectProphecy $filesystem;
 
+    private ObjectProphecy $gitClient;
+
     private ObjectProphecy $input;
 
     private ObjectProphecy $output;
@@ -65,6 +68,7 @@ final class WikiCommandTest extends TestCase
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->gitClient = $this->prophesize(GitClientInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -89,6 +93,7 @@ final class WikiCommandTest extends TestCase
             $this->processQueue->reveal(),
             $this->composer->reveal(),
             $this->filesystem->reveal(),
+            $this->gitClient->reveal(),
         );
     }
 
