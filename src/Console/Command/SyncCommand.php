@@ -34,7 +34,7 @@ use Symfony\Component\Filesystem\Path;
 #[AsCommand(
     name: 'dev-tools:sync',
     description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.',
-    help: 'This command runs the dedicated synchronization commands for composer.json, resources, wiki, Git metadata, skills, license, and Git hooks.'
+    help: 'This command runs the dedicated synchronization commands for composer.json, resources, funding metadata, wiki, Git metadata, skills, license, and Git hooks.'
 )]
 final class SyncCommand extends BaseCommand
 {
@@ -103,6 +103,7 @@ final class SyncCommand extends BaseCommand
         $allowDetached = ! $dryRun && ! $check && ! $interactive;
 
         $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments]);
+        $this->queueDevToolsCommand(['funding', ...$modeArguments]);
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
