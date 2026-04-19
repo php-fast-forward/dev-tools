@@ -108,7 +108,7 @@ final class ReportsCommand extends BaseCommand
         $metrics = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--junit', $input->getOption('coverage') . '/junit.xml')
-            ->withArgument('--report-html', $input->getOption('metrics'))
+            ->withArgument('--target', $input->getOption('metrics'))
             ->build('composer dev-tools metrics --');
 
         $this->processQueue->add(process: $docs, detached: true);

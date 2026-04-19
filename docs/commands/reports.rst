@@ -11,7 +11,7 @@ coverage. It combines:
 
 - ``docs --target`` - generates API documentation
 - ``tests --coverage`` - generates test coverage reports
-- optionally ``metrics --report-html`` - generates PhpMetrics HTML reports
+- optionally ``metrics --target`` - generates PhpMetrics HTML and JSON reports
 
 These are run in parallel for efficiency.
 
@@ -78,7 +78,7 @@ Behavior
 ---------
 
 - Runs ``docs`` and ``tests --coverage`` in parallel.
-- Runs ``metrics --report-html`` in parallel when ``--metrics`` is enabled.
+- Runs ``metrics --target`` after tests when ``--metrics`` is enabled.
 - Runs tests with ``--no-progress`` and ``--coverage-summary`` so report builds
   keep PHPUnit output concise.
 - Used by the ``standards`` command as the final phase.

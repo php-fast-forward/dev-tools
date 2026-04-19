@@ -168,7 +168,7 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->withArgument('--report-html', 'public/metrics')
+        $this->processBuilder->withArgument('--target', 'public/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')
@@ -198,7 +198,7 @@ final class ReportsCommandTest extends TestCase
         $this->input->getOption('metrics')
             ->willReturn('tmp/metrics');
 
-        $this->processBuilder->withArgument('--report-html', 'tmp/metrics')
+        $this->processBuilder->withArgument('--target', 'tmp/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')

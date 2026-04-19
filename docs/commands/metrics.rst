@@ -35,14 +35,16 @@ Options
    Default:
    ``vendor,test,tests,tmp,cache,spec,build,backup,resources``.
 
-``--report-html=<directory>``
-   Optional output directory for the generated HTML report.
+``--target=<directory>``
+   Output directory for the generated metrics reports.
 
-``--report-json=<file>``
-   Optional output file for the generated JSON report.
+   Default: ``public/metrics``.
 
-``--report-summary-json=<file>``
-   Optional output file for the generated summary JSON report.
+   The command writes:
+
+   - the HTML report to the target directory itself;
+   - ``report.json`` inside the target directory;
+   - ``report-summary.json`` inside the target directory.
 
 Examples
 --------
@@ -57,17 +59,18 @@ Generate an HTML report for manual inspection:
 
 .. code-block:: bash
 
-   composer dev-tools metrics -- --report-html=build/metrics
+   composer dev-tools metrics -- --target=build/metrics
 
-Generate JSON and HTML reports for CI artifacts:
+Generate the full metrics artifact set for CI previews:
 
 .. code-block:: bash
 
-   vendor/bin/dev-tools metrics --report-json=build/metrics.json --report-html=build/metrics
+   vendor/bin/dev-tools metrics --target=build/metrics
 
 Behavior
 --------
 
-- the command forwards report options directly to PhpMetrics;
+- the command derives ``report.json`` and ``report-summary.json`` from the
+  selected ``--target`` directory;
 - it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
   deprecation notices emitted by the dependency itself.
