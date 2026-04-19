@@ -2424,12 +2424,12 @@ secrets: inherit</code></pre>
 </em>
    <strong>Pull Requests</strong>
 :
-    <em>   Generates a **Preview** of the documentation and coverage.
+    <em>   Generates a **Preview** of the documentation, coverage, and metrics.
     </em>
    Deploys the preview to <code>gh-pages</code>
  under <code>previews/pr-{number}/</code>
 .
-    <em>   Posts a **Sticky Comment** on the PR with links to the live preview and coverage report.
+    <em>   Posts a **Sticky Comment** on the PR with links to the live preview, coverage report, and metrics site.
     </em>
    <strong>Cleanup</strong>
 : When a PR is closed, the workflow automatically removes the preview directory from the <code>gh-pages</code>
@@ -2491,11 +2491,11 @@ protection, bot commit, and submodule pointer conflict guidance.</p>
             
 
 <ul>
-    <li>Runs PHPUnit tests across supported PHP versions (defaults to 8.3).</li>
+    <li>Runs PHPUnit tests across the supported PHP matrix.</li>
 
-    <li>Validates code style using Easy Coding Standard (ECS).</li>
+    <li>Runs dependency health as a separate non-blocking job when enabled.</li>
 
-    <li>Performs static analysis.</li>
+    <li>Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.</li>
 
 </ul>
 

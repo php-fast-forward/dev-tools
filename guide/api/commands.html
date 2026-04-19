@@ -2431,7 +2431,14 @@ dependencies through constructor injection. The architecture uses
 </td>
             <td><code>dependencies</code>
 </td>
-            <td>Reports missing and unused Composer dependencies.</td>
+            <td>Reports missing, unused, and outdated Composer dependencies.</td>
+    </tr>
+    <tr>
+            <td><code>FastForward\DevTools\Console\Command\MetricsCommand</code>
+</td>
+            <td><code>metrics</code>
+</td>
+            <td>Builds the PhpMetrics site and JSON artifacts for the current project.</td>
     </tr>
     <tr>
             <td><code>FastForward\DevTools\Console\Command\DocsCommand</code>
@@ -2452,7 +2459,7 @@ dependencies through constructor injection. The architecture uses
 </td>
             <td><code>reports</code>
 </td>
-            <td>Combines the documentation build with coverage generation.</td>
+            <td>Combines documentation, coverage, and metrics generation.</td>
     </tr>
     <tr>
             <td><code>FastForward\DevTools\Console\Command\SkillsCommand</code>

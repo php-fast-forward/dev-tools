@@ -2375,7 +2375,7 @@
             <h1>dependencies</h1>
 
             
-    <p>Analyzes missing and unused Composer dependencies.</p>
+    <p>Analyzes missing, unused, and outdated Composer dependencies.</p>
 
             <section class="section " id="description">
             <h2>Description</h2>
@@ -2384,8 +2384,7 @@
     <p>The <code>dependencies</code>
  command (alias: <code>deps</code>
 ) analyzes missing, unused, and
-overly outdated
-Composer dependencies using two tools:</p>
+overly outdated Composer dependencies using three tools:</p>
 
             
 
@@ -2402,8 +2401,9 @@ Composer dependencies using two tools:</p>
 </ul>
 
             
-    <p>This command ships as a direct dependency of <code>fast-forward/dev-tools</code>
-.</p>
+    <p>These analyzers ship as direct dependencies of <code>fast-forward/dev-tools</code>
+, so
+consumer repositories do not need extra setup before running the command.</p>
 
     </section>
 
@@ -2411,13 +2411,10 @@ Composer dependencies using two tools:</p>
             <h2>Usage</h2>
 
             <pre><code class="language-bash">composer dependencies
-composer dev-tools dependencies
+composer dependencies [options]
 
 composer deps
-composer dev-tools deps
-
-vendor/bin/dev-tools dependencies
-vendor/bin/dev-tools deps</code></pre>
+vendor/bin/dev-tools dependencies [options]</code></pre>
 
     </section>
 
@@ -2443,13 +2440,16 @@ vendor/bin/dev-tools deps</code></pre>
 
 
 <ul>
-    <li class="dash"><code>vendor/bin/jack open-versions</code>
-</li>
-
     <li class="dash"><code>vendor/bin/jack raise-to-installed</code>
 </li>
 
+    <li class="dash"><code>vendor/bin/jack open-versions</code>
+</li>
+
     <li class="dash"><code>composer update -W</code>
+</li>
+
+    <li class="dash"><code>composer normalize</code>
 </li>
 
 </ul>
@@ -2477,17 +2477,17 @@ before the analyzers.</p>
             
     <p>Allow up to 10 outdated packages:</p>
 
-            <pre><code class="language-bash">composer dev-tools dependencies -- --max-outdated=10</code></pre>
+            <pre><code class="language-bash">composer dependencies --max-outdated=10</code></pre>
 
             
     <p>Preview the upgrade workflow:</p>
 
-            <pre><code class="language-bash">composer dev-tools dependencies -- --dev</code></pre>
+            <pre><code class="language-bash">composer dependencies --dev</code></pre>
 
             
     <p>Apply the upgrade workflow and then analyze dependencies:</p>
 
-            <pre><code class="language-bash">composer dev-tools dependencies -- --upgrade --dev</code></pre>
+            <pre><code class="language-bash">composer dependencies --upgrade --dev</code></pre>
 
             
     <p>Using the alias:</p>
@@ -2526,11 +2526,16 @@ before the analyzers.</p>
             
 
 <ul>
+    <li class="dash">Always previews or applies <code>jack raise-to-installed</code>
+ first and then
+<code>jack open-versions</code>
+ before running the analyzers.</li>
+
     <li class="dash">Runs <code>composer-unused</code>
 , <code>composer-dependency-analyser</code>
 , and
 <code>jack breakpoint</code>
-.</li>
+ after the Jack preview or upgrade phase.</li>
 
     <li class="dash"><code>composer-dependency-analyser</code>
  is configured with:
@@ -2545,16 +2550,12 @@ before the analyzers.</p>
  to Jack&#039;s <code>--limit</code>
  option.</li>
 
-    <li class="dash">It always previews Jack&#039;s <code>open-versions</code>
- and <code>raise-to-installed</code>
-
-commands before the analyzers.</li>
-
     <li class="dash"><code>--upgrade</code>
- applies Jack&#039;s <code>open-versions</code>
- and <code>raise-to-installed</code>
+ applies Jack&#039;s <code>raise-to-installed</code>
+ and <code>open-versions</code>
 
 commands before <code>composer update -W</code>
+ and <code>composer normalize</code>
 .</li>
 
     <li class="dash">Returns a non-zero exit code when missing, unused, or too many outdated

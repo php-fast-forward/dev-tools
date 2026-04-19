@@ -2455,10 +2455,10 @@ and human-written guides.</p>
             <section class="section " id="common-examples">
             <h2>Common Examples</h2>
 
-            <pre><code class="language-bash">composer dev-tools docs
+            <pre><code class="language-bash">composer docs
 vendor/bin/dev-tools docs --source=docs --target=public
-composer dev-tools wiki
-composer dev-tools reports</code></pre>
+composer wiki
+composer reports</code></pre>
 
     </section>
 
@@ -2480,6 +2480,8 @@ guide directory does not exist.</li>
  runs <code>docs --target public</code>
  and
 <code>tests --coverage public/coverage</code>
+ and then
+<code>metrics --target public/metrics --junit public/coverage/junit.xml</code>
 .</li>
 
 </ul>
@@ -2503,6 +2505,12 @@ guide directory does not exist.</li>
  or
 <code>tests --coverage</code>
  is used;</li>
+
+    <li class="dash">metrics data under <code>public/metrics</code>
+ when <code>reports</code>
+ or <code>metrics</code>
+ is
+used;</li>
 
     <li class="dash">Markdown API pages under <code>.github/wiki</code>
  when <code>wiki</code>

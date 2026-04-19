@@ -2382,8 +2382,8 @@
 
             
     <p>The <code>reports</code>
- command generates the documentation frontpage and runs tests with
-coverage. It combines:</p>
+ command generates the documentation frontpage, runs tests with
+coverage, and generates code metrics. It combines:</p>
 
             
 
@@ -2394,13 +2394,14 @@ coverage. It combines:</p>
     <li class="dash"><code>tests --coverage</code>
  - generates test coverage reports</li>
 
-    <li class="dash">optionally <code>metrics --target</code>
+    <li class="dash"><code>metrics --target</code>
  - generates PhpMetrics HTML and JSON reports</li>
 
 </ul>
 
             
-    <p>These are run in parallel for efficiency.</p>
+    <p>The documentation build runs in parallel with PHPUnit, and the metrics step
+runs after PHPUnit so it can reuse the generated JUnit report.</p>
 
     </section>
 
@@ -2432,8 +2433,8 @@ Default: <code>public/coverage</code>
                                 <dt><code>--metrics</code>
  (optional)</dt>
         
-        <dd>Generate the metrics HTML report. When passed without a value, the report is
-generated in <code>public/metrics</code>
+        <dd>The target directory for the generated metrics report.
+Default: <code>public/metrics</code>
 .</dd>
             </dl>
 
@@ -2453,10 +2454,9 @@ generated in <code>public/metrics</code>
             <pre><code class="language-bash">composer reports --target=build --coverage=build/coverage</code></pre>
 
             
-    <p>Generate reports including metrics:</p>
+    <p>Generate reports with a custom metrics directory:</p>
 
-            <pre><code class="language-bash">composer reports --metrics
-composer reports --metrics=build/metrics</code></pre>
+            <pre><code class="language-bash">composer reports --metrics=build/metrics</code></pre>
 
     </section>
 
@@ -2473,11 +2473,11 @@ composer reports --metrics=build/metrics</code></pre>
     <tbody>
     <tr>
             <td>0</td>
-            <td>Success. Both docs and coverage generated.</td>
+            <td>Success. Documentation, coverage, and metrics generated successfully.</td>
     </tr>
     <tr>
             <td>1</td>
-            <td>Failure. One or both commands failed.</td>
+            <td>Failure. One or more report stages failed.</td>
     </tr>
 </tbody>
 </table>
@@ -2491,17 +2491,19 @@ composer reports --metrics=build/metrics</code></pre>
 
 <ul>
     <li class="dash">Runs <code>docs</code>
- and <code>tests --coverage</code>
- in parallel.</li>
+ in parallel with <code>tests --coverage</code>
+.</li>
 
     <li class="dash">Runs <code>metrics --target</code>
- after tests when <code>--metrics</code>
- is enabled.</li>
+ after tests so the JUnit report is available.</li>
 
     <li class="dash">Runs tests with <code>--no-progress</code>
  and <code>--coverage-summary</code>
  so report builds
 keep PHPUnit output concise.</li>
+
+    <li class="dash">Passes <code>--junit &lt;coverage&gt;/junit.xml</code>
+ to the metrics step.</li>
 
     <li class="dash">Used by the <code>standards</code>
  command as the final phase.</li>

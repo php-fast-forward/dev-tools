@@ -2396,9 +2396,9 @@ so consumer projects get a consistent baseline.</p>
             <td>Provide the Composer plugin API, command integration, and script hooks.</td>
     </tr>
     <tr>
-            <td><code>phpro/grumphp</code>
+            <td><code>phpro/grumphp-shim</code>
 </td>
-            <td>Supplies the default GrumPHP configuration referenced by
+            <td>Supplies the default GrumPHP executable and configuration referenced by
 <code>dev-tools:sync</code>
 .</td>
     </tr>
@@ -2446,6 +2446,24 @@ so consumer projects get a consistent baseline.</p>
             <td>Powers the PHPDoc fixer phase.</td>
     </tr>
     <tr>
+            <td><code>icanhazstring/composer-unused</code>
+</td>
+            <td>Reports unused Composer dependencies in <code>dependencies</code>
+.</td>
+    </tr>
+    <tr>
+            <td><code>shipmonk/composer-dependency-analyser</code>
+</td>
+            <td>Reports missing Composer dependencies in <code>dependencies</code>
+.</td>
+    </tr>
+    <tr>
+            <td><code>rector/jack</code>
+</td>
+            <td>Previews or applies dependency version updates and enforces the
+outdated dependency threshold.</td>
+    </tr>
+    <tr>
             <td><code>thecodingmachine/safe</code>
 </td>
             <td>Enables optional Safe migration rules when present.</td>
@@ -2483,6 +2501,14 @@ so consumer projects get a consistent baseline.</p>
 .</td>
     </tr>
     <tr>
+            <td><code>phpmetrics/phpmetrics</code>
+</td>
+            <td>Generates the metrics site and JSON artifacts used by <code>metrics</code>
+ and
+<code>reports</code>
+.</td>
+    </tr>
+    <tr>
             <td><code>esi/phpunit-coverage-check</code>
 </td>
             <td>Enforces the minimum coverage threshold in the reusable test workflow.</td>
@@ -2507,6 +2533,23 @@ so consumer projects get a consistent baseline.</p>
             <td><code>phpunit/phpunit</code>
 </td>
             <td>Runs the test suite.</td>
+    </tr>
+    <tr>
+            <td><code>phpunit/php-code-coverage</code>
+</td>
+            <td>Provides the coverage exporters consumed by <code>tests</code>
+ and <code>reports</code>
+.</td>
+    </tr>
+    <tr>
+            <td><code>php-parallel-lint/php-parallel-lint</code>
+</td>
+            <td>Supports linting and validation in the packaged development workflow.</td>
+    </tr>
+    <tr>
+            <td><code>phpspec/prophecy</code>
+</td>
+            <td>Provides Prophecy doubles used throughout the packaged test suite.</td>
     </tr>
     <tr>
             <td><code>phpspec/prophecy-phpunit</code>

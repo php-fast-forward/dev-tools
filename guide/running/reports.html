@@ -2397,6 +2397,9 @@ publishes the <code>public/</code>
     <li value="2"><code>tests --coverage public/coverage --no-progress --coverage-summary</code>
 </li>
 
+    <li value="3"><code>metrics --target public/metrics --junit public/coverage/junit.xml</code>
+</li>
+
 </ol>
 
     </section>
@@ -2419,10 +2422,18 @@ publishes the <code>public/</code>
     <li class="dash">coverage reports inside <code>public/coverage/</code>
 ;</li>
 
+    <li class="dash">PhpMetrics output inside <code>public/metrics/</code>
+;</li>
+
     <li class="dash"><code>public/coverage/testdox.html</code>
  and <code>public/coverage/clover.xml</code>
  for
-human and CI consumption.</li>
+human and CI consumption;</li>
+
+    <li class="dash"><code>public/metrics/report.json</code>
+ and <code>public/metrics/report-summary.json</code>
+ for
+preview artifacts and machine-readable metrics summaries.</li>
 
 </ul>
 
@@ -2441,7 +2452,7 @@ human and CI consumption.</li>
  workflow publishes <code>public/</code>
  to GitHub Pages;</li>
 
-    <li class="dash">the live documentation, coverage, and Testdox links all depend on this
+    <li class="dash">the live documentation, coverage, metrics, and Testdox links all depend on this
 directory structure staying stable.</li>
 
 </ul>
@@ -2459,6 +2470,8 @@ directory structure staying stable.</li>
     <li class="dash"><a href="https://php-fast-forward.github.io/dev-tools/guide/">Guide Pages</a></li>
 
     <li class="dash"><a href="https://php-fast-forward.github.io/dev-tools/coverage/">Code Coverage</a></li>
+
+    <li class="dash"><a href="https://php-fast-forward.github.io/dev-tools/metrics/">Metrics</a></li>
 
     <li class="dash"><a href="https://php-fast-forward.github.io/dev-tools/coverage/testdox.html">Testdox Report</a></li>
 
