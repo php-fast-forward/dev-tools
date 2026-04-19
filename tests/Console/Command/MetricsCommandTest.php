@@ -87,7 +87,7 @@ final class MetricsCommandTest extends TestCase
         $jsonReport = $this->jsonReport;
         $summaryReport = $this->summaryReport;
 
-        foreach (['exclude', 'report-html', 'report-json', 'report-summary-json'] as $option) {
+        foreach (['exclude', 'report-html', 'report-json', 'report-summary-json', 'junit'] as $option) {
             $this->input->getOption($option)
                 ->willReturn($this->commandDefaultOption($option));
         }
@@ -146,12 +146,13 @@ final class MetricsCommandTest extends TestCase
     {
         $definition = $this->command->getDefinition();
 
-        self::assertTrue($definition->hasOption('working-dir'));
+        self::assertFalse($definition->hasOption('working-dir'));
         self::assertFalse($definition->hasOption('src'));
         self::assertTrue($definition->hasOption('exclude'));
         self::assertTrue($definition->hasOption('report-html'));
         self::assertTrue($definition->hasOption('report-json'));
         self::assertTrue($definition->hasOption('report-summary-json'));
+        self::assertTrue($definition->hasOption('junit'));
         self::assertFalse($definition->hasOption('cache-dir'));
     }
 
@@ -181,6 +182,8 @@ final class MetricsCommandTest extends TestCase
         $this->processBuilder->withArgument('--report-summary-json', $this->summaryReport)
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--junit', null)
+            ->shouldNotBeCalled();
         $this->processBuilder->withArgument('.')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
@@ -200,10 +203,16 @@ final class MetricsCommandTest extends TestCase
             ->willReturn(null);
         $this->input->getOption('report-summary-json')
             ->willReturn(null);
+        $this->input->getOption('junit')
+            ->willReturn(null);
 
-        $this->processBuilder->withArgument('--report-json', Argument::any())
-            ->shouldNotBeCalled();
-        $this->processBuilder->withArgument('--report-summary-json', Argument::any())
+        $this->processBuilder->withArgument('--report-json', null)
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--report-summary-json', null)
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--junit', Argument::any())
             ->shouldNotBeCalled();
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalledOnce();
@@ -219,6 +228,8 @@ final class MetricsCommandTest extends TestCase
     {
         $this->input->getOption('report-html')
             ->willReturn('build/metrics');
+        $this->input->getOption('junit')
+            ->willReturn(null);
 
         $this->processBuilder->withArgument('--report-html', 'build/metrics')
             ->shouldBeCalledOnce()
@@ -240,6 +251,7 @@ final class MetricsCommandTest extends TestCase
             'exclude' => 'vendor,test,tests,tmp,cache,spec,build,backup,resources',
             'report-json' => $this->jsonReport,
             'report-summary-json' => $this->summaryReport,
+            'junit' => null,
             default => null,
         };
     }

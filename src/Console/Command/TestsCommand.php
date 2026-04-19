@@ -278,7 +278,8 @@ final class TestsCommand extends BaseCommand
                 ->withArgument('--coverage-text')
                 ->withArgument('--coverage-html', $coveragePath)
                 ->withArgument('--testdox-html', $coveragePath . '/testdox.html')
-                ->withArgument('--coverage-clover', $coveragePath . '/clover.xml');
+                ->withArgument('--coverage-clover', $coveragePath . '/clover.xml')
+                ->withArgument('--log-junit', $coveragePath . '/junit.xml');
 
             if ($input->getOption('coverage-summary')) {
                 $processBuilder = $processBuilder->withArgument('--only-summary-for-coverage-text');

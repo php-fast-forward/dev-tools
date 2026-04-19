@@ -71,16 +71,24 @@ final class MetricsCommand extends BaseCommand
                 name: 'report-html',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Optional target directory for the generated HTML report.',
+                default: 'public/metrics',
             )
             ->addOption(
                 name: 'report-json',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Optional target file for the generated JSON report.',
+                default: 'public/metrics/report.json',
             )
             ->addOption(
                 name: 'report-summary-json',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Optional target file for the generated summary JSON report.',
+                default: 'public/metrics/report-summary.json',
+            )
+            ->addOption(
+                name: 'junit',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Optional target file for the generated JUnit XML report.',
             );
     }
 
@@ -97,14 +105,13 @@ final class MetricsCommand extends BaseCommand
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--git', 'git')
-            ->withArgument('--exclude', (string) $input->getOption('exclude'));
+            ->withArgument('--exclude', (string) $input->getOption('exclude'))
+            ->withArgument('--report-html', $input->getOption('report-html'))
+            ->withArgument('--report-json', $input->getOption('report-json'))
+            ->withArgument('--report-summary-json', $input->getOption('report-summary-json'));
 
-        foreach (['report-html', 'report-json', 'report-summary-json'] as $option) {
-            if (null === $input->getOption($option)) {
-                continue;
-            }
-
-            $processBuilder = $processBuilder->withArgument('--' . $option, (string) $input->getOption($option));
+        if (null !== $input->getOption('junit')) {
+            $processBuilder = $processBuilder->withArgument('--junit', $input->getOption('junit'));
         }
 
         $this->processQueue->add(

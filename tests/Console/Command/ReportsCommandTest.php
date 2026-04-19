@@ -143,7 +143,7 @@ final class ReportsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillRunDocsTestsAndMetricsCommandAsDetachedProcesses(): void
+    public function executeWillRunDocsAsDetachedAndTestsAndMetricsInSequence(): void
     {
         $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
             ->shouldBeCalledOnce();
@@ -171,14 +171,17 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->withArgument('--report-html', 'public/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
 
         $this->processQueue->add($this->docsProcess->reveal(), false, true)
             ->shouldBeCalledOnce();
 
-        $this->processQueue->add($this->testsProcess->reveal(), false, true)
+        $this->processQueue->add($this->testsProcess->reveal())
             ->shouldBeCalledOnce();
 
-        $this->processQueue->add($this->metricsProcess->reveal(), false, true)
+        $this->processQueue->add($this->metricsProcess->reveal())
             ->shouldBeCalledOnce();
 
         $result = $this->executeCommand();
@@ -198,9 +201,16 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->withArgument('--report-html', 'tmp/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
 
-        $this->processQueue->add(Argument::type(Process::class), false, true)
-            ->shouldBeCalledTimes(3);
+        $this->processQueue->add($this->docsProcess->reveal(), false, true)
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->testsProcess->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->metricsProcess->reveal())
+            ->shouldBeCalledOnce();
 
         self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
     }

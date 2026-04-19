@@ -105,15 +105,15 @@ final class ReportsCommand extends BaseCommand
             ->withArgument('--coverage', $input->getOption('coverage'))
             ->build('composer dev-tools tests --');
 
-        $this->processQueue->add(process: $docs, detached: true);
-        $this->processQueue->add(process: $coverage, detached: true);
-
         $metrics = $this->processBuilder
             ->withArgument('--ansi')
+            ->withArgument('--junit', $input->getOption('coverage') . '/junit.xml')
             ->withArgument('--report-html', $input->getOption('metrics'))
             ->build('composer dev-tools metrics --');
 
-        $this->processQueue->add(process: $metrics, detached: true);
+        $this->processQueue->add(process: $docs, detached: true);
+        $this->processQueue->add(process: $coverage);
+        $this->processQueue->add(process: $metrics);
 
         return $this->processQueue->run($output);
     }
