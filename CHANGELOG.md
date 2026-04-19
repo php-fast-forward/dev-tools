@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Document required GitHub Actions permissions for changelog release automation (#118)
 - Add the project mascot image to README and documentation (#121)
 - Upgrade the packaged phpDocumentor bootstrap template to v2.0.0 (#121)
+- Refresh outdated console application class references in repository documentation (#123)
 
 ## [1.12.0] - 2026-04-19
 
