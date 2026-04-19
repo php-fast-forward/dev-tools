@@ -128,6 +128,24 @@ Use the ``RectorConfig`` class to extend instead of replace:
 
 This approach automatically receives upstream updates while allowing additive customization.
 
+How do I enable Type Perfect together with ``refactor``?
+--------------------------------------------------------
+
+Install the companion packages in the consumer project:
+
+.. code-block:: bash
+
+   composer require --dev rector/type-perfect phpstan/extension-installer
+
+Then run:
+
+.. code-block:: bash
+
+   composer dev-tools refactor -- --type-perfect
+
+You can narrow the rollout by selecting groups with
+``--type-perfect-groups=null_over_false,no_mixed``.
+
 Can I generate coverage without running the full ``standards`` pipeline?
 ------------------------------------------------------------------------
 

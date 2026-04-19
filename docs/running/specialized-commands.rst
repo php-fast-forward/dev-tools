@@ -89,13 +89,18 @@ Runs Rector against the current project.
 .. code-block:: bash
 
    composer refactor --fix
+   composer dev-tools refactor -- --type-perfect
 
 Important details:
 
 - without ``--fix``, Rector runs in dry-run mode;
 - local ``rector.php`` is preferred when present;
 - the packaged default includes Fast Forward custom Rector rules plus shared
-  Rector sets.
+  Rector sets;
+- ``--type-perfect`` adds a PHPStan Type Perfect pass after Rector using a
+  generated config in ``tmp/cache/phpstan/type-perfect.neon``;
+- the Fast Forward Type Perfect path expects ``rector/type-perfect`` and
+  ``phpstan/extension-installer`` to be installed in the consumer project.
 
 ``phpdoc``
 ----------

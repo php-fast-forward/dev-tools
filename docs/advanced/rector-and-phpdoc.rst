@@ -42,6 +42,23 @@ The default ``rector.php`` also loads shared Rector sets, imports names,
 removes unused imports, skips generated directories, and enables Safe migration
 rules when ``thecodingmachine/safe`` is installed.
 
+Type Perfect in the Refactor Workflow
+-------------------------------------
+
+The ``refactor`` command can optionally run Type Perfect immediately after the
+Rector pass:
+
+.. code-block:: bash
+
+   composer dev-tools refactor -- --type-perfect
+
+The Fast Forward integration path is intentionally opt-in. It expects
+``rector/type-perfect`` and ``phpstan/extension-installer`` to be installed in
+the consumer project. When the consumer already has ``phpstan.neon`` or
+``phpstan.neon.dist``, DevTools includes that file automatically in the
+generated ``tmp/cache/phpstan/type-perfect.neon`` and then enables the selected
+Type Perfect groups there.
+
 Why ``.docheader`` Appears Automatically
 ----------------------------------------
 

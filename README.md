@@ -64,6 +64,8 @@ composer dev-tools code-style
 
 # Refactor code using Rector
 composer dev-tools refactor
+composer dev-tools refactor -- --type-perfect
+composer dev-tools refactor -- --type-perfect-groups=null_over_false,no_mixed
 
 # Check and fix PHPDoc comments
 composer dev-tools phpdoc
@@ -112,6 +114,14 @@ installation in the consumer project.
 The `metrics` command ships with `phpmetrics/phpmetrics` as a direct
 dependency of `fast-forward/dev-tools`, so consumer repositories can generate
 metrics reports without extra setup.
+
+Type Perfect support is opt-in on top of the `refactor` command. To enable the
+Fast Forward integration path in a consumer repository, install the companion
+packages first:
+
+```bash
+composer require --dev rector/type-perfect phpstan/extension-installer
+```
 
 The `skills` command keeps `.agents/skills` aligned with the packaged Fast
 Forward skill set. It creates missing links, repairs broken links, and
