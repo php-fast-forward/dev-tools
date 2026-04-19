@@ -18,6 +18,7 @@ Maintain changelog files for humans first while keeping them deterministic enoug
 2. Backfill missing release history when needed.
 - If the repository has no changelog, or if some Git tags are still undocumented, walk the Git tags until the changelog is complete.
 - Inspect tags in chronological order so each documented version can be derived from the diff against the previous tag.
+- Treat version ordering as semantic version ordering, never plain string ordering. For example, `1.11.0` MUST sort after `1.10.0`, and `1.10.0` MUST sort after `1.9.0`.
 - Capture the creation date for each tag and use it as the release date recorded in the changelog.
 - For each missing released version:
   1. compare the previous tag to the current tag;
@@ -83,7 +84,8 @@ composer dev-tools changelog:show 1.2.0 -- --file=docs/CHANGELOG.md
 
 5. Respect the managed format.
 - Keep `Unreleased` first.
-- Keep released versions in reverse chronological order.
+- Keep released versions in reverse semantic version order unless the repository has an explicit non-semver release policy.
+- Do not use lexical ordering for versions. `1.10.0` and `1.11.0` MUST remain above `1.9.0`, `1.8.0`, and `1.1.0`.
 - Keep section order as:
   1. `Added`
   2. `Changed`
@@ -93,6 +95,7 @@ composer dev-tools changelog:show 1.2.0 -- --file=docs/CHANGELOG.md
   6. `Security`
 - Omit empty sections.
 - Preserve the official introduction and footer-reference style from Keep a Changelog 1.1.0.
+- Build compare links from the semantically previous published version, not from the previous string-sorted heading.
 
 6. Verify the result.
 - For branch validation, prefer running:

@@ -21,6 +21,9 @@ automation using the local changelog workflow.
   changelog yet or has undocumented published versions.
 - Capture each documented tag's creation date and persist it as the release
   date while backfilling historical versions.
+- Order documented releases by semantic version, not by lexical string
+  comparison, so versions like `1.10.0` and `1.11.0` remain above `1.9.0` and
+  `1.1.0`.
 - Validate whether a branch or pull request added meaningful changelog content.
 - Infer the next semantic version from changelog content when preparing a
   release.
