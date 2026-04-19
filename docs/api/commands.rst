@@ -1,9 +1,13 @@
 Command Classes
 ===============
 
-All public CLI commands extend ``Composer\Command\BaseCommand`` and receive
-dependencies through constructor injection. The architecture uses
-``ProcessBuilder`` and ``ProcessQueue`` for fluent process management.
+All public CLI commands extend ``Composer\Command\BaseCommand``. Most command
+classes are resolved lazily through ``DevToolsCommandLoader`` and receive
+their collaborators from the shared ``DevToolsServiceProvider`` container,
+while orchestration commands such as ``standards`` dispatch other commands
+through the console application itself. The architecture also relies on
+``ProcessBuilder`` and ``ProcessQueue`` for fluent process management where
+subprocess execution is needed.
 
 .. list-table::
    :header-rows: 1
