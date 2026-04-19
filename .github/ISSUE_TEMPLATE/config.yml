@@ -4,8 +4,8 @@ contact_links:
     url: https://php-fast-forward.github.io/dev-tools/
     about: Check the published documentation before opening a support request.
   - name: Support
-    url: https://github.com/php-fast-forward/dev-tools/blob/main/.github/SUPPORT.md
+    url: https://github.com/php-fast-forward/dev-tools/blob/main/SUPPORT.md
     about: Learn which channel to use for questions, bugs, and feature ideas.
   - name: Security
-    url: https://github.com/php-fast-forward/dev-tools/blob/main/.github/SECURITY.md
+    url: https://github.com/php-fast-forward/dev-tools/blob/main/SECURITY.md
     about: Report vulnerabilities privately instead of using public issues.
