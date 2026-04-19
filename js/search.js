@@ -65,7 +65,7 @@ var Search = (function () {
         var summary = result.summary ? escapeHtml(result.summary) : '';
         var fqsen = result.fqsen ? escapeHtml(result.fqsen) : '';
         var name = escapeHtml(result.name || 'Untitled');
-        var url = document.baseURI + result.url;
+        var url = result.url;
 
         return '' +
             '<li class="list-group-item px-3 py-3">' +
