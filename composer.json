@@ -45,7 +45,7 @@
         "ergebnis/composer-normalize": "^2.51",
         "ergebnis/rector-rules": "^1.18",
         "fakerphp/faker": "^1.24",
-        "fast-forward/phpdoc-bootstrap-template": "^1.0",
+        "fast-forward/phpdoc-bootstrap-template": "^2.0",
         "friendsofphp/php-cs-fixer": "^3.95",
         "icanhazstring/composer-unused": "^0.9.6",
         "jolicode/jolinotif": "^3.3",
