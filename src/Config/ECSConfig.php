@@ -59,7 +59,7 @@ final class ECSConfig
         return $config
             ->withPaths([$cwd])
             ->withSkip([
-                $cwd . '/build',
+                $cwd . '/.dev-tools',
                 $cwd . '/resources',
                 $cwd . '/vendor',
                 $cwd . '/tmp',

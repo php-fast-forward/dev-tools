@@ -79,13 +79,13 @@ Run with coverage report:
 
 .. code-block:: bash
 
-   composer tests --coverage=build/coverage
+   composer tests --coverage=.dev-tools/coverage
 
 Run with concise coverage text output:
 
 .. code-block:: bash
 
-   composer tests --coverage=build/coverage --coverage-summary
+   composer tests --coverage=.dev-tools/coverage --coverage-summary
 
 Run tests matching a pattern:
 

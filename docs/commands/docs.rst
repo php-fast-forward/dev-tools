@@ -28,7 +28,7 @@ Options
 
 ``--target, -t`` (optional)
    Path to the output directory for the generated HTML documentation.
-   Default: ``build``.
+   Default: ``.dev-tools``.
 
 ``--source, -s`` (optional)
    Path to the source directory for the guide documentation.

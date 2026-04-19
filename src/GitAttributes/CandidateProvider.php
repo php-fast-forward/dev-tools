@@ -43,7 +43,7 @@ final class CandidateProvider implements CandidateProviderInterface
             '/.php-cs-fixer.cache/',
             '/.vscode/',
             '/benchmarks/',
-            '/build/',
+            '/.dev-tools/',
             '/coverage/',
             '/docker/',
             '/docs/',

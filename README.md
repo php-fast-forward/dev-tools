@@ -59,7 +59,7 @@ composer dependencies --upgrade --dev
 
 # Analyze code metrics with PhpMetrics
 composer metrics
-composer metrics --target=build/metrics
+composer metrics --target=.dev-tools/metrics
 composer --working-dir=packages/example metrics
 
 # Check and fix code style using ECS and Composer Normalize
@@ -79,7 +79,7 @@ composer wiki
 
 # Generate documentation frontpage and related reports
 composer reports
-composer reports --target=build --coverage=build/coverage
+composer reports --target=.dev-tools --coverage=.dev-tools/coverage
 
 # Synchronize packaged agent skills into .agents/skills
 composer skills

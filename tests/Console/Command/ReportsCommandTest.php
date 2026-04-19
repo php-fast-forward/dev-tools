@@ -89,11 +89,11 @@ final class ReportsCommandTest extends TestCase
         $this->metricsProcess = $this->prophesize(Process::class);
 
         $this->input->getOption('target')
-            ->willReturn('build');
+            ->willReturn('.dev-tools');
         $this->input->getOption('coverage')
-            ->willReturn('build/coverage');
+            ->willReturn('.dev-tools/coverage');
         $this->input->getOption('metrics')
-            ->willReturn('build/metrics');
+            ->willReturn('.dev-tools/metrics');
 
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
@@ -152,11 +152,11 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->withArgument('--target', 'build')
+        $this->processBuilder->withArgument('--target', '.dev-tools')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->withArgument('--coverage', 'build/coverage')
+        $this->processBuilder->withArgument('--coverage', '.dev-tools/coverage')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
@@ -168,10 +168,10 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->withArgument('--target', 'build/metrics')
+        $this->processBuilder->withArgument('--target', '.dev-tools/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--junit', 'build/coverage/junit.xml')
+        $this->processBuilder->withArgument('--junit', '.dev-tools/coverage/junit.xml')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
@@ -201,7 +201,7 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->withArgument('--target', 'tmp/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--junit', 'build/coverage/junit.xml')
+        $this->processBuilder->withArgument('--junit', '.dev-tools/coverage/junit.xml')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 

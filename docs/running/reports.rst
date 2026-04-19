@@ -10,22 +10,22 @@ What the Command Runs
 
 ``reports`` executes the following steps:
 
-1. ``docs --target build``
-2. ``tests --coverage build/coverage --no-progress --coverage-summary``
-3. ``metrics --target build/metrics --junit build/coverage/junit.xml``
+1. ``docs --target .dev-tools``
+2. ``tests --coverage .dev-tools/coverage --no-progress --coverage-summary``
+3. ``metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml``
 
 Outputs
 -------
 
 After a successful run you should expect:
 
-- the documentation site rooted at ``build/``;
+- the documentation site rooted at ``.dev-tools/``;
 - guide pages generated from the local ``docs/`` source;
-- coverage reports inside ``build/coverage/``;
-- PhpMetrics output inside ``build/metrics/``;
-- ``build/coverage/testdox.html`` and ``build/coverage/clover.xml`` for
+- coverage reports inside ``.dev-tools/coverage/``;
+- PhpMetrics output inside ``.dev-tools/metrics/``;
+- ``.dev-tools/coverage/testdox.html`` and ``.dev-tools/coverage/clover.xml`` for
   human and CI consumption;
-- ``build/metrics/report.json`` and ``build/metrics/report-summary.json`` for
+- ``.dev-tools/metrics/report.json`` and ``.dev-tools/metrics/report-summary.json`` for
   preview artifacts and machine-readable metrics summaries.
 
 Why This Command Matters

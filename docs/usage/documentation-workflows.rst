@@ -28,7 +28,7 @@ Important Command Options
      - Selects the guide source directory.
    * - ``docs``
      - ``--target``
-     - ``build``
+     - ``.dev-tools``
      - Selects the HTML output directory.
    * - ``docs``
      - ``--template``
@@ -45,7 +45,7 @@ Common Examples
 .. code-block:: bash
 
    composer docs
-   vendor/bin/dev-tools docs --source=docs --target=build
+   vendor/bin/dev-tools docs --source=docs --target=.dev-tools
    composer wiki
    composer reports
 
@@ -55,18 +55,18 @@ What Each Command Is For
 - ``docs`` builds the HTML documentation site. It fails early if the source
   guide directory does not exist.
 - ``wiki`` builds Markdown API pages intended for ``.github/wiki``.
-- ``reports`` runs ``docs --target build`` and
-  ``tests --coverage build/coverage`` and then
-  ``metrics --target build/metrics --junit build/coverage/junit.xml``.
+- ``reports`` runs ``docs --target .dev-tools`` and
+  ``tests --coverage .dev-tools/coverage`` and then
+  ``metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml``.
 
 Outputs to Expect
 -----------------
 
 - an HTML site rooted at the target directory chosen for ``docs``;
 - guide pages generated from ``docs/``;
-- coverage data under ``build/coverage`` when ``reports`` or
+- coverage data under ``.dev-tools/coverage`` when ``reports`` or
   ``tests --coverage`` is used;
-- metrics data under ``build/metrics`` when ``reports`` or ``metrics`` is
+- metrics data under ``.dev-tools/metrics`` when ``reports`` or ``metrics`` is
   used;
 - Markdown API pages under ``.github/wiki`` when ``wiki`` is used.
 

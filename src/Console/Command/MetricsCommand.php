@@ -67,13 +67,13 @@ final class MetricsCommand extends BaseCommand
                 name: 'exclude',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Comma-separated directories that SHOULD be excluded from analysis.',
-                default: 'vendor,test,tests,tmp,cache,spec,build,backup,resources',
+                default: 'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources',
             )
             ->addOption(
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Target directory for the generated metrics reports.',
-                default: 'build/metrics',
+                default: '.dev-tools/metrics',
             )
             ->addOption(
                 name: 'junit',

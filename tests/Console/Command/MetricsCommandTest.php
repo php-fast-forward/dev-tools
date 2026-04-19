@@ -159,7 +159,7 @@ final class MetricsCommandTest extends TestCase
             ->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(
             '--exclude',
-            'vendor,test,tests,tmp,cache,spec,build,backup,resources'
+            'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources'
         )
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
@@ -192,17 +192,17 @@ final class MetricsCommandTest extends TestCase
     public function executeWillSkipUnsetOptionalReports(): void
     {
         $this->input->getOption('target')
-            ->willReturn('build/metrics/');
+            ->willReturn('.dev-tools/metrics/');
         $this->input->getOption('junit')
             ->willReturn(null);
 
-        $this->processBuilder->withArgument('--report-html', 'build/metrics')
+        $this->processBuilder->withArgument('--report-html', '.dev-tools/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--report-json', 'build/metrics/report.json')
+        $this->processBuilder->withArgument('--report-json', '.dev-tools/metrics/report.json')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--report-summary-json', 'build/metrics/report-summary.json')
+        $this->processBuilder->withArgument('--report-summary-json', '.dev-tools/metrics/report-summary.json')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument('--junit', Argument::any())
@@ -220,9 +220,9 @@ final class MetricsCommandTest extends TestCase
     public function executeWillIncludeJunitReportWhenRequested(): void
     {
         $this->input->getOption('junit')
-            ->willReturn('build/metrics/junit.xml');
+            ->willReturn('.dev-tools/metrics/junit.xml');
 
-        $this->processBuilder->withArgument('--junit', 'build/metrics/junit.xml')
+        $this->processBuilder->withArgument('--junit', '.dev-tools/metrics/junit.xml')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processQueue->add($this->process->reveal())
@@ -239,7 +239,7 @@ final class MetricsCommandTest extends TestCase
     private function commandDefaultOption(string $option): mixed
     {
         return match ($option) {
-            'exclude' => 'vendor,test,tests,tmp,cache,spec,build,backup,resources',
+            'exclude' => 'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources',
             'target' => $this->target,
             'junit' => null,
             default => null,

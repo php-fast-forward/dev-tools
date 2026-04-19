@@ -72,7 +72,7 @@ final class RectorConfig
             ]);
             $rectorConfig->paths([$cwd]);
             $rectorConfig->skip([
-                $cwd . '/build',
+                $cwd . '/.dev-tools',
                 $cwd . '/resources',
                 $cwd . '/vendor',
                 $cwd . '/tmp',

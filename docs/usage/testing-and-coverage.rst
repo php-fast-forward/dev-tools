@@ -23,18 +23,18 @@ Useful Examples
 
    composer tests
    composer tests -- --filter=PluginTest
-   vendor/bin/dev-tools tests --coverage=build/coverage
+   vendor/bin/dev-tools tests --coverage=.dev-tools/coverage
    vendor/bin/dev-tools tests --no-cache --bootstrap=tests/bootstrap.php
 
 Coverage Outputs
 ----------------
 
-When ``--coverage=build/coverage`` is used, PHPUnit writes:
+When ``--coverage=.dev-tools/coverage`` is used, PHPUnit writes:
 
-- ``build/coverage/index.html``
-- ``build/coverage/testdox.html``
-- ``build/coverage/clover.xml``
-- ``build/coverage/coverage.php``
+- ``.dev-tools/coverage/index.html``
+- ``.dev-tools/coverage/testdox.html``
+- ``.dev-tools/coverage/clover.xml``
+- ``.dev-tools/coverage/coverage.php``
 
 Built-In PHPUnit Extension
 --------------------------
@@ -64,7 +64,7 @@ external tooling or build custom reports:
    use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 
    $loader = new CoverageSummaryLoader();
-   $summary = $loader->load('build/coverage/coverage.php');
+   $summary = $loader->load('.dev-tools/coverage/coverage.php');
 
    $summary->executedLines();      // e.g., 142
    $summary->executableLines();   // e.g., 168
