@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,11 +46,13 @@ final class CopyResourceCommand extends BaseCommand
      * @param FilesystemInterface $filesystem the filesystem used for copy operations
      * @param FileLocatorInterface $fileLocator the locator used to resolve source resources
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
+     * @param OverwriteDiffRenderer $overwriteDiffRenderer the renderer used to summarize overwrite changes
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
+        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
     ) {
         parent::__construct();
     }
@@ -155,6 +158,20 @@ final class CopyResourceCommand extends BaseCommand
             $output->writeln(\sprintf('<comment>Skipped existing resource %s.</comment>', $targetPath));
 
             return self::SUCCESS;
+        }
+
+        if ($overwrite && $this->filesystem->exists($targetPath)) {
+            $comparison = $this->overwriteDiffRenderer->render($sourcePath, $targetPath);
+
+            $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+
+            if ($comparison->isChanged() && null !== $comparison->diff()) {
+                $output->writeln($comparison->diff());
+            }
+
+            if ($comparison->isUnchanged()) {
+                return self::SUCCESS;
+            }
         }
 
         $this->filesystem->copy($sourcePath, $targetPath, $overwrite);

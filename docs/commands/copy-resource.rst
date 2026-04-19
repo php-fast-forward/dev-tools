@@ -36,7 +36,9 @@ Options
 
 ``--overwrite, -o``
    Overwrite existing target files. Without this option, existing files
-   are skipped.
+   are skipped. When a text file changes, the command shows a unified diff
+   before copying. Unchanged targets are reported as skipped, and binary or
+   unreadable files fall back to a clear non-diff message.
 
 Examples
 --------

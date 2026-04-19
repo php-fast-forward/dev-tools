@@ -22,8 +22,11 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Console\Command\CopyResourceCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\OverwriteDiffResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -40,6 +43,7 @@ use function Safe\unlink;
 use function Safe\rmdir;
 
 #[CoversClass(CopyResourceCommand::class)]
+#[UsesClass(OverwriteDiffResult::class)]
 final class CopyResourceCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -53,6 +57,8 @@ final class CopyResourceCommandTest extends TestCase
     private ObjectProphecy $input;
 
     private ObjectProphecy $output;
+
+    private ObjectProphecy $overwriteDiffRenderer;
 
     private CopyResourceCommand $command;
 
@@ -72,11 +78,13 @@ final class CopyResourceCommandTest extends TestCase
         $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
 
         $this->command = new CopyResourceCommand(
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
             $this->finderFactory->reveal(),
+            $this->overwriteDiffRenderer->reveal(),
         );
     }
 
@@ -138,6 +146,120 @@ final class CopyResourceCommandTest extends TestCase
         )->shouldBeCalledOnce();
         $this->output->writeln(Argument::containingString('Copied resource'))
             ->shouldBeCalled();
+
+        self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillShowDiffBeforeOverwritingChangedFile(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('target')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('overwrite')
+            ->willReturn(true);
+
+        $this->fileLocator->locate('.editorconfig')
+            ->willReturn('/package/.editorconfig');
+        $this->filesystem->getAbsolutePath('.editorconfig')
+            ->willReturn('/project/.editorconfig');
+        $this->filesystem->exists('/project/.editorconfig')
+            ->willReturn(true);
+
+        $this->overwriteDiffRenderer->render('/package/.editorconfig', '/project/.editorconfig')
+            ->willReturn(new OverwriteDiffResult(
+                OverwriteDiffResult::STATUS_CHANGED,
+                'Overwriting resource /project/.editorconfig from /package/.editorconfig.',
+                "--- Current: /project/.editorconfig\n+++ Source: /package/.editorconfig\n@@ -1 +1 @@\n-old\n+new"
+            ))
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<comment>Overwriting resource /project/.editorconfig from /package/.editorconfig.</comment>')
+            ->shouldBeCalledOnce();
+        $this->output->writeln("--- Current: /project/.editorconfig\n+++ Source: /package/.editorconfig\n@@ -1 +1 @@\n-old\n+new")
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy('/package/.editorconfig', '/project/.editorconfig', true)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<info>Copied resource /project/.editorconfig.</info>')
+            ->shouldBeCalledOnce();
+
+        self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReportUnchangedOverwriteAsNoOp(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('target')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('overwrite')
+            ->willReturn(true);
+
+        $this->fileLocator->locate('.editorconfig')
+            ->willReturn('/package/.editorconfig');
+        $this->filesystem->getAbsolutePath('.editorconfig')
+            ->willReturn('/project/.editorconfig');
+        $this->filesystem->exists('/project/.editorconfig')
+            ->willReturn(true);
+
+        $this->overwriteDiffRenderer->render('/package/.editorconfig', '/project/.editorconfig')
+            ->willReturn(new OverwriteDiffResult(
+                OverwriteDiffResult::STATUS_UNCHANGED,
+                'Target /project/.editorconfig already matches source /package/.editorconfig; overwrite skipped.',
+            ))
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<comment>Target /project/.editorconfig already matches source /package/.editorconfig; overwrite skipped.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::any(), Argument::any(), Argument::any())
+            ->shouldNotBeCalled();
+        $this->output->writeln('<info>Copied resource /project/.editorconfig.</info>')
+            ->shouldNotBeCalled();
+
+        self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillHandleBinaryOverwriteGracefully(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('target')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('overwrite')
+            ->willReturn(true);
+
+        $this->fileLocator->locate('.editorconfig')
+            ->willReturn('/package/.editorconfig');
+        $this->filesystem->getAbsolutePath('.editorconfig')
+            ->willReturn('/project/.editorconfig');
+        $this->filesystem->exists('/project/.editorconfig')
+            ->willReturn(true);
+
+        $this->overwriteDiffRenderer->render('/package/.editorconfig', '/project/.editorconfig')
+            ->willReturn(new OverwriteDiffResult(
+                OverwriteDiffResult::STATUS_BINARY,
+                'Target /project/.editorconfig will be overwritten from /package/.editorconfig, but a text diff is unavailable for binary content.',
+            ))
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<comment>Target /project/.editorconfig will be overwritten from /package/.editorconfig, but a text diff is unavailable for binary content.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy('/package/.editorconfig', '/project/.editorconfig', true)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<info>Copied resource /project/.editorconfig.</info>')
+            ->shouldBeCalledOnce();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
     }
