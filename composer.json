@@ -67,6 +67,10 @@
         "thecodingmachine/safe": "^3.4",
         "twig/twig": "^3.0"
     },
+    "suggest": {
+        "phpstan/extension-installer": "Recommended when enabling Type Perfect through `composer dev-tools refactor -- --type-perfect` so PHPStan extension wiring is loaded automatically.",
+        "rector/type-perfect": "Optional companion package for running Type Perfect checks through `composer dev-tools refactor -- --type-perfect`."
+    },
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
