@@ -42,6 +42,7 @@
         "nikic/php-parser": "^5.7",
         "php-di/php-di": "^7.1",
         "php-parallel-lint/php-parallel-lint": "^1.4",
+        "phpmetrics/phpmetrics": "^2.9",
         "phpdocumentor/shim": "^3.9",
         "phpro/grumphp-shim": "^2.19",
         "phpspec/prophecy": "^1.26",
@@ -113,6 +114,7 @@
     },
     "scripts": {
         "dev-tools": "dev-tools",
-        "dev-tools:fix": "@dev-tools --fix"
+        "dev-tools:fix": "@dev-tools --fix",
+        "metrics": "@dev-tools metrics"
     }
 }

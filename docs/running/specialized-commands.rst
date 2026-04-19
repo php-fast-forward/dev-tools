@@ -42,6 +42,26 @@ Important details:
 - it returns a non-zero exit code when missing or unused dependencies are
   found.
 
+``metrics``
+-----------
+
+Analyzes code metrics with PhpMetrics.
+
+.. code-block:: bash
+
+   composer metrics
+   composer dev-tools metrics -- --report-html=build/metrics
+
+Important details:
+
+- it ships ``phpmetrics/phpmetrics`` as a direct dependency of
+  ``fast-forward/dev-tools``;
+- it prints a reduced summary with average cyclomatic complexity, average
+  maintainability index, and analyzed class/function counts;
+- ``--report-html`` and ``--report-json`` allow persisting the native
+  PhpMetrics reports for CI artifacts or manual review;
+- it fails early when the PhpMetrics binary or source directory is missing.
+
 ``code-style``
 --------------
 

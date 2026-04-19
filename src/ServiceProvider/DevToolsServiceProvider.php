@@ -50,6 +50,10 @@ use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\License\Resolver;
 use FastForward\DevTools\License\ResolverInterface;
+use FastForward\DevTools\Metrics\ReportLoader;
+use FastForward\DevTools\Metrics\ReportLoaderInterface;
+use FastForward\DevTools\Metrics\SummaryRenderer;
+use FastForward\DevTools\Metrics\SummaryRendererInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
@@ -126,6 +130,10 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             // License
             GeneratorInterface::class => get(Generator::class),
             ResolverInterface::class => get(Resolver::class),
+
+            // Metrics
+            ReportLoaderInterface::class => get(ReportLoader::class),
+            SummaryRendererInterface::class => get(SummaryRenderer::class),
 
             // Twig
             LoaderInterface::class => create(FilesystemLoader::class)->constructor(\dirname(__DIR__, 2) . '/resources'),
