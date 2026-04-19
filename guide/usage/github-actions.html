@@ -2489,21 +2489,24 @@ secrets: inherit</code></pre>
 <em>   **Main Branch**: Runs all checks and deploys the final reports to the root of the ``gh-pages`` branch.
     </em>
    Runs a post-deploy health check against the published reports index and coverage URLs with retry/backoff to account for Pages propagation.
-<em>   **Pull Requests**:
-    </em>
-   Generates a <strong>Preview</strong>
- of the documentation, coverage, and metrics.
-    <em>   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.
-    </em>
-   Verifies the preview index and coverage URLs after deployment before posting preview links.
-    <em>   Posts a **Sticky Comment** on the PR with links to the live preview, coverage report, and metrics site.
-    </em>
-   <strong>Cleanup</strong>
-: When a PR is closed, the workflow automatically removes the preview directory from the <code>gh-pages</code>
- branch to keep the repository clean.
-    <em>   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
+    <em>   Resolves the workflow PHP version from ``composer.lock`` or ``composer.json`` before installing dependencies.
 </em>
-   <strong>Scheduled Cleanup</strong>
+   <strong>Pull Requests</strong>
+:
+    <em>   Generates a **Preview** of the documentation, coverage, and metrics.
+    </em>
+   Deploys the preview to <code>gh-pages</code>
+ under <code>previews/pr-{number}/</code>
+.
+    <em>   Verifies the preview index and coverage URLs after deployment before posting preview links.
+    </em>
+   Posts a <strong>Sticky Comment</strong>
+ on the PR with links to the live preview, coverage report, and metrics site.
+    <em>   **Cleanup**: When a PR is closed, the workflow automatically removes the preview directory from the ``gh-pages`` branch to keep the repository clean.
+    </em>
+   <strong>Concurrency</strong>
+: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
+*   <strong>Scheduled Cleanup</strong>
 : A scheduled/manual cleanup removes stale <code>previews/pr-{number}/</code>
  directories for already closed pull requests.</p>
 
@@ -2525,9 +2528,13 @@ secrets: inherit</code></pre>
    <strong>Pull Requests</strong>
 : Pushes documentation changes to a dedicated branch (e.g., <code>pr-123</code>
 ) in the wiki repository for review.
-<em>   **Merge**: When a PR is merged into ``main``, it pushes the changes to the ``master`` branch of the wiki, validates the remote branch SHA, and makes them live.
+<em>   **PHP Version Resolution**: Resolves the PHP version from ``composer.lock`` or ``composer.json`` before setting up PHP and installing dependencies.
 </em>
-   <strong>Cleanup</strong>
+   <strong>Merge</strong>
+: When a PR is merged into <code>main</code>
+, it pushes the changes to the <code>master</code>
+ branch of the wiki, validates the remote branch SHA, and makes them live.
+*   <strong>Cleanup</strong>
 : When a PR is closed, the workflow deletes the matching wiki preview branch. A scheduled cleanup also removes stale <code>pr-{number}</code>
  branches for already closed pull requests.</p>
 
@@ -2559,6 +2566,10 @@ protection, bot commit, and submodule pointer conflict guidance.</p>
 
 <ul>
     <li>Runs PHPUnit tests across the supported PHP matrix.</li>
+
+    <li>Resolves the minimum supported PHP minor version from <code>composer.lock</code>
+ or <code>composer.json</code>
+ and builds the test matrix from that floor upward.</li>
 
     <li>Runs dependency health as a separate non-blocking job when enabled.</li>
 
