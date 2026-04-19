@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776584664">
-  <project timestamp="1776584664" name="Clover Coverage">
+<coverage generated="1776585454">
+  <project timestamp="1776585454" name="Clover Coverage">
     <package name="FastForward\DevTools\Agent\Skills">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Agent/Skills/SkillsSynchronizer.php">
         <class name="FastForward\DevTools\Agent\Skills\SkillsSynchronizer" namespace="FastForward\DevTools\Agent\Skills">
@@ -1492,7 +1492,7 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/SyncCommand.php">
         <class name="FastForward\DevTools\Console\Command\SyncCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="18" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="92" coveredstatements="92" elements="97" coveredelements="97"/>
+          <metrics complexity="17" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="82" coveredstatements="82" elements="87" coveredelements="87"/>
         </class>
         <line num="47" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
         <line num="51" type="stmt" count="3"/>
@@ -1519,7 +1519,7 @@
         <line num="78" type="stmt" count="3"/>
         <line num="79" type="stmt" count="3"/>
         <line num="80" type="stmt" count="3"/>
-        <line num="91" type="method" name="execute" visibility="protected" complexity="13" crap="13" count="2"/>
+        <line num="91" type="method" name="execute" visibility="protected" complexity="12" crap="12" count="2"/>
         <line num="93" type="stmt" count="2"/>
         <line num="95" type="stmt" count="2"/>
         <line num="96" type="stmt" count="2"/>
@@ -1563,35 +1563,25 @@
         <line num="135" type="stmt" count="2"/>
         <line num="136" type="stmt" count="2"/>
         <line num="137" type="stmt" count="2"/>
-        <line num="138" type="stmt" count="2"/>
-        <line num="139" type="stmt" count="2"/>
-        <line num="140" type="stmt" count="2"/>
-        <line num="141" type="stmt" count="2"/>
-        <line num="142" type="stmt" count="2"/>
-        <line num="143" type="stmt" count="2"/>
-        <line num="144" type="stmt" count="2"/>
-        <line num="145" type="stmt" count="2"/>
+        <line num="138" type="stmt" count="1"/>
+        <line num="139" type="stmt" count="1"/>
+        <line num="140" type="stmt" count="1"/>
+        <line num="142" type="stmt" count="1"/>
+        <line num="143" type="stmt" count="1"/>
         <line num="146" type="stmt" count="2"/>
         <line num="147" type="stmt" count="2"/>
-        <line num="148" type="stmt" count="1"/>
-        <line num="149" type="stmt" count="1"/>
-        <line num="150" type="stmt" count="1"/>
-        <line num="152" type="stmt" count="1"/>
-        <line num="153" type="stmt" count="1"/>
-        <line num="156" type="stmt" count="2"/>
-        <line num="157" type="stmt" count="2"/>
-        <line num="158" type="stmt" count="2"/>
-        <line num="159" type="stmt" count="2"/>
-        <line num="161" type="stmt" count="2"/>
-        <line num="170" type="method" name="queueDevToolsCommand" visibility="private" complexity="2" crap="2" count="2"/>
-        <line num="172" type="stmt" count="2"/>
-        <line num="173" type="stmt" count="2"/>
-        <line num="175" type="stmt" count="2"/>
-        <line num="176" type="stmt" count="2"/>
+        <line num="148" type="stmt" count="2"/>
+        <line num="149" type="stmt" count="2"/>
+        <line num="151" type="stmt" count="2"/>
+        <line num="160" type="method" name="queueDevToolsCommand" visibility="private" complexity="2" crap="2" count="2"/>
+        <line num="162" type="stmt" count="2"/>
+        <line num="163" type="stmt" count="2"/>
+        <line num="165" type="stmt" count="2"/>
+        <line num="166" type="stmt" count="2"/>
+        <line num="169" type="stmt" count="2"/>
+        <line num="177" type="method" name="devToolsBinary" visibility="private" complexity="1" crap="1" count="2"/>
         <line num="179" type="stmt" count="2"/>
-        <line num="187" type="method" name="devToolsBinary" visibility="private" complexity="1" crap="1" count="2"/>
-        <line num="189" type="stmt" count="2"/>
-        <metrics loc="192" ncloc="147" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="92" coveredstatements="92" elements="97" coveredelements="97"/>
+        <metrics loc="182" ncloc="137" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="82" coveredstatements="82" elements="87" coveredelements="87"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/TestsCommand.php">
         <class name="FastForward\DevTools\Console\Command\TestsCommand" namespace="FastForward\DevTools\Console\Command">
@@ -3169,6 +3159,6 @@
         <metrics loc="150" ncloc="112" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="28" coveredstatements="28" elements="30" coveredelements="30"/>
       </file>
     </package>
-    <metrics files="89" loc="11740" ncloc="6510" classes="64" methods="289" coveredmethods="218" conditionals="0" coveredconditionals="0" statements="2368" coveredstatements="2137" elements="2657" coveredelements="2355"/>
+    <metrics files="89" loc="11730" ncloc="6500" classes="64" methods="289" coveredmethods="218" conditionals="0" coveredconditionals="0" statements="2358" coveredstatements="2127" elements="2647" coveredelements="2345"/>
   </project>
 </coverage>
