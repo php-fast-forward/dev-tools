@@ -971,6 +971,11 @@ Search.appendIndex(
             "summary": "Prompts\u0020whether\u0020a\u0020managed\u0020file\u0020should\u0020be\u0020written.",
             "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#method_shouldWriteManagedFile"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand\u003A\u003AnormalizeComposerFile\u0028\u0029",
+            "name": "normalizeComposerFile",
+            "summary": "Normalizes\u0020a\u0020composer\u0020manifest\u0020after\u0020funding\u0020metadata\u0020changes.",
+            "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#method_normalizeComposerFile"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand\u003A\u003A\u0024filesystem",
             "name": "filesystem",
             "summary": "",
@@ -995,6 +1000,16 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand\u003A\u003A\u0024processBuilder",
+            "name": "processBuilder",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_processBuilder"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand\u003A\u003A\u0024processQueue",
+            "name": "processQueue",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_processQueue"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
             "name": "GitAttributesCommand",
@@ -1895,6 +1910,11 @@ Search.appendIndex(
             "name": "extractGithubSponsor",
             "summary": "Extracts\u0020a\u0020GitHub\u0020Sponsors\u0020handle\u0020from\u0020a\u0020funding\u0020URL.",
             "url": "classes/FastForward-DevTools-Funding-ComposerFundingCodec.html#method_extractGithubSponsor"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec\u003A\u003AinsertFundingEntries\u0028\u0029",
+            "name": "insertFundingEntries",
+            "summary": "Inserts\u0020funding\u0020entries\u0020in\u0020a\u0020stable\u0020Composer\u0020key\u0020order.",
+            "url": "classes/FastForward-DevTools-Funding-ComposerFundingCodec.html#method_insertFundingEntries"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Funding\\FundingProfile",
             "name": "FundingProfile",
