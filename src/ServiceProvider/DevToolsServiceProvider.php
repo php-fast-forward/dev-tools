@@ -95,7 +95,6 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
 
             // Composer
             ComposerJsonInterface::class => get(ComposerJson::class),
-
             // Symfony Components
             FileLocatorInterface::class => create(FileLocator::class)->constructor([getcwd(), \dirname(__DIR__, 2)]),
 

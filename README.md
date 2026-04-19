@@ -53,6 +53,9 @@ composer dev-tools tests
 # Analyze missing and unused Composer dependencies
 composer dependencies
 vendor/bin/dev-tools dependencies
+composer dev-tools dependencies -- --max-outdated=8
+composer dev-tools dependencies -- --dev
+composer dev-tools dependencies -- --upgrade --dev
 
 # Analyze code metrics with PhpMetrics
 composer metrics
@@ -105,7 +108,8 @@ composer dev-tools update-composer-json --force
 composer dev-tools:sync
 ```
 
-The `dependencies` command ships with both dependency analyzers as direct
+The `dependencies` command ships with both dependency analyzers and
+`rector/jack` as direct
 dependencies of `fast-forward/dev-tools`, so it works without extra
 installation in the consumer project.
 
@@ -125,7 +129,7 @@ automation assets.
 |---------|---------|
 | `composer dev-tools` | Runs the full `standards` pipeline. |
 | `composer dev-tools tests` | Runs PHPUnit with local-or-packaged configuration. |
-| `composer dev-tools dependencies` | Reports missing and unused Composer dependencies. |
+| `composer dev-tools dependencies` | Previews Jack dependency updates, then reports missing, unused, and overly outdated Composer dependencies. |
 | `composer dev-tools metrics` | Runs PhpMetrics for a working directory and generates requested report artifacts. |
 | `composer dev-tools docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer dev-tools skills` | Creates or repairs packaged skill links in `.agents/skills`. |

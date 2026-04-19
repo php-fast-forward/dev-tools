@@ -8,6 +8,16 @@ on:
                 required: false
                 type: number
                 default: 80
+            run-dependencies-check:
+                description: Whether to run the dependency health check during CI.
+                required: false
+                type: boolean
+                default: true
+            max-outdated:
+                description: Maximum number of outdated packages allowed by the dependencies command.
+                required: false
+                type: number
+                default: 5
     workflow_dispatch:
         inputs:
             min-coverage:
@@ -15,6 +25,16 @@ on:
                 required: false
                 type: number
                 default: 80
+            run-dependencies-check:
+                description: Whether to run the dependency health check during CI.
+                required: false
+                type: boolean
+                default: true
+            max-outdated:
+                description: Maximum number of outdated packages allowed by the dependencies command.
+                required: false
+                type: number
+                default: 5
     pull_request:
         paths:
           - 'src/**'
@@ -29,8 +49,8 @@ permissions:
     contents: read
 
 concurrency:
-    group: "pages"
-    cancel-in-progress: false
+    group: ${{ github.event_name == 'pull_request' && format('tests-pr-{0}', github.event.pull_request.number) || format('tests-{0}', github.ref) }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
     tests:
@@ -39,6 +59,8 @@ jobs:
         strategy:
             matrix:
                 php-version: [ '8.3', '8.4', '8.5' ]
+        env:
+            TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v6
 
@@ -64,12 +86,12 @@ jobs:
               env:
                 COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
                 COMPOSER_CACHE_DIR: /tmp/composer-cache
-                COMPOSER_ROOT_VERSION: dev-main
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Composer Audit
               env:
-                COMPOSER_ROOT_VERSION: dev-main
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer audit
 
             - name: Resolve minimum coverage
@@ -80,5 +102,43 @@ jobs:
 
             - name: Run PHPUnit tests
               env:
-                COMPOSER_ROOT_VERSION: dev-main
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer dev-tools tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
+
+    dependency-health:
+        name: Dependency Health
+        if: ${{ github.event_name != 'workflow_call' || inputs.run-dependencies-check }}
+        runs-on: ubuntu-latest
+        continue-on-error: true
+        env:
+            TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '8.3'
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v5
+              with:
+                path: /tmp/composer-cache
+                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                restore-keys: |
+                  ${{ runner.os }}-composer-
+
+            - name: Mark workspace as safe for git
+              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+            - name: Install dependencies
+              env:
+                COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+                COMPOSER_CACHE_DIR: /tmp/composer-cache
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
+              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+
+            - name: Run dependency health check
+              env:
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
+              run: composer dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || 5 }}
