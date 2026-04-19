@@ -123,6 +123,11 @@ preserves existing non-symlink directories. The `dev-tools:sync` command calls
 `skills` automatically after refreshing the rest of the consumer-facing
 automation assets.
 
+This repository also keeps role-based project agents in `.agents/agents`. They
+are mirrored through `.github/agents` for GitHub-oriented discovery, while the
+packaged `.agents/skills` directory remains the consumer-facing procedural
+source of truth.
+
 ## 🧰 Command Summary
 
 | Command | Purpose |
