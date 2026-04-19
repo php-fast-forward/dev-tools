@@ -155,3 +155,19 @@ composer dev-tools
 - **Updating PHPDoc / PHP Style**: Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
 - **Drafting / Publishing GitHub Issues**: Use skill `github-issues` in `.agents/skills/github-issues/` to transform a short feature description into a complete, production-ready GitHub issue and create or update it on GitHub when needed
 - **Implementing Issues & PRs**: Use skill `github-pull-request` in `.agents/skills/github-pull-request/` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests
+
+## Project Agents
+
+Repository-specific agent prompts live in `.agents/agents/` and are mirrored
+through `.github/agents` for GitHub-facing discovery. These role prompts define
+behavior and ownership boundaries, while `.agents/skills/` remains the
+procedural source of truth.
+
+- Use `issue-editor` for issue drafting, refinement, comments, updates, and closure workflows.
+- Use `issue-implementer` for issue-to-branch-to-PR execution.
+- Delegate to `test-guardian` whenever behavior changes, regressions, or missing coverage are involved.
+- Delegate to `php-style-curator` for PHPDoc cleanup, file-header normalization, and repository style conformance.
+- Delegate to `readme-maintainer` when public commands, installation, usage, links, or badges change.
+- Delegate to `docs-writer` when `docs/` must be created or updated.
+- Delegate to `consumer-sync-auditor` when packaged skills, sync assets, wiki, workflows, or consumer bootstrap behavior change.
+- Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
