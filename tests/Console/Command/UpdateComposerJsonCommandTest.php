@@ -22,8 +22,11 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\UpdateComposerJsonCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Resource\FileDiff;
+use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -36,6 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\json_decode;
 
 #[CoversClass(UpdateComposerJsonCommand::class)]
+#[UsesClass(FileDiff::class)]
 final class UpdateComposerJsonCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -50,6 +54,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
+    private ObjectProphecy $fileDiffer;
+
     private UpdateComposerJsonCommand $command;
 
     /**
@@ -62,11 +68,24 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->writeln(Argument::any());
+        $this->fileDiffer->formatForConsole(Argument::cetera())
+            ->willReturn(null);
+        $this->input->getOption('dry-run')
+            ->willReturn(false);
+        $this->input->getOption('check')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(false);
 
         $this->command = new UpdateComposerJsonCommand(
             $this->composer->reveal(),
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
+            $this->fileDiffer->reveal(),
         );
     }
 
@@ -105,6 +124,17 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->willReturn(false);
         $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
             ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(
+            'generated dev-tools composer.json configuration',
+            '/app/composer.json',
+            Argument::type('string'),
+            '{"name":"example/package"}',
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+            '@@ diff @@'
+        ))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
             '/app/composer.json',
             Argument::that(static fn(string $contents): bool => str_contains($contents, '"dev-tools"')
@@ -132,6 +162,16 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->willReturn(true);
         $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
             ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(
+            'generated dev-tools composer.json configuration',
+            '/app/composer.json',
+            Argument::type('string'),
+            '{"name":"example/package"}',
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+        ))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
             '/app/composer.json',
             Argument::that(static function (string $contents): bool {
@@ -162,6 +202,16 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->shouldNotBeCalled();
         $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
             ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(
+            'generated dev-tools composer.json configuration',
+            '/app/composer.json',
+            Argument::type('string'),
+            '{"name":"example/package","readme":"docs/readme.md"}',
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+        ))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
             '/app/composer.json',
             Argument::that(static function (string $contents): bool {
@@ -192,6 +242,16 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->willReturn(false);
         $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
             ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(
+            'generated dev-tools composer.json configuration',
+            '/app/composer.json',
+            Argument::type('string'),
+            '{"name":"example/package"}',
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+        ))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
             '/app/composer.json',
             Argument::that(static function (string $contents): bool {

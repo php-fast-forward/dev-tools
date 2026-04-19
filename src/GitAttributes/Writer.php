@@ -49,7 +49,19 @@ final readonly class Writer implements WriterInterface
      */
     public function write(string $gitattributesPath, string $content): void
     {
-        $this->filesystem->dumpFile($gitattributesPath, $this->format($content));
+        $this->filesystem->dumpFile($gitattributesPath, $this->render($content));
+    }
+
+    /**
+     * Renders normalized .gitattributes content.
+     *
+     * @param string $content the merged .gitattributes content to normalize
+     *
+     * @return string the normalized file content
+     */
+    public function render(string $content): string
+    {
+        return $this->format($content);
     }
 
     /**

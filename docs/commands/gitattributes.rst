@@ -21,7 +21,14 @@ Usage
 Options
 -------
 
-This command does not accept additional options.
+``--dry-run``
+   Preview managed ``.gitattributes`` drift without writing the file.
+
+``--check``
+   Exit with code ``1`` when ``.gitattributes`` needs an update.
+
+``--interactive``
+   Prompt before updating ``.gitattributes``.
 
 Examples
 --------
@@ -57,3 +64,5 @@ Behavior
 - Deduplicates equivalent entries and sorts them (directories before files, then alphabetically).
 - Uses CandidateProvider, ExistenceChecker, ExportIgnoreFilter, Merger,
   Reader, and Writer components from the GitAttributes namespace.
+- ``--dry-run`` and ``--check`` render a diff against the normalized managed
+  result before deciding whether to write.

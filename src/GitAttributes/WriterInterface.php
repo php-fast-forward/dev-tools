@@ -29,6 +29,15 @@ namespace FastForward\DevTools\GitAttributes;
 interface WriterInterface
 {
     /**
+     * Renders normalized .gitattributes content without persisting it.
+     *
+     * @param string $content the merged .gitattributes content to normalize
+     *
+     * @return string the normalized file content
+     */
+    public function render(string $content): string;
+
+    /**
      * Writes the .gitattributes content to the specified filesystem path.
      *
      * @param string $gitattributesPath The filesystem path to the .gitattributes file.

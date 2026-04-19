@@ -58,8 +58,18 @@ final readonly class Writer implements WriterInterface
      */
     public function write(GitIgnoreInterface $gitignore): void
     {
-        $content = implode("\n", $gitignore->entries()) . "\n";
+        $this->filesystem->dumpFile($gitignore->path(), $this->render($gitignore));
+    }
 
-        $this->filesystem->dumpFile($gitignore->path(), $content);
+    /**
+     * Renders the normalized .gitignore content.
+     *
+     * @param GitIgnoreInterface $gitignore the gitignore representation to render
+     *
+     * @return string the rendered file content
+     */
+    public function render(GitIgnoreInterface $gitignore): string
+    {
+        return implode("\n", $gitignore->entries()) . "\n";
     }
 }

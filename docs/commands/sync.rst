@@ -36,6 +36,16 @@ Options
    ``copy-resource`` show a readable diff in the sync output before they are
    replaced.
 
+``--dry-run``
+   Preview managed-file drift without writing changes.
+
+``--check``
+   Report managed-file drift and exit with code ``1`` when updates are
+   required.
+
+``--interactive``
+   Prompt before replacing drifted managed files.
+
 Examples
 --------
 
@@ -50,6 +60,18 @@ Sync with overwrite:
 .. code-block:: bash
 
    composer dev-tools:sync --overwrite
+
+Preview managed-file drift:
+
+.. code-block:: bash
+
+   composer dev-tools:sync --dry-run
+
+Fail in CI when managed files drift:
+
+.. code-block:: bash
+
+   composer dev-tools:sync --check
 
 Exit Codes
 ---------
@@ -71,5 +93,12 @@ Behavior
 - Copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``.
 - When ``--overwrite`` is enabled, replaced text resources emit a unified diff
   so terminal sessions and CI logs show what changed.
+- ``--dry-run`` and ``--check`` verify managed-file drift for ``composer.json``,
+  copied resources, ``.gitignore``, ``.gitattributes``, ``LICENSE``, and Git
+  hooks.
+- ``--interactive`` prompts before replacing drifted managed files when the
+  command is running in an interactive terminal.
 - Creates ``.github/wiki`` as a git submodule when missing.
 - Calls other commands in sequence.
+- ``wiki`` and ``skills`` are skipped in preview/check modes until they expose a
+  non-destructive verification path.

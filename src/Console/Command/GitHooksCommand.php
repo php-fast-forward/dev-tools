@@ -22,11 +22,13 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -45,11 +47,13 @@ final class GitHooksCommand extends BaseCommand
      * @param FilesystemInterface $filesystem the filesystem used to copy hooks
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
+     * @param FileDiffer $fileDiffer
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
+        private readonly FileDiffer $fileDiffer,
     ) {
         parent::__construct();
     }
@@ -78,6 +82,21 @@ final class GitHooksCommand extends BaseCommand
                 name: 'no-overwrite',
                 mode: InputOption::VALUE_NONE,
                 description: 'Do not overwrite existing hook files.',
+            )
+            ->addOption(
+                name: 'dry-run',
+                mode: InputOption::VALUE_NONE,
+                description: 'Preview Git hook synchronization without copying files.',
+            )
+            ->addOption(
+                name: 'check',
+                mode: InputOption::VALUE_NONE,
+                description: 'Report Git hook drift and exit non-zero when replacements are required.',
+            )
+            ->addOption(
+                name: 'interactive',
+                mode: InputOption::VALUE_NONE,
+                description: 'Prompt before replacing drifted Git hooks.',
             );
     }
 
@@ -94,27 +113,83 @@ final class GitHooksCommand extends BaseCommand
         $sourcePath = $this->fileLocator->locate((string) $input->getOption('source'));
         $targetPath = (string) $this->filesystem->getAbsolutePath((string) $input->getOption('target'));
         $overwrite = ! $input->getOption('no-overwrite');
+        $dryRun = (bool) $input->getOption('dry-run');
+        $check = (bool) $input->getOption('check');
+        $interactive = (bool) $input->getOption('interactive');
 
         $files = $this->finderFactory
             ->create()
             ->files()
             ->in($sourcePath);
 
+        $status = self::SUCCESS;
+
         foreach ($files as $file) {
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
-            if (! $overwrite && $this->filesystem->exists($hookPath)) {
+            if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($hookPath)) {
                 $output->writeln(\sprintf('<comment>Skipped existing %s hook.</comment>', $file->getFilename()));
 
                 continue;
             }
 
-            $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite);
+            if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($hookPath)) {
+                $comparison = $this->fileDiffer->diff($file->getRealPath(), $hookPath);
+
+                $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+
+                if ($comparison->isChanged()) {
+                    $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
+
+                    if (null !== $consoleDiff) {
+                        $output->writeln($consoleDiff);
+                    }
+                }
+
+                if ($comparison->isUnchanged()) {
+                    continue;
+                }
+
+                if ($check) {
+                    $status = self::FAILURE;
+
+                    continue;
+                }
+
+                if ($dryRun) {
+                    continue;
+                }
+
+                if ($interactive && $input->isInteractive() && ! $this->shouldReplaceHook($input, $output, $hookPath)) {
+                    $output->writeln(\sprintf('<comment>Skipped replacing %s.</comment>', $hookPath));
+
+                    continue;
+                }
+            }
+
+            $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite || $interactive);
             $this->filesystem->chmod($hookPath, 755, 0o755);
 
             $output->writeln(\sprintf('<info>Installed %s hook.</info>', $file->getFilename()));
         }
 
-        return self::SUCCESS;
+        return $status;
+    }
+
+    /**
+     * Prompts whether a drifted hook should be replaced.
+     *
+     * @param InputInterface $input the command input
+     * @param OutputInterface $output the command output
+     * @param string $hookPath the hook path that would be replaced
+     *
+     * @return bool true when the replacement SHOULD proceed
+     */
+    private function shouldReplaceHook(InputInterface $input, OutputInterface $output, string $hookPath): bool
+    {
+        $question = new ConfirmationQuestion(\sprintf('Replace drifted Git hook %s? [y/N] ', $hookPath), false);
+
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 }

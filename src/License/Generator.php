@@ -65,6 +65,24 @@ final readonly class Generator implements GeneratorInterface
      */
     public function generate(string $targetPath): ?string
     {
+        $content = $this->generateContent();
+
+        if (null === $content) {
+            return null;
+        }
+
+        $this->filesystem->dumpFile($targetPath, $content);
+
+        return $content;
+    }
+
+    /**
+     * Generates license content without writing it to disk.
+     *
+     * @return string|null the generated license content, or null if generation failed
+     */
+    public function generateContent(): ?string
+    {
         $templateFilename = $this->resolver->resolve($this->composer->getLicense());
 
         if (null === $templateFilename) {
@@ -80,8 +98,6 @@ final readonly class Generator implements GeneratorInterface
         } catch (Throwable) {
             return null;
         }
-
-        $this->filesystem->dumpFile($targetPath, $content);
 
         return $content;
     }

@@ -28,6 +28,13 @@ namespace FastForward\DevTools\License;
 interface GeneratorInterface
 {
     /**
+     * Generates license content without writing it to disk.
+     *
+     * @return string|null the generated license content, or null when generation is not possible
+     */
+    public function generateContent(): ?string;
+
+    /**
      * Generates a LICENSE file at the specified path.
      *
      * Reads the license from composer.json, validates it's supported,

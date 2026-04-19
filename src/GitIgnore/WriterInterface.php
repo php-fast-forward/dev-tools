@@ -30,6 +30,15 @@ namespace FastForward\DevTools\GitIgnore;
 interface WriterInterface
 {
     /**
+     * Renders the GitIgnore content without persisting it.
+     *
+     * @param GitIgnoreInterface $gitignore the .gitignore representation to render
+     *
+     * @return string the normalized .gitignore file content
+     */
+    public function render(GitIgnoreInterface $gitignore): string;
+
+    /**
      * Writes the GitIgnore content to its associated filesystem path.
      *
      * The provided GitIgnoreInterface instance MUST contain the target path and

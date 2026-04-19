@@ -28,6 +28,15 @@ Options
 ``--target, -t`` (optional)
    Path to the target .gitignore file (project). Default: project root .gitignore.
 
+``--dry-run``
+   Preview managed ``.gitignore`` drift without writing the file.
+
+``--check``
+   Exit with code ``1`` when ``.gitignore`` needs an update.
+
+``--interactive``
+   Prompt before updating ``.gitignore``.
+
 Examples
 --------
 
@@ -63,3 +72,5 @@ Behavior
 - By default, the source is the packaged .gitignore and the target is the project's root.
 - Duplicates are removed and entries are sorted alphabetically.
 - Uses the Reader, Merger, and Writer components from the GitIgnore namespace.
+- ``--dry-run`` and ``--check`` render a diff against the normalized managed
+  result before deciding whether to write.

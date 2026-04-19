@@ -56,6 +56,8 @@ final class SyncCommandTest extends TestCase
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->input->getOption(Argument::type('string'))
+            ->willReturn(false);
         $this->command = new SyncCommand(new ProcessBuilder(), $this->processQueue->reveal());
     }
 
@@ -91,6 +93,26 @@ final class SyncCommandTest extends TestCase
             ->shouldBeCalledOnce();
 
         self::assertSame(SyncCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillDisableDetachedModeWhenCheckingDrift(): void
+    {
+        $this->input->getOption('check')
+            ->willReturn(true);
+
+        $this->processQueue->add(Argument::type(Process::class), false, false)
+            ->shouldBeCalledTimes(8);
+        $this->processQueue->add(Argument::type(Process::class), false, true)
+            ->shouldNotBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(SyncCommand::FAILURE)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(SyncCommand::FAILURE, $this->executeCommand());
     }
 
     /**

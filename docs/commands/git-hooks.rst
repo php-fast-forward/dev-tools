@@ -34,6 +34,16 @@ Options
 ``--no-overwrite``
    Do not overwrite existing hook files.
 
+``--dry-run``
+   Preview managed Git hook drift without copying files.
+
+``--check``
+   Exit with code ``1`` when packaged Git hooks differ from the installed
+   versions.
+
+``--interactive``
+   Prompt before replacing a drifted Git hook.
+
 Examples
 --------
 

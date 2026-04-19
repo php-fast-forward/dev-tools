@@ -33,7 +33,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-use function Safe\file_put_contents;
+use function Safe\unlink;
 use function uniqid;
 
 #[CoversClass(MetricsCommand::class)]
@@ -89,7 +89,9 @@ final class MetricsCommandTest extends TestCase
 
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->build([\PHP_BINARY, '-derror_reporting=' . (\E_ALL & ~\E_DEPRECATED), 'vendor/bin/phpmetrics'])
+        $this->processBuilder->build(
+            [\PHP_BINARY, '-derror_reporting=' . (\E_ALL & ~\E_DEPRECATED), 'vendor/bin/phpmetrics']
+        )
             ->willReturn($this->process->reveal());
 
         $this->processQueue->run($this->output->reveal())
@@ -105,7 +107,7 @@ final class MetricsCommandTest extends TestCase
     {
         foreach ([$this->target . '/report.json', $this->target . '/report-summary.json'] as $path) {
             if (file_exists($path)) {
-                \unlink($path);
+                unlink($path);
             }
         }
     }

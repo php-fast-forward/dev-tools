@@ -57,10 +57,14 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Psr\Clock\SystemClock;
+use FastForward\DevTools\Resource\DifferInterface;
+use FastForward\DevTools\Resource\UnifiedDiffer;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use SebastianBergmann\Diff\Output\DiffOutputBuilderInterface;
+use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
@@ -108,6 +112,10 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
 
             // Coverage
             CoverageSummaryLoaderInterface::class => get(CoverageSummaryLoader::class),
+
+            // Resource
+            DiffOutputBuilderInterface::class => get(UnifiedDiffOutputBuilder::class),
+            DifferInterface::class => get(UnifiedDiffer::class),
 
             // GitIgnore
             MergerInterface::class => get(Merger::class),
