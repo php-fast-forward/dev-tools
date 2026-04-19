@@ -10,9 +10,9 @@ Startup Chain
 1. ``bin/dev-tools`` loads ``bin/dev-tools.php``.
 2. ``bin/dev-tools.php`` prefers the consumer project's
    ``vendor/autoload.php`` and falls back to the package autoloader.
-3. ``bin/dev-tools.php`` starts ``FastForward\DevTools\DevTools`` and appends
+3. ``bin/dev-tools.php`` starts ``FastForward\DevTools\Console\DevTools`` and appends
    ``--no-plugins``.
-4. ``FastForward\DevTools\DevTools`` sets ``standards`` as the default command
+4. ``FastForward\DevTools\Console\DevTools`` sets ``standards`` as the default command
    and loads commands from
    ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
 
@@ -29,7 +29,7 @@ Composer Plugin Classes
        Composer install and update.
    * - ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``
      - Instantiates and returns the available command classes.
-   * - ``FastForward\DevTools\DevTools``
+   * - ``FastForward\DevTools\Console\DevTools``
      - Console application used by the local binary.
 
 Why ``--no-plugins`` Is Appended

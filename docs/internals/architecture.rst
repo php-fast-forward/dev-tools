@@ -10,7 +10,7 @@ Local Command Lifecycle
 1. ``bin/dev-tools`` loads ``bin/dev-tools.php``.
 2. ``bin/dev-tools.php`` prefers the consumer ``vendor/autoload.php`` and
    falls back to the package autoloader.
-3. ``FastForward\DevTools\DevTools`` boots the command registry from
+3. ``FastForward\DevTools\Console\DevTools`` boots the command registry from
    ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
 4. ``standards`` is used as the default command when no explicit command name
    is given.
