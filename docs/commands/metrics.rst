@@ -33,12 +33,12 @@ Options
    Comma-separated directories that should be excluded from analysis.
 
    Default:
-   ``vendor,test,tests,tmp,cache,spec,build,backup,resources``.
+   ``vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources``.
 
 ``--target=<directory>``
    Output directory for the generated metrics reports.
 
-   Default: ``public/metrics``.
+   Default: ``.dev-tools/metrics``.
 
    The command writes:
 
@@ -59,13 +59,13 @@ Generate an HTML report for manual inspection:
 
 .. code-block:: bash
 
-   composer metrics --target=build/metrics
+   composer metrics --target=.dev-tools/metrics
 
 Generate the full metrics artifact set for CI previews:
 
 .. code-block:: bash
 
-   composer metrics --target=build/metrics
+   composer metrics --target=.dev-tools/metrics
 
 Analyze another checkout through Composer's inherited working directory:
 

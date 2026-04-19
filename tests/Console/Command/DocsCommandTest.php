@@ -107,7 +107,7 @@ final class DocsCommandTest extends TestCase
         $this->input->getOption('source')
             ->willReturn('docs');
         $this->input->getOption('target')
-            ->willReturn('public');
+            ->willReturn('.dev-tools');
         $this->input->getOption('template')
             ->willReturn('default');
         $this->input->getOption('cache-dir')
@@ -168,8 +168,8 @@ final class DocsCommandTest extends TestCase
             ->willReturn('/app/docs');
         $this->filesystem->exists('/app/docs')
             ->willReturn(true);
-        $this->filesystem->getAbsolutePath('public')
-            ->willReturn('/app/public');
+        $this->filesystem->getAbsolutePath('.dev-tools')
+            ->willReturn('/app/.dev-tools');
         $this->filesystem->getAbsolutePath('tmp/cache/phpdoc')
             ->willReturn('/app/tmp/cache/phpdoc');
 

@@ -173,7 +173,7 @@ Recovery:
 .. code-block:: bash
 
     composer dev-tools tests
-    composer dev-tools tests -- --coverage=public/coverage
+    composer dev-tools tests -- --coverage=.dev-tools/coverage
 
 Add focused tests for the changed behavior before lowering thresholds. If local
 coverage differs from CI, compare PHP, Xdebug or PCOV, and PHPUnit versions.

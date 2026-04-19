@@ -103,7 +103,7 @@ jobs:
             - name: Run PHPUnit tests
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer dev-tools tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
+              run: composer dev-tools tests -- --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
 
     dependency-health:
         name: Dependency Health

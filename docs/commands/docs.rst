@@ -28,7 +28,7 @@ Options
 
 ``--target, -t`` (optional)
    Path to the output directory for the generated HTML documentation.
-   Default: ``public``.
+   Default: ``.dev-tools``.
 
 ``--source, -s`` (optional)
    Path to the source directory for the guide documentation.
@@ -55,7 +55,7 @@ Generate to custom directory:
 
 .. code-block:: bash
 
-   composer docs --target=build/docs
+   composer docs --target=dist/docs
 
 Use custom source:
 

@@ -30,15 +30,15 @@ Options
 
 ``--target`` (optional)
    The target directory for the generated documentation.
-   Default: ``public``.
+   Default: ``.dev-tools``.
 
 ``--coverage, -c`` (optional)
    The target directory for the generated test coverage report.
-   Default: ``public/coverage``.
+   Default: ``.dev-tools/coverage``.
 
 ``--metrics`` (optional)
    The target directory for the generated metrics report.
-   Default: ``public/metrics``.
+   Default: ``.dev-tools/metrics``.
 
 Examples
 --------
@@ -53,13 +53,13 @@ Generate to custom directories:
 
 .. code-block:: bash
 
-   composer reports --target=build --coverage=build/coverage
+   composer reports --target=.dev-tools --coverage=.dev-tools/coverage
 
 Generate reports with a custom metrics directory:
 
 .. code-block:: bash
 
-   composer reports --metrics=build/metrics
+   composer reports --metrics=.dev-tools/metrics
 
 Exit Codes
 ---------

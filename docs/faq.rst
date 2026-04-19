@@ -131,5 +131,5 @@ This approach automatically receives upstream updates while allowing additive cu
 Can I generate coverage without running the full ``standards`` pipeline?
 ------------------------------------------------------------------------
 
-Yes. Run ``vendor/bin/dev-tools tests --coverage=public/coverage`` to generate
+Yes. Run ``vendor/bin/dev-tools tests --coverage=.dev-tools/coverage`` to generate
 coverage directly.

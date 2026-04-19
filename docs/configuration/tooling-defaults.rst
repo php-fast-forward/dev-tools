@@ -36,9 +36,11 @@ create them on day one.
 Generated and Cache Directories
 -------------------------------
 
-- ``public/`` contains generated documentation and report output.
-- ``public/coverage/`` contains HTML coverage, Testdox, Clover, and raw
+- ``.dev-tools/`` contains generated documentation and report output.
+- ``.dev-tools/coverage/`` contains HTML coverage, Testdox, Clover, and raw
   coverage data.
+- ``.dev-tools/metrics/`` contains PhpMetrics HTML output plus the generated
+  ``report.json`` and ``report-summary.json`` artifacts.
 - ``.github/wiki/`` contains generated Markdown API documentation and, in
   consumer repositories, the wiki submodule.
 - ``.agents/skills/`` contains symlinked packaged skills or consumer-owned
