@@ -28,6 +28,15 @@ Options
 ``--file, -f`` (optional)
    Path to the composer.json file to update. Default: ``composer.json``.
 
+``--dry-run``
+   Preview managed ``composer.json`` drift without writing the file.
+
+``--check``
+   Exit with code ``1`` when ``composer.json`` needs an update.
+
+``--interactive``
+   Prompt before updating ``composer.json``.
+
 Examples
 --------
 
@@ -49,6 +58,8 @@ Behavior
 - If the target composer.json does not exist, the command exits silently with code 0.
 - Existing scripts with the same name are overwritten.
 - The GrumPHP extra configuration is merged with existing configuration.
+- ``--dry-run`` and ``--check`` render a diff against the managed
+  ``composer.json`` result before deciding whether to write.
 
 Exit Codes
 ---------

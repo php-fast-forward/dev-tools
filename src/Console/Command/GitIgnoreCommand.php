@@ -23,11 +23,13 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Provides functionality to merge and synchronize .gitignore files.
@@ -63,6 +65,7 @@ final class GitIgnoreCommand extends BaseCommand
         private readonly ReaderInterface $reader,
         private readonly WriterInterface $writer,
         private readonly FileLocatorInterface $fileLocator,
+        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
     ) {
         parent::__construct();
     }
@@ -89,6 +92,21 @@ final class GitIgnoreCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the target .gitignore file (project)',
                 default: $this->fileLocator->locate(self::FILENAME)
+            )
+            ->addOption(
+                name: 'dry-run',
+                mode: InputOption::VALUE_NONE,
+                description: 'Preview .gitignore synchronization without writing the file.',
+            )
+            ->addOption(
+                name: 'check',
+                mode: InputOption::VALUE_NONE,
+                description: 'Report .gitignore drift and exit non-zero when changes are required.',
+            )
+            ->addOption(
+                name: 'interactive',
+                mode: InputOption::VALUE_NONE,
+                description: 'Prompt before updating .gitignore.',
             );
     }
 
@@ -106,16 +124,66 @@ final class GitIgnoreCommand extends BaseCommand
 
         $sourcePath = $input->getOption('source');
         $targetPath = $input->getOption('target');
+        $dryRun = (bool) $input->getOption('dry-run');
+        $check = (bool) $input->getOption('check');
+        $interactive = (bool) $input->getOption('interactive');
 
         $canonical = $this->reader->read($sourcePath);
         $project = $this->reader->read($targetPath);
 
         $merged = $this->merger->merge($canonical, $project);
+        $comparison = $this->overwriteDiffRenderer->renderContents(
+            'generated .gitignore synchronization',
+            $merged->path(),
+            $this->writer->render($merged),
+            $this->writer->render($project),
+            \sprintf('Updating managed file %s from generated .gitignore synchronization.', $merged->path()),
+        );
+
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+
+        if ($comparison->isChanged() && null !== $comparison->diff()) {
+            $output->writeln($comparison->diff());
+        }
+
+        if ($comparison->isUnchanged()) {
+            return self::SUCCESS;
+        }
+
+        if ($check) {
+            return self::FAILURE;
+        }
+
+        if ($dryRun) {
+            return self::SUCCESS;
+        }
+
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitIgnore($input, $output, $merged->path())) {
+            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $merged->path()));
+
+            return self::SUCCESS;
+        }
 
         $this->writer->write($merged);
 
         $output->writeln('<info>Successfully merged .gitignore file.</info>');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Prompts whether .gitignore should be updated.
+     *
+     * @param InputInterface $input the command input
+     * @param OutputInterface $output the command output
+     * @param string $targetPath the target path that would be updated
+     *
+     * @return bool true when the update SHOULD proceed
+     */
+    private function shouldWriteGitIgnore(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    {
+        $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
+
+        return (bool) $this->getHelper('question')->ask($input, $output, $question);
     }
 }

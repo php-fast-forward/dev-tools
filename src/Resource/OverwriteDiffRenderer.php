@@ -85,11 +85,63 @@ final readonly class OverwriteDiffRenderer
         }
 
         $header = sprintf("--- Current: %s\n+++ Source: %s\n", $targetPath, $sourcePath);
-        $differ = new Differ(new UnifiedDiffOutputBuilder($header));
+        return $this->renderContents(
+            $sourcePath,
+            $targetPath,
+            $sourceContent,
+            $targetContent,
+            sprintf('Overwriting resource %s from %s.', $targetPath, $sourcePath),
+            $header,
+        );
+    }
+
+    /**
+     * Compares managed content against the current target contents.
+     *
+     * @param string $sourceLabel the human-readable source label shown in summaries and diffs
+     * @param string $targetPath the target file path
+     * @param string $sourceContent the generated or source content
+     * @param string|null $targetContent the current target content, or null when the target does not exist
+     * @param string|null $changedSummary an optional changed-state summary override
+     * @param string|null $diffHeader an optional unified diff header override
+     *
+     * @return OverwriteDiffResult the rendered comparison result
+     */
+    public function renderContents(
+        string $sourceLabel,
+        string $targetPath,
+        string $sourceContent,
+        ?string $targetContent,
+        ?string $changedSummary = null,
+        ?string $diffHeader = null,
+    ): OverwriteDiffResult {
+        if (null !== $targetContent && $sourceContent === $targetContent) {
+            return new OverwriteDiffResult(
+                OverwriteDiffResult::STATUS_UNCHANGED,
+                sprintf('Target %s already matches source %s; overwrite skipped.', $targetPath, $sourceLabel),
+            );
+        }
+
+        if ($this->isBinary($sourceContent) || (null !== $targetContent && $this->isBinary($targetContent))) {
+            return new OverwriteDiffResult(
+                OverwriteDiffResult::STATUS_BINARY,
+                sprintf(
+                    'Target %s will be overwritten from %s, but a text diff is unavailable for binary content.',
+                    $targetPath,
+                    $sourceLabel,
+                ),
+            );
+        }
+
+        $targetContent ??= '';
+        $changedSummary ??= sprintf('Overwriting resource %s from %s.', $targetPath, $sourceLabel);
+        $diffHeader ??= sprintf("--- Current: %s\n+++ Source: %s\n", $targetPath, $sourceLabel);
+
+        $differ = new Differ(new UnifiedDiffOutputBuilder($diffHeader));
 
         return new OverwriteDiffResult(
             OverwriteDiffResult::STATUS_CHANGED,
-            sprintf('Overwriting resource %s from %s.', $targetPath, $sourcePath),
+            $changedSummary,
             trim($differ->diff($targetContent, $sourceContent)),
         );
     }

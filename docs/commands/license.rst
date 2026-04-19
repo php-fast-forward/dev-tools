@@ -25,6 +25,15 @@ Options
 ``--target`` (optional)
    Path to the target LICENSE file. Default: ``LICENSE``.
 
+``--dry-run``
+   Preview managed ``LICENSE`` drift without writing the file.
+
+``--check``
+   Exit with code ``1`` when ``LICENSE`` needs an update.
+
+``--interactive``
+   Prompt before writing the generated ``LICENSE`` content.
+
 Examples
 --------
 
@@ -60,4 +69,5 @@ Behavior
 - Supports common open-source licenses: MIT, Apache-2.0, BSD-2-Clause, BSD-3-Clause,
   GPL-3.0, LGPL-3.0, ISC, MPL-2.0.
 - Resolves placeholders using information from ``composer.json``.
-- Skips generation if a LICENSE file already exists.
+- Compares the generated content with the existing file before deciding whether
+  to write.

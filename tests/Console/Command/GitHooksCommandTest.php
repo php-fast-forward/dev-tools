@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Console\Command\GitHooksCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -54,6 +55,8 @@ final class GitHooksCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
+    private ObjectProphecy $overwriteDiffRenderer;
+
     private GitHooksCommand $command;
 
     private string $sourceDirectory;
@@ -72,11 +75,19 @@ final class GitHooksCommandTest extends TestCase
         $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
+        $this->input->getOption('dry-run')
+            ->willReturn(false);
+        $this->input->getOption('check')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(false);
 
         $this->command = new GitHooksCommand(
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
             $this->finderFactory->reveal(),
+            $this->overwriteDiffRenderer->reveal(),
         );
     }
 
@@ -125,6 +136,8 @@ final class GitHooksCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->filesystem->getAbsolutePath('.git/hooks')
             ->willReturn('/app/.git/hooks');
+        $this->filesystem->exists('/app/.git/hooks/post-merge')
+            ->willReturn(false);
         $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', true)
             ->shouldBeCalledOnce();
         $this->filesystem->chmod('/app/.git/hooks/post-merge', 755, 0o755)

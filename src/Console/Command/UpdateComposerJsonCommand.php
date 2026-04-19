@@ -24,11 +24,13 @@ use Composer\Factory;
 use Composer\Json\JsonManipulator;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Path;
 
 use function Safe\getcwd;
@@ -54,6 +56,7 @@ final class UpdateComposerJsonCommand extends BaseCommand
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
+        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
     ) {
         parent::__construct();
     }
@@ -70,6 +73,21 @@ final class UpdateComposerJsonCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the composer.json file to update.',
                 default: Factory::getComposerFile(),
+            )
+            ->addOption(
+                name: 'dry-run',
+                mode: InputOption::VALUE_NONE,
+                description: 'Preview composer.json synchronization without writing the file.',
+            )
+            ->addOption(
+                name: 'check',
+                mode: InputOption::VALUE_NONE,
+                description: 'Report composer.json drift and exit non-zero when updates are required.',
+            )
+            ->addOption(
+                name: 'interactive',
+                mode: InputOption::VALUE_NONE,
+                description: 'Prompt before updating composer.json.',
             );
     }
 
@@ -84,6 +102,9 @@ final class UpdateComposerJsonCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $file = (string) $input->getOption('file');
+        $dryRun = (bool) $input->getOption('dry-run');
+        $check = (bool) $input->getOption('check');
+        $interactive = (bool) $input->getOption('interactive');
 
         if (! $this->filesystem->exists($file)) {
             $output->writeln(\sprintf('<comment>Composer file %s does not exist.</comment>', $file));
@@ -91,7 +112,8 @@ final class UpdateComposerJsonCommand extends BaseCommand
             return self::SUCCESS;
         }
 
-        $manipulator = new JsonManipulator($this->filesystem->readFile($file));
+        $currentContents = $this->filesystem->readFile($file);
+        $manipulator = new JsonManipulator($currentContents);
         $grumphpConfig = $this->fileLocator->locate('grumphp.yml', \dirname(__DIR__, 3));
 
         foreach ($this->scripts() as $name => $command) {
@@ -106,10 +128,59 @@ final class UpdateComposerJsonCommand extends BaseCommand
             'config-default-path' => Path::makeRelative($grumphpConfig, getcwd()),
         ], true);
 
-        $this->filesystem->dumpFile($file, $manipulator->getContents());
+        $updatedContents = $manipulator->getContents();
+        $comparison = $this->overwriteDiffRenderer->renderContents(
+            'generated dev-tools composer.json configuration',
+            $file,
+            $updatedContents,
+            $currentContents,
+            \sprintf('Updating managed file %s from generated dev-tools composer.json configuration.', $file),
+        );
+
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+
+        if ($comparison->isChanged() && null !== $comparison->diff()) {
+            $output->writeln($comparison->diff());
+        }
+
+        if ($comparison->isUnchanged()) {
+            return self::SUCCESS;
+        }
+
+        if ($check) {
+            return self::FAILURE;
+        }
+
+        if ($dryRun) {
+            return self::SUCCESS;
+        }
+
+        if ($interactive && $input->isInteractive() && ! $this->shouldUpdateComposerJson($input, $output, $file)) {
+            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $file));
+
+            return self::SUCCESS;
+        }
+
+        $this->filesystem->dumpFile($file, $updatedContents);
         $output->writeln('<info>Updated composer.json dev-tools configuration.</info>');
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Prompts whether composer.json should be updated.
+     *
+     * @param InputInterface $input the command input
+     * @param OutputInterface $output the command output
+     * @param string $file the composer.json path that would be updated
+     *
+     * @return bool true when the update SHOULD proceed
+     */
+    private function shouldUpdateComposerJson(InputInterface $input, OutputInterface $output, string $file): bool
+    {
+        $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $file), false);
+
+        return (bool) $this->getHelper('question')->ask($input, $output, $question);
     }
 
     /**

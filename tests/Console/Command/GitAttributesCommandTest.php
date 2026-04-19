@@ -29,6 +29,8 @@ use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
 use FastForward\DevTools\GitAttributes\MergerInterface;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\OverwriteDiffResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -95,6 +97,11 @@ final class GitAttributesCommandTest extends TestCase
      */
     private ObjectProphecy $output;
 
+    /**
+     * @var ObjectProphecy<OverwriteDiffRenderer>
+     */
+    private ObjectProphecy $overwriteDiffRenderer;
+
     private GitAttributesCommand $command;
 
     /**
@@ -112,6 +119,13 @@ final class GitAttributesCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
+        $this->input->getOption('dry-run')
+            ->willReturn(false);
+        $this->input->getOption('check')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(false);
 
         $this->composerJson->getExtra('gitattributes')
             ->willReturn([]);
@@ -125,6 +139,7 @@ final class GitAttributesCommandTest extends TestCase
             $this->writer->reveal(),
             $this->composerJson->reveal(),
             $this->filesystem->reveal(),
+            $this->overwriteDiffRenderer->reveal(),
         );
     }
 
@@ -174,10 +189,26 @@ final class GitAttributesCommandTest extends TestCase
             ->willReturn("custom-entry\n");
         $this->merger->merge("custom-entry\n", $entries, [])
             ->willReturn("custom-entry\n/.github/ export-ignore");
+        $this->writer->render("custom-entry\n/.github/ export-ignore")
+            ->willReturn("custom-entry\n/.github/ export-ignore\n");
+        $this->writer->render("custom-entry\n")
+            ->willReturn("custom-entry\n");
+        $this->overwriteDiffRenderer->renderContents(
+            'generated .gitattributes synchronization',
+            $gitattributesPath,
+            "custom-entry\n/.github/ export-ignore\n",
+            "custom-entry\n",
+            'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
+        )->willReturn(new OverwriteDiffResult(
+            OverwriteDiffResult::STATUS_CHANGED,
+            'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
+        ))->shouldBeCalledOnce();
         $this->writer->write($gitattributesPath, "custom-entry\n/.github/ export-ignore")
             ->shouldBeCalledOnce();
 
         $this->output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>')
+            ->shouldBeCalled();
+        $this->output->writeln('<comment>Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.</comment>')
             ->shouldBeCalled();
         $this->output->writeln('<info>Added 4 export-ignore entries to .gitattributes.</info>')
             ->shouldBeCalled();
@@ -221,6 +252,18 @@ final class GitAttributesCommandTest extends TestCase
             ->willReturn('');
         $this->merger->merge('', $entries, $keepInExportPaths)
             ->willReturn("/docs/ export-ignore\n/.editorconfig export-ignore");
+        $this->writer->render("/docs/ export-ignore\n/.editorconfig export-ignore")
+            ->willReturn("/docs/ export-ignore\n/.editorconfig export-ignore\n");
+        $this->overwriteDiffRenderer->renderContents(
+            'generated .gitattributes synchronization',
+            $gitattributesPath,
+            "/docs/ export-ignore\n/.editorconfig export-ignore\n",
+            null,
+            'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
+        )->willReturn(new OverwriteDiffResult(
+            OverwriteDiffResult::STATUS_CHANGED,
+            'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
+        ))->shouldBeCalledOnce();
         $this->writer->write($gitattributesPath, "/docs/ export-ignore\n/.editorconfig export-ignore")
             ->shouldBeCalledOnce();
 

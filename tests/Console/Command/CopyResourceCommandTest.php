@@ -79,6 +79,12 @@ final class CopyResourceCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
+        $this->input->getOption('dry-run')
+            ->willReturn(false);
+        $this->input->getOption('check')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(false);
 
         $this->command = new CopyResourceCommand(
             $this->filesystem->reveal(),

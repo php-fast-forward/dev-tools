@@ -22,8 +22,8 @@ Usage
 .. code-block:: bash
 
    composer copy-resource --source <path> --target <path>
-   composer dev-tools copy-resource -- --source <path> --target <path> [--overwrite]
-   vendor/bin/dev-tools copy-resource --source <path> --target <path> [--overwrite]
+   composer dev-tools copy-resource -- --source <path> --target <path> [--overwrite] [--dry-run] [--check] [--interactive]
+   vendor/bin/dev-tools copy-resource --source <path> --target <path> [--overwrite] [--dry-run] [--check] [--interactive]
 
 Options
 -------
@@ -39,6 +39,16 @@ Options
    are skipped. When a text file changes, the command shows a unified diff
    before copying. Unchanged targets are reported as skipped, and binary or
    unreadable files fall back to a clear non-diff message.
+
+``--dry-run``
+   Preview drift for existing managed resources without writing files.
+
+``--check``
+   Exit with code ``1`` when an existing managed resource differs from the
+   packaged source.
+
+``--interactive``
+   Prompt before replacing a drifted resource.
 
 Examples
 --------

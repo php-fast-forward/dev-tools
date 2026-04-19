@@ -22,10 +22,12 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\GeneratorInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Generates and copies LICENSE files to projects.
@@ -49,6 +51,7 @@ final class LicenseCommand extends BaseCommand
     public function __construct(
         private readonly GeneratorInterface $generator,
         private readonly FilesystemInterface $filesystem,
+        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
     ) {
         parent::__construct();
     }
@@ -64,6 +67,21 @@ final class LicenseCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The target path for the generated LICENSE file.',
                 default: 'LICENSE',
+            )
+            ->addOption(
+                name: 'dry-run',
+                mode: InputOption::VALUE_NONE,
+                description: 'Preview LICENSE generation without writing the file.',
+            )
+            ->addOption(
+                name: 'check',
+                mode: InputOption::VALUE_NONE,
+                description: 'Report LICENSE drift and exit non-zero when changes are required.',
+            )
+            ->addOption(
+                name: 'interactive',
+                mode: InputOption::VALUE_NONE,
+                description: 'Prompt before writing LICENSE changes.',
             );
     }
 
@@ -80,20 +98,13 @@ final class LicenseCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $targetPath = $this->filesystem->getAbsolutePath($input->getOption('target'));
+        $dryRun = (bool) $input->getOption('dry-run');
+        $check = (bool) $input->getOption('check');
+        $interactive = (bool) $input->getOption('interactive');
+        $existingContent = $this->filesystem->exists($targetPath) ? $this->filesystem->readFile($targetPath) : null;
+        $generatedContent = $this->generator->generateContent();
 
-        if ($this->filesystem->exists($targetPath)) {
-            $output->writeln(
-                \sprintf('<info>%s file already exists at %s. Skipping generation.</info>', basename(
-                    $targetPath
-                ), $targetPath)
-            );
-
-            return self::SUCCESS;
-        }
-
-        $license = $this->generator->generate($targetPath);
-
-        if (null === $license) {
+        if (null === $generatedContent) {
             $output->writeln(
                 '<comment>No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.</comment>'
             );
@@ -101,10 +112,61 @@ final class LicenseCommand extends BaseCommand
             return self::SUCCESS;
         }
 
+        $comparison = $this->overwriteDiffRenderer->renderContents(
+            'generated LICENSE content',
+            $targetPath,
+            $generatedContent,
+            $existingContent,
+            null === $existingContent
+                ? \sprintf('Managed file %s will be created from generated LICENSE content.', $targetPath)
+                : \sprintf('Updating managed file %s from generated LICENSE content.', $targetPath),
+        );
+
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+
+        if ($comparison->isChanged() && null !== $comparison->diff()) {
+            $output->writeln($comparison->diff());
+        }
+
+        if ($comparison->isUnchanged()) {
+            return self::SUCCESS;
+        }
+
+        if ($check) {
+            return self::FAILURE;
+        }
+
+        if ($dryRun) {
+            return self::SUCCESS;
+        }
+
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteLicense($input, $output, $targetPath)) {
+            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $targetPath));
+
+            return self::SUCCESS;
+        }
+
+        $this->filesystem->dumpFile($targetPath, $generatedContent);
         $output->writeln(
             \sprintf('<info>%s file generated successfully at %s.</info>', basename($targetPath), $targetPath)
         );
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Prompts whether the generated LICENSE should be written.
+     *
+     * @param InputInterface $input the command input
+     * @param OutputInterface $output the command output
+     * @param string $targetPath the license path that would be written
+     *
+     * @return bool true when the write SHOULD proceed
+     */
+    private function shouldWriteLicense(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    {
+        $question = new ConfirmationQuestion(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
+
+        return (bool) $this->getHelper('question')->ask($input, $output, $question);
     }
 }

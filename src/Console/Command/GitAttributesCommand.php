@@ -28,9 +28,12 @@ use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
 use FastForward\DevTools\GitAttributes\MergerInterface;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
+use FastForward\DevTools\Resource\OverwriteDiffRenderer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use function Safe\getcwd;
 
@@ -77,8 +80,32 @@ final class GitAttributesCommand extends BaseCommand
         private readonly WriterInterface $writer,
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
+        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
     ) {
         parent::__construct();
+    }
+
+    /**
+     * Configures verification and interactive update modes.
+     */
+    protected function configure(): void
+    {
+        $this
+            ->addOption(
+                name: 'dry-run',
+                mode: InputOption::VALUE_NONE,
+                description: 'Preview .gitattributes synchronization without writing the file.',
+            )
+            ->addOption(
+                name: 'check',
+                mode: InputOption::VALUE_NONE,
+                description: 'Report .gitattributes drift and exit non-zero when changes are required.',
+            )
+            ->addOption(
+                name: 'interactive',
+                mode: InputOption::VALUE_NONE,
+                description: 'Prompt before updating .gitattributes.',
+            );
     }
 
     /**
@@ -92,6 +119,9 @@ final class GitAttributesCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>');
+        $dryRun = (bool) $input->getOption('dry-run');
+        $check = (bool) $input->getOption('check');
+        $interactive = (bool) $input->getOption('interactive');
 
         $basePath = getcwd();
         $keepInExportPaths = $this->configuredKeepInExportPaths();
@@ -115,6 +145,39 @@ final class GitAttributesCommand extends BaseCommand
         $gitattributesPath = $this->filesystem->getAbsolutePath(self::FILENAME);
         $existingContent = $this->reader->read($gitattributesPath);
         $content = $this->merger->merge($existingContent, $entries, $keepInExportPaths);
+        $renderedContent = $this->writer->render($content);
+        $comparison = $this->overwriteDiffRenderer->renderContents(
+            'generated .gitattributes synchronization',
+            $gitattributesPath,
+            $renderedContent,
+            '' === $existingContent ? null : $this->writer->render($existingContent),
+            \sprintf('Updating managed file %s from generated .gitattributes synchronization.', $gitattributesPath),
+        );
+
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+
+        if ($comparison->isChanged() && null !== $comparison->diff()) {
+            $output->writeln($comparison->diff());
+        }
+
+        if ($comparison->isUnchanged()) {
+            return self::SUCCESS;
+        }
+
+        if ($check) {
+            return self::FAILURE;
+        }
+
+        if ($dryRun) {
+            return self::SUCCESS;
+        }
+
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes($input, $output, $gitattributesPath)) {
+            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $gitattributesPath));
+
+            return self::SUCCESS;
+        }
+
         $this->writer->write($gitattributesPath, $content);
 
         $output->writeln(\sprintf(
@@ -123,6 +186,22 @@ final class GitAttributesCommand extends BaseCommand
         ));
 
         return self::SUCCESS;
+    }
+
+    /**
+     * Prompts whether .gitattributes should be updated.
+     *
+     * @param InputInterface $input the command input
+     * @param OutputInterface $output the command output
+     * @param string $targetPath the target path that would be updated
+     *
+     * @return bool true when the update SHOULD proceed
+     */
+    private function shouldWriteGitAttributes(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    {
+        $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
+
+        return (bool) $this->getHelper('question')->ask($input, $output, $question);
     }
 
     /**

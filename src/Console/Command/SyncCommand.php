@@ -62,6 +62,21 @@ final class SyncCommand extends BaseCommand
                 shortcut: 'o',
                 mode: InputOption::VALUE_NONE,
                 description: 'Overwrite existing target files.',
+            )
+            ->addOption(
+                name: 'dry-run',
+                mode: InputOption::VALUE_NONE,
+                description: 'Preview managed-file drift without writing changes.',
+            )
+            ->addOption(
+                name: 'check',
+                mode: InputOption::VALUE_NONE,
+                description: 'Exit non-zero when managed-file drift is detected.',
+            )
+            ->addOption(
+                name: 'interactive',
+                mode: InputOption::VALUE_NONE,
+                description: 'Prompt before applying managed-file replacements.',
             );
     }
 
@@ -77,15 +92,26 @@ final class SyncCommand extends BaseCommand
     {
         $output->writeln('<info>Starting dev-tools synchronization...</info>');
 
-        $this->queueDevToolsCommand(['update-composer-json']);
+        $dryRun = (bool) $input->getOption('dry-run');
+        $check = (bool) $input->getOption('check');
+        $interactive = (bool) $input->getOption('interactive');
+        $modeArguments = [
+            $dryRun ? '--dry-run' : null,
+            $check ? '--check' : null,
+            $interactive ? '--interactive' : null,
+        ];
+        $allowDetached = ! $dryRun && ! $check && ! $interactive;
+
+        $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments]);
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
                 '--source=resources/github-actions',
                 '--target=.github/workflows',
                 $input->getOption('overwrite') ? '--overwrite' : null,
+                ...$modeArguments,
             ],
-            true
+            $allowDetached
         );
         $this->queueDevToolsCommand(
             [
@@ -93,8 +119,9 @@ final class SyncCommand extends BaseCommand
                 '--source=.editorconfig',
                 '--target=.editorconfig',
                 $input->getOption('overwrite') ? '--overwrite' : null,
+                ...$modeArguments,
             ],
-            true
+            $allowDetached
         );
         $this->queueDevToolsCommand(
             [
@@ -102,15 +129,21 @@ final class SyncCommand extends BaseCommand
                 '--source=resources/dependabot.yml',
                 '--target=.github/dependabot.yml',
                 $input->getOption('overwrite') ? '--overwrite' : null,
+                ...$modeArguments,
             ],
-            true
+            $allowDetached
         );
-        $this->queueDevToolsCommand(['wiki', '--init'], true);
-        $this->queueDevToolsCommand(['gitignore'], true);
-        $this->queueDevToolsCommand(['gitattributes'], true);
-        $this->queueDevToolsCommand(['skills'], true);
-        $this->queueDevToolsCommand(['license'], true);
-        $this->queueDevToolsCommand(['git-hooks'], true);
+        if ($dryRun || $check || $interactive) {
+            $output->writeln('<comment>Skipping wiki and skills during preview/check modes because they do not yet expose non-destructive verification.</comment>');
+        } else {
+            $this->queueDevToolsCommand(['wiki', '--init'], true);
+            $this->queueDevToolsCommand(['skills'], true);
+        }
+
+        $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached);
+        $this->queueDevToolsCommand(['gitattributes', ...$modeArguments], $allowDetached);
+        $this->queueDevToolsCommand(['license', ...$modeArguments], $allowDetached);
+        $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached);
 
         return $this->processQueue->run($output);
     }
