@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776545848">
-  <project timestamp="1776545848" name="Clover Coverage">
+<coverage generated="1776566032">
+  <project timestamp="1776566032" name="Clover Coverage">
     <package name="FastForward\DevTools\Agent\Skills">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Agent/Skills/SkillsSynchronizer.php">
         <class name="FastForward\DevTools\Agent\Skills\SkillsSynchronizer" namespace="FastForward\DevTools\Agent\Skills">
@@ -778,6 +778,51 @@
         <line num="108" type="stmt" count="1"/>
         <metrics loc="111" ncloc="72" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="26" coveredstatements="26" elements="29" coveredelements="29"/>
       </file>
+      <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/MetricsCommand.php">
+        <class name="FastForward\DevTools\Console\Command\MetricsCommand" namespace="FastForward\DevTools\Console\Command">
+          <metrics complexity="4" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="36" coveredstatements="36" elements="39" coveredelements="39"/>
+        </class>
+        <line num="53" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
+        <line num="57" type="stmt" count="5"/>
+        <line num="63" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="5"/>
+        <line num="65" type="stmt" count="5"/>
+        <line num="66" type="stmt" count="5"/>
+        <line num="67" type="stmt" count="5"/>
+        <line num="68" type="stmt" count="5"/>
+        <line num="69" type="stmt" count="5"/>
+        <line num="70" type="stmt" count="5"/>
+        <line num="71" type="stmt" count="5"/>
+        <line num="72" type="stmt" count="5"/>
+        <line num="73" type="stmt" count="5"/>
+        <line num="74" type="stmt" count="5"/>
+        <line num="75" type="stmt" count="5"/>
+        <line num="76" type="stmt" count="5"/>
+        <line num="77" type="stmt" count="5"/>
+        <line num="78" type="stmt" count="5"/>
+        <line num="79" type="stmt" count="5"/>
+        <line num="80" type="stmt" count="5"/>
+        <line num="81" type="stmt" count="5"/>
+        <line num="82" type="stmt" count="5"/>
+        <line num="91" type="method" name="execute" visibility="protected" complexity="2" crap="2" count="3"/>
+        <line num="93" type="stmt" count="3"/>
+        <line num="95" type="stmt" count="3"/>
+        <line num="97" type="stmt" count="3"/>
+        <line num="98" type="stmt" count="3"/>
+        <line num="99" type="stmt" count="3"/>
+        <line num="100" type="stmt" count="3"/>
+        <line num="101" type="stmt" count="3"/>
+        <line num="102" type="stmt" count="3"/>
+        <line num="103" type="stmt" count="3"/>
+        <line num="105" type="stmt" count="3"/>
+        <line num="106" type="stmt" count="1"/>
+        <line num="109" type="stmt" count="3"/>
+        <line num="110" type="stmt" count="3"/>
+        <line num="111" type="stmt" count="3"/>
+        <line num="112" type="stmt" count="3"/>
+        <line num="113" type="stmt" count="3"/>
+        <line num="115" type="stmt" count="3"/>
+        <metrics loc="118" ncloc="85" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="36" coveredstatements="36" elements="39" coveredelements="39"/>
+      </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/PhpDocCommand.php">
         <class name="FastForward\DevTools\Console\Command\PhpDocCommand" namespace="FastForward\DevTools\Console\Command">
           <metrics complexity="7" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="67" coveredstatements="67" elements="71" coveredelements="71"/>
@@ -890,41 +935,53 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/ReportsCommand.php">
         <class name="FastForward\DevTools\Console\Command\ReportsCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="29" elements="32" coveredelements="32"/>
+          <metrics complexity="3" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="41" coveredstatements="41" elements="44" coveredelements="44"/>
         </class>
-        <line num="47" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
-        <line num="51" type="stmt" count="3"/>
-        <line num="57" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="3"/>
-        <line num="59" type="stmt" count="3"/>
-        <line num="60" type="stmt" count="3"/>
-        <line num="61" type="stmt" count="3"/>
-        <line num="62" type="stmt" count="3"/>
-        <line num="63" type="stmt" count="3"/>
-        <line num="64" type="stmt" count="3"/>
-        <line num="65" type="stmt" count="3"/>
-        <line num="66" type="stmt" count="3"/>
-        <line num="67" type="stmt" count="3"/>
-        <line num="68" type="stmt" count="3"/>
-        <line num="69" type="stmt" count="3"/>
-        <line num="70" type="stmt" count="3"/>
-        <line num="71" type="stmt" count="3"/>
-        <line num="72" type="stmt" count="3"/>
-        <line num="86" type="method" name="execute" visibility="protected" complexity="1" crap="1" count="1"/>
-        <line num="88" type="stmt" count="1"/>
-        <line num="90" type="stmt" count="1"/>
-        <line num="91" type="stmt" count="1"/>
-        <line num="92" type="stmt" count="1"/>
-        <line num="93" type="stmt" count="1"/>
-        <line num="95" type="stmt" count="1"/>
-        <line num="96" type="stmt" count="1"/>
-        <line num="97" type="stmt" count="1"/>
-        <line num="98" type="stmt" count="1"/>
-        <line num="99" type="stmt" count="1"/>
-        <line num="100" type="stmt" count="1"/>
-        <line num="102" type="stmt" count="1"/>
-        <line num="103" type="stmt" count="1"/>
-        <line num="105" type="stmt" count="1"/>
-        <metrics loc="108" ncloc="70" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="29" elements="32" coveredelements="32"/>
+        <line num="47" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="51" type="stmt" count="4"/>
+        <line num="57" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="4"/>
+        <line num="59" type="stmt" count="4"/>
+        <line num="60" type="stmt" count="4"/>
+        <line num="61" type="stmt" count="4"/>
+        <line num="62" type="stmt" count="4"/>
+        <line num="63" type="stmt" count="4"/>
+        <line num="64" type="stmt" count="4"/>
+        <line num="65" type="stmt" count="4"/>
+        <line num="66" type="stmt" count="4"/>
+        <line num="67" type="stmt" count="4"/>
+        <line num="68" type="stmt" count="4"/>
+        <line num="69" type="stmt" count="4"/>
+        <line num="70" type="stmt" count="4"/>
+        <line num="71" type="stmt" count="4"/>
+        <line num="72" type="stmt" count="4"/>
+        <line num="73" type="stmt" count="4"/>
+        <line num="74" type="stmt" count="4"/>
+        <line num="75" type="stmt" count="4"/>
+        <line num="76" type="stmt" count="4"/>
+        <line num="77" type="stmt" count="4"/>
+        <line num="78" type="stmt" count="4"/>
+        <line num="92" type="method" name="execute" visibility="protected" complexity="1" crap="1" count="2"/>
+        <line num="94" type="stmt" count="2"/>
+        <line num="96" type="stmt" count="2"/>
+        <line num="97" type="stmt" count="2"/>
+        <line num="98" type="stmt" count="2"/>
+        <line num="99" type="stmt" count="2"/>
+        <line num="101" type="stmt" count="2"/>
+        <line num="102" type="stmt" count="2"/>
+        <line num="103" type="stmt" count="2"/>
+        <line num="104" type="stmt" count="2"/>
+        <line num="105" type="stmt" count="2"/>
+        <line num="106" type="stmt" count="2"/>
+        <line num="108" type="stmt" count="2"/>
+        <line num="109" type="stmt" count="2"/>
+        <line num="110" type="stmt" count="2"/>
+        <line num="111" type="stmt" count="2"/>
+        <line num="112" type="stmt" count="2"/>
+        <line num="114" type="stmt" count="2"/>
+        <line num="115" type="stmt" count="2"/>
+        <line num="116" type="stmt" count="2"/>
+        <line num="118" type="stmt" count="2"/>
+        <metrics loc="121" ncloc="83" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="41" coveredstatements="41" elements="44" coveredelements="44"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/SkillsCommand.php">
         <class name="FastForward\DevTools\Console\Command\SkillsCommand" namespace="FastForward\DevTools\Console\Command">
@@ -1041,7 +1098,7 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/TestsCommand.php">
         <class name="FastForward\DevTools\Console\Command\TestsCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="27" methods="7" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="137" coveredstatements="132" elements="144" coveredelements="136"/>
+          <metrics complexity="27" methods="7" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="138" coveredstatements="133" elements="145" coveredelements="137"/>
         </class>
         <line num="63" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="12"/>
         <line num="71" type="stmt" count="12"/>
@@ -1164,17 +1221,17 @@
         <line num="279" type="stmt" count="3"/>
         <line num="280" type="stmt" count="3"/>
         <line num="281" type="stmt" count="3"/>
-        <line num="283" type="stmt" count="3"/>
-        <line num="284" type="stmt" count="1"/>
-        <line num="288" type="stmt" count="5"/>
+        <line num="282" type="stmt" count="3"/>
+        <line num="284" type="stmt" count="3"/>
+        <line num="285" type="stmt" count="1"/>
         <line num="289" type="stmt" count="5"/>
-        <line num="291" type="stmt" count="5"/>
-        <line num="301" type="method" name="validateMinimumCoverage" visibility="private" complexity="4" crap="4.09" count="3"/>
-        <line num="307" type="stmt" count="3"/>
-        <line num="308" type="stmt" count="0"/>
+        <line num="290" type="stmt" count="5"/>
+        <line num="292" type="stmt" count="5"/>
+        <line num="302" type="method" name="validateMinimumCoverage" visibility="private" complexity="4" crap="4.09" count="3"/>
+        <line num="308" type="stmt" count="3"/>
         <line num="309" type="stmt" count="0"/>
-        <line num="311" type="stmt" count="0"/>
-        <line num="314" type="stmt" count="3"/>
+        <line num="310" type="stmt" count="0"/>
+        <line num="312" type="stmt" count="0"/>
         <line num="315" type="stmt" count="3"/>
         <line num="316" type="stmt" count="3"/>
         <line num="317" type="stmt" count="3"/>
@@ -1182,12 +1239,13 @@
         <line num="319" type="stmt" count="3"/>
         <line num="320" type="stmt" count="3"/>
         <line num="321" type="stmt" count="3"/>
-        <line num="323" type="stmt" count="3"/>
-        <line num="324" type="stmt" count="2"/>
-        <line num="326" type="stmt" count="2"/>
-        <line num="329" type="stmt" count="1"/>
-        <line num="331" type="stmt" count="1"/>
-        <metrics loc="334" ncloc="256" classes="1" methods="7" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="137" coveredstatements="132" elements="144" coveredelements="136"/>
+        <line num="322" type="stmt" count="3"/>
+        <line num="324" type="stmt" count="3"/>
+        <line num="325" type="stmt" count="2"/>
+        <line num="327" type="stmt" count="2"/>
+        <line num="330" type="stmt" count="1"/>
+        <line num="332" type="stmt" count="1"/>
+        <metrics loc="335" ncloc="257" classes="1" methods="7" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="138" coveredstatements="133" elements="145" coveredelements="137"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/UpdateComposerJsonCommand.php">
         <class name="FastForward\DevTools\Console\Command\UpdateComposerJsonCommand" namespace="FastForward\DevTools\Console\Command">
@@ -1987,7 +2045,7 @@
     <package name="FastForward\DevTools\Process">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Process/ProcessBuilder.php">
         <class name="FastForward\DevTools\Process\ProcessBuilder" namespace="FastForward\DevTools\Process">
-          <metrics complexity="5" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="6" elements="10" coveredelements="10"/>
+          <metrics complexity="6" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="12" coveredelements="12"/>
         </class>
         <line num="42" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="6"/>
         <line num="44" type="stmt" count="6"/>
@@ -1997,9 +2055,11 @@
         <line num="67" type="stmt" count="4"/>
         <line num="78" type="method" name="getArguments" visibility="public" complexity="1" crap="1" count="3"/>
         <line num="80" type="stmt" count="3"/>
-        <line num="95" type="method" name="build" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="95" type="method" name="build" visibility="public" complexity="2" crap="2" count="2"/>
         <line num="97" type="stmt" count="2"/>
-        <metrics loc="100" ncloc="35" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="6" coveredstatements="6" elements="10" coveredelements="10"/>
+        <line num="98" type="stmt" count="2"/>
+        <line num="101" type="stmt" count="2"/>
+        <metrics loc="104" ncloc="39" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="12" coveredelements="12"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Process/ProcessQueue.php">
         <class name="FastForward\DevTools\Process\ProcessQueue" namespace="FastForward\DevTools\Process">
@@ -2290,6 +2350,6 @@
         <metrics loc="143" ncloc="106" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="26" coveredstatements="26" elements="28" coveredelements="28"/>
       </file>
     </package>
-    <metrics files="79" loc="9600" ncloc="4976" classes="55" methods="230" coveredmethods="191" conditionals="0" coveredconditionals="0" statements="1609" coveredstatements="1492" elements="1839" coveredelements="1683"/>
+    <metrics files="80" loc="9736" ncloc="5079" classes="56" methods="233" coveredmethods="194" conditionals="0" coveredconditionals="0" statements="1660" coveredstatements="1543" elements="1893" coveredelements="1737"/>
   </project>
 </coverage>

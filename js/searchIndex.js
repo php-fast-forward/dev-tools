@@ -1076,6 +1076,46 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_filesystem"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
+            "name": "MetricsCommand",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003ABINARY",
+            "name": "BINARY",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_BINARY"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003APHP_ERROR_REPORTING",
+            "name": "PHP_ERROR_REPORTING",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_ERROR_REPORTING"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024processBuilder",
+            "name": "processBuilder",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processBuilder"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024processQueue",
+            "name": "processQueue",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processQueue"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand",
             "name": "PhpDocCommand",
             "summary": "Provides\u0020operations\u0020to\u0020inspect,\u0020lint,\u0020and\u0020repair\u0020PHPDoc\u0020comments\u0020across\u0020the\u0020project.",

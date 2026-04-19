@@ -694,6 +694,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="guide/commands/metrics.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            metrics
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="guide/commands/code-style.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2430,6 +2452,46 @@ found.</li>
 
     </section>
 
+            <section class="section " id="metrics">
+            <h2><code>metrics</code>
+</h2>
+
+            
+    <p>Analyzes code metrics with PhpMetrics.</p>
+
+            <pre><code class="language-bash">composer metrics
+composer dev-tools metrics -- --target=build/metrics
+composer dev-tools metrics -- --working-dir=packages/example</code></pre>
+
+            
+    <p>Important details:</p>
+
+            
+
+<ul>
+    <li class="dash">it ships <code>phpmetrics/phpmetrics</code>
+ as a direct dependency of
+<code>fast-forward/dev-tools</code>
+;</li>
+
+    <li class="dash">it analyzes the selected <code>--working-dir</code>
+ and forwards the requested
+report options directly to PhpMetrics;</li>
+
+    <li class="dash"><code>--target</code>
+ stores the HTML report plus <code>report.json</code>
+ and
+<code>report-summary.json</code>
+ in the same directory for CI artifacts or manual
+review;</li>
+
+    <li class="dash">it suppresses deprecation notices emitted by the PhpMetrics dependency
+itself so the command output stays readable.</li>
+
+</ul>
+
+    </section>
+
             <section class="section " id="code-style">
             <h2><code>code-style</code>
 </h2>
@@ -2601,6 +2663,10 @@ local-first fallback logic;</li>
 ;</li>
 
     <li class="dash">it calls <code>tests --coverage public/coverage --no-progress --coverage-summary</code>
+;</li>
+
+    <li class="dash"><code>--metrics</code>
+ adds <code>metrics --target public/metrics</code>
 ;</li>
 
     <li class="dash">it is the reporting stage used by <code>standards</code>

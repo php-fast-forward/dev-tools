@@ -694,6 +694,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="guide/commands/metrics.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            metrics
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="guide/commands/code-style.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2372,6 +2394,9 @@ coverage. It combines:</p>
     <li class="dash"><code>tests --coverage</code>
  - generates test coverage reports</li>
 
+    <li class="dash">optionally <code>metrics --target</code>
+ - generates PhpMetrics HTML and JSON reports</li>
+
 </ul>
 
             
@@ -2404,6 +2429,12 @@ Default: <code>public</code>
         <dd>The target directory for the generated test coverage report.
 Default: <code>public/coverage</code>
 .</dd>
+                                <dt><code>--metrics</code>
+ (optional)</dt>
+        
+        <dd>Generate the metrics HTML report. When passed without a value, the report is
+generated in <code>public/metrics</code>
+.</dd>
             </dl>
 
     </section>
@@ -2420,6 +2451,12 @@ Default: <code>public/coverage</code>
     <p>Generate to custom directories:</p>
 
             <pre><code class="language-bash">composer reports --target=build --coverage=build/coverage</code></pre>
+
+            
+    <p>Generate reports including metrics:</p>
+
+            <pre><code class="language-bash">composer reports --metrics
+composer reports --metrics=build/metrics</code></pre>
 
     </section>
 
@@ -2456,6 +2493,10 @@ Default: <code>public/coverage</code>
     <li class="dash">Runs <code>docs</code>
  and <code>tests --coverage</code>
  in parallel.</li>
+
+    <li class="dash">Runs <code>metrics --target</code>
+ after tests when <code>--metrics</code>
+ is enabled.</li>
 
     <li class="dash">Runs tests with <code>--no-progress</code>
  and <code>--coverage-summary</code>
