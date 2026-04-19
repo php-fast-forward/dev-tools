@@ -44,10 +44,10 @@ Common Examples
 
 .. code-block:: bash
 
-   composer dev-tools docs
+   composer docs
    vendor/bin/dev-tools docs --source=docs --target=public
-   composer dev-tools wiki
-   composer dev-tools reports
+   composer wiki
+   composer reports
 
 What Each Command Is For
 ------------------------
@@ -56,7 +56,8 @@ What Each Command Is For
   guide directory does not exist.
 - ``wiki`` builds Markdown API pages intended for ``.github/wiki``.
 - ``reports`` runs ``docs --target public`` and
-  ``tests --coverage public/coverage``.
+  ``tests --coverage public/coverage`` and then
+  ``metrics --target public/metrics --junit public/coverage/junit.xml``.
 
 Outputs to Expect
 -----------------
@@ -65,6 +66,8 @@ Outputs to Expect
 - guide pages generated from ``docs/``;
 - coverage data under ``public/coverage`` when ``reports`` or
   ``tests --coverage`` is used;
+- metrics data under ``public/metrics`` when ``reports`` or ``metrics`` is
+  used;
 - Markdown API pages under ``.github/wiki`` when ``wiki`` is used.
 
 Troubleshooting

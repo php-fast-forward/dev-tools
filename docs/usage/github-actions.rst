@@ -34,9 +34,9 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
 **Behavior:**
 *   **Main Branch**: Runs all checks and deploys the final reports to the root of the ``gh-pages`` branch.
 *   **Pull Requests**:
-    *   Generates a **Preview** of the documentation and coverage.
+    *   Generates a **Preview** of the documentation, coverage, and metrics.
     *   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.
-    *   Posts a **Sticky Comment** on the PR with links to the live preview and coverage report.
+    *   Posts a **Sticky Comment** on the PR with links to the live preview, coverage report, and metrics site.
     *   **Cleanup**: When a PR is closed, the workflow automatically removes the preview directory from the ``gh-pages`` branch to keep the repository clean.
     *   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
 *   **Scheduled Cleanup**: A scheduled/manual cleanup removes stale ``previews/pr-{number}/`` directories for already closed pull requests.
@@ -62,9 +62,9 @@ Fast Forward Tests
 
 The ``tests.yml`` workflow provides standard Continuous Integration.
 
-*   Runs PHPUnit tests across supported PHP versions (defaults to 8.3).
-*   Validates code style using Easy Coding Standard (ECS).
-*   Performs static analysis.
+*   Runs PHPUnit tests across the supported PHP matrix.
+*   Runs dependency health as a separate non-blocking job when enabled.
+*   Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.
 
 Maintenance Workflows
 ---------------------

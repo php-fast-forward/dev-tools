@@ -34,7 +34,8 @@ composer require --dev fast-forward/dev-tools:dev-main
 
 ## 🛠️ Usage
 
-Once installed, the plugin automatically exposes the `dev-tools` command via Composer.
+Once installed, the plugin automatically exposes the aggregated `dev-tools`
+command and the individual Composer commands described below.
 
 ```bash
 # Run all standard checks (refactoring, code styling, docs, tests, and reports)
@@ -50,57 +51,56 @@ You can also run individual commands for specific development tasks:
 # Run PHPUnit tests
 composer dev-tools tests
 
-# Analyze missing and unused Composer dependencies
+# Analyze missing, unused, and outdated Composer dependencies
 composer dependencies
-vendor/bin/dev-tools dependencies
-composer dev-tools dependencies -- --max-outdated=8
-composer dev-tools dependencies -- --dev
-composer dev-tools dependencies -- --upgrade --dev
+composer dependencies --max-outdated=8
+composer dependencies --dev
+composer dependencies --upgrade --dev
 
 # Analyze code metrics with PhpMetrics
 composer metrics
-composer dev-tools metrics -- --target=build/metrics
-composer dev-tools metrics -- --working-dir=packages/example
+composer metrics --target=build/metrics
+composer --working-dir=packages/example metrics
 
 # Check and fix code style using ECS and Composer Normalize
-composer dev-tools code-style
+composer code-style
 
 # Refactor code using Rector
-composer dev-tools refactor
+composer refactor
 
 # Check and fix PHPDoc comments
-composer dev-tools phpdoc
+composer phpdoc
 
 # Generate HTML API documentation using phpDocumentor
-composer dev-tools docs
+composer docs
 
 # Generate Markdown documentation for the wiki
-composer dev-tools wiki
+composer wiki
 
 # Generate documentation frontpage and related reports
-composer dev-tools reports
-composer dev-tools reports -- --metrics
+composer reports
+composer reports --target=build --coverage=build/coverage
 
 # Synchronize packaged agent skills into .agents/skills
-composer dev-tools skills
+composer skills
 
 # Merges and synchronizes .gitignore files
-composer dev-tools gitignore
+composer gitignore
 
 # Manages .gitattributes export-ignore rules for leaner package archives
-composer dev-tools gitattributes
+composer gitattributes
 
 # Generates a LICENSE file from composer.json license information
-composer dev-tools license
+composer license
 
 # Copies packaged or local resources into the consumer repository
-composer dev-tools copy-resource --source resources/docblock --target .docheader
+composer copy-resource --source resources/docblock --target .docheader
 
 # Installs Fast Forward Git hooks
-composer dev-tools git-hooks
+composer git-hooks
 
 # Updates the composer.json file to match the packaged schema
-composer dev-tools update-composer-json --force
+composer update-composer-json --force
 
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows,
 # .editorconfig, .gitignore rules, packaged skills, and the repository wiki
@@ -128,12 +128,12 @@ automation assets.
 | Command | Purpose |
 |---------|---------|
 | `composer dev-tools` | Runs the full `standards` pipeline. |
-| `composer dev-tools tests` | Runs PHPUnit with local-or-packaged configuration. |
-| `composer dev-tools dependencies` | Previews Jack dependency updates, then reports missing, unused, and overly outdated Composer dependencies. |
-| `composer dev-tools metrics` | Runs PhpMetrics for a working directory and generates requested report artifacts. |
-| `composer dev-tools docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
-| `composer dev-tools skills` | Creates or repairs packaged skill links in `.agents/skills`. |
-| `composer dev-tools gitattributes` | Manages export-ignore rules in .gitattributes. |
+| `composer tests` | Runs PHPUnit with local-or-packaged configuration. |
+| `composer dependencies` | Previews Jack dependency updates, then reports missing, unused, and overly outdated Composer dependencies. |
+| `composer metrics` | Runs PhpMetrics for the current project and generates requested report artifacts. |
+| `composer docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
+| `composer skills` | Creates or repairs packaged skill links in `.agents/skills`. |
+| `composer gitattributes` | Manages export-ignore rules in `.gitattributes`. |
 | `composer dev-tools:sync` | Updates scripts, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
 
 ## 🔌 Integration

@@ -6,14 +6,15 @@ Generates the frontpage for Fast Forward documentation.
 Description
 -----------
 
-The ``reports`` command generates the documentation frontpage and runs tests with
-coverage. It combines:
+The ``reports`` command generates the documentation frontpage, runs tests with
+coverage, and generates code metrics. It combines:
 
 - ``docs --target`` - generates API documentation
 - ``tests --coverage`` - generates test coverage reports
-- optionally ``metrics --target`` - generates PhpMetrics HTML and JSON reports
+- ``metrics --target`` - generates PhpMetrics HTML and JSON reports
 
-These are run in parallel for efficiency.
+The documentation build runs in parallel with PHPUnit, and the metrics step
+runs after PHPUnit so it can reuse the generated JUnit report.
 
 Usage
 -----
@@ -36,8 +37,8 @@ Options
    Default: ``public/coverage``.
 
 ``--metrics`` (optional)
-   Generate the metrics HTML report. When passed without a value, the report is
-   generated in ``public/metrics``.
+   The target directory for the generated metrics report.
+   Default: ``public/metrics``.
 
 Examples
 --------
@@ -54,11 +55,10 @@ Generate to custom directories:
 
    composer reports --target=build --coverage=build/coverage
 
-Generate reports including metrics:
+Generate reports with a custom metrics directory:
 
 .. code-block:: bash
 
-   composer reports --metrics
    composer reports --metrics=build/metrics
 
 Exit Codes
@@ -70,16 +70,17 @@ Exit Codes
    * - Code
      - Meaning
    * - 0
-     - Success. Both docs and coverage generated.
+     - Success. Documentation, coverage, and metrics generated successfully.
    * - 1
-     - Failure. One or both commands failed.
+     - Failure. One or more report stages failed.
 
 Behavior
 ---------
 
-- Runs ``docs`` and ``tests --coverage`` in parallel.
-- Runs ``metrics --target`` after tests when ``--metrics`` is enabled.
+- Runs ``docs`` in parallel with ``tests --coverage``.
+- Runs ``metrics --target`` after tests so the JUnit report is available.
 - Runs tests with ``--no-progress`` and ``--coverage-summary`` so report builds
   keep PHPUnit output concise.
+- Passes ``--junit <coverage>/junit.xml`` to the metrics step.
 - Used by the ``standards`` command as the final phase.
 - This is the reporting stage used by GitHub Pages.

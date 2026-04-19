@@ -1,20 +1,20 @@
 dependencies
 =============
 
-Analyzes missing and unused Composer dependencies.
+Analyzes missing, unused, and outdated Composer dependencies.
 
 Description
 -----------
 
 The ``dependencies`` command (alias: ``deps``) analyzes missing, unused, and
-overly outdated
-Composer dependencies using two tools:
+overly outdated Composer dependencies using three tools:
 
 - ``composer-unused`` - detects unused packages
 - ``composer-dependency-analyser`` - detects missing packages
 - ``jack breakpoint`` - fails when too many outdated packages accumulate
 
-This command ships as a direct dependency of ``fast-forward/dev-tools``.
+These analyzers ship as direct dependencies of ``fast-forward/dev-tools``, so
+consumer repositories do not need extra setup before running the command.
 
 Usage
 -----
@@ -22,13 +22,10 @@ Usage
 .. code-block:: bash
 
    composer dependencies
-   composer dev-tools dependencies
+   composer dependencies [options]
 
    composer deps
-   composer dev-tools deps
-
-   vendor/bin/dev-tools dependencies
-   vendor/bin/dev-tools deps
+   vendor/bin/dev-tools dependencies [options]
 
 Options
 -------
@@ -41,9 +38,10 @@ Options
 ``--upgrade`` (optional)
    Applies the Jack upgrade workflow before the analyzers:
 
-   - ``vendor/bin/jack open-versions``
    - ``vendor/bin/jack raise-to-installed``
+   - ``vendor/bin/jack open-versions``
    - ``composer update -W``
+   - ``composer normalize``
 
    Without ``--upgrade``, the command runs the Jack workflow in preview mode
    before the analyzers.
@@ -64,19 +62,19 @@ Allow up to 10 outdated packages:
 
 .. code-block:: bash
 
-   composer dev-tools dependencies -- --max-outdated=10
+   composer dependencies --max-outdated=10
 
 Preview the upgrade workflow:
 
 .. code-block:: bash
 
-   composer dev-tools dependencies -- --dev
+   composer dependencies --dev
 
 Apply the upgrade workflow and then analyze dependencies:
 
 .. code-block:: bash
 
-   composer dev-tools dependencies -- --upgrade --dev
+   composer dependencies --upgrade --dev
 
 Using the alias:
 
@@ -98,18 +96,18 @@ Exit Codes
      - Failure. A dependency analyzer or Jack reported findings or errors.
 
 Behavior
----------
+--------
 
+- Always previews or applies ``jack raise-to-installed`` first and then
+  ``jack open-versions`` before running the analyzers.
 - Runs ``composer-unused``, ``composer-dependency-analyser``, and
-  ``jack breakpoint``.
+  ``jack breakpoint`` after the Jack preview or upgrade phase.
 - ``composer-dependency-analyser`` is configured with:
   - ``--ignore-unused-deps`` (leaves unused detection to ``composer-unused``)
   - ``--ignore-prod-only-in-dev-deps`` (ignores dev-only usage in production code)
 - ``jack breakpoint`` maps ``--max-outdated`` to Jack's ``--limit`` option.
-- It always previews Jack's ``open-versions`` and ``raise-to-installed``
-  commands before the analyzers.
-- ``--upgrade`` applies Jack's ``open-versions`` and ``raise-to-installed``
-  commands before ``composer update -W``.
+- ``--upgrade`` applies Jack's ``raise-to-installed`` and ``open-versions``
+  commands before ``composer update -W`` and ``composer normalize``.
 - Returns a non-zero exit code when missing, unused, or too many outdated
   dependencies are found.
 - All three tools must be available in ``vendor/bin/``.

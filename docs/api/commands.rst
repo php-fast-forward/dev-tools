@@ -28,7 +28,10 @@ dependencies through constructor injection. The architecture uses
      - Runs PHPUnit with optional coverage output.
    * - ``FastForward\DevTools\Console\Command\DependenciesCommand``
      - ``dependencies``
-     - Reports missing and unused Composer dependencies.
+     - Reports missing, unused, and outdated Composer dependencies.
+   * - ``FastForward\DevTools\Console\Command\MetricsCommand``
+     - ``metrics``
+     - Builds the PhpMetrics site and JSON artifacts for the current project.
    * - ``FastForward\DevTools\Console\Command\DocsCommand``
      - ``docs``
      - Builds the HTML documentation site.
@@ -37,7 +40,7 @@ dependencies through constructor injection. The architecture uses
      - Builds Markdown API documentation.
    * - ``FastForward\DevTools\Console\Command\ReportsCommand``
      - ``reports``
-     - Combines the documentation build with coverage generation.
+     - Combines documentation, coverage, and metrics generation.
    * - ``FastForward\DevTools\Console\Command\SkillsCommand``
      - ``skills``
      - Synchronizes packaged agent skills into ``.agents/skills``.
