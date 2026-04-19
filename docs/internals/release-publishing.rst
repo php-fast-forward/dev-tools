@@ -51,6 +51,11 @@ The expected flow is:
 6. let the merged release workflow create or update the GitHub release and tag from the released changelog section;
 7. confirm Packagist, reports, and wiki publication.
 
+This means an ordinary feature or bug-fix pull request merged into ``main``
+does **not** publish a GitHub release by itself. Publication happens only after
+the dedicated ``release/v...`` pull request created by the changelog workflow
+is merged.
+
 Do not retag an existing published version. If a release needs correction,
 prepare a follow-up changelog entry, open a new release-preparation pull
 request, and publish a new version tag.
@@ -112,6 +117,26 @@ matching released changelog section. Those notes SHOULD include:
 - new or changed commands;
 - documentation and workflow changes that affect consumer repositories;
 - verification performed before the release.
+
+Workflow Permissions
+--------------------
+
+The manual release-preparation step depends on GitHub Actions being allowed to
+open pull requests on behalf of the repository workflow token.
+
+Configure the repository under **Settings** > **Actions** > **General**:
+
+1. enable **Read and write permissions** under **Workflow permissions**;
+2. enable **Allow GitHub Actions to create and approve pull requests**.
+
+If either control appears disabled or grayed out, the restriction is usually
+coming from repository permissions or organization policy rather than branch
+protection. In that case, an organization or repository administrator MUST
+adjust the policy before the workflow can prepare release pull requests.
+
+Branch protection matters later, when the generated ``release/v...`` pull
+request is reviewed and merged, but it does not control whether the workflow is
+allowed to create that pull request in the first place.
 
 Packagist Publication
 ---------------------

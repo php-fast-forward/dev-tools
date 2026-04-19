@@ -170,6 +170,14 @@ changelog automation for pull-request validation and release preparation, so
 consumer repositories can adopt the same changelog-driven release flow without
 copying workflow logic by hand.
 
+The release workflow is intentionally two-step: `workflow_dispatch` prepares a
+`release/v...` pull request, and merging that release pull request publishes
+the GitHub release and tag. Consumer repositories must enable GitHub Actions
+**Read and write permissions** and **Allow GitHub Actions to create and approve
+pull requests** under `Settings -> Actions -> General`. If those controls are
+disabled, an organization or repository admin must unlock them before the
+release-preparation workflow can create pull requests.
+
 This repository also keeps role-based project agents in `.agents/agents`. They
 are mirrored through `.github/agents` for GitHub-oriented discovery, while the
 packaged `.agents/skills` directory remains the consumer-facing procedural
