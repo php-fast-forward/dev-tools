@@ -2383,7 +2383,8 @@
             
     <p>The <code>dependencies</code>
  command (alias: <code>deps</code>
-) analyzes missing and unused
+) analyzes missing, unused, and
+overly outdated
 Composer dependencies using two tools:</p>
 
             
@@ -2394,6 +2395,9 @@ Composer dependencies using two tools:</p>
 
     <li class="dash"><code>composer-dependency-analyser</code>
  - detects missing packages</li>
+
+    <li class="dash"><code>jack breakpoint</code>
+ - fails when too many outdated packages accumulate</li>
 
 </ul>
 
@@ -2420,8 +2424,45 @@ vendor/bin/dev-tools deps</code></pre>
             <section class="section " id="options">
             <h2>Options</h2>
 
-            
-    <p>This command does not accept additional options.</p>
+            <dl>
+                        <dt><code>--max-outdated=&lt;count&gt;</code>
+ (optional)</dt>
+        
+        <dd>
+    <p>Maximum number of outdated packages allowed by <code>jack breakpoint</code>
+.</p>
+
+    <p>Default: <code>5</code>
+.</p>
+</dd>
+                                <dt><code>--upgrade</code>
+ (optional)</dt>
+        
+        <dd>
+    <p>Applies the Jack upgrade workflow before the analyzers:</p>
+
+
+<ul>
+    <li class="dash"><code>vendor/bin/jack open-versions</code>
+</li>
+
+    <li class="dash"><code>vendor/bin/jack raise-to-installed</code>
+</li>
+
+    <li class="dash"><code>composer update -W</code>
+</li>
+
+</ul>
+
+    <p>Without <code>--upgrade</code>
+, the command runs the Jack workflow in preview mode
+before the analyzers.</p>
+</dd>
+                                <dt><code>--dev</code>
+ (optional)</dt>
+        
+        <dd>Prioritizes dev dependencies where Jack supports it.</dd>
+            </dl>
 
     </section>
 
@@ -2432,6 +2473,21 @@ vendor/bin/dev-tools deps</code></pre>
     <p>Run dependency analysis:</p>
 
             <pre><code class="language-bash">composer dependencies</code></pre>
+
+            
+    <p>Allow up to 10 outdated packages:</p>
+
+            <pre><code class="language-bash">composer dev-tools dependencies -- --max-outdated=10</code></pre>
+
+            
+    <p>Preview the upgrade workflow:</p>
+
+            <pre><code class="language-bash">composer dev-tools dependencies -- --dev</code></pre>
+
+            
+    <p>Apply the upgrade workflow and then analyze dependencies:</p>
+
+            <pre><code class="language-bash">composer dev-tools dependencies -- --upgrade --dev</code></pre>
 
             
     <p>Using the alias:</p>
@@ -2453,11 +2509,11 @@ vendor/bin/dev-tools deps</code></pre>
     <tbody>
     <tr>
             <td>0</td>
-            <td>Success. No missing or unused dependencies.</td>
+            <td>Success. No missing, unused, or excessive outdated dependencies.</td>
     </tr>
     <tr>
             <td>1</td>
-            <td>Failure. Missing or unused dependencies found.</td>
+            <td>Failure. A dependency analyzer or Jack reported findings or errors.</td>
     </tr>
 </tbody>
 </table>
@@ -2470,8 +2526,10 @@ vendor/bin/dev-tools deps</code></pre>
             
 
 <ul>
-    <li class="dash">Runs both <code>composer-unused</code>
- and <code>composer-dependency-analyser</code>
+    <li class="dash">Runs <code>composer-unused</code>
+, <code>composer-dependency-analyser</code>
+, and
+<code>jack breakpoint</code>
 .</li>
 
     <li class="dash"><code>composer-dependency-analyser</code>
@@ -2482,9 +2540,27 @@ vendor/bin/dev-tools deps</code></pre>
 - <code>--ignore-prod-only-in-dev-deps</code>
  (ignores dev-only usage in production code)</li>
 
-    <li class="dash">Returns a non-zero exit code when missing or unused dependencies are found.</li>
+    <li class="dash"><code>jack breakpoint</code>
+ maps <code>--max-outdated</code>
+ to Jack&#039;s <code>--limit</code>
+ option.</li>
 
-    <li class="dash">Both tools must be available in <code>vendor/bin/</code>
+    <li class="dash">It always previews Jack&#039;s <code>open-versions</code>
+ and <code>raise-to-installed</code>
+
+commands before the analyzers.</li>
+
+    <li class="dash"><code>--upgrade</code>
+ applies Jack&#039;s <code>open-versions</code>
+ and <code>raise-to-installed</code>
+
+commands before <code>composer update -W</code>
+.</li>
+
+    <li class="dash">Returns a non-zero exit code when missing, unused, or too many outdated
+dependencies are found.</li>
+
+    <li class="dash">All three tools must be available in <code>vendor/bin/</code>
 .</li>
 
 </ul>

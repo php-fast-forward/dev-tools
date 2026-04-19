@@ -180,10 +180,10 @@
         <h2>Dependencies Command (FastForward\DevTools\Tests\Console\Command\DependenciesCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>
-            <li class="success">Command can be constructed with dependencies</li>
-            <li class="success">Execute will return success when both tools succeed</li>
+            <li class="success">Execute will return success when preview and analyzers succeed</li>
             <li class="success">Execute will return failure when process queue fails</li>
-            <li class="success">Execute will call both dependency tools with composer json</li>
+            <li class="success">Execute will queue upgrade workflow before analysis when upgrade is requested</li>
+            <li class="success">Execute will fail when max outdated is not numeric</li>
         </ul>
         <h2>Dev Tools (FastForward\DevTools\Tests\Console\DevTools)</h2>
         <ul>

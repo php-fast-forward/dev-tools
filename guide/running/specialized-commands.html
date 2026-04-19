@@ -2425,7 +2425,10 @@ composer tests -- --filter=EventTracerTest</code></pre>
             
     <p>Analyzes missing and unused Composer dependencies.</p>
 
-            <pre><code class="language-bash">composer dependencies</code></pre>
+            <pre><code class="language-bash">composer dependencies
+composer dev-tools dependencies -- --max-outdated=10
+composer dev-tools dependencies -- --dev
+composer dev-tools dependencies -- --upgrade --dev</code></pre>
 
             
     <p>Important details:</p>
@@ -2436,6 +2439,7 @@ composer tests -- --filter=EventTracerTest</code></pre>
     <li class="dash">it ships <code>shipmonk/composer-dependency-analyser</code>
  and
 <code>icanhazstring/composer-unused</code>
+ and <code>rector/jack</code>
  as direct dependencies of
 <code>fast-forward/dev-tools</code>
 ;</li>
@@ -2445,8 +2449,24 @@ composer tests -- --filter=EventTracerTest</code></pre>
 and leaves unused-package reporting to <code>composer-unused</code>
 ;</li>
 
-    <li class="dash">it returns a non-zero exit code when missing or unused dependencies are
-found.</li>
+    <li class="dash">it uses <code>jack breakpoint --limit=&lt;max-outdated&gt;</code>
+ to fail when too many
+outdated dependencies accumulate;</li>
+
+    <li class="dash">it previews <code>jack open-versions</code>
+ and <code>jack raise-to-installed</code>
+ before
+the analyzers;</li>
+
+    <li class="dash"><code>--upgrade</code>
+ runs <code>jack open-versions</code>
+, <code>jack raise-to-installed</code>
+, and
+<code>composer update -W</code>
+ before the analyzers;</li>
+
+    <li class="dash">it returns a non-zero exit code when missing, unused, or too many outdated
+dependencies are found.</li>
 
 </ul>
 
