@@ -193,6 +193,28 @@ Important details:
 - it creates missing symlinks and repairs broken ones;
 - it preserves an existing non-symlink directory instead of overwriting it.
 
+``funding``
+-----------
+
+Synchronizes supported funding metadata between Composer and GitHub formats.
+
+.. code-block:: bash
+
+   composer funding
+   composer funding --dry-run
+   composer funding --check
+
+Important details:
+
+- it keeps ``composer.json`` ``funding`` entries and ``.github/FUNDING.yml`` in
+  sync for GitHub Sponsors and ``custom`` URLs;
+- it preserves unsupported Composer funding providers and unsupported YAML
+  keys instead of rewriting them;
+- it creates ``.github/FUNDING.yml`` when Composer already declares supported
+  funding metadata;
+- it supports ``--dry-run``, ``--check``, and ``--interactive`` so funding
+  drift can be surfaced in CI and reviewed locally.
+
 ``dev-tools:sync``
 ------------------
 
@@ -206,6 +228,8 @@ Important details:
 
 - it updates ``composer.json`` scripts and
   ``extra.grumphp.config-default-path``;
+- it calls ``funding`` so supported funding metadata stays aligned between
+  ``composer.json`` and ``.github/FUNDING.yml``;
 - it copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``;
 - it creates ``.github/wiki`` as a git submodule when the directory is
   missing.

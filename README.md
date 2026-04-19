@@ -84,6 +84,10 @@ composer reports --target=.dev-tools --coverage=.dev-tools/coverage
 # Synchronize packaged agent skills into .agents/skills
 composer skills
 
+# Synchronize Composer funding metadata with .github/FUNDING.yml
+composer funding
+composer funding --dry-run
+
 # Merges and synchronizes .gitignore files
 composer gitignore
 
@@ -117,6 +121,11 @@ The `metrics` command ships with `phpmetrics/phpmetrics` as a direct
 dependency of `fast-forward/dev-tools`, so consumer repositories can generate
 metrics reports without extra setup.
 
+The `funding` command keeps supported `composer.json` funding entries aligned
+with `.github/FUNDING.yml`, including GitHub Sponsors handles and `custom`
+URLs, while preserving unsupported providers in place and re-running
+`composer normalize` after manifest updates.
+
 The `skills` command keeps `.agents/skills` aligned with the packaged Fast
 Forward skill set. It creates missing links, repairs broken links, and
 preserves existing non-symlink directories. The `dev-tools:sync` command calls
@@ -138,8 +147,9 @@ source of truth.
 | `composer metrics` | Runs PhpMetrics for the current project and generates requested report artifacts. |
 | `composer docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer skills` | Creates or repairs packaged skill links in `.agents/skills`. |
+| `composer funding` | Synchronizes managed funding metadata between `composer.json` and `.github/FUNDING.yml`. |
 | `composer gitattributes` | Manages export-ignore rules in `.gitattributes`. |
-| `composer dev-tools:sync` | Updates scripts, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
+| `composer dev-tools:sync` | Updates scripts, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
 
 ## 🔌 Integration
 

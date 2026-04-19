@@ -26,6 +26,16 @@
         "source": "https://github.com/php-fast-forward/dev-tools",
         "docs": "https://php-fast-forward.github.io/dev-tools/"
     },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/php-fast-forward"
+        },
+        {
+            "type": "custom",
+            "url": "https://www.paypal.com/donate/?business=JLDAF45XZ8D84"
+        }
+    ],
     "require": {
         "php": "^8.3",
         "composer-plugin-api": "^2.0",
@@ -65,6 +75,7 @@
         "symfony/process": "^7.4 || ^8.0",
         "symfony/var-dumper": "^7.4 || ^8.0",
         "symfony/var-exporter": "^7.4 || ^8.0",
+        "symfony/yaml": "^7.4 || ^8.0",
         "symplify/easy-coding-standard": "^13.0",
         "thecodingmachine/safe": "^3.4",
         "twig/twig": "^3.24"

@@ -12,12 +12,13 @@ The ``dev-tools:sync`` command synchronizes consumer-facing automation and defau
 2. ``copy-resource`` - copies GitHub Actions workflows
 3. ``copy-resource`` - copies .editorconfig
 4. ``copy-resource`` - copies dependabot.yml
-5. ``wiki --init`` - initializes wiki as submodule
-6. ``gitignore`` - merges .gitignore files
-7. ``gitattributes`` - manages export-ignore rules
-8. ``skills`` - synchronizes packaged skills
-9. ``license`` - generates LICENSE file
-10. ``git-hooks`` - installs Git hooks
+5. ``funding`` - synchronizes ``composer.json`` funding metadata with ``.github/FUNDING.yml``
+6. ``wiki --init`` - initializes wiki as submodule
+7. ``gitignore`` - merges .gitignore files
+8. ``gitattributes`` - manages export-ignore rules
+9. ``skills`` - synchronizes packaged skills
+10. ``license`` - generates LICENSE file
+11. ``git-hooks`` - installs Git hooks
 
 Usage
 -----
@@ -89,13 +90,16 @@ Exit Codes
 Behavior
 ---------
 
-- Updates ``composer.json`` scripts and extra configuration.
+- Updates ``composer.json`` scripts, extra configuration, and managed funding
+  metadata.
 - Copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``.
+- Synchronizes supported funding metadata between ``composer.json`` and
+  ``.github/FUNDING.yml``.
 - When ``--overwrite`` is enabled, replaced text resources emit a unified diff
   so terminal sessions and CI logs show what changed.
 - ``--dry-run`` and ``--check`` verify managed-file drift for ``composer.json``,
-  copied resources, ``.gitignore``, ``.gitattributes``, ``LICENSE``, and Git
-  hooks.
+  funding metadata, copied resources, ``.gitignore``, ``.gitattributes``,
+  ``LICENSE``, and Git hooks.
 - ``--interactive`` prompts before replacing drifted managed files when the
   command is running in an interactive terminal.
 - Creates ``.github/wiki`` as a git submodule when missing.

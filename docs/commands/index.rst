@@ -18,6 +18,7 @@ Detailed documentation for each dev-tools command.
    reports
    skills
    sync
+   funding
    gitignore
    gitattributes
    license
