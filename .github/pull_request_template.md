@@ -1,4 +1,8 @@
-## Summary
+## Related Issue
+
+Closes #
+
+## Motivation / Context
 
 - 
 
@@ -6,17 +10,22 @@
 
 - 
 
-## Testing
+## Verification
 
-- [ ] Not run
 - [ ] `composer dev-tools`
 - [ ] Focused command(s):
+- [ ] Manual verification:
+
+## Documentation / Generated Output
+
+- [ ] README updated
+- [ ] `docs/` updated
+- [ ] Generated or synchronized output reviewed
 
 ## Changelog
 
-- [ ] Not needed
 - [ ] Added a notable `CHANGELOG.md` entry
 
-## Closes
+## Reviewer Notes
 
-Closes #
+-
