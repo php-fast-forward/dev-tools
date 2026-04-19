@@ -2441,6 +2441,22 @@ vendor/bin/dev-tools update-composer-json [options]</code></pre>
         
         <dd>Path to the composer.json file to update. Default: <code>composer.json</code>
 .</dd>
+                                <dt><code>--dry-run</code>
+</dt>
+        
+        <dd>Preview managed <code>composer.json</code>
+ drift without writing the file.</dd>
+                                <dt><code>--check</code>
+</dt>
+        
+        <dd>Exit with code <code>1</code>
+ when <code>composer.json</code>
+ needs an update.</dd>
+                                <dt><code>--interactive</code>
+</dt>
+        
+        <dd>Prompt before updating <code>composer.json</code>
+.</dd>
             </dl>
 
     </section>
@@ -2471,6 +2487,12 @@ vendor/bin/dev-tools update-composer-json [options]</code></pre>
     <li class="dash">Existing scripts with the same name are overwritten.</li>
 
     <li class="dash">The GrumPHP extra configuration is merged with existing configuration.</li>
+
+    <li class="dash"><code>--dry-run</code>
+ and <code>--check</code>
+ render a diff against the managed
+<code>composer.json</code>
+ result before deciding whether to write.</li>
 
 </ul>
 

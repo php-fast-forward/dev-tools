@@ -791,6 +791,11 @@ Search.appendIndex(
             "summary": "Copies\u0020a\u0020single\u0020file\u0020when\u0020the\u0020target\u0020does\u0020not\u0020exist\u0020or\u0020overwrite\u0020is\u0020enabled.",
             "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#method_copyFile"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003AshouldReplaceResource\u0028\u0029",
+            "name": "shouldReplaceResource",
+            "summary": "Prompts\u0020whether\u0020a\u0020drifted\u0020resource\u0020should\u0020be\u0020replaced.",
+            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#method_shouldReplaceResource"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024filesystem",
             "name": "filesystem",
             "summary": "",
@@ -806,10 +811,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_finderFactory"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024overwriteDiffRenderer",
-            "name": "overwriteDiffRenderer",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024fileDiffer",
+            "name": "fileDiffer",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_overwriteDiffRenderer"
+            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_fileDiffer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
             "name": "DependenciesCommand",
@@ -941,10 +946,20 @@ Search.appendIndex(
             "summary": "Creates\u0020a\u0020new\u0020GitAttributesCommand\u0020instance.",
             "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020verification\u0020and\u0020interactive\u0020update\u0020modes.",
+            "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#method_configure"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
             "summary": "Configures\u0020the\u0020current\u0020command.",
             "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003AshouldWriteGitAttributes\u0028\u0029",
+            "name": "shouldWriteGitAttributes",
+            "summary": "Prompts\u0020whether\u0020.gitattributes\u0020should\u0020be\u0020updated.",
+            "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#method_shouldWriteGitAttributes"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003AconfiguredKeepInExportPaths\u0028\u0029",
             "name": "configuredKeepInExportPaths",
@@ -1011,6 +1026,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_filesystem"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003A\u0024fileDiffer",
+            "name": "fileDiffer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_fileDiffer"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
             "name": "GitHooksCommand",
             "summary": "Installs\u0020packaged\u0020Git\u0020hooks\u0020for\u0020the\u0020consumer\u0020repository.",
@@ -1031,6 +1051,11 @@ Search.appendIndex(
             "summary": "Copies\u0020packaged\u0020Git\u0020hooks.",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#method_execute"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003AshouldReplaceHook\u0028\u0029",
+            "name": "shouldReplaceHook",
+            "summary": "Prompts\u0020whether\u0020a\u0020drifted\u0020hook\u0020should\u0020be\u0020replaced.",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#method_shouldReplaceHook"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024filesystem",
             "name": "filesystem",
             "summary": "",
@@ -1045,6 +1070,11 @@ Search.appendIndex(
             "name": "finderFactory",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_finderFactory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024fileDiffer",
+            "name": "fileDiffer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_fileDiffer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
             "name": "GitIgnoreCommand",
@@ -1065,6 +1095,11 @@ Search.appendIndex(
             "name": "execute",
             "summary": "Executes\u0020the\u0020gitignore\u0020merge\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand\u003A\u003AshouldWriteGitIgnore\u0028\u0029",
+            "name": "shouldWriteGitIgnore",
+            "summary": "Prompts\u0020whether\u0020.gitignore\u0020should\u0020be\u0020updated.",
+            "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#method_shouldWriteGitIgnore"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand\u003A\u003AFILENAME",
             "name": "FILENAME",
@@ -1091,6 +1126,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_fileLocator"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand\u003A\u003A\u0024fileDiffer",
+            "name": "fileDiffer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_fileDiffer"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand",
             "name": "LicenseCommand",
             "summary": "Generates\u0020and\u0020copies\u0020LICENSE\u0020files\u0020to\u0020projects.",
@@ -1111,6 +1151,11 @@ Search.appendIndex(
             "summary": "Executes\u0020the\u0020license\u0020generation\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#method_execute"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand\u003A\u003AshouldWriteLicense\u0028\u0029",
+            "name": "shouldWriteLicense",
+            "summary": "Prompts\u0020whether\u0020the\u0020generated\u0020LICENSE\u0020should\u0020be\u0020written.",
+            "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#method_shouldWriteLicense"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand\u003A\u003A\u0024generator",
             "name": "generator",
             "summary": "",
@@ -1120,6 +1165,11 @@ Search.appendIndex(
             "name": "filesystem",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand\u003A\u003A\u0024fileDiffer",
+            "name": "fileDiffer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_fileDiffer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
             "name": "MetricsCommand",
@@ -1486,6 +1536,11 @@ Search.appendIndex(
             "summary": "Updates\u0020composer.json\u0020when\u0020the\u0020target\u0020file\u0020exists.",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#method_execute"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003AshouldUpdateComposerJson\u0028\u0029",
+            "name": "shouldUpdateComposerJson",
+            "summary": "Prompts\u0020whether\u0020composer.json\u0020should\u0020be\u0020updated.",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#method_shouldUpdateComposerJson"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003Ascripts\u0028\u0029",
             "name": "scripts",
             "summary": "Returns\u0020the\u0020Composer\u0020scripts\u0020managed\u0020by\u0020this\u0020command.",
@@ -1505,6 +1560,11 @@ Search.appendIndex(
             "name": "fileLocator",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_fileLocator"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024fileDiffer",
+            "name": "fileDiffer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_fileDiffer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand",
             "name": "WikiCommand",
@@ -1986,6 +2046,11 @@ Search.appendIndex(
             "summary": "Writes\u0020the\u0020.gitattributes\u0020content\u0020to\u0020the\u0020specified\u0020filesystem\u0020path.",
             "url": "classes/FastForward-DevTools-GitAttributes-Writer.html#method_write"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Writer\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Renders\u0020normalized\u0020.gitattributes\u0020content.",
+            "url": "classes/FastForward-DevTools-GitAttributes-Writer.html#method_render"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Writer\u003A\u003Aformat\u0028\u0029",
             "name": "format",
             "summary": "Formats\u0020.gitattributes\u0020content\u0020with\u0020aligned\u0020attribute\u0020columns.",
@@ -2010,6 +2075,11 @@ Search.appendIndex(
             "name": "WriterInterface",
             "summary": "Defines\u0020the\u0020contract\u0020for\u0020writing\u0020.gitattributes\u0020files\u0020to\u0020persistent\u0020storage.",
             "url": "classes/FastForward-DevTools-GitAttributes-WriterInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GitAttributes\\WriterInterface\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Renders\u0020normalized\u0020.gitattributes\u0020content\u0020without\u0020persisting\u0020it.",
+            "url": "classes/FastForward-DevTools-GitAttributes-WriterInterface.html#method_render"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitAttributes\\WriterInterface\u003A\u003Awrite\u0028\u0029",
             "name": "write",
@@ -2176,6 +2246,11 @@ Search.appendIndex(
             "summary": "Writes\u0020the\u0020normalized\u0020.gitignore\u0020entries\u0020to\u0020the\u0020target\u0020file\u0020path.",
             "url": "classes/FastForward-DevTools-GitIgnore-Writer.html#method_write"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Writer\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Renders\u0020the\u0020normalized\u0020.gitignore\u0020content.",
+            "url": "classes/FastForward-DevTools-GitIgnore-Writer.html#method_render"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Writer\u003A\u003A\u0024filesystem",
             "name": "filesystem",
             "summary": "",
@@ -2185,6 +2260,11 @@ Search.appendIndex(
             "name": "WriterInterface",
             "summary": "Defines\u0020the\u0020contract\u0020for\u0020writing\u0020.gitignore\u0020representations\u0020to\u0020persistent\u0020storage.",
             "url": "classes/FastForward-DevTools-GitIgnore-WriterInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GitIgnore\\WriterInterface\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Renders\u0020the\u0020GitIgnore\u0020content\u0020without\u0020persisting\u0020it.",
+            "url": "classes/FastForward-DevTools-GitIgnore-WriterInterface.html#method_render"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\WriterInterface\u003A\u003Awrite\u0028\u0029",
             "name": "write",
@@ -2205,6 +2285,11 @@ Search.appendIndex(
             "name": "generate",
             "summary": "Generates\u0020a\u0020LICENSE\u0020file\u0020at\u0020the\u0020specified\u0020path.",
             "url": "classes/FastForward-DevTools-License-Generator.html#method_generate"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\License\\Generator\u003A\u003AgenerateContent\u0028\u0029",
+            "name": "generateContent",
+            "summary": "Generates\u0020license\u0020content\u0020without\u0020writing\u0020it\u0020to\u0020disk.",
+            "url": "classes/FastForward-DevTools-License-Generator.html#method_generateContent"
         },                {
             "fqsen": "\\FastForward\\DevTools\\License\\Generator\u003A\u003A\u0024resolver",
             "name": "resolver",
@@ -2235,6 +2320,11 @@ Search.appendIndex(
             "name": "GeneratorInterface",
             "summary": "Generates\u0020LICENSE\u0020files\u0020from\u0020composer.json\u0020metadata.",
             "url": "classes/FastForward-DevTools-License-GeneratorInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\License\\GeneratorInterface\u003A\u003AgenerateContent\u0028\u0029",
+            "name": "generateContent",
+            "summary": "Generates\u0020license\u0020content\u0020without\u0020writing\u0020it\u0020to\u0020disk.",
+            "url": "classes/FastForward-DevTools-License-GeneratorInterface.html#method_generateContent"
         },                {
             "fqsen": "\\FastForward\\DevTools\\License\\GeneratorInterface\u003A\u003Agenerate\u0028\u0029",
             "name": "generate",
@@ -2661,85 +2751,150 @@ Search.appendIndex(
             "summary": "Ascertains\u0020visually\u0020and\u0020technically\u0020if\u0020a\u0020provided\u0020block\u0020comprises\u0020an\u0020absolute\u0020empty\u0020placeholder\u0020structure\u0020safely.",
             "url": "classes/FastForward-DevTools-Rector-RemoveEmptyDocBlockRector.html#method_isEmptyDocBlock"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer",
-            "name": "OverwriteDiffRenderer",
-            "summary": "Renders\u0020deterministic\u0020overwrite\u0020summaries\u0020and\u0020unified\u0020diffs\u0020for\u0020copied\u0020files.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html"
+            "fqsen": "\\FastForward\\DevTools\\Resource\\DifferInterface",
+            "name": "DifferInterface",
+            "summary": "Defines\u0020the\u0020contract\u0020for\u0020generating\u0020unified\u0020diffs.",
+            "url": "classes/FastForward-DevTools-Resource-DifferInterface.html"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Creates\u0020a\u0020new\u0020overwrite\u0020diff\u0020renderer.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#method___construct"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003Arender\u0028\u0029",
-            "name": "render",
-            "summary": "Compares\u0020a\u0020source\u0020file\u0020against\u0020the\u0020target\u0020file\u0020that\u0020would\u0020be\u0020overwritten.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#method_render"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003AisBinary\u0028\u0029",
-            "name": "isBinary",
-            "summary": "Reports\u0020whether\u0020the\u0020given\u0020content\u0020should\u0020be\u0020treated\u0020as\u0020binary.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#method_isBinary"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003A\u0024filesystem",
-            "name": "filesystem",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#property_filesystem"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult",
-            "name": "OverwriteDiffResult",
-            "summary": "Carries\u0020the\u0020result\u0020of\u0020comparing\u0020an\u0020overwrite\u0020source\u0020and\u0020target\u0020pair.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Creates\u0020a\u0020new\u0020overwrite\u0020diff\u0020result.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method___construct"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A\u0024status",
-            "name": "status",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_status"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A\u0024summary",
-            "name": "summary",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_summary"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A\u0024diff",
+            "fqsen": "\\FastForward\\DevTools\\Resource\\DifferInterface\u003A\u003Adiff\u0028\u0029",
             "name": "diff",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_diff"
+            "summary": "Generates\u0020a\u0020unified\u0020diff\u0020between\u0020current\u0020and\u0020updated\u0020content.",
+            "url": "classes/FastForward-DevTools-Resource-DifferInterface.html#method_diff"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003AisUnchanged\u0028\u0029",
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff",
+            "name": "FileDiff",
+            "summary": "Carries\u0020the\u0020result\u0020of\u0020comparing\u0020source\u0020and\u0020target\u0020file\u0020contents.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020file\u0020diff\u0020result.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003AgetStatus\u0028\u0029",
+            "name": "getStatus",
+            "summary": "Returns\u0020the\u0020comparison\u0020status.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#method_getStatus"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003AgetSummary\u0028\u0029",
+            "name": "getSummary",
+            "summary": "Returns\u0020the\u0020human\u002Dreadable\u0020summary.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#method_getSummary"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003AgetDiff\u0028\u0029",
+            "name": "getDiff",
+            "summary": "Returns\u0020the\u0020optional\u0020unified\u0020diff\u0020payload.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#method_getDiff"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003AisUnchanged\u0028\u0029",
             "name": "isUnchanged",
             "summary": "Reports\u0020whether\u0020the\u0020compared\u0020files\u0020already\u0020match.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isUnchanged"
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#method_isUnchanged"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003AisChanged\u0028\u0029",
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003AisChanged\u0028\u0029",
             "name": "isChanged",
             "summary": "Reports\u0020whether\u0020the\u0020compared\u0020files\u0020produced\u0020a\u0020text\u0020diff.",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isChanged"
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#method_isChanged"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_CHANGED",
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003ASTATUS_CHANGED",
             "name": "STATUS_CHANGED",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_CHANGED"
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#constant_STATUS_CHANGED"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_UNCHANGED",
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003ASTATUS_UNCHANGED",
             "name": "STATUS_UNCHANGED",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNCHANGED"
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#constant_STATUS_UNCHANGED"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_BINARY",
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003ASTATUS_BINARY",
             "name": "STATUS_BINARY",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_BINARY"
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#constant_STATUS_BINARY"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_UNREADABLE",
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003ASTATUS_UNREADABLE",
             "name": "STATUS_UNREADABLE",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNREADABLE"
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#constant_STATUS_UNREADABLE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003A\u0024status",
+            "name": "status",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#property_status"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003A\u0024summary",
+            "name": "summary",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#property_summary"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiff\u003A\u003A\u0024diff",
+            "name": "diff",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-FileDiff.html#property_diff"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "name": "FileDiffer",
+            "summary": "Renders\u0020deterministic\u0020summaries\u0020and\u0020unified\u0020diffs\u0020for\u0020file\u0020comparisons.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020file\u0020differ.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003Adiff\u0028\u0029",
+            "name": "diff",
+            "summary": "Compares\u0020a\u0020source\u0020file\u0020against\u0020the\u0020target\u0020file\u0020that\u0020would\u0020be\u0020overwritten.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#method_diff"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003AdiffContents\u0028\u0029",
+            "name": "diffContents",
+            "summary": "Compares\u0020managed\u0020content\u0020against\u0020the\u0020current\u0020target\u0020contents.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#method_diffContents"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003Acolorize\u0028\u0029",
+            "name": "colorize",
+            "summary": "Colorizes\u0020a\u0020unified\u0020diff\u0020for\u0020decorated\u0020console\u0020output.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#method_colorize"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003AformatForConsole\u0028\u0029",
+            "name": "formatForConsole",
+            "summary": "Formats\u0020a\u0020diff\u0020payload\u0020for\u0020console\u0020output.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#method_formatForConsole"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003AisBinary\u0028\u0029",
+            "name": "isBinary",
+            "summary": "Reports\u0020whether\u0020the\u0020given\u0020content\u0020should\u0020be\u0020treated\u0020as\u0020binary.",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#method_isBinary"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\FileDiffer\u003A\u003A\u0024differ",
+            "name": "differ",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-FileDiffer.html#property_differ"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\UnifiedDiffer",
+            "name": "UnifiedDiffer",
+            "summary": "Generates\u0020unified\u0020diffs\u0020using\u0020the\u0020default\u0020Sebastian\u0020diff\u0020output\u0020builder.",
+            "url": "classes/FastForward-DevTools-Resource-UnifiedDiffer.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\UnifiedDiffer\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020unified\u0020differ.",
+            "url": "classes/FastForward-DevTools-Resource-UnifiedDiffer.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\UnifiedDiffer\u003A\u003Adiff\u0028\u0029",
+            "name": "diff",
+            "summary": "Generates\u0020a\u0020unified\u0020diff\u0020between\u0020current\u0020and\u0020updated\u0020content.",
+            "url": "classes/FastForward-DevTools-Resource-UnifiedDiffer.html#method_diff"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\UnifiedDiffer\u003A\u003A\u0024differ",
+            "name": "differ",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-UnifiedDiffer.html#property_differ"
         },                {
             "fqsen": "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
             "name": "DevToolsServiceProvider",

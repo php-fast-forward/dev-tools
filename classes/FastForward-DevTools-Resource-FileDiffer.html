@@ -2427,7 +2427,7 @@
             <i class="fas fa-cube"></i>
         </div>
         <div>
-            <h2 class="display-5 mb-1">OverwriteDiffResult</h2>
+            <h2 class="display-5 mb-1">FileDiffer</h2>
             <div class="text-body-secondary">Class</div>
         </div>
     </div>
@@ -2470,20 +2470,20 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">25</span>
+    <span class="badge text-bg-light border">33</span>
 
     </aside>
         </div>
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Carries the result of comparing an overwrite source and target pair.</p>
+        <p class="lead text-body-secondary mb-0">Renders deterministic summaries and unified diffs for file comparisons.</p>
     </div>
 
 
@@ -2499,7 +2499,7 @@
         <h3 id="toc" class="h4 mb-0">
             Table of Contents
             <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#toc"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#toc"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -2516,78 +2516,6 @@
         
         
         
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-thumbtack text-warning"></i>
-                    <h4 id="toc-constants" class="h6 mb-0 fw-semibold">Constants</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_BINARY"
-        >
-            STATUS_BINARY
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-        &nbsp;= &#039;binary&#039;                            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_CHANGED"
-        >
-            STATUS_CHANGED
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-        &nbsp;= &#039;changed&#039;                            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNCHANGED"
-        >
-            STATUS_UNCHANGED
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-        &nbsp;= &#039;unchanged&#039;                            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNREADABLE"
-        >
-            STATUS_UNREADABLE
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-        &nbsp;= &#039;unreadable&#039;                            </span>
-</div>
-                        </div>
-                                    </div>
-            </section>
         
         
                     <section class="card border-0 shadow-sm">
@@ -2601,15 +2529,15 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_diff"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#property_differ"
         >
-            $diff
+            $differ
         </a>
 
             </div>
 
     <span class="text-body-secondary small text-end">
-                        &nbsp;: string|null            </span>
+                        &nbsp;: <a href="classes/FastForward-DevTools-Resource-DifferInterface.html"><abbr title="\FastForward\DevTools\Resource\DifferInterface">DifferInterface</abbr></a>            </span>
 </div>
                         </div>
                                             <div class="list-group-item">
@@ -2617,31 +2545,15 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_status"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#property_filesystem"
         >
-            $status
+            $filesystem
         </a>
 
             </div>
 
     <span class="text-body-secondary small text-end">
-                        &nbsp;: string            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_summary"
-        >
-            $summary
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: string            </span>
+                        &nbsp;: <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>            </span>
 </div>
                         </div>
                                     </div>
@@ -2658,13 +2570,13 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method___construct"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#method___construct"
         >
             __construct()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Creates a new overwrite diff result.
+                Creates a new file differ.
             </p>
             </div>
 
@@ -2677,13 +2589,70 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_diff"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_colorize"
+        >
+            colorize()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Colorizes a unified diff for decorated console output.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: string    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_diff"
         >
             diff()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Returns the optional unified diff payload.
+                Compares a source file against the target file that would be overwritten.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: <a href="classes/FastForward-DevTools-Resource-FileDiff.html"><abbr title="\FastForward\DevTools\Resource\FileDiff">FileDiff</abbr></a>    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_diffContents"
+        >
+            diffContents()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Compares managed content against the current target contents.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: <a href="classes/FastForward-DevTools-Resource-FileDiff.html"><abbr title="\FastForward\DevTools\Resource\FileDiff">FileDiff</abbr></a>    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_formatForConsole"
+        >
+            formatForConsole()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Formats a diff payload for console output.
             </p>
             </div>
 
@@ -2696,75 +2665,18 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isChanged"
+            href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_isBinary"
         >
-            isChanged()
+            isBinary()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Reports whether the compared files produced a text diff.
+                Reports whether the given content should be treated as binary.
             </p>
             </div>
 
     <span class="text-body-secondary small text-end">
                                 &nbsp;: bool    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isUnchanged"
-        >
-            isUnchanged()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Reports whether the compared files already match.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: bool    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_status"
-        >
-            status()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Returns the comparison status.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_summary"
-        >
-            summary()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Returns the human-readable summary.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string    </span>
 </div>
                         </div>
                                     </div>
@@ -2777,371 +2689,6 @@
 
         <div class="d-grid gap-4">
                                     
-                            <section class="card border-0 shadow-sm">
-                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                        <i class="fas fa-thumbtack text-warning"></i>
-                        <span class="fw-semibold">Constants</span>
-                    </div>
-                    <div class="card-body p-4">
-                        
-    <section>
-        <div class="d-flex align-items-center gap-2 mb-4">
-            <i class="fas fa-thumbtack text-warning"></i>
-            <h3 class="h4 mb-0" id="constants">
-                Constants
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constants"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h3>
-        </div>
-
-        <div class="d-grid gap-4">
-                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="constant_STATUS_BINARY">
-                <span class="text-warning-emphasis">STATUS_BINARY</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_BINARY"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">40</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">
-        public
-    </span>
-
-    
-    <span class="text-info-emphasis">
-        string
-    </span>
-
-    <span class="text-warning-emphasis fw-semibold">
-        STATUS_BINARY
-    </span>
-
-    <span class="text-body-secondary">=</span>
-
-    <span class="text-success-emphasis">
-        &#039;binary&#039;
-    </span>
-</code>
-    </div>
-
-    
-
-    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>indicates that a text diff should not be rendered for the compared files</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-    
-
-        
-    </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="constant_STATUS_CHANGED">
-                <span class="text-warning-emphasis">STATUS_CHANGED</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_CHANGED"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">30</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">
-        public
-    </span>
-
-    
-    <span class="text-info-emphasis">
-        string
-    </span>
-
-    <span class="text-warning-emphasis fw-semibold">
-        STATUS_CHANGED
-    </span>
-
-    <span class="text-body-secondary">=</span>
-
-    <span class="text-success-emphasis">
-        &#039;changed&#039;
-    </span>
-</code>
-    </div>
-
-    
-
-    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>indicates that the source and target differ and a text diff is available</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-    
-
-        
-    </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="constant_STATUS_UNCHANGED">
-                <span class="text-warning-emphasis">STATUS_UNCHANGED</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNCHANGED"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">35</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">
-        public
-    </span>
-
-    
-    <span class="text-info-emphasis">
-        string
-    </span>
-
-    <span class="text-warning-emphasis fw-semibold">
-        STATUS_UNCHANGED
-    </span>
-
-    <span class="text-body-secondary">=</span>
-
-    <span class="text-success-emphasis">
-        &#039;unchanged&#039;
-    </span>
-</code>
-    </div>
-
-    
-
-    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>indicates that the source and target already match</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-    
-
-        
-    </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="constant_STATUS_UNREADABLE">
-                <span class="text-warning-emphasis">STATUS_UNREADABLE</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNREADABLE"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">45</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">
-        public
-    </span>
-
-    
-    <span class="text-info-emphasis">
-        string
-    </span>
-
-    <span class="text-warning-emphasis fw-semibold">
-        STATUS_UNREADABLE
-    </span>
-
-    <span class="text-body-secondary">=</span>
-
-    <span class="text-success-emphasis">
-        &#039;unreadable&#039;
-    </span>
-</code>
-    </div>
-
-    
-
-    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>indicates that the compared files could not be read safely</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-    
-
-        
-    </article>                    </div>
-    </section>
-
-                    </div>
-                </section>
             
                             <section class="card border-0 shadow-sm">
                     <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
@@ -3149,7 +2696,7 @@
                         <span class="fw-semibold">
                             Properties
                             <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#properties"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#properties"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3165,10 +2712,10 @@
                             <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="property_diff">
-                <span class="text-primary">$diff</span>
+            <h4 class="h5 mb-2" id="property_differ">
+                <span class="text-primary">$differ</span>
                 <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_diff"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#property_differ"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3193,13 +2740,13 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">57</span>
+    <span class="badge text-bg-light border">43</span>
 
     </aside>
     
@@ -3213,84 +2760,11 @@
     
     
     <span class="text-info-emphasis">
-        string|null
+        <a href="classes/FastForward-DevTools-Resource-DifferInterface.html"><abbr title="\FastForward\DevTools\Resource\DifferInterface">DifferInterface</abbr></a>
     </span>
 
     <span class="text-primary fw-semibold">
-        $diff
-    </span>
-
-            <span class="text-body-secondary">=</span>
-        <span class="text-success-emphasis">
-            null
-        </span>
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_status">
-                <span class="text-primary">$status</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_status"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">55</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        string
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $status
+        $differ
     </span>
 
     </code>
@@ -3307,10 +2781,10 @@
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="property_summary">
-                <span class="text-primary">$summary</span>
+            <h4 class="h5 mb-2" id="property_filesystem">
+                <span class="text-primary">$filesystem</span>
                 <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_summary"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#property_filesystem"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3335,13 +2809,13 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">56</span>
+    <span class="badge text-bg-light border">42</span>
 
     </aside>
     
@@ -3355,11 +2829,11 @@
     
     
     <span class="text-info-emphasis">
-        string
+        <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>
     </span>
 
     <span class="text-primary fw-semibold">
-        $summary
+        $filesystem
     </span>
 
     </code>
@@ -3385,7 +2859,7 @@
                         <span class="fw-semibold">
                             Methods
                             <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#methods"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#methods"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3404,7 +2878,7 @@
             <h4 class="h5 mb-2" id="method___construct">
                 <span class="text-primary">__construct()</span>
                 <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method___construct"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#method___construct"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3428,17 +2902,17 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">54</span>
+    <span class="badge text-bg-light border">41</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Creates a new overwrite diff result.</p>
+        <p class="lead text-body-secondary mb-0">Creates a new file differ.</p>
     </div>
 
 
@@ -3450,13 +2924,9 @@
     
     
     
-    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$status</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$summary</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
-                    string|null&nbsp;
-                </span><span class="text-primary">$diff</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>&nbsp;
+                </span><span class="text-primary">$filesystem</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Resource-DifferInterface.html"><abbr title="\FastForward\DevTools\Resource\DifferInterface">DifferInterface</abbr></a>&nbsp;
+                </span><span class="text-primary">$differ</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3475,12 +2945,12 @@
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$status</code>
+                            <code class="text-primary fw-semibold mb-0">$filesystem</code>
 
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                string
+                                <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>
                             </span>
 
                                                     </div>
@@ -3495,7 +2965,7 @@
                 </div>
 
                 <div>
-                    <p>the comparison status for the source and target files</p>
+                    <p>the filesystem used to read compared file contents</p>
 
                 </div>
             </div>
@@ -3507,12 +2977,12 @@
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$summary</code>
+                            <code class="text-primary fw-semibold mb-0">$differ</code>
 
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                string
+                                <a href="classes/FastForward-DevTools-Resource-DifferInterface.html"><abbr title="\FastForward\DevTools\Resource\DifferInterface">DifferInterface</abbr></a>
                             </span>
 
                                                     </div>
@@ -3527,7 +2997,7 @@
                 </div>
 
                 <div>
-                    <p>the human-readable summary for console output</p>
+                    <p>the differ used to generate unified diffs</p>
 
                 </div>
             </div>
@@ -3536,10 +3006,546 @@
                         </div>
                     </div>
                 </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+    
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_colorize">
+                <span class="text-primary">colorize()</span>
+                <a
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_colorize"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Public</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">132</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Colorizes a unified diff for decorated console output.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">public</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">colorize</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$diff</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
                             <code class="text-primary fw-semibold mb-0">$diff</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the plain unified diff</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            string
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the colorized diff using Symfony Console tags</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_diff">
+                <span class="text-primary">diff()</span>
+                <a
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_diff"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Public</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">54</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Compares a source file against the target file that would be overwritten.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">public</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">diff</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$targetPath</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Resource-FileDiff.html"><abbr title="\FastForward\DevTools\Resource\FileDiff">FileDiff</abbr></a></span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$sourcePath</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the source file path that would replace the target</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$targetPath</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the existing target file path</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            <a href="classes/FastForward-DevTools-Resource-FileDiff.html"><abbr title="\FastForward\DevTools\Resource\FileDiff">FileDiff</abbr></a>
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the rendered comparison result</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_diffContents">
+                <span class="text-primary">diffContents()</span>
+                <a
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_diffContents"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Public</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">90</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Compares managed content against the current target contents.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">public</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">diffContents</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$sourceLabel</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$targetPath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$sourceContent</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string|null&nbsp;
+                </span><span class="text-primary">$targetContent</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string|null&nbsp;
+                </span><span class="text-primary">$changedSummary</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Resource-FileDiff.html"><abbr title="\FastForward\DevTools\Resource\FileDiff">FileDiff</abbr></a></span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$sourceLabel</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the human-readable source label shown in summaries</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$targetPath</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the target file path</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$sourceContent</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the generated or source content</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$targetContent</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string|null
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the current target content, or null when the target does not exist</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$changedSummary</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -3561,7 +3567,7 @@
                 </div>
 
                 <div>
-                    <p>the optional unified diff payload</p>
+                    <p>an optional changed-state summary override</p>
 
                 </div>
             </div>
@@ -3577,14 +3583,48 @@
 
         
     
-    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            <a href="classes/FastForward-DevTools-Resource-FileDiff.html"><abbr title="\FastForward\DevTools\Resource\FileDiff">FileDiff</abbr></a>
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the rendered comparison result</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="method_diff">
-                <span class="text-primary">diff()</span>
+            <h4 class="h5 mb-2" id="method_formatForConsole">
+                <span class="text-primary">formatForConsole()</span>
                 <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_diff"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_formatForConsole"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3608,17 +3648,17 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">86</span>
+    <span class="badge text-bg-light border">171</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Returns the optional unified diff payload.</p>
+        <p class="lead text-body-secondary mb-0">Formats a diff payload for console output.</p>
     </div>
 
 
@@ -3630,7 +3670,11 @@
     
     
     
-    <span class="text-primary fw-semibold">diff</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
+    <span class="text-primary fw-semibold">formatForConsole</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string|null&nbsp;
+                </span><span class="text-primary">$diff</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    bool&nbsp;
+                </span><span class="text-primary">$decorated</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3639,7 +3683,80 @@
     
     
 
-    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$diff</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string|null
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the plain unified diff, if available</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$decorated</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                bool
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>whether console decoration is enabled</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
     
 
         
@@ -3668,7 +3785,7 @@
                 </div>
 
                 <div>
-                    <p>the diff payload, or null when no text diff is available</p>
+                    <p>the diff payload ready for console output</p>
 
                 </div>
             </div>
@@ -3682,10 +3799,10 @@
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="method_isChanged">
-                <span class="text-primary">isChanged()</span>
+            <h4 class="h5 mb-2" id="method_isBinary">
+                <span class="text-primary">isBinary()</span>
                 <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isChanged"
+    href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_isBinary"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3695,7 +3812,7 @@
             </h4>
 
             <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
+                <span class="badge text-bg-light border text-dark">Private</span>
 
                 
                 
@@ -3709,29 +3826,31 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
+    <abbr title="src/Resource/FileDiffer.php" class="text-decoration-none mb-0">
+        <a href="files/src-resource-filediffer.html"><abbr title="src/Resource/FileDiffer.php">FileDiffer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">106</span>
+    <span class="badge text-bg-light border">191</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Reports whether the compared files produced a text diff.</p>
+        <p class="lead text-body-secondary mb-0">Reports whether the given content should be treated as binary.</p>
     </div>
 
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">public</span>
+    <span class="badge text-bg-light border text-dark">private</span>
 
     
     
     
     
-    <span class="text-primary fw-semibold">isChanged</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    <span class="text-primary fw-semibold">isBinary</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$content</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3740,7 +3859,48 @@
     
     
 
-    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$content</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the content to inspect</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
     
 
         
@@ -3769,310 +3929,7 @@
                 </div>
 
                 <div>
-                    <p>true when a text diff is available</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_isUnchanged">
-                <span class="text-primary">isUnchanged()</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isUnchanged"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">96</span>
-
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Reports whether the compared files already match.</p>
-    </div>
-
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">public</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">isUnchanged</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-    
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            bool
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>true when the source and target contents are identical</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_status">
-                <span class="text-primary">status()</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_status"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">66</span>
-
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Returns the comparison status.</p>
-    </div>
-
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">public</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">status</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-    
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            string
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the comparison status value</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_summary">
-                <span class="text-primary">summary()</span>
-                <a
-    href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_summary"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Public</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Resource/OverwriteDiffResult.php" class="text-decoration-none mb-0">
-        <a href="files/src-resource-overwritediffresult.html"><abbr title="src/Resource/OverwriteDiffResult.php">OverwriteDiffResult.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">76</span>
-
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Returns the human-readable summary.</p>
-    </div>
-
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">public</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">summary</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-    
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            string
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the summary for console output</p>
+                    <p>true when the content should not receive a text diff</p>
 
                 </div>
             </div>
@@ -4105,7 +3962,7 @@
                 <pre
                     class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
                     style="max-height: 70vh; overflow-y: auto;"
-                    data-src="files/src/Resource/OverwriteDiffResult.php.txt"
+                    data-src="files/src/Resource/FileDiffer.php.txt"
                 ></pre>
             </div>
         </div>
@@ -4209,51 +4066,15 @@
             <div>
                 <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
                 <div class="list-group list-group-flush">
-                                            <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#toc-constants">
-                            Constants
-                        </a>
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#toc-properties">
+                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Resource-FileDiffer.html#toc-properties">
                             Properties
                         </a>
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#toc-methods">
+                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Resource-FileDiffer.html#toc-methods">
                             Methods
                         </a>
                                     </div>
             </div>
 
-                            <div>
-                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
-                        <i class="fas fa-thumbtack text-warning"></i>
-                        <span>Constants</span>
-                    </div>
-
-                    <div class="list-group list-group-flush">
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_BINARY"
-                            >
-                                <span class="text-truncate">STATUS_BINARY</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_CHANGED"
-                            >
-                                <span class="text-truncate">STATUS_CHANGED</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNCHANGED"
-                            >
-                                <span class="text-truncate">STATUS_UNCHANGED</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNREADABLE"
-                            >
-                                <span class="text-truncate">STATUS_UNREADABLE</span>
-                                                            </a>
-                                            </div>
-                </div>
             
                             <div>
                     <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
@@ -4264,21 +4085,15 @@
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_diff"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#property_differ"
                             >
-                                <span class="text-truncate">$diff</span>
+                                <span class="text-truncate">$differ</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_status"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#property_filesystem"
                             >
-                                <span class="text-truncate">$status</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_summary"
-                            >
-                                <span class="text-truncate">$summary</span>
+                                <span class="text-truncate">$filesystem</span>
                                                             </a>
                                             </div>
                 </div>
@@ -4292,39 +4107,39 @@
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method___construct"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#method___construct"
                             >
                                 <span class="text-truncate">__construct()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_diff"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_colorize"
+                            >
+                                <span class="text-truncate">colorize()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_diff"
                             >
                                 <span class="text-truncate">diff()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isChanged"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_diffContents"
                             >
-                                <span class="text-truncate">isChanged()</span>
+                                <span class="text-truncate">diffContents()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isUnchanged"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_formatForConsole"
                             >
-                                <span class="text-truncate">isUnchanged()</span>
+                                <span class="text-truncate">formatForConsole()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_status"
+                                href="classes/FastForward-DevTools-Resource-FileDiffer.html#method_isBinary"
                             >
-                                <span class="text-truncate">status()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_summary"
-                            >
-                                <span class="text-truncate">summary()</span>
+                                <span class="text-truncate">isBinary()</span>
                                                             </a>
                                             </div>
                 </div>

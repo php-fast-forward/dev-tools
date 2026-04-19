@@ -2428,6 +2428,22 @@ vendor/bin/dev-tools license [options]</code></pre>
         
         <dd>Path to the target LICENSE file. Default: <code>LICENSE</code>
 .</dd>
+                                <dt><code>--dry-run</code>
+</dt>
+        
+        <dd>Preview managed <code>LICENSE</code>
+ drift without writing the file.</dd>
+                                <dt><code>--check</code>
+</dt>
+        
+        <dd>Exit with code <code>1</code>
+ when <code>LICENSE</code>
+ needs an update.</dd>
+                                <dt><code>--interactive</code>
+</dt>
+        
+        <dd>Prompt before writing the generated <code>LICENSE</code>
+ content.</dd>
             </dl>
 
     </section>
@@ -2487,7 +2503,8 @@ GPL-3.0, LGPL-3.0, ISC, MPL-2.0.</li>
     <li class="dash">Resolves placeholders using information from <code>composer.json</code>
 .</li>
 
-    <li class="dash">Skips generation if a LICENSE file already exists.</li>
+    <li class="dash">Compares the generated content with the existing file before deciding whether
+to write.</li>
 
 </ul>
 

@@ -2443,14 +2443,15 @@ secrets: inherit</code></pre>
     <p><strong>Behavior:</strong>
 
 <em>   **Main Branch**: Runs all checks and deploys the final reports to the root of the ``gh-pages`` branch.
-</em>
-   <strong>Pull Requests</strong>
-:
-    <em>   Generates a **Preview** of the documentation, coverage, and metrics.
     </em>
-   Deploys the preview to <code>gh-pages</code>
- under <code>previews/pr-{number}/</code>
-.
+   Runs a post-deploy health check against the published reports index and coverage URLs with retry/backoff to account for Pages propagation.
+<em>   **Pull Requests**:
+    </em>
+   Generates a <strong>Preview</strong>
+ of the documentation, coverage, and metrics.
+    <em>   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.
+    </em>
+   Verifies the preview index and coverage URLs after deployment before posting preview links.
     <em>   Posts a **Sticky Comment** on the PR with links to the live preview, coverage report, and metrics site.
     </em>
    <strong>Cleanup</strong>

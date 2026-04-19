@@ -255,6 +255,15 @@
             <li class="success">Filter will remove configured paths even with slash variants</li>
             <li class="success">Filter will preserve original candidate order</li>
         </ul>
+        <h2>File Differ (FastForward\DevTools\Tests\Resource\FileDiffer)</h2>
+        <ul>
+            <li class="success">Render will return changed result with unified diff</li>
+            <li class="success">Render will return unchanged result when contents match</li>
+            <li class="success">Render will return binary result when null bytes are detected</li>
+            <li class="success">Render will return unreadable result when contents cannot be read</li>
+            <li class="success">Render contents will use the injected differ without custom headers</li>
+            <li class="success">Colorize will wrap unified diff lines with console colors</li>
+        </ul>
         <h2>Filesystem (FastForward\DevTools\Tests\Filesystem\Filesystem)</h2>
         <ul>
             <li class="success">Get absolute path will return absolute for relative path</li>
@@ -357,13 +366,6 @@
             <li class="success">Execute will run php metrics</li>
             <li class="success">Execute will skip unset optional reports</li>
             <li class="success">Execute will include junit report when requested</li>
-        </ul>
-        <h2>Overwrite Diff Renderer (FastForward\DevTools\Tests\Resource\OverwriteDiffRenderer)</h2>
-        <ul>
-            <li class="success">Render will return changed result with unified diff</li>
-            <li class="success">Render will return unchanged result when contents match</li>
-            <li class="success">Render will return binary result when null bytes are detected</li>
-            <li class="success">Render will return unreadable result when contents cannot be read</li>
         </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>
@@ -485,6 +487,7 @@
         <ul>
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will queue dedicated synchronization commands</li>
+            <li class="success">Execute will disable detached mode when checking drift</li>
         </ul>
         <h2>Synchronize Result (FastForward\DevTools\Tests\Agent\Skills\SynchronizeResult)</h2>
         <ul>

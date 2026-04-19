@@ -2430,8 +2430,8 @@ target is resolved to an absolute path using <code>FilesystemInterface</code>
             <h2>Usage</h2>
 
             <pre><code class="language-bash">composer copy-resource --source &lt;path&gt; --target &lt;path&gt;
-composer dev-tools copy-resource -- --source &lt;path&gt; --target &lt;path&gt; [--overwrite]
-vendor/bin/dev-tools copy-resource --source &lt;path&gt; --target &lt;path&gt; [--overwrite]</code></pre>
+composer dev-tools copy-resource -- --source &lt;path&gt; --target &lt;path&gt; [--overwrite] [--dry-run] [--check] [--interactive]
+vendor/bin/dev-tools copy-resource --source &lt;path&gt; --target &lt;path&gt; [--overwrite] [--dry-run] [--check] [--interactive]</code></pre>
 
     </section>
 
@@ -2456,6 +2456,20 @@ vendor/bin/dev-tools copy-resource --source &lt;path&gt; --target &lt;path&gt; [
 are skipped. When a text file changes, the command shows a unified diff
 before copying. Unchanged targets are reported as skipped, and binary or
 unreadable files fall back to a clear non-diff message.</dd>
+                                <dt><code>--dry-run</code>
+</dt>
+        
+        <dd>Preview drift for existing managed resources without writing files.</dd>
+                                <dt><code>--check</code>
+</dt>
+        
+        <dd>Exit with code <code>1</code>
+ when an existing managed resource differs from the
+packaged source.</dd>
+                                <dt><code>--interactive</code>
+</dt>
+        
+        <dd>Prompt before replacing a drifted resource.</dd>
             </dl>
 
     </section>

@@ -2463,6 +2463,20 @@ vendor/bin/dev-tools dev-tools:sync [options]</code></pre>
 <code>copy-resource</code>
  show a readable diff in the sync output before they are
 replaced.</dd>
+                                <dt><code>--dry-run</code>
+</dt>
+        
+        <dd>Preview managed-file drift without writing changes.</dd>
+                                <dt><code>--check</code>
+</dt>
+        
+        <dd>Report managed-file drift and exit with code <code>1</code>
+ when updates are
+required.</dd>
+                                <dt><code>--interactive</code>
+</dt>
+        
+        <dd>Prompt before replacing drifted managed files.</dd>
             </dl>
 
     </section>
@@ -2479,6 +2493,16 @@ replaced.</dd>
     <p>Sync with overwrite:</p>
 
             <pre><code class="language-bash">composer dev-tools:sync --overwrite</code></pre>
+
+            
+    <p>Preview managed-file drift:</p>
+
+            <pre><code class="language-bash">composer dev-tools:sync --dry-run</code></pre>
+
+            
+    <p>Fail in CI when managed files drift:</p>
+
+            <pre><code class="language-bash">composer dev-tools:sync --check</code></pre>
 
     </section>
 
@@ -2523,10 +2547,29 @@ replaced.</dd>
  is enabled, replaced text resources emit a unified diff
 so terminal sessions and CI logs show what changed.</li>
 
+    <li class="dash"><code>--dry-run</code>
+ and <code>--check</code>
+ verify managed-file drift for <code>composer.json</code>
+,
+copied resources, <code>.gitignore</code>
+, <code>.gitattributes</code>
+, <code>LICENSE</code>
+, and Git
+hooks.</li>
+
+    <li class="dash"><code>--interactive</code>
+ prompts before replacing drifted managed files when the
+command is running in an interactive terminal.</li>
+
     <li class="dash">Creates <code>.github/wiki</code>
  as a git submodule when missing.</li>
 
     <li class="dash">Calls other commands in sequence.</li>
+
+    <li class="dash"><code>wiki</code>
+ and <code>skills</code>
+ are skipped in preview/check modes until they expose a
+non-destructive verification path.</li>
 
 </ul>
 

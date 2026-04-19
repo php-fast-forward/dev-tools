@@ -2431,6 +2431,22 @@ vendor/bin/dev-tools gitignore [options]</code></pre>
  (optional)</dt>
         
         <dd>Path to the target .gitignore file (project). Default: project root .gitignore.</dd>
+                                <dt><code>--dry-run</code>
+</dt>
+        
+        <dd>Preview managed <code>.gitignore</code>
+ drift without writing the file.</dd>
+                                <dt><code>--check</code>
+</dt>
+        
+        <dd>Exit with code <code>1</code>
+ when <code>.gitignore</code>
+ needs an update.</dd>
+                                <dt><code>--interactive</code>
+</dt>
+        
+        <dd>Prompt before updating <code>.gitignore</code>
+.</dd>
             </dl>
 
     </section>
@@ -2487,6 +2503,11 @@ vendor/bin/dev-tools gitignore [options]</code></pre>
     <li class="dash">Duplicates are removed and entries are sorted alphabetically.</li>
 
     <li class="dash">Uses the Reader, Merger, and Writer components from the GitIgnore namespace.</li>
+
+    <li class="dash"><code>--dry-run</code>
+ and <code>--check</code>
+ render a diff against the normalized managed
+result before deciding whether to write.</li>
 
 </ul>
 

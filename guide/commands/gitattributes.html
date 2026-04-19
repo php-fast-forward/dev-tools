@@ -2421,8 +2421,24 @@ vendor/bin/dev-tools gitattributes</code></pre>
             <section class="section " id="options">
             <h2>Options</h2>
 
-            
-    <p>This command does not accept additional options.</p>
+            <dl>
+                        <dt><code>--dry-run</code>
+</dt>
+        
+        <dd>Preview managed <code>.gitattributes</code>
+ drift without writing the file.</dd>
+                                <dt><code>--check</code>
+</dt>
+        
+        <dd>Exit with code <code>1</code>
+ when <code>.gitattributes</code>
+ needs an update.</dd>
+                                <dt><code>--interactive</code>
+</dt>
+        
+        <dd>Prompt before updating <code>.gitattributes</code>
+.</dd>
+            </dl>
 
     </section>
 
@@ -2484,6 +2500,11 @@ paths in exported archives.</li>
 
     <li class="dash">Uses CandidateProvider, ExistenceChecker, ExportIgnoreFilter, Merger,
 Reader, and Writer components from the GitAttributes namespace.</li>
+
+    <li class="dash"><code>--dry-run</code>
+ and <code>--check</code>
+ render a diff against the normalized managed
+result before deciding whether to write.</li>
 
 </ul>
 
