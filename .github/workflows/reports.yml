@@ -30,7 +30,22 @@ concurrency:
     cancel-in-progress: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
 
 jobs:
+    resolve_php:
+        name: Resolve PHP Version
+        runs-on: ubuntu-latest
+        outputs:
+            php-version: ${{ steps.resolve.outputs.php-version }}
+            php-version-source: ${{ steps.resolve.outputs.php-version-source }}
+
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Resolve workflow PHP version
+              id: resolve
+              run: python3 .github/scripts/resolve_php_version.py
+
     reports:
+        needs: resolve_php
         if: github.event_name != 'schedule' && !(github.event_name == 'workflow_dispatch' && inputs.cleanup-previews) && (github.event_name != 'pull_request' || github.event.action != 'closed')
         name: Generate Reports
         runs-on: ubuntu-latest
@@ -49,7 +64,7 @@ jobs:
             - name: Setup PHP
               uses: shivammathur/setup-php@v2
               with:
-                php-version: '8.3'
+                php-version: ${{ needs.resolve_php.outputs.php-version }}
                 extensions: pcov, pcntl
                 coverage: pcov
 
@@ -57,8 +72,9 @@ jobs:
               uses: actions/cache@v5
               with:
                 path: /tmp/composer-cache
-                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                key: ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-${{ hashFiles('**/composer.lock') }}
                 restore-keys: |
+                  ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-
                   ${{ runner.os }}-composer-
 
             - name: Install dependencies
