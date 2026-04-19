@@ -2422,19 +2422,19 @@ vendor/bin/dev-tools reports -- [options]</code></pre>
  (optional)</dt>
         
         <dd>The target directory for the generated documentation.
-Default: <code>public</code>
+Default: <code>.dev-tools</code>
 .</dd>
                                 <dt><code>--coverage, -c</code>
  (optional)</dt>
         
         <dd>The target directory for the generated test coverage report.
-Default: <code>public/coverage</code>
+Default: <code>.dev-tools/coverage</code>
 .</dd>
                                 <dt><code>--metrics</code>
  (optional)</dt>
         
         <dd>The target directory for the generated metrics report.
-Default: <code>public/metrics</code>
+Default: <code>.dev-tools/metrics</code>
 .</dd>
             </dl>
 
@@ -2451,12 +2451,12 @@ Default: <code>public/metrics</code>
             
     <p>Generate to custom directories:</p>
 
-            <pre><code class="language-bash">composer reports --target=build --coverage=build/coverage</code></pre>
+            <pre><code class="language-bash">composer reports --target=.dev-tools --coverage=.dev-tools/coverage</code></pre>
 
             
     <p>Generate reports with a custom metrics directory:</p>
 
-            <pre><code class="language-bash">composer reports --metrics=build/metrics</code></pre>
+            <pre><code class="language-bash">composer reports --metrics=.dev-tools/metrics</code></pre>
 
     </section>
 

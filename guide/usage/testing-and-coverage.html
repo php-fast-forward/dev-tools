@@ -2411,9 +2411,9 @@ when <code>--coverage</code>
             <section class="section " id="useful-examples">
             <h2>Useful Examples</h2>
 
-            <pre><code class="language-bash">composer dev-tools tests
-composer dev-tools tests -- --filter=PluginTest
-vendor/bin/dev-tools tests --coverage=public/coverage
+            <pre><code class="language-bash">composer tests
+composer tests -- --filter=PluginTest
+vendor/bin/dev-tools tests --coverage=.dev-tools/coverage
 vendor/bin/dev-tools tests --no-cache --bootstrap=tests/bootstrap.php</code></pre>
 
     </section>
@@ -2422,22 +2422,22 @@ vendor/bin/dev-tools tests --no-cache --bootstrap=tests/bootstrap.php</code></pr
             <h2>Coverage Outputs</h2>
 
             
-    <p>When <code>--coverage=public/coverage</code>
+    <p>When <code>--coverage=.dev-tools/coverage</code>
  is used, PHPUnit writes:</p>
 
             
 
 <ul>
-    <li class="dash"><code>public/coverage/index.html</code>
+    <li class="dash"><code>.dev-tools/coverage/index.html</code>
 </li>
 
-    <li class="dash"><code>public/coverage/testdox.html</code>
+    <li class="dash"><code>.dev-tools/coverage/testdox.html</code>
 </li>
 
-    <li class="dash"><code>public/coverage/clover.xml</code>
+    <li class="dash"><code>.dev-tools/coverage/clover.xml</code>
 </li>
 
-    <li class="dash"><code>public/coverage/coverage.php</code>
+    <li class="dash"><code>.dev-tools/coverage/coverage.php</code>
 </li>
 
 </ul>
@@ -2489,7 +2489,7 @@ external tooling or build custom reports:</p>
             <pre><code class="language-php">use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 
 $loader = new CoverageSummaryLoader();
-$summary = $loader-&gt;load(&#039;public/coverage/coverage.php&#039;);
+$summary = $loader-&gt;load(&#039;.dev-tools/coverage/coverage.php&#039;);
 
 $summary-&gt;executedLines();      // e.g., 142
 $summary-&gt;executableLines();   // e.g., 168

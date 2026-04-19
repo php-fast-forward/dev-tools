@@ -2378,8 +2378,7 @@
     <p>The <code>reports</code>
  command is the packaged &quot;build the site&quot; workflow. It is aimed
 at local verification and at the reusable GitHub Actions workflow that
-publishes the <code>public/</code>
- directory.</p>
+publishes a generated reports directory to GitHub Pages.</p>
 
             <section class="section " id="what-the-command-runs">
             <h2>What the Command Runs</h2>
@@ -2391,13 +2390,13 @@ publishes the <code>public/</code>
             
     
 <ol start="1" type="1">
-    <li value="1"><code>docs --target public</code>
+    <li value="1"><code>docs --target .dev-tools</code>
 </li>
 
-    <li value="2"><code>tests --coverage public/coverage --no-progress --coverage-summary</code>
+    <li value="2"><code>tests --coverage .dev-tools/coverage --no-progress --coverage-summary</code>
 </li>
 
-    <li value="3"><code>metrics --target public/metrics --junit public/coverage/junit.xml</code>
+    <li value="3"><code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
 </li>
 
 </ol>
@@ -2413,25 +2412,25 @@ publishes the <code>public/</code>
             
 
 <ul>
-    <li class="dash">the documentation site rooted at <code>public/</code>
+    <li class="dash">the documentation site rooted at <code>.dev-tools/</code>
 ;</li>
 
     <li class="dash">guide pages generated from the local <code>docs/</code>
  source;</li>
 
-    <li class="dash">coverage reports inside <code>public/coverage/</code>
+    <li class="dash">coverage reports inside <code>.dev-tools/coverage/</code>
 ;</li>
 
-    <li class="dash">PhpMetrics output inside <code>public/metrics/</code>
+    <li class="dash">PhpMetrics output inside <code>.dev-tools/metrics/</code>
 ;</li>
 
-    <li class="dash"><code>public/coverage/testdox.html</code>
- and <code>public/coverage/clover.xml</code>
+    <li class="dash"><code>.dev-tools/coverage/testdox.html</code>
+ and <code>.dev-tools/coverage/clover.xml</code>
  for
 human and CI consumption;</li>
 
-    <li class="dash"><code>public/metrics/report.json</code>
- and <code>public/metrics/report-summary.json</code>
+    <li class="dash"><code>.dev-tools/metrics/report.json</code>
+ and <code>.dev-tools/metrics/report-summary.json</code>
  for
 preview artifacts and machine-readable metrics summaries.</li>
 
@@ -2449,8 +2448,8 @@ preview artifacts and machine-readable metrics summaries.</li>
 ;</li>
 
     <li class="dash">the reusable <code>reports.yml</code>
- workflow publishes <code>public/</code>
- to GitHub Pages;</li>
+ workflow publishes the generated reports
+directory to GitHub Pages;</li>
 
     <li class="dash">the live documentation, coverage, metrics, and Testdox links all depend on this
 directory structure staying stable.</li>
