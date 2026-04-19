@@ -892,6 +892,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="guide/commands/funding.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            funding
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="guide/commands/gitignore.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1883,6 +1905,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-funding.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Funding
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-gitattributes.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2421,22 +2465,27 @@
     <li value="4"><code>copy-resource</code>
  - copies dependabot.yml</li>
 
-    <li value="5"><code>wiki --init</code>
+    <li value="5"><code>funding</code>
+ - synchronizes <code>composer.json</code>
+ funding metadata with <code>.github/FUNDING.yml</code>
+</li>
+
+    <li value="6"><code>wiki --init</code>
  - initializes wiki as submodule</li>
 
-    <li value="6"><code>gitignore</code>
+    <li value="7"><code>gitignore</code>
  - merges .gitignore files</li>
 
-    <li value="7"><code>gitattributes</code>
+    <li value="8"><code>gitattributes</code>
  - manages export-ignore rules</li>
 
-    <li value="8"><code>skills</code>
+    <li value="9"><code>skills</code>
  - synchronizes packaged skills</li>
 
-    <li value="9"><code>license</code>
+    <li value="10"><code>license</code>
  - generates LICENSE file</li>
 
-    <li value="10"><code>git-hooks</code>
+    <li value="11"><code>git-hooks</code>
  - installs Git hooks</li>
 
 </ol>
@@ -2537,10 +2586,16 @@ required.</dd>
 
 <ul>
     <li class="dash">Updates <code>composer.json</code>
- scripts and extra configuration.</li>
+ scripts, extra configuration, and managed funding
+metadata.</li>
 
     <li class="dash">Copies missing workflow stubs, <code>.editorconfig</code>
 , and <code>dependabot.yml</code>
+.</li>
+
+    <li class="dash">Synchronizes supported funding metadata between <code>composer.json</code>
+ and
+<code>.github/FUNDING.yml</code>
 .</li>
 
     <li class="dash">When <code>--overwrite</code>
@@ -2551,11 +2606,11 @@ so terminal sessions and CI logs show what changed.</li>
  and <code>--check</code>
  verify managed-file drift for <code>composer.json</code>
 ,
-copied resources, <code>.gitignore</code>
+funding metadata, copied resources, <code>.gitignore</code>
 , <code>.gitattributes</code>
-, <code>LICENSE</code>
-, and Git
-hooks.</li>
+,
+<code>LICENSE</code>
+, and Git hooks.</li>
 
     <li class="dash"><code>--interactive</code>
  prompts before replacing drifted managed files when the

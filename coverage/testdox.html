@@ -140,6 +140,11 @@
             <li class="success">Execute with invalid min coverage will return failure</li>
             <li class="success">Execute will return failure if process queue fails</li>
         </ul>
+        <h2>Composer Funding Codec (FastForward\DevTools\Tests\Funding\ComposerFundingCodec)</h2>
+        <ul>
+            <li class="success">Parse will normalize supported and unsupported funding entries</li>
+            <li class="success">Dump will write supported funding and preserve unsupported entries</li>
+        </ul>
         <h2>Composer Json (FastForward\DevTools\Tests\Composer\Json\ComposerJson)</h2>
         <ul>
             <li class="success">Identification accessors will return configured data</li>
@@ -284,6 +289,24 @@
         <h2>Funding (FastForward\DevTools\Tests\Composer\Json\Schema\Funding)</h2>
         <ul>
             <li class="success">Accessors will return values provided to constructor</li>
+        </ul>
+        <h2>Funding Command (FastForward\DevTools\Tests\Console\Command\FundingCommand)</h2>
+        <ul>
+            <li class="success">Execute will create composer funding from funding yaml</li>
+            <li class="success">Execute will create funding yaml from composer funding</li>
+            <li class="success">Execute will merge both sources without duplicating entries</li>
+            <li class="success">Execute will be idempotent when funding metadata already matches</li>
+            <li class="success">Command will set expected name description and help</li>
+        </ul>
+        <h2>Funding Profile Merger (FastForward\DevTools\Tests\Funding\FundingProfileMerger)</h2>
+        <ul>
+            <li class="success">Merge will combine supported funding and preserve unsupported entries</li>
+        </ul>
+        <h2>Funding Yaml Codec (FastForward\DevTools\Tests\Funding\FundingYamlCodec)</h2>
+        <ul>
+            <li class="success">Parse will normalize supported and unsupported yaml entries</li>
+            <li class="success">Dump will render scalar and list funding keys</li>
+            <li class="success">Dump will render single custom url as list</li>
         </ul>
         <h2>Generator (FastForward\DevTools\Tests\License\Generator)</h2>
         <ul>
