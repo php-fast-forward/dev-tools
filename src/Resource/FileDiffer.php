@@ -20,27 +20,28 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Resource;
 
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use SebastianBergmann\Diff\Differ;
-use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use Throwable;
 
-use function sprintf;
+use function explode;
+use function implode;
 use function str_contains;
-use function trim;
+use function str_starts_with;
 
 /**
- * Renders deterministic overwrite summaries and unified diffs for copied files.
+ * Renders deterministic summaries and unified diffs for file comparisons.
  */
-final readonly class OverwriteDiffRenderer
+final readonly class FileDiffer
 {
     /**
-     * Creates a new overwrite diff renderer.
+     * Creates a new file differ.
      *
      * @param FilesystemInterface $filesystem the filesystem used to read compared file contents
+     * @param DifferInterface $differ the differ used to generate unified diffs
      */
-    public function __construct(private FilesystemInterface $filesystem)
-    {
-    }
+    public function __construct(
+        private FilesystemInterface $filesystem,
+        private DifferInterface $differ,
+    ) {}
 
     /**
      * Compares a source file against the target file that would be overwritten.
@@ -48,17 +49,17 @@ final readonly class OverwriteDiffRenderer
      * @param string $sourcePath the source file path that would replace the target
      * @param string $targetPath the existing target file path
      *
-     * @return OverwriteDiffResult the rendered comparison result
+     * @return FileDiff the rendered comparison result
      */
-    public function render(string $sourcePath, string $targetPath): OverwriteDiffResult
+    public function diff(string $sourcePath, string $targetPath): FileDiff
     {
         try {
             $sourceContent = $this->filesystem->readFile($sourcePath);
             $targetContent = $this->filesystem->readFile($targetPath);
         } catch (Throwable) {
-            return new OverwriteDiffResult(
-                OverwriteDiffResult::STATUS_UNREADABLE,
-                sprintf(
+            return new FileDiff(
+                FileDiff::STATUS_UNREADABLE,
+                \sprintf(
                     'Target %s will be overwritten from %s, but the existing or source content could not be read.',
                     $targetPath,
                     $sourcePath,
@@ -66,66 +67,44 @@ final readonly class OverwriteDiffRenderer
             );
         }
 
-        if ($sourceContent === $targetContent) {
-            return new OverwriteDiffResult(
-                OverwriteDiffResult::STATUS_UNCHANGED,
-                sprintf('Target %s already matches source %s; overwrite skipped.', $targetPath, $sourcePath),
-            );
-        }
-
-        if ($this->isBinary($sourceContent) || $this->isBinary($targetContent)) {
-            return new OverwriteDiffResult(
-                OverwriteDiffResult::STATUS_BINARY,
-                sprintf(
-                    'Target %s will be overwritten from %s, but a text diff is unavailable for binary content.',
-                    $targetPath,
-                    $sourcePath,
-                ),
-            );
-        }
-
-        $header = sprintf("--- Current: %s\n+++ Source: %s\n", $targetPath, $sourcePath);
-        return $this->renderContents(
+        return $this->diffContents(
             $sourcePath,
             $targetPath,
             $sourceContent,
             $targetContent,
-            sprintf('Overwriting resource %s from %s.', $targetPath, $sourcePath),
-            $header,
+            \sprintf('Overwriting resource %s from %s.', $targetPath, $sourcePath),
         );
     }
 
     /**
      * Compares managed content against the current target contents.
      *
-     * @param string $sourceLabel the human-readable source label shown in summaries and diffs
+     * @param string $sourceLabel the human-readable source label shown in summaries
      * @param string $targetPath the target file path
      * @param string $sourceContent the generated or source content
      * @param string|null $targetContent the current target content, or null when the target does not exist
      * @param string|null $changedSummary an optional changed-state summary override
-     * @param string|null $diffHeader an optional unified diff header override
      *
-     * @return OverwriteDiffResult the rendered comparison result
+     * @return FileDiff the rendered comparison result
      */
-    public function renderContents(
+    public function diffContents(
         string $sourceLabel,
         string $targetPath,
         string $sourceContent,
         ?string $targetContent,
         ?string $changedSummary = null,
-        ?string $diffHeader = null,
-    ): OverwriteDiffResult {
+    ): FileDiff {
         if (null !== $targetContent && $sourceContent === $targetContent) {
-            return new OverwriteDiffResult(
-                OverwriteDiffResult::STATUS_UNCHANGED,
-                sprintf('Target %s already matches source %s; overwrite skipped.', $targetPath, $sourceLabel),
+            return new FileDiff(
+                FileDiff::STATUS_UNCHANGED,
+                \sprintf('Target %s already matches source %s; overwrite skipped.', $targetPath, $sourceLabel),
             );
         }
 
         if ($this->isBinary($sourceContent) || (null !== $targetContent && $this->isBinary($targetContent))) {
-            return new OverwriteDiffResult(
-                OverwriteDiffResult::STATUS_BINARY,
-                sprintf(
+            return new FileDiff(
+                FileDiff::STATUS_BINARY,
+                \sprintf(
                     'Target %s will be overwritten from %s, but a text diff is unavailable for binary content.',
                     $targetPath,
                     $sourceLabel,
@@ -134,16 +113,72 @@ final readonly class OverwriteDiffRenderer
         }
 
         $targetContent ??= '';
-        $changedSummary ??= sprintf('Overwriting resource %s from %s.', $targetPath, $sourceLabel);
-        $diffHeader ??= sprintf("--- Current: %s\n+++ Source: %s\n", $targetPath, $sourceLabel);
+        $changedSummary ??= \sprintf('Overwriting resource %s from %s.', $targetPath, $sourceLabel);
 
-        $differ = new Differ(new UnifiedDiffOutputBuilder($diffHeader));
-
-        return new OverwriteDiffResult(
-            OverwriteDiffResult::STATUS_CHANGED,
+        return new FileDiff(
+            FileDiff::STATUS_CHANGED,
             $changedSummary,
-            trim($differ->diff($targetContent, $sourceContent)),
+            $this->differ->diff($targetContent, $sourceContent),
         );
+    }
+
+    /**
+     * Colorizes a unified diff for decorated console output.
+     *
+     * @param string $diff the plain unified diff
+     *
+     * @return string the colorized diff using Symfony Console tags
+     */
+    public function colorize(string $diff): string
+    {
+        $lines = explode("\n", $diff);
+
+        foreach ($lines as &$line) {
+            if (str_starts_with($line, '+++') || str_starts_with($line, '---')) {
+                $line = \sprintf('<fg=cyan>%s</>', $line);
+
+                continue;
+            }
+
+            if (str_starts_with($line, '@@')) {
+                $line = \sprintf('<fg=yellow>%s</>', $line);
+
+                continue;
+            }
+
+            if (str_starts_with($line, '+')) {
+                $line = \sprintf('<fg=green>%s</>', $line);
+
+                continue;
+            }
+
+            if (str_starts_with($line, '-')) {
+                $line = \sprintf('<fg=red>%s</>', $line);
+            }
+        }
+
+        return implode("\n", $lines);
+    }
+
+    /**
+     * Formats a diff payload for console output.
+     *
+     * @param string|null $diff the plain unified diff, if available
+     * @param bool $decorated whether console decoration is enabled
+     *
+     * @return string|null the diff payload ready for console output
+     */
+    public function formatForConsole(?string $diff, bool $decorated): ?string
+    {
+        if (null === $diff) {
+            return null;
+        }
+
+        if (! $decorated) {
+            return $diff;
+        }
+
+        return $this->colorize($diff);
     }
 
     /**

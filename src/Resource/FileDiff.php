@@ -20,9 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Resource;
 
 /**
- * Carries the result of comparing an overwrite source and target pair.
+ * Carries the result of comparing source and target file contents.
  */
-final readonly class OverwriteDiffResult
+final readonly class FileDiff
 {
     /**
      * @var string indicates that the source and target differ and a text diff is available
@@ -45,7 +45,7 @@ final readonly class OverwriteDiffResult
     public const string STATUS_UNREADABLE = 'unreadable';
 
     /**
-     * Creates a new overwrite diff result.
+     * Creates a new file diff result.
      *
      * @param string $status the comparison status for the source and target files
      * @param string $summary the human-readable summary for console output
@@ -55,15 +55,14 @@ final readonly class OverwriteDiffResult
         private string $status,
         private string $summary,
         private ?string $diff = null,
-    ) {
-    }
+    ) {}
 
     /**
      * Returns the comparison status.
      *
      * @return string the comparison status value
      */
-    public function status(): string
+    public function getStatus(): string
     {
         return $this->status;
     }
@@ -73,7 +72,7 @@ final readonly class OverwriteDiffResult
      *
      * @return string the summary for console output
      */
-    public function summary(): string
+    public function getSummary(): string
     {
         return $this->summary;
     }
@@ -83,7 +82,7 @@ final readonly class OverwriteDiffResult
      *
      * @return string|null the diff payload, or null when no text diff is available
      */
-    public function diff(): ?string
+    public function getDiff(): ?string
     {
         return $this->diff;
     }

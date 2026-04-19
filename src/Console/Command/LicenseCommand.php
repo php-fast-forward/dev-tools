@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\GeneratorInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -47,11 +47,12 @@ final class LicenseCommand extends BaseCommand
      *
      * @param GeneratorInterface $generator the generator component
      * @param FilesystemInterface $filesystem the filesystem component
+     * @param FileDiffer $fileDiffer
      */
     public function __construct(
         private readonly GeneratorInterface $generator,
         private readonly FilesystemInterface $filesystem,
-        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
+        private readonly FileDiffer $fileDiffer,
     ) {
         parent::__construct();
     }
@@ -112,7 +113,7 @@ final class LicenseCommand extends BaseCommand
             return self::SUCCESS;
         }
 
-        $comparison = $this->overwriteDiffRenderer->renderContents(
+        $comparison = $this->fileDiffer->diffContents(
             'generated LICENSE content',
             $targetPath,
             $generatedContent,
@@ -122,10 +123,14 @@ final class LicenseCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated LICENSE content.', $targetPath),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
 
-        if ($comparison->isChanged() && null !== $comparison->diff()) {
-            $output->writeln($comparison->diff());
+        if ($comparison->isChanged()) {
+            $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
+
+            if (null !== $consoleDiff) {
+                $output->writeln($consoleDiff);
+            }
         }
 
         if ($comparison->isUnchanged()) {
@@ -167,6 +172,7 @@ final class LicenseCommand extends BaseCommand
     {
         $question = new ConfirmationQuestion(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
 
-        return (bool) $this->getHelper('question')->ask($input, $output, $question);
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 }

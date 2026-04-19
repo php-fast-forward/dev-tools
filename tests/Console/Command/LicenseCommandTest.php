@@ -24,8 +24,8 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\License\Resolver;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
-use FastForward\DevTools\Resource\OverwriteDiffResult;
+use FastForward\DevTools\Resource\FileDiff;
+use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -40,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 #[CoversClass(LicenseCommand::class)]
+#[UsesClass(FileDiff::class)]
 #[UsesClass(Resolver::class)]
 #[UsesClass(Generator::class)]
 final class LicenseCommandTest extends TestCase
@@ -67,9 +68,9 @@ final class LicenseCommandTest extends TestCase
     private ObjectProphecy $output;
 
     /**
-     * @var ObjectProphecy<OverwriteDiffRenderer>
+     * @var ObjectProphecy<FileDiffer>
      */
-    private ObjectProphecy $overwriteDiffRenderer;
+    private ObjectProphecy $fileDiffer;
 
     private LicenseCommand $command;
 
@@ -84,18 +85,23 @@ final class LicenseCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
+        $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->writeln(Argument::any());
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
             ->willReturn(false);
         $this->input->getOption('interactive')
             ->willReturn(false);
+        $this->fileDiffer->formatForConsole(Argument::cetera())
+            ->willReturn(null);
 
         $this->command = new LicenseCommand(
             $this->generator->reveal(),
             $this->filesystem->reveal(),
-            $this->overwriteDiffRenderer->reveal(),
+            $this->fileDiffer->reveal(),
         );
     }
 
@@ -132,20 +138,22 @@ final class LicenseCommandTest extends TestCase
             ->willReturn(false);
         $this->generator->generateContent()
             ->willReturn('MIT License content');
-        $this->overwriteDiffRenderer->renderContents(
+        $this->fileDiffer->diffContents(
             'generated LICENSE content',
             $targetPath,
             'MIT License content',
             null,
             'Managed file ' . $targetPath . ' will be created from generated LICENSE content.',
-        )->willReturn(new OverwriteDiffResult(
-            OverwriteDiffResult::STATUS_CHANGED,
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
             'Managed file ' . $targetPath . ' will be created from generated LICENSE content.',
         ))->shouldBeCalledOnce();
         $this->filesystem->dumpFile($targetPath, 'MIT License content')
             ->shouldBeCalledOnce();
 
-        $this->output->writeln(Argument::containingString('will be created from generated LICENSE content'))->shouldBeCalled();
+        $this->output->writeln(
+            Argument::containingString('will be created from generated LICENSE content')
+        )->shouldBeCalled();
         $this->output->writeln(Argument::containingString('LICENSE file generated successfully'))->shouldBeCalled();
 
         self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
@@ -169,18 +177,20 @@ final class LicenseCommandTest extends TestCase
             ->willReturn('MIT License content');
         $this->generator->generateContent()
             ->willReturn('MIT License content');
-        $this->overwriteDiffRenderer->renderContents(
+        $this->fileDiffer->diffContents(
             'generated LICENSE content',
             $targetPath,
             'MIT License content',
             'MIT License content',
             'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
-        )->willReturn(new OverwriteDiffResult(
-            OverwriteDiffResult::STATUS_UNCHANGED,
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_UNCHANGED,
             'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
         ))->shouldBeCalledOnce();
 
-        $this->output->writeln(Argument::containingString('already matches source generated LICENSE content'))->shouldBeCalled();
+        $this->output->writeln(
+            Argument::containingString('already matches source generated LICENSE content')
+        )->shouldBeCalled();
 
         self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
     }

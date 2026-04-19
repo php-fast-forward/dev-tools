@@ -134,7 +134,9 @@ final class SyncCommand extends BaseCommand
             $allowDetached
         );
         if ($dryRun || $check || $interactive) {
-            $output->writeln('<comment>Skipping wiki and skills during preview/check modes because they do not yet expose non-destructive verification.</comment>');
+            $output->writeln(
+                '<comment>Skipping wiki and skills during preview/check modes because they do not yet expose non-destructive verification.</comment>'
+            );
         } else {
             $this->queueDevToolsCommand(['wiki', '--init'], true);
             $this->queueDevToolsCommand(['skills'], true);

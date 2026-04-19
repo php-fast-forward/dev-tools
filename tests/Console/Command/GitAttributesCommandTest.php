@@ -29,10 +29,11 @@ use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
 use FastForward\DevTools\GitAttributes\MergerInterface;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
-use FastForward\DevTools\Resource\OverwriteDiffResult;
+use FastForward\DevTools\Resource\FileDiff;
+use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -43,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 #[CoversClass(GitAttributesCommand::class)]
+#[UsesClass(FileDiff::class)]
 final class GitAttributesCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -98,9 +100,9 @@ final class GitAttributesCommandTest extends TestCase
     private ObjectProphecy $output;
 
     /**
-     * @var ObjectProphecy<OverwriteDiffRenderer>
+     * @var ObjectProphecy<FileDiffer>
      */
-    private ObjectProphecy $overwriteDiffRenderer;
+    private ObjectProphecy $fileDiffer;
 
     private GitAttributesCommand $command;
 
@@ -119,7 +121,12 @@ final class GitAttributesCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
+        $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->writeln(Argument::any());
+        $this->fileDiffer->formatForConsole(Argument::cetera())
+            ->willReturn(null);
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
@@ -139,7 +146,7 @@ final class GitAttributesCommandTest extends TestCase
             $this->writer->reveal(),
             $this->composerJson->reveal(),
             $this->filesystem->reveal(),
-            $this->overwriteDiffRenderer->reveal(),
+            $this->fileDiffer->reveal(),
         );
     }
 
@@ -193,14 +200,14 @@ final class GitAttributesCommandTest extends TestCase
             ->willReturn("custom-entry\n/.github/ export-ignore\n");
         $this->writer->render("custom-entry\n")
             ->willReturn("custom-entry\n");
-        $this->overwriteDiffRenderer->renderContents(
+        $this->fileDiffer->diffContents(
             'generated .gitattributes synchronization',
             $gitattributesPath,
             "custom-entry\n/.github/ export-ignore\n",
             "custom-entry\n",
             'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
-        )->willReturn(new OverwriteDiffResult(
-            OverwriteDiffResult::STATUS_CHANGED,
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
             'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
         ))->shouldBeCalledOnce();
         $this->writer->write($gitattributesPath, "custom-entry\n/.github/ export-ignore")
@@ -208,7 +215,9 @@ final class GitAttributesCommandTest extends TestCase
 
         $this->output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>')
             ->shouldBeCalled();
-        $this->output->writeln('<comment>Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.</comment>')
+        $this->output->writeln(
+            '<comment>Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.</comment>'
+        )
             ->shouldBeCalled();
         $this->output->writeln('<info>Added 4 export-ignore entries to .gitattributes.</info>')
             ->shouldBeCalled();
@@ -254,14 +263,14 @@ final class GitAttributesCommandTest extends TestCase
             ->willReturn("/docs/ export-ignore\n/.editorconfig export-ignore");
         $this->writer->render("/docs/ export-ignore\n/.editorconfig export-ignore")
             ->willReturn("/docs/ export-ignore\n/.editorconfig export-ignore\n");
-        $this->overwriteDiffRenderer->renderContents(
+        $this->fileDiffer->diffContents(
             'generated .gitattributes synchronization',
             $gitattributesPath,
             "/docs/ export-ignore\n/.editorconfig export-ignore\n",
             null,
             'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
-        )->willReturn(new OverwriteDiffResult(
-            OverwriteDiffResult::STATUS_CHANGED,
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
             'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
         ))->shouldBeCalledOnce();
         $this->writer->write($gitattributesPath, "/docs/ export-ignore\n/.editorconfig export-ignore")

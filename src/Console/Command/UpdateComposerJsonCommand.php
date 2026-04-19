@@ -24,7 +24,7 @@ use Composer\Factory;
 use Composer\Json\JsonManipulator;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,12 +51,13 @@ final class UpdateComposerJsonCommand extends BaseCommand
      * @param ComposerJsonInterface $composer the composer.json metadata accessor
      * @param FilesystemInterface $filesystem the filesystem used to read and write composer.json
      * @param FileLocatorInterface $fileLocator the locator used to resolve packaged configuration files
+     * @param FileDiffer $fileDiffer
      */
     public function __construct(
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
-        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
+        private readonly FileDiffer $fileDiffer,
     ) {
         parent::__construct();
     }
@@ -129,7 +130,7 @@ final class UpdateComposerJsonCommand extends BaseCommand
         ], true);
 
         $updatedContents = $manipulator->getContents();
-        $comparison = $this->overwriteDiffRenderer->renderContents(
+        $comparison = $this->fileDiffer->diffContents(
             'generated dev-tools composer.json configuration',
             $file,
             $updatedContents,
@@ -137,10 +138,14 @@ final class UpdateComposerJsonCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated dev-tools composer.json configuration.', $file),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
 
-        if ($comparison->isChanged() && null !== $comparison->diff()) {
-            $output->writeln($comparison->diff());
+        if ($comparison->isChanged()) {
+            $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
+
+            if (null !== $consoleDiff) {
+                $output->writeln($consoleDiff);
+            }
         }
 
         if ($comparison->isUnchanged()) {
@@ -180,7 +185,8 @@ final class UpdateComposerJsonCommand extends BaseCommand
     {
         $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $file), false);
 
-        return (bool) $this->getHelper('question')->ask($input, $output, $question);
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 
     /**

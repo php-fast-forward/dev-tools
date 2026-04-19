@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,13 +47,13 @@ final class CopyResourceCommand extends BaseCommand
      * @param FilesystemInterface $filesystem the filesystem used for copy operations
      * @param FileLocatorInterface $fileLocator the locator used to resolve source resources
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
-     * @param OverwriteDiffRenderer $overwriteDiffRenderer the renderer used to summarize overwrite changes
+     * @param FileDiffer $fileDiffer the service used to summarize overwrite changes
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
-        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
+        private readonly FileDiffer $fileDiffer,
     ) {
         parent::__construct();
     }
@@ -126,7 +126,16 @@ final class CopyResourceCommand extends BaseCommand
         $targetPath = (string) $this->filesystem->getAbsolutePath($target);
 
         if (is_dir($sourcePath)) {
-            return $this->copyDirectory($sourcePath, $targetPath, $overwrite, $dryRun, $check, $interactive, $input, $output);
+            return $this->copyDirectory(
+                $sourcePath,
+                $targetPath,
+                $overwrite,
+                $dryRun,
+                $check,
+                $interactive,
+                $input,
+                $output
+            );
         }
 
         return $this->copyFile($sourcePath, $targetPath, $overwrite, $dryRun, $check, $interactive, $input, $output);
@@ -139,6 +148,10 @@ final class CopyResourceCommand extends BaseCommand
      * @param string $targetPath the resolved target directory
      * @param bool $overwrite whether existing files MAY be overwritten
      * @param OutputInterface $output the output used to report copy results
+     * @param bool $dryRun
+     * @param bool $check
+     * @param bool $interactive
+     * @param InputInterface $input
      *
      * @return int the command status code
      */
@@ -163,7 +176,16 @@ final class CopyResourceCommand extends BaseCommand
             $destination = Path::join($targetPath, $file->getRelativePathname());
             $status = max(
                 $status,
-                $this->copyFile($file->getRealPath(), $destination, $overwrite, $dryRun, $check, $interactive, $input, $output),
+                $this->copyFile(
+                    $file->getRealPath(),
+                    $destination,
+                    $overwrite,
+                    $dryRun,
+                    $check,
+                    $interactive,
+                    $input,
+                    $output
+                ),
             );
         }
 
@@ -177,6 +199,10 @@ final class CopyResourceCommand extends BaseCommand
      * @param string $targetPath the resolved target file
      * @param bool $overwrite whether an existing target file MAY be overwritten
      * @param OutputInterface $output the output used to report copy results
+     * @param bool $dryRun
+     * @param bool $check
+     * @param bool $interactive
+     * @param InputInterface $input
      *
      * @return int the command status code
      */
@@ -189,8 +215,7 @@ final class CopyResourceCommand extends BaseCommand
         bool $interactive,
         InputInterface $input,
         OutputInterface $output,
-    ): int
-    {
+    ): int {
         if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($targetPath)) {
             $output->writeln(\sprintf('<comment>Skipped existing resource %s.</comment>', $targetPath));
 
@@ -198,12 +223,16 @@ final class CopyResourceCommand extends BaseCommand
         }
 
         if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($targetPath)) {
-            $comparison = $this->overwriteDiffRenderer->render($sourcePath, $targetPath);
+            $comparison = $this->fileDiffer->diff($sourcePath, $targetPath);
 
-            $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+            $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
 
-            if ($comparison->isChanged() && null !== $comparison->diff()) {
-                $output->writeln($comparison->diff());
+            if ($comparison->isChanged()) {
+                $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
+
+                if (null !== $consoleDiff) {
+                    $output->writeln($consoleDiff);
+                }
             }
 
             if ($comparison->isUnchanged()) {
@@ -218,7 +247,11 @@ final class CopyResourceCommand extends BaseCommand
                 return self::SUCCESS;
             }
 
-            if ($interactive && $input->isInteractive() && ! $this->shouldReplaceResource($input, $output, $targetPath)) {
+            if ($interactive && $input->isInteractive() && ! $this->shouldReplaceResource(
+                $input,
+                $output,
+                $targetPath
+            )) {
                 $output->writeln(\sprintf('<comment>Skipped replacing %s.</comment>', $targetPath));
 
                 return self::SUCCESS;
@@ -244,6 +277,7 @@ final class CopyResourceCommand extends BaseCommand
     {
         $question = new ConfirmationQuestion(\sprintf('Replace drifted resource %s? [y/N] ', $targetPath), false);
 
-        return (bool) $this->getHelper('question')->ask($input, $output, $question);
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 }

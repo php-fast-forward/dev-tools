@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Console\Command\GitHooksCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -55,7 +55,7 @@ final class GitHooksCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
-    private ObjectProphecy $overwriteDiffRenderer;
+    private ObjectProphecy $fileDiffer;
 
     private GitHooksCommand $command;
 
@@ -75,7 +75,12 @@ final class GitHooksCommandTest extends TestCase
         $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
+        $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->writeln(Argument::any());
+        $this->fileDiffer->formatForConsole(Argument::cetera())
+            ->willReturn(null);
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
@@ -87,7 +92,7 @@ final class GitHooksCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
             $this->finderFactory->reveal(),
-            $this->overwriteDiffRenderer->reveal(),
+            $this->fileDiffer->reveal(),
         );
     }
 

@@ -28,7 +28,7 @@ use FastForward\DevTools\GitAttributes\ExportIgnoreFilterInterface;
 use FastForward\DevTools\GitAttributes\MergerInterface;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -70,6 +70,7 @@ final class GitAttributesCommand extends BaseCommand
      * @param WriterInterface $writer the writer component
      * @param FilesystemInterface $filesystem the filesystem component
      * @param ComposerJsonInterface $composer the composer.json accessor
+     * @param FileDiffer $fileDiffer
      */
     public function __construct(
         private readonly CandidateProviderInterface $candidateProvider,
@@ -80,7 +81,7 @@ final class GitAttributesCommand extends BaseCommand
         private readonly WriterInterface $writer,
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
-        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
+        private readonly FileDiffer $fileDiffer,
     ) {
         parent::__construct();
     }
@@ -146,7 +147,7 @@ final class GitAttributesCommand extends BaseCommand
         $existingContent = $this->reader->read($gitattributesPath);
         $content = $this->merger->merge($existingContent, $entries, $keepInExportPaths);
         $renderedContent = $this->writer->render($content);
-        $comparison = $this->overwriteDiffRenderer->renderContents(
+        $comparison = $this->fileDiffer->diffContents(
             'generated .gitattributes synchronization',
             $gitattributesPath,
             $renderedContent,
@@ -154,10 +155,14 @@ final class GitAttributesCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated .gitattributes synchronization.', $gitattributesPath),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
 
-        if ($comparison->isChanged() && null !== $comparison->diff()) {
-            $output->writeln($comparison->diff());
+        if ($comparison->isChanged()) {
+            $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
+
+            if (null !== $consoleDiff) {
+                $output->writeln($consoleDiff);
+            }
         }
 
         if ($comparison->isUnchanged()) {
@@ -172,7 +177,11 @@ final class GitAttributesCommand extends BaseCommand
             return self::SUCCESS;
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes($input, $output, $gitattributesPath)) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes(
+            $input,
+            $output,
+            $gitattributesPath
+        )) {
             $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $gitattributesPath));
 
             return self::SUCCESS;
@@ -201,7 +210,8 @@ final class GitAttributesCommand extends BaseCommand
     {
         $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
 
-        return (bool) $this->getHelper('question')->ask($input, $output, $question);
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 
     /**

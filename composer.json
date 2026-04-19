@@ -56,6 +56,7 @@
         "rector/jack": "^0.5",
         "rector/rector": "^2.4",
         "saggre/phpdocumentor-markdown": "^1.0",
+        "sebastian/diff": "^7.0",
         "shipmonk/composer-dependency-analyser": "^1.8.4",
         "symfony/config": "^7.4 || ^8.0",
         "symfony/console": "^7.4 || ^8.0",

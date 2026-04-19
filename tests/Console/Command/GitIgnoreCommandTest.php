@@ -24,10 +24,11 @@ use FastForward\DevTools\GitIgnore\GitIgnoreInterface;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
-use FastForward\DevTools\Resource\OverwriteDiffResult;
+use FastForward\DevTools\Resource\FileDiff;
+use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -38,6 +39,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(GitIgnoreCommand::class)]
+#[UsesClass(FileDiff::class)]
 final class GitIgnoreCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -73,9 +75,9 @@ final class GitIgnoreCommandTest extends TestCase
     private ObjectProphecy $output;
 
     /**
-     * @var ObjectProphecy<OverwriteDiffRenderer>
+     * @var ObjectProphecy<FileDiffer>
      */
-    private ObjectProphecy $overwriteDiffRenderer;
+    private ObjectProphecy $fileDiffer;
 
     /**
      * @var ObjectProphecy<GitIgnoreInterface>
@@ -112,7 +114,12 @@ final class GitIgnoreCommandTest extends TestCase
         $this->writer = $this->prophesize(WriterInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->overwriteDiffRenderer = $this->prophesize(OverwriteDiffRenderer::class);
+        $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->writeln(Argument::any());
+        $this->fileDiffer->formatForConsole(Argument::cetera())
+            ->willReturn(null);
 
         $this->gitIgnoreSource = $this->prophesize(GitIgnoreInterface::class);
         $this->gitIgnoreTarget = $this->prophesize(GitIgnoreInterface::class);
@@ -144,24 +151,22 @@ final class GitIgnoreCommandTest extends TestCase
             ->willReturn('');
         $this->gitIgnoreMerged->path()
             ->willReturn(self::TARGET_PATH);
-        $this->overwriteDiffRenderer->renderContents(
+        $this->fileDiffer->diffContents(
             'generated .gitignore synchronization',
             self::TARGET_PATH,
             "vendor/\n",
             '',
             'Updating managed file /path/to/target/.gitignore from generated .gitignore synchronization.',
-        )->willReturn(new OverwriteDiffResult(
-            OverwriteDiffResult::STATUS_CHANGED,
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
             'Updating managed file /path/to/target/.gitignore from generated .gitignore synchronization.',
         ));
-        $this->output->writeln(Argument::any());
-
         $this->command = new GitIgnoreCommand(
             $this->merger->reveal(),
             $this->reader->reveal(),
             $this->writer->reveal(),
             $this->fileLocator->reveal(),
-            $this->overwriteDiffRenderer->reveal(),
+            $this->fileDiffer->reveal(),
         );
     }
 

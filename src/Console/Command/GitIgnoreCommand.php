@@ -23,7 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -59,13 +59,14 @@ final class GitIgnoreCommand extends BaseCommand
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface|null $writer the writer component
      * @param FileLocatorInterface $fileLocator the file locator
+     * @param FileDiffer $fileDiffer
      */
     public function __construct(
         private readonly MergerInterface $merger,
         private readonly ReaderInterface $reader,
         private readonly WriterInterface $writer,
         private readonly FileLocatorInterface $fileLocator,
-        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
+        private readonly FileDiffer $fileDiffer,
     ) {
         parent::__construct();
     }
@@ -132,7 +133,7 @@ final class GitIgnoreCommand extends BaseCommand
         $project = $this->reader->read($targetPath);
 
         $merged = $this->merger->merge($canonical, $project);
-        $comparison = $this->overwriteDiffRenderer->renderContents(
+        $comparison = $this->fileDiffer->diffContents(
             'generated .gitignore synchronization',
             $merged->path(),
             $this->writer->render($merged),
@@ -140,10 +141,14 @@ final class GitIgnoreCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated .gitignore synchronization.', $merged->path()),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
 
-        if ($comparison->isChanged() && null !== $comparison->diff()) {
-            $output->writeln($comparison->diff());
+        if ($comparison->isChanged()) {
+            $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
+
+            if (null !== $consoleDiff) {
+                $output->writeln($consoleDiff);
+            }
         }
 
         if ($comparison->isUnchanged()) {
@@ -158,7 +163,11 @@ final class GitIgnoreCommand extends BaseCommand
             return self::SUCCESS;
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitIgnore($input, $output, $merged->path())) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitIgnore(
+            $input,
+            $output,
+            $merged->path()
+        )) {
             $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $merged->path()));
 
             return self::SUCCESS;
@@ -184,6 +193,7 @@ final class GitIgnoreCommand extends BaseCommand
     {
         $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
 
-        return (bool) $this->getHelper('question')->ask($input, $output, $question);
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 }

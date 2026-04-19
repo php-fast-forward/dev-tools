@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Resource\OverwriteDiffRenderer;
+use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,12 +47,13 @@ final class GitHooksCommand extends BaseCommand
      * @param FilesystemInterface $filesystem the filesystem used to copy hooks
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
+     * @param FileDiffer $fileDiffer
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
-        private readonly OverwriteDiffRenderer $overwriteDiffRenderer,
+        private readonly FileDiffer $fileDiffer,
     ) {
         parent::__construct();
     }
@@ -133,12 +134,16 @@ final class GitHooksCommand extends BaseCommand
             }
 
             if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($hookPath)) {
-                $comparison = $this->overwriteDiffRenderer->render($file->getRealPath(), $hookPath);
+                $comparison = $this->fileDiffer->diff($file->getRealPath(), $hookPath);
 
-                $output->writeln(\sprintf('<comment>%s</comment>', $comparison->summary()));
+                $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
 
-                if ($comparison->isChanged() && null !== $comparison->diff()) {
-                    $output->writeln($comparison->diff());
+                if ($comparison->isChanged()) {
+                    $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
+
+                    if (null !== $consoleDiff) {
+                        $output->writeln($consoleDiff);
+                    }
                 }
 
                 if ($comparison->isUnchanged()) {
@@ -184,6 +189,7 @@ final class GitHooksCommand extends BaseCommand
     {
         $question = new ConfirmationQuestion(\sprintf('Replace drifted Git hook %s? [y/N] ', $hookPath), false);
 
-        return (bool) $this->getHelper('question')->ask($input, $output, $question);
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 }
