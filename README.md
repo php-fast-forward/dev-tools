@@ -13,6 +13,10 @@ across Fast Forward libraries.
 [![License](https://img.shields.io/github/license/php-fast-forward/dev-tools?color=64748B)](LICENSE)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/php-fast-forward?logo=githubsponsors&logoColor=white&color=EC4899)](https://github.com/sponsors/php-fast-forward)
 
+<p align="center">
+  <img src="docs/_static/mascot.png" alt="Fast Forward DevTools mascot" width="520">
+</p>
+
 ## ✨ Features
 
 - Aggregates refactoring, PHPDoc, code style, tests, and reporting under a
