@@ -1,7 +1,7 @@
+.dev-tools/
 .idea/
 .vscode/
 backup/
-.dev-tools/
 tmp/
 vendor/
 *.cache
