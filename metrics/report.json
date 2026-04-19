@@ -7384,16 +7384,43 @@
         "name": "git",
         "history": {
             "2026-16": {
-                "nbFiles": 0,
-                "additions": 0,
-                "removes": 0
+                "nbFiles": 471,
+                "additions": 11902,
+                "removes": 6455
+            },
+            "2026-15": {
+                "nbFiles": 176,
+                "additions": 9950,
+                "removes": 1676
+            },
+            "2026-14": {
+                "nbFiles": 22,
+                "additions": 891,
+                "removes": 635
+            },
+            "2026-13": {
+                "nbFiles": 165,
+                "additions": 3204,
+                "removes": 864
             }
         },
         "authors": {
             "GitHub": {
-                "nbFiles": 142,
-                "commits": 1,
-                "additions": 19311,
+                "nbFiles": 110,
+                "commits": 54,
+                "additions": 2864,
+                "removes": 1155
+            },
+            "Felipe Say\u00e3o Lobato Abreu": {
+                "nbFiles": 751,
+                "commits": 187,
+                "additions": 26039,
+                "removes": 8475
+            },
+            "github-actions": {
+                "nbFiles": 0,
+                "commits": 23,
+                "additions": 0,
                 "removes": 0
             }
         },
@@ -7401,282 +7428,149 @@
         "violations": {},
         "_type": "Hal\\Metric\\ProjectMetric"
     },
-    ".php-cs-fixer.dist.php": {
-        "name": ".php-cs-fixer.dist.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "bin\/dev-tools.php": {
-        "name": "bin\/dev-tools.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "ecs.php": {
-        "name": "ecs.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "rector.php": {
-        "name": "rector.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Agent\/Skills\/SkillsSynchronizer.php": {
-        "name": "src\/Agent\/Skills\/SkillsSynchronizer.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Agent\/Skills\/SynchronizeResult.php": {
-        "name": "src\/Agent\/Skills\/SynchronizeResult.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Capability\/DevToolsCommandProvider.php": {
-        "name": "src\/Composer\/Capability\/DevToolsCommandProvider.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/ComposerJson.php": {
-        "name": "src\/Composer\/Json\/ComposerJson.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/ComposerJsonInterface.php": {
-        "name": "src\/Composer\/Json\/ComposerJsonInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/Schema\/Author.php": {
-        "name": "src\/Composer\/Json\/Schema\/Author.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/Schema\/AuthorInterface.php": {
-        "name": "src\/Composer\/Json\/Schema\/AuthorInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/Schema\/Funding.php": {
-        "name": "src\/Composer\/Json\/Schema\/Funding.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/Schema\/FundingInterface.php": {
-        "name": "src\/Composer\/Json\/Schema\/FundingInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/Schema\/Support.php": {
-        "name": "src\/Composer\/Json\/Schema\/Support.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Json\/Schema\/SupportInterface.php": {
-        "name": "src\/Composer\/Json\/Schema\/SupportInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Composer\/Plugin.php": {
-        "name": "src\/Composer\/Plugin.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Config\/ECSConfig.php": {
-        "name": "src\/Config\/ECSConfig.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Config\/RectorConfig.php": {
-        "name": "src\/Config\/RectorConfig.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/CodeStyleCommand.php": {
-        "name": "src\/Console\/Command\/CodeStyleCommand.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/CopyResourceCommand.php": {
-        "name": "src\/Console\/Command\/CopyResourceCommand.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
     "src\/Console\/Command\/DependenciesCommand.php": {
         "name": "src\/Console\/Command\/DependenciesCommand.php",
-        "gitChanges": 1,
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "src\/Console\/Command\/DocsCommand.php": {
-        "name": "src\/Console\/Command\/DocsCommand.php",
-        "gitChanges": 1,
+    "src\/ServiceProvider\/DevToolsServiceProvider.php": {
+        "name": "src\/ServiceProvider\/DevToolsServiceProvider.php",
+        "gitChanges": 8,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "src\/Console\/Command\/GitAttributesCommand.php": {
-        "name": "src\/Console\/Command\/GitAttributesCommand.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/GitHooksCommand.php": {
-        "name": "src\/Console\/Command\/GitHooksCommand.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/GitIgnoreCommand.php": {
-        "name": "src\/Console\/Command\/GitIgnoreCommand.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/LicenseCommand.php": {
-        "name": "src\/Console\/Command\/LicenseCommand.php",
-        "gitChanges": 1,
+    "tests\/Console\/Command\/DependenciesCommandTest.php": {
+        "name": "tests\/Console\/Command\/DependenciesCommandTest.php",
+        "gitChanges": 4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Console\/Command\/MetricsCommand.php": {
         "name": "src\/Console\/Command\/MetricsCommand.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/PhpDocCommand.php": {
-        "name": "src\/Console\/Command\/PhpDocCommand.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/RefactorCommand.php": {
-        "name": "src\/Console\/Command\/RefactorCommand.php",
-        "gitChanges": 1,
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Console\/Command\/ReportsCommand.php": {
         "name": "src\/Console\/Command\/ReportsCommand.php",
-        "gitChanges": 1,
+        "gitChanges": 8,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "src\/Console\/Command\/SkillsCommand.php": {
-        "name": "src\/Console\/Command\/SkillsCommand.php",
-        "gitChanges": 1,
+    "tests\/Console\/Command\/MetricsCommandTest.php": {
+        "name": "tests\/Console\/Command\/MetricsCommandTest.php",
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "src\/Console\/Command\/StandardsCommand.php": {
-        "name": "src\/Console\/Command\/StandardsCommand.php",
-        "gitChanges": 1,
+    "tests\/Console\/Command\/ReportsCommandTest.php": {
+        "name": "tests\/Console\/Command\/ReportsCommandTest.php",
+        "gitChanges": 7,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Console\/Command\/SyncCommand.php": {
         "name": "src\/Console\/Command\/SyncCommand.php",
-        "gitChanges": 1,
+        "gitChanges": 10,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Console\/Command\/TestsCommand.php": {
         "name": "src\/Console\/Command\/TestsCommand.php",
-        "gitChanges": 1,
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "src\/Console\/Command\/UpdateComposerJsonCommand.php": {
-        "name": "src\/Console\/Command\/UpdateComposerJsonCommand.php",
-        "gitChanges": 1,
+    "src\/Process\/ProcessBuilder.php": {
+        "name": "src\/Process\/ProcessBuilder.php",
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "src\/Console\/Command\/WikiCommand.php": {
-        "name": "src\/Console\/Command\/WikiCommand.php",
-        "gitChanges": 1,
+    "src\/Process\/ProcessBuilderInterface.php": {
+        "name": "src\/Process\/ProcessBuilderInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitAttributes\/ExistenceCheckerTest.php": {
+        "name": "tests\/GitAttributes\/ExistenceCheckerTest.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/GitHooksCommand.php": {
+        "name": "src\/Console\/Command\/GitHooksCommand.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/GitHooksCommandTest.php": {
+        "name": "tests\/Console\/Command\/GitHooksCommandTest.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Filesystem\/FilesystemTest.php": {
+        "name": "tests\/Filesystem\/FilesystemTest.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Agent\/Skills\/SkillsSynchronizer.php": {
+        "name": "src\/Agent\/Skills\/SkillsSynchronizer.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/CopyResourceCommand.php": {
+        "name": "src\/Console\/Command\/CopyResourceCommand.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/GitAttributesCommand.php": {
+        "name": "src\/Console\/Command\/GitAttributesCommand.php",
+        "gitChanges": 4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Console\/CommandLoader\/DevToolsCommandLoader.php": {
         "name": "src\/Console\/CommandLoader\/DevToolsCommandLoader.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/DevTools.php": {
-        "name": "src\/Console\/DevTools.php",
-        "gitChanges": 1,
+        "gitChanges": 4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Filesystem\/Filesystem.php": {
         "name": "src\/Filesystem\/Filesystem.php",
-        "gitChanges": 1,
+        "gitChanges": 6,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Filesystem\/FilesystemInterface.php": {
         "name": "src\/Filesystem\/FilesystemInterface.php",
-        "gitChanges": 1,
+        "gitChanges": 6,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
@@ -7695,513 +7589,58 @@
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "src\/GitAttributes\/CandidateProvider.php": {
-        "name": "src\/GitAttributes\/CandidateProvider.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/CandidateProviderInterface.php": {
-        "name": "src\/GitAttributes\/CandidateProviderInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
     "src\/GitAttributes\/ExistenceChecker.php": {
         "name": "src\/GitAttributes\/ExistenceChecker.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/ExistenceCheckerInterface.php": {
-        "name": "src\/GitAttributes\/ExistenceCheckerInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/ExportIgnoreFilter.php": {
-        "name": "src\/GitAttributes\/ExportIgnoreFilter.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/ExportIgnoreFilterInterface.php": {
-        "name": "src\/GitAttributes\/ExportIgnoreFilterInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/Merger.php": {
-        "name": "src\/GitAttributes\/Merger.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/MergerInterface.php": {
-        "name": "src\/GitAttributes\/MergerInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/Reader.php": {
-        "name": "src\/GitAttributes\/Reader.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/ReaderInterface.php": {
-        "name": "src\/GitAttributes\/ReaderInterface.php",
-        "gitChanges": 1,
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/GitAttributes\/Writer.php": {
         "name": "src\/GitAttributes\/Writer.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitAttributes\/WriterInterface.php": {
-        "name": "src\/GitAttributes\/WriterInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/Classifier.php": {
-        "name": "src\/GitIgnore\/Classifier.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/ClassifierInterface.php": {
-        "name": "src\/GitIgnore\/ClassifierInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/GitIgnore.php": {
-        "name": "src\/GitIgnore\/GitIgnore.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/GitIgnoreInterface.php": {
-        "name": "src\/GitIgnore\/GitIgnoreInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/Merger.php": {
-        "name": "src\/GitIgnore\/Merger.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/MergerInterface.php": {
-        "name": "src\/GitIgnore\/MergerInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/Reader.php": {
-        "name": "src\/GitIgnore\/Reader.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/ReaderInterface.php": {
-        "name": "src\/GitIgnore\/ReaderInterface.php",
-        "gitChanges": 1,
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/GitIgnore\/Writer.php": {
         "name": "src\/GitIgnore\/Writer.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/GitIgnore\/WriterInterface.php": {
-        "name": "src\/GitIgnore\/WriterInterface.php",
-        "gitChanges": 1,
+        "gitChanges": 6,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/License\/Generator.php": {
         "name": "src\/License\/Generator.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/License\/GeneratorInterface.php": {
-        "name": "src\/License\/GeneratorInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/License\/Resolver.php": {
-        "name": "src\/License\/Resolver.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/License\/ResolverInterface.php": {
-        "name": "src\/License\/ResolverInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/PhpUnit\/Coverage\/CoverageSummary.php": {
-        "name": "src\/PhpUnit\/Coverage\/CoverageSummary.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/PhpUnit\/Coverage\/CoverageSummaryLoader.php": {
-        "name": "src\/PhpUnit\/Coverage\/CoverageSummaryLoader.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/PhpUnit\/Coverage\/CoverageSummaryLoaderInterface.php": {
-        "name": "src\/PhpUnit\/Coverage\/CoverageSummaryLoaderInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/PhpUnit\/Event\/EventTracer.php": {
-        "name": "src\/PhpUnit\/Event\/EventTracer.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriber.php": {
-        "name": "src\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriber.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriber.php": {
-        "name": "src\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriber.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/PhpUnit\/Runner\/Extension\/DevToolsExtension.php": {
-        "name": "src\/PhpUnit\/Runner\/Extension\/DevToolsExtension.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Process\/ProcessBuilder.php": {
-        "name": "src\/Process\/ProcessBuilder.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Process\/ProcessBuilderInterface.php": {
-        "name": "src\/Process\/ProcessBuilderInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Process\/ProcessQueue.php": {
-        "name": "src\/Process\/ProcessQueue.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Process\/ProcessQueueInterface.php": {
-        "name": "src\/Process\/ProcessQueueInterface.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Psr\/Clock\/SystemClock.php": {
-        "name": "src\/Psr\/Clock\/SystemClock.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Rector\/AddMissingClassPhpDocRector.php": {
-        "name": "src\/Rector\/AddMissingClassPhpDocRector.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Rector\/AddMissingMethodPhpDocRector.php": {
-        "name": "src\/Rector\/AddMissingMethodPhpDocRector.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Rector\/RemoveEmptyDocBlockRector.php": {
-        "name": "src\/Rector\/RemoveEmptyDocBlockRector.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/ServiceProvider\/DevToolsServiceProvider.php": {
-        "name": "src\/ServiceProvider\/DevToolsServiceProvider.php",
-        "gitChanges": 1,
+        "gitChanges": 11,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Agent\/Skills\/SkillsSynchronizerTest.php": {
         "name": "tests\/Agent\/Skills\/SkillsSynchronizerTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Agent\/Skills\/SynchronizeResultTest.php": {
-        "name": "tests\/Agent\/Skills\/SynchronizeResultTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Composer\/Capability\/DevToolsCommandProviderTest.php": {
-        "name": "tests\/Composer\/Capability\/DevToolsCommandProviderTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Composer\/Json\/ComposerJsonTest.php": {
-        "name": "tests\/Composer\/Json\/ComposerJsonTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Composer\/Json\/Schema\/AuthorTest.php": {
-        "name": "tests\/Composer\/Json\/Schema\/AuthorTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Composer\/Json\/Schema\/FundingTest.php": {
-        "name": "tests\/Composer\/Json\/Schema\/FundingTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Composer\/Json\/Schema\/SupportTest.php": {
-        "name": "tests\/Composer\/Json\/Schema\/SupportTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Composer\/PluginTest.php": {
-        "name": "tests\/Composer\/PluginTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Config\/ECSConfigTest.php": {
-        "name": "tests\/Config\/ECSConfigTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Config\/RectorConfigTest.php": {
-        "name": "tests\/Config\/RectorConfigTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/CodeStyleCommandTest.php": {
-        "name": "tests\/Console\/Command\/CodeStyleCommandTest.php",
-        "gitChanges": 1,
+        "gitChanges": 4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Console\/Command\/CopyResourceCommandTest.php": {
         "name": "tests\/Console\/Command\/CopyResourceCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/DependenciesCommandTest.php": {
-        "name": "tests\/Console\/Command\/DependenciesCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/DocsCommandTest.php": {
-        "name": "tests\/Console\/Command\/DocsCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/GitAttributesCommandTest.php": {
-        "name": "tests\/Console\/Command\/GitAttributesCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/GitHooksCommandTest.php": {
-        "name": "tests\/Console\/Command\/GitHooksCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/GitIgnoreCommandTest.php": {
-        "name": "tests\/Console\/Command\/GitIgnoreCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/LicenseCommandTest.php": {
-        "name": "tests\/Console\/Command\/LicenseCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/MetricsCommandTest.php": {
-        "name": "tests\/Console\/Command\/MetricsCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/PhpDocCommandTest.php": {
-        "name": "tests\/Console\/Command\/PhpDocCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/RefactorCommandTest.php": {
-        "name": "tests\/Console\/Command\/RefactorCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/ReportsCommandTest.php": {
-        "name": "tests\/Console\/Command\/ReportsCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/SkillsCommandTest.php": {
-        "name": "tests\/Console\/Command\/SkillsCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/StandardsCommandTest.php": {
-        "name": "tests\/Console\/Command\/StandardsCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/SyncCommandTest.php": {
-        "name": "tests\/Console\/Command\/SyncCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/TestsCommandTest.php": {
-        "name": "tests\/Console\/Command\/TestsCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/UpdateComposerJsonCommandTest.php": {
-        "name": "tests\/Console\/Command\/UpdateComposerJsonCommandTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/WikiCommandTest.php": {
-        "name": "tests\/Console\/Command\/WikiCommandTest.php",
-        "gitChanges": 1,
+        "gitChanges": 3,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Console\/CommandLoader\/DevToolsCommandLoaderTest.php": {
         "name": "tests\/Console\/CommandLoader\/DevToolsCommandLoaderTest.php",
-        "gitChanges": 1,
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Console\/DevToolsTest.php": {
         "name": "tests\/Console\/DevToolsTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Filesystem\/FilesystemTest.php": {
-        "name": "tests\/Filesystem\/FilesystemTest.php",
-        "gitChanges": 1,
+        "gitChanges": 3,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
@@ -8213,183 +7652,1359 @@
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
-    "tests\/GitAttributes\/CandidateProviderTest.php": {
-        "name": "tests\/GitAttributes\/CandidateProviderTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitAttributes\/ExistenceCheckerTest.php": {
-        "name": "tests\/GitAttributes\/ExistenceCheckerTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitAttributes\/ExportIgnoreFilterTest.php": {
-        "name": "tests\/GitAttributes\/ExportIgnoreFilterTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitAttributes\/MergerTest.php": {
-        "name": "tests\/GitAttributes\/MergerTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitAttributes\/ReaderTest.php": {
-        "name": "tests\/GitAttributes\/ReaderTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
     "tests\/GitAttributes\/WriterTest.php": {
         "name": "tests\/GitAttributes\/WriterTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitIgnore\/ClassifierTest.php": {
-        "name": "tests\/GitIgnore\/ClassifierTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitIgnore\/GitIgnoreTest.php": {
-        "name": "tests\/GitIgnore\/GitIgnoreTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitIgnore\/MergerTest.php": {
-        "name": "tests\/GitIgnore\/MergerTest.php",
-        "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/GitIgnore\/ReaderTest.php": {
-        "name": "tests\/GitIgnore\/ReaderTest.php",
-        "gitChanges": 1,
+        "gitChanges": 4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/GitIgnore\/WriterTest.php": {
         "name": "tests\/GitIgnore\/WriterTest.php",
-        "gitChanges": 1,
+        "gitChanges": 3,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/License\/GeneratorTest.php": {
         "name": "tests\/License\/GeneratorTest.php",
-        "gitChanges": 1,
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/TestsCommandTest.php": {
+        "name": "tests\/Console\/Command\/TestsCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/UpdateComposerJsonCommand.php": {
+        "name": "src\/Console\/Command\/UpdateComposerJsonCommand.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/UpdateComposerJsonCommandTest.php": {
+        "name": "tests\/Console\/Command\/UpdateComposerJsonCommandTest.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Composer\/Json\/ComposerJsonTest.php": {
+        "name": "tests\/Composer\/Json\/ComposerJsonTest.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/ComposerJson.php": {
+        "name": "src\/Composer\/Json\/ComposerJson.php",
+        "gitChanges": 7,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "bin\/dev-tools.php": {
+        "name": "bin\/dev-tools.php",
+        "gitChanges": 7,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "ecs.php": {
+        "name": "ecs.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "rector.php": {
+        "name": "rector.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Agent\/Skills\/SynchronizeResult.php": {
+        "name": "src\/Agent\/Skills\/SynchronizeResult.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Capability\/DevToolsCommandProvider.php": {
+        "name": "src\/Composer\/Capability\/DevToolsCommandProvider.php",
+        "gitChanges": 14,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/ComposerJsonInterface.php": {
+        "name": "src\/Composer\/Json\/ComposerJsonInterface.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/Schema\/Author.php": {
+        "name": "src\/Composer\/Json\/Schema\/Author.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/Schema\/AuthorInterface.php": {
+        "name": "src\/Composer\/Json\/Schema\/AuthorInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/Schema\/Funding.php": {
+        "name": "src\/Composer\/Json\/Schema\/Funding.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/Schema\/FundingInterface.php": {
+        "name": "src\/Composer\/Json\/Schema\/FundingInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/Schema\/Support.php": {
+        "name": "src\/Composer\/Json\/Schema\/Support.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Json\/Schema\/SupportInterface.php": {
+        "name": "src\/Composer\/Json\/Schema\/SupportInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/Plugin.php": {
+        "name": "src\/Composer\/Plugin.php",
+        "gitChanges": 14,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Config\/ECSConfig.php": {
+        "name": "src\/Config\/ECSConfig.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Config\/RectorConfig.php": {
+        "name": "src\/Config\/RectorConfig.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/CodeStyleCommand.php": {
+        "name": "src\/Console\/Command\/CodeStyleCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/DocsCommand.php": {
+        "name": "src\/Console\/Command\/DocsCommand.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/GitIgnoreCommand.php": {
+        "name": "src\/Console\/Command\/GitIgnoreCommand.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/LicenseCommand.php": {
+        "name": "src\/Console\/Command\/LicenseCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/PhpDocCommand.php": {
+        "name": "src\/Console\/Command\/PhpDocCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/RefactorCommand.php": {
+        "name": "src\/Console\/Command\/RefactorCommand.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/SkillsCommand.php": {
+        "name": "src\/Console\/Command\/SkillsCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/StandardsCommand.php": {
+        "name": "src\/Console\/Command\/StandardsCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/WikiCommand.php": {
+        "name": "src\/Console\/Command\/WikiCommand.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/DevTools.php": {
+        "name": "src\/Console\/DevTools.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/CandidateProvider.php": {
+        "name": "src\/GitAttributes\/CandidateProvider.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/CandidateProviderInterface.php": {
+        "name": "src\/GitAttributes\/CandidateProviderInterface.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/ExistenceCheckerInterface.php": {
+        "name": "src\/GitAttributes\/ExistenceCheckerInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/ExportIgnoreFilter.php": {
+        "name": "src\/GitAttributes\/ExportIgnoreFilter.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/ExportIgnoreFilterInterface.php": {
+        "name": "src\/GitAttributes\/ExportIgnoreFilterInterface.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/Merger.php": {
+        "name": "src\/GitAttributes\/Merger.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/MergerInterface.php": {
+        "name": "src\/GitAttributes\/MergerInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/Reader.php": {
+        "name": "src\/GitAttributes\/Reader.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/ReaderInterface.php": {
+        "name": "src\/GitAttributes\/ReaderInterface.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitAttributes\/WriterInterface.php": {
+        "name": "src\/GitAttributes\/WriterInterface.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/Classifier.php": {
+        "name": "src\/GitIgnore\/Classifier.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/ClassifierInterface.php": {
+        "name": "src\/GitIgnore\/ClassifierInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/GitIgnore.php": {
+        "name": "src\/GitIgnore\/GitIgnore.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/GitIgnoreInterface.php": {
+        "name": "src\/GitIgnore\/GitIgnoreInterface.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/Merger.php": {
+        "name": "src\/GitIgnore\/Merger.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/MergerInterface.php": {
+        "name": "src\/GitIgnore\/MergerInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/Reader.php": {
+        "name": "src\/GitIgnore\/Reader.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/ReaderInterface.php": {
+        "name": "src\/GitIgnore\/ReaderInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/GitIgnore\/WriterInterface.php": {
+        "name": "src\/GitIgnore\/WriterInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/GeneratorInterface.php": {
+        "name": "src\/License\/GeneratorInterface.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/Resolver.php": {
+        "name": "src\/License\/Resolver.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/ResolverInterface.php": {
+        "name": "src\/License\/ResolverInterface.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/PhpUnit\/Coverage\/CoverageSummary.php": {
+        "name": "src\/PhpUnit\/Coverage\/CoverageSummary.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/PhpUnit\/Coverage\/CoverageSummaryLoader.php": {
+        "name": "src\/PhpUnit\/Coverage\/CoverageSummaryLoader.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/PhpUnit\/Coverage\/CoverageSummaryLoaderInterface.php": {
+        "name": "src\/PhpUnit\/Coverage\/CoverageSummaryLoaderInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/PhpUnit\/Event\/EventTracer.php": {
+        "name": "src\/PhpUnit\/Event\/EventTracer.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriber.php": {
+        "name": "src\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriber.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriber.php": {
+        "name": "src\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriber.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/PhpUnit\/Runner\/Extension\/DevToolsExtension.php": {
+        "name": "src\/PhpUnit\/Runner\/Extension\/DevToolsExtension.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Process\/ProcessQueue.php": {
+        "name": "src\/Process\/ProcessQueue.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Process\/ProcessQueueInterface.php": {
+        "name": "src\/Process\/ProcessQueueInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Psr\/Clock\/SystemClock.php": {
+        "name": "src\/Psr\/Clock\/SystemClock.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Rector\/AddMissingClassPhpDocRector.php": {
+        "name": "src\/Rector\/AddMissingClassPhpDocRector.php",
+        "gitChanges": 7,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Rector\/AddMissingMethodPhpDocRector.php": {
+        "name": "src\/Rector\/AddMissingMethodPhpDocRector.php",
+        "gitChanges": 10,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Rector\/RemoveEmptyDocBlockRector.php": {
+        "name": "src\/Rector\/RemoveEmptyDocBlockRector.php",
+        "gitChanges": 8,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Agent\/Skills\/SynchronizeResultTest.php": {
+        "name": "tests\/Agent\/Skills\/SynchronizeResultTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Composer\/Capability\/DevToolsCommandProviderTest.php": {
+        "name": "tests\/Composer\/Capability\/DevToolsCommandProviderTest.php",
+        "gitChanges": 15,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Composer\/Json\/Schema\/AuthorTest.php": {
+        "name": "tests\/Composer\/Json\/Schema\/AuthorTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Composer\/Json\/Schema\/FundingTest.php": {
+        "name": "tests\/Composer\/Json\/Schema\/FundingTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Composer\/Json\/Schema\/SupportTest.php": {
+        "name": "tests\/Composer\/Json\/Schema\/SupportTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Composer\/PluginTest.php": {
+        "name": "tests\/Composer\/PluginTest.php",
+        "gitChanges": 15,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Config\/ECSConfigTest.php": {
+        "name": "tests\/Config\/ECSConfigTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Config\/RectorConfigTest.php": {
+        "name": "tests\/Config\/RectorConfigTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/CodeStyleCommandTest.php": {
+        "name": "tests\/Console\/Command\/CodeStyleCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/DocsCommandTest.php": {
+        "name": "tests\/Console\/Command\/DocsCommandTest.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/GitAttributesCommandTest.php": {
+        "name": "tests\/Console\/Command\/GitAttributesCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/GitIgnoreCommandTest.php": {
+        "name": "tests\/Console\/Command\/GitIgnoreCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/LicenseCommandTest.php": {
+        "name": "tests\/Console\/Command\/LicenseCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/PhpDocCommandTest.php": {
+        "name": "tests\/Console\/Command\/PhpDocCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/RefactorCommandTest.php": {
+        "name": "tests\/Console\/Command\/RefactorCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/SkillsCommandTest.php": {
+        "name": "tests\/Console\/Command\/SkillsCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/StandardsCommandTest.php": {
+        "name": "tests\/Console\/Command\/StandardsCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/SyncCommandTest.php": {
+        "name": "tests\/Console\/Command\/SyncCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/WikiCommandTest.php": {
+        "name": "tests\/Console\/Command\/WikiCommandTest.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitAttributes\/CandidateProviderTest.php": {
+        "name": "tests\/GitAttributes\/CandidateProviderTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitAttributes\/ExportIgnoreFilterTest.php": {
+        "name": "tests\/GitAttributes\/ExportIgnoreFilterTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitAttributes\/MergerTest.php": {
+        "name": "tests\/GitAttributes\/MergerTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitAttributes\/ReaderTest.php": {
+        "name": "tests\/GitAttributes\/ReaderTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitIgnore\/ClassifierTest.php": {
+        "name": "tests\/GitIgnore\/ClassifierTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitIgnore\/GitIgnoreTest.php": {
+        "name": "tests\/GitIgnore\/GitIgnoreTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitIgnore\/MergerTest.php": {
+        "name": "tests\/GitIgnore\/MergerTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/GitIgnore\/ReaderTest.php": {
+        "name": "tests\/GitIgnore\/ReaderTest.php",
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/License\/ResolverTest.php": {
         "name": "tests\/License\/ResolverTest.php",
-        "gitChanges": 1,
+        "gitChanges": 4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/PhpUnit\/Coverage\/CoverageSummaryLoaderTest.php": {
         "name": "tests\/PhpUnit\/Coverage\/CoverageSummaryLoaderTest.php",
-        "gitChanges": 1,
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/PhpUnit\/Coverage\/CoverageSummaryTest.php": {
         "name": "tests\/PhpUnit\/Coverage\/CoverageSummaryTest.php",
-        "gitChanges": 1,
+        "gitChanges": 3,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/PhpUnit\/Event\/EventTracerTest.php": {
         "name": "tests\/PhpUnit\/Event\/EventTracerTest.php",
-        "gitChanges": 1,
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriberTest.php": {
         "name": "tests\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriberTest.php",
-        "gitChanges": 1,
+        "gitChanges": 3,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriberTest.php": {
         "name": "tests\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriberTest.php",
-        "gitChanges": 1,
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/PhpUnit\/Runner\/Extension\/DevToolsExtensionTest.php": {
         "name": "tests\/PhpUnit\/Runner\/Extension\/DevToolsExtensionTest.php",
-        "gitChanges": 1,
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Process\/ProcessBuilderTest.php": {
         "name": "tests\/Process\/ProcessBuilderTest.php",
-        "gitChanges": 1,
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Process\/ProcessQueueTest.php": {
         "name": "tests\/Process\/ProcessQueueTest.php",
-        "gitChanges": 1,
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Psr\/Clock\/SystemClockTest.php": {
         "name": "tests\/Psr\/Clock\/SystemClockTest.php",
-        "gitChanges": 1,
+        "gitChanges": 2,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Rector\/AddMissingClassPhpDocRectorTest.php": {
         "name": "tests\/Rector\/AddMissingClassPhpDocRectorTest.php",
-        "gitChanges": 1,
+        "gitChanges": 4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Rector\/AddMissingMethodPhpDocRectorTest.php": {
         "name": "tests\/Rector\/AddMissingMethodPhpDocRectorTest.php",
-        "gitChanges": 1,
+        "gitChanges": 7,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/Rector\/RemoveEmptyDocBlockRectorTest.php": {
         "name": "tests\/Rector\/RemoveEmptyDocBlockRectorTest.php",
-        "gitChanges": 1,
+        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
     },
     "tests\/ServiceProvider\/DevToolsServiceProviderTest.php": {
         "name": "tests\/ServiceProvider\/DevToolsServiceProviderTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/AbstractCommand.php": {
+        "name": "src\/Console\/Command\/AbstractCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/AbstractCommandTestCase.php": {
+        "name": "tests\/Console\/Command\/AbstractCommandTestCase.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/PlaceholderResolver.php": {
+        "name": "src\/License\/PlaceholderResolver.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/PlaceholderResolverInterface.php": {
+        "name": "src\/License\/PlaceholderResolverInterface.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/Reader.php": {
+        "name": "src\/License\/Reader.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/ReaderInterface.php": {
+        "name": "src\/License\/ReaderInterface.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/TemplateLoader.php": {
+        "name": "src\/License\/TemplateLoader.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/License\/TemplateLoaderInterface.php": {
+        "name": "src\/License\/TemplateLoaderInterface.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/CopyLicenseCommandTest.php": {
+        "name": "tests\/Console\/Command\/CopyLicenseCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/License\/PlaceholderResolverTest.php": {
+        "name": "tests\/License\/PlaceholderResolverTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/License\/ReaderTest.php": {
+        "name": "tests\/License\/ReaderTest.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/License\/TemplateLoaderTest.php": {
+        "name": "tests\/License\/TemplateLoaderTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/AbstractCommandTestCase.php": {
+        "name": "tests\/{ => Console}\/Command\/AbstractCommandTestCase.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/CodeStyleCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/CodeStyleCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/CopyLicenseCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/CopyLicenseCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/DependenciesCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/DependenciesCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/DocsCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/DocsCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/GitAttributesCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/GitAttributesCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/GitIgnoreCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/GitIgnoreCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/PhpDocCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/PhpDocCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/RefactorCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/RefactorCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/ReportsCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/ReportsCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/SkillsCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/SkillsCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/StandardsCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/StandardsCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/SyncCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/SyncCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/TestsCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/TestsCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/Command\/WikiCommandTest.php": {
+        "name": "tests\/{ => Console}\/Command\/WikiCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/AbstractCommand.php": {
+        "name": "src\/{ => Console}\/Command\/AbstractCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/CodeStyleCommand.php": {
+        "name": "src\/{ => Console}\/Command\/CodeStyleCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/CopyLicenseCommand.php": {
+        "name": "src\/{ => Console}\/Command\/CopyLicenseCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/DependenciesCommand.php": {
+        "name": "src\/{ => Console}\/Command\/DependenciesCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/DocsCommand.php": {
+        "name": "src\/{ => Console}\/Command\/DocsCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/GitAttributesCommand.php": {
+        "name": "src\/{ => Console}\/Command\/GitAttributesCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/GitIgnoreCommand.php": {
+        "name": "src\/{ => Console}\/Command\/GitIgnoreCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/PhpDocCommand.php": {
+        "name": "src\/{ => Console}\/Command\/PhpDocCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/RefactorCommand.php": {
+        "name": "src\/{ => Console}\/Command\/RefactorCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/ReportsCommand.php": {
+        "name": "src\/{ => Console}\/Command\/ReportsCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/SkillsCommand.php": {
+        "name": "src\/{ => Console}\/Command\/SkillsCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/StandardsCommand.php": {
+        "name": "src\/{ => Console}\/Command\/StandardsCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/SyncCommand.php": {
+        "name": "src\/{ => Console}\/Command\/SyncCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/TestsCommand.php": {
+        "name": "src\/{ => Console}\/Command\/TestsCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/{ => Console}\/Command\/WikiCommand.php": {
+        "name": "src\/{ => Console}\/Command\/WikiCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/DevTools.php": {
+        "name": "src\/DevTools.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/AbstractCommandTest.php": {
+        "name": "tests\/Command\/AbstractCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/AbstractCommandTestCase.php": {
+        "name": "tests\/Command\/AbstractCommandTestCase.php",
+        "gitChanges": 7,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/CodeStyleCommandTest.php": {
+        "name": "tests\/Command\/CodeStyleCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/CopyLicenseCommandTest.php": {
+        "name": "tests\/Command\/CopyLicenseCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/DependenciesCommandTest.php": {
+        "name": "tests\/Command\/DependenciesCommandTest.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/DocsCommandTest.php": {
+        "name": "tests\/Command\/DocsCommandTest.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/GitAttributesCommandTest.php": {
+        "name": "tests\/Command\/GitAttributesCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/GitIgnoreCommandTest.php": {
+        "name": "tests\/Command\/GitIgnoreCommandTest.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/PhpDocCommandTest.php": {
+        "name": "tests\/Command\/PhpDocCommandTest.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/RefactorCommandTest.php": {
+        "name": "tests\/Command\/RefactorCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/ReportsCommandTest.php": {
+        "name": "tests\/Command\/ReportsCommandTest.php",
+        "gitChanges": 7,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/SkillsCommandTest.php": {
+        "name": "tests\/Command\/SkillsCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/StandardsCommandTest.php": {
+        "name": "tests\/Command\/StandardsCommandTest.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/SyncCommandTest.php": {
+        "name": "tests\/Command\/SyncCommandTest.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/TestsCommandTest.php": {
+        "name": "tests\/Command\/TestsCommandTest.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Command\/WikiCommandTest.php": {
+        "name": "tests\/Command\/WikiCommandTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/{ => Console}\/DevToolsTest.php": {
+        "name": "tests\/{ => Console}\/DevToolsTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/SkillsCommand.php": {
+        "name": "src\/Command\/SkillsCommand.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/TestsCommand.php": {
+        "name": "src\/Command\/TestsCommand.php",
+        "gitChanges": 8,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/GitAttributesCommand.php": {
+        "name": "src\/Command\/GitAttributesCommand.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/SyncCommand.php": {
+        "name": "src\/Command\/SyncCommand.php",
+        "gitChanges": 13,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/CopyLicenseCommand.php": {
+        "name": "src\/Command\/CopyLicenseCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/AbstractCommand.php": {
+        "name": "src\/Command\/AbstractCommand.php",
+        "gitChanges": 15,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/DependenciesCommand.php": {
+        "name": "src\/Command\/DependenciesCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/Skills\/SkillsSynchronizer.php": {
+        "name": "src\/Command\/Skills\/SkillsSynchronizer.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/Skills\/SynchronizeResult.php": {
+        "name": "src\/Command\/Skills\/SynchronizeResult.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/ReportsCommand.php": {
+        "name": "src\/Command\/ReportsCommand.php",
+        "gitChanges": 15,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/StandardsCommand.php": {
+        "name": "src\/Command\/StandardsCommand.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/GitIgnoreCommand.php": {
+        "name": "src\/Command\/GitIgnoreCommand.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Docblock\/OrderedDocblock.php": {
+        "name": "src\/Docblock\/OrderedDocblock.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Docblock\/OrderedDocblockTest.php": {
+        "name": "tests\/Docblock\/OrderedDocblockTest.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/DocsCommand.php": {
+        "name": "src\/Command\/DocsCommand.php",
+        "gitChanges": 12,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    ".php-cs-fixer.dist.php": {
+        "name": ".php-cs-fixer.dist.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/InstallCommand.php": {
+        "name": "src\/Command\/InstallCommand.php",
+        "gitChanges": 5,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/InstallScriptsCommand.php": {
+        "name": "src\/Command\/InstallScriptsCommand.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Composer\/ScriptsInstallerTrait.php": {
+        "name": "src\/Composer\/ScriptsInstallerTrait.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "resources\/index.php": {
+        "name": "resources\/index.php",
+        "gitChanges": 4,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/WikiCommand.php": {
+        "name": "src\/Command\/WikiCommand.php",
+        "gitChanges": 2,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/CodeStyleCommand.php": {
+        "name": "src\/Command\/CodeStyleCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/PhpDocCommand.php": {
+        "name": "src\/Command\/PhpDocCommand.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Command\/RefactorCommand.php": {
+        "name": "src\/Command\/RefactorCommand.php",
+        "gitChanges": 3,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/DevToolsTest.php": {
+        "name": "tests\/DevToolsTest.php",
         "gitChanges": 1,
         "numberOfUnitTests": 0,
         "violations": {},
@@ -8410,7 +9025,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Agent\/Skills\/SkillsSynchronizerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Agent\\Skills\\SkillsSynchronizerTest",
                 "assertions": "46",
-                "time": "0.410804"
+                "time": "0.363404"
             },
             "FastForward\\DevTools\\Tests\\Agent\\Skills\\SynchronizeResultTest": {
                 "nbExternals": 2,
@@ -8421,7 +9036,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Agent\/Skills\/SynchronizeResultTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Agent\\Skills\\SynchronizeResultTest",
                 "assertions": "13",
-                "time": "0.001758"
+                "time": "0.001719"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Capability\\DevToolsCommandProviderTest": {
                 "nbExternals": 3,
@@ -8433,7 +9048,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Capability\/DevToolsCommandProviderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Capability\\DevToolsCommandProviderTest",
                 "assertions": "9",
-                "time": "0.035456"
+                "time": "0.038634"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\ComposerJsonTest": {
                 "nbExternals": 2,
@@ -8444,7 +9059,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/ComposerJsonTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\ComposerJsonTest",
                 "assertions": "51",
-                "time": "0.062869"
+                "time": "0.081528"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\AuthorTest": {
                 "nbExternals": 2,
@@ -8455,7 +9070,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/Schema\/AuthorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\AuthorTest",
                 "assertions": "8",
-                "time": "0.001381"
+                "time": "0.001320"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\FundingTest": {
                 "nbExternals": 2,
@@ -8466,7 +9081,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/Schema\/FundingTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\FundingTest",
                 "assertions": "2",
-                "time": "0.000268"
+                "time": "0.000264"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\SupportTest": {
                 "nbExternals": 2,
@@ -8477,7 +9092,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/Schema\/SupportTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\SupportTest",
                 "assertions": "20",
-                "time": "0.000569"
+                "time": "0.000560"
             },
             "FastForward\\DevTools\\Tests\\Composer\\PluginTest": {
                 "nbExternals": 2,
@@ -8488,7 +9103,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/PluginTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\PluginTest",
                 "assertions": "7",
-                "time": "0.017195"
+                "time": "0.014428"
             },
             "FastForward\\DevTools\\Tests\\Config\\ECSConfigTest": {
                 "nbExternals": 2,
@@ -8499,7 +9114,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Config\/ECSConfigTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Config\\ECSConfigTest",
                 "assertions": "1",
-                "time": "0.018664"
+                "time": "0.016153"
             },
             "FastForward\\DevTools\\Tests\\Config\\RectorConfigTest": {
                 "nbExternals": 2,
@@ -8510,7 +9125,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Config\/RectorConfigTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Config\\RectorConfigTest",
                 "assertions": "2",
-                "time": "0.001902"
+                "time": "0.001861"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\CodeStyleCommandTest": {
                 "nbExternals": 4,
@@ -8523,7 +9138,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/CodeStyleCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\CodeStyleCommandTest",
                 "assertions": "13",
-                "time": "0.024887"
+                "time": "0.022748"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\CopyResourceCommandTest": {
                 "nbExternals": 5,
@@ -8537,7 +9152,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/CopyResourceCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\CopyResourceCommandTest",
                 "assertions": "7",
-                "time": "0.004856"
+                "time": "0.004160"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\DependenciesCommandTest": {
                 "nbExternals": 4,
@@ -8550,7 +9165,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/DependenciesCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\DependenciesCommandTest",
                 "assertions": "32",
-                "time": "0.070436"
+                "time": "0.064711"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\DocsCommandTest": {
                 "nbExternals": 4,
@@ -8563,7 +9178,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/DocsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\DocsCommandTest",
                 "assertions": "10",
-                "time": "0.016763"
+                "time": "0.014953"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\GitAttributesCommandTest": {
                 "nbExternals": 4,
@@ -8576,7 +9191,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/GitAttributesCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\GitAttributesCommandTest",
                 "assertions": "15",
-                "time": "0.009968"
+                "time": "0.009560"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\GitHooksCommandTest": {
                 "nbExternals": 5,
@@ -8590,7 +9205,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/GitHooksCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\GitHooksCommandTest",
                 "assertions": "7",
-                "time": "0.003648"
+                "time": "0.003242"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\GitIgnoreCommandTest": {
                 "nbExternals": 4,
@@ -8603,7 +9218,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/GitIgnoreCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\GitIgnoreCommandTest",
                 "assertions": "9",
-                "time": "0.008722"
+                "time": "0.008169"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\LicenseCommandTest": {
                 "nbExternals": 4,
@@ -8616,7 +9231,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/LicenseCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\LicenseCommandTest",
                 "assertions": "9",
-                "time": "0.004400"
+                "time": "0.004132"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\MetricsCommandTest": {
                 "nbExternals": 4,
@@ -8629,7 +9244,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/MetricsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\MetricsCommandTest",
                 "assertions": "33",
-                "time": "0.021692"
+                "time": "0.021165"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\PhpDocCommandTest": {
                 "nbExternals": 9,
@@ -8647,7 +9262,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/PhpDocCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\PhpDocCommandTest",
                 "assertions": "14",
-                "time": "0.009120"
+                "time": "0.008191"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\RefactorCommandTest": {
                 "nbExternals": 4,
@@ -8660,7 +9275,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/RefactorCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\RefactorCommandTest",
                 "assertions": "15",
-                "time": "0.005925"
+                "time": "0.005948"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\ReportsCommandTest": {
                 "nbExternals": 4,
@@ -8673,7 +9288,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/ReportsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\ReportsCommandTest",
                 "assertions": "24",
-                "time": "0.024635"
+                "time": "0.022935"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\SkillsCommandTest": {
                 "nbExternals": 6,
@@ -8688,7 +9303,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/SkillsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\SkillsCommandTest",
                 "assertions": "20",
-                "time": "0.026455"
+                "time": "0.022638"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\StandardsCommandTest": {
                 "nbExternals": 5,
@@ -8702,7 +9317,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/StandardsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\StandardsCommandTest",
                 "assertions": "9",
-                "time": "0.004571"
+                "time": "0.004115"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\SyncCommandTest": {
                 "nbExternals": 5,
@@ -8716,7 +9331,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/SyncCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\SyncCommandTest",
                 "assertions": "7",
-                "time": "0.003212"
+                "time": "0.002823"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\TestsCommandTest": {
                 "nbExternals": 6,
@@ -8731,7 +9346,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/TestsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\TestsCommandTest",
                 "assertions": "30",
-                "time": "0.075231"
+                "time": "0.073138"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\UpdateComposerJsonCommandTest": {
                 "nbExternals": 4,
@@ -8744,7 +9359,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/UpdateComposerJsonCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\UpdateComposerJsonCommandTest",
                 "assertions": "12",
-                "time": "0.008104"
+                "time": "0.007671"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\WikiCommandTest": {
                 "nbExternals": 4,
@@ -8757,7 +9372,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/WikiCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\WikiCommandTest",
                 "assertions": "21",
-                "time": "0.014247"
+                "time": "0.013387"
             },
             "FastForward\\DevTools\\Tests\\Console\\CommandLoader\\DevToolsCommandLoaderTest": {
                 "nbExternals": 5,
@@ -8771,21 +9386,21 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/CommandLoader\/DevToolsCommandLoaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\CommandLoader\\DevToolsCommandLoaderTest",
                 "assertions": "9",
-                "time": "0.002308"
+                "time": "0.001902"
             },
             "FastForward\\DevTools\\Tests\\Console\\DevToolsTest": {
                 "nbExternals": 5,
                 "externals": {
                     "0": "PHPUnit\\Framework\\TestCase",
                     "1": "FastForward\\DevTools\\Console\\DevTools",
-                    "2": "anonymous@0000000000000b9f0000000000000000",
+                    "2": "anonymous@00000000000009840000000000000000",
                     "3": "ReflectionProperty",
                     "7": "ReflectionMethod"
                 },
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/DevToolsTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\DevToolsTest",
                 "assertions": "10",
-                "time": "0.015194"
+                "time": "0.012700"
             },
             "FastForward\\DevTools\\Tests\\Filesystem\\FilesystemTest": {
                 "nbExternals": 3,
@@ -8797,7 +9412,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Filesystem\/FilesystemTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Filesystem\\FilesystemTest",
                 "assertions": "14",
-                "time": "0.015525"
+                "time": "0.020025"
             },
             "FastForward\\DevTools\\Tests\\Filesystem\\FinderFactoryTest": {
                 "nbExternals": 2,
@@ -8808,7 +9423,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Filesystem\/FinderFactoryTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Filesystem\\FinderFactoryTest",
                 "assertions": "3",
-                "time": "0.000324"
+                "time": "0.000341"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\CandidateProviderTest": {
                 "nbExternals": 2,
@@ -8819,7 +9434,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/CandidateProviderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\CandidateProviderTest",
                 "assertions": "11",
-                "time": "0.004437"
+                "time": "0.004158"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\ExistenceCheckerTest": {
                 "nbExternals": 2,
@@ -8830,7 +9445,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/ExistenceCheckerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\ExistenceCheckerTest",
                 "assertions": "12",
-                "time": "0.006307"
+                "time": "0.006351"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\ExportIgnoreFilterTest": {
                 "nbExternals": 2,
@@ -8841,7 +9456,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/ExportIgnoreFilterTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\ExportIgnoreFilterTest",
                 "assertions": "2",
-                "time": "0.001508"
+                "time": "0.001478"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\MergerTest": {
                 "nbExternals": 2,
@@ -8852,7 +9467,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/MergerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\MergerTest",
                 "assertions": "15",
-                "time": "0.007635"
+                "time": "0.008090"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\ReaderTest": {
                 "nbExternals": 2,
@@ -8863,7 +9478,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/ReaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\ReaderTest",
                 "assertions": "2",
-                "time": "0.001407"
+                "time": "0.001205"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\WriterTest": {
                 "nbExternals": 2,
@@ -8874,7 +9489,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/WriterTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\WriterTest",
                 "assertions": "11",
-                "time": "0.007124"
+                "time": "0.006887"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\ClassifierTest": {
                 "nbExternals": 2,
@@ -8885,7 +9500,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/ClassifierTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\ClassifierTest",
                 "assertions": "15",
-                "time": "0.005648"
+                "time": "0.005562"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\GitIgnoreTest": {
                 "nbExternals": 2,
@@ -8896,7 +9511,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/GitIgnoreTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\GitIgnoreTest",
                 "assertions": "11",
-                "time": "0.003023"
+                "time": "0.002804"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\MergerTest": {
                 "nbExternals": 2,
@@ -8907,7 +9522,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/MergerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\MergerTest",
                 "assertions": "17",
-                "time": "0.007358"
+                "time": "0.007209"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\ReaderTest": {
                 "nbExternals": 2,
@@ -8918,7 +9533,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/ReaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\ReaderTest",
                 "assertions": "7",
-                "time": "0.001824"
+                "time": "0.001592"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\WriterTest": {
                 "nbExternals": 4,
@@ -8931,7 +9546,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/WriterTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\WriterTest",
                 "assertions": "3",
-                "time": "0.002162"
+                "time": "0.001985"
             },
             "FastForward\\DevTools\\Tests\\License\\GeneratorTest": {
                 "nbExternals": 5,
@@ -8945,7 +9560,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/License\/GeneratorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\License\\GeneratorTest",
                 "assertions": "4",
-                "time": "0.003981"
+                "time": "0.003760"
             },
             "FastForward\\DevTools\\Tests\\License\\ResolverTest": {
                 "nbExternals": 2,
@@ -8956,7 +9571,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/License\/ResolverTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\License\\ResolverTest",
                 "assertions": "3",
-                "time": "0.001664"
+                "time": "0.001510"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Coverage\\CoverageSummaryLoaderTest": {
                 "nbExternals": 8,
@@ -8964,7 +9579,7 @@
                     "PHPUnit\\Framework\\TestCase",
                     "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
                     "RuntimeException",
-                    "anonymous@0000000000001ced0000000000000000",
+                    "anonymous@0000000000001d410000000000000000",
                     "SebastianBergmann\\CodeCoverage\\Filter",
                     "SebastianBergmann\\CodeCoverage\\CodeCoverage",
                     "SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",
@@ -8973,7 +9588,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Coverage\/CoverageSummaryLoaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Coverage\\CoverageSummaryLoaderTest",
                 "assertions": "8",
-                "time": "0.003798"
+                "time": "0.003249"
             },
             "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryTest": {
                 "nbExternals": 2,
@@ -8984,7 +9599,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Coverage\/CoverageSummaryTest.php",
                 "classname": "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryTest",
                 "assertions": "9",
-                "time": "0.000888"
+                "time": "0.000876"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\EventTracerTest": {
                 "nbExternals": 4,
@@ -8997,7 +9612,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Event\/EventTracerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\EventTracerTest",
                 "assertions": "5",
-                "time": "0.001454"
+                "time": "0.001519"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriberTest": {
                 "nbExternals": 3,
@@ -9009,7 +9624,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriberTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriberTest",
                 "assertions": "0",
-                "time": "0.002426"
+                "time": "0.002049"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriberTest": {
                 "nbExternals": 4,
@@ -9022,7 +9637,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriberTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriberTest",
                 "assertions": "3",
-                "time": "0.004189"
+                "time": "0.003738"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Runner\\Extension\\DevToolsExtensionTest": {
                 "nbExternals": 2,
@@ -9033,7 +9648,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Runner\/Extension\/DevToolsExtensionTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Runner\\Extension\\DevToolsExtensionTest",
                 "assertions": "2",
-                "time": "0.002016"
+                "time": "0.001862"
             },
             "FastForward\\DevTools\\Tests\\Process\\ProcessBuilderTest": {
                 "nbExternals": 2,
@@ -9044,7 +9659,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Process\/ProcessBuilderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Process\\ProcessBuilderTest",
                 "assertions": "11",
-                "time": "0.002158"
+                "time": "0.002050"
             },
             "FastForward\\DevTools\\Tests\\Process\\ProcessQueueTest": {
                 "nbExternals": 5,
@@ -9058,7 +9673,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Process\/ProcessQueueTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Process\\ProcessQueueTest",
                 "assertions": "36",
-                "time": "0.016230"
+                "time": "0.015379"
             },
             "FastForward\\DevTools\\Tests\\Psr\\Clock\\SystemClockTest": {
                 "nbExternals": 3,
@@ -9070,7 +9685,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Psr\/Clock\/SystemClockTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Psr\\Clock\\SystemClockTest",
                 "assertions": "5",
-                "time": "0.001248"
+                "time": "0.001113"
             },
             "FastForward\\DevTools\\Tests\\Rector\\AddMissingClassPhpDocRectorTest": {
                 "nbExternals": 8,
@@ -9087,7 +9702,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Rector\/AddMissingClassPhpDocRectorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Rector\\AddMissingClassPhpDocRectorTest",
                 "assertions": "12",
-                "time": "0.032180"
+                "time": "0.028143"
             },
             "FastForward\\DevTools\\Tests\\Rector\\AddMissingMethodPhpDocRectorTest": {
                 "nbExternals": 17,
@@ -9113,7 +9728,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Rector\/AddMissingMethodPhpDocRectorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Rector\\AddMissingMethodPhpDocRectorTest",
                 "assertions": "22",
-                "time": "0.005861"
+                "time": "0.005577"
             },
             "FastForward\\DevTools\\Tests\\Rector\\RemoveEmptyDocBlockRectorTest": {
                 "nbExternals": 9,
@@ -9131,7 +9746,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Rector\/RemoveEmptyDocBlockRectorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Rector\\RemoveEmptyDocBlockRectorTest",
                 "assertions": "13",
-                "time": "0.004140"
+                "time": "0.003919"
             },
             "FastForward\\DevTools\\Tests\\ServiceProvider\\DevToolsServiceProviderTest": {
                 "nbExternals": 2,
@@ -9142,7 +9757,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/ServiceProvider\/DevToolsServiceProviderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\ServiceProvider\\DevToolsServiceProviderTest",
                 "assertions": "4",
-                "time": "0.000924"
+                "time": "0.000933"
             }
         },
         "nbSuites": 60,
