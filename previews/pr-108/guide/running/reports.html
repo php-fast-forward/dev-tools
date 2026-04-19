@@ -2390,13 +2390,13 @@ publishes a generated reports directory to GitHub Pages.</p>
             
     
 <ol start="1" type="1">
-    <li value="1"><code>docs --target build</code>
+    <li value="1"><code>docs --target .dev-tools</code>
 </li>
 
-    <li value="2"><code>tests --coverage build/coverage --no-progress --coverage-summary</code>
+    <li value="2"><code>tests --coverage .dev-tools/coverage --no-progress --coverage-summary</code>
 </li>
 
-    <li value="3"><code>metrics --target build/metrics --junit build/coverage/junit.xml</code>
+    <li value="3"><code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
 </li>
 
 </ol>
@@ -2412,25 +2412,25 @@ publishes a generated reports directory to GitHub Pages.</p>
             
 
 <ul>
-    <li class="dash">the documentation site rooted at <code>build/</code>
+    <li class="dash">the documentation site rooted at <code>.dev-tools/</code>
 ;</li>
 
     <li class="dash">guide pages generated from the local <code>docs/</code>
  source;</li>
 
-    <li class="dash">coverage reports inside <code>build/coverage/</code>
+    <li class="dash">coverage reports inside <code>.dev-tools/coverage/</code>
 ;</li>
 
-    <li class="dash">PhpMetrics output inside <code>build/metrics/</code>
+    <li class="dash">PhpMetrics output inside <code>.dev-tools/metrics/</code>
 ;</li>
 
-    <li class="dash"><code>build/coverage/testdox.html</code>
- and <code>build/coverage/clover.xml</code>
+    <li class="dash"><code>.dev-tools/coverage/testdox.html</code>
+ and <code>.dev-tools/coverage/clover.xml</code>
  for
 human and CI consumption;</li>
 
-    <li class="dash"><code>build/metrics/report.json</code>
- and <code>build/metrics/report-summary.json</code>
+    <li class="dash"><code>.dev-tools/metrics/report.json</code>
+ and <code>.dev-tools/metrics/report-summary.json</code>
  for
 preview artifacts and machine-readable metrics summaries.</li>
 

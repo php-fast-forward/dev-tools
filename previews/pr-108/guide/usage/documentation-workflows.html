@@ -2425,7 +2425,7 @@ and human-written guides.</p>
 </td>
             <td><code>--target</code>
 </td>
-            <td><code>build</code>
+            <td><code>.dev-tools</code>
 </td>
             <td>Selects the HTML output directory.</td>
     </tr>
@@ -2456,7 +2456,7 @@ and human-written guides.</p>
             <h2>Common Examples</h2>
 
             <pre><code class="language-bash">composer docs
-vendor/bin/dev-tools docs --source=docs --target=build
+vendor/bin/dev-tools docs --source=docs --target=.dev-tools
 composer wiki
 composer reports</code></pre>
 
@@ -2477,11 +2477,11 @@ guide directory does not exist.</li>
 .</li>
 
     <li class="dash"><code>reports</code>
- runs <code>docs --target build</code>
+ runs <code>docs --target .dev-tools</code>
  and
-<code>tests --coverage build/coverage</code>
+<code>tests --coverage .dev-tools/coverage</code>
  and then
-<code>metrics --target build/metrics --junit build/coverage/junit.xml</code>
+<code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
 .</li>
 
 </ul>
@@ -2500,13 +2500,13 @@ guide directory does not exist.</li>
     <li class="dash">guide pages generated from <code>docs/</code>
 ;</li>
 
-    <li class="dash">coverage data under <code>build/coverage</code>
+    <li class="dash">coverage data under <code>.dev-tools/coverage</code>
  when <code>reports</code>
  or
 <code>tests --coverage</code>
  is used;</li>
 
-    <li class="dash">metrics data under <code>build/metrics</code>
+    <li class="dash">metrics data under <code>.dev-tools/metrics</code>
  when <code>reports</code>
  or <code>metrics</code>
  is

@@ -2481,7 +2481,7 @@ dependencies are found.</li>
     <p>Analyzes code metrics with PhpMetrics.</p>
 
             <pre><code class="language-bash">composer metrics
-composer metrics --target=build/metrics
+composer metrics --target=.dev-tools/metrics
 composer --working-dir=packages/example metrics</code></pre>
 
             
@@ -2612,7 +2612,7 @@ local-first fallback logic;</li>
             
     <p>Builds the HTML documentation site with phpDocumentor.</p>
 
-            <pre><code class="language-bash">composer docs --source=docs --target=build</code></pre>
+            <pre><code class="language-bash">composer docs --source=docs --target=.dev-tools</code></pre>
 
             
     <p>Important details:</p>
@@ -2681,13 +2681,13 @@ local-first fallback logic;</li>
             
 
 <ul>
-    <li class="dash">it calls <code>docs --target build</code>
+    <li class="dash">it calls <code>docs --target .dev-tools</code>
 ;</li>
 
-    <li class="dash">it calls <code>tests --coverage build/coverage --no-progress --coverage-summary</code>
+    <li class="dash">it calls <code>tests --coverage .dev-tools/coverage --no-progress --coverage-summary</code>
 ;</li>
 
-    <li class="dash">it calls <code>metrics --target build/metrics --junit build/coverage/junit.xml</code>
+    <li class="dash">it calls <code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
 ;</li>
 
     <li class="dash"><code>docs</code>
