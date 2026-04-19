@@ -199,6 +199,7 @@ final class DependenciesCommandTest extends TestCase
     private function configureUpgradeBuilders(bool $dev, string $maxOutdated): void
     {
         $composerUpdateWithDependenciesBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $composerUpdateAnsiBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $composerUpdateBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $depAnalyserBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $depAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
@@ -210,9 +211,10 @@ final class DependenciesCommandTest extends TestCase
             ->build($dev ? 'vendor/bin/jack open-versions --dev' : 'vendor/bin/jack open-versions')
             ->willReturn($this->processOpenVersions->reveal());
         $this->processBuilder->withArgument('-W')->willReturn($composerUpdateWithDependenciesBuilder->reveal());
-        $composerUpdateWithDependenciesBuilder->withArgument('--no-progress')->willReturn($composerUpdateBuilder->reveal());
+        $composerUpdateWithDependenciesBuilder->withArgument('--ansi')->willReturn($composerUpdateAnsiBuilder->reveal());
+        $composerUpdateAnsiBuilder->withArgument('--no-progress')->willReturn($composerUpdateBuilder->reveal());
         $composerUpdateBuilder->build('composer update')->willReturn($this->processComposerUpdate->reveal());
-        $this->processBuilder->build('vendor/bin/composer-normalize')->willReturn($this->processComposerNormalize->reveal());
+        $this->processBuilder->build('composer normalize')->willReturn($this->processComposerNormalize->reveal());
         $this->processBuilder->build('vendor/bin/composer-unused')->willReturn($this->processUnused->reveal());
         $this->processBuilder->withArgument('--ignore-unused-deps')->willReturn($depAnalyserBuilder->reveal());
         $depAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')->willReturn($depAnalyserFinalBuilder->reveal());
