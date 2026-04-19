@@ -41,8 +41,7 @@ on:
           - 'tests/**'
           - 'composer.json'
           - 'composer.lock'
-          - '.github/scripts/**'
-          - 'resources/github-actions/scripts/**'
+          - '.github/actions/**'
           - '.github/workflows/tests.yml'
     push:
         branches: [ "main" ]
@@ -68,7 +67,7 @@ jobs:
 
             - name: Resolve workflow PHP version
               id: resolve
-              run: python3 .github/scripts/resolve_php_version.py
+              uses: php-fast-forward/dev-tools/.github/actions/resolve-php-version@main
 
     tests:
         needs: resolve_php

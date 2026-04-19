@@ -87,7 +87,7 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->add(Argument::type(Process::class), false, false)
             ->shouldBeCalledTimes(2);
         $this->processQueue->add(Argument::type(Process::class), false, true)
-            ->shouldBeCalledTimes(10);
+            ->shouldBeCalledTimes(9);
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
@@ -105,7 +105,7 @@ final class SyncCommandTest extends TestCase
             ->willReturn(true);
 
         $this->processQueue->add(Argument::type(Process::class), false, false)
-            ->shouldBeCalledTimes(10);
+            ->shouldBeCalledTimes(9);
         $this->processQueue->add(Argument::type(Process::class), false, true)
             ->shouldNotBeCalled();
         $this->processQueue->run($this->output->reveal())

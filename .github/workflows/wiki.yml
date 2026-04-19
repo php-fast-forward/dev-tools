@@ -30,7 +30,7 @@ jobs:
 
       - name: Resolve workflow PHP version
         id: resolve
-        run: python3 .github/scripts/resolve_php_version.py
+        uses: php-fast-forward/dev-tools/.github/actions/resolve-php-version@main
 
   preview:
     needs: resolve_php

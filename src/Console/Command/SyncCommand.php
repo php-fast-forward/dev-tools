@@ -117,16 +117,6 @@ final class SyncCommand extends BaseCommand
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
-                '--source=resources/github-actions/scripts',
-                '--target=.github/scripts',
-                $input->getOption('overwrite') ? '--overwrite' : null,
-                ...$modeArguments,
-            ],
-            $allowDetached
-        );
-        $this->queueDevToolsCommand(
-            [
-                'copy-resource',
                 '--source=.editorconfig',
                 '--target=.editorconfig',
                 $input->getOption('overwrite') ? '--overwrite' : null,

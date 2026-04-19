@@ -30,10 +30,10 @@ use function Safe\json_decode;
 use function Safe\mkdir;
 
 #[CoversNothing]
-final class ResolvePhpVersionScriptTest extends TestCase
+final class ResolvePhpVersionActionTest extends TestCase
 {
     #[Test]
-    public function scriptWillUseComposerLockPlatformOverrideFirst(): void
+    public function actionWillUseComposerLockPlatformOverrideFirst(): void
     {
         $result = $this->runResolver(
             ['require' => ['php' => '^8.3'], 'config' => ['platform' => ['php' => '8.4.0']]],
@@ -46,7 +46,7 @@ final class ResolvePhpVersionScriptTest extends TestCase
     }
 
     #[Test]
-    public function scriptWillUseComposerJsonPlatformWhenLockOverrideIsMissing(): void
+    public function actionWillUseComposerJsonPlatformWhenLockOverrideIsMissing(): void
     {
         $result = $this->runResolver(
             ['config' => ['platform' => ['php' => '8.4.0']]],
@@ -59,7 +59,7 @@ final class ResolvePhpVersionScriptTest extends TestCase
     }
 
     #[Test]
-    public function scriptWillBuildMatrixFromComposerRequireConstraint(): void
+    public function actionWillBuildMatrixFromComposerRequireConstraint(): void
     {
         $result = $this->runResolver(
             ['require' => ['php' => '^8.4']],
@@ -72,7 +72,7 @@ final class ResolvePhpVersionScriptTest extends TestCase
     }
 
     #[Test]
-    public function scriptWillHandleGreaterThanOrEqualConstraint(): void
+    public function actionWillHandleGreaterThanOrEqualConstraint(): void
     {
         $result = $this->runResolver(
             ['require' => ['php' => '>=8.5']],
@@ -84,7 +84,7 @@ final class ResolvePhpVersionScriptTest extends TestCase
     }
 
     #[Test]
-    public function scriptWillFallbackWhenNoReliableRequirementExists(): void
+    public function actionWillFallbackWhenNoReliableRequirementExists(): void
     {
         $result = $this->runResolver(
             ['require' => ['php' => '<8.3']],
@@ -115,14 +115,14 @@ final class ResolvePhpVersionScriptTest extends TestCase
 
         $outputFile = $directory . '/github-output.txt';
 
-        $process = new Process([
-            'python3',
-            '.github/scripts/resolve_php_version.py',
-            '--composer-json',
-            $directory . '/composer.json',
-            '--composer-lock',
-            $directory . '/composer.lock',
-        ], \dirname(__DIR__, 2));
+        $process = new Process(
+            [
+                'python3',
+                '-c',
+                $this->actionScript(),
+            ],
+            $directory,
+        );
         $process->setEnv(['GITHUB_OUTPUT' => $outputFile]);
         $process->mustRun();
 
@@ -145,5 +145,28 @@ final class ResolvePhpVersionScriptTest extends TestCase
             'matrix' => $matrix,
             'stdout' => $process->getOutput(),
         ];
+    }
+
+    private function actionScript(): string
+    {
+        $actionContents = file_get_contents(\dirname(__DIR__, 2) . '/.github/actions/resolve-php-version/action.yml');
+
+        self::assertIsString($actionContents);
+        $lines = explode("\n", $actionContents);
+        $start = array_search("        python3 <<'PY'", $lines, true);
+
+        self::assertNotFalse($start);
+
+        $scriptLines = [];
+
+        for ($index = $start + 1, $lineCount = count($lines); $index < $lineCount; ++$index) {
+            if ('        PY' === $lines[$index]) {
+                return implode("\n", $scriptLines);
+            }
+
+            $scriptLines[] = substr($lines[$index], 8);
+        }
+
+        self::fail('The resolve-php-version action does not contain the expected Python heredoc terminator.');
     }
 }
