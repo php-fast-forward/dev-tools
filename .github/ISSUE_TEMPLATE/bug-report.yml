@@ -1,0 +1,61 @@
+name: Bug Report
+description: Report a reproducible problem in FastForward DevTools
+title: "[bug] "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a problem. Please provide enough
+        detail for us to reproduce it.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What is going wrong?
+      placeholder: Describe the failure in one or two sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Tell us exactly how to reproduce the issue.
+      placeholder: |
+        1. Run ...
+        2. Edit ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      placeholder: Describe what you expected to happen.
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      placeholder: Describe what happened instead, including error output.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Share the relevant runtime details.
+      placeholder: |
+        - PHP version:
+        - Composer version:
+        - fast-forward/dev-tools version:
+        - OS:
+    validations:
+      required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional Context
+      description: Logs, screenshots, related links, or anything else helpful.

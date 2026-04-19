@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add community health files plus issue and pull request templates for contributors (#37)
+
 ### Changed
 
 - Document required GitHub Actions permissions for changelog release automation (#118)
