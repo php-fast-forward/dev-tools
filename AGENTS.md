@@ -171,3 +171,4 @@ procedural source of truth.
 - Delegate to `docs-writer` when `docs/` must be created or updated.
 - Delegate to `consumer-sync-auditor` when packaged skills, sync assets, wiki, workflows, or consumer bootstrap behavior change.
 - Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
+- Delegate to `changelog-maintainer` when a task needs changelog authoring, changelog validation for PRs, release promotion, or release-note export.

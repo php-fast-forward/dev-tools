@@ -37,8 +37,7 @@ final readonly class FundingProfile
         private array $customUrls = [],
         private array $unsupportedYamlEntries = [],
         private array $unsupportedComposerEntries = [],
-    ) {
-    }
+    ) {}
 
     /**
      * Returns the normalized GitHub Sponsors handles.

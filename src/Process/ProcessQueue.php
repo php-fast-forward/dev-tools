@@ -147,6 +147,7 @@ final class ProcessQueue implements ProcessQueueInterface
         }
 
         $this->drainDetachedProcessesOutput($output, true);
+        $this->entries = [];
 
         return $statusCode;
     }

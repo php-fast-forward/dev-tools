@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Funding;
 
-use function array_merge;
 use function array_unique;
 use function sort;
 

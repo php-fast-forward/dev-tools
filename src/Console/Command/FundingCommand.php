@@ -121,7 +121,12 @@ final class FundingCommand extends BaseCommand
         $output->writeln('<info>Synchronizing funding metadata...</info>');
 
         if (! $this->filesystem->exists($composerFile)) {
-            $output->writeln(\sprintf('<comment>Composer file %s does not exist. Skipping funding synchronization.</comment>', $composerFile));
+            $output->writeln(
+                \sprintf(
+                    '<comment>Composer file %s does not exist. Skipping funding synchronization.</comment>',
+                    $composerFile
+                )
+            );
 
             return self::SUCCESS;
         }
@@ -167,6 +172,15 @@ final class FundingCommand extends BaseCommand
     /**
      * Handles composer.json synchronization reporting and writes.
      *
+     * @param string $composerFile
+     * @param string $composerContents
+     * @param string $updatedComposerContents
+     * @param bool $dryRun
+     * @param bool $check
+     * @param bool $interactive
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
      * @return int the command status code
      */
     private function handleComposerFile(
@@ -209,7 +223,11 @@ final class FundingCommand extends BaseCommand
             return self::SUCCESS;
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($input, $output, $composerFile)) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile(
+            $input,
+            $output,
+            $composerFile
+        )) {
             $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $composerFile));
 
             return self::SUCCESS;
@@ -229,6 +247,15 @@ final class FundingCommand extends BaseCommand
     /**
      * Handles .github/FUNDING.yml synchronization reporting and writes.
      *
+     * @param string $fundingFile
+     * @param ?string $currentFundingContents
+     * @param ?string $updatedFundingContents
+     * @param bool $dryRun
+     * @param bool $check
+     * @param bool $interactive
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
      * @return int the command status code
      */
     private function handleFundingFile(
@@ -242,7 +269,9 @@ final class FundingCommand extends BaseCommand
         OutputInterface $output,
     ): int {
         if (null === $updatedFundingContents && null === $currentFundingContents) {
-            $output->writeln('<comment>No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.</comment>');
+            $output->writeln(
+                '<comment>No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.</comment>'
+            );
 
             return self::SUCCESS;
         }
@@ -257,7 +286,10 @@ final class FundingCommand extends BaseCommand
             $updatedFundingContents,
             $currentFundingContents,
             null === $currentFundingContents
-                ? \sprintf('Managed file %s will be created from generated funding metadata synchronization.', $fundingFile)
+                ? \sprintf(
+                    'Managed file %s will be created from generated funding metadata synchronization.',
+                    $fundingFile
+                )
                 : \sprintf('Updating managed file %s from generated funding metadata synchronization.', $fundingFile),
         );
 
@@ -291,6 +323,7 @@ final class FundingCommand extends BaseCommand
 
         $this->filesystem->mkdir($this->filesystem->dirname($fundingFile));
         $this->filesystem->dumpFile($fundingFile, $updatedFundingContents);
+
         $output->writeln(\sprintf('<info>Updated funding metadata in %s.</info>', $fundingFile));
 
         return self::SUCCESS;
@@ -299,13 +332,18 @@ final class FundingCommand extends BaseCommand
     /**
      * Prompts whether a managed file should be written.
      *
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @param string $targetFile
+     *
      * @return bool true when the write SHOULD proceed
      */
     private function shouldWriteManagedFile(InputInterface $input, OutputInterface $output, string $targetFile): bool
     {
         $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetFile), false);
 
-        return (bool) $this->getHelper('question')->ask($input, $output, $question);
+        return (bool) $this->getHelper('question')
+            ->ask($input, $output, $question);
     }
 
     /**

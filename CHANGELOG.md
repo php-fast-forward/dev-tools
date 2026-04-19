@@ -1,0 +1,222 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+### Added
+
+- Add Keep a Changelog management commands and release automation workflows (#28).
+- Package changelog maintenance skills, docs, and the changelog-maintainer project agent (#28).
+
+### Changed
+
+- Force workflow colors through FORCE_COLOR across packaged GitHub Actions for clearer CI logs (#28).
+
+## [1.11.0] - 2026-04-19
+
+### Added
+
+- Ship role-based project agents for issue implementation, docs, README, tests, and changelog work (#75) (#109).
+- Show diffs for overwritten synchronized resources and add preview/check modes to dev-tools:sync (#66) (#110) (#62) (#111).
+- Verify deployed reports health, synchronize funding metadata, and infer workflow PHP versions from project metadata (#70) (#112) (#56) (#113) (#76) (#114).
+
+### Fixed
+
+- Package the PHP version resolver action from resources/ so GitHub Actions can load it correctly (#115) (#116).
+
+## [1.10.0] - 2026-04-19
+
+### Changed
+
+- Refresh dependency and reporting docs to match the shipped commands and workflows (#105) (#106).
+- Move generated outputs into .dev-tools by default instead of public/ (#107) (#108).
+
+### Fixed
+
+- Preserve Git history in metrics previews so PhpMetrics reports show meaningful contributor and file history (#103) (#104).
+
+## [1.9.0] - 2026-04-19
+
+### Added
+
+- Generate PhpMetrics reports for consumer repositories (#98).
+- Add a Jack-powered dependency workflow to the dependencies command (#34) (#102).
+
+### Changed
+
+- Unify metrics outputs under a target directory (#99) (#100).
+
+### Fixed
+
+- Address code quality findings and sync safety regressions in command and test code (#94) (#95) (#96) (#97).
+
+## [1.8.0] - 2026-04-18
+
+### Added
+
+- Canonicalize packaged Git hooks during synchronization (#92) (#93).
+
+### Changed
+
+- Isolate Finder creation behind a factory to make filesystem traversal extensible (#90) (#91).
+
+## [1.7.0] - 2026-04-18
+
+### Added
+
+- Publish branch protection, migration, troubleshooting, and release-publishing guidance for consumer repositories (#61) (#72) (#79) (#80).
+- Synchronize README metadata during composer sync and expand PHPUnit output controls (#57) (#84).
+- Validate and clean up wiki and reports preview branches in packaged GitHub Actions workflows (#68) (#69) (#83).
+
+### Changed
+
+- Reduce default GitHub Actions token permissions across packaged workflows (#63).
+
+## [1.6.0] - 2026-04-17
+
+### Added
+
+- Introduce copy-resource, update-composer-json, and git-hooks commands plus packaged funding and support metadata.
+- Publish pull request Pages previews for reports and document the consumer preview workflow (#54) (#55).
+
+### Changed
+
+- Refactor command architecture around filesystem abstractions, resource copy and update commands, and dependency-injected process handling (#46).
+
+## [1.5.0] - 2026-04-14
+
+### Added
+
+- Package pull request auto-assign and label-sync GitHub Actions workflows (#35).
+
+### Changed
+
+- Standardize Composer installation and caching across packaged reports, tests, and wiki workflows.
+- Reorganize commands into the Console namespace and migrate to the GrumPHP shim (#42) (#44).
+
+### Fixed
+
+- Make wiki publishing work under branch protection and synced submodule pointer updates.
+
+## [1.4.0] - 2026-04-11
+
+### Changed
+
+- Replace external coverage-check tooling with native PHPUnit coverage summary validation (#30) (#31).
+
+### Fixed
+
+- Update Symfony component constraints to support Symfony 8.0 (#31).
+
+## [1.3.0] - 2026-04-11
+
+### Added
+
+- Manage .gitattributes export-ignore rules through dedicated gitattributes tooling (#27).
+
+### Changed
+
+- Exclude context7.json from packaged exports and broaden GitAttributes test coverage (#27).
+
+## [1.2.2] - 2026-03-26
+
+### Added
+
+- Bundle GrumPHP support into packaged scripts and installation commands.
+- Reuse packaged GitHub Actions workflows and synchronize .editorconfig and wiki submodule assets during setup.
+
+### Fixed
+
+- Resolve packaged workflow and wiki resource paths more reliably during script synchronization.
+
+## [1.2.1] - 2026-04-10
+
+### Changed
+
+- Refine license-generation documentation and export-ignore defaults (#26).
+
+## [1.2.0] - 2026-04-10
+
+### Added
+
+- Synchronize packaged skills into consumer repositories with the skills command (#23).
+- Bundle dependency analysis tooling and the dependencies command (#10).
+- Generate repository LICENSE files through dev-tools:sync and the license command (#25).
+
+## [1.1.0] - 2026-04-09
+
+### Added
+
+- Package reusable skills for Sphinx docs, README maintenance, PHPUnit, and GitHub issue workflows.
+- Synchronize .gitignore files through dedicated gitignore tooling (#21).
+
+### Changed
+
+- Make ECS and Rector configuration extensible for consumer overrides (#19).
+
+## [1.0.4] - 2026-03-26
+
+### Fixed
+
+- Resolve DocsCommand configuration files correctly from relative paths.
+
+## [1.0.3] - 2026-03-26
+
+### Changed
+
+- Verify the consumer package name before installing packaged scripts.
+
+## [1.0.2] - 2026-03-26
+
+### Fixed
+
+- Move the composer/composer dependency into the required package metadata.
+
+## [1.0.1] - 2026-03-26
+
+### Added
+
+- Introduce the unified Composer plugin command suite for tests, docs, reports, wiki publishing, and packaged script installation.
+
+### Fixed
+
+- Improve GitHub Actions and reports deployment handling for TTY, coverage, and Pages publishing.
+
+## [1.0.0] - 2026-04-08
+
+### Added
+
+- Rename the installation workflow to dev-tools:sync and synchronize Dependabot, GitHub Actions, and repository defaults.
+- Support PHPUnit test filtering, phpDocumentor bootstrap templates, and richer test notifications.
+
+### Changed
+
+- Standardize README badges, funding metadata, and documentation references for the packaged plugin.
+
+### Fixed
+
+- Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
+
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.11.0...HEAD
+[1.11.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.10.0...v1.11.0
+[1.10.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.9.0...v1.10.0
+[1.9.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.8.0...v1.9.0
+[1.8.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.7.0...v1.8.0
+[1.7.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.6.0...v1.7.0
+[1.6.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.5.0...v1.6.0
+[1.5.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.4.0...v1.5.0
+[1.4.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.3.0...v1.4.0
+[1.3.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.2.2...v1.3.0
+[1.2.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.2.1...v1.2.2
+[1.2.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.2.0...v1.2.1
+[1.2.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.1.0...v1.2.0
+[1.1.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.4...v1.1.0
+[1.0.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.3...v1.0.4
+[1.0.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.0.0...v1.0.1
+[1.0.0]: https://github.com/php-fast-forward/dev-tools/releases/tag/v1.0.0

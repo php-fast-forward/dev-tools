@@ -14,6 +14,21 @@ dependencies through constructor injection. The architecture uses
    * - ``FastForward\DevTools\Console\Command\StandardsCommand``
      - ``standards``
      - Runs the full quality pipeline.
+   * - ``FastForward\DevTools\Console\Command\ChangelogEntryCommand``
+     - ``changelog:entry``
+     - Adds a changelog entry to ``Unreleased`` or a published version.
+   * - ``FastForward\DevTools\Console\Command\ChangelogCheckCommand``
+     - ``changelog:check``
+     - Verifies that a branch adds meaningful unreleased changelog changes.
+   * - ``FastForward\DevTools\Console\Command\ChangelogNextVersionCommand``
+     - ``changelog:next-version``
+     - Infers the next semantic version from ``Unreleased``.
+   * - ``FastForward\DevTools\Console\Command\ChangelogPromoteCommand``
+     - ``changelog:promote``
+     - Promotes ``Unreleased`` entries into a published release section.
+   * - ``FastForward\DevTools\Console\Command\ChangelogShowCommand``
+     - ``changelog:show``
+     - Renders the notes body for a published changelog release.
    * - ``FastForward\DevTools\Console\Command\RefactorCommand``
      - ``refactor``
      - Runs Rector with local or packaged configuration.

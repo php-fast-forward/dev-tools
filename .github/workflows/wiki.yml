@@ -43,6 +43,7 @@ jobs:
 
     env:
       WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
+      FORCE_COLOR: '1'
 
     steps:
       - name: Checkout PR branch
@@ -142,6 +143,7 @@ jobs:
     env:
       WIKI_PUBLISH_BRANCH: master
       WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
+      FORCE_COLOR: '1'
 
     steps:
       - name: Checkout main branch

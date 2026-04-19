@@ -31,23 +31,31 @@ use Symfony\Component\Yaml\Yaml;
 #[UsesClass(FundingProfile::class)]
 final class FundingYamlCodecTest extends TestCase
 {
+    /**
+     * @return void
+     */
     #[Test]
     public function parseWillNormalizeSupportedAndUnsupportedYamlEntries(): void
     {
         $codec = new FundingYamlCodec();
 
         $profile = $codec->parse(<<<'YAML'
-github:
-  - foo
-custom: https://example.com/support
-patreon: example
-YAML);
+            github:
+              - foo
+            custom: https://example.com/support
+            patreon: example
+            YAML);
 
         self::assertSame(['foo'], $profile->getGithubSponsors());
         self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
-        self::assertSame(['patreon' => 'example'], $profile->getUnsupportedYamlEntries());
+        self::assertSame([
+            'patreon' => 'example',
+        ], $profile->getUnsupportedYamlEntries());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function dumpWillRenderScalarAndListFundingKeys(): void
     {
@@ -56,7 +64,9 @@ YAML);
         $contents = $codec->dump(new FundingProfile(
             ['foo'],
             ['https://example.com/support', 'https://example.com/other'],
-            ['patreon' => 'example'],
+            [
+                'patreon' => 'example',
+            ],
         ));
 
         self::assertSame(
@@ -69,15 +79,15 @@ YAML);
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function dumpWillRenderSingleCustomUrlAsList(): void
     {
         $codec = new FundingYamlCodec();
 
-        $contents = $codec->dump(new FundingProfile(
-            ['foo'],
-            ['https://example.com/support'],
-        ));
+        $contents = $codec->dump(new FundingProfile(['foo'], ['https://example.com/support']));
 
         self::assertSame(
             [

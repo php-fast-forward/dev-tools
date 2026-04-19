@@ -70,6 +70,9 @@ final class FundingCommandTest extends TestCase
 
     private FundingCommand $command;
 
+    /**
+     * @return void
+     */
     protected function setUp(): void
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
@@ -79,20 +82,32 @@ final class FundingCommandTest extends TestCase
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->normalizeProcess = $this->prophesize(Process::class);
-        $this->output->isDecorated()->willReturn(false);
+        $this->output->isDecorated()
+            ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
-        $this->input->getOption('composer-file')->willReturn('composer.json');
-        $this->input->getOption('funding-file')->willReturn('.github/FUNDING.yml');
-        $this->input->getOption('dry-run')->willReturn(false);
-        $this->input->getOption('check')->willReturn(false);
-        $this->input->getOption('interactive')->willReturn(false);
-        $this->filesystem->dirname('.github/FUNDING.yml')->willReturn('.github');
-        $this->filesystem->dirname('composer.json')->willReturn('.');
-        $this->filesystem->basename('composer.json')->willReturn('composer.json');
+        $this->input->getOption('composer-file')
+            ->willReturn('composer.json');
+        $this->input->getOption('funding-file')
+            ->willReturn('.github/FUNDING.yml');
+        $this->input->getOption('dry-run')
+            ->willReturn(false);
+        $this->input->getOption('check')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(false);
+        $this->filesystem->dirname('.github/FUNDING.yml')
+            ->willReturn('.github');
+        $this->filesystem->dirname('composer.json')
+            ->willReturn('.');
+        $this->filesystem->basename('composer.json')
+            ->willReturn('composer.json');
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->build('composer normalize')->willReturn($this->normalizeProcess->reveal());
+        $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
+            $this->processBuilder->reveal()
+        );
+        $this->processBuilder->build('composer normalize')
+            ->willReturn($this->normalizeProcess->reveal());
 
         $this->command = new FundingCommand(
             $this->filesystem->reveal(),
@@ -105,16 +120,23 @@ final class FundingCommandTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillCreateComposerFundingFromFundingYaml(): void
     {
         $composerContents = '{"name":"example/package"}';
         $fundingYaml = "github: foo\ncustom: https://example.com/support\n";
 
-        $this->filesystem->exists('composer.json')->willReturn(true);
-        $this->filesystem->readFile('composer.json')->willReturn($composerContents);
-        $this->filesystem->exists('.github/FUNDING.yml')->willReturn(true);
-        $this->filesystem->readFile('.github/FUNDING.yml')->willReturn($fundingYaml);
+        $this->filesystem->exists('composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('composer.json')
+            ->willReturn($composerContents);
+        $this->filesystem->exists('.github/FUNDING.yml')
+            ->willReturn(true);
+        $this->filesystem->readFile('.github/FUNDING.yml')
+            ->willReturn($fundingYaml);
         $this->fileDiffer->diffContents(
             'generated funding metadata synchronization',
             'composer.json',
@@ -122,8 +144,14 @@ final class FundingCommandTest extends TestCase
                 $decoded = json_decode($contents, true);
 
                 return [
-                    ['type' => 'github', 'url' => 'https://github.com/sponsors/foo'],
-                    ['type' => 'custom', 'url' => 'https://example.com/support'],
+                    [
+                        'type' => 'github',
+                        'url' => 'https://github.com/sponsors/foo',
+                    ],
+                    [
+                        'type' => 'custom',
+                        'url' => 'https://example.com/support',
+                    ],
                 ] === $decoded['funding'];
             }),
             $composerContents,
@@ -136,8 +164,10 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
-        $this->processQueue->add($this->normalizeProcess->reveal())->shouldBeCalledOnce();
-        $this->processQueue->run($this->output->reveal())->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
+        $this->processQueue->add($this->normalizeProcess->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
             'composer.json',
             Argument::that(static fn(string $contents): bool => str_contains($contents, '"funding"')),
@@ -146,16 +176,22 @@ final class FundingCommandTest extends TestCase
         self::assertSame(FundingCommand::SUCCESS, $this->executeCommand());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillCreateFundingYamlFromComposerFunding(): void
     {
         $composerContents = <<<'JSON'
-{"name":"example/package","funding":[{"type":"github","url":"https://github.com/sponsors/foo"},{"type":"custom","url":"https://example.com/support"}]}
-JSON;
+            {"name":"example/package","funding":[{"type":"github","url":"https://github.com/sponsors/foo"},{"type":"custom","url":"https://example.com/support"}]}
+            JSON;
 
-        $this->filesystem->exists('composer.json')->willReturn(true);
-        $this->filesystem->readFile('composer.json')->willReturn($composerContents);
-        $this->filesystem->exists('.github/FUNDING.yml')->willReturn(false);
+        $this->filesystem->exists('composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('composer.json')
+            ->willReturn($composerContents);
+        $this->filesystem->exists('.github/FUNDING.yml')
+            ->willReturn(false);
         $this->fileDiffer->diffContents(
             'generated funding metadata synchronization',
             'composer.json',
@@ -175,24 +211,32 @@ JSON;
             null,
             'Managed file .github/FUNDING.yml will be created from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Funding changed'))->shouldBeCalledOnce();
-        $this->filesystem->mkdir('.github')->shouldBeCalledOnce();
+        $this->filesystem->mkdir('.github')
+            ->shouldBeCalledOnce();
         $this->filesystem->dumpFile('.github/FUNDING.yml', Argument::type('string'))->shouldBeCalledOnce();
 
         self::assertSame(FundingCommand::SUCCESS, $this->executeCommand());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillMergeBothSourcesWithoutDuplicatingEntries(): void
     {
         $composerContents = <<<'JSON'
-{"name":"example/package","funding":[{"type":"github","url":"https://github.com/sponsors/foo"}]}
-JSON;
+            {"name":"example/package","funding":[{"type":"github","url":"https://github.com/sponsors/foo"}]}
+            JSON;
         $fundingYaml = "custom: https://example.com/support\n";
 
-        $this->filesystem->exists('composer.json')->willReturn(true);
-        $this->filesystem->readFile('composer.json')->willReturn($composerContents);
-        $this->filesystem->exists('.github/FUNDING.yml')->willReturn(true);
-        $this->filesystem->readFile('.github/FUNDING.yml')->willReturn($fundingYaml);
+        $this->filesystem->exists('composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('composer.json')
+            ->willReturn($composerContents);
+        $this->filesystem->exists('.github/FUNDING.yml')
+            ->willReturn(true);
+        $this->filesystem->readFile('.github/FUNDING.yml')
+            ->willReturn($fundingYaml);
         $this->fileDiffer->diffContents(
             'generated funding metadata synchronization',
             'composer.json',
@@ -200,8 +244,14 @@ JSON;
                 $decoded = json_decode($contents, true);
 
                 return [
-                    ['type' => 'github', 'url' => 'https://github.com/sponsors/foo'],
-                    ['type' => 'custom', 'url' => 'https://example.com/support'],
+                    [
+                        'type' => 'github',
+                        'url' => 'https://github.com/sponsors/foo',
+                    ],
+                    [
+                        'type' => 'custom',
+                        'url' => 'https://example.com/support',
+                    ],
                 ] === $decoded['funding'];
             }),
             $composerContents,
@@ -219,27 +269,37 @@ JSON;
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Funding changed'))->shouldBeCalledOnce();
-        $this->processQueue->add($this->normalizeProcess->reveal())->shouldBeCalledOnce();
-        $this->processQueue->run($this->output->reveal())->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
+        $this->processQueue->add($this->normalizeProcess->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
         $this->filesystem->dumpFile('composer.json', Argument::type('string'))->shouldBeCalledOnce();
-        $this->filesystem->mkdir('.github')->shouldBeCalledOnce();
+        $this->filesystem->mkdir('.github')
+            ->shouldBeCalledOnce();
         $this->filesystem->dumpFile('.github/FUNDING.yml', Argument::type('string'))->shouldBeCalledOnce();
 
         self::assertSame(FundingCommand::SUCCESS, $this->executeCommand());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillBeIdempotentWhenFundingMetadataAlreadyMatches(): void
     {
         $composerContents = <<<'JSON'
-{"name":"example/package","funding":[{"type":"github","url":"https://github.com/sponsors/foo"},{"type":"custom","url":"https://example.com/support"}]}
-JSON;
+            {"name":"example/package","funding":[{"type":"github","url":"https://github.com/sponsors/foo"},{"type":"custom","url":"https://example.com/support"}]}
+            JSON;
         $fundingYaml = "github: foo\ncustom: https://example.com/support\n";
 
-        $this->filesystem->exists('composer.json')->willReturn(true);
-        $this->filesystem->readFile('composer.json')->willReturn($composerContents);
-        $this->filesystem->exists('.github/FUNDING.yml')->willReturn(true);
-        $this->filesystem->readFile('.github/FUNDING.yml')->willReturn($fundingYaml);
+        $this->filesystem->exists('composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('composer.json')
+            ->willReturn($composerContents);
+        $this->filesystem->exists('.github/FUNDING.yml')
+            ->willReturn(true);
+        $this->filesystem->readFile('.github/FUNDING.yml')
+            ->willReturn($fundingYaml);
         $this->fileDiffer->diffContents(
             'generated funding metadata synchronization',
             'composer.json',
@@ -260,6 +320,9 @@ JSON;
         self::assertSame(FundingCommand::SUCCESS, $this->executeCommand());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
@@ -274,6 +337,9 @@ JSON;
         );
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

@@ -30,6 +30,9 @@ use PHPUnit\Framework\TestCase;
 #[UsesClass(FundingProfile::class)]
 final class FundingProfileMergerTest extends TestCase
 {
+    /**
+     * @return void
+     */
     #[Test]
     public function mergeWillCombineSupportedFundingAndPreserveUnsupportedEntries(): void
     {
@@ -39,20 +42,30 @@ final class FundingProfileMergerTest extends TestCase
             new FundingProfile(
                 ['foo'],
                 ['https://example.com/a'],
-                unsupportedComposerEntries: [['type' => 'patreon', 'url' => 'https://patreon.com/example']],
+                unsupportedComposerEntries: [[
+                    'type' => 'patreon',
+                    'url' => 'https://patreon.com/example',
+                ]],
             ),
             new FundingProfile(
                 ['bar', 'foo'],
                 ['https://example.com/b'],
-                ['ko_fi' => 'example'],
+                [
+                    'ko_fi' => 'example',
+                ],
             ),
         );
 
         self::assertSame(['bar', 'foo'], $merged->getGithubSponsors());
         self::assertSame(['https://example.com/a', 'https://example.com/b'], $merged->getCustomUrls());
-        self::assertSame(['ko_fi' => 'example'], $merged->getUnsupportedYamlEntries());
+        self::assertSame([
+            'ko_fi' => 'example',
+        ], $merged->getUnsupportedYamlEntries());
         self::assertSame(
-            [['type' => 'patreon', 'url' => 'https://patreon.com/example']],
+            [[
+                'type' => 'patreon',
+                'url' => 'https://patreon.com/example',
+            ]],
             $merged->getUnsupportedComposerEntries(),
         );
     }

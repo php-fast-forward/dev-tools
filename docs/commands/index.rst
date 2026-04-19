@@ -8,6 +8,7 @@ Detailed documentation for each dev-tools command.
 
    standards
    tests
+   changelog
    dependencies
    metrics
    code-style

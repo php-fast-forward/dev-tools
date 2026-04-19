@@ -4,6 +4,30 @@ Specialized Commands
 Use the standalone commands when you want one tool instead of the full
 ``standards`` pipeline.
 
+``changelog:*``
+---------------
+
+Manages Keep a Changelog 1.1.0 files and supports the packaged changelog
+workflow.
+
+.. code-block:: bash
+
+   composer changelog:entry --type=added "Add release automation workflow (#28)"
+   composer changelog:check --against=origin/main
+   composer changelog:next-version
+   composer changelog:promote 1.3.0 --date=2026-04-19
+   composer changelog:show 1.3.0
+
+Important details:
+
+- ``changelog:entry`` creates the changelog file automatically when it does not
+  exist yet;
+- ``changelog:check`` is the command used by pull-request validation;
+- ``changelog:next-version`` and ``changelog:promote`` support the manual
+  release-preparation workflow;
+- ``changelog:show`` renders the published release body used by GitHub Release
+  publication.
+
 ``tests``
 ---------
 

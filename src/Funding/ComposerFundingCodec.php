@@ -20,13 +20,11 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Funding;
 
 use Composer\Json\JsonFile;
+
+use function Safe\json_encode;
+use function Safe\parse_url;
+use function Safe\preg_match;
 use function array_values;
-use function is_array;
-use function is_string;
-use function json_encode;
-use function parse_url;
-use function preg_match;
-use function sprintf;
 use function trim;
 
 /**
@@ -46,7 +44,7 @@ final readonly class ComposerFundingCodec
         $data = JsonFile::parseJson($contents);
         $funding = $data['funding'] ?? [];
 
-        if (! is_array($funding)) {
+        if (! \is_array($funding)) {
             return new FundingProfile();
         }
 
@@ -55,12 +53,12 @@ final readonly class ComposerFundingCodec
         $unsupported = [];
 
         foreach ($funding as $entry) {
-            if (! is_array($entry)) {
+            if (! \is_array($entry)) {
                 continue;
             }
 
-            $type = is_string($entry['type'] ?? null) ? trim($entry['type']) : '';
-            $url = is_string($entry['url'] ?? null) ? trim($entry['url']) : '';
+            $type = \is_string($entry['type'] ?? null) ? trim($entry['type']) : '';
+            $url = \is_string($entry['url'] ?? null) ? trim($entry['url']) : '';
 
             if ('' === $url) {
                 $unsupported[] = $entry;
@@ -107,7 +105,7 @@ final readonly class ComposerFundingCodec
         foreach ($profile->getGithubSponsors() as $githubSponsor) {
             $entries[] = [
                 'type' => 'github',
-                'url' => sprintf('https://github.com/sponsors/%s', $githubSponsor),
+                'url' => \sprintf('https://github.com/sponsors/%s', $githubSponsor),
             ];
         }
 
@@ -126,15 +124,12 @@ final readonly class ComposerFundingCodec
         unset($data['funding']);
 
         if ([] === $entries) {
-            return json_encode(
-                $data,
-                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
-            ) . "\n";
+            return json_encode($data, \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE) . "\n";
         }
 
         return json_encode(
             $this->insertFundingEntries($data, $entries),
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+            \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE,
         ) . "\n";
     }
 
@@ -147,10 +142,10 @@ final readonly class ComposerFundingCodec
      */
     private function extractGithubSponsor(string $url): ?string
     {
-        $host = parse_url($url, PHP_URL_HOST);
-        $path = parse_url($url, PHP_URL_PATH);
+        $host = parse_url($url, \PHP_URL_HOST);
+        $path = parse_url($url, \PHP_URL_PATH);
 
-        if (! is_string($host) || ! is_string($path)) {
+        if (! \is_string($host) || ! \is_string($path)) {
             return null;
         }
 

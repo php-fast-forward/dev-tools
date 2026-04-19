@@ -11,7 +11,7 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 
 1. Resolve repository, branch, issue, and PR context. Read [references/context-routing.md](references/context-routing.md).
 2. Select the next ready issue, or decide to skip or stop. Read [references/issue-selection.md](references/issue-selection.md).
-3. Implement the issue on an isolated branch and keep the write scope focused. Read [references/implementation-loop.md](references/implementation-loop.md).
+3. Implement the issue on an isolated branch, keep the write scope focused, and add a notable changelog entry when the delivered behavior, workflow, or release surface deserves one. Read [references/implementation-loop.md](references/implementation-loop.md).
 4. Draft or update the PR using repository templates when present, otherwise use the fallback structure. Read [references/pr-drafting.md](references/pr-drafting.md).
 5. Run the final gate in [references/review-checklist.md](references/review-checklist.md) before handing results to the user.
 
@@ -22,6 +22,7 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 - Prefer local `git` for checkout, commit, and push.
 - Prefer connector-backed GitHub data for issue and PR context when available.
 - Use `phpunit-tests`, `package-readme`, and `sphinx-docs` when the change clearly affects tests or documentation.
+- Use `changelog-generator` when the implementation introduces a notable user-facing or automation-facing change that SHOULD appear in release notes.
 - Never manually close an issue; rely on `Closes #123` style text in the PR body.
 - Do not block waiting for merge. Open or update the PR, then report status and the next action.
 
@@ -40,5 +41,6 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 - Do not batch unrelated issues into one branch or PR.
 - Do not create a duplicate PR if the current branch already has one.
 - Do not open a PR before running the relevant verification commands.
+- Do not skip a notable changelog update when the implementation changes public behavior, release automation, or repository workflows in a way users or maintainers would expect to see called out.
 - Do not proceed to the next issue if the repository is dirty from unfinished work.
 - Do not let a vague issue body force broad implementation guesses; stop and clarify when the acceptance criteria are not actionable.
