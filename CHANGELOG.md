@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add CODEOWNERS generation and sync support for consumer repositories (#67)
+
 ## [1.13.0] - 2026-04-19
 
 ### Added

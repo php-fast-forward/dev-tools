@@ -20,6 +20,7 @@ Detailed documentation for each dev-tools command.
    skills
    sync
    funding
+   codeowners
    gitignore
    gitattributes
    license

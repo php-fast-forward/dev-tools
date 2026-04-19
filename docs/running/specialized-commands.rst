@@ -239,6 +239,28 @@ Important details:
 - it supports ``--dry-run``, ``--check``, and ``--interactive`` so funding
   drift can be surfaced in CI and reviewed locally.
 
+``codeowners``
+--------------
+
+Generates managed CODEOWNERS files from repository metadata.
+
+.. code-block:: bash
+
+   composer codeowners
+   composer codeowners --dry-run
+   composer codeowners --interactive
+
+Important details:
+
+- it inspects ``composer.json`` author homepages to infer GitHub handles for
+  ``.github/CODEOWNERS``;
+- when direct ownership cannot be inferred, it renders a commented fallback
+  instead of copying hard-coded owners into the consumer repository;
+- ``--interactive`` lets maintainers provide explicit owners before writing the
+  catch-all ``*`` rule;
+- ``dev-tools:sync`` runs ``codeowners`` automatically alongside the other
+  consumer bootstrap steps.
+
 ``dev-tools:sync``
 ------------------
 
@@ -255,6 +277,8 @@ Important details:
 - it calls ``funding`` so supported funding metadata stays aligned between
   ``composer.json`` and ``.github/FUNDING.yml``;
 - it copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``;
+- it calls ``codeowners`` to generate ``.github/CODEOWNERS`` from local
+  metadata;
 - it creates ``.github/wiki`` as a git submodule when the directory is
   missing.
 - it calls ``gitignore`` to merge the canonical .gitignore with the project's
