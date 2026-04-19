@@ -28,24 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - name: Resolve workflow source
-        id: workflow_source
-        env:
-          WORKFLOW_REF: ${{ github.workflow_ref }}
-        run: |
-          echo "repository=${WORKFLOW_REF%%/.github/workflows/*}" >> "$GITHUB_OUTPUT"
-          echo "ref=${WORKFLOW_REF#*@}" >> "$GITHUB_OUTPUT"
-
-      - name: Checkout workflow source repository
-        uses: actions/checkout@v6
-        with:
-          repository: ${{ steps.workflow_source.outputs.repository }}
-          ref: ${{ steps.workflow_source.outputs.ref }}
-          path: .dev-tools-workflow-source
-
       - name: Resolve workflow PHP version
         id: resolve
-        uses: ./.dev-tools-workflow-source/.github/actions/resolve-php-version
+        uses: php-fast-forward/dev-tools/.github/actions/resolve-php-version@main
 
   preview:
     needs: resolve_php
