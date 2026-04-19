@@ -49,8 +49,8 @@ permissions:
     contents: read
 
 concurrency:
-    group: "pages"
-    cancel-in-progress: false
+    group: ${{ github.event_name == 'pull_request' && format('tests-pr-{0}', github.event.pull_request.number) || format('tests-{0}', github.ref) }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
     tests:
@@ -59,6 +59,8 @@ jobs:
         strategy:
             matrix:
                 php-version: [ '8.3', '8.4', '8.5' ]
+        env:
+            TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v6
 
@@ -84,12 +86,12 @@ jobs:
               env:
                 COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
                 COMPOSER_CACHE_DIR: /tmp/composer-cache
-                COMPOSER_ROOT_VERSION: dev-main
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Composer Audit
               env:
-                COMPOSER_ROOT_VERSION: dev-main
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer audit
 
             - name: Resolve minimum coverage
@@ -98,22 +100,45 @@ jobs:
               env:
                   INPUT_MIN_COVERAGE: ${{ inputs.min-coverage }}
 
-            - name: Resolve dependency check settings
-              id: dependency-check
-              run: |
-                echo "enabled=${INPUT_RUN_DEPENDENCIES_CHECK:-true}" >> "$GITHUB_OUTPUT"
-                echo "max_outdated=${INPUT_MAX_OUTDATED:-5}" >> "$GITHUB_OUTPUT"
-              env:
-                INPUT_RUN_DEPENDENCIES_CHECK: ${{ inputs.run-dependencies-check }}
-                INPUT_MAX_OUTDATED: ${{ inputs.max-outdated }}
-
-            - name: Run dependency health check
-              if: matrix.php-version == '8.3' && steps.dependency-check.outputs.enabled == 'true'
-              env:
-                COMPOSER_ROOT_VERSION: dev-main
-              run: composer dev-tools dependencies -- --max-outdated=${{ steps.dependency-check.outputs.max_outdated }}
-
             - name: Run PHPUnit tests
               env:
-                COMPOSER_ROOT_VERSION: dev-main
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer dev-tools tests -- --coverage=public/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
+
+    dependency-health:
+        name: Dependency Health
+        if: ${{ inputs.run-dependencies-check != false }}
+        runs-on: ubuntu-latest
+        continue-on-error: true
+        env:
+            TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
+        steps:
+            - uses: actions/checkout@v6
+
+            - name: Setup PHP
+              uses: shivammathur/setup-php@v2
+              with:
+                php-version: '8.3'
+
+            - name: Cache Composer dependencies
+              uses: actions/cache@v5
+              with:
+                path: /tmp/composer-cache
+                key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                restore-keys: |
+                  ${{ runner.os }}-composer-
+
+            - name: Mark workspace as safe for git
+              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
+            - name: Install dependencies
+              env:
+                COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+                COMPOSER_CACHE_DIR: /tmp/composer-cache
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
+              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+
+            - name: Run dependency health check
+              env:
+                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
+              run: composer dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || 5 }}
