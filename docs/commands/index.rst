@@ -9,6 +9,7 @@ Detailed documentation for each dev-tools command.
    standards
    tests
    dependencies
+   metrics
    code-style
    refactor
    phpdoc

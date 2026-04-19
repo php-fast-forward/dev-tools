@@ -124,7 +124,7 @@ final class SyncCommand extends BaseCommand
     private function queueDevToolsCommand(array $arguments, bool $detached = false): void
     {
         $processBuilder = $this->processBuilder;
-        $arguments = array_filter($arguments, static fn (?string $arg): bool => $arg !== null);
+        $arguments = array_filter($arguments, static fn(?string $arg): bool => null !== $arg);
 
         foreach ($arguments as $argument) {
             $processBuilder = $processBuilder->withArgument($argument);

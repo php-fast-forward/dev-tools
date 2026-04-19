@@ -68,6 +68,11 @@ final class ReportsCommandTest extends TestCase
      */
     private ObjectProphecy $testsProcess;
 
+    /**
+     * @var ObjectProphecy<Process>
+     */
+    private ObjectProphecy $metricsProcess;
+
     private ReportsCommand $command;
 
     /**
@@ -81,11 +86,14 @@ final class ReportsCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->docsProcess = $this->prophesize(Process::class);
         $this->testsProcess = $this->prophesize(Process::class);
+        $this->metricsProcess = $this->prophesize(Process::class);
 
         $this->input->getOption('target')
             ->willReturn('public');
         $this->input->getOption('coverage')
             ->willReturn('public/coverage');
+        $this->input->getOption('metrics')
+            ->willReturn('public/metrics');
 
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
@@ -95,6 +103,8 @@ final class ReportsCommandTest extends TestCase
 
         $this->processBuilder->build('composer dev-tools tests --')
             ->willReturn($this->testsProcess->reveal());
+        $this->processBuilder->build('composer dev-tools metrics --')
+            ->willReturn($this->metricsProcess->reveal());
 
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ReportsCommand::SUCCESS);
@@ -126,13 +136,14 @@ final class ReportsCommandTest extends TestCase
 
         self::assertTrue($definition->hasOption('target'));
         self::assertTrue($definition->hasOption('coverage'));
+        self::assertTrue($definition->hasOption('metrics'));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunDocsAndTestsCommandAsDetachedProcesses(): void
+    public function executeWillRunDocsAsDetachedAndTestsAndMetricsInSequence(): void
     {
         $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
             ->shouldBeCalledOnce();
@@ -157,15 +168,51 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
+        $this->processBuilder->withArgument('--report-html', 'public/metrics')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
         $this->processQueue->add($this->docsProcess->reveal(), false, true)
             ->shouldBeCalledOnce();
 
-        $this->processQueue->add($this->testsProcess->reveal(), false, true)
+        $this->processQueue->add($this->testsProcess->reveal())
+            ->shouldBeCalledOnce();
+
+        $this->processQueue->add($this->metricsProcess->reveal())
             ->shouldBeCalledOnce();
 
         $result = $this->executeCommand();
 
         self::assertSame(ReportsCommand::SUCCESS, $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRunMetricsCommandWhenRequested(): void
+    {
+        $this->input->getOption('metrics')
+            ->willReturn('tmp/metrics');
+
+        $this->processBuilder->withArgument('--report-html', 'tmp/metrics')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+
+        $this->processQueue->add($this->docsProcess->reveal(), false, true)
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->testsProcess->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->metricsProcess->reveal())
+            ->shouldBeCalledOnce();
+
+        self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
