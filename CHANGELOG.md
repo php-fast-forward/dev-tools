@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.12.0] - 2026-04-19
+
 ### Added
 
 - Add Keep a Changelog management commands and release automation workflows (#28).
@@ -201,7 +203,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.11.0...HEAD
+
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.12.0...HEAD
+[1.12.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.11.0...v1.12.0
 [1.11.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.10.0...v1.11.0
 [1.10.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.9.0...v1.10.0
 [1.9.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.8.0...v1.9.0
