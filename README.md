@@ -14,7 +14,7 @@ across Fast Forward libraries.
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/php-fast-forward?logo=githubsponsors&logoColor=white&color=EC4899)](https://github.com/sponsors/php-fast-forward)
 
 <p align="center">
-  <img src="docs/_static/mascot.png" alt="Fast Forward DevTools mascot" width="520">
+  <img src="docs/_static/mascot-banner.png" alt="Fast Forward DevTools mascot" width="840">
 </p>
 
 ## ✨ Features
