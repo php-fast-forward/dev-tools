@@ -672,6 +672,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="guide/commands/changelog.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            changelog commands
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="guide/commands/dependencies.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1662,6 +1684,175 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-changelog.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Changelog
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-changelog-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-checker.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Checker
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-document.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Document
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-entry.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Entry
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-manager.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Manager
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-parser.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Parser
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-renderer.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Renderer
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-composer.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1909,6 +2100,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Funding
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-git.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Git
         </a>
 
             </div>
@@ -2442,8 +2655,9 @@
 
             
     <p>This guide is for maintainers preparing a Fast Forward DevTools release. It
-documents the current manual release flow and the publishing surfaces affected
-by a merge or tag. It does not add release automation.</p>
+documents the changelog-driven release flow, the automated GitHub Actions
+sequence that supports it, and the publishing surfaces affected by a merge or
+tag.</p>
 
             <section class="section " id="release-surfaces">
             <h2>Release Surfaces</h2>
@@ -2467,7 +2681,7 @@ by a merge or tag. It does not add release automation.</p>
     <tr>
             <td>Git tags</td>
             <td>Immutable release markers consumed by Composer and maintainers.</td>
-            <td>Created manually when maintainers decide to publish a release.</td>
+            <td>Created by the changelog release workflow when a prepared release pull request is merged.</td>
     </tr>
     <tr>
             <td>Packagist</td>
@@ -2491,7 +2705,7 @@ by a merge or tag. It does not add release automation.</p>
     <tr>
             <td>GitHub Releases</td>
             <td>Human-facing release notes and changelog summary.</td>
-            <td>Created manually when a tagged version should be announced.</td>
+            <td>Published by the changelog release workflow from the released changelog section.</td>
     </tr>
 </tbody>
 </table>
@@ -2502,9 +2716,10 @@ by a merge or tag. It does not add release automation.</p>
             <h2>Versioning and Branch Flow</h2>
 
             
-    <p>Use pull requests for all release-bound changes. The release candidate should
+    <p>Use pull requests for all release-bound changes. The release candidate SHOULD
 land on <code>main</code>
- before any tag is created.</p>
+ through a dedicated release-preparation pull request before the
+tag or GitHub release is published.</p>
 
             
     <p>The expected flow is:</p>
@@ -2513,25 +2728,30 @@ land on <code>main</code>
     
 <ol start="1" type="1">
     <li value="1">merge feature, bug fix, and documentation pull requests into <code>main</code>
-;</li>
+ while keeping <code>Unreleased</code>
+ current;</li>
 
     <li value="2">run the release verification checklist against the current <code>main</code>
 ;</li>
 
-    <li value="3">prepare changelog or release notes from merged work;</li>
+    <li value="3">trigger the changelog workflow manually through <code>workflow_dispatch</code>
+ to infer the next version or accept an explicit version;</li>
 
-    <li value="4">create a version tag from the verified <code>main</code>
- commit;</li>
+    <li value="4">review the release notes preview written to <code>.dev-tools/release-notes.md</code>
+ in the release-preparation branch;</li>
 
-    <li value="5">publish the GitHub release notes for that tag;</li>
+    <li value="5">review and merge the release-preparation pull request created from that workflow;</li>
 
-    <li value="6">confirm Packagist, reports, and wiki publication.</li>
+    <li value="6">let the merged release workflow create or update the GitHub release and tag from the released changelog section;</li>
+
+    <li value="7">confirm Packagist, reports, and wiki publication.</li>
 
 </ol>
 
             
     <p>Do not retag an existing published version. If a release needs correction,
-create a follow-up commit and publish a new version tag.</p>
+prepare a follow-up changelog entry, open a new release-preparation pull
+request, and publish a new version tag.</p>
 
     </section>
 
@@ -2568,7 +2788,20 @@ git log --oneline origin/main..HEAD</code></pre>
             <h2>Tagging and GitHub Release Notes</h2>
 
             
-    <p>Create the tag from the verified <code>main</code>
+    <p>The changelog workflow now handles the tag and GitHub release publication after
+the release-preparation pull request is merged. Manual tagging SHOULD only be
+used for recovery or exceptional maintenance.</p>
+
+            
+    <p>The same workflow also owns pull-request changelog validation. Regular feature
+and fix pull requests SHOULD expect <code>changelog:check</code>
+ to run against the base
+branch and fail when no meaningful <code>Unreleased</code>
+ entry is added.</p>
+
+            
+    <p>If maintainers must recover the release manually, create the tag from the
+verified <code>main</code>
  commit:</p>
 
             <pre><code class="language-bash">git switch main
@@ -2577,8 +2810,8 @@ git tag &lt;version&gt;
 git push origin &lt;version&gt;</code></pre>
 
             
-    <p>Use the GitHub release page for the pushed tag to publish release notes. The
-notes SHOULD include:</p>
+    <p>When the workflow publishes the GitHub release, the notes come from the
+matching released changelog section. Those notes SHOULD include:</p>
 
             
 
@@ -2674,17 +2907,19 @@ discovered during the process.</li>
 
     </section>
 
-            <section class="section " id="current-manual-steps-versus-future-automation">
-            <h2>Current Manual Steps Versus Future Automation</h2>
+            <section class="section " id="current-automation-and-remaining-manual-checks">
+            <h2>Current Automation and Remaining Manual Checks</h2>
 
             
-    <p>Maintainers currently choose the release commit, create the tag, and write
-release notes manually. That keeps release intent explicit.</p>
+    <p>Maintainers still decide when to prepare a release and when to merge the
+release-preparation pull request. After that merge, the workflow owns the tag
+and GitHub release publication so branch protection rules remain intact.</p>
 
             
-    <p>Future automation could help generate changelog drafts, validate Packagist
-publication, or summarize post-release checks. Those improvements should remain
-separate from this guide unless the release process itself changes.</p>
+    <p>Further automation may still help validate Packagist publication, summarize
+post-release checks, or backfill historical changelog sections. Those
+improvements should remain separate from this guide unless the release process
+itself changes again.</p>
 
     </section>
 

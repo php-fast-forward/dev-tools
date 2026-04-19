@@ -99,6 +99,41 @@
             <li class="success">Folder will contain dot github</li>
             <li class="success">Files will contain gitignore</li>
         </ul>
+        <h2>Changelog Check Command (FastForward\DevTools\Tests\Console\Command\ChangelogCheckCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success when unreleased entries exist</li>
+            <li class="success">Execute will return failure when unreleased entries are missing</li>
+        </ul>
+        <h2>Changelog Command (FastForward\DevTools\Tests\Console\Command\ChangelogCommand)</h2>
+        <ul>
+            <li class="success">Entry command will delegate to the manager</li>
+            <li class="success">Promote command will use the provided or current date</li>
+            <li class="success">Next version command will print the inferred version</li>
+            <li class="success">Show command will print the rendered release notes</li>
+        </ul>
+        <h2>Changelog Document (FastForward\DevTools\Tests\Changelog\Document\ChangelogDocument)</h2>
+        <ul>
+            <li class="success">With release will keep the unreleased section at the top</li>
+            <li class="success">Promote unreleased will merge with an existing published version</li>
+        </ul>
+        <h2>Changelog Manager (FastForward\DevTools\Tests\Changelog\Manager\ChangelogManager)</h2>
+        <ul>
+            <li class="success">Add entry will create the managed changelog when needed</li>
+            <li class="success">Add entry will preserve existing release dates when no new date is provided</li>
+            <li class="success">Add entry will update an existing release date when a new one is provided</li>
+            <li class="success">Promote will throw when the unreleased section is empty</li>
+            <li class="success">Promote will persist the published release when unreleased entries exist</li>
+            <li class="success">Infer next version will throw when there are no unreleased entries</li>
+            <li class="success">Infer next version will bump minor versions when added entries exist</li>
+            <li class="success">Infer next version will bump major versions when removed entries exist</li>
+            <li class="success">Infer next version will bump patch versions when only fixes exist</li>
+            <li class="success">Render release notes will return the renderer output for the requested release</li>
+            <li class="success">Render release notes will throw when the requested release does not exist</li>
+        </ul>
+        <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
+        <ul>
+            <li class="success">Parse will extract release sections and entries</li>
+        </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
             <li class="success">Classify with trailing slash returns directory</li>
@@ -321,6 +356,13 @@
             <li class="success">Execute will respect keep in export composer configuration</li>
             <li class="success">Execute with no candidates will skip synchronization</li>
         </ul>
+        <h2>Git Client (FastForward\DevTools\Tests\Git\GitClient)</h2>
+        <ul>
+            <li class="success">Get config will build and run the expected git command</li>
+            <li class="success">Show will relativize absolute paths within the repository</li>
+            <li class="success">Show will keep paths that do not belong to the repository unchanged</li>
+            <li class="success">Get config will throw the trimmed error output when the queue fails</li>
+        </ul>
         <h2>Git Hooks Command (FastForward\DevTools\Tests\Console\Command\GitHooksCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>
@@ -354,6 +396,15 @@
             <li class="success">Execute will return success and write info</li>
             <li class="success">Execute will skip when license file exists</li>
             <li class="success">Execute will handle unsupported license</li>
+        </ul>
+        <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
+        <ul>
+            <li class="success">Render will generate changelog with header and unreleased section</li>
+            <li class="success">Render will include published sections and references</li>
+            <li class="success">Render release body will omit the release heading</li>
+            <li class="success">Render will omit dangling release date separators when date is missing</li>
+            <li class="success">Render will not insert extra blank lines between rendered sections</li>
+            <li class="success">Render will keep only one blank line between an empty unreleased section and the next release</li>
         </ul>
         <h2>Merger (FastForward\DevTools\Tests\GitAttributes\Merger)</h2>
         <ul>
@@ -524,6 +575,15 @@
         <h2>System Clock (FastForward\DevTools\Tests\Psr\Clock\SystemClock)</h2>
         <ul>
             <li class="success">Now will return current date time immutable</li>
+        </ul>
+        <h2>Unreleased Entry Checker (FastForward\DevTools\Tests\Changelog\Checker\UnreleasedEntryChecker)</h2>
+        <ul>
+            <li class="success">Has pending changes will return false when the file cannot be read</li>
+            <li class="success">Has pending changes will return false when the unreleased section is empty</li>
+            <li class="success">Has pending changes will return true when unreleased section contains entries</li>
+            <li class="success">Has pending changes will compare against baseline reference</li>
+            <li class="success">Has pending changes will return true when baseline does not contain new entries</li>
+            <li class="success">Has pending changes will return true when the baseline cannot be loaded</li>
         </ul>
         <h2>Update Composer Json Command (FastForward\DevTools\Tests\Console\Command\UpdateComposerJsonCommand)</h2>
         <ul>

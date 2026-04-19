@@ -672,6 +672,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="guide/commands/changelog.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            changelog commands
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="guide/commands/dependencies.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1662,6 +1684,175 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-changelog.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Changelog
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-changelog-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-checker.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Checker
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-document.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Document
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-entry.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Entry
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-manager.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Manager
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-parser.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Parser
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-changelog-renderer.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Renderer
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-composer.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1909,6 +2100,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Funding
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-git.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Git
         </a>
 
             </div>
@@ -2576,6 +2789,74 @@ protection, bot commit, and submodule pointer conflict guidance.</p>
     <li>Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.</li>
 
 </ul>
+
+    </section>
+
+            <section class="section " id="fast-forward-changelog">
+            <h2>Fast Forward Changelog</h2>
+
+            
+    <p>The <code>changelog.yml</code>
+ workflow validates pull-request changelog updates and
+automates the release-preparation flow for repositories that use the local
+changelog commands. Consumer repositories typically expose it through the thin
+wrapper in <code>resources/github-actions/changelog.yml</code>
+.</p>
+
+            
+    <p><strong>Triggers:</strong>
+
+<em>   Pull Request (opened, synchronized, reopened).
+</em>
+   Pull Request Target (closed) for merged release-preparation pull requests.
+*   Manual trigger (workflow_dispatch).</p>
+
+            
+    <p><strong>Behavior:</strong>
+
+<em>   **Pull Requests**:
+    </em>
+   Resolves the workflow PHP version from <code>composer.lock</code>
+ or
+        <code>composer.json</code>
+ before installing dependencies.
+    <em>   Uses ``fetch-depth: 0`` so the base branch reference can be compared
+        safely.
+    </em>
+   Fetches the base branch changelog reference.
+    <em>   Runs ``composer dev-tools changelog:check -- --against=&lt;base-ref&gt;`` against the base ref.
+    </em>
+   Fails when the current branch does not add a meaningful <code>Unreleased</code>
+ change.
+<em>   **Manual Release Preparation**:
+    </em>
+   Checks out the repository default branch with full history.
+    <em>   Resolves the next version from ``Unreleased`` unless a version input is provided.
+    </em>
+   Promotes <code>Unreleased</code>
+ into the selected version with the current UTC release date.
+    <em>   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
+        ``composer dev-tools changelog:show -- &lt;version&gt;``.
+    </em>
+   Opens or updates a release-preparation pull request instead of committing directly to <code>main</code>
+.
+<em>   **Merged Release Pull Requests**:
+    </em>
+   Detects merged branches that match the configured release branch prefix.
+    <em>   Renders the released changelog section with ``composer dev-tools changelog:show -- &lt;version&gt;``.
+</em>
+   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.</p>
+
+            
+    <p><strong>Inputs:</strong>
+
+<em>   ``changelog-file``: managed changelog path, default ``CHANGELOG.md``.
+</em>
+   <code>version</code>
+: optional explicit version for manual release preparation.
+*   <code>release-branch-prefix</code>
+: release branch prefix, default <code>release/v</code>
+.</p>
 
     </section>
 
