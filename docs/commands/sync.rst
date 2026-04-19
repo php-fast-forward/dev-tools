@@ -32,7 +32,9 @@ Options
 -------
 
 ``--overwrite, -o``
-   Overwrite existing target files.
+   Overwrite existing target files. Text resources copied through
+   ``copy-resource`` show a readable diff in the sync output before they are
+   replaced.
 
 Examples
 --------
@@ -67,5 +69,7 @@ Behavior
 
 - Updates ``composer.json`` scripts and extra configuration.
 - Copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``.
+- When ``--overwrite`` is enabled, replaced text resources emit a unified diff
+  so terminal sessions and CI logs show what changed.
 - Creates ``.github/wiki`` as a git submodule when missing.
 - Calls other commands in sequence.
