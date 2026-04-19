@@ -2749,6 +2749,15 @@ tag or GitHub release is published.</p>
 </ol>
 
             
+    <p>This means an ordinary feature or bug-fix pull request merged into <code>main</code>
+
+does <strong>not</strong>
+ publish a GitHub release by itself. Publication happens only after
+the dedicated <code>release/v...</code>
+ pull request created by the changelog workflow
+is merged.</p>
+
+            
     <p>Do not retag an existing published version. If a release needs correction,
 prepare a follow-up changelog entry, open a new release-preparation pull
 request, and publish a new version tag.</p>
@@ -2827,6 +2836,45 @@ matching released changelog section. Those notes SHOULD include:</p>
     <li class="dash">verification performed before the release.</li>
 
 </ul>
+
+    </section>
+
+            <section class="section " id="workflow-permissions">
+            <h2>Workflow Permissions</h2>
+
+            
+    <p>The manual release-preparation step depends on GitHub Actions being allowed to
+open pull requests on behalf of the repository workflow token.</p>
+
+            
+    <p>Configure the repository under <strong>Settings</strong>
+ &gt; <strong>Actions</strong>
+ &gt; <strong>General</strong>
+:</p>
+
+            
+    
+<ol start="1" type="1">
+    <li value="1">enable <strong>Read and write permissions</strong>
+ under <strong>Workflow permissions</strong>
+;</li>
+
+    <li value="2">enable <strong>Allow GitHub Actions to create and approve pull requests</strong>
+.</li>
+
+</ol>
+
+            
+    <p>If either control appears disabled or grayed out, the restriction is usually
+coming from repository permissions or organization policy rather than branch
+protection. In that case, an organization or repository administrator MUST
+adjust the policy before the workflow can prepare release pull requests.</p>
+
+            
+    <p>Branch protection matters later, when the generated <code>release/v...</code>
+ pull
+request is reviewed and merged, but it does not control whether the workflow is
+allowed to create that pull request in the first place.</p>
 
     </section>
 

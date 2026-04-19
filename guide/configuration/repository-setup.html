@@ -2754,7 +2754,8 @@ GitHub does not create the underlying wiki repository until at least one page is
             <h2>Workflow Permissions</h2>
 
             
-    <p>GitHub Actions must have permission to push changes to your repository (for Wiki updates and GitHub Pages deployments).</p>
+    <p>GitHub Actions must have permission to push changes to your repository and, for
+the changelog release flow, to open release-preparation pull requests.</p>
 
             
     
@@ -2770,7 +2771,10 @@ GitHub does not create the underlying wiki repository until at least one page is
     <li value="3">Select <strong>Read and write permissions</strong>
 .</li>
 
-    <li value="4">Click <strong>Save</strong>
+    <li value="4">Enable <strong>Allow GitHub Actions to create and approve pull requests</strong>
+.</li>
+
+    <li value="5">Click <strong>Save</strong>
 .</li>
 
 </ol>
@@ -2786,7 +2790,26 @@ GitHub does not create the underlying wiki repository until at least one page is
         
     <p>Without these permissions, the <code>wiki.yml</code>
  and <code>reports.yml</code>
- workflows will fail when attempting to deploy content.</p>
+ workflows will fail when attempting to deploy content, and the <code>changelog.yml</code>
+ workflow will fail when trying to open a <code>release/v...</code>
+ pull request.</p>
+
+    </article>
+</div>
+            
+        
+<div class="alert alert-info d-flex align-items-start gap-3" role="alert">
+    <div class="fs-5">
+        <i class="fas fa-sticky-note"></i>
+    </div>
+
+    <article class="mb-0 flex-grow-1">
+        
+    <p>If the permission controls are disabled or grayed out, the repository is
+usually constrained by organization policy or by missing admin access. This
+is separate from branch protection. Branch protection affects whether the
+generated release pull request can be merged, while workflow permissions
+affect whether GitHub Actions can create that pull request at all.</p>
 
     </article>
 </div>

@@ -2840,12 +2840,19 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
     </em>
    Opens or updates a release-preparation pull request instead of committing directly to <code>main</code>
 .
-<em>   **Merged Release Pull Requests**:
-    </em>
-   Detects merged branches that match the configured release branch prefix.
-    <em>   Renders the released changelog section with ``composer dev-tools changelog:show -- &lt;version&gt;``.
+    <em>   Requires repository Actions permissions that allow the workflow token to create pull requests.
 </em>
-   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.</p>
+   <strong>Merged Release Pull Requests</strong>
+:
+    <em>   Detects merged branches that match the configured release branch prefix.
+    </em>
+   Renders the released changelog section with <code>composer dev-tools changelog:show -- &lt;version&gt;</code>
+.
+    <em>   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
+</em>
+   Does <strong>not</strong>
+ run for ordinary feature or fix pull requests merged into <code>main</code>
+.</p>
 
             
     <p><strong>Inputs:</strong>
@@ -2858,6 +2865,32 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
 : release branch prefix, default <code>release/v</code>
 .</p>
 
+            
+    <p><strong>Repository prerequisites:</strong>
+
+<em>   Go to **Settings** &gt; **Actions** &gt; **General**.
+</em>
+   Under <strong>Workflow permissions</strong>
+, enable <strong>Read and write permissions</strong>
+.
+<em>   Enable **Allow GitHub Actions to create and approve pull requests**.
+</em>
+   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.</p>
+
+            
+        
+<div class="alert alert-info d-flex align-items-start gap-3" role="alert">
+    <div class="fs-5">
+        <i class="fas fa-sticky-note"></i>
+    </div>
+
+    <article class="mb-0 flex-grow-1">
+        
+    <p>Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the <code>release/v...</code>
+ pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.</p>
+
+    </article>
+</div>
     </section>
 
             <section class="section " id="maintenance-workflows">
