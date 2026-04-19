@@ -52,9 +52,9 @@ interface ProcessBuilderInterface
      * command and all arguments previously collected by the builder. The
      * returned process SHOULD be ready for execution by the caller.
      *
-     * @param string $command the base command that SHALL be used to create the process
+     * @param string|array $command the base command that SHALL be used to create the process
      *
      * @return Process the configured process instance
      */
-    public function build(string $command): Process;
+    public function build(string|array $command): Process;
 }

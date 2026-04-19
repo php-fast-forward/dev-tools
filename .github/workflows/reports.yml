@@ -72,7 +72,7 @@ jobs:
             - name: Generate reports
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.REPORTS_ROOT_VERSION }}
-              run: composer dev-tools reports -- --target=tmp/reports --coverage=tmp/reports/coverage
+              run: composer dev-tools reports -- --target=tmp/reports --coverage=tmp/reports/coverage --metrics=tmp/reports/metrics
 
             - name: Fix permissions
               run: |
@@ -139,6 +139,7 @@ jobs:
 
                   - Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/
                   - Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/
+                  - Metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/metrics/
 
     cleanup_preview:
         if: github.event_name == 'pull_request' && github.event.action == 'closed'

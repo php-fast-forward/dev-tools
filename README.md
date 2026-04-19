@@ -8,6 +8,7 @@ across Fast Forward libraries.
 [![Composer Package](https://img.shields.io/badge/composer-fast--forward%2Fdev--tools-F28D1A.svg?logo=composer&logoColor=white)](https://packagist.org/packages/fast-forward/dev-tools)
 [![Tests](https://img.shields.io/github/actions/workflow/status/php-fast-forward/dev-tools/tests.yml?logo=githubactions&logoColor=white&label=tests&color=22C55E)](https://github.com/php-fast-forward/dev-tools/actions/workflows/tests.yml)
 [![Coverage](https://img.shields.io/badge/coverage-phpunit-4ADE80?logo=php&logoColor=white)](https://php-fast-forward.github.io/dev-tools/coverage/index.html)
+[![Metrics](https://img.shields.io/badge/metrics-phpmetrics-8B5CF6?logo=php&logoColor=white)](https://php-fast-forward.github.io/dev-tools/metrics/index.html)
 [![Docs](https://img.shields.io/github/deployments/php-fast-forward/dev-tools/github-pages?logo=readthedocs&logoColor=white&label=docs&labelColor=1E293B&color=38BDF8&style=flat)](https://php-fast-forward.github.io/dev-tools/index.html)
 [![License](https://img.shields.io/github/license/php-fast-forward/dev-tools?color=64748B)](LICENSE)
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/php-fast-forward?logo=githubsponsors&logoColor=white&color=EC4899)](https://github.com/sponsors/php-fast-forward)
@@ -56,6 +57,7 @@ vendor/bin/dev-tools dependencies
 # Analyze code metrics with PhpMetrics
 composer metrics
 composer dev-tools metrics -- --report-html=build/metrics
+composer dev-tools metrics -- --working-dir=packages/example
 
 # Check and fix code style using ECS and Composer Normalize
 composer dev-tools code-style
@@ -74,6 +76,7 @@ composer dev-tools wiki
 
 # Generate documentation frontpage and related reports
 composer dev-tools reports
+composer dev-tools reports -- --metrics
 
 # Synchronize packaged agent skills into .agents/skills
 composer dev-tools skills
@@ -123,7 +126,7 @@ automation assets.
 | `composer dev-tools` | Runs the full `standards` pipeline. |
 | `composer dev-tools tests` | Runs PHPUnit with local-or-packaged configuration. |
 | `composer dev-tools dependencies` | Reports missing and unused Composer dependencies. |
-| `composer dev-tools metrics` | Runs PhpMetrics and prints a reduced code-metrics summary. |
+| `composer dev-tools metrics` | Runs PhpMetrics for a working directory and generates requested report artifacts. |
 | `composer dev-tools docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer dev-tools skills` | Creates or repairs packaged skill links in `.agents/skills`. |
 | `composer dev-tools gitattributes` | Manages export-ignore rules in .gitattributes. |

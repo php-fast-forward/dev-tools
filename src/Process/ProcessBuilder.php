@@ -88,12 +88,16 @@ final readonly class ProcessBuilder implements ProcessBuilderInterface
      * process MUST preserve the final token order exactly as assembled by this
      * method.
      *
-     * @param string $command the base command used to initialize the process
+     * @param string|array $command the base command used to initialize the process
      *
      * @return Process the configured process instance ready for execution
      */
-    public function build(string $command): Process
+    public function build(string|array $command): Process
     {
-        return new Process(command: [...explode(' ', $command), ...$this->arguments], timeout: 0);
+        if (\is_string($command)) {
+            $command = explode(' ', $command);
+        }
+
+        return new Process(command: [...$command, ...$this->arguments], timeout: 0);
     }
 }

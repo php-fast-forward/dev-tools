@@ -20,10 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\MetricsCommand;
-use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Metrics\Report;
-use FastForward\DevTools\Metrics\ReportLoaderInterface;
-use FastForward\DevTools\Metrics\SummaryRendererInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -37,15 +33,13 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+use function Safe\file_put_contents;
+use function uniqid;
+
 #[CoversClass(MetricsCommand::class)]
 final class MetricsCommandTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var ObjectProphecy<FilesystemInterface>
-     */
-    private ObjectProphecy $filesystem;
 
     /**
      * @var ObjectProphecy<ProcessBuilderInterface>
@@ -56,16 +50,6 @@ final class MetricsCommandTest extends TestCase
      * @var ObjectProphecy<ProcessQueueInterface>
      */
     private ObjectProphecy $processQueue;
-
-    /**
-     * @var ObjectProphecy<ReportLoaderInterface>
-     */
-    private ObjectProphecy $reportLoader;
-
-    /**
-     * @var ObjectProphecy<SummaryRendererInterface>
-     */
-    private ObjectProphecy $summaryRenderer;
 
     /**
      * @var ObjectProphecy<InputInterface>
@@ -82,6 +66,10 @@ final class MetricsCommandTest extends TestCase
      */
     private ObjectProphecy $process;
 
+    private string $jsonReport;
+
+    private string $summaryReport;
+
     private MetricsCommand $command;
 
     /**
@@ -89,61 +77,51 @@ final class MetricsCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
-        $this->reportLoader = $this->prophesize(ReportLoaderInterface::class);
-        $this->summaryRenderer = $this->prophesize(SummaryRendererInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
+        $this->jsonReport = sys_get_temp_dir() . '/metrics-' . uniqid() . '.json';
+        $this->summaryReport = sys_get_temp_dir() . '/metrics-summary-' . uniqid() . '.json';
+        $jsonReport = $this->jsonReport;
+        $summaryReport = $this->summaryReport;
 
-        foreach (['src', 'exclude', 'report-html', 'report-json', 'cache-dir'] as $option) {
+        foreach (['exclude', 'report-html', 'report-json', 'report-summary-json'] as $option) {
             $this->input->getOption($option)
                 ->willReturn($this->commandDefaultOption($option));
         }
 
-        $this->filesystem->getAbsolutePath('vendor/bin/phpmetrics')
-            ->willReturn('/app/vendor/bin/phpmetrics');
-        $this->filesystem->exists('/app/vendor/bin/phpmetrics')
-            ->willReturn(true);
-        $this->filesystem->getAbsolutePath('src')
-            ->willReturn('/app/src');
-        $this->filesystem->exists('/app/src')
-            ->willReturn(true);
-        $this->filesystem->getAbsolutePath('tmp/cache/phpmetrics')
-            ->willReturn('/app/tmp/cache/phpmetrics');
-        $this->filesystem->getAbsolutePath('metrics.json', '/app/tmp/cache/phpmetrics')
-            ->willReturn('/app/tmp/cache/phpmetrics/metrics.json');
-        $this->filesystem->dirname('/app/tmp/cache/phpmetrics/metrics.json')
-            ->willReturn('/app/tmp/cache/phpmetrics');
-
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->build('vendor/bin/phpmetrics')
+        $this->processBuilder->build([\PHP_BINARY, '-derror_reporting=' . (\E_ALL & ~\E_DEPRECATED), 'vendor/bin/phpmetrics'])
             ->willReturn($this->process->reveal());
 
         $this->processQueue->run($this->output->reveal())
-            ->willReturn(MetricsCommand::SUCCESS);
+            ->will(static function () use ($summaryReport, $jsonReport): int {
+                file_put_contents($summaryReport, <<<'JSON'
+                    {"OOP":{"classes":2},"Complexity":{"avgCyclomaticComplexityByClass":4}}
+                    JSON);
+                file_put_contents($jsonReport, <<<'JSON'
+                    {"App\\Foo":{"_type":"Hal\\Metric\\ClassMetric","mi":80,"methods":[{"_type":"Hal\\Metric\\FunctionMetric"},{"_type":"Hal\\Metric\\FunctionMetric"}]},"App\\Bar":{"_type":"Hal\\Metric\\ClassMetric","mi":70}}
+                    JSON);
 
-        $this->reportLoader->load('/app/tmp/cache/phpmetrics/metrics.json')
-            ->willReturn(new Report(4.0, 75.0, 2, 1));
-        $this->summaryRenderer->render(Argument::type(Report::class))
-            ->willReturn(
-                "<info>Metrics summary</info>\n"
-                . "Average cyclomatic complexity by class: 4.00\n"
-                . "Average maintainability index by class: 75.00\n"
-                . "Classes analyzed: 2\n"
-                . "Functions analyzed: 1"
-            );
+                return MetricsCommand::SUCCESS;
+            });
 
-        $this->command = new MetricsCommand(
-            $this->filesystem->reveal(),
-            $this->processBuilder->reveal(),
-            $this->processQueue->reveal(),
-            $this->reportLoader->reveal(),
-            $this->summaryRenderer->reveal(),
-        );
+        $this->command = new MetricsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        foreach ([$this->jsonReport, $this->summaryReport] as $path) {
+            if (file_exists($path)) {
+                \unlink($path);
+            }
+        }
     }
 
     /**
@@ -155,7 +133,7 @@ final class MetricsCommandTest extends TestCase
         self::assertSame('metrics', $this->command->getName());
         self::assertSame('Analyzes code metrics with PhpMetrics.', $this->command->getDescription());
         self::assertSame(
-            'This command runs PhpMetrics to analyze source code and prints a reduced summary.',
+            'This command runs PhpMetrics to analyze the current working directory.',
             $this->command->getHelp(),
         );
     }
@@ -168,38 +146,45 @@ final class MetricsCommandTest extends TestCase
     {
         $definition = $this->command->getDefinition();
 
-        self::assertTrue($definition->hasOption('src'));
+        self::assertTrue($definition->hasOption('working-dir'));
+        self::assertFalse($definition->hasOption('src'));
         self::assertTrue($definition->hasOption('exclude'));
         self::assertTrue($definition->hasOption('report-html'));
         self::assertTrue($definition->hasOption('report-json'));
-        self::assertTrue($definition->hasOption('cache-dir'));
+        self::assertTrue($definition->hasOption('report-summary-json'));
+        self::assertFalse($definition->hasOption('cache-dir'));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunPhpMetricsAndPrintSummary(): void
+    public function executeWillRunPhpMetrics(): void
     {
         $this->output->writeln('<info>Running code metrics analysis...</info>')
             ->shouldBeCalledOnce();
-        $this->filesystem->mkdir('/app/tmp/cache/phpmetrics')
-            ->shouldBeCalledTimes(2);
-        $this->processBuilder->withArgument('--quiet')
+        $this->processBuilder->withArgument('--ansi')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--exclude', 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec,build')
+        $this->processBuilder->withArgument('--git', 'git')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--report-json', '/app/tmp/cache/phpmetrics/metrics.json')
+        $this->processBuilder->withArgument(
+            '--exclude',
+            'vendor,test,tests,tmp,cache,spec,build,backup,resources'
+        )
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('/app/src')
+        $this->processBuilder->withArgument('--report-json', $this->jsonReport)
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--report-summary-json', $this->summaryReport)
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('.')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processQueue->add($this->process->reveal())
-            ->shouldBeCalledOnce();
-        $this->output->writeln(Argument::containingString('Metrics summary'))
             ->shouldBeCalledOnce();
 
         self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
@@ -209,17 +194,21 @@ final class MetricsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillFailWhenBinaryIsMissing(): void
+    public function executeWillSkipUnsetOptionalReports(): void
     {
-        $this->filesystem->exists('/app/vendor/bin/phpmetrics')
-            ->willReturn(false);
+        $this->input->getOption('report-json')
+            ->willReturn(null);
+        $this->input->getOption('report-summary-json')
+            ->willReturn(null);
 
-        $this->output->writeln('<info>Running code metrics analysis...</info>')
-            ->shouldBeCalledOnce();
-        $this->output->writeln(Argument::containingString('PhpMetrics binary was not found'))
+        $this->processBuilder->withArgument('--report-json', Argument::any())
+            ->shouldNotBeCalled();
+        $this->processBuilder->withArgument('--report-summary-json', Argument::any())
+            ->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal())
             ->shouldBeCalledOnce();
 
-        self::assertSame(MetricsCommand::FAILURE, $this->executeCommand());
+        self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
@@ -230,14 +219,12 @@ final class MetricsCommandTest extends TestCase
     {
         $this->input->getOption('report-html')
             ->willReturn('build/metrics');
-        $this->filesystem->getAbsolutePath('build/metrics')
-            ->willReturn('/app/build/metrics');
 
-        $this->filesystem->mkdir('/app/build/metrics')
-            ->shouldBeCalledOnce();
-        $this->processBuilder->withArgument('--report-html', '/app/build/metrics')
+        $this->processBuilder->withArgument('--report-html', 'build/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalledOnce();
 
         self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
     }
@@ -250,9 +237,9 @@ final class MetricsCommandTest extends TestCase
     private function commandDefaultOption(string $option): mixed
     {
         return match ($option) {
-            'src' => 'src',
-            'exclude' => 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec,build',
-            'cache-dir' => 'tmp/cache/phpmetrics',
+            'exclude' => 'vendor,test,tests,tmp,cache,spec,build,backup,resources',
+            'report-json' => $this->jsonReport,
+            'report-summary-json' => $this->summaryReport,
             default => null,
         };
     }

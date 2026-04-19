@@ -44,7 +44,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 
 - **Badges**
 	- Read [references/badges.md](references/badges.md) before drafting the badge block.
-	- For current Fast Forward packages, default to this order: PHP Version, Composer Package, Tests, Coverage, Docs, License, GitHub Sponsors.
+	- For current Fast Forward packages, default to this order: PHP Version, Composer Package, Tests, Coverage, Metrics, Docs, License, GitHub Sponsors.
 	- Add a second standards row for relevant PSRs when the package contract is centered on them.
 	- Keep Packagist visible both in the badge block via `Composer Package` and in the links section.
 
@@ -54,6 +54,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 	[![Composer Package](https://img.shields.io/badge/composer-fast--forward%2Fcomponent-F28D1A.svg?logo=composer&logoColor=white)](https://packagist.org/packages/fast-forward/component)
 	[![Tests](https://img.shields.io/github/actions/workflow/status/php-fast-forward/component/tests.yml?logo=githubactions&logoColor=white&label=tests&color=22C55E)](https://github.com/php-fast-forward/component/actions/workflows/tests.yml)
 	[![Coverage](https://img.shields.io/badge/coverage-phpunit-4ADE80?logo=php&logoColor=white)](https://php-fast-forward.github.io/component/coverage/index.html)
+	[![Metrics](https://img.shields.io/badge/metrics-phpmetrics-8B5CF6?logo=php&logoColor=white)](https://php-fast-forward.github.io/component/metrics/index.html)
 	[![Docs](https://img.shields.io/github/deployments/php-fast-forward/component/github-pages?logo=readthedocs&logoColor=white&label=docs&labelColor=1E293B&color=38BDF8&style=flat)](https://php-fast-forward.github.io/component/index.html)
 	[![License](https://img.shields.io/github/license/php-fast-forward/component?color=64748B)](LICENSE)
 	[![GitHub Sponsors](https://img.shields.io/github/sponsors/php-fast-forward?logo=githubsponsors&logoColor=white&color=EC4899)](https://github.com/sponsors/php-fast-forward)
@@ -169,6 +170,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 	## 🔗 Links
 	- [Repository](https://github.com/php-fast-forward/component)
 	- [Packagist](https://packagist.org/packages/php-fast-forward/component)
+	- [Metrics Report](https://php-fast-forward.github.io/component/metrics/index.html)
 	- [RFC 2119](https://datatracker.ietf.org/doc/html/rfc2119)
 	- [PSR-11](https://www.php-fig.org/psr/psr-11/)
 	- [Sphinx Documentation](docs/index.rst)
@@ -205,7 +207,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 
 ## Quick Review Checklist
 - [ ] Project title and short description
-- [ ] Badges follow the current Fast Forward stack: PHP Version, Composer Package, Tests, Coverage, Docs, License, GitHub Sponsors, plus relevant standards badges
+- [ ] Badges follow the current Fast Forward stack: PHP Version, Composer Package, Tests, Coverage, Metrics, Docs, License, GitHub Sponsors, plus relevant standards badges
 - [ ] Features (bulleted, with emoji)
 - [ ] Installation (composer, requirements)
 - [ ] Usage (basic and advanced)
@@ -217,7 +219,7 @@ This skill provides a comprehensive, reusable checklist and structure for creati
 - [ ] FAQ (if relevant)
 - [ ] License
 - [ ] Contributing
-- [ ] Links (repository, Packagist, docs, RFCs, PSRs)
+- [ ] Links (repository, Packagist, docs, metrics, RFCs, PSRs)
 - [ ] Comparison table (if relevant)
 - [ ] Formatting and style guidelines followed
 - [ ] SEO/discoverability (keywords, cross-links)

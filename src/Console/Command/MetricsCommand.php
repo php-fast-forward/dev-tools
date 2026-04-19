@@ -20,12 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Metrics\ReportLoaderInterface;
-use FastForward\DevTools\Metrics\SummaryRendererInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -34,7 +30,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(
     name: 'metrics',
     description: 'Analyzes code metrics with PhpMetrics.',
-    help: 'This command runs PhpMetrics to analyze source code and prints a reduced summary.',
+    help: 'This command runs PhpMetrics to analyze the current working directory.',
 )]
 final class MetricsCommand extends BaseCommand
 {
@@ -44,23 +40,17 @@ final class MetricsCommand extends BaseCommand
     private const string BINARY = 'vendor/bin/phpmetrics';
 
     /**
-     * @var string the default cache directory used for temporary metrics reports
+     * @var int the PHP error reporting mask that suppresses deprecations emitted by PhpMetrics internals
      */
-    private const string CACHE_DIR = 'tmp/cache/phpmetrics';
+    private const int PHP_ERROR_REPORTING = \E_ALL & ~\E_DEPRECATED;
 
     /**
-     * @param FilesystemInterface $filesystem the filesystem utility used for path handling and report persistence
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PhpMetrics process
      * @param ProcessQueueInterface $processQueue the queue used to execute the PhpMetrics process
-     * @param ReportLoaderInterface $reportLoader the loader used to derive a reduced summary from the JSON report
-     * @param SummaryRendererInterface $summaryRenderer the renderer used to format the reduced summary
      */
     public function __construct(
-        private readonly FilesystemInterface $filesystem,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly ReportLoaderInterface $reportLoader,
-        private readonly SummaryRendererInterface $summaryRenderer,
     ) {
         parent::__construct();
     }
@@ -72,16 +62,10 @@ final class MetricsCommand extends BaseCommand
     {
         $this
             ->addOption(
-                name: 'src',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Path to the source directory that MUST be analyzed.',
-                default: 'src',
-            )
-            ->addOption(
                 name: 'exclude',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Comma-separated directories that SHOULD be excluded from analysis.',
-                default: 'vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec,build',
+                default: 'vendor,test,tests,tmp,cache,spec,build,backup,resources',
             )
             ->addOption(
                 name: 'report-html',
@@ -94,10 +78,9 @@ final class MetricsCommand extends BaseCommand
                 description: 'Optional target file for the generated JSON report.',
             )
             ->addOption(
-                name: 'cache-dir',
+                name: 'report-summary-json',
                 mode: InputOption::VALUE_OPTIONAL,
-                description: 'Path to the cache directory used for temporary metrics reports.',
-                default: self::CACHE_DIR,
+                description: 'Optional target file for the generated summary JSON report.',
             );
     }
 
@@ -111,133 +94,25 @@ final class MetricsCommand extends BaseCommand
     {
         $output->writeln('<info>Running code metrics analysis...</info>');
 
-        try {
-            $binary = $this->resolveBinaryPath();
-            $source = $this->resolveSourcePath($input);
-            $cacheDir = $this->resolveCacheDirectory($input);
-            $jsonReport = $this->resolveJsonReportPath($input, $cacheDir);
-            $htmlReport = $this->resolveOptionalReportDirectory($input, 'report-html');
-        } catch (RuntimeException $runtimeException) {
-            $output->writeln('<error>' . $runtimeException->getMessage() . '</error>');
-
-            return self::FAILURE;
-        }
-
         $processBuilder = $this->processBuilder
-            ->withArgument('--quiet')
-            ->withArgument('--exclude', (string) $input->getOption('exclude'))
-            ->withArgument('--report-json', $jsonReport);
+            ->withArgument('--ansi')
+            ->withArgument('--git', 'git')
+            ->withArgument('--exclude', (string) $input->getOption('exclude'));
 
-        if (null !== $htmlReport) {
-            $processBuilder = $processBuilder->withArgument('--report-html', $htmlReport);
+        foreach (['report-html', 'report-json', 'report-summary-json'] as $option) {
+            if (null === $input->getOption($option)) {
+                continue;
+            }
+
+            $processBuilder = $processBuilder->withArgument('--' . $option, (string) $input->getOption($option));
         }
 
         $this->processQueue->add(
             $processBuilder
-                ->withArgument($source)
-                ->build(self::BINARY)
+                ->withArgument('.')
+                ->build([\PHP_BINARY, '-derror_reporting=' . self::PHP_ERROR_REPORTING, self::BINARY])
         );
 
-        $result = $this->processQueue->run($output);
-
-        if (self::SUCCESS !== $result) {
-            return $result;
-        }
-
-        try {
-            $output->writeln($this->summaryRenderer->render($this->reportLoader->load($jsonReport)));
-        } catch (RuntimeException $runtimeException) {
-            $output->writeln('<error>' . $runtimeException->getMessage() . '</error>');
-
-            return self::FAILURE;
-        }
-
-        return self::SUCCESS;
-    }
-
-    /**
-     * @return string the absolute path to the PhpMetrics binary
-     */
-    private function resolveBinaryPath(): string
-    {
-        $binary = $this->filesystem->getAbsolutePath(self::BINARY);
-
-        if (! $this->filesystem->exists($binary)) {
-            throw new RuntimeException(
-                \sprintf(
-                    'The PhpMetrics binary was not found at %s. Install dependencies before running the metrics command.',
-                    $binary,
-                )
-            );
-        }
-
-        return $binary;
-    }
-
-    /**
-     * @param InputInterface $input the runtime command input
-     *
-     * @return string the absolute source directory path
-     */
-    private function resolveSourcePath(InputInterface $input): string
-    {
-        $source = $this->filesystem->getAbsolutePath((string) $input->getOption('src'));
-
-        if (! $this->filesystem->exists($source)) {
-            throw new RuntimeException(\sprintf('Source directory not found: %s', $source));
-        }
-
-        return $source;
-    }
-
-    /**
-     * @param InputInterface $input the runtime command input
-     *
-     * @return string the absolute cache directory path
-     */
-    private function resolveCacheDirectory(InputInterface $input): string
-    {
-        $cacheDir = $this->filesystem->getAbsolutePath((string) $input->getOption('cache-dir'));
-        $this->filesystem->mkdir($cacheDir);
-
-        return $cacheDir;
-    }
-
-    /**
-     * @param InputInterface $input the runtime command input
-     * @param string $cacheDir the absolute cache directory used for fallback output
-     *
-     * @return string the absolute JSON report path
-     */
-    private function resolveJsonReportPath(InputInterface $input, string $cacheDir): string
-    {
-        $reportJson = $input->getOption('report-json');
-        $reportJsonPath = null === $reportJson
-            ? $this->filesystem->getAbsolutePath('metrics.json', $cacheDir)
-            : $this->filesystem->getAbsolutePath((string) $reportJson);
-
-        $this->filesystem->mkdir($this->filesystem->dirname($reportJsonPath));
-
-        return $reportJsonPath;
-    }
-
-    /**
-     * @param InputInterface $input the runtime command input
-     * @param string $option the option that may contain a report directory
-     *
-     * @return string|null the absolute report directory path when configured
-     */
-    private function resolveOptionalReportDirectory(InputInterface $input, string $option): ?string
-    {
-        $reportDirectory = $input->getOption($option);
-
-        if (null === $reportDirectory) {
-            return null;
-        }
-
-        $reportDirectory = $this->filesystem->getAbsolutePath((string) $reportDirectory);
-        $this->filesystem->mkdir($reportDirectory);
-
-        return $reportDirectory;
+        return $this->processQueue->run($output);
     }
 }

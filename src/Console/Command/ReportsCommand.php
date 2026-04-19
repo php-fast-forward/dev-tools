@@ -69,6 +69,12 @@ final class ReportsCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The target directory for the generated test coverage report.',
                 default: 'public/coverage',
+            )
+            ->addOption(
+                name: 'metrics',
+                mode: InputOption::VALUE_OPTIONAL,
+                description: 'Generate code metrics and optionally choose the HTML output directory.',
+                default: 'public/metrics',
             );
     }
 
@@ -101,6 +107,13 @@ final class ReportsCommand extends BaseCommand
 
         $this->processQueue->add(process: $docs, detached: true);
         $this->processQueue->add(process: $coverage, detached: true);
+
+        $metrics = $this->processBuilder
+            ->withArgument('--ansi')
+            ->withArgument('--report-html', $input->getOption('metrics'))
+            ->build('composer dev-tools metrics --');
+
+        $this->processQueue->add(process: $metrics, detached: true);
 
         return $this->processQueue->run($output);
     }

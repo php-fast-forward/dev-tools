@@ -7,13 +7,8 @@ Overview
 --------
 
 The ``metrics`` command runs `PhpMetrics <https://phpmetrics.github.io/website/>`_
-against the selected source directory, generates a JSON report, and prints a
-reduced summary with:
-
-- average cyclomatic complexity by class;
-- average maintainability index by class;
-- number of classes analyzed;
-- number of functions analyzed.
+against the current working directory and forwards the requested report
+artifacts.
 
 Usage
 -----
@@ -27,16 +22,18 @@ Usage
 Options
 -------
 
-``--src=<path>``
-   Source directory to analyze.
+``--working-dir=<path>``
+   Composer's inherited working-directory option. Use it when you want to run
+   the command from another directory without changing your current shell
+   session.
 
-   Default: ``src``.
+   Default: the current working directory.
 
 ``--exclude=<list>``
    Comma-separated directories that should be excluded from analysis.
 
    Default:
-   ``vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec,build``.
+   ``vendor,test,tests,tmp,cache,spec,build,backup,resources``.
 
 ``--report-html=<directory>``
    Optional output directory for the generated HTML report.
@@ -44,16 +41,13 @@ Options
 ``--report-json=<file>``
    Optional output file for the generated JSON report.
 
-``--cache-dir=<directory>``
-   Cache directory used for temporary JSON reports when ``--report-json`` is
-   not provided.
-
-   Default: ``tmp/cache/phpmetrics``.
+``--report-summary-json=<file>``
+   Optional output file for the generated summary JSON report.
 
 Examples
 --------
 
-Generate the reduced summary with defaults:
+Analyze the current repository with defaults:
 
 .. code-block:: bash
 
@@ -65,7 +59,7 @@ Generate an HTML report for manual inspection:
 
    composer dev-tools metrics -- --report-html=build/metrics
 
-Generate both JSON and HTML reports for CI artifacts:
+Generate JSON and HTML reports for CI artifacts:
 
 .. code-block:: bash
 
@@ -74,7 +68,6 @@ Generate both JSON and HTML reports for CI artifacts:
 Behavior
 --------
 
-- the command fails early when ``vendor/bin/phpmetrics`` is not installed;
-- the source directory must exist;
-- the reduced summary is derived from the generated PhpMetrics JSON report;
-- optional HTML and JSON report destinations are created before execution.
+- the command forwards report options directly to PhpMetrics;
+- it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
+  deprecation notices emitted by the dependency itself.
