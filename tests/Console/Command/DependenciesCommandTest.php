@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DependenciesCommand;
+use FastForward\DevTools\Dependency\DependencyUpgradeProcessFactoryInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -41,6 +42,8 @@ final class DependenciesCommandTest extends TestCase
 
     private ObjectProphecy $fileLocator;
 
+    private ObjectProphecy $upgradeProcessFactory;
+
     private ObjectProphecy $processBuilder;
 
     private ObjectProphecy $processQueue;
@@ -53,167 +56,150 @@ final class DependenciesCommandTest extends TestCase
 
     private ObjectProphecy $processDepAnalyser;
 
+    private ObjectProphecy $processBreakpoint;
+
+    private ObjectProphecy $processUpgrade;
+
     private DependenciesCommand $command;
 
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
+        $this->upgradeProcessFactory = $this->prophesize(DependencyUpgradeProcessFactoryInterface::class);
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->processUnused = $this->prophesize(Process::class);
         $this->processDepAnalyser = $this->prophesize(Process::class);
-
-        $this->processBuilder->withArgument(Argument::any())
-            ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument(Argument::any(), Argument::any())
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->build(Argument::any())
-            ->willReturn($this->processUnused->reveal());
+        $this->processBreakpoint = $this->prophesize(Process::class);
+        $this->processUpgrade = $this->prophesize(Process::class);
 
         $this->command = new DependenciesCommand(
+            $this->upgradeProcessFactory->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
         );
     }
 
-    /**
-     * @return void
-     */
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
         self::assertSame('dependencies', $this->command->getName());
-        self::assertSame('Analyzes missing and unused Composer dependencies.', $this->command->getDescription());
+        self::assertSame('Analyzes missing, unused, and outdated Composer dependencies.', $this->command->getDescription());
         self::assertSame(
-            'This command runs composer-dependency-analyser and composer-unused to report missing and unused Composer dependencies.',
+            'This command runs composer-dependency-analyser, composer-unused, and Jack to report missing, unused, and outdated Composer dependencies.',
             $this->command->getHelp()
         );
     }
 
-    /**
-     * @return void
-     */
     #[Test]
-    public function commandCanBeConstructedWithDependencies(): void
+    public function executeWillReturnSuccessWhenPreviewAndAnalyzersSucceed(): void
     {
-        self::assertInstanceOf(DependenciesCommand::class, $this->command);
-    }
+        $this->configureBaseExecution(maxOutdated: '5', fix: false, dev: false);
+        $this->upgradeProcessFactory->create(false, false)
+            ->willReturn([$this->processUpgrade->reveal()]);
+        $this->configureAnalyzerBuilders('5');
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnSuccessWhenBothToolsSucceed(): void
-    {
-        $this->fileLocator->locate('composer.json')
-            ->willReturn('/path/to/composer.json');
-
-        $this->processBuilder->build('vendor/bin/composer-unused')
-            ->willReturn($this->processUnused->reveal());
-        $this->processBuilder->build('vendor/bin/composer-dependency-analyser')
-            ->willReturn($this->processDepAnalyser->reveal());
-
-        $this->processQueue->add($this->processUnused->reveal())
-            ->shouldBeCalled();
-        $this->processQueue->add($this->processDepAnalyser->reveal())
-            ->shouldBeCalled();
-
+        $this->processQueue->add($this->processUpgrade->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processUnused->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processDepAnalyser->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processBreakpoint->reveal())->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)
-            ->shouldBeCalled();
+            ->shouldBeCalledOnce();
 
-        $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
+        $this->output->writeln('<info>Running dependency dry-run upgrade preview and analysis...</info>')
+            ->shouldBeCalledOnce();
 
-        $result = $this->executeCommand();
-
-        self::assertSame(DependenciesCommand::SUCCESS, $result);
+        self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());
     }
 
-    /**
-     * @return void
-     */
     #[Test]
     public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
-        $this->fileLocator->locate('composer.json')
-            ->willReturn('/path/to/composer.json');
+        $this->configureBaseExecution(maxOutdated: '5', fix: false, dev: true);
+        $this->upgradeProcessFactory->create(false, true)
+            ->willReturn([]);
+        $this->configureAnalyzerBuilders('5');
+
+        $this->processQueue->add($this->processUnused->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processDepAnalyser->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processBreakpoint->reveal())->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::FAILURE)
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<info>Running dependency dry-run upgrade preview and analysis...</info>')
+            ->shouldBeCalledOnce();
+
+        self::assertSame(DependenciesCommand::FAILURE, $this->executeCommand());
+    }
+
+    #[Test]
+    public function executeWillQueueUpgradeWorkflowBeforeAnalysisWhenFixIsRequested(): void
+    {
+        $this->configureBaseExecution(maxOutdated: '8', fix: true, dev: true);
+        $this->upgradeProcessFactory->create(true, true)
+            ->willReturn([$this->processUpgrade->reveal()]);
+        $this->configureAnalyzerBuilders('8');
+
+        $this->processQueue->add($this->processUpgrade->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processUnused->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processDepAnalyser->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processBreakpoint->reveal())->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<info>Running dependency upgrade and analysis...</info>')
+            ->shouldBeCalledOnce();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());
+    }
+
+    #[Test]
+    public function executeWillFailWhenMaxOutdatedIsNotNumeric(): void
+    {
+        $this->input->getOption('max-outdated')->willReturn('invalid');
+        $this->output->writeln('<error>The --max-outdated option MUST be a numeric threshold.</error>')
+            ->shouldBeCalledOnce();
+        $this->fileLocator->locate(Argument::cetera())->shouldNotBeCalled();
+        $this->upgradeProcessFactory->create(Argument::cetera())->shouldNotBeCalled();
+        $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(DependenciesCommand::FAILURE, $this->executeCommand());
+    }
+
+    private function configureBaseExecution(string $maxOutdated, bool $fix, bool $dev): void
+    {
+        $this->input->getOption('max-outdated')->willReturn($maxOutdated);
+        $this->input->getOption('fix')->willReturn($fix);
+        $this->input->getOption('dev')->willReturn($dev);
+        $this->fileLocator->locate('composer.json')->willReturn('/path/to/composer.json');
+    }
+
+    private function configureAnalyzerBuilders(string $maxOutdated): void
+    {
+        $composerDependencyAnalyserBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $composerDependencyAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $jackBreakpointBuilder = $this->prophesize(ProcessBuilderInterface::class);
 
         $this->processBuilder->build('vendor/bin/composer-unused')
             ->willReturn($this->processUnused->reveal());
-        $this->processBuilder->build('vendor/bin/composer-dependency-analyser')
+        $this->processBuilder->withArgument('--ignore-unused-deps')
+            ->willReturn($composerDependencyAnalyserBuilder->reveal());
+        $composerDependencyAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')
+            ->willReturn($composerDependencyAnalyserFinalBuilder->reveal());
+        $composerDependencyAnalyserFinalBuilder->build('vendor/bin/composer-dependency-analyser')
             ->willReturn($this->processDepAnalyser->reveal());
-
-        $this->processQueue->add($this->processUnused->reveal())
-            ->shouldBeCalled();
-        $this->processQueue->add($this->processDepAnalyser->reveal())
-            ->shouldBeCalled();
-
-        $this->processQueue->run($this->output->reveal())
-            ->willReturn(ProcessQueueInterface::FAILURE)
-            ->shouldBeCalled();
-
-        $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-
-        $result = $this->executeCommand();
-
-        self::assertSame(DependenciesCommand::FAILURE, $result);
+        $this->processBuilder->withArgument('--limit', $maxOutdated)
+            ->willReturn($jackBreakpointBuilder->reveal());
+        $jackBreakpointBuilder->build('vendor/bin/jack breakpoint')
+            ->willReturn($this->processBreakpoint->reveal());
     }
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillCallBothDependencyToolsWithComposerJson(): void
-    {
-        $composerJsonPath = '/path/to/composer.json';
-
-        $this->fileLocator->locate('composer.json')
-            ->willReturn($composerJsonPath);
-
-        $processUnused = $this->prophesize(Process::class);
-        $processUnused->getCommandLine()
-            ->willReturn('vendor/bin/composer-unused ' . $composerJsonPath . ' --no-progress');
-
-        $processDepAnalyser = $this->prophesize(Process::class);
-        $processDepAnalyser->getCommandLine()
-            ->willReturn(
-                'vendor/bin/composer-dependency-analyser --composer-json=' . $composerJsonPath . ' --ignore-unused-deps --ignore-prod-only-in-dev-deps'
-            );
-
-        $this->processBuilder->build('vendor/bin/composer-unused')
-            ->willReturn($processUnused->reveal());
-        $this->processBuilder->build('vendor/bin/composer-dependency-analyser')
-            ->willReturn($processDepAnalyser->reveal());
-
-        $this->processQueue->add($processUnused->reveal())
-            ->shouldBeCalled();
-        $this->processQueue->add($processDepAnalyser->reveal())
-            ->shouldBeCalled();
-
-        $this->processQueue->run($this->output->reveal())
-            ->willReturn(ProcessQueueInterface::SUCCESS)
-            ->shouldBeCalled();
-
-        $this->output->writeln('<info>Running dependency analysis...</info>')
-            ->shouldBeCalled();
-
-        $result = $this->executeCommand();
-
-        self::assertSame(DependenciesCommand::SUCCESS, $result);
-    }
-
-    /**
-     * @return int
-     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

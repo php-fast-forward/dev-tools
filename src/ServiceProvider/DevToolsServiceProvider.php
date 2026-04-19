@@ -24,6 +24,8 @@ use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
+use FastForward\DevTools\Dependency\DependencyUpgradeProcessFactory;
+use FastForward\DevTools\Dependency\DependencyUpgradeProcessFactoryInterface;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
@@ -95,6 +97,9 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
 
             // Composer
             ComposerJsonInterface::class => get(ComposerJson::class),
+
+            // Dependency workflows
+            DependencyUpgradeProcessFactoryInterface::class => get(DependencyUpgradeProcessFactory::class),
 
             // Symfony Components
             FileLocatorInterface::class => create(FileLocator::class)->constructor([getcwd(), \dirname(__DIR__, 2)]),

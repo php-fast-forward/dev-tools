@@ -3,6 +3,17 @@ name: "Fast Forward Test Suite"
 on:
   push:
   workflow_dispatch:
+    inputs:
+      run-dependencies-check:
+        description: Whether to run the dependency health check during CI.
+        required: false
+        type: boolean
+        default: true
+      max-outdated:
+        description: Maximum number of outdated packages allowed by the dependencies command.
+        required: false
+        type: number
+        default: 5
 
 permissions:
   contents: read
@@ -10,4 +21,7 @@ permissions:
 jobs:
   tests:
     uses: php-fast-forward/dev-tools/.github/workflows/tests.yml@main
+    with:
+      run-dependencies-check: ${{ inputs.run-dependencies-check || true }}
+      max-outdated: ${{ inputs.max-outdated || 5 }}
     secrets: inherit

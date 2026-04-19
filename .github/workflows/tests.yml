@@ -8,6 +8,16 @@ on:
                 required: false
                 type: number
                 default: 80
+            run-dependencies-check:
+                description: Whether to run the dependency health check during CI.
+                required: false
+                type: boolean
+                default: true
+            max-outdated:
+                description: Maximum number of outdated packages allowed by the dependencies command.
+                required: false
+                type: number
+                default: 5
     workflow_dispatch:
         inputs:
             min-coverage:
@@ -15,6 +25,16 @@ on:
                 required: false
                 type: number
                 default: 80
+            run-dependencies-check:
+                description: Whether to run the dependency health check during CI.
+                required: false
+                type: boolean
+                default: true
+            max-outdated:
+                description: Maximum number of outdated packages allowed by the dependencies command.
+                required: false
+                type: number
+                default: 5
     pull_request:
         paths:
           - 'src/**'
@@ -77,6 +97,21 @@ jobs:
               run: echo "value=${INPUT_MIN_COVERAGE:-80}" >> "$GITHUB_OUTPUT"
               env:
                   INPUT_MIN_COVERAGE: ${{ inputs.min-coverage }}
+
+            - name: Resolve dependency check settings
+              id: dependency-check
+              run: |
+                echo "enabled=${INPUT_RUN_DEPENDENCIES_CHECK:-true}" >> "$GITHUB_OUTPUT"
+                echo "max_outdated=${INPUT_MAX_OUTDATED:-5}" >> "$GITHUB_OUTPUT"
+              env:
+                INPUT_RUN_DEPENDENCIES_CHECK: ${{ inputs.run-dependencies-check }}
+                INPUT_MAX_OUTDATED: ${{ inputs.max-outdated }}
+
+            - name: Run dependency health check
+              if: matrix.php-version == '8.3' && steps.dependency-check.outputs.enabled == 'true'
+              env:
+                COMPOSER_ROOT_VERSION: dev-main
+              run: composer dev-tools dependencies -- --max-outdated=${{ steps.dependency-check.outputs.max_outdated }}
 
             - name: Run PHPUnit tests
               env:
