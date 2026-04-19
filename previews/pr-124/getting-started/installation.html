@@ -2719,11 +2719,15 @@ update.</li>
 
     <li value="5"><code>dev-tools:sync</code>
  updates <code>extra.grumphp.config-default-path</code>
- and copies
-missing automation assets such as workflow stubs, <code>.editorconfig</code>
-, and
-<code>.github/dependabot.yml</code>
-.</li>
+,
+synchronizes funding metadata, copies automation assets such as workflow
+stubs, <code>.editorconfig</code>
+, and <code>.github/dependabot.yml</code>
+, and refreshes
+<code>.gitignore</code>
+, <code>.gitattributes</code>
+, the project license, and packaged Git
+hooks.</li>
 
     <li value="6">If <code>.github/wiki</code>
  is missing, <code>dev-tools:sync</code>
@@ -2739,7 +2743,8 @@ the consumer project.</li>
  runs <code>skills</code>
  to create or repair packaged skill links
 inside <code>.agents/skills</code>
-.</li>
+ when sync runs in normal mode rather than
+preview/check mode.</li>
 
 </ol>
 

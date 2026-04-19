@@ -2700,19 +2700,22 @@ For a first-time adoption path, see
 </td>
             <td>Copies stub workflows from <code>resources/github-actions</code>
 .</td>
-            <td>Only when missing.</td>
+            <td>Only when missing by default; replaceable with <code>--overwrite</code>
+.</td>
     </tr>
     <tr>
             <td><code>.editorconfig</code>
 </td>
             <td>Copies the packaged file from the repository root.</td>
-            <td>Only when missing.</td>
+            <td>Only when missing by default; replaceable with <code>--overwrite</code>
+.</td>
     </tr>
     <tr>
             <td><code>.github/dependabot.yml</code>
 </td>
             <td>Copies the packaged Dependabot template.</td>
-            <td>Only when missing.</td>
+            <td>Only when missing by default; replaceable with <code>--overwrite</code>
+.</td>
     </tr>
     <tr>
             <td><code>.agents/skills/&lt;skill-name&gt;</code>
@@ -2786,11 +2789,13 @@ needs fresh links.</li>
     <p>Workflow stubs, <code>.editorconfig</code>
 , and <code>dependabot.yml</code>
  are copied only
-when the target file does not already exist. This protects
-consumer-specific customizations. The <code>skills</code>
- phase follows the same
-spirit by preserving existing non-symlink directories inside
-<code>.agents/skills</code>
+when the target file does not already exist unless <code>--overwrite</code>
+ is used.
+This protects consumer-specific customizations by default while still
+allowing explicit replacement during shared automation updates. The
+<code>skills</code>
+ phase follows the same spirit by preserving existing
+non-symlink directories inside <code>.agents/skills</code>
 .</p>
 
     </article>

@@ -2683,12 +2683,19 @@ console application.</p>
 <code>--no-plugins</code>
 .</li>
 
-    <li value="4"><code>FastForward\DevTools\Console\DevTools</code>
- sets <code>standards</code>
- as the default command
-and loads commands from
-<code>FastForward\DevTools\Composer\Capability\DevToolsCommandProvider</code>
+    <li value="4"><code>FastForward\DevTools\Console\DevTools::create()</code>
+ builds the shared
+container from <code>FastForward\DevTools\ServiceProvider\DevToolsServiceProvider</code>
 .</li>
+
+    <li value="5"><code>FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader</code>
+
+lazily discovers <code>#[AsCommand]</code>
+ classes from the command namespace.</li>
+
+    <li value="6"><code>FastForward\DevTools\Composer\Capability\DevToolsCommandProvider</code>
+ later
+exposes that same command set to Composer.</li>
 
 </ol>
 
