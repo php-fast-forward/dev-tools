@@ -18,7 +18,22 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  resolve_php:
+    name: Resolve PHP Version
+    runs-on: ubuntu-latest
+    outputs:
+      php-version: ${{ steps.resolve.outputs.php-version }}
+      php-version-source: ${{ steps.resolve.outputs.php-version-source }}
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Resolve workflow PHP version
+        id: resolve
+        uses: php-fast-forward/dev-tools/.github/actions/resolve-php-version@main
+
   preview:
+    needs: resolve_php
     name: Update Wiki Preview
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
@@ -42,14 +57,15 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.3'
+          php-version: ${{ needs.resolve_php.outputs.php-version }}
 
       - name: Cache Composer dependencies
         uses: actions/cache@v5
         with:
           path: /tmp/composer-cache
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
+            ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-
             ${{ runner.os }}-composer-
 
       - name: Mark workspace as safe for git
