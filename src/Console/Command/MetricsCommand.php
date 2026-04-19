@@ -27,6 +27,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function rtrim;
+
 #[AsCommand(
     name: 'metrics',
     description: 'Analyzes code metrics with PhpMetrics.',
@@ -68,22 +70,10 @@ final class MetricsCommand extends BaseCommand
                 default: 'vendor,test,tests,tmp,cache,spec,build,backup,resources',
             )
             ->addOption(
-                name: 'report-html',
+                name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
-                description: 'Optional target directory for the generated HTML report.',
+                description: 'Target directory for the generated metrics reports.',
                 default: 'public/metrics',
-            )
-            ->addOption(
-                name: 'report-json',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Optional target file for the generated JSON report.',
-                default: 'public/metrics/report.json',
-            )
-            ->addOption(
-                name: 'report-summary-json',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Optional target file for the generated summary JSON report.',
-                default: 'public/metrics/report-summary.json',
             )
             ->addOption(
                 name: 'junit',
@@ -102,13 +92,15 @@ final class MetricsCommand extends BaseCommand
     {
         $output->writeln('<info>Running code metrics analysis...</info>');
 
+        $target = rtrim((string) $input->getOption('target'), '/');
+
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--git', 'git')
             ->withArgument('--exclude', (string) $input->getOption('exclude'))
-            ->withArgument('--report-html', $input->getOption('report-html'))
-            ->withArgument('--report-json', $input->getOption('report-json'))
-            ->withArgument('--report-summary-json', $input->getOption('report-summary-json'));
+            ->withArgument('--report-html', $target)
+            ->withArgument('--report-json', $target . '/report.json')
+            ->withArgument('--report-summary-json', $target . '/report-summary.json');
 
         if (null !== $input->getOption('junit')) {
             $processBuilder = $processBuilder->withArgument('--junit', $input->getOption('junit'));

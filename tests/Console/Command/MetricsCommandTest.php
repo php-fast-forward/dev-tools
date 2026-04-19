@@ -66,9 +66,7 @@ final class MetricsCommandTest extends TestCase
      */
     private ObjectProphecy $process;
 
-    private string $jsonReport;
-
-    private string $summaryReport;
+    private string $target;
 
     private MetricsCommand $command;
 
@@ -82,12 +80,9 @@ final class MetricsCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
-        $this->jsonReport = sys_get_temp_dir() . '/metrics-' . uniqid() . '.json';
-        $this->summaryReport = sys_get_temp_dir() . '/metrics-summary-' . uniqid() . '.json';
-        $jsonReport = $this->jsonReport;
-        $summaryReport = $this->summaryReport;
+        $this->target = sys_get_temp_dir() . '/metrics-' . uniqid();
 
-        foreach (['exclude', 'report-html', 'report-json', 'report-summary-json', 'junit'] as $option) {
+        foreach (['exclude', 'target', 'junit'] as $option) {
             $this->input->getOption($option)
                 ->willReturn($this->commandDefaultOption($option));
         }
@@ -98,16 +93,7 @@ final class MetricsCommandTest extends TestCase
             ->willReturn($this->process->reveal());
 
         $this->processQueue->run($this->output->reveal())
-            ->will(static function () use ($summaryReport, $jsonReport): int {
-                file_put_contents($summaryReport, <<<'JSON'
-                    {"OOP":{"classes":2},"Complexity":{"avgCyclomaticComplexityByClass":4}}
-                    JSON);
-                file_put_contents($jsonReport, <<<'JSON'
-                    {"App\\Foo":{"_type":"Hal\\Metric\\ClassMetric","mi":80,"methods":[{"_type":"Hal\\Metric\\FunctionMetric"},{"_type":"Hal\\Metric\\FunctionMetric"}]},"App\\Bar":{"_type":"Hal\\Metric\\ClassMetric","mi":70}}
-                    JSON);
-
-                return MetricsCommand::SUCCESS;
-            });
+            ->willReturn(MetricsCommand::SUCCESS);
 
         $this->command = new MetricsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
     }
@@ -117,7 +103,7 @@ final class MetricsCommandTest extends TestCase
      */
     protected function tearDown(): void
     {
-        foreach ([$this->jsonReport, $this->summaryReport] as $path) {
+        foreach ([$this->target . '/report.json', $this->target . '/report-summary.json'] as $path) {
             if (file_exists($path)) {
                 \unlink($path);
             }
@@ -149,9 +135,10 @@ final class MetricsCommandTest extends TestCase
         self::assertFalse($definition->hasOption('working-dir'));
         self::assertFalse($definition->hasOption('src'));
         self::assertTrue($definition->hasOption('exclude'));
-        self::assertTrue($definition->hasOption('report-html'));
-        self::assertTrue($definition->hasOption('report-json'));
-        self::assertTrue($definition->hasOption('report-summary-json'));
+        self::assertTrue($definition->hasOption('target'));
+        self::assertFalse($definition->hasOption('report-html'));
+        self::assertFalse($definition->hasOption('report-json'));
+        self::assertFalse($definition->hasOption('report-summary-json'));
         self::assertTrue($definition->hasOption('junit'));
         self::assertFalse($definition->hasOption('cache-dir'));
     }
@@ -176,10 +163,15 @@ final class MetricsCommandTest extends TestCase
         )
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--report-json', $this->jsonReport)
+        $this->processBuilder->withArgument('--target', null)
+            ->shouldNotBeCalled();
+        $this->processBuilder->withArgument('--report-html', $this->target)
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--report-summary-json', $this->summaryReport)
+        $this->processBuilder->withArgument('--report-json', $this->target . '/report.json')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--report-summary-json', $this->target . '/report-summary.json')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument('--junit', null)
@@ -199,17 +191,18 @@ final class MetricsCommandTest extends TestCase
     #[Test]
     public function executeWillSkipUnsetOptionalReports(): void
     {
-        $this->input->getOption('report-json')
-            ->willReturn(null);
-        $this->input->getOption('report-summary-json')
-            ->willReturn(null);
+        $this->input->getOption('target')
+            ->willReturn('build/metrics/');
         $this->input->getOption('junit')
             ->willReturn(null);
 
-        $this->processBuilder->withArgument('--report-json', null)
+        $this->processBuilder->withArgument('--report-html', 'build/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--report-summary-json', null)
+        $this->processBuilder->withArgument('--report-json', 'build/metrics/report.json')
+            ->shouldBeCalledOnce()
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--report-summary-json', 'build/metrics/report-summary.json')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument('--junit', Argument::any())
@@ -224,14 +217,12 @@ final class MetricsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillIncludeHtmlReportWhenRequested(): void
+    public function executeWillIncludeJunitReportWhenRequested(): void
     {
-        $this->input->getOption('report-html')
-            ->willReturn('build/metrics');
         $this->input->getOption('junit')
-            ->willReturn(null);
+            ->willReturn('build/metrics/junit.xml');
 
-        $this->processBuilder->withArgument('--report-html', 'build/metrics')
+        $this->processBuilder->withArgument('--junit', 'build/metrics/junit.xml')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
         $this->processQueue->add($this->process->reveal())
@@ -249,8 +240,7 @@ final class MetricsCommandTest extends TestCase
     {
         return match ($option) {
             'exclude' => 'vendor,test,tests,tmp,cache,spec,build,backup,resources',
-            'report-json' => $this->jsonReport,
-            'report-summary-json' => $this->summaryReport,
+            'target' => $this->target,
             'junit' => null,
             default => null,
         };

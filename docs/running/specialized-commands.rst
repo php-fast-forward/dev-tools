@@ -50,7 +50,7 @@ Analyzes code metrics with PhpMetrics.
 .. code-block:: bash
 
    composer metrics
-   composer dev-tools metrics -- --report-html=build/metrics
+   composer dev-tools metrics -- --target=build/metrics
    composer dev-tools metrics -- --working-dir=packages/example
 
 Important details:
@@ -59,8 +59,9 @@ Important details:
   ``fast-forward/dev-tools``;
 - it analyzes the selected ``--working-dir`` and forwards the requested
   report options directly to PhpMetrics;
-- ``--report-html``, ``--report-json``, and ``--report-summary-json`` allow
-  persisting the native PhpMetrics reports for CI artifacts or manual review;
+- ``--target`` stores the HTML report plus ``report.json`` and
+  ``report-summary.json`` in the same directory for CI artifacts or manual
+  review;
 - it suppresses deprecation notices emitted by the PhpMetrics dependency
   itself so the command output stays readable.
 
@@ -161,7 +162,7 @@ Important details:
 
 - it calls ``docs --target public``;
 - it calls ``tests --coverage public/coverage --no-progress --coverage-summary``;
-- ``--metrics`` adds ``metrics --report-html public/metrics``;
+- ``--metrics`` adds ``metrics --target public/metrics``;
 - it is the reporting stage used by ``standards``.
 
 ``skills``

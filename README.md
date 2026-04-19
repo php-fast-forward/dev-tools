@@ -56,7 +56,7 @@ vendor/bin/dev-tools dependencies
 
 # Analyze code metrics with PhpMetrics
 composer metrics
-composer dev-tools metrics -- --report-html=build/metrics
+composer dev-tools metrics -- --target=build/metrics
 composer dev-tools metrics -- --working-dir=packages/example
 
 # Check and fix code style using ECS and Composer Normalize
