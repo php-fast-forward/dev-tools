@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DependenciesCommand;
-use FastForward\DevTools\Dependency\DependencyUpgradeProcessFactoryInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -42,8 +41,6 @@ final class DependenciesCommandTest extends TestCase
 
     private ObjectProphecy $fileLocator;
 
-    private ObjectProphecy $upgradeProcessFactory;
-
     private ObjectProphecy $processBuilder;
 
     private ObjectProphecy $processQueue;
@@ -52,31 +49,35 @@ final class DependenciesCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
+    private ObjectProphecy $processOpenVersions;
+
+    private ObjectProphecy $processRaiseToInstalled;
+
+    private ObjectProphecy $processComposerUpdate;
+
     private ObjectProphecy $processUnused;
 
     private ObjectProphecy $processDepAnalyser;
 
     private ObjectProphecy $processBreakpoint;
 
-    private ObjectProphecy $processUpgrade;
-
     private DependenciesCommand $command;
 
     protected function setUp(): void
     {
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
-        $this->upgradeProcessFactory = $this->prophesize(DependencyUpgradeProcessFactoryInterface::class);
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->processOpenVersions = $this->prophesize(Process::class);
+        $this->processRaiseToInstalled = $this->prophesize(Process::class);
+        $this->processComposerUpdate = $this->prophesize(Process::class);
         $this->processUnused = $this->prophesize(Process::class);
         $this->processDepAnalyser = $this->prophesize(Process::class);
         $this->processBreakpoint = $this->prophesize(Process::class);
-        $this->processUpgrade = $this->prophesize(Process::class);
 
         $this->command = new DependenciesCommand(
-            $this->upgradeProcessFactory->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
@@ -97,12 +98,11 @@ final class DependenciesCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenPreviewAndAnalyzersSucceed(): void
     {
-        $this->configureBaseExecution(maxOutdated: '5', fix: false, dev: false);
-        $this->upgradeProcessFactory->create(false, false)
-            ->willReturn([$this->processUpgrade->reveal()]);
-        $this->configureAnalyzerBuilders('5');
+        $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: false);
+        $this->configurePreviewBuilders(dev: false, maxOutdated: '5');
 
-        $this->processQueue->add($this->processUpgrade->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processOpenVersions->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processRaiseToInstalled->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processUnused->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processBreakpoint->reveal())->shouldBeCalledOnce();
@@ -119,11 +119,11 @@ final class DependenciesCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
-        $this->configureBaseExecution(maxOutdated: '5', fix: false, dev: true);
-        $this->upgradeProcessFactory->create(false, true)
-            ->willReturn([]);
-        $this->configureAnalyzerBuilders('5');
+        $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: true);
+        $this->configurePreviewBuilders(dev: true, maxOutdated: '5');
 
+        $this->processQueue->add($this->processOpenVersions->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processRaiseToInstalled->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processUnused->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processBreakpoint->reveal())->shouldBeCalledOnce();
@@ -138,14 +138,14 @@ final class DependenciesCommandTest extends TestCase
     }
 
     #[Test]
-    public function executeWillQueueUpgradeWorkflowBeforeAnalysisWhenFixIsRequested(): void
+    public function executeWillQueueUpgradeWorkflowBeforeAnalysisWhenUpgradeIsRequested(): void
     {
-        $this->configureBaseExecution(maxOutdated: '8', fix: true, dev: true);
-        $this->upgradeProcessFactory->create(true, true)
-            ->willReturn([$this->processUpgrade->reveal()]);
-        $this->configureAnalyzerBuilders('8');
+        $this->configureBaseExecution(maxOutdated: '8', upgrade: true, dev: true);
+        $this->configureUpgradeBuilders(dev: true, maxOutdated: '8');
 
-        $this->processQueue->add($this->processUpgrade->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processOpenVersions->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processRaiseToInstalled->reveal())->shouldBeCalledOnce();
+        $this->processQueue->add($this->processComposerUpdate->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processUnused->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())->shouldBeCalledOnce();
         $this->processQueue->add($this->processBreakpoint->reveal())->shouldBeCalledOnce();
@@ -166,38 +166,80 @@ final class DependenciesCommandTest extends TestCase
         $this->output->writeln('<error>The --max-outdated option MUST be a numeric threshold.</error>')
             ->shouldBeCalledOnce();
         $this->fileLocator->locate(Argument::cetera())->shouldNotBeCalled();
-        $this->upgradeProcessFactory->create(Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(DependenciesCommand::FAILURE, $this->executeCommand());
     }
 
-    private function configureBaseExecution(string $maxOutdated, bool $fix, bool $dev): void
+    private function configureBaseExecution(string $maxOutdated, bool $upgrade, bool $dev): void
     {
         $this->input->getOption('max-outdated')->willReturn($maxOutdated);
-        $this->input->getOption('fix')->willReturn($fix);
+        $this->input->getOption('upgrade')->willReturn($upgrade);
         $this->input->getOption('dev')->willReturn($dev);
         $this->fileLocator->locate('composer.json')->willReturn('/path/to/composer.json');
     }
 
-    private function configureAnalyzerBuilders(string $maxOutdated): void
+    private function configurePreviewBuilders(bool $dev, string $maxOutdated): void
     {
-        $composerDependencyAnalyserBuilder = $this->prophesize(ProcessBuilderInterface::class);
-        $composerDependencyAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
-        $jackBreakpointBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $openVersionsBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $openVersionsDryRunBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $raiseToInstalledBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $breakpointBuilder = $this->prophesize(ProcessBuilderInterface::class);
 
-        $this->processBuilder->build('vendor/bin/composer-unused')
-            ->willReturn($this->processUnused->reveal());
-        $this->processBuilder->withArgument('--ignore-unused-deps')
-            ->willReturn($composerDependencyAnalyserBuilder->reveal());
-        $composerDependencyAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')
-            ->willReturn($composerDependencyAnalyserFinalBuilder->reveal());
-        $composerDependencyAnalyserFinalBuilder->build('vendor/bin/composer-dependency-analyser')
-            ->willReturn($this->processDepAnalyser->reveal());
-        $this->processBuilder->withArgument('--limit', $maxOutdated)
-            ->willReturn($jackBreakpointBuilder->reveal());
-        $jackBreakpointBuilder->build('vendor/bin/jack breakpoint')
-            ->willReturn($this->processBreakpoint->reveal());
+        if ($dev) {
+            $this->processBuilder->withArgument('--dev')->willReturn($openVersionsBuilder->reveal());
+            $openVersionsBuilder->withArgument('--dry-run')->willReturn($openVersionsDryRunBuilder->reveal());
+        } else {
+            $this->processBuilder->withArgument('--dry-run')->willReturn($openVersionsDryRunBuilder->reveal(), $raiseToInstalledBuilder->reveal());
+        }
+
+        if (! $dev) {
+            $openVersionsDryRunBuilder->build('vendor/bin/jack open-versions')->willReturn($this->processOpenVersions->reveal());
+        } else {
+            $openVersionsDryRunBuilder->build('vendor/bin/jack open-versions')->willReturn($this->processOpenVersions->reveal());
+        }
+
+        if ($dev) {
+            $this->processBuilder->withArgument('--dry-run')->willReturn($raiseToInstalledBuilder->reveal());
+        }
+
+        $raiseToInstalledBuilder->build('vendor/bin/jack raise-to-installed')->willReturn($this->processRaiseToInstalled->reveal());
+        $this->processBuilder->build('vendor/bin/composer-unused')->willReturn($this->processUnused->reveal());
+        $this->processBuilder->withArgument('--ignore-unused-deps')->willReturn($depAnalyserBuilder->reveal());
+        $depAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')->willReturn($depAnalyserFinalBuilder->reveal());
+        $depAnalyserFinalBuilder->build('vendor/bin/composer-dependency-analyser')->willReturn($this->processDepAnalyser->reveal());
+        $this->processBuilder->withArgument('--limit', $maxOutdated)->willReturn($breakpointBuilder->reveal());
+        $breakpointBuilder->build('vendor/bin/jack breakpoint')->willReturn($this->processBreakpoint->reveal());
+    }
+
+    private function configureUpgradeBuilders(bool $dev, string $maxOutdated): void
+    {
+        $openVersionsBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $composerUpdateWithDependenciesBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $composerUpdateBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $breakpointBuilder = $this->prophesize(ProcessBuilderInterface::class);
+
+        if ($dev) {
+            $this->processBuilder->withArgument('--dev')->willReturn($openVersionsBuilder->reveal());
+            $openVersionsBuilder->build('vendor/bin/jack open-versions')->willReturn($this->processOpenVersions->reveal());
+        } else {
+            $this->processBuilder->build('vendor/bin/jack open-versions')->willReturn($this->processOpenVersions->reveal());
+        }
+
+        $this->processBuilder->build('vendor/bin/jack raise-to-installed')->willReturn($this->processRaiseToInstalled->reveal());
+        $this->processBuilder->withArgument('-W')->willReturn($composerUpdateWithDependenciesBuilder->reveal());
+        $composerUpdateWithDependenciesBuilder->withArgument('--no-progress')->willReturn($composerUpdateBuilder->reveal());
+        $composerUpdateBuilder->build('composer update')->willReturn($this->processComposerUpdate->reveal());
+        $this->processBuilder->build('vendor/bin/composer-unused')->willReturn($this->processUnused->reveal());
+        $this->processBuilder->withArgument('--ignore-unused-deps')->willReturn($depAnalyserBuilder->reveal());
+        $depAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')->willReturn($depAnalyserFinalBuilder->reveal());
+        $depAnalyserFinalBuilder->build('vendor/bin/composer-dependency-analyser')->willReturn($this->processDepAnalyser->reveal());
+        $this->processBuilder->withArgument('--limit', $maxOutdated)->willReturn($breakpointBuilder->reveal());
+        $breakpointBuilder->build('vendor/bin/jack breakpoint')->willReturn($this->processBreakpoint->reveal());
     }
 
     private function executeCommand(): int

@@ -38,14 +38,14 @@ Options
 
    Default: ``5``.
 
-``--fix`` (optional)
+``--upgrade`` (optional)
    Applies the Jack upgrade workflow before the analyzers:
 
    - ``vendor/bin/jack open-versions``
    - ``vendor/bin/jack raise-to-installed``
    - ``composer update -W``
 
-   Without ``--fix``, the command runs the Jack workflow in preview mode
+   Without ``--upgrade``, the command runs the Jack workflow in preview mode
    before the analyzers.
 
 ``--dev`` (optional)
@@ -76,7 +76,7 @@ Apply the upgrade workflow and then analyze dependencies:
 
 .. code-block:: bash
 
-   composer dev-tools dependencies -- --fix --dev
+   composer dev-tools dependencies -- --upgrade --dev
 
 Using the alias:
 
@@ -108,7 +108,7 @@ Behavior
 - ``jack breakpoint`` maps ``--max-outdated`` to Jack's ``--limit`` option.
 - It always previews Jack's ``open-versions`` and ``raise-to-installed``
   commands before the analyzers.
-- ``--fix`` applies Jack's ``open-versions`` and ``raise-to-installed``
+- ``--upgrade`` applies Jack's ``open-versions`` and ``raise-to-installed``
   commands before ``composer update -W``.
 - Returns a non-zero exit code when missing, unused, or too many outdated
   dependencies are found.

@@ -33,7 +33,7 @@ Analyzes missing and unused Composer dependencies.
    composer dependencies
    composer dev-tools dependencies -- --max-outdated=10
    composer dev-tools dependencies -- --dev
-   composer dev-tools dependencies -- --fix --dev
+   composer dev-tools dependencies -- --upgrade --dev
 
 Important details:
 
@@ -46,7 +46,7 @@ Important details:
   outdated dependencies accumulate;
 - it previews ``jack open-versions`` and ``jack raise-to-installed`` before
   the analyzers;
-- ``--fix`` runs ``jack open-versions``, ``jack raise-to-installed``, and
+- ``--upgrade`` runs ``jack open-versions``, ``jack raise-to-installed``, and
   ``composer update -W`` before the analyzers;
 - it returns a non-zero exit code when missing, unused, or too many outdated
   dependencies are found.

@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Dependency\DependencyUpgradeProcessFactoryInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
@@ -46,13 +45,11 @@ use function is_numeric;
 final class DependenciesCommand extends BaseCommand
 {
     /**
-     * @param DependencyUpgradeProcessFactoryInterface $upgradeProcessFactory creates Jack and Composer upgrade processes
-     * @param ProcessBuilderInterface $processBuilder creates analyzer processes
+     * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
      * @param FileLocatorInterface $fileLocator resolves local composer.json
      */
     public function __construct(
-        private readonly DependencyUpgradeProcessFactoryInterface $upgradeProcessFactory,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly FileLocatorInterface $fileLocator,
@@ -73,7 +70,7 @@ final class DependenciesCommand extends BaseCommand
                 default: '5',
             )
             ->addOption(
-                name: 'fix',
+                name: 'upgrade',
                 mode: InputOption::VALUE_NONE,
                 description: 'Apply Jack dependency upgrades before executing the dependency analyzers.',
             )
@@ -104,17 +101,39 @@ final class DependenciesCommand extends BaseCommand
 
         $this->fileLocator->locate('composer.json');
 
-        $fix = (bool) $input->getOption('fix');
+        $upgrade = (bool) $input->getOption('upgrade');
         $dev = (bool) $input->getOption('dev');
 
         $output->writeln(
-            $fix
+            $upgrade
                 ? '<info>Running dependency upgrade and analysis...</info>'
                 : '<info>Running dependency dry-run upgrade preview and analysis...</info>'
         );
 
-        foreach ($this->upgradeProcessFactory->create($fix, $dev) as $process) {
-            $this->processQueue->add($process);
+        $openVersionsBuilder = $this->processBuilder;
+
+        if ($dev) {
+            $openVersionsBuilder = $openVersionsBuilder->withArgument('--dev');
+        }
+
+        $this->processQueue->add(
+            $upgrade
+                ? $openVersionsBuilder->build('vendor/bin/jack open-versions')
+                : $openVersionsBuilder->withArgument('--dry-run')->build('vendor/bin/jack open-versions')
+        );
+        $this->processQueue->add(
+            $upgrade
+                ? $this->processBuilder->build('vendor/bin/jack raise-to-installed')
+                : $this->processBuilder->withArgument('--dry-run')->build('vendor/bin/jack raise-to-installed')
+        );
+
+        if ($upgrade) {
+            $this->processQueue->add(
+                $this->processBuilder
+                    ->withArgument('-W')
+                    ->withArgument('--no-progress')
+                    ->build('composer update')
+            );
         }
 
         $this->processQueue->add(

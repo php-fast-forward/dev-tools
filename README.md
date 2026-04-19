@@ -55,7 +55,7 @@ composer dependencies
 vendor/bin/dev-tools dependencies
 composer dev-tools dependencies -- --max-outdated=8
 composer dev-tools dependencies -- --dev
-composer dev-tools dependencies -- --fix --dev
+composer dev-tools dependencies -- --upgrade --dev
 
 # Analyze code metrics with PhpMetrics
 composer metrics
