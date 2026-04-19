@@ -23,11 +23,11 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
-use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 use function is_numeric;
 
@@ -47,12 +47,10 @@ final class DependenciesCommand extends BaseCommand
     /**
      * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
-     * @param FileLocatorInterface $fileLocator resolves local composer.json
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly FileLocatorInterface $fileLocator,
     ) {
         return parent::__construct();
     }
@@ -70,14 +68,14 @@ final class DependenciesCommand extends BaseCommand
                 default: '5',
             )
             ->addOption(
-                name: 'upgrade',
-                mode: InputOption::VALUE_NONE,
-                description: 'Apply Jack dependency upgrades before executing the dependency analyzers.',
-            )
-            ->addOption(
                 name: 'dev',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prioritize dev dependencies where Jack supports it.',
+            )
+            ->addOption(
+                name: 'upgrade',
+                mode: InputOption::VALUE_NONE,
+                description: 'Apply Jack dependency upgrades before executing the dependency analyzers.',
             );
     }
 
@@ -99,62 +97,138 @@ final class DependenciesCommand extends BaseCommand
             return self::FAILURE;
         }
 
-        $this->fileLocator->locate('composer.json');
+        $this->processQueue->add($this->getRaiseToInstalledCommand($input));
+        $this->processQueue->add($this->getOpenVersionsCommand($input));
 
-        $upgrade = (bool) $input->getOption('upgrade');
-        $dev = (bool) $input->getOption('dev');
-
-        $output->writeln(
-            $upgrade
-                ? '<info>Running dependency upgrade and analysis...</info>'
-                : '<info>Running dependency dry-run upgrade preview and analysis...</info>'
-        );
-
-        $openVersionsBuilder = $this->processBuilder;
-
-        if ($dev) {
-            $openVersionsBuilder = $openVersionsBuilder->withArgument('--dev');
+        if ($input->getOption('upgrade')) {
+            $this->processQueue->add($this->getComposerUpdateCommand());
+            $this->processQueue->add($this->getComposerNormalizeCommand());
         }
 
-        $this->processQueue->add(
-            $upgrade
-                ? $openVersionsBuilder->build('vendor/bin/jack open-versions')
-                : $openVersionsBuilder->withArgument('--dry-run')->build('vendor/bin/jack open-versions')
-        );
-        $this->processQueue->add(
-            $upgrade
-                ? $this->processBuilder->build('vendor/bin/jack raise-to-installed')
-                : $this->processBuilder->withArgument('--dry-run')->build('vendor/bin/jack raise-to-installed')
-        );
+        $output->writeln('<info>Running dependency analysis...</info>');
 
-        if ($upgrade) {
-            $this->processQueue->add(
-                $this->processBuilder
-                    ->withArgument('-W')
-                    ->withArgument('--no-progress')
-                    ->build('composer update')
-            );
-        }
-
-        $this->processQueue->add(
-            $this->processBuilder->build('vendor/bin/composer-unused')
-        );
-        $this->processQueue->add(
-            $this->processBuilder
-                ->withArgument('--ignore-unused-deps')
-                ->withArgument('--ignore-prod-only-in-dev-deps')
-                ->build('vendor/bin/composer-dependency-analyser')
-        );
-        $this->processQueue->add(
-            $this->processBuilder
-                ->withArgument('--limit', (string) $maximumOutdated)
-                ->build('vendor/bin/jack breakpoint')
-        );
+        $this->processQueue->add($this->getComposerUnusedCommand());
+        $this->processQueue->add($this->getComposerDependencyAnalyserCommand());
+        $this->processQueue->add($this->getJackBreakpointCommand($input, $maximumOutdated));
 
         return $this->processQueue->run($output);
     }
 
     /**
+     * Builds the Composer Dependency Analyser process.
+     *
+     * @return Process the configured Composer Dependency Analyser process
+     */
+    private function getComposerDependencyAnalyserCommand(): Process
+    {
+        return $this->processBuilder
+            ->withArgument('--ignore-unused-deps')
+            ->withArgument('--ignore-prod-only-in-dev-deps')
+            ->build('vendor/bin/composer-dependency-analyser');
+    }
+
+    /**
+     * Builds the Jack breakpoint process.
+     *
+     * @param InputInterface $input the runtime command input
+     * @param int $maximumOutdated the maximum number of outdated packages accepted by Jack
+     *
+     * @return Process the configured Jack breakpoint process
+     */
+    private function getJackBreakpointCommand(InputInterface $input, int $maximumOutdated): Process
+    {
+        $command = 'vendor/bin/jack breakpoint';
+
+        if ((bool) $input->getOption('dev')) {
+            $command .= ' --dev';
+        }
+
+        $command .= ' --limit ' . $maximumOutdated;
+
+        return $this->processBuilder->build($command);
+    }
+
+    /**
+     * Builds the Jack open-versions process.
+     *
+     * @param InputInterface $input the runtime command input
+     *
+     * @return Process the configured Jack open-versions process
+     */
+    private function getOpenVersionsCommand(InputInterface $input): Process
+    {
+        $command = 'vendor/bin/jack open-versions';
+
+        if ((bool) $input->getOption('dev')) {
+            $command .= ' --dev';
+        }
+
+        if (! (bool) $input->getOption('upgrade')) {
+            $command .= ' --dry-run';
+        }
+
+        return $this->processBuilder->build($command);
+    }
+
+    /**
+     * Builds the Jack raise-to-installed process.
+     *
+     * @param InputInterface $input the runtime command input
+     *
+     * @return Process the configured Jack raise-to-installed process
+     */
+    private function getRaiseToInstalledCommand(InputInterface $input): Process
+    {
+        $command = 'vendor/bin/jack raise-to-installed';
+
+        if ((bool) $input->getOption('dev')) {
+            $command .= ' --dev';
+        }
+
+        if (! (bool) $input->getOption('upgrade')) {
+            $command .= ' --dry-run';
+        }
+
+        return $this->processBuilder->build($command);
+    }
+
+    /**
+     * Builds the Composer update process.
+     *
+     * @return Process the configured Composer update process
+     */
+    private function getComposerUpdateCommand(): Process
+    {
+        return $this->processBuilder
+            ->withArgument('-W')
+            ->withArgument('--ansi')
+            ->withArgument('--no-progress')
+            ->build('composer update');
+    }
+
+    /**
+     * Builds the Composer Normalize process.
+     *
+     * @return Process the configured Composer Normalize process
+     */
+    private function getComposerNormalizeCommand(): Process
+    {
+        return $this->processBuilder->build('composer normalize');
+    }
+
+    /**
+     * Builds the composer-unused process.
+     *
+     * @return Process the configured composer-unused process
+     */
+    private function getComposerUnusedCommand(): Process
+    {
+        return $this->processBuilder->build('vendor/bin/composer-unused');
+    }
+
+    /**
+     * Resolves the maximum outdated dependency threshold.
+     *
      * @param InputInterface $input the runtime command input
      *
      * @return int the validated maximum number of outdated packages
