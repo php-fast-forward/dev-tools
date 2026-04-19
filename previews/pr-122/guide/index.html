@@ -2653,544 +2653,100 @@
                                             <section class="section " id="documentation">
             <h1>Documentation</h1>
 
-            
-    <p>FastForward DevTools is infrastructure for Fast Forward libraries. It ships
-shared defaults, registers Composer commands, generates documentation, and
-synchronizes automation plus packaged agent skills into consumer repositories.</p>
+            <div class="row align-items-center gy-4 my-4">
+    <div class="col-lg-7">
+    
+    <p>FastForward DevTools is the shared infrastructure layer for Fast Forward
+libraries. It keeps Composer commands, documentation generation,
+reporting, workflow automation, and packaged agent skills moving in the
+same direction.</p>
 
-            <img
-    src="guide/docs/_static/mascot.png"
-    width="420"        align="center"    alt="Fast Forward DevTools mascot"        />
+    <p>If you are new to the package, start with
+<a href="guide/getting-started/index.html">Getting Started</a> and <a href="guide/usage/index.html">Usage</a> for installation, the
+first successful run, and the core command flow.</p>
 
-            
-    <p>If you are new to the package, start with <a href="guide/getting-started/index.html">Getting Started</a> and
-<a href="guide/usage/index.html">Usage</a>. If you maintain Fast Forward libraries, continue with
+    <p>If you maintain Fast Forward libraries, continue with
 <a href="guide/advanced/index.html">Advanced</a>, <a href="guide/api/index.html">API Overview</a>, and <a href="guide/internals/index.html">Internals</a> to
-understand how the Composer plugin, PHPUnit extension, and reusable workflows
-fit together.</p>
+understand how the Composer plugin, PHPUnit extension, and reusable
+workflows fit together.</p>
+
+</div>
+<div class="col-lg-5 text-center">
+    <img
+    src="guide/docs/_static/mascot.png"
+                alt="Fast Forward DevTools mascot"        class="img-fluid w-100 rounded-4 shadow-sm border border-light-subtle bg-body-tertiary p-2"/>
+
+</div>
+
+</div>
 
             <div class="toc">
             <p class="caption">Contents</p>
     <ul>
     <li class="toc-item">
     <a href="guide/getting-started/index.html#getting-started">Getting Started</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/getting-started/installation.html#installation">Installation</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/getting-started/quickstart.html#quickstart">Quickstart</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/getting-started/supported-php-versions.html#supported-php-versions">Supported PHP Versions</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/usage/index.html#usage">Usage</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/usage/common-workflows.html#common-workflows">Common Workflows</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/usage/testing-and-coverage.html#testing-and-coverage">Testing and Coverage</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/usage/documentation-workflows.html#documentation-workflows">Documentation Workflows</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/usage/github-actions.html#github-actions-workflows">GitHub Actions Workflows</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/usage/migrating-consumer-repositories.html#migrating-consumer-repositories">Migrating Consumer Repositories</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/usage/syncing-packaged-skills.html#syncing-packaged-skills">Syncing Packaged Skills</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/usage/syncing-consumer-projects.html#syncing-consumer-projects">Syncing Consumer Projects</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/configuration/index.html#configuration">Configuration</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/configuration/tooling-defaults.html#packaged-defaults">Packaged Defaults</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/configuration/overriding-defaults.html#overriding-defaults">Overriding Defaults</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/configuration/repository-setup.html#repository-setup">Repository Setup</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/running/index.html#running-the-tools">Running the Tools</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/running/unified-command.html#the-unified-command">The Unified Command</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/running/specialized-commands.html#specialized-commands">Specialized Commands</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/running/reports.html#test-reports">Test Reports</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/commands/index.html#command-reference">Command Reference</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/commands/standards.html#standards">standards</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/tests.html#tests">tests</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/changelog.html#changelog-commands">changelog commands</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/dependencies.html#dependencies">dependencies</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/metrics.html#metrics">metrics</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/code-style.html#code-style">code-style</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/refactor.html#refactor">refactor</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/phpdoc.html#phpdoc">phpdoc</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/docs.html#docs">docs</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/wiki.html#wiki">wiki</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/reports.html#reports">reports</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/skills.html#skills">skills</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/sync.html#dev-tools-sync">dev-tools:sync</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/funding.html#funding">funding</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/gitignore.html#gitignore">gitignore</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/gitattributes.html#gitattributes">gitattributes</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/license.html#license">license</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/copy-resource.html#copy-resource">copy-resource</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/git-hooks.html#git-hooks">git-hooks</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/commands/update-composer-json.html#update-composer-json">update-composer-json</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/advanced/index.html#advanced">Advanced</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/advanced/consumer-automation.html#consumer-automation">Consumer Automation</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/advanced/branch-protection-and-bot-commits.html#branch-protection-and-bot-commits">Branch Protection and Bot Commits</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/advanced/phpunit-extension.html#phpunit-extension">PHPUnit Extension</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/advanced/rector-and-phpdoc.html#rector-and-phpdoc-automation">Rector and PHPDoc Automation</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/api/index.html#api-overview">API Overview</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/api/commands.html#command-classes">Command Classes</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/api/composer-integration.html#composer-integration">Composer Integration</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/api/phpunit-support.html#phpunit-support-classes">PHPUnit Support Classes</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/api/rector-rules.html#rector-rules">Rector Rules</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/internals/index.html#internals">Internals</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/internals/architecture.html#architecture-and-command-lifecycle">Architecture and Command Lifecycle</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/internals/release-publishing.html#release-and-publishing-workflow">Release and Publishing Workflow</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/links/index.html#links">Links</a>
-        <ul class="menu-level-1">
-            <li class="toc-item">
-    <a href="guide/links/project-links.html#project-links">Project Links</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/links/dependencies.html#dependencies">Dependencies</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/links/live-reports.html#live-reports">Live Reports</a>
-
-
-</li>
-
-                    </ul>
 
 </li>
 
     <li class="toc-item">
     <a href="guide/troubleshooting.html#troubleshooting">Troubleshooting</a>
 
-        <ul class="section-level-1">
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#composer-install-or-authentication-failures">Composer Install or Authentication Failures</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#missing-vendor-or-lock-file-mismatch">Missing vendor/ or Lock-File Mismatch</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#branch-protection-or-bot-commit-blocks">Branch Protection or Bot Commit Blocks</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#github-wiki-submodule-pointer-conflicts">.github/wiki Submodule Pointer Conflicts</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#no-tty-process-errors">No-TTY Process Errors</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#coverage-threshold-failures">Coverage Threshold Failures</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#phpdoc-or-template-generation-issues">PHPDoc or Template Generation Issues</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#reports-or-wiki-preview-cleanup-issues">Reports or Wiki Preview Cleanup Issues</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/troubleshooting.html#related-references">Related References</a>
-
-
-</li>
-
-                    </ul>
 </li>
 
     <li class="toc-item">
     <a href="guide/faq.html#faq">FAQ</a>
 
-        <ul class="section-level-1">
-            <li class="toc-item">
-    <a href="guide/faq.html#why-does-composer-dev-tools-docs-fail-in-a-new-package">Why does composer dev-tools docs fail in a new package?</a>
 
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#why-did-my-composer-json-change-after-installing-the-package">Why did my composer.json change after installing the package?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#do-i-always-need-to-run-dev-tools-sync-manually">Do I always need to run dev-tools:sync manually?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#when-should-i-run-composer-dev-tools-skills-manually">When should I run composer dev-tools skills manually?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#why-does-code-style-touch-composer-lock">Why does code-style touch composer.lock?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#where-did-docheader-come-from">Where did .docheader come from?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#how-do-i-run-only-one-test-class-or-method">How do I run only one test class or method?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#why-can-my-tests-double-final-classes">Why can my tests double final classes?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#why-did-desktop-notifications-stop-appearing-after-i-customized-phpunit">Why did desktop notifications stop appearing after I customized PHPUnit?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#is-addmissingclassphpdocrector-enabled-by-default">Is AddMissingClassPhpDocRector enabled by default?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#what-happens-if-github-wiki-already-exists">What happens if .github/wiki already exists?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#what-happens-if-agents-skills-my-skill-already-exists">What happens if .agents/skills/my-skill already exists?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#how-do-i-override-only-one-tool-without-forking-the-whole-package">How do I override only one tool without forking the whole package?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#how-do-i-extend-the-ecs-configuration-without-copying-the-whole-file">How do I extend the ECS configuration without copying the whole file?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#how-do-i-extend-the-rector-configuration-without-copying-the-whole-file">How do I extend the Rector configuration without copying the whole file?</a>
-
-
-</li>
-
-            <li class="toc-item">
-    <a href="guide/faq.html#can-i-generate-coverage-without-running-the-full-standards-pipeline">Can I generate coverage without running the full standards pipeline?</a>
-
-
-</li>
-
-                    </ul>
 </li>
 
     </ul></div>
