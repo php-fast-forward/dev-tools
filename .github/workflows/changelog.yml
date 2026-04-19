@@ -70,6 +70,7 @@ jobs:
         env:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
             CHANGELOG_ROOT_VERSION: ${{ github.event.pull_request.head.ref && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
+            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
@@ -103,12 +104,12 @@ jobs:
                   COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
                   COMPOSER_CACHE_DIR: /tmp/composer-cache
                   COMPOSER_ROOT_VERSION: ${{ env.CHANGELOG_ROOT_VERSION }}
-              run: composer --ansi install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Verify changelog update
               env:
                   BASE_REF: ${{ github.event.pull_request.base.ref }}
-              run: composer --ansi dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
+              run: composer dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
 
     prepare_release_pull_request:
         name: Prepare Release Pull Request
@@ -119,6 +120,7 @@ jobs:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
             RELEASE_BRANCH_PREFIX: ${{ inputs.release-branch-prefix || 'release/v' }}
             CHANGELOG_ROOT_VERSION: ${{ format('dev-{0}', github.event.repository.default_branch) }}
+            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
@@ -149,7 +151,7 @@ jobs:
                   COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
                   COMPOSER_CACHE_DIR: /tmp/composer-cache
                   COMPOSER_ROOT_VERSION: ${{ env.CHANGELOG_ROOT_VERSION }}
-              run: composer --ansi install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Resolve release version
               id: version
@@ -160,7 +162,7 @@ jobs:
                     version="${INPUT_VERSION}"
                     source="input"
                   else
-                    version="$(composer --ansi dev-tools changelog:next-version -- --file="${CHANGELOG_FILE}")"
+                    version="$(composer dev-tools changelog:next-version -- --file="${CHANGELOG_FILE}")"
                     source="inferred"
                   fi
 
@@ -172,14 +174,14 @@ jobs:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   release_date="$(date -u +%F)"
-                  composer --ansi dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
+                  composer dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
 
             - name: Render release notes preview
               env:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   mkdir -p .dev-tools
-                  composer --ansi dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
+                  composer dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
 
             - name: Create release preparation pull request
               id: create_pr
@@ -218,6 +220,7 @@ jobs:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
             RELEASE_BRANCH_PREFIX: ${{ inputs.release-branch-prefix || 'release/v' }}
             CHANGELOG_ROOT_VERSION: ${{ format('dev-{0}', github.event.repository.default_branch) }}
+            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
@@ -248,7 +251,7 @@ jobs:
                   COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
                   COMPOSER_CACHE_DIR: /tmp/composer-cache
                   COMPOSER_ROOT_VERSION: ${{ env.CHANGELOG_ROOT_VERSION }}
-              run: composer --ansi install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Resolve merged release version
               id: version
@@ -269,7 +272,7 @@ jobs:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   mkdir -p .dev-tools
-                  composer --ansi dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
+                  composer dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
 
             - name: Publish GitHub release
               env:

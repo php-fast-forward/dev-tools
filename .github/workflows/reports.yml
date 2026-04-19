@@ -55,6 +55,7 @@ jobs:
         env:
             PAGES_ARTIFACT_NAME: ${{ github.event_name == 'pull_request' && format('github-pages-pr-{0}', github.event.pull_request.number) || 'github-pages' }}
             REPORTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
+            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
