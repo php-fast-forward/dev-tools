@@ -2677,18 +2677,24 @@ consumer repository synchronization.</p>
  and
 falls back to the package autoloader.</li>
 
-    <li value="3"><code>FastForward\DevTools\DevTools</code>
- boots the command registry from
-<code>FastForward\DevTools\Composer\Capability\DevToolsCommandProvider</code>
+    <li value="3"><code>FastForward\DevTools\Console\DevTools::create()</code>
+ builds a shared
+container from <code>FastForward\DevTools\ServiceProvider\DevToolsServiceProvider</code>
 .</li>
 
-    <li value="4"><code>standards</code>
+    <li value="4"><code>FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader</code>
+
+lazily discovers <code>#[AsCommand]</code>
+ classes and resolves them from that
+container.</li>
+
+    <li value="5"><code>standards</code>
  is used as the default command when no explicit command name
 is given.</li>
 
-    <li value="5">Commands receive dependencies through constructor injection from
-<code>DevToolsServiceProvider</code>
-.</li>
+    <li value="6"><code>FastForward\DevTools\Composer\Capability\DevToolsCommandProvider</code>
+ only
+adapts the same application command set for Composer plugin integration.</li>
 
 </ol>
 
@@ -2717,19 +2723,34 @@ is given.</li>
 .</li>
 
     <li value="5"><code>FastForward\DevTools\Console\Command\SyncCommand</code>
- updates scripts, GitHub
-workflow stubs, <code>.editorconfig</code>
+ updates
+<code>composer.json</code>
+ scripts, funding metadata, workflow stubs,
+<code>.editorconfig</code>
 , <code>dependabot.yml</code>
 , <code>.gitignore</code>
-, and
-the wiki submodule in the consumer repository.</li>
+,
+<code>.gitattributes</code>
+, the project license, and packaged Git hooks.</li>
 
-    <li value="6"><code>FastForward\DevTools\Console\Command\SkillsCommand</code>
- synchronizes packaged skill
-links into the consumer <code>.agents/skills</code>
- directory.</li>
+    <li value="6">In normal mode, <code>dev-tools:sync</code>
+ also runs <code>wiki --init</code>
+ and
+<code>skills</code>
+ to initialize the wiki submodule and synchronize packaged skill
+links into <code>.agents/skills</code>
+.</li>
 
-    <li value="7"><code>FastForward\DevTools\Agent\Skills\SkillsSynchronizer</code>
+    <li value="7">In <code>--dry-run</code>
+, <code>--check</code>
+, and <code>--interactive</code>
+ modes, <code>wiki</code>
+ and
+<code>skills</code>
+ are skipped because they do not yet expose non-destructive
+verification paths.</li>
+
+    <li value="8"><code>FastForward\DevTools\Agent\Skills\SkillsSynchronizer</code>
  creates missing
 links, repairs broken ones, and preserves consumer-owned directories.</li>
 
@@ -2771,43 +2792,75 @@ documentation build with PHPUnit coverage generation.</li>
             <h2>Dependency Injection</h2>
 
             
-    <p>Commands receive their dependencies through constructor injection provided by
-<code>DevToolsServiceProvider</code>
+    <p><code>DevToolsServiceProvider</code>
+ builds the shared application container used by
+<code>DevTools::create()</code>
+. Most commands receive collaborators through
+constructor injection once resolved by that container, while command discovery
+itself stays lazy through <code>DevToolsCommandLoader</code>
 .</p>
+
+            
+    <p>The provider wires the command runtime by concern rather than by one flat
+command list:</p>
 
             <table>
                 <thead>
             <tr>
-                            <th>Interface</th>
-                            <th>Purpose</th>
+                            <th>Concern</th>
+                            <th>Services</th>
                     </tr>
         </thead>
     <tbody>
     <tr>
             <td><code>FastForward\DevTools\Process\ProcessBuilderInterface</code>
 </td>
-            <td>Builds process commands with a fluent API for arguments.</td>
+            <td><code>ProcessBuilderInterface</code>
+ and <code>ProcessQueueInterface</code>
+ build and
+execute subprocess pipelines.</td>
     </tr>
     <tr>
-            <td><code>FastForward\DevTools\Process\ProcessQueueInterface</code>
+            <td><code>Filesystem and metadata</code>
 </td>
-            <td>Queues and executes multiple processes in sequence.</td>
+            <td><code>FilesystemInterface</code>
+, <code>ComposerJsonInterface</code>
+, and
+<code>FileLocatorInterface</code>
+ resolve local files, project metadata, and
+packaged resources.</td>
     </tr>
     <tr>
-            <td><code>FastForward\DevTools\Filesystem\FilesystemInterface</code>
+            <td><code>Console bootstrapping</code>
 </td>
-            <td>Abstracts filesystem operations.</td>
+            <td><code>CommandLoaderInterface</code>
+ resolves lazy command loading, and
+<code>Composer\Plugin\Capability\CommandProvider</code>
+ exposes the same
+command set to Composer.</td>
     </tr>
     <tr>
-            <td><code>FastForward\DevTools\Composer\Json\ComposerJsonInterface</code>
+            <td><code>Changelog and Git</code>
 </td>
-            <td>Reads and validates <code>composer.json</code>
- metadata.</td>
+            <td>The changelog manager, parser, renderer, checker, and
+<code>GitClientInterface</code>
+ support changelog authoring, verification, and
+release-note flows.</td>
     </tr>
     <tr>
-            <td><code>Symfony\Component\Config\FileLocatorInterface</code>
+            <td><code>Synchronization helpers</code>
 </td>
-            <td>Locates configuration files.</td>
+            <td>Git ignore, Git attributes, license, resource diffing, and coverage
+summary services support consumer sync and reporting workflows.</td>
+    </tr>
+    <tr>
+            <td><code>Shared infrastructure</code>
+</td>
+            <td><code>LoggerInterface</code>
+, <code>ClockInterface</code>
+, and Twig&#039;s
+<code>LoaderInterface</code>
+ provide reusable runtime infrastructure.</td>
     </tr>
 </tbody>
 </table>

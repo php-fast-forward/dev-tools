@@ -2678,17 +2678,24 @@ console application.</p>
  and falls back to the package autoloader.</li>
 
     <li value="3"><code>bin/dev-tools.php</code>
- starts <code>FastForward\DevTools\DevTools</code>
+ starts <code>FastForward\DevTools\Console\DevTools</code>
  and appends
 <code>--no-plugins</code>
 .</li>
 
-    <li value="4"><code>FastForward\DevTools\DevTools</code>
- sets <code>standards</code>
- as the default command
-and loads commands from
-<code>FastForward\DevTools\Composer\Capability\DevToolsCommandProvider</code>
+    <li value="4"><code>FastForward\DevTools\Console\DevTools::create()</code>
+ builds the shared
+container from <code>FastForward\DevTools\ServiceProvider\DevToolsServiceProvider</code>
 .</li>
+
+    <li value="5"><code>FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader</code>
+
+lazily discovers <code>#[AsCommand]</code>
+ classes from the command namespace.</li>
+
+    <li value="6"><code>FastForward\DevTools\Composer\Capability\DevToolsCommandProvider</code>
+ later
+exposes that same command set to Composer.</li>
 
 </ol>
 
@@ -2718,7 +2725,7 @@ Composer install and update.</td>
             <td>Instantiates and returns the available command classes.</td>
     </tr>
     <tr>
-            <td><code>FastForward\DevTools\DevTools</code>
+            <td><code>FastForward\DevTools\Console\DevTools</code>
 </td>
             <td>Console application used by the local binary.</td>
     </tr>

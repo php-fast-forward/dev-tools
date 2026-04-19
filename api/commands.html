@@ -2660,11 +2660,18 @@
 
             
     <p>All public CLI commands extend <code>Composer\Command\BaseCommand</code>
+. Most command
+classes are resolved lazily through <code>DevToolsCommandLoader</code>
  and receive
-dependencies through constructor injection. The architecture uses
+their collaborators from the shared <code>DevToolsServiceProvider</code>
+ container,
+while orchestration commands such as <code>standards</code>
+ dispatch other commands
+through the console application itself. The architecture also relies on
 <code>ProcessBuilder</code>
  and <code>ProcessQueue</code>
- for fluent process management.</p>
+ for fluent process management where
+subprocess execution is needed.</p>
 
             <table>
                 <thead>
