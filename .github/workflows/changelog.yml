@@ -108,7 +108,7 @@ jobs:
             - name: Verify changelog update
               env:
                   BASE_REF: ${{ github.event.pull_request.base.ref }}
-              run: vendor/bin/dev-tools changelog:check --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
+              run: composer dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
 
     prepare_release_pull_request:
         name: Prepare Release Pull Request
@@ -160,7 +160,7 @@ jobs:
                     version="${INPUT_VERSION}"
                     source="input"
                   else
-                    version="$(vendor/bin/dev-tools changelog:next-version --file="${CHANGELOG_FILE}")"
+                    version="$(composer dev-tools changelog:next-version -- --file="${CHANGELOG_FILE}")"
                     source="inferred"
                   fi
 
@@ -172,14 +172,14 @@ jobs:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   release_date="$(date -u +%F)"
-                  vendor/bin/dev-tools changelog:promote "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
+                  composer dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
 
             - name: Render release notes preview
               env:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   mkdir -p .dev-tools
-                  vendor/bin/dev-tools changelog:show "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
+                  composer dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
 
             - name: Create release preparation pull request
               id: create_pr
@@ -269,7 +269,7 @@ jobs:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   mkdir -p .dev-tools
-                  vendor/bin/dev-tools changelog:show "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
+                  composer dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
 
             - name: Publish GitHub release
               env:

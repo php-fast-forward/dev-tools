@@ -91,18 +91,18 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Uses ``fetch-depth: 0`` so the base branch reference can be compared
         safely.
     *   Fetches the base branch changelog reference.
-    *   Runs ``vendor/bin/dev-tools changelog:check`` against the base ref.
+    *   Runs ``composer dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
     *   Fails when the current branch does not add a meaningful ``Unreleased`` change.
 *   **Manual Release Preparation**:
     *   Checks out the repository default branch with full history.
     *   Resolves the next version from ``Unreleased`` unless a version input is provided.
     *   Promotes ``Unreleased`` into the selected version with the current UTC release date.
     *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
-        ``vendor/bin/dev-tools changelog:show``.
+        ``composer dev-tools changelog:show -- <version>``.
     *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
 *   **Merged Release Pull Requests**:
     *   Detects merged branches that match the configured release branch prefix.
-    *   Renders the released changelog section with ``vendor/bin/dev-tools changelog:show``.
+    *   Renders the released changelog section with ``composer dev-tools changelog:show -- <version>``.
     *   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
 
 **Inputs:**
