@@ -25,13 +25,13 @@ What the Command Changes
      - Updated in place.
    * - ``.github/workflows/*.yml``
      - Copies stub workflows from ``resources/github-actions``.
-     - Only when missing.
+     - Only when missing by default; replaceable with ``--overwrite``.
    * - ``.editorconfig``
      - Copies the packaged file from the repository root.
-     - Only when missing.
+     - Only when missing by default; replaceable with ``--overwrite``.
    * - ``.github/dependabot.yml``
      - Copies the packaged Dependabot template.
-     - Only when missing.
+     - Only when missing by default; replaceable with ``--overwrite``.
    * - ``.agents/skills/<skill-name>``
      - Creates or repairs symlinks to packaged agent skills.
      - Creates missing links, repairs broken symlinks, and preserves existing
@@ -61,7 +61,8 @@ What It Needs
 .. important::
 
    Workflow stubs, ``.editorconfig``, and ``dependabot.yml`` are copied only
-   when the target file does not already exist. This protects
-   consumer-specific customizations. The ``skills`` phase follows the same
-   spirit by preserving existing non-symlink directories inside
-   ``.agents/skills``.
+   when the target file does not already exist unless ``--overwrite`` is used.
+   This protects consumer-specific customizations by default while still
+   allowing explicit replacement during shared automation updates. The
+   ``skills`` phase follows the same spirit by preserving existing
+   non-symlink directories inside ``.agents/skills``.

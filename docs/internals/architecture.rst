@@ -10,12 +10,15 @@ Local Command Lifecycle
 1. ``bin/dev-tools`` loads ``bin/dev-tools.php``.
 2. ``bin/dev-tools.php`` prefers the consumer ``vendor/autoload.php`` and
    falls back to the package autoloader.
-3. ``FastForward\DevTools\Console\DevTools`` boots the command registry from
-   ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
-4. ``standards`` is used as the default command when no explicit command name
+3. ``FastForward\DevTools\Console\DevTools::create()`` builds a shared
+   container from ``FastForward\DevTools\ServiceProvider\DevToolsServiceProvider``.
+4. ``FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader``
+   lazily discovers ``#[AsCommand]`` classes and resolves them from that
+   container.
+5. ``standards`` is used as the default command when no explicit command name
    is given.
-5. Commands receive dependencies through constructor injection from
-   ``DevToolsServiceProvider``.
+6. ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider`` only
+   adapts the same application command set for Composer plugin integration.
 
 Consumer Synchronization Lifecycle
 ----------------------------------
@@ -26,12 +29,17 @@ Consumer Synchronization Lifecycle
    ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
 4. After ``composer install`` or ``composer update``, the plugin runs
    ``vendor/bin/dev-tools dev-tools:sync``.
-5. ``FastForward\DevTools\Console\Command\SyncCommand`` updates scripts, GitHub
-   workflow stubs, ``.editorconfig``, ``dependabot.yml``, ``.gitignore``, and
-   the wiki submodule in the consumer repository.
-6. ``FastForward\DevTools\Console\Command\SkillsCommand`` synchronizes packaged skill
-   links into the consumer ``.agents/skills`` directory.
-7. ``FastForward\DevTools\Agent\Skills\SkillsSynchronizer`` creates missing
+5. ``FastForward\DevTools\Console\Command\SyncCommand`` updates
+   ``composer.json`` scripts, funding metadata, workflow stubs,
+   ``.editorconfig``, ``dependabot.yml``, ``.gitignore``,
+   ``.gitattributes``, the project license, and packaged Git hooks.
+6. In normal mode, ``dev-tools:sync`` also runs ``wiki --init`` and
+   ``skills`` to initialize the wiki submodule and synchronize packaged skill
+   links into ``.agents/skills``.
+7. In ``--dry-run``, ``--check``, and ``--interactive`` modes, ``wiki`` and
+   ``skills`` are skipped because they do not yet expose non-destructive
+   verification paths.
+8. ``FastForward\DevTools\Agent\Skills\SkillsSynchronizer`` creates missing
    links, repairs broken ones, and preserves consumer-owned directories.
 
 Documentation Pipeline
@@ -50,21 +58,37 @@ Documentation Pipeline
 Dependency Injection
 --------------------
 
-Commands receive their dependencies through constructor injection provided by
-``DevToolsServiceProvider``.
+``DevToolsServiceProvider`` builds the shared application container used by
+``DevTools::create()``. Most commands receive collaborators through
+constructor injection once resolved by that container, while command discovery
+itself stays lazy through ``DevToolsCommandLoader``.
+
+The provider wires the command runtime by concern rather than by one flat
+command list:
 
 .. list-table::
    :header-rows: 1
 
-   * - Interface
-     - Purpose
+   * - Concern
+     - Services
    * - ``FastForward\DevTools\Process\ProcessBuilderInterface``
-     - Builds process commands with a fluent API for arguments.
-   * - ``FastForward\DevTools\Process\ProcessQueueInterface``
-     - Queues and executes multiple processes in sequence.
-   * - ``FastForward\DevTools\Filesystem\FilesystemInterface``
-     - Abstracts filesystem operations.
-   * - ``FastForward\DevTools\Composer\Json\ComposerJsonInterface``
-     - Reads and validates ``composer.json`` metadata.
-   * - ``Symfony\Component\Config\FileLocatorInterface``
-     - Locates configuration files.
+     - ``ProcessBuilderInterface`` and ``ProcessQueueInterface`` build and
+       execute subprocess pipelines.
+   * - ``Filesystem and metadata``
+     - ``FilesystemInterface``, ``ComposerJsonInterface``, and
+       ``FileLocatorInterface`` resolve local files, project metadata, and
+       packaged resources.
+   * - ``Console bootstrapping``
+     - ``CommandLoaderInterface`` resolves lazy command loading, and
+       ``Composer\Plugin\Capability\CommandProvider`` exposes the same
+       command set to Composer.
+   * - ``Changelog and Git``
+     - The changelog manager, parser, renderer, checker, and
+       ``GitClientInterface`` support changelog authoring, verification, and
+       release-note flows.
+   * - ``Synchronization helpers``
+     - Git ignore, Git attributes, license, resource diffing, and coverage
+       summary services support consumer sync and reporting workflows.
+   * - ``Shared infrastructure``
+     - ``LoggerInterface``, ``ClockInterface``, and Twig's
+       ``LoaderInterface`` provide reusable runtime infrastructure.

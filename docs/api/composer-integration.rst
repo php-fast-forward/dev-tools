@@ -12,9 +12,12 @@ Startup Chain
    ``vendor/autoload.php`` and falls back to the package autoloader.
 3. ``bin/dev-tools.php`` starts ``FastForward\DevTools\Console\DevTools`` and appends
    ``--no-plugins``.
-4. ``FastForward\DevTools\Console\DevTools`` sets ``standards`` as the default command
-   and loads commands from
-   ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
+4. ``FastForward\DevTools\Console\DevTools::create()`` builds the shared
+   container from ``FastForward\DevTools\ServiceProvider\DevToolsServiceProvider``.
+5. ``FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader``
+   lazily discovers ``#[AsCommand]`` classes from the command namespace.
+6. ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider`` later
+   exposes that same command set to Composer.
 
 Composer Plugin Classes
 -----------------------

@@ -216,11 +216,21 @@ so agents can discover the packaged skills shipped with this repository.
 
 ## 🏗️ Architecture
 
-Each command is self-contained and receives its dependencies through constructor injection, following the :abbr:`DI` pattern. The ``ProcessBuilder`` and ``ProcessQueue`` classes provide a fluent API for constructing and executing system processes in sequence.
-
-- ``ProcessBuilderInterface`` - Builds process commands with arguments
-- ``ProcessQueueInterface`` - Manages and executes process queues
-- ``FilesystemInterface`` - Abstracts filesystem operations
+- `Composer Plugin` - `FastForward\DevTools\Composer\Plugin` exposes the
+  packaged command set to Composer and runs `dev-tools:sync` after install and
+  update.
+- `DevTools Container` - `FastForward\DevTools\Console\DevTools::create()`
+  builds a shared container from `DevToolsServiceProvider`, which wires
+  process execution, filesystem access, changelog services, Git helpers,
+  diffing, reporting, and template loading.
+- `Lazy Command Loading` - `DevToolsCommandLoader` discovers `#[AsCommand]`
+  classes and resolves most commands only when they are invoked, while
+  orchestration commands such as `standards` dispatch other commands through
+  the console application itself.
+- `Consumer Sync Pipeline` - `dev-tools:sync` refreshes `composer.json`,
+  funding metadata, workflow stubs, repository defaults, git metadata files,
+  packaged Git hooks, and, in normal mode, the wiki submodule plus packaged
+  skills.
 
 ## 🤝 Contributing
 

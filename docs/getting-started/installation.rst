@@ -32,15 +32,18 @@ following steps:
    update.
 4. ``dev-tools:sync`` adds or refreshes the ``dev-tools`` and
    ``dev-tools:fix`` scripts in the consumer ``composer.json``.
-5. ``dev-tools:sync`` updates ``extra.grumphp.config-default-path`` and copies
-   missing automation assets such as workflow stubs, ``.editorconfig``, and
-   ``.github/dependabot.yml``.
+5. ``dev-tools:sync`` updates ``extra.grumphp.config-default-path``,
+   synchronizes funding metadata, copies automation assets such as workflow
+   stubs, ``.editorconfig``, and ``.github/dependabot.yml``, and refreshes
+   ``.gitignore``, ``.gitattributes``, the project license, and packaged Git
+   hooks.
 6. If ``.github/wiki`` is missing, ``dev-tools:sync`` adds it as a Git
    submodule that points to the repository wiki.
 7. ``dev-tools:sync`` runs ``gitignore`` to merge canonical ignore rules into
    the consumer project.
 8. ``dev-tools:sync`` runs ``skills`` to create or repair packaged skill links
-   inside ``.agents/skills``.
+   inside ``.agents/skills`` when sync runs in normal mode rather than
+   preview/check mode.
 
 First commands to try
 ---------------------
