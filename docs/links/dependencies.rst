@@ -14,8 +14,8 @@ Runtime and Composer Integration
      - Why it matters
    * - ``composer/composer`` and ``composer-plugin-api``
      - Provide the Composer plugin API, command integration, and script hooks.
-   * - ``phpro/grumphp``
-     - Supplies the default GrumPHP configuration referenced by
+   * - ``phpro/grumphp-shim``
+     - Supplies the default GrumPHP executable and configuration referenced by
        ``dev-tools:sync``.
 
 QA and Refactoring
@@ -36,6 +36,13 @@ QA and Refactoring
      - Extends the default Rector configuration with shared rules.
    * - ``friendsofphp/php-cs-fixer``
      - Powers the PHPDoc fixer phase.
+   * - ``icanhazstring/composer-unused``
+     - Reports unused Composer dependencies in ``dependencies``.
+   * - ``shipmonk/composer-dependency-analyser``
+     - Reports missing Composer dependencies in ``dependencies``.
+   * - ``rector/jack``
+     - Previews or applies dependency version updates and enforces the
+       outdated dependency threshold.
    * - ``thecodingmachine/safe``
      - Enables optional Safe migration rules when present.
 
@@ -53,6 +60,9 @@ Documentation and Reporting
      - Generates the Markdown API pages for the wiki.
    * - ``fast-forward/phpdoc-bootstrap-template``
      - Provides the default HTML theme used by ``docs``.
+   * - ``phpmetrics/phpmetrics``
+     - Generates the metrics site and JSON artifacts used by ``metrics`` and
+       ``reports``.
    * - ``esi/phpunit-coverage-check``
      - Enforces the minimum coverage threshold in the reusable test workflow.
 
@@ -66,6 +76,12 @@ Testing and Local Developer Experience
      - Why it matters
    * - ``phpunit/phpunit``
      - Runs the test suite.
+   * - ``phpunit/php-code-coverage``
+     - Provides the coverage exporters consumed by ``tests`` and ``reports``.
+   * - ``php-parallel-lint/php-parallel-lint``
+     - Supports linting and validation in the packaged development workflow.
+   * - ``phpspec/prophecy``
+     - Provides Prophecy doubles used throughout the packaged test suite.
    * - ``phpspec/prophecy-phpunit``
      - Supports the repository's Prophecy-based test doubles.
    * - ``dg/bypass-finals``

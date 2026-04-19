@@ -16,16 +16,16 @@ Usage
 .. code-block:: bash
 
    composer metrics
-   composer dev-tools metrics -- [options]
+   composer metrics [options]
    vendor/bin/dev-tools metrics [options]
 
 Options
 -------
 
 ``--working-dir=<path>``
-   Composer's inherited working-directory option. Use it when you want to run
-   the command from another directory without changing your current shell
-   session.
+   Composer's inherited working-directory option. Use it when you invoke the
+   command through Composer and want to analyze another checkout without
+   changing your current shell session first.
 
    Default: the current working directory.
 
@@ -59,13 +59,19 @@ Generate an HTML report for manual inspection:
 
 .. code-block:: bash
 
-   composer dev-tools metrics -- --target=build/metrics
+   composer metrics --target=build/metrics
 
 Generate the full metrics artifact set for CI previews:
 
 .. code-block:: bash
 
-   vendor/bin/dev-tools metrics --target=build/metrics
+   composer metrics --target=build/metrics
+
+Analyze another checkout through Composer's inherited working directory:
+
+.. code-block:: bash
+
+   composer --working-dir=packages/example metrics
 
 Behavior
 --------
