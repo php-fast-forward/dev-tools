@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776569495">
-  <project timestamp="1776569495" name="Clover Coverage">
+<coverage generated="1776572196">
+  <project timestamp="1776572196" name="Clover Coverage">
     <package name="FastForward\DevTools\Agent\Skills">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Agent/Skills/SkillsSynchronizer.php">
         <class name="FastForward\DevTools\Agent\Skills\SkillsSynchronizer" namespace="FastForward\DevTools\Agent\Skills">
@@ -530,11 +530,13 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/DependenciesCommand.php">
         <class name="FastForward\DevTools\Console\Command\DependenciesCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="12" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="71" elements="76" coveredelements="74"/>
+          <metrics complexity="20" methods="11" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="67" coveredstatements="66" elements="78" coveredelements="76"/>
         </class>
-        <line num="52" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
-        <line num="57" type="stmt" count="5"/>
-        <line num="63" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="5"/>
+        <line num="51" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
+        <line num="55" type="stmt" count="5"/>
+        <line num="61" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="5"/>
+        <line num="63" type="stmt" count="5"/>
+        <line num="64" type="stmt" count="5"/>
         <line num="65" type="stmt" count="5"/>
         <line num="66" type="stmt" count="5"/>
         <line num="67" type="stmt" count="5"/>
@@ -550,65 +552,65 @@
         <line num="77" type="stmt" count="5"/>
         <line num="78" type="stmt" count="5"/>
         <line num="79" type="stmt" count="5"/>
-        <line num="80" type="stmt" count="5"/>
-        <line num="81" type="stmt" count="5"/>
-        <line num="92" type="method" name="execute" visibility="protected" complexity="7" crap="7" count="4"/>
-        <line num="95" type="stmt" count="4"/>
-        <line num="96" type="stmt" count="1"/>
+        <line num="90" type="method" name="execute" visibility="protected" complexity="3" crap="3" count="4"/>
+        <line num="93" type="stmt" count="4"/>
+        <line num="94" type="stmt" count="1"/>
+        <line num="95" type="stmt" count="1"/>
         <line num="97" type="stmt" count="1"/>
-        <line num="99" type="stmt" count="1"/>
-        <line num="102" type="stmt" count="3"/>
-        <line num="104" type="stmt" count="3"/>
-        <line num="105" type="stmt" count="3"/>
-        <line num="107" type="stmt" count="3"/>
+        <line num="100" type="stmt" count="3"/>
+        <line num="101" type="stmt" count="3"/>
+        <line num="103" type="stmt" count="3"/>
+        <line num="104" type="stmt" count="1"/>
+        <line num="105" type="stmt" count="1"/>
         <line num="108" type="stmt" count="3"/>
-        <line num="109" type="stmt" count="1"/>
         <line num="110" type="stmt" count="3"/>
         <line num="111" type="stmt" count="3"/>
-        <line num="113" type="stmt" count="3"/>
-        <line num="115" type="stmt" count="3"/>
-        <line num="116" type="stmt" count="2"/>
-        <line num="119" type="stmt" count="3"/>
-        <line num="120" type="stmt" count="3"/>
-        <line num="121" type="stmt" count="1"/>
-        <line num="122" type="stmt" count="3"/>
-        <line num="123" type="stmt" count="3"/>
+        <line num="112" type="stmt" count="3"/>
+        <line num="114" type="stmt" count="3"/>
+        <line num="122" type="method" name="getComposerDependencyAnalyserCommand" visibility="private" complexity="1" crap="1" count="3"/>
         <line num="124" type="stmt" count="3"/>
         <line num="125" type="stmt" count="3"/>
-        <line num="126" type="stmt" count="1"/>
+        <line num="126" type="stmt" count="3"/>
         <line num="127" type="stmt" count="3"/>
-        <line num="128" type="stmt" count="3"/>
-        <line num="130" type="stmt" count="3"/>
-        <line num="131" type="stmt" count="1"/>
-        <line num="132" type="stmt" count="1"/>
-        <line num="133" type="stmt" count="1"/>
-        <line num="134" type="stmt" count="1"/>
-        <line num="135" type="stmt" count="1"/>
-        <line num="136" type="stmt" count="1"/>
-        <line num="139" type="stmt" count="3"/>
+        <line num="138" type="method" name="getJackBreakpointCommand" visibility="private" complexity="2" crap="2" count="3"/>
         <line num="140" type="stmt" count="3"/>
-        <line num="141" type="stmt" count="3"/>
         <line num="142" type="stmt" count="3"/>
-        <line num="143" type="stmt" count="3"/>
-        <line num="144" type="stmt" count="3"/>
-        <line num="145" type="stmt" count="3"/>
+        <line num="143" type="stmt" count="2"/>
         <line num="146" type="stmt" count="3"/>
-        <line num="147" type="stmt" count="3"/>
         <line num="148" type="stmt" count="3"/>
-        <line num="149" type="stmt" count="3"/>
-        <line num="150" type="stmt" count="3"/>
-        <line num="151" type="stmt" count="3"/>
-        <line num="152" type="stmt" count="3"/>
-        <line num="154" type="stmt" count="3"/>
-        <line num="162" type="method" name="resolveMaximumOutdated" visibility="private" complexity="3" crap="3.03" count="4"/>
-        <line num="164" type="stmt" count="4"/>
-        <line num="166" type="stmt" count="4"/>
-        <line num="167" type="stmt" count="1"/>
+        <line num="158" type="method" name="getOpenVersionsCommand" visibility="private" complexity="3" crap="3" count="3"/>
+        <line num="160" type="stmt" count="3"/>
+        <line num="162" type="stmt" count="3"/>
+        <line num="163" type="stmt" count="2"/>
+        <line num="166" type="stmt" count="3"/>
+        <line num="167" type="stmt" count="2"/>
         <line num="170" type="stmt" count="3"/>
-        <line num="172" type="stmt" count="3"/>
-        <line num="173" type="stmt" count="0"/>
-        <line num="176" type="stmt" count="3"/>
-        <metrics loc="179" ncloc="139" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="72" coveredstatements="71" elements="76" coveredelements="74"/>
+        <line num="180" type="method" name="getRaiseToInstalledCommand" visibility="private" complexity="3" crap="3" count="3"/>
+        <line num="182" type="stmt" count="3"/>
+        <line num="184" type="stmt" count="3"/>
+        <line num="185" type="stmt" count="2"/>
+        <line num="188" type="stmt" count="3"/>
+        <line num="189" type="stmt" count="2"/>
+        <line num="192" type="stmt" count="3"/>
+        <line num="200" type="method" name="getComposerUpdateCommand" visibility="private" complexity="1" crap="1" count="1"/>
+        <line num="202" type="stmt" count="1"/>
+        <line num="203" type="stmt" count="1"/>
+        <line num="204" type="stmt" count="1"/>
+        <line num="205" type="stmt" count="1"/>
+        <line num="206" type="stmt" count="1"/>
+        <line num="214" type="method" name="getComposerNormalizeCommand" visibility="private" complexity="1" crap="1" count="1"/>
+        <line num="216" type="stmt" count="1"/>
+        <line num="224" type="method" name="getComposerUnusedCommand" visibility="private" complexity="1" crap="1" count="3"/>
+        <line num="226" type="stmt" count="3"/>
+        <line num="236" type="method" name="resolveMaximumOutdated" visibility="private" complexity="3" crap="3.03" count="4"/>
+        <line num="238" type="stmt" count="4"/>
+        <line num="240" type="stmt" count="4"/>
+        <line num="241" type="stmt" count="1"/>
+        <line num="244" type="stmt" count="3"/>
+        <line num="246" type="stmt" count="3"/>
+        <line num="247" type="stmt" count="0"/>
+        <line num="250" type="stmt" count="3"/>
+        <metrics loc="253" ncloc="170" classes="1" methods="11" coveredmethods="10" conditionals="0" coveredconditionals="0" statements="67" coveredstatements="66" elements="78" coveredelements="76"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/DocsCommand.php">
         <class name="FastForward\DevTools\Console\Command\DocsCommand" namespace="FastForward\DevTools\Console\Command">
@@ -2409,6 +2411,6 @@
         <metrics loc="142" ncloc="105" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="26" coveredstatements="26" elements="28" coveredelements="28"/>
       </file>
     </package>
-    <metrics files="80" loc="9823" ncloc="5162" classes="56" methods="235" coveredmethods="195" conditionals="0" coveredconditionals="0" statements="1717" coveredstatements="1599" elements="1952" coveredelements="1794"/>
+    <metrics files="80" loc="9897" ncloc="5193" classes="56" methods="242" coveredmethods="202" conditionals="0" coveredconditionals="0" statements="1712" coveredstatements="1594" elements="1954" coveredelements="1796"/>
   </project>
 </coverage>

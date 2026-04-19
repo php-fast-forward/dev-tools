@@ -826,9 +826,44 @@ Search.appendIndex(
             "summary": "Executes\u0020the\u0020dependency\u0020analysis\u0020workflow.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_execute"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetComposerDependencyAnalyserCommand\u0028\u0029",
+            "name": "getComposerDependencyAnalyserCommand",
+            "summary": "Builds\u0020the\u0020Composer\u0020Dependency\u0020Analyser\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerDependencyAnalyserCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetJackBreakpointCommand\u0028\u0029",
+            "name": "getJackBreakpointCommand",
+            "summary": "Builds\u0020the\u0020Jack\u0020breakpoint\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getJackBreakpointCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetOpenVersionsCommand\u0028\u0029",
+            "name": "getOpenVersionsCommand",
+            "summary": "Builds\u0020the\u0020Jack\u0020open\u002Dversions\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getOpenVersionsCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetRaiseToInstalledCommand\u0028\u0029",
+            "name": "getRaiseToInstalledCommand",
+            "summary": "Builds\u0020the\u0020Jack\u0020raise\u002Dto\u002Dinstalled\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getRaiseToInstalledCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetComposerUpdateCommand\u0028\u0029",
+            "name": "getComposerUpdateCommand",
+            "summary": "Builds\u0020the\u0020Composer\u0020update\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUpdateCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetComposerNormalizeCommand\u0028\u0029",
+            "name": "getComposerNormalizeCommand",
+            "summary": "Builds\u0020the\u0020Composer\u0020Normalize\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerNormalizeCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetComposerUnusedCommand\u0028\u0029",
+            "name": "getComposerUnusedCommand",
+            "summary": "Builds\u0020the\u0020composer\u002Dunused\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUnusedCommand"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AresolveMaximumOutdated\u0028\u0029",
             "name": "resolveMaximumOutdated",
-            "summary": "",
+            "summary": "Resolves\u0020the\u0020maximum\u0020outdated\u0020dependency\u0020threshold.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_resolveMaximumOutdated"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003A\u0024processBuilder",
@@ -840,11 +875,6 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_processQueue"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003A\u0024fileLocator",
-            "name": "fileLocator",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_fileLocator"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand",
             "name": "DocsCommand",
