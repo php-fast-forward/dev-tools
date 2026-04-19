@@ -1096,45 +1096,15 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_execute"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003AresolveBinaryPath\u0028\u0029",
-            "name": "resolveBinaryPath",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveBinaryPath"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003AresolveSourcePath\u0028\u0029",
-            "name": "resolveSourcePath",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveSourcePath"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003AresolveCacheDirectory\u0028\u0029",
-            "name": "resolveCacheDirectory",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveCacheDirectory"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003AresolveJsonReportPath\u0028\u0029",
-            "name": "resolveJsonReportPath",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveJsonReportPath"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003AresolveOptionalReportDirectory\u0028\u0029",
-            "name": "resolveOptionalReportDirectory",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveOptionalReportDirectory"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003ABINARY",
             "name": "BINARY",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_BINARY"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003ACACHE_DIR",
-            "name": "CACHE_DIR",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003APHP_ERROR_REPORTING",
+            "name": "PHP_ERROR_REPORTING",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_CACHE_DIR"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024filesystem",
-            "name": "filesystem",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_filesystem"
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_ERROR_REPORTING"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
@@ -1145,16 +1115,6 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processQueue"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024reportLoader",
-            "name": "reportLoader",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_reportLoader"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024summaryRenderer",
-            "name": "summaryRenderer",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_summaryRenderer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand",
             "name": "PhpDocCommand",
@@ -2266,91 +2226,6 @@ Search.appendIndex(
             "summary": "Resolves\u0020a\u0020license\u0020identifier\u0020to\u0020its\u0020template\u0020filename.",
             "url": "classes/FastForward-DevTools-License-ResolverInterface.html#method_resolve"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\Report",
-            "name": "Report",
-            "summary": "Represents\u0020the\u0020reduced\u0020metrics\u0020summary\u0020shown\u0020by\u0020the\u0020dev\u002Dtools\u0020metrics\u0020command.",
-            "url": "classes/FastForward-DevTools-Metrics-Report.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\Report\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-Report.html#method___construct"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\Report\u003A\u003A\u0024averageCyclomaticComplexityByClass",
-            "name": "averageCyclomaticComplexityByClass",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-Report.html#property_averageCyclomaticComplexityByClass"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\Report\u003A\u003A\u0024averageMaintainabilityIndexByClass",
-            "name": "averageMaintainabilityIndexByClass",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-Report.html#property_averageMaintainabilityIndexByClass"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\Report\u003A\u003A\u0024classesAnalyzed",
-            "name": "classesAnalyzed",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-Report.html#property_classesAnalyzed"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\Report\u003A\u003A\u0024functionsAnalyzed",
-            "name": "functionsAnalyzed",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-Report.html#property_functionsAnalyzed"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\ReportLoader",
-            "name": "ReportLoader",
-            "summary": "Derives\u0020a\u0020reduced\u0020command\u0020summary\u0020from\u0020the\u0020raw\u0020PhpMetrics\u0020JSON\u0020payload.",
-            "url": "classes/FastForward-DevTools-Metrics-ReportLoader.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\ReportLoader\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-ReportLoader.html#method___construct"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\ReportLoader\u003A\u003Aload\u0028\u0029",
-            "name": "load",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-ReportLoader.html#method_load"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\ReportLoader\u003A\u003AtoFloat\u0028\u0029",
-            "name": "toFloat",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-ReportLoader.html#method_toFloat"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\ReportLoader\u003A\u003A\u0024filesystem",
-            "name": "filesystem",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-ReportLoader.html#property_filesystem"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\ReportLoaderInterface",
-            "name": "ReportLoaderInterface",
-            "summary": "Loads\u0020a\u0020reduced\u0020metrics\u0020summary\u0020from\u0020a\u0020PhpMetrics\u0020JSON\u0020report.",
-            "url": "classes/FastForward-DevTools-Metrics-ReportLoaderInterface.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\ReportLoaderInterface\u003A\u003Aload\u0028\u0029",
-            "name": "load",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-ReportLoaderInterface.html#method_load"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\SummaryRenderer",
-            "name": "SummaryRenderer",
-            "summary": "Formats\u0020reduced\u0020PhpMetrics\u0020data\u0020as\u0020a\u0020concise\u0020console\u0020summary.",
-            "url": "classes/FastForward-DevTools-Metrics-SummaryRenderer.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\SummaryRenderer\u003A\u003Arender\u0028\u0029",
-            "name": "render",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-SummaryRenderer.html#method_render"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\SummaryRendererInterface",
-            "name": "SummaryRendererInterface",
-            "summary": "Renders\u0020a\u0020human\u002Dreadable\u0020metrics\u0020summary\u0020for\u0020console\u0020output.",
-            "url": "classes/FastForward-DevTools-Metrics-SummaryRendererInterface.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics\\SummaryRendererInterface\u003A\u003Arender\u0028\u0029",
-            "name": "render",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Metrics-SummaryRendererInterface.html#method_render"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
             "name": "CoverageSummary",
             "summary": "Represents\u0020the\u0020line\u0020coverage\u0020summary\u0020extracted\u0020from\u0020a\u0020PHPUnit\u0020\u0060coverage\u002Dphp\u0060\u0020report.",
@@ -2840,11 +2715,6 @@ Search.appendIndex(
             "name": "License",
             "summary": "",
             "url": "namespaces/fastforward-devtools-license.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Metrics",
-            "name": "Metrics",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools-metrics.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage",
             "name": "Coverage",

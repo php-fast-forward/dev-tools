@@ -1949,28 +1949,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-metrics.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Metrics
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-phpunit.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2405,21 +2383,8 @@
             
     <p>The <code>metrics</code>
  command runs <a href="https://phpmetrics.github.io/website/">PhpMetrics</a>
-against the selected source directory, generates a JSON report, and prints a
-reduced summary with:</p>
-
-            
-
-<ul>
-    <li class="dash">average cyclomatic complexity by class;</li>
-
-    <li class="dash">average maintainability index by class;</li>
-
-    <li class="dash">number of classes analyzed;</li>
-
-    <li class="dash">number of functions analyzed.</li>
-
-</ul>
+against the current working directory and forwards the requested report
+artifacts.</p>
 
     </section>
 
@@ -2436,14 +2401,15 @@ vendor/bin/dev-tools metrics [options]</code></pre>
             <h2>Options</h2>
 
             <dl>
-                        <dt><code>--src=&lt;path&gt;</code>
+                        <dt><code>--working-dir=&lt;path&gt;</code>
 </dt>
         
         <dd>
-    <p>Source directory to analyze.</p>
+    <p>Composer&#039;s inherited working-directory option. Use it when you want to run
+the command from another directory without changing your current shell
+session.</p>
 
-    <p>Default: <code>src</code>
-.</p>
+    <p>Default: the current working directory.</p>
 </dd>
                                 <dt><code>--exclude=&lt;list&gt;</code>
 </dt>
@@ -2452,7 +2418,7 @@ vendor/bin/dev-tools metrics [options]</code></pre>
     <p>Comma-separated directories that should be excluded from analysis.</p>
 
     <p>Default:
-<code>vendor,test,Test,tests,Tests,testing,Testing,bower_components,node_modules,cache,spec,build</code>
+<code>vendor,test,tests,tmp,cache,spec,build,backup,resources</code>
 .</p>
 </dd>
                                 <dt><code>--report-html=&lt;directory&gt;</code>
@@ -2463,17 +2429,10 @@ vendor/bin/dev-tools metrics [options]</code></pre>
 </dt>
         
         <dd>Optional output file for the generated JSON report.</dd>
-                                <dt><code>--cache-dir=&lt;directory&gt;</code>
+                                <dt><code>--report-summary-json=&lt;file&gt;</code>
 </dt>
         
-        <dd>
-    <p>Cache directory used for temporary JSON reports when <code>--report-json</code>
- is
-not provided.</p>
-
-    <p>Default: <code>tmp/cache/phpmetrics</code>
-.</p>
-</dd>
+        <dd>Optional output file for the generated summary JSON report.</dd>
             </dl>
 
     </section>
@@ -2482,7 +2441,7 @@ not provided.</p>
             <h2>Examples</h2>
 
             
-    <p>Generate the reduced summary with defaults:</p>
+    <p>Analyze the current repository with defaults:</p>
 
             <pre><code class="language-bash">composer metrics</code></pre>
 
@@ -2492,7 +2451,7 @@ not provided.</p>
             <pre><code class="language-bash">composer dev-tools metrics -- --report-html=build/metrics</code></pre>
 
             
-    <p>Generate both JSON and HTML reports for CI artifacts:</p>
+    <p>Generate JSON and HTML reports for CI artifacts:</p>
 
             <pre><code class="language-bash">vendor/bin/dev-tools metrics --report-json=build/metrics.json --report-html=build/metrics</code></pre>
 
@@ -2504,14 +2463,10 @@ not provided.</p>
             
 
 <ul>
-    <li class="dash">the command fails early when <code>vendor/bin/phpmetrics</code>
- is not installed;</li>
+    <li class="dash">the command forwards report options directly to PhpMetrics;</li>
 
-    <li class="dash">the source directory must exist;</li>
-
-    <li class="dash">the reduced summary is derived from the generated PhpMetrics JSON report;</li>
-
-    <li class="dash">optional HTML and JSON report destinations are created before execution.</li>
+    <li class="dash">it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
+deprecation notices emitted by the dependency itself.</li>
 
 </ul>
 

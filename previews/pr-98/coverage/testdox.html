@@ -349,11 +349,11 @@
         </ul>
         <h2>Metrics Command (FastForward\DevTools\Tests\Console\Command\MetricsCommand)</h2>
         <ul>
-            <li class="defect">Command will set expected name description and help</li>
+            <li class="success">Command will set expected name description and help</li>
             <li class="defect">Command will have expected options</li>
-            <li class="defect">Execute will run php metrics and print summary</li>
-            <li class="defect">Execute will fail when binary is missing</li>
-            <li class="defect">Execute will include html report when requested</li>
+            <li class="success">Execute will run php metrics</li>
+            <li class="success">Execute will skip unset optional reports</li>
+            <li class="success">Execute will include html report when requested</li>
         </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>
@@ -432,16 +432,12 @@
             <li class="success">Refactor will remove empty doc comment with spaces</li>
             <li class="success">Refactor will return null for non supported nodes</li>
         </ul>
-        <h2>Report Loader (FastForward\DevTools\Tests\Metrics\ReportLoader)</h2>
-        <ul>
-            <li class="success">Load will aggregate class and function metrics</li>
-            <li class="success">Load will fail when json cannot be decoded</li>
-        </ul>
         <h2>Reports Command (FastForward\DevTools\Tests\Console\Command\ReportsCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Command will have expected options</li>
-            <li class="success">Execute will run docs and tests command as detached processes</li>
+            <li class="success">Execute will run docs tests and metrics command as detached processes</li>
+            <li class="success">Execute will run metrics command when requested</li>
         </ul>
         <h2>Resolver (FastForward\DevTools\Tests\License\Resolver)</h2>
         <ul>
@@ -469,10 +465,6 @@
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will run suite sequentially</li>
             <li class="success">Execute will return failure when any command fails</li>
-        </ul>
-        <h2>Summary Renderer (FastForward\DevTools\Tests\Metrics\SummaryRenderer)</h2>
-        <ul>
-            <li class="success">Render will format the expected summary</li>
         </ul>
         <h2>Support (FastForward\DevTools\Tests\Composer\Json\Schema\Support)</h2>
         <ul>

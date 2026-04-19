@@ -1949,28 +1949,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-metrics.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Metrics
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-phpunit.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2482,7 +2460,8 @@ found.</li>
     <p>Analyzes code metrics with PhpMetrics.</p>
 
             <pre><code class="language-bash">composer metrics
-composer dev-tools metrics -- --report-html=build/metrics</code></pre>
+composer dev-tools metrics -- --report-html=build/metrics
+composer dev-tools metrics -- --working-dir=packages/example</code></pre>
 
             
     <p>Important details:</p>
@@ -2495,15 +2474,18 @@ composer dev-tools metrics -- --report-html=build/metrics</code></pre>
 <code>fast-forward/dev-tools</code>
 ;</li>
 
-    <li class="dash">it prints a reduced summary with average cyclomatic complexity, average
-maintainability index, and analyzed class/function counts;</li>
+    <li class="dash">it analyzes the selected <code>--working-dir</code>
+ and forwards the requested
+report options directly to PhpMetrics;</li>
 
     <li class="dash"><code>--report-html</code>
- and <code>--report-json</code>
- allow persisting the native
-PhpMetrics reports for CI artifacts or manual review;</li>
+, <code>--report-json</code>
+, and <code>--report-summary-json</code>
+ allow
+persisting the native PhpMetrics reports for CI artifacts or manual review;</li>
 
-    <li class="dash">it fails early when the PhpMetrics binary or source directory is missing.</li>
+    <li class="dash">it suppresses deprecation notices emitted by the PhpMetrics dependency
+itself so the command output stays readable.</li>
 
 </ul>
 
@@ -2680,6 +2662,10 @@ local-first fallback logic;</li>
 ;</li>
 
     <li class="dash">it calls <code>tests --coverage public/coverage --no-progress --coverage-summary</code>
+;</li>
+
+    <li class="dash"><code>--metrics</code>
+ adds <code>metrics --report-html public/metrics</code>
 ;</li>
 
     <li class="dash">it is the reporting stage used by <code>standards</code>

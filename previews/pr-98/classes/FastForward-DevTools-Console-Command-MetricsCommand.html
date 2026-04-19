@@ -1948,28 +1948,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-metrics.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Metrics
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-phpunit.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2483,7 +2461,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">34</span>
+    <span class="badge text-bg-light border">30</span>
 
     </aside>
         </div>
@@ -2534,7 +2512,7 @@
                             <div class="small">
                                             <span class="fw-semibold text-body-secondary">$help</span>
                         <span class="text-body-secondary">:</span>
-                                        <code>&#039;This command runs PhpMetrics to analyze source code and prints a reduced summary.&#039;</code>
+                                        <code>&#039;This command runs PhpMetrics to analyze the current working directory.&#039;</code>
                 </div>
                     </div>
     </div>                            </div>
@@ -2590,15 +2568,15 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_CACHE_DIR"
+            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_ERROR_REPORTING"
         >
-            CACHE_DIR
+            PHP_ERROR_REPORTING
         </a>
 
             </div>
 
     <span class="text-body-secondary small text-end">
-        &nbsp;= &#039;tmp/cache/phpmetrics&#039;                            </span>
+        &nbsp;= \E_ALL &amp; ~\E_DEPRECATED                            </span>
 </div>
                         </div>
                                     </div>
@@ -2611,22 +2589,6 @@
                     <h4 id="toc-properties" class="h6 mb-0 fw-semibold">Properties</h4>
                 </div>
                 <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_filesystem"
-        >
-            $filesystem
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>            </span>
-</div>
-                        </div>
                                             <div class="list-group-item">
                             <div class="d-flex justify-content-between align-items-start gap-3">
     <div class="flex-grow-1">
@@ -2657,38 +2619,6 @@
 
     <span class="text-body-secondary small text-end">
                         &nbsp;: <a href="classes/FastForward-DevTools-Process-ProcessQueueInterface.html"><abbr title="\FastForward\DevTools\Process\ProcessQueueInterface">ProcessQueueInterface</abbr></a>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_reportLoader"
-        >
-            $reportLoader
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <a href="classes/FastForward-DevTools-Metrics-ReportLoaderInterface.html"><abbr title="\FastForward\DevTools\Metrics\ReportLoaderInterface">ReportLoaderInterface</abbr></a>            </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_summaryRenderer"
-        >
-            $summaryRenderer
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                        &nbsp;: <a href="classes/FastForward-DevTools-Metrics-SummaryRendererInterface.html"><abbr title="\FastForward\DevTools\Metrics\SummaryRendererInterface">SummaryRendererInterface</abbr></a>            </span>
 </div>
                         </div>
                                     </div>
@@ -2746,86 +2676,6 @@
 
     <span class="text-body-secondary small text-end">
                                 &nbsp;: int    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveBinaryPath"
-        >
-            resolveBinaryPath()
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveCacheDirectory"
-        >
-            resolveCacheDirectory()
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveJsonReportPath"
-        >
-            resolveJsonReportPath()
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveOptionalReportDirectory"
-        >
-            resolveOptionalReportDirectory()
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string|null    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveSourcePath"
-        >
-            resolveSourcePath()
-        </a>
-
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: string    </span>
 </div>
                         </div>
                                     </div>
@@ -2895,7 +2745,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">44</span>
+    <span class="badge text-bg-light border">40</span>
 
     </aside>
     
@@ -2949,10 +2799,10 @@
     </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="constant_CACHE_DIR">
-                <span class="text-warning-emphasis">CACHE_DIR</span>
+            <h4 class="h5 mb-2" id="constant_PHP_ERROR_REPORTING">
+                <span class="text-warning-emphasis">PHP_ERROR_REPORTING</span>
                 <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_CACHE_DIR"
+    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_ERROR_REPORTING"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -2979,7 +2829,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">49</span>
+    <span class="badge text-bg-light border">45</span>
 
     </aside>
     
@@ -2993,17 +2843,17 @@
 
     
     <span class="text-info-emphasis">
-        string
+        int
     </span>
 
     <span class="text-warning-emphasis fw-semibold">
-        CACHE_DIR
+        PHP_ERROR_REPORTING
     </span>
 
     <span class="text-body-secondary">=</span>
 
     <span class="text-success-emphasis">
-        &#039;tmp/cache/phpmetrics&#039;
+        \E_ALL &amp; ~\E_DEPRECATED
     </span>
 </code>
     </div>
@@ -3020,7 +2870,7 @@
                     </div>
 
                     <div>
-                        <p>the default cache directory used for temporary metrics reports</p>
+                        <p>the PHP error reporting mask that suppresses deprecations emitted by PhpMetrics internals</p>
 
                     </div>
                 </div>
@@ -3058,76 +2908,6 @@
                             <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="property_filesystem">
-                <span class="text-primary">$filesystem</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_filesystem"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                                    <span class="badge text-bg-info">Read-only</span>
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">59</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $filesystem
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
             <h4 class="h5 mb-2" id="property_processBuilder">
                 <span class="text-primary">$processBuilder</span>
                 <a
@@ -3163,7 +2943,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">60</span>
+    <span class="badge text-bg-light border">52</span>
 
     </aside>
     
@@ -3233,7 +3013,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">61</span>
+    <span class="badge text-bg-light border">53</span>
 
     </aside>
     
@@ -3252,146 +3032,6 @@
 
     <span class="text-primary fw-semibold">
         $processQueue
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_reportLoader">
-                <span class="text-primary">$reportLoader</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_reportLoader"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                                    <span class="badge text-bg-info">Read-only</span>
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">62</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <a href="classes/FastForward-DevTools-Metrics-ReportLoaderInterface.html"><abbr title="\FastForward\DevTools\Metrics\ReportLoaderInterface">ReportLoaderInterface</abbr></a>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $reportLoader
-    </span>
-
-    </code>
-    </div>
-
-    
-
-    
-
-    
-
-        
-        
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="property_summaryRenderer">
-                <span class="text-primary">$summaryRenderer</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_summaryRenderer"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                                    <span class="badge text-bg-info">Read-only</span>
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">63</span>
-
-    </aside>
-    
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-            <span class="badge text-bg-light border text-dark">
-            private
-        </span>
-    
-    
-    <span class="text-info-emphasis">
-        <a href="classes/FastForward-DevTools-Metrics-SummaryRendererInterface.html"><abbr title="\FastForward\DevTools\Metrics\SummaryRendererInterface">SummaryRendererInterface</abbr></a>
-    </span>
-
-    <span class="text-primary fw-semibold">
-        $summaryRenderer
     </span>
 
     </code>
@@ -3466,7 +3106,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">58</span>
+    <span class="badge text-bg-light border">51</span>
 
     </aside>
     
@@ -3479,12 +3119,9 @@
     
     
     
-    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$filesystem</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Process-ProcessBuilderInterface.html"><abbr title="\FastForward\DevTools\Process\ProcessBuilderInterface">ProcessBuilderInterface</abbr></a>&nbsp;
+    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Process-ProcessBuilderInterface.html"><abbr title="\FastForward\DevTools\Process\ProcessBuilderInterface">ProcessBuilderInterface</abbr></a>&nbsp;
                 </span><span class="text-primary">$processBuilder</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Process-ProcessQueueInterface.html"><abbr title="\FastForward\DevTools\Process\ProcessQueueInterface">ProcessQueueInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$processQueue</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Metrics-ReportLoaderInterface.html"><abbr title="\FastForward\DevTools\Metrics\ReportLoaderInterface">ReportLoaderInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$reportLoader</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Metrics-SummaryRendererInterface.html"><abbr title="\FastForward\DevTools\Metrics\SummaryRendererInterface">SummaryRendererInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$summaryRenderer</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+                </span><span class="text-primary">$processQueue</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3500,38 +3137,6 @@
         </div>
 
         <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$filesystem</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the filesystem utility used for path handling and report persistence</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
@@ -3596,70 +3201,6 @@
                         </div>
                     </div>
                 </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$reportLoader</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Metrics-ReportLoaderInterface.html"><abbr title="\FastForward\DevTools\Metrics\ReportLoaderInterface">ReportLoaderInterface</abbr></a>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the loader used to derive a reduced summary from the JSON report</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$summaryRenderer</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Metrics-SummaryRendererInterface.html"><abbr title="\FastForward\DevTools\Metrics\SummaryRendererInterface">SummaryRendererInterface</abbr></a>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the renderer used to format the reduced summary</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
                     </div>
     </section>
 
@@ -3704,7 +3245,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">71</span>
+    <span class="badge text-bg-light border">61</span>
 
     </aside>
     
@@ -3768,7 +3309,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">110</span>
+    <span class="badge text-bg-light border">93</span>
 
     </aside>
     
@@ -3895,732 +3436,6 @@
 
                 <div>
                     <p>the command execution status code</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_resolveBinaryPath">
-                <span class="text-primary">resolveBinaryPath()</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveBinaryPath"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">161</span>
-
-    </aside>
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">private</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">resolveBinaryPath</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-    
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            string
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the absolute path to the PhpMetrics binary</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_resolveCacheDirectory">
-                <span class="text-primary">resolveCacheDirectory()</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveCacheDirectory"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">198</span>
-
-    </aside>
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">private</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">resolveCacheDirectory</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
-                </span><span class="text-primary">$input</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$input</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the runtime command input</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
-    </section>
-
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            string
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the absolute cache directory path</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_resolveJsonReportPath">
-                <span class="text-primary">resolveJsonReportPath()</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveJsonReportPath"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">212</span>
-
-    </aside>
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">private</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">resolveJsonReportPath</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
-                </span><span class="text-primary">$input</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$cacheDir</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$input</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the runtime command input</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$cacheDir</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                string
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the absolute cache directory used for fallback output</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
-    </section>
-
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            string
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the absolute JSON report path</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_resolveOptionalReportDirectory">
-                <span class="text-primary">resolveOptionalReportDirectory()</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveOptionalReportDirectory"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">230</span>
-
-    </aside>
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">private</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">resolveOptionalReportDirectory</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
-                </span><span class="text-primary">$input</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$option</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$input</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the runtime command input</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$option</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                string
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the option that may contain a report directory</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
-    </section>
-
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            string|null
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the absolute report directory path when configured</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_resolveSourcePath">
-                <span class="text-primary">resolveSourcePath()</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveSourcePath"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/MetricsCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-metricscommand.html"><abbr title="src/Console/Command/MetricsCommand.php">MetricsCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">182</span>
-
-    </aside>
-    
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">private</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">resolveSourcePath</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
-                </span><span class="text-primary">$input</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$input</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the runtime command input</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
-    </section>
-
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            string
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the absolute source directory path</p>
 
                 </div>
             </div>
@@ -4784,9 +3599,9 @@
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_CACHE_DIR"
+                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_ERROR_REPORTING"
                             >
-                                <span class="text-truncate">CACHE_DIR</span>
+                                <span class="text-truncate">PHP_ERROR_REPORTING</span>
                                                             </a>
                                             </div>
                 </div>
@@ -4800,12 +3615,6 @@
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_filesystem"
-                            >
-                                <span class="text-truncate">$filesystem</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processBuilder"
                             >
                                 <span class="text-truncate">$processBuilder</span>
@@ -4815,18 +3624,6 @@
                                 href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processQueue"
                             >
                                 <span class="text-truncate">$processQueue</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_reportLoader"
-                            >
-                                <span class="text-truncate">$reportLoader</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_summaryRenderer"
-                            >
-                                <span class="text-truncate">$summaryRenderer</span>
                                                             </a>
                                             </div>
                 </div>
@@ -4855,36 +3652,6 @@
                                 href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_execute"
                             >
                                 <span class="text-truncate">execute()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveBinaryPath"
-                            >
-                                <span class="text-truncate">resolveBinaryPath()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveCacheDirectory"
-                            >
-                                <span class="text-truncate">resolveCacheDirectory()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveJsonReportPath"
-                            >
-                                <span class="text-truncate">resolveJsonReportPath()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveOptionalReportDirectory"
-                            >
-                                <span class="text-truncate">resolveOptionalReportDirectory()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_resolveSourcePath"
-                            >
-                                <span class="text-truncate">resolveSourcePath()</span>
                                                             </a>
                                             </div>
                 </div>
