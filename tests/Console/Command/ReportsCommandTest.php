@@ -89,11 +89,11 @@ final class ReportsCommandTest extends TestCase
         $this->metricsProcess = $this->prophesize(Process::class);
 
         $this->input->getOption('target')
-            ->willReturn('public');
+            ->willReturn('build');
         $this->input->getOption('coverage')
-            ->willReturn('public/coverage');
+            ->willReturn('build/coverage');
         $this->input->getOption('metrics')
-            ->willReturn('public/metrics');
+            ->willReturn('build/metrics');
 
         $this->processBuilder->withArgument(Argument::cetera())
             ->willReturn($this->processBuilder->reveal());
@@ -152,11 +152,11 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalled()
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->withArgument('--target', 'public')
+        $this->processBuilder->withArgument('--target', 'build')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->withArgument('--coverage', 'public/coverage')
+        $this->processBuilder->withArgument('--coverage', 'build/coverage')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
@@ -168,10 +168,10 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
-        $this->processBuilder->withArgument('--target', 'public/metrics')
+        $this->processBuilder->withArgument('--target', 'build/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')
+        $this->processBuilder->withArgument('--junit', 'build/coverage/junit.xml')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 
@@ -201,7 +201,7 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->withArgument('--target', 'tmp/metrics')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--junit', 'public/coverage/junit.xml')
+        $this->processBuilder->withArgument('--junit', 'build/coverage/junit.xml')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
 

@@ -36,8 +36,8 @@ create them on day one.
 Generated and Cache Directories
 -------------------------------
 
-- ``public/`` contains generated documentation and report output.
-- ``public/coverage/`` contains HTML coverage, Testdox, Clover, and raw
+- ``build/`` contains generated documentation and report output.
+- ``build/coverage/`` contains HTML coverage, Testdox, Clover, and raw
   coverage data.
 - ``.github/wiki/`` contains generated Markdown API documentation and, in
   consumer repositories, the wiki submodule.

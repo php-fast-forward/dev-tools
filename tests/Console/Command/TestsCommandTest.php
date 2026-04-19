@@ -119,8 +119,8 @@ final class TestsCommandTest extends TestCase
             ->willReturn(getcwd() . '/vendor/autoload.php');
         $this->filesystem->getAbsolutePath('./tmp/cache/phpunit')
             ->willReturn(getcwd() . '/tmp/cache/phpunit');
-        $this->filesystem->getAbsolutePath('public/coverage')
-            ->willReturn(getcwd() . '/public/coverage');
+        $this->filesystem->getAbsolutePath('build/coverage')
+            ->willReturn(getcwd() . '/build/coverage');
         $this->filesystem->getAbsolutePath('src/')
             ->willReturn(getcwd() . '/src');
 
@@ -185,11 +185,11 @@ final class TestsCommandTest extends TestCase
 
             return str_contains($commandLine, '--coverage-text')
                 && ! str_contains($commandLine, '--only-summary-for-coverage-text')
-                && str_contains($commandLine, '--coverage-html=' . getcwd() . '/public/coverage');
+                && str_contains($commandLine, '--coverage-html=' . getcwd() . '/build/coverage');
         });
 
         $this->input->getOption('coverage')
-            ->willReturn('public/coverage');
+            ->willReturn('build/coverage');
 
         $this->invokeExecute();
     }
@@ -225,7 +225,7 @@ final class TestsCommandTest extends TestCase
         });
 
         $this->input->getOption('coverage')
-            ->willReturn('public/coverage');
+            ->willReturn('build/coverage');
         $this->input->getOption('coverage-summary')
             ->willReturn(true);
 
@@ -281,12 +281,12 @@ final class TestsCommandTest extends TestCase
     #[Test]
     public function executeWithCoverageAndMinCoverageWillValidateGeneratedCoverageReport(): void
     {
-        $coverageReportPath = getcwd() . '/public/coverage/coverage.php';
+        $coverageReportPath = getcwd() . '/build/coverage/coverage.php';
 
         $this->willQueueProcessMatching(function (Process $process) use ($coverageReportPath): bool {
             $commandLine = $process->getCommandLine();
 
-            return str_contains($commandLine, '--coverage-html=' . getcwd() . '/public/coverage')
+            return str_contains($commandLine, '--coverage-html=' . getcwd() . '/build/coverage')
                 && str_contains($commandLine, '--coverage-php=' . $coverageReportPath);
         });
 
@@ -294,7 +294,7 @@ final class TestsCommandTest extends TestCase
             ->willReturn(new CoverageSummary(90, 100));
 
         $this->input->getOption('coverage')
-            ->willReturn('public/coverage');
+            ->willReturn('build/coverage');
         $this->input->getOption('min-coverage')
             ->willReturn('80');
 

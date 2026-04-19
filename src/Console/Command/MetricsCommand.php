@@ -73,7 +73,7 @@ final class MetricsCommand extends BaseCommand
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Target directory for the generated metrics reports.',
-                default: 'public/metrics',
+                default: 'build/metrics',
             )
             ->addOption(
                 name: 'junit',

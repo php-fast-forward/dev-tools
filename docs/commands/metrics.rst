@@ -38,7 +38,7 @@ Options
 ``--target=<directory>``
    Output directory for the generated metrics reports.
 
-   Default: ``public/metrics``.
+   Default: ``build/metrics``.
 
    The command writes:
 

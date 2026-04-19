@@ -57,7 +57,7 @@ coverage metrics programmatically.
    use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 
    $loader = new CoverageSummaryLoader();
-   $summary = $loader->load('public/coverage/coverage.php');
+   $summary = $loader->load('build/coverage/coverage.php');
 
    $summary->executedLines();      // Number of covered lines
    $summary->executableLines();   // Total number of executable lines

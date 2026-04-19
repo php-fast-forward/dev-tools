@@ -78,7 +78,7 @@ final class DocsCommand extends BaseCommand
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated HTML documentation.',
-                default: 'public',
+                default: 'build',
             )
             ->addOption(
                 name: 'source',

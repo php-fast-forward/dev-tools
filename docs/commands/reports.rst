@@ -30,15 +30,15 @@ Options
 
 ``--target`` (optional)
    The target directory for the generated documentation.
-   Default: ``public``.
+   Default: ``build``.
 
 ``--coverage, -c`` (optional)
    The target directory for the generated test coverage report.
-   Default: ``public/coverage``.
+   Default: ``build/coverage``.
 
 ``--metrics`` (optional)
    The target directory for the generated metrics report.
-   Default: ``public/metrics``.
+   Default: ``build/metrics``.
 
 Examples
 --------

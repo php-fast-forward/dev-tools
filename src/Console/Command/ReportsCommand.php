@@ -61,20 +61,20 @@ final class ReportsCommand extends BaseCommand
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The target directory for the generated reports.',
-                default: 'public',
+                default: 'build',
             )
             ->addOption(
                 name: 'coverage',
                 shortcut: 'c',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The target directory for the generated test coverage report.',
-                default: 'public/coverage',
+                default: 'build/coverage',
             )
             ->addOption(
                 name: 'metrics',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Generate code metrics and optionally choose the HTML output directory.',
-                default: 'public/metrics',
+                default: 'build/metrics',
             );
     }
 
