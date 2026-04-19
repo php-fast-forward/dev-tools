@@ -33,9 +33,11 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
 
 **Behavior:**
 *   **Main Branch**: Runs all checks and deploys the final reports to the root of the ``gh-pages`` branch.
+    *   Runs a post-deploy health check against the published reports index and coverage URLs with retry/backoff to account for Pages propagation.
 *   **Pull Requests**:
     *   Generates a **Preview** of the documentation, coverage, and metrics.
     *   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.
+    *   Verifies the preview index and coverage URLs after deployment before posting preview links.
     *   Posts a **Sticky Comment** on the PR with links to the live preview, coverage report, and metrics site.
     *   **Cleanup**: When a PR is closed, the workflow automatically removes the preview directory from the ``gh-pages`` branch to keep the repository clean.
     *   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
