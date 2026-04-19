@@ -100,15 +100,26 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
         ``composer dev-tools changelog:show -- <version>``.
     *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
+    *   Requires repository Actions permissions that allow the workflow token to create pull requests.
 *   **Merged Release Pull Requests**:
     *   Detects merged branches that match the configured release branch prefix.
     *   Renders the released changelog section with ``composer dev-tools changelog:show -- <version>``.
     *   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
+    *   Does **not** run for ordinary feature or fix pull requests merged into ``main``.
 
 **Inputs:**
 *   ``changelog-file``: managed changelog path, default ``CHANGELOG.md``.
 *   ``version``: optional explicit version for manual release preparation.
 *   ``release-branch-prefix``: release branch prefix, default ``release/v``.
+
+**Repository prerequisites:**
+*   Go to **Settings** > **Actions** > **General**.
+*   Under **Workflow permissions**, enable **Read and write permissions**.
+*   Enable **Allow GitHub Actions to create and approve pull requests**.
+*   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.
+
+.. note::
+   Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the ``release/v...`` pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.
 
 Maintenance Workflows
 ---------------------

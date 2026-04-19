@@ -38,12 +38,21 @@ Once this is done, the wiki can be cloned as a submodule and synchronized by the
 Workflow Permissions
 --------------------
 
-GitHub Actions must have permission to push changes to your repository (for Wiki updates and GitHub Pages deployments).
+GitHub Actions must have permission to push changes to your repository and, for
+the changelog release flow, to open release-preparation pull requests.
 
 1.  Go to **Settings** > **Actions** > **General**.
 2.  Scroll down to **Workflow permissions**.
 3.  Select **Read and write permissions**.
-4.  Click **Save**.
+4.  Enable **Allow GitHub Actions to create and approve pull requests**.
+5.  Click **Save**.
 
 .. warning::
-   Without these permissions, the ``wiki.yml`` and ``reports.yml`` workflows will fail when attempting to deploy content.
+   Without these permissions, the ``wiki.yml`` and ``reports.yml`` workflows will fail when attempting to deploy content, and the ``changelog.yml`` workflow will fail when trying to open a ``release/v...`` pull request.
+
+.. note::
+   If the permission controls are disabled or grayed out, the repository is
+   usually constrained by organization policy or by missing admin access. This
+   is separate from branch protection. Branch protection affects whether the
+   generated release pull request can be merged, while workflow permissions
+   affect whether GitHub Actions can create that pull request at all.
