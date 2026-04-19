@@ -17,6 +17,13 @@ Thanks for helping improve FastForward DevTools.
    composer dev-tools
    ```
 
+4. Read the project guidance before making structural changes:
+
+   - `README.md` for the public command surface and contributor workflow
+   - `docs/` for the generated-user documentation structure
+   - `AGENTS.md` for repository-specific engineering patterns, project agents,
+     and skill usage
+
 ## Development Workflow
 
 Use the Composer commands exposed by the package during normal development:
@@ -32,6 +39,19 @@ composer dev-tools:sync
 Focused checks are fine while iterating, but please run the relevant
 verification for the files you changed before opening a pull request.
 
+If you contribute with Codex or project agents, prefer the packaged workflow
+helpers that already exist in this repository:
+
+- `.agents/skills/github-pull-request/` for issue-to-branch-to-PR flow
+- `.agents/skills/github-issues/` for issue drafting and updates
+- `.agents/skills/phpunit-tests/` for focused PHPUnit coverage work
+- `.agents/skills/phpdoc-code-style/` for PHPDoc and repository PHP style
+- `.agents/skills/package-readme/` and `.agents/skills/sphinx-docs/` for
+  README and `docs/` updates
+- `.agents/agents/` for repository-specific role prompts such as
+  `docs-writer`, `readme-maintainer`, `consumer-sync-auditor`, and
+  `changelog-maintainer`
+
 ## Coding Standards
 
 - Follow the repository PHP style and architecture patterns already in `src/`
@@ -40,6 +60,10 @@ verification for the files you changed before opening a pull request.
   into dedicated collaborators.
 - Update documentation when a change affects commands, workflows, generated
   outputs, or consumer onboarding.
+- Respect the current command bootstrapping and dependency-injection patterns
+  described in `AGENTS.md` and `docs/internals/architecture.rst`.
+- Keep generated or synchronized surfaces consistent when a change affects
+  workflows, wiki output, consumer sync assets, or packaged skills.
 
 ## Changelog Expectations
 
