@@ -30,7 +30,7 @@ jobs:
 
       - name: Resolve workflow PHP version
         id: resolve
-        uses: php-fast-forward/dev-tools/.github/actions/resolve-php-version@main
+        uses: php-fast-forward/dev-tools/resources/resolve-php-version@main
 
   preview:
     needs: resolve_php
