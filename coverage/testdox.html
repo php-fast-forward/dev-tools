@@ -164,6 +164,9 @@
         <ul>
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will copy directory contents into target</li>
+            <li class="success">Execute will show diff before overwriting changed file</li>
+            <li class="success">Execute will report unchanged overwrite as no op</li>
+            <li class="success">Execute will handle binary overwrite gracefully</li>
         </ul>
         <h2>Coverage Summary (FastForward\DevTools\PhpUnit\Coverage\CoverageSummary)</h2>
         <ul>
@@ -354,6 +357,13 @@
             <li class="success">Execute will run php metrics</li>
             <li class="success">Execute will skip unset optional reports</li>
             <li class="success">Execute will include junit report when requested</li>
+        </ul>
+        <h2>Overwrite Diff Renderer (FastForward\DevTools\Tests\Resource\OverwriteDiffRenderer)</h2>
+        <ul>
+            <li class="success">Render will return changed result with unified diff</li>
+            <li class="success">Render will return unchanged result when contents match</li>
+            <li class="success">Render will return binary result when null bytes are detected</li>
+            <li class="success">Render will return unreadable result when contents cannot be read</li>
         </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>

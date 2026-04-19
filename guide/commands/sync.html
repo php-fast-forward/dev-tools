@@ -2229,6 +2229,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-resource.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Resource
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-serviceprovider.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2437,7 +2459,10 @@ vendor/bin/dev-tools dev-tools:sync [options]</code></pre>
                         <dt><code>--overwrite, -o</code>
 </dt>
         
-        <dd>Overwrite existing target files.</dd>
+        <dd>Overwrite existing target files. Text resources copied through
+<code>copy-resource</code>
+ show a readable diff in the sync output before they are
+replaced.</dd>
             </dl>
 
     </section>
@@ -2493,6 +2518,10 @@ vendor/bin/dev-tools dev-tools:sync [options]</code></pre>
     <li class="dash">Copies missing workflow stubs, <code>.editorconfig</code>
 , and <code>dependabot.yml</code>
 .</li>
+
+    <li class="dash">When <code>--overwrite</code>
+ is enabled, replaced text resources emit a unified diff
+so terminal sessions and CI logs show what changed.</li>
 
     <li class="dash">Creates <code>.github/wiki</code>
  as a git submodule when missing.</li>

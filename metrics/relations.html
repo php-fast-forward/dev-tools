@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-19 06:00:56        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-19 06:26:50        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -634,6 +634,7 @@
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
             "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Filesystem\\Path"
@@ -643,6 +644,16 @@
         "name": "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult",
+            "\\SebastianBergmann\\Diff\\Output\\UnifiedDiffOutputBuilder",
+            "\\SebastianBergmann\\Diff\\Differ"
+        ]
     },
     {
         "name": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
@@ -791,6 +802,21 @@
             "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
             "\\FastForward\\DevTools\\GitIgnore\\GitIgnore"
         ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\SebastianBergmann\\Diff\\Output\\UnifiedDiffOutputBuilder",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\SebastianBergmann\\Diff\\Differ",
+        "size": 3000,
+        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Rector\\RemoveEmptyDocBlockRector",

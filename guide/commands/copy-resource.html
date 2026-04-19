@@ -2229,6 +2229,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-resource.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Resource
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-serviceprovider.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2431,7 +2453,9 @@ vendor/bin/dev-tools copy-resource --source &lt;path&gt; --target &lt;path&gt; [
 </dt>
         
         <dd>Overwrite existing target files. Without this option, existing files
-are skipped.</dd>
+are skipped. When a text file changes, the command shows a unified diff
+before copying. Unchanged targets are reported as skipped, and binary or
+unreadable files fall back to a clear non-diff message.</dd>
             </dl>
 
     </section>

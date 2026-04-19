@@ -806,6 +806,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_finderFactory"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024overwriteDiffRenderer",
+            "name": "overwriteDiffRenderer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_overwriteDiffRenderer"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
             "name": "DependenciesCommand",
             "summary": "Orchestrates\u0020dependency\u0020analysis\u0020across\u0020the\u0020supported\u0020Composer\u0020analyzers.",
@@ -2656,6 +2661,86 @@ Search.appendIndex(
             "summary": "Ascertains\u0020visually\u0020and\u0020technically\u0020if\u0020a\u0020provided\u0020block\u0020comprises\u0020an\u0020absolute\u0020empty\u0020placeholder\u0020structure\u0020safely.",
             "url": "classes/FastForward-DevTools-Rector-RemoveEmptyDocBlockRector.html#method_isEmptyDocBlock"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer",
+            "name": "OverwriteDiffRenderer",
+            "summary": "Renders\u0020deterministic\u0020overwrite\u0020summaries\u0020and\u0020unified\u0020diffs\u0020for\u0020copied\u0020files.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020overwrite\u0020diff\u0020renderer.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Compares\u0020a\u0020source\u0020file\u0020against\u0020the\u0020target\u0020file\u0020that\u0020would\u0020be\u0020overwritten.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#method_render"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003AisBinary\u0028\u0029",
+            "name": "isBinary",
+            "summary": "Reports\u0020whether\u0020the\u0020given\u0020content\u0020should\u0020be\u0020treated\u0020as\u0020binary.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#method_isBinary"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffRenderer\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffRenderer.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult",
+            "name": "OverwriteDiffResult",
+            "summary": "Carries\u0020the\u0020result\u0020of\u0020comparing\u0020an\u0020overwrite\u0020source\u0020and\u0020target\u0020pair.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020overwrite\u0020diff\u0020result.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A\u0024status",
+            "name": "status",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_status"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A\u0024summary",
+            "name": "summary",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_summary"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003A\u0024diff",
+            "name": "diff",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#property_diff"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003AisUnchanged\u0028\u0029",
+            "name": "isUnchanged",
+            "summary": "Reports\u0020whether\u0020the\u0020compared\u0020files\u0020already\u0020match.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isUnchanged"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003AisChanged\u0028\u0029",
+            "name": "isChanged",
+            "summary": "Reports\u0020whether\u0020the\u0020compared\u0020files\u0020produced\u0020a\u0020text\u0020diff.",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#method_isChanged"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_CHANGED",
+            "name": "STATUS_CHANGED",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_CHANGED"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_UNCHANGED",
+            "name": "STATUS_UNCHANGED",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNCHANGED"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_BINARY",
+            "name": "STATUS_BINARY",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_BINARY"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource\\OverwriteDiffResult\u003A\u003ASTATUS_UNREADABLE",
+            "name": "STATUS_UNREADABLE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Resource-OverwriteDiffResult.html#constant_STATUS_UNREADABLE"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
             "name": "DevToolsServiceProvider",
             "summary": "DevToolsServiceProvider\u0020registers\u0020the\u0020services\u0020provided\u0020by\u0020this\u0020package.",
@@ -2805,6 +2890,11 @@ Search.appendIndex(
             "name": "Rector",
             "summary": "",
             "url": "namespaces/fastforward-devtools-rector.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Resource",
+            "name": "Resource",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-resource.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\ServiceProvider",
             "name": "ServiceProvider",
