@@ -20,11 +20,10 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Funding;
 
 use Composer\Json\JsonFile;
-use Composer\Json\JsonManipulator;
-
 use function array_values;
 use function is_array;
 use function is_string;
+use function json_encode;
 use function parse_url;
 use function preg_match;
 use function sprintf;
@@ -103,7 +102,6 @@ final readonly class ComposerFundingCodec
      */
     public function dump(string $contents, FundingProfile $profile): string
     {
-        $manipulator = new JsonManipulator($contents);
         $entries = [];
 
         foreach ($profile->getGithubSponsors() as $githubSponsor) {
@@ -124,13 +122,20 @@ final readonly class ComposerFundingCodec
             $entries[] = $unsupportedEntry;
         }
 
-        $manipulator->removeMainKey('funding');
+        $data = JsonFile::parseJson($contents);
+        unset($data['funding']);
 
-        if ([] !== $entries) {
-            $manipulator->addMainKey('funding', $entries);
+        if ([] === $entries) {
+            return json_encode(
+                $data,
+                JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+            ) . "\n";
         }
 
-        return $manipulator->getContents();
+        return json_encode(
+            $this->insertFundingEntries($data, $entries),
+            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE,
+        ) . "\n";
     }
 
     /**
@@ -158,5 +163,34 @@ final readonly class ComposerFundingCodec
         }
 
         return $matches[1];
+    }
+
+    /**
+     * Inserts funding entries in a stable Composer key order.
+     *
+     * @param array<string, mixed> $data the decoded composer.json payload
+     * @param array<int, array<string, mixed>> $entries the funding entries to insert
+     *
+     * @return array<string, mixed> the composer payload with funding inserted
+     */
+    private function insertFundingEntries(array $data, array $entries): array
+    {
+        $orderedData = [];
+        $inserted = false;
+
+        foreach ($data as $key => $value) {
+            $orderedData[$key] = $value;
+
+            if ('support' === $key) {
+                $orderedData['funding'] = $entries;
+                $inserted = true;
+            }
+        }
+
+        if (! $inserted) {
+            $orderedData['funding'] = $entries;
+        }
+
+        return $orderedData;
     }
 }

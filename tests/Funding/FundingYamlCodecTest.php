@@ -68,4 +68,23 @@ YAML);
             Yaml::parse($contents),
         );
     }
+
+    #[Test]
+    public function dumpWillRenderSingleCustomUrlAsList(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        $contents = $codec->dump(new FundingProfile(
+            ['foo'],
+            ['https://example.com/support'],
+        ));
+
+        self::assertSame(
+            [
+                'github' => 'foo',
+                'custom' => ['https://example.com/support'],
+            ],
+            Yaml::parse($contents),
+        );
+    }
 }

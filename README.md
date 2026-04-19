@@ -123,7 +123,8 @@ metrics reports without extra setup.
 
 The `funding` command keeps supported `composer.json` funding entries aligned
 with `.github/FUNDING.yml`, including GitHub Sponsors handles and `custom`
-URLs, while preserving unsupported providers in place.
+URLs, while preserving unsupported providers in place and re-running
+`composer normalize` after manifest updates.
 
 The `skills` command keeps `.agents/skills` aligned with the packaged Fast
 Forward skill set. It creates missing links, repairs broken links, and

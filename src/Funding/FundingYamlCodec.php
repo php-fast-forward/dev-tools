@@ -81,7 +81,7 @@ final readonly class FundingYamlCodec
         }
 
         if ([] !== $profile->getCustomUrls()) {
-            $data['custom'] = $this->denormalizeList($profile->getCustomUrls());
+            $data['custom'] = $profile->getCustomUrls();
         }
 
         return Yaml::dump($data, 4, 2);

@@ -26,6 +26,16 @@
         "source": "https://github.com/php-fast-forward/dev-tools",
         "docs": "https://php-fast-forward.github.io/dev-tools/"
     },
+    "funding": [
+        {
+            "type": "github",
+            "url": "https://github.com/sponsors/php-fast-forward"
+        },
+        {
+            "type": "custom",
+            "url": "https://www.paypal.com/donate/?business=JLDAF45XZ8D84"
+        }
+    ],
     "require": {
         "php": "^8.3",
         "composer-plugin-api": "^2.0",

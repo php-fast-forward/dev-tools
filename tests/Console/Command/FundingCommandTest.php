@@ -25,6 +25,8 @@ use FastForward\DevTools\Funding\ComposerFundingCodec;
 use FastForward\DevTools\Funding\FundingProfile;
 use FastForward\DevTools\Funding\FundingProfileMerger;
 use FastForward\DevTools\Funding\FundingYamlCodec;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -37,6 +39,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
 use function Safe\json_decode;
@@ -59,6 +62,12 @@ final class FundingCommandTest extends TestCase
 
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $processBuilder;
+
+    private ObjectProphecy $processQueue;
+
+    private ObjectProphecy $normalizeProcess;
+
     private FundingCommand $command;
 
     protected function setUp(): void
@@ -67,6 +76,9 @@ final class FundingCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->normalizeProcess = $this->prophesize(Process::class);
         $this->output->isDecorated()->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
@@ -76,6 +88,11 @@ final class FundingCommandTest extends TestCase
         $this->input->getOption('check')->willReturn(false);
         $this->input->getOption('interactive')->willReturn(false);
         $this->filesystem->dirname('.github/FUNDING.yml')->willReturn('.github');
+        $this->filesystem->dirname('composer.json')->willReturn('.');
+        $this->filesystem->basename('composer.json')->willReturn('composer.json');
+        $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->build('composer normalize')->willReturn($this->normalizeProcess->reveal());
 
         $this->command = new FundingCommand(
             $this->filesystem->reveal(),
@@ -83,6 +100,8 @@ final class FundingCommandTest extends TestCase
             new FundingYamlCodec(),
             new FundingProfileMerger(),
             $this->fileDiffer->reveal(),
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
         );
     }
 
@@ -117,6 +136,8 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
+        $this->processQueue->add($this->normalizeProcess->reveal())->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
             'composer.json',
             Argument::that(static fn(string $contents): bool => str_contains($contents, '"funding"')),
@@ -149,7 +170,7 @@ JSON;
                 $decoded = Yaml::parse($contents);
 
                 return 'foo' === $decoded['github']
-                    && 'https://example.com/support' === $decoded['custom'];
+                    && ['https://example.com/support'] === $decoded['custom'];
             }),
             null,
             'Managed file .github/FUNDING.yml will be created from generated funding metadata synchronization.',
@@ -193,11 +214,13 @@ JSON;
                 $decoded = Yaml::parse($contents);
 
                 return 'foo' === $decoded['github']
-                    && 'https://example.com/support' === $decoded['custom'];
+                    && ['https://example.com/support'] === $decoded['custom'];
             }),
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Funding changed'))->shouldBeCalledOnce();
+        $this->processQueue->add($this->normalizeProcess->reveal())->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
         $this->filesystem->dumpFile('composer.json', Argument::type('string'))->shouldBeCalledOnce();
         $this->filesystem->mkdir('.github')->shouldBeCalledOnce();
         $this->filesystem->dumpFile('.github/FUNDING.yml', Argument::type('string'))->shouldBeCalledOnce();
@@ -232,6 +255,7 @@ JSON;
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+        $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(FundingCommand::SUCCESS, $this->executeCommand());
     }

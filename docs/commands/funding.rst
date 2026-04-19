@@ -97,6 +97,8 @@ Behavior
   entries.
 - Preserves unsupported Composer funding providers and unsupported GitHub
   funding YAML keys.
+- Normalizes ``composer.json`` with ``composer normalize`` after applying
+  funding metadata updates.
 - Creates ``.github/FUNDING.yml`` when Composer declares supported funding
   metadata and the file is missing.
 - Skips writing ``.github/FUNDING.yml`` when neither side declares supported

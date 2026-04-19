@@ -25,6 +25,8 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Funding\ComposerFundingCodec;
 use FastForward\DevTools\Funding\FundingProfileMerger;
 use FastForward\DevTools\Funding\FundingYamlCodec;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -50,6 +52,8 @@ final class FundingCommand extends BaseCommand
      * @param FundingYamlCodec $fundingYamlCodec the codec used to parse and render GitHub funding YAML metadata
      * @param FundingProfileMerger $fundingProfileMerger the merger used to synchronize normalized funding profiles
      * @param FileDiffer $fileDiffer the differ used to summarize managed-file drift
+     * @param ProcessBuilderInterface $processBuilder the process builder used to normalize composer.json after updates
+     * @param ProcessQueueInterface $processQueue the process queue used to execute composer normalize
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
@@ -57,6 +61,8 @@ final class FundingCommand extends BaseCommand
         private readonly FundingYamlCodec $fundingYamlCodec,
         private readonly FundingProfileMerger $fundingProfileMerger,
         private readonly FileDiffer $fileDiffer,
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
     ) {
         parent::__construct();
     }
@@ -210,6 +216,11 @@ final class FundingCommand extends BaseCommand
         }
 
         $this->filesystem->dumpFile($composerFile, $updatedComposerContents);
+
+        if (self::SUCCESS !== $this->normalizeComposerFile($composerFile, $output)) {
+            return self::FAILURE;
+        }
+
         $output->writeln(\sprintf('<info>Updated funding metadata in %s.</info>', $composerFile));
 
         return self::SUCCESS;
@@ -295,5 +306,36 @@ final class FundingCommand extends BaseCommand
         $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetFile), false);
 
         return (bool) $this->getHelper('question')->ask($input, $output, $question);
+    }
+
+    /**
+     * Normalizes a composer manifest after funding metadata changes.
+     *
+     * @param string $composerFile the composer manifest path
+     * @param OutputInterface $output the command output
+     *
+     * @return int the normalization status code
+     */
+    private function normalizeComposerFile(string $composerFile, OutputInterface $output): int
+    {
+        $processBuilder = $this->processBuilder
+            ->withArgument('--ansi')
+            ->withArgument('--no-update-lock');
+
+        $workingDirectory = $this->filesystem->dirname($composerFile);
+
+        if ('.' !== $workingDirectory) {
+            $processBuilder = $processBuilder->withArgument('--working-dir', $workingDirectory);
+        }
+
+        $composerBasename = $this->filesystem->basename($composerFile);
+
+        if ('composer.json' !== $composerBasename) {
+            $processBuilder = $processBuilder->withArgument('--file', $composerBasename);
+        }
+
+        $this->processQueue->add($processBuilder->build('composer normalize'));
+
+        return $this->processQueue->run($output);
     }
 }
