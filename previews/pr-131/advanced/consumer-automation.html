@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -2676,7 +2720,8 @@ configuration files;</li>
 
     <li class="dash">consumer helper: the <code>dev-tools:sync</code>
  command copies those assets and links
-packaged skills into other Fast Forward libraries.</li>
+packaged skills and packaged project agents into other Fast Forward
+libraries.</li>
 
 </ul>
 
@@ -2718,6 +2763,13 @@ packaged skills into other Fast Forward libraries.</li>
 </td>
             <td>Packaged agent skills linked into consumer repositories by the
 <code>skills</code>
+ command.</td>
+    </tr>
+    <tr>
+            <td><code>.agents/agents/*</code>
+</td>
+            <td>Packaged project-agent prompts linked into consumer repositories by
+the <code>agents</code>
  command.</td>
     </tr>
     <tr>
@@ -2790,6 +2842,7 @@ bot commit behavior, and <code>.github/wiki</code>
 , <code>resources/dependabot.yml</code>
 ,
 <code>.agents/skills</code>
+, <code>.agents/agents</code>
 , <code>.github/workflows</code>
 , or
 <code>FastForward\DevTools\Console\Command\SyncCommand</code>

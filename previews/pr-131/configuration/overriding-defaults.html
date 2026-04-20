@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -2756,6 +2800,14 @@ when missing.</td>
 non-symlink directories.</td>
     </tr>
     <tr>
+            <td><code>agents</code>
+</td>
+            <td><code>.agents/agents/</code>
+</td>
+            <td>Creates missing local links to packaged project agents and preserves
+existing non-symlink directories.</td>
+    </tr>
+    <tr>
             <td><code>dev-tools:sync</code>
 </td>
             <td>Consumer repository files</td>
@@ -2861,6 +2913,9 @@ return RectorConfig::configure(
 ;</li>
 
     <li class="dash">an existing non-symlink directory inside <code>.agents/skills/</code>
+;</li>
+
+    <li class="dash">an existing non-symlink directory inside <code>.agents/agents/</code>
 ;</li>
 
     <li class="dash">an existing <code>.github/wiki</code>

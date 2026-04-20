@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -2748,10 +2792,12 @@ the consumer project.</li>
 
     <li value="8"><code>dev-tools:sync</code>
  runs <code>skills</code>
- to create or repair packaged skill links
-inside <code>.agents/skills</code>
- when sync runs in normal mode rather than
-preview/check mode.</li>
+ and <code>agents</code>
+ to create or repair
+packaged links inside <code>.agents/skills</code>
+ and <code>.agents/agents</code>
+ when sync
+runs in normal mode rather than preview/check mode.</li>
 
 </ol>
 
@@ -2764,6 +2810,7 @@ preview/check mode.</li>
     <p>After installation, these are the most useful sanity checks:</p>
 
             <pre><code class="language-bash">composer dev-tools skills
+composer agents
 composer dev-tools tests
 composer dev-tools docs
 composer dev-tools</code></pre>
@@ -2774,9 +2821,10 @@ composer dev-tools</code></pre>
             <pre><code class="language-bash">vendor/bin/dev-tools tests --filter=SyncCommandTest</code></pre>
 
             
-    <p>If you want to verify the packaged skills on their own, run:</p>
+    <p>If you want to verify the packaged skills or project agents on their own, run:</p>
 
-            <pre><code class="language-bash">vendor/bin/dev-tools skills</code></pre>
+            <pre><code class="language-bash">vendor/bin/dev-tools skills
+vendor/bin/dev-tools agents</code></pre>
 
     </section>
 
@@ -2809,9 +2857,12 @@ refresh consumer automation after upgrading this package, run:</p>
  directory. If
 your package does not have one yet, create it before running those commands.
 The <code>skills</code>
- command creates <code>.agents/skills</code>
- when needed, but it does
-not overwrite an existing non-symlink directory inside that tree.</p>
+ and <code>agents</code>
+ commands create <code>.agents/skills</code>
+ and
+<code>.agents/agents</code>
+ when needed, but they do not overwrite existing
+non-symlink directories inside those trees.</p>
 
     </article>
 </div>

@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -2731,6 +2775,15 @@ create them on day one.</p>
             <td>Packaged agent skill directories exposed to consumer repositories
 through symlinks.</td>
     </tr>
+    <tr>
+            <td><code>.agents/agents/*</code>
+</td>
+            <td><code>agents</code>
+ and <code>dev-tools:sync</code>
+</td>
+            <td>Packaged project-agent prompt directories exposed to consumer
+repositories through symlinks.</td>
+    </tr>
 </tbody>
 </table>
 
@@ -2760,6 +2813,11 @@ consumer repositories, the wiki submodule.</li>
     <li class="dash"><code>.agents/skills/</code>
  contains symlinked packaged skills or consumer-owned
 directories kept in place by the <code>skills</code>
+ command.</li>
+
+    <li class="dash"><code>.agents/agents/</code>
+ contains symlinked packaged project agents or
+consumer-owned directories kept in place by the <code>agents</code>
  command.</li>
 
     <li class="dash"><code>tmp/cache/phpdoc</code>

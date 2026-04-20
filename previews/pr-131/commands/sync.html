@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -2711,10 +2755,13 @@
     <li value="10"><code>skills</code>
  - synchronizes packaged skills</li>
 
-    <li value="11"><code>license</code>
+    <li value="11"><code>agents</code>
+ - synchronizes packaged project agents</li>
+
+    <li value="12"><code>license</code>
  - generates LICENSE file</li>
 
-    <li value="12"><code>git-hooks</code>
+    <li value="13"><code>git-hooks</code>
  - installs Git hooks</li>
 
 </ol>
@@ -2858,10 +2905,16 @@ command is running in an interactive terminal.</li>
 
     <li class="dash">Calls other commands in sequence.</li>
 
+    <li class="dash">Runs <code>skills</code>
+ and <code>agents</code>
+ in normal mode so consumer repositories
+receive both packaged procedural skills and packaged role prompts.</li>
+
     <li class="dash"><code>wiki</code>
- and <code>skills</code>
- are skipped in preview/check modes until they expose a
-non-destructive verification path.</li>
+, <code>skills</code>
+, and <code>agents</code>
+ are skipped in preview/check modes
+until they expose a non-destructive verification path.</li>
 
 </ul>
 

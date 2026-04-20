@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -2672,6 +2716,7 @@ libraries that consume it.</p>
 
             
     <p>For the focused skills-only workflow, see <a href="./usage/syncing-packaged-skills.html">Syncing Packaged Skills</a>.
+For packaged project agents, see <a href="./usage/syncing-packaged-agents.html">Syncing Packaged Agents</a>.
 For a first-time adoption path, see
 <a href="./usage/migrating-consumer-repositories.html">Migrating Consumer Repositories</a>.</p>
 
@@ -2741,6 +2786,13 @@ with commented suggestions when direct GitHub owners cannot be inferred.</td>
 non-symlink directories.</td>
     </tr>
     <tr>
+            <td><code>.agents/agents/&lt;agent-name&gt;</code>
+</td>
+            <td>Creates or repairs symlinks to packaged project agents.</td>
+            <td>Creates missing links, repairs broken symlinks, and preserves existing
+non-symlink directories.</td>
+    </tr>
+    <tr>
             <td><code>.github/wiki</code>
 </td>
             <td>Adds a Git submodule derived from <code>git remote origin</code>
@@ -2789,7 +2841,9 @@ needs fresh links.</li>
  files;</li>
 
     <li class="dash">permission to create local <code>.agents/skills</code>
- entries.</li>
+ and <code>.agents/agents</code>
+
+entries.</li>
 
 </ul>
 
@@ -2813,8 +2867,10 @@ generated <code>.github/CODEOWNERS</code>
  file follows the same principle by keeping
 an existing file unless you explicitly request replacement. The <code>skills</code>
 
-phase follows the same spirit by preserving existing non-symlink
-directories inside <code>.agents/skills</code>
+and <code>agents</code>
+ phases follow the same spirit by preserving existing
+non-symlink directories inside <code>.agents/skills</code>
+ and <code>.agents/agents</code>
 .</p>
 
     </article>

@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -2675,7 +2719,7 @@
 
     <li value="2">Create a minimal guide directory.</li>
 
-    <li value="3">Synchronize shared automation and packaged skills.</li>
+    <li value="3">Synchronize shared automation, packaged skills, and packaged agents.</li>
 
     <li value="4">Run the focused commands once.</li>
 
@@ -2716,6 +2760,7 @@ Welcome to the project documentation.</code></pre>
 
             <pre><code class="language-bash">composer dev-tools:sync
 composer dev-tools skills
+composer agents
 composer dev-tools tests
 composer dev-tools docs
 composer dev-tools</code></pre>
@@ -2730,11 +2775,18 @@ composer dev-tools</code></pre>
 <ul>
     <li class="dash"><code>composer dev-tools:sync</code>
  proves the consumer repository can receive the
-shared scripts, automation assets, and packaged skills during onboarding.</li>
+shared scripts, automation assets, packaged skills, and packaged agents
+during onboarding.</li>
 
     <li class="dash"><code>composer dev-tools skills</code>
  proves the packaged skill set can be linked
 safely into <code>.agents/skills</code>
+ without copying files into the consumer
+repository.</li>
+
+    <li class="dash"><code>composer agents</code>
+ proves the packaged project-agent prompts can be linked
+safely into <code>.agents/agents</code>
  without copying files into the consumer
 repository.</li>
 
