@@ -240,20 +240,30 @@
             <li class="success">Identification accessors will return configured data</li>
             <li class="success">Type will default to library</li>
             <li class="success">Metadata accessors will return configured data</li>
+            <li class="success">Metadata accessors will return defaults when optional fields are missing</li>
             <li class="success">Get license will return resolved value</li>
             <li class="success">Get authors will return normalized author entries</li>
             <li class="success">Get authors with only first author will throw exception when no authors are defined</li>
             <li class="success">Get support will return support object</li>
+            <li class="success">Get support will return empty support object when section is invalid</li>
             <li class="success">Get funding will return funding entries</li>
+            <li class="success">Get funding will ignore invalid entries and invalid section types</li>
             <li class="success">Get autoload will return configured mappings</li>
+            <li class="success">Get autoload will return empty array when section or requested mapping is invalid</li>
             <li class="success">Get autoload dev will return configured mappings</li>
+            <li class="success">Get autoload dev will return empty array when section or requested mapping is invalid</li>
             <li class="success">Get minimum stability will return configured value</li>
             <li class="success">Get config will return values from config section</li>
             <li class="success">Get scripts will return scripts section</li>
+            <li class="success">Get scripts will return empty array when section is invalid</li>
             <li class="success">Get extra will return extra section or specific key</li>
+            <li class="success">Get extra will return empty array when section or requested value is invalid</li>
             <li class="success">Get bin will return configured binaries</li>
+            <li class="success">Get bin will filter invalid entries and return empty array for invalid sections</li>
             <li class="success">Get suggest will return package suggestions</li>
+            <li class="success">Get suggest will ignore invalid entries and invalid sections</li>
             <li class="success">Get comments will return comment data</li>
+            <li class="success">Get comments will return empty array when section is invalid</li>
         </ul>
         <h2>Copy Resource Command (FastForward\DevTools\Tests\Console\Command\CopyResourceCommand)</h2>
         <ul>
@@ -455,6 +465,9 @@
         <ul>
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will copy packaged hooks</li>
+            <li class="success">Execute will skip existing hooks when no overwrite is requested</li>
+            <li class="success">Execute will return failure in check mode when hook would change</li>
+            <li class="success">Execute will skip replacing hook when interactive confirmation is declined</li>
         </ul>
         <h2>Git Ignore (FastForward\DevTools\Tests\GitIgnore\GitIgnore)</h2>
         <ul>
@@ -471,6 +484,10 @@
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Command will have expected options</li>
             <li class="success">Execute will return success when merge succeeds</li>
+            <li class="success">Execute will return success when git ignore is already synchronized</li>
+            <li class="success">Execute will return failure in check mode when drift is detected</li>
+            <li class="success">Execute will return success in dry run mode when drift is detected</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
         </ul>
         <h2>Joli Notif Execution Finished Subscriber (FastForward\DevTools\Tests\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber)</h2>
         <ul>
@@ -484,6 +501,9 @@
             <li class="success">Execute will return success and write info</li>
             <li class="success">Execute will skip when license file exists</li>
             <li class="success">Execute will handle unsupported license</li>
+            <li class="success">Execute will return failure in check mode when license would change</li>
+            <li class="success">Execute will return success in dry run mode when license would change</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
         </ul>
         <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
         <ul>
