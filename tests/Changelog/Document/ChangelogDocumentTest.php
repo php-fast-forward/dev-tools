@@ -83,4 +83,100 @@ final class ChangelogDocumentTest extends TestCase
         self::assertSame(['Preserve release sections'], $release->getEntriesFor(ChangelogEntryType::Fixed));
         self::assertFalse($promoted->getUnreleased()->hasEntries());
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function documentAccessorsWillResolveExpectedReleaseVariants(): void
+    {
+        $document = new ChangelogDocument([
+            new ChangelogRelease('1.2.0', '2026-04-19'),
+        ]);
+
+        self::assertSame(ChangelogDocument::UNRELEASED_VERSION, $document->getUnreleased()->getVersion());
+        self::assertNull($document->getRelease('9.9.9'));
+        self::assertSame('1.2.0', $document->getLatestPublishedRelease()?->getVersion());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getLatestPublishedReleaseWillReturnNullWhenOnlyUnreleasedExists(): void
+    {
+        self::assertNull(ChangelogDocument::create()->getLatestPublishedRelease());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function withReleaseWillReplaceExistingVersionAndInsertUnreleasedAtTheTop(): void
+    {
+        $existing = new ChangelogRelease('1.2.0', '2026-04-01');
+        $replacement = (new ChangelogRelease('1.2.0', '2026-04-19'))
+            ->withEntry(ChangelogEntryType::Added, 'Updated note');
+        $document = (new ChangelogDocument([$existing]))
+            ->withRelease(new ChangelogRelease(ChangelogDocument::UNRELEASED_VERSION))
+            ->withRelease($replacement);
+
+        self::assertSame(
+            [ChangelogDocument::UNRELEASED_VERSION, '1.2.0'],
+            array_map(
+                static fn(ChangelogRelease $release): string => $release->getVersion(),
+                $document->getReleases(),
+            ),
+        );
+        self::assertSame(['Updated note'], $document->getRelease('1.2.0')?->getEntriesFor(ChangelogEntryType::Added));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function promoteUnreleasedWillCreatePublishedReleaseWhenDocumentIsEmpty(): void
+    {
+        $document = new ChangelogDocument([]);
+
+        $promoted = $document->promoteUnreleased('1.0.0', '2026-04-20');
+
+        self::assertSame(
+            [ChangelogDocument::UNRELEASED_VERSION, '1.0.0'],
+            array_map(
+                static fn(ChangelogRelease $release): string => $release->getVersion(),
+                $promoted->getReleases(),
+            ),
+        );
+        self::assertSame('2026-04-20', $promoted->getRelease('1.0.0')?->getDate());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function releaseHelpersWillNormalizeEntriesAndSupportImmutableMutators(): void
+    {
+        $release = new ChangelogRelease('1.3.0', null, [
+            ChangelogEntryType::Added->value => ['Ship feature', 'Ship feature'],
+        ]);
+
+        self::assertSame('1.3.0', $release->getVersion());
+        self::assertNull($release->getDate());
+        self::assertFalse($release->isUnreleased());
+        self::assertTrue($release->hasEntries());
+        self::assertSame(['Ship feature'], $release->getEntriesFor(ChangelogEntryType::Added));
+
+        $sameRelease = $release->withEntry(ChangelogEntryType::Fixed, '   ');
+        self::assertSame($release, $sameRelease);
+
+        $updated = $release
+            ->withEntry(ChangelogEntryType::Fixed, 'Repair behavior')
+            ->withEntries([ChangelogEntryType::Security->value => ['Security hardening']])
+            ->withDate('2026-04-20');
+
+        self::assertSame('2026-04-20', $updated->getDate());
+        self::assertSame(['Security hardening'], $updated->getEntriesFor(ChangelogEntryType::Security));
+        self::assertSame([], $updated->getEntriesFor(ChangelogEntryType::Added));
+    }
 }
