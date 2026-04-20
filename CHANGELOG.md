@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.15.0] - 2026-04-20
+
 ### Changed
 
 - Consolidate dependency analysis on `composer-dependency-analyser`, add a reusable packaged analyzer config, remove the redundant `composer-unused` dependency, and expose `--dump-usage` plus report-only `--max-outdated=-1` support (#135)
@@ -230,7 +232,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.14.0...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.15.0...HEAD
+[1.15.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.13.0...v1.14.0
 [1.13.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.12.0...v1.13.0
 [1.12.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.11.0...v1.12.0
