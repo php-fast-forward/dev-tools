@@ -31,6 +31,9 @@ Add these only when the repository clearly supports them:
 - Lint, format, static-analysis, or code-style commands
 - CI workflow locations in `.github/workflows/`
 - Deployment, publishing, or release commands if present
+- Canonical human-facing entrypoints such as `README.md`, `docs/`, wiki content,
+  support files, or notable generated-output directories that agents may need to
+  consult
 - Existing repository conventions from `README.md`, `composer.json`, `package.json`,
   `Makefile`, `pyproject.toml`, or similar project files
 
@@ -42,6 +45,8 @@ Add these only when the repository clearly supports them:
 - The guidance complements `README.md` instead of repeating it wholesale.
 - The instructions mention generated artifacts, sync workflows, or docs outputs
   when agents can affect them.
+- Helpful canonical references such as `README.md`, `docs/`, workflow files, or
+  other notable repository paths are called out when they improve navigation.
 - The file uses concrete repository vocabulary rather than generic advice.
 - The final result is specific enough that another agent could start work without
   guessing the workflow.

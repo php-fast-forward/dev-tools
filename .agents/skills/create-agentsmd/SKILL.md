@@ -33,6 +33,8 @@ prefer concise instructions over generic explanations.
 - Code style, file-organization, and naming expectations that matter in review
 - Build, release, or deployment behavior when the repository exposes one
 - Pull request or contribution rules when they are discoverable from local files
+- Notable repository references such as `README.md`, `docs/`, workflow files, or
+  generated-output locations when those links help an agent navigate the project
 
 ## Writing Rules
 
@@ -40,6 +42,9 @@ prefer concise instructions over generic explanations.
 - Prefer exact commands in backticks instead of vague descriptions.
 - Mention real paths, scripts, workflow files, and generated outputs.
 - Keep `AGENTS.md` as a companion to `README.md`, not a duplicate of it.
+- Add links or path references to canonical repository surfaces when they are
+  useful entrypoints for agents, especially `README.md`, `docs/`, `.github/workflows/`,
+  and other notable local documentation or output directories.
 - Call out monorepo or nested-`AGENTS.md` precedence only when it actually applies.
 - Preserve valid repository-specific guidance when updating an existing file.
 - Do not invent commands, services, environment variables, or workflows that are

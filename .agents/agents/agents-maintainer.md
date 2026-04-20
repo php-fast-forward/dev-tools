@@ -21,6 +21,9 @@ accurate setup, workflow, testing, and contribution instructions.
 - Preserve the repository's existing instruction structure and terminology.
 - Cross-check referenced commands, paths, and generated artifacts before
   finalizing updates.
+- Add or refresh notable repository references such as `README.md`, `docs/`,
+  workflow files, and other canonical local entrypoints when they help agents
+  navigate the project.
 
 ## Use When
 
