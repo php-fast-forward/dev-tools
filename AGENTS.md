@@ -38,12 +38,12 @@ composer dev-tools:fix
 composer dev-tools tests         # Run PHPUnit tests
 composer dev-tools code-style    # Check and fix code style (ECS + Composer Normalize)
 composer dev-tools refactor      # Refactor code using Rector
-composer dev-tools phpdoc         # Check and fix PHPDoc comments
+composer dev-tools phpdoc        # Check and fix PHPDoc comments
 composer dev-tools docs          # Generate HTML API documentation
-composer dev-tools wiki         # Generate Markdown documentation for wiki
+composer dev-tools wiki          # Generate Markdown documentation for wiki
 composer dev-tools reports       # Generate docs frontpage and reports
-composer agents                 # Sync packaged project agents into .agents/agents
-composer dev-tools:sync         # Sync scripts, GitHub Actions, .editorconfig, wiki
+composer dev-tools agents        # Sync packaged project agents into .agents/agents
+composer dev-tools:sync          # Sync scripts, GitHub Actions, .editorconfig, wiki
 ```
 
 **Notable Specialized Commands:**
