@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Config;
 
-use FastForward\DevTools\Composer\Json\ComposerJson;
 use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
 use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
@@ -41,7 +40,8 @@ use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
  */
 final class ComposerDependencyAnalyserConfig
 {
-    private const string PACKAGE_NAME = 'fast-forward/dev-tools';
+    private const string VENDOR_PACKAGE_PATH = \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR
+        . 'fast-forward' . \DIRECTORY_SEPARATOR . 'dev-tools';
 
     /**
      * Dependencies that are only required by the packaged DevTools distribution itself.
@@ -92,7 +92,7 @@ final class ComposerDependencyAnalyserConfig
     {
         $configuration = new Configuration();
 
-        if (self::isDevToolsRepository()) {
+        if (self::isDevToolsRepository(__DIR__)) {
             self::configurePackagedRepositoryIgnores($configuration);
         }
 
@@ -123,12 +123,24 @@ final class ComposerDependencyAnalyserConfig
     /**
      * Detects whether the analyser is running inside the DevTools repository itself.
      *
-     * @return bool true when the current project is fast-forward/dev-tools
+     * @param string $configDirectory the directory where the config class is loaded from
+     *
+     * @return bool true when the config is loaded from the repository checkout itself
      */
-    private static function isDevToolsRepository(): bool
+    private static function isDevToolsRepository(string $configDirectory): bool
     {
-        $composer = new ComposerJson();
+        return ! self::isInstalledAsDependency($configDirectory);
+    }
 
-        return self::PACKAGE_NAME === $composer->getName();
+    /**
+     * Detects whether the packaged config is being loaded from a consumer vendor directory.
+     *
+     * @param string $configDirectory the directory where the config class is loaded from
+     *
+     * @return bool true when DevTools is being used from vendor/fast-forward/dev-tools
+     */
+    private static function isInstalledAsDependency(string $configDirectory): bool
+    {
+        return str_contains($configDirectory, self::VENDOR_PACKAGE_PATH);
     }
 }
