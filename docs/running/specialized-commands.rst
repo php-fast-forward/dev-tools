@@ -74,6 +74,9 @@ Important details:
   outdated dependencies accumulate;
 - ``--max-outdated=-1`` keeps the Jack outdated report in the output but
   ignores Jack's failure so only dependency-analyser findings fail the command;
+- the packaged ``tests.yml`` workflow uses ``--max-outdated=-1`` by default,
+  so dependency health stays required in CI while outdated-package counts are
+  reported without failing the workflow on their own;
 - it previews ``jack raise-to-installed`` and ``jack open-versions`` before
   the analyzers;
 - ``--upgrade`` runs ``jack raise-to-installed``, ``jack open-versions``,

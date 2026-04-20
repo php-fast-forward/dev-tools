@@ -181,6 +181,7 @@ composer dev-tools
 - **Documentation**: Sphinx-based docs in `docs/` directory
 - **Wiki**: GitHub wiki synced via `dev-tools wiki` and `dev-tools:sync`
 - **GitHub Actions**: Workflows in `.github/workflows/` (synced via `dev-tools:sync`)
+- **Dependency Health CI**: `.github/workflows/tests.yml` always runs the dependency-health job, and its default `max-outdated` input is `-1` so outdated packages are reported without failing CI on count alone
 - **Project Agents**: Packaged role prompts synchronized via `composer agents` and `dev-tools:sync`
 
 ## Skills Usage

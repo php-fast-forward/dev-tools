@@ -65,7 +65,7 @@ jobs:
     validate_pull_request:
         name: Validate PR Changelog
         needs: resolve_php
-        if: ${{ github.event.pull_request.number && github.event.pull_request.merged != true }}
+        if: ${{ github.event.pull_request.number && github.event.pull_request.merged != true && !startsWith(github.event.pull_request.head.ref, inputs.release-branch-prefix || 'release/v') }}
         runs-on: ubuntu-latest
         env:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}

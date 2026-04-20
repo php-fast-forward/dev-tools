@@ -68,7 +68,10 @@ The ``tests.yml`` workflow provides standard Continuous Integration.
 
 *   Runs PHPUnit tests across the supported PHP matrix.
 *   Resolves the minimum supported PHP minor version from ``composer.lock`` or ``composer.json`` and builds the test matrix from that floor upward.
-*   Runs dependency health as a separate non-blocking job when enabled.
+*   Runs dependency health as a separate required job.
+*   Defaults the dependency-health threshold to ``--max-outdated=-1`` so
+    outdated packages stay visible in CI without failing the workflow on count
+    alone.
 *   Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.
 
 Fast Forward Changelog
@@ -92,7 +95,8 @@ wrapper in ``resources/github-actions/changelog.yml``.
         safely.
     *   Fetches the base branch changelog reference.
     *   Runs ``composer dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
-    *   Fails when the current branch does not add a meaningful ``Unreleased`` change.
+    *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
+    *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
 *   **Manual Release Preparation**:
     *   Checks out the repository default branch with full history.
     *   Resolves the next version from ``Unreleased`` unless a version input is provided.

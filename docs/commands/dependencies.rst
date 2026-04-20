@@ -32,7 +32,7 @@ Options
 ``--max-outdated=<count>`` (optional)
    Maximum number of outdated packages allowed by ``jack breakpoint``.
 
-   Default: ``5``.
+   Default: ``5`` when you run the command directly.
 
    Use ``-1`` to keep the outdated dependency report in the output while
    ignoring Jack failures in the final command status.
@@ -134,6 +134,9 @@ Behavior
   the command.
 - ``--upgrade`` applies Jack's ``raise-to-installed`` and ``open-versions``
   commands before ``composer update -W`` and ``composer normalize``.
+- the packaged ``tests.yml`` workflow uses ``--max-outdated=-1`` by default so
+  dependency health remains a required CI job while outdated-package counts are
+  reported without failing the workflow on their own.
 - Returns a non-zero exit code when missing, unused, misplaced, or too many
   outdated dependencies are found.
 - Both tools must be available in ``vendor/bin/``.
