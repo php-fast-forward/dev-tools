@@ -56,6 +56,7 @@ Analyzes missing, unused, misplaced, and outdated Composer dependencies.
 
    composer dependencies
    composer dependencies --max-outdated=10
+   composer dependencies --max-outdated=-1
    composer dependencies --dev
    composer dependencies --dump-usage=symfony/console
    composer dependencies --upgrade --dev
@@ -71,6 +72,8 @@ Important details:
   ``composer-dependency-analyser --dump-usages <package> --show-all-usages``;
 - it uses ``jack breakpoint --limit=<max-outdated>`` to fail when too many
   outdated dependencies accumulate;
+- ``--max-outdated=-1`` keeps the Jack outdated report in the output but
+  ignores Jack's failure so only dependency-analyser findings fail the command;
 - it previews ``jack raise-to-installed`` and ``jack open-versions`` before
   the analyzers;
 - ``--upgrade`` runs ``jack raise-to-installed``, ``jack open-versions``,

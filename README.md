@@ -63,6 +63,7 @@ composer dev-tools tests
 # Analyze missing, unused, misplaced, and outdated Composer dependencies
 composer dependencies
 composer dependencies --max-outdated=8
+composer dependencies --max-outdated=-1
 composer dependencies --dev
 composer dependencies --dump-usage=symfony/console
 composer dependencies --upgrade --dev

@@ -121,7 +121,7 @@ final class DependenciesCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->processBreakpoint->reveal())
+        $this->processQueue->add($this->processBreakpoint->reveal(), false)
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)
@@ -148,7 +148,7 @@ final class DependenciesCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->processBreakpoint->reveal())
+        $this->processQueue->add($this->processBreakpoint->reveal(), false)
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::FAILURE)
@@ -179,7 +179,7 @@ final class DependenciesCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->processBreakpoint->reveal())
+        $this->processQueue->add($this->processBreakpoint->reveal(), false)
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)
@@ -210,6 +210,21 @@ final class DependenciesCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillFailWhenMaxOutdatedIsLowerThanMinusOne(): void
+    {
+        $this->input->getOption('max-outdated')
+            ->willReturn('-2');
+        $this->output->writeln('<error>The --max-outdated option MUST be -1 or greater.</error>')
+            ->shouldBeCalledOnce();
+        $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(DependenciesCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWillDumpPackageUsagesAndShowAllMatchesWhenRequested(): void
     {
         $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: false, dumpUsage: 'symfony/console');
@@ -221,7 +236,34 @@ final class DependenciesCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->processBreakpoint->reveal())
+        $this->processQueue->add($this->processBreakpoint->reveal(), false)
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<info>Running dependency analysis...</info>')
+            ->shouldBeCalledOnce();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillIgnoreJackFailuresWhenMaxOutdatedIsDisabled(): void
+    {
+        $this->configureBaseExecution(maxOutdated: '-1', upgrade: false, dev: false, dumpUsage: null);
+        $this->configurePreviewBuilders(dev: false, maxOutdated: '-1', dumpUsage: null);
+
+        $this->processQueue->add($this->processRaiseToInstalled->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->processOpenVersions->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->processDepAnalyser->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->processBreakpoint->reveal(), true)
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)
@@ -291,7 +333,11 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn($this->processDepAnalyser->reveal());
         $this->processBuilder
             ->build(
-                $dev ? 'vendor/bin/jack breakpoint --dev --limit ' . $maxOutdated : 'vendor/bin/jack breakpoint --limit ' . $maxOutdated
+                '-1' === $maxOutdated
+                    ? ($dev ? 'vendor/bin/jack breakpoint --dev' : 'vendor/bin/jack breakpoint')
+                    : ($dev
+                        ? 'vendor/bin/jack breakpoint --dev --limit ' . $maxOutdated
+                        : 'vendor/bin/jack breakpoint --limit ' . $maxOutdated)
             )
             ->willReturn($this->processBreakpoint->reveal());
     }
@@ -345,7 +391,11 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn($this->processDepAnalyser->reveal());
         $this->processBuilder
             ->build(
-                $dev ? 'vendor/bin/jack breakpoint --dev --limit ' . $maxOutdated : 'vendor/bin/jack breakpoint --limit ' . $maxOutdated
+                '-1' === $maxOutdated
+                    ? ($dev ? 'vendor/bin/jack breakpoint --dev' : 'vendor/bin/jack breakpoint')
+                    : ($dev
+                        ? 'vendor/bin/jack breakpoint --dev --limit ' . $maxOutdated
+                        : 'vendor/bin/jack breakpoint --limit ' . $maxOutdated)
             )
             ->willReturn($this->processBreakpoint->reveal());
     }

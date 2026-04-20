@@ -47,6 +47,8 @@ final class DependenciesCommand extends BaseCommand
 {
     private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';
 
+    private const int DISABLE_OUTDATED_THRESHOLD = -1;
+
     /**
      * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
@@ -69,7 +71,7 @@ final class DependenciesCommand extends BaseCommand
             ->addOption(
                 name: 'max-outdated',
                 mode: InputOption::VALUE_REQUIRED,
-                description: 'Maximum number of outdated packages allowed by jack breakpoint.',
+                description: 'Maximum number of outdated packages allowed by jack breakpoint. Use -1 to keep the report but ignore Jack failures.',
                 default: '5',
             )
             ->addOption(
@@ -118,7 +120,10 @@ final class DependenciesCommand extends BaseCommand
         $output->writeln('<info>Running dependency analysis...</info>');
 
         $this->processQueue->add($this->getComposerDependencyAnalyserCommand($input));
-        $this->processQueue->add($this->getJackBreakpointCommand($input, $maximumOutdated));
+        $this->processQueue->add(
+            $this->getJackBreakpointCommand($input, $maximumOutdated),
+            $this->shouldIgnoreOutdatedFailures($maximumOutdated),
+        );
 
         return $this->processQueue->run($output);
     }
@@ -162,7 +167,9 @@ final class DependenciesCommand extends BaseCommand
             $command .= ' --dev';
         }
 
-        $command .= ' --limit ' . $maximumOutdated;
+        if (! $this->shouldIgnoreOutdatedFailures($maximumOutdated)) {
+            $command .= ' --limit ' . $maximumOutdated;
+        }
 
         return $this->processBuilder->build($command);
     }
@@ -252,10 +259,22 @@ final class DependenciesCommand extends BaseCommand
 
         $maximumOutdated = (int) $maximumOutdated;
 
-        if (0 > $maximumOutdated) {
-            throw new InvalidArgumentException('The --max-outdated option MUST be zero or greater.');
+        if (self::DISABLE_OUTDATED_THRESHOLD > $maximumOutdated) {
+            throw new InvalidArgumentException('The --max-outdated option MUST be -1 or greater.');
         }
 
         return $maximumOutdated;
+    }
+
+    /**
+     * Determines whether Jack outdated failures SHOULD be ignored for the given threshold.
+     *
+     * @param int $maximumOutdated the validated outdated threshold option
+     *
+     * @return bool true when the outdated threshold is explicitly disabled
+     */
+    private function shouldIgnoreOutdatedFailures(int $maximumOutdated): bool
+    {
+        return self::DISABLE_OUTDATED_THRESHOLD === $maximumOutdated;
     }
 }

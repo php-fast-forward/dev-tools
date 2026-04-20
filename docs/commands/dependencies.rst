@@ -34,6 +34,9 @@ Options
 
    Default: ``5``.
 
+   Use ``-1`` to keep the outdated dependency report in the output while
+   ignoring Jack failures in the final command status.
+
 ``--upgrade`` (optional)
    Applies the Jack upgrade workflow before the analyzers:
 
@@ -66,6 +69,12 @@ Allow up to 10 outdated packages:
 .. code-block:: bash
 
    composer dependencies --max-outdated=10
+
+Report outdated packages without failing on their count:
+
+.. code-block:: bash
+
+   composer dependencies --max-outdated=-1
 
 Preview the upgrade workflow:
 
@@ -120,6 +129,9 @@ Behavior
   - ``--dump-usages <package>`` and ``--show-all-usages`` when ``--dump-usage``
     is passed to the DevTools command
 - ``jack breakpoint`` maps ``--max-outdated`` to Jack's ``--limit`` option.
+- ``--max-outdated=-1`` keeps ``jack breakpoint`` in the workflow for reporting,
+  but its failure is ignored so only missing or unused dependency findings fail
+  the command.
 - ``--upgrade`` applies Jack's ``raise-to-installed`` and ``open-versions``
   commands before ``composer update -W`` and ``composer normalize``.
 - Returns a non-zero exit code when missing, unused, misplaced, or too many
