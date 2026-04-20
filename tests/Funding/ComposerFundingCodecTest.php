@@ -102,4 +102,126 @@ final class ComposerFundingCodecTest extends TestCase
             $decoded['funding'],
         );
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillIgnoreInvalidEntriesAndDeduplicateSupportedValues(): void
+    {
+        $codec = new ComposerFundingCodec();
+
+        $profile = $codec->parse(<<<'JSON'
+            {
+              "name": "example/package",
+              "funding": [
+                "invalid",
+                {"type": "github", "url": "https://github.com/sponsors/foo"},
+                {"type": "github", "url": "https://www.github.com/sponsors/foo"},
+                {"type": "github", "url": "https://github.com/foo"},
+                {"type": "custom", "url": " https://example.com/support "},
+                {"type": "custom", "url": "https://example.com/support"},
+                {"type": "patreon", "url": ""},
+                {"type": "other"}
+              ]
+            }
+            JSON);
+
+        self::assertSame(['foo'], $profile->getGithubSponsors());
+        self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
+        self::assertSame(
+            [
+                [
+                    'type' => 'github',
+                    'url' => 'https://github.com/foo',
+                ],
+                [
+                    'type' => 'patreon',
+                    'url' => '',
+                ],
+                [
+                    'type' => 'other',
+                ],
+            ],
+            $profile->getUnsupportedComposerEntries(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillReturnEmptyProfileWhenFundingIsNotAnArray(): void
+    {
+        $codec = new ComposerFundingCodec();
+        $profile = $codec->parse('{"name":"example/package","funding":"nope"}');
+
+        self::assertSame([], $profile->getGithubSponsors());
+        self::assertSame([], $profile->getCustomUrls());
+        self::assertSame([], $profile->getUnsupportedComposerEntries());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillTreatGithubEntriesWithoutParsableUrlPartsAsUnsupported(): void
+    {
+        $codec = new ComposerFundingCodec();
+
+        $profile = $codec->parse(<<<'JSON'
+            {
+              "name": "example/package",
+              "funding": [
+                {"type": "github", "url": "mailto:team@example.com"}
+              ]
+            }
+            JSON);
+
+        self::assertSame([], $profile->getGithubSponsors());
+        self::assertSame(
+            [[
+                'type' => 'github',
+                'url' => 'mailto:team@example.com',
+            ]],
+            $profile->getUnsupportedComposerEntries(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function dumpWillRemoveFundingWhenTheProfileHasNoEntries(): void
+    {
+        $codec = new ComposerFundingCodec();
+
+        $contents = $codec->dump(
+            '{"name":"example/package","funding":[{"type":"github","url":"https://github.com/sponsors/foo"}]}',
+            new FundingProfile(),
+        );
+
+        $decoded = json_decode($contents, true);
+
+        self::assertArrayNotHasKey('funding', $decoded);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function dumpWillInsertFundingImmediatelyAfterSupportWhenPresent(): void
+    {
+        $codec = new ComposerFundingCodec();
+
+        $contents = $codec->dump(
+            '{"name":"example/package","support":{"docs":"https://example.com/docs"},"autoload":{"psr-4":{"App\\\\":"src/"}}}',
+            new FundingProfile(['fast-forward']),
+        );
+
+        self::assertStringContainsString(
+            "\"support\": {\n        \"docs\": \"https://example.com/docs\"\n    },\n    \"funding\": [",
+            $contents,
+        );
+    }
 }

@@ -25,6 +25,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use Symfony\Component\Yaml\Yaml;
 
 #[CoversClass(FundingYamlCodec::class)]
@@ -96,5 +97,90 @@ final class FundingYamlCodecTest extends TestCase
             ],
             Yaml::parse($contents),
         );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillReturnEmptyProfileForMissingOrInvalidYamlPayloads(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        self::assertSame([], $codec->parse(null)->getGithubSponsors());
+        self::assertSame([], $codec->parse(" \n")->getCustomUrls());
+        self::assertSame([], $codec->parse('true')->getGithubSponsors());
+        self::assertSame(['just-a-list'], $codec->parse('- just-a-list')->getUnsupportedYamlEntries());
+        self::assertSame([], $codec->parse('42')->getGithubSponsors());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillNormalizeListsAndDiscardBlankEntries(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        $profile = $codec->parse(<<<'YAML'
+            github:
+              - foo
+              - " "
+              - bar
+            custom:
+              - https://example.com/support
+              - ""
+            YAML);
+
+        self::assertSame(['foo', 'bar'], $profile->getGithubSponsors());
+        self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillNormalizeScalarGithubAndCustomValues(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        $profile = $codec->parse(<<<'YAML'
+            github: foo
+            custom: https://example.com/support
+            YAML);
+
+        self::assertSame(['foo'], $profile->getGithubSponsors());
+        self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function dumpWillCollapseSingleGithubSponsorToScalar(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        $contents = $codec->dump(new FundingProfile(['foo']));
+
+        self::assertSame([
+            'github' => 'foo',
+        ], Yaml::parse($contents),);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function privateListHelpersWillNormalizeAndDenormalizeValues(): void
+    {
+        $codec = new FundingYamlCodec();
+        $normalizeList = new ReflectionMethod($codec, 'normalizeList');
+        $denormalizeList = new ReflectionMethod($codec, 'denormalizeList');
+
+        self::assertSame(['foo'], $normalizeList->invoke($codec, ' foo '));
+        self::assertSame([], $normalizeList->invoke($codec, 42));
+        self::assertSame('foo', $denormalizeList->invoke($codec, ['foo']));
+        self::assertSame(['foo', 'bar'], $denormalizeList->invoke($codec, ['foo', 'bar']));
     }
 }

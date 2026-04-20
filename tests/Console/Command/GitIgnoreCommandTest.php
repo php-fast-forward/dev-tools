@@ -35,8 +35,11 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 #[CoversClass(GitIgnoreCommand::class)]
 #[UsesClass(FileDiff::class)]
@@ -80,6 +83,11 @@ final class GitIgnoreCommandTest extends TestCase
     private ObjectProphecy $fileDiffer;
 
     /**
+     * @var ObjectProphecy<QuestionHelper>
+     */
+    private ObjectProphecy $questionHelper;
+
+    /**
      * @var ObjectProphecy<GitIgnoreInterface>
      */
     private ObjectProphecy $gitIgnoreSource;
@@ -115,11 +123,16 @@ final class GitIgnoreCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->questionHelper->getName()
+            ->willReturn('question');
+        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
+            ->shouldBeCalled();
 
         $this->gitIgnoreSource = $this->prophesize(GitIgnoreInterface::class);
         $this->gitIgnoreTarget = $this->prophesize(GitIgnoreInterface::class);
@@ -134,6 +147,8 @@ final class GitIgnoreCommandTest extends TestCase
         $this->input->getOption('check')
             ->willReturn(false);
         $this->input->getOption('interactive')
+            ->willReturn(false);
+        $this->input->isInteractive()
             ->willReturn(false);
 
         $this->reader->read(self::SOURCE_PATH)
@@ -168,6 +183,9 @@ final class GitIgnoreCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->fileDiffer->reveal(),
         );
+        $this->command->setHelperSet(new HelperSet([
+            'question' => $this->questionHelper->reveal(),
+        ]));
     }
 
     /**
@@ -213,6 +231,79 @@ final class GitIgnoreCommandTest extends TestCase
         $result = $this->executeCommand();
 
         self::assertSame(GitIgnoreCommand::SUCCESS, $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessWhenGitIgnoreIsAlreadySynchronized(): void
+    {
+        $this->fileDiffer->diffContents(
+            'generated .gitignore synchronization',
+            self::TARGET_PATH,
+            "vendor/\n",
+            '',
+            'Updating managed file /path/to/target/.gitignore from generated .gitignore synchronization.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_UNCHANGED,
+            'Target /path/to/target/.gitignore already matches source generated .gitignore synchronization; overwrite skipped.',
+        ));
+
+        $this->writer->write(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitIgnoreCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureInCheckModeWhenDriftIsDetected(): void
+    {
+        $this->input->getOption('check')
+            ->willReturn(true);
+
+        $this->writer->write(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitIgnoreCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessInDryRunModeWhenDriftIsDetected(): void
+    {
+        $this->input->getOption('dry-run')
+            ->willReturn(true);
+
+        $this->writer->write(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitIgnoreCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWritingWhenInteractiveConfirmationIsDeclined(): void
+    {
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(false)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Skipped updating /path/to/target/.gitignore.</comment>')
+            ->shouldBeCalledOnce();
+        $this->writer->write(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitIgnoreCommand::SUCCESS, $this->executeCommand());
     }
 
     /**

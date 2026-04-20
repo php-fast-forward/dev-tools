@@ -23,6 +23,7 @@ use ReflectionClass;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeAnalyzer\CallAnalyzer;
 use Rector\Rector\AbstractRector;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\NullableType;
@@ -268,5 +269,42 @@ final class AddMissingMethodPhpDocRectorTest extends TestCase
         $doc = $result->getDocComment()
             ->getText();
         self::assertStringContainsString('@param ArrayAccess&Countable $p', $doc);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function refactorWillSkipReturnTagForConstructorsAndRespectOriginalTypeNames(): void
+    {
+        $node = new ClassMethod('__construct');
+        $param = new Param(new Variable('dependency'));
+        $param->type = new FullyQualified('Acme\\Contract');
+        $param->type->setAttribute('originalName', new Name('ContractAlias'));
+
+        $node->params = [$param];
+        $node->stmts = [new Expression(new Throw_(new New_(new FullyQualified('DomainException'))))];
+
+        $result = $this->rector->refactor($node);
+        $doc = $result->getDocComment();
+        self::assertNotNull($doc);
+        $text = $doc->getText();
+        self::assertStringContainsString('@param ContractAlias $dependency', $text);
+        self::assertStringContainsString('@throws DomainException', $text);
+        self::assertStringNotContainsString('@return', $text);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function refactorWillReturnOriginalNodeWhenNoTagsCanBeGenerated(): void
+    {
+        $node = new ClassMethod('__construct');
+        $node->params = [new Param(new ArrayDimFetch(new Variable('items')))];
+        $node->stmts = null;
+
+        self::assertSame($node, $this->rector->refactor($node));
+        self::assertNull($node->getDocComment());
     }
 }

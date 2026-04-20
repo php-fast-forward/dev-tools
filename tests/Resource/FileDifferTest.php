@@ -221,4 +221,38 @@ final class FileDifferTest extends TestCase
         self::assertStringContainsString('<fg=green>+new</>', $colorized);
         self::assertStringContainsString(' unchanged', $colorized);
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function formatForConsoleWillReturnNullWhenDiffIsMissing(): void
+    {
+        self::assertNull($this->renderer->formatForConsole(null, true));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function formatForConsoleWillReturnPlainDiffWhenOutputIsNotDecorated(): void
+    {
+        $diff = "@@ -1 +1 @@\n-old\n+new";
+
+        self::assertSame($diff, $this->renderer->formatForConsole($diff, false));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function formatForConsoleWillReturnColorizedDiffWhenOutputIsDecorated(): void
+    {
+        $diff = "@@ -1 +1 @@\n-old\n+new";
+
+        self::assertSame(
+            "<fg=yellow>@@ -1 +1 @@</>\n<fg=red>-old</>\n<fg=green>+new</>",
+            $this->renderer->formatForConsole($diff, true),
+        );
+    }
 }

@@ -27,6 +27,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 #[CoversClass(ChangelogParser::class)]
 #[UsesClass(ChangelogDocument::class)]
@@ -68,5 +69,97 @@ final class ChangelogParserTest extends TestCase
         self::assertSame(ChangelogDocument::UNRELEASED_VERSION, $document->getUnreleased()->getVersion());
         self::assertSame(['Add release preparation workflow'], $document->getUnreleased()->getEntries()['Added']);
         self::assertSame('2026-04-01', $document->getRelease('1.0.0')?->getDate());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillReturnDefaultDocumentForEmptyContents(): void
+    {
+        $document = (new ChangelogParser())->parse("   \n\n");
+
+        self::assertSame([ChangelogDocument::UNRELEASED_VERSION], array_map(
+            static fn(ChangelogRelease $release): string => $release->getVersion(),
+            $document->getReleases(),
+        ));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillReturnDefaultDocumentWhenNoReleaseHeadingsExist(): void
+    {
+        $document = (new ChangelogParser())->parse("# Changelog\n\nThis file has no release headings yet.\n");
+
+        self::assertSame(ChangelogDocument::UNRELEASED_VERSION, $document->getUnreleased()->getVersion());
+        self::assertFalse($document->getUnreleased()->hasEntries());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillIgnoreUnsupportedLinesAndDeduplicateEntriesWithinASection(): void
+    {
+        $document = (new ChangelogParser())->parse(<<<'MD'
+            ## [Unreleased]
+
+            ### Added
+
+            Intro line that should be ignored
+            - Add sync command
+            - Add sync command
+            *
+
+            ### Fixed
+
+            - Repair coverage report
+            -
+            MD);
+
+        self::assertSame(['Add sync command'], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Added));
+        self::assertSame(
+            ['Repair coverage report'],
+            $document->getUnreleased()
+                ->getEntriesFor(ChangelogEntryType::Fixed)
+        );
+        self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Security));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillTreatEmptyCategoryBodiesAsEmptyEntryLists(): void
+    {
+        $document = (new ChangelogParser())->parse(<<<'MD'
+            ## [Unreleased]
+
+            ### Added
+
+            ### Fixed
+
+            Not a bullet entry
+            MD);
+
+        self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Added));
+        self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Fixed));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function extractEntriesWillReturnEmptyArrayWhenCategoryHeadingIsMissing(): void
+    {
+        $parser = new ChangelogParser();
+        $reflectionMethod = new ReflectionMethod($parser, 'extractEntries');
+
+        self::assertSame(
+            [],
+            $reflectionMethod->invoke($parser, "### Fixed\n\n- Repair release notes", ChangelogEntryType::Added),
+        );
     }
 }

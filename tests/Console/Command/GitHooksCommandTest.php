@@ -19,20 +19,25 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Console\Command\GitHooksCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Finder\Finder;
 
 use function Safe\mkdir;
@@ -41,6 +46,7 @@ use function Safe\unlink;
 use function Safe\rmdir;
 
 #[CoversClass(GitHooksCommand::class)]
+#[UsesClass(FileDiff::class)]
 final class GitHooksCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -56,6 +62,8 @@ final class GitHooksCommandTest extends TestCase
     private ObjectProphecy $output;
 
     private ObjectProphecy $fileDiffer;
+
+    private ObjectProphecy $questionHelper;
 
     private GitHooksCommand $command;
 
@@ -76,16 +84,23 @@ final class GitHooksCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->questionHelper->getName()
+            ->willReturn('question');
+        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
+            ->shouldBeCalled();
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
             ->willReturn(false);
         $this->input->getOption('interactive')
+            ->willReturn(false);
+        $this->input->isInteractive()
             ->willReturn(false);
 
         $this->command = new GitHooksCommand(
@@ -94,6 +109,9 @@ final class GitHooksCommandTest extends TestCase
             $this->finderFactory->reveal(),
             $this->fileDiffer->reveal(),
         );
+        $this->command->setHelperSet(new HelperSet([
+            'question' => $this->questionHelper->reveal(),
+        ]));
     }
 
     /**
@@ -147,6 +165,125 @@ final class GitHooksCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->filesystem->chmod('/app/.git/hooks/post-merge', 755, 0o755)
             ->shouldBeCalledOnce();
+
+        self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipExistingHooksWhenNoOverwriteIsRequested(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('resources/git-hooks');
+        $this->input->getOption('target')
+            ->willReturn('.git/hooks');
+        $this->input->getOption('no-overwrite')
+            ->willReturn(true);
+
+        $this->fileLocator->locate('resources/git-hooks')
+            ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
+        $this->filesystem->getAbsolutePath('.git/hooks')
+            ->willReturn('/app/.git/hooks');
+        $this->filesystem->exists('/app/.git/hooks/post-merge')
+            ->willReturn(true);
+        $this->output->writeln('<comment>Skipped existing post-merge hook.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureInCheckModeWhenHookWouldChange(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('resources/git-hooks');
+        $this->input->getOption('target')
+            ->willReturn('.git/hooks');
+        $this->input->getOption('no-overwrite')
+            ->willReturn(false);
+        $this->input->getOption('check')
+            ->willReturn(true);
+
+        $this->fileLocator->locate('resources/git-hooks')
+            ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
+        $this->filesystem->getAbsolutePath('.git/hooks')
+            ->willReturn('/app/.git/hooks');
+        $this->filesystem->exists('/app/.git/hooks/post-merge')
+            ->willReturn(true);
+        $this->fileDiffer->diff(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge')
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'Changed summary',
+                "@@ -1 +1 @@\n-old\n+new",
+            ))->shouldBeCalledOnce();
+        $this->fileDiffer->formatForConsole("@@ -1 +1 @@\n-old\n+new", false)
+            ->willReturn("@@ -1 +1 @@\n-old\n+new")
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Changed summary</comment>')
+            ->shouldBeCalledOnce();
+        $this->output->writeln("@@ -1 +1 @@\n-old\n+new")
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitHooksCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipReplacingHookWhenInteractiveConfirmationIsDeclined(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('resources/git-hooks');
+        $this->input->getOption('target')
+            ->willReturn('.git/hooks');
+        $this->input->getOption('no-overwrite')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+
+        $this->fileLocator->locate('resources/git-hooks')
+            ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
+        $this->filesystem->getAbsolutePath('.git/hooks')
+            ->willReturn('/app/.git/hooks');
+        $this->filesystem->exists('/app/.git/hooks/post-merge')
+            ->willReturn(true);
+        $this->fileDiffer->diff(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge')
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'Changed summary',
+                "@@ -1 +1 @@\n-old\n+new",
+            ))->shouldBeCalledOnce();
+        $this->fileDiffer->formatForConsole("@@ -1 +1 @@\n-old\n+new", false)
+            ->willReturn("@@ -1 +1 @@\n-old\n+new")
+            ->shouldBeCalledOnce();
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(false)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Skipped replacing /app/.git/hooks/post-merge.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
     }

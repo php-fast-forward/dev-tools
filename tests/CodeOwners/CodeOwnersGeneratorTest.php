@@ -30,6 +30,7 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 
 #[CoversClass(CodeOwnersGenerator::class)]
@@ -117,6 +118,36 @@ final class CodeOwnersGeneratorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function inferOwnersWillIgnoreUnsupportedAuthorEntriesAndInvalidUrls(): void
+    {
+        $this->composerJson->getSupport()
+            ->willReturn(new Support(source: 'https://github.com/php-fast-forward/dev-tools'));
+        $this->composerJson->getAuthors()
+            ->willReturn([
+                'not-an-author',
+                new Author(homepage: 'https://github.com/mentordosnerds/dev-tools'),
+                new Author(homepage: 'https://github.com'),
+            ]);
+
+        self::assertSame(['@php-fast-forward'], $this->generator->inferOwners());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function inferGroupOwnerWillReturnNullWhenSupportSourceIsMissingOrInvalid(): void
+    {
+        $this->composerJson->getSupport()
+            ->willReturn(new Support(source: 'https://example.com/php-fast-forward/dev-tools'));
+
+        self::assertNull($this->generator->inferGroupOwner());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function generateWillRenderExplicitOwners(): void
     {
         self::assertSame(
@@ -166,5 +197,44 @@ final class CodeOwnersGeneratorTest extends TestCase
             ['@php-fast-forward', '@mentordosnerds', 'security@example.com'],
             $this->generator->normalizeOwners('php-fast-forward, @mentordosnerds security@example.com'),
         );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function normalizeOwnersWillDropEmptyTokensAndDeduplicateRepeatedOwners(): void
+    {
+        self::assertSame(
+            ['@php-fast-forward', 'security@example.com'],
+            $this->generator->normalizeOwners('  php-fast-forward,, @php-fast-forward security@example.com  '),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function extractGitHubHelpersWillHandleSupportedAndUnsupportedUrls(): void
+    {
+        $handleMethod = new ReflectionMethod($this->generator, 'extractGitHubHandleFromUrl');
+        $ownerMethod = new ReflectionMethod($this->generator, 'extractGitHubRepositoryOwner');
+        $pathMethod = new ReflectionMethod($this->generator, 'githubPath');
+
+        self::assertSame(
+            'mentordosnerds',
+            $handleMethod->invoke($this->generator, 'https://github.com/mentordosnerds/')
+        );
+        self::assertNull($handleMethod->invoke($this->generator, 'https://github.com/mentordosnerds/dev-tools'));
+        self::assertSame(
+            'php-fast-forward',
+            $ownerMethod->invoke($this->generator, 'https://github.com/php-fast-forward/dev-tools/')
+        );
+        self::assertNull($ownerMethod->invoke($this->generator, 'https://github.com/php-fast-forward'));
+        self::assertSame(
+            '//php-fast-forward///dev-tools/',
+            $pathMethod->invoke($this->generator, 'https://github.com//php-fast-forward///dev-tools/')
+        );
+        self::assertNull($pathMethod->invoke($this->generator, 'https://example.com/php-fast-forward/dev-tools'));
     }
 }

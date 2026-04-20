@@ -75,6 +75,29 @@ final class PackagedDirectorySynchronizerTest extends TestCase
      * @return void
      */
     #[Test]
+    public function setLoggerWillReplaceTheActiveLogger(): void
+    {
+        $replacementLogger = $this->prophesize(LoggerInterface::class);
+        $synchronizer = $this->createSynchronizer();
+
+        $this->filesystem->exists('/package/.agents/agents')
+            ->willReturn(false);
+
+        $synchronizer->setLogger($replacementLogger->reveal());
+
+        $replacementLogger->error('No packaged .agents/agents found at: /package/.agents/agents')
+            ->shouldBeCalledOnce();
+
+        $result = $synchronizer
+            ->synchronize('/consumer/.agents/agents', '/package/.agents/agents', '.agents/agents');
+
+        self::assertTrue($result->failed());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function synchronizeWithMissingPackagePathWillReturnFailedResult(): void
     {
         $this->filesystem->exists('/package/.agents/agents')
@@ -118,6 +141,112 @@ final class PackagedDirectorySynchronizerTest extends TestCase
 
         self::assertFalse($result->failed());
         self::assertSame(['issue-editor'], $result->getCreatedLinks());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function synchronizeWillPreserveExistingValidSymlink(): void
+    {
+        $entryPath = '/package/.agents/agents/issue-editor';
+        $targetLink = '/consumer/.agents/agents/issue-editor';
+
+        $this->mockFinder($this->createDirectory('issue-editor', $entryPath));
+
+        $this->filesystem->exists('/package/.agents/agents')
+            ->willReturn(true);
+        $this->filesystem->exists('/consumer/.agents/agents')
+            ->willReturn(true);
+        $this->filesystem->exists($targetLink)
+            ->willReturn(true);
+        $this->filesystem->readlink($targetLink)
+            ->willReturn($entryPath);
+        $this->filesystem->readlink($targetLink, true)
+            ->willReturn($entryPath);
+        $this->filesystem->exists($entryPath)
+            ->willReturn(true);
+        $this->logger->notice('Preserved existing link: issue-editor')
+            ->shouldBeCalledOnce();
+
+        $result = $this->createSynchronizer()
+            ->synchronize('/consumer/.agents/agents', '/package/.agents/agents', '.agents/agents');
+
+        self::assertFalse($result->failed());
+        self::assertSame([], $result->getCreatedLinks());
+        self::assertSame(['issue-editor'], $result->getPreservedLinks());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function synchronizeWillRepairBrokenSymlink(): void
+    {
+        $entryPath = '/package/.agents/agents/issue-editor';
+        $targetLink = '/consumer/.agents/agents/issue-editor';
+        $brokenPath = '/obsolete/.agents/agents/issue-editor';
+
+        $this->mockFinder($this->createDirectory('issue-editor', $entryPath));
+
+        $this->filesystem->exists('/package/.agents/agents')
+            ->willReturn(true);
+        $this->filesystem->exists('/consumer/.agents/agents')
+            ->willReturn(true);
+        $this->filesystem->exists($targetLink)
+            ->willReturn(true);
+        $this->filesystem->readlink($targetLink)
+            ->willReturn($brokenPath);
+        $this->filesystem->readlink($targetLink, true)
+            ->willReturn($brokenPath);
+        $this->filesystem->exists($brokenPath)
+            ->willReturn(false);
+        $this->filesystem->remove($targetLink)
+            ->shouldBeCalledOnce();
+        $this->filesystem->symlink($entryPath, $targetLink)
+            ->shouldBeCalledOnce();
+        $this->logger->notice('Existing link is broken: issue-editor (removing and recreating)')
+            ->shouldBeCalledOnce();
+        $this->logger->info('Created link: issue-editor -> ' . $entryPath)
+            ->shouldBeCalledOnce();
+
+        $result = $this->createSynchronizer()
+            ->synchronize('/consumer/.agents/agents', '/package/.agents/agents', '.agents/agents');
+
+        self::assertFalse($result->failed());
+        self::assertSame(['issue-editor'], $result->getCreatedLinks());
+        self::assertSame(['issue-editor'], $result->getRemovedBrokenLinks());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function synchronizeWillPreserveExistingNonSymlinkDirectory(): void
+    {
+        $entryPath = '/package/.agents/agents/issue-editor';
+        $targetLink = '/consumer/.agents/agents/issue-editor';
+
+        $this->mockFinder($this->createDirectory('issue-editor', $entryPath));
+
+        $this->filesystem->exists('/package/.agents/agents')
+            ->willReturn(true);
+        $this->filesystem->exists('/consumer/.agents/agents')
+            ->willReturn(true);
+        $this->filesystem->exists($targetLink)
+            ->willReturn(true);
+        $this->filesystem->readlink($targetLink)
+            ->willReturn(null);
+        $this->logger->notice(
+            'Existing non-symlink found: issue-editor (keeping as is, skipping link creation)'
+        )->shouldBeCalledOnce();
+
+        $result = $this->createSynchronizer()
+            ->synchronize('/consumer/.agents/agents', '/package/.agents/agents', '.agents/agents');
+
+        self::assertFalse($result->failed());
+        self::assertSame([], $result->getCreatedLinks());
+        self::assertSame(['issue-editor'], $result->getPreservedLinks());
     }
 
     /**
@@ -167,10 +296,20 @@ final class PackagedDirectorySynchronizerTest extends TestCase
      */
     private function createSynchronizer(): PackagedDirectorySynchronizer
     {
+        return $this->createSynchronizerWithLogger($this->logger->reveal());
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     *
+     * @return PackagedDirectorySynchronizer
+     */
+    private function createSynchronizerWithLogger(LoggerInterface $logger): PackagedDirectorySynchronizer
+    {
         return new PackagedDirectorySynchronizer(
             $this->filesystem->reveal(),
             $this->finderFactory->reveal(),
-            $this->logger->reveal(),
+            $logger,
         );
     }
 }

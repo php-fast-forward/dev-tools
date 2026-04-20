@@ -148,4 +148,68 @@ final class MarkdownRendererTest extends TestCase
         self::assertStringContainsString("## [Unreleased]\n\n## [1.2.0] - 2026-04-19", $output);
         self::assertStringNotContainsString("## [Unreleased]\n\n\n## [1.2.0] - 2026-04-19", $output);
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function renderWillOmitReferencesWhenRepositoryUrlIsMissingOrBlank(): void
+    {
+        $document = new ChangelogDocument([
+            (new ChangelogRelease('1.2.0', '2026-04-19'))->withEntry(
+                ChangelogEntryType::Added,
+                'Ship changelog automation',
+            ),
+        ]);
+
+        $renderer = new MarkdownRenderer();
+
+        self::assertStringNotContainsString('[1.2.0]:', $renderer->render($document));
+        self::assertStringNotContainsString('[1.2.0]:', $renderer->render($document, '   '));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function renderWillNormalizeSshRepositoryUrlsAndTrimTrailingGitSuffix(): void
+    {
+        $document = new ChangelogDocument([
+            (new ChangelogRelease('1.2.0', '2026-04-19'))->withEntry(
+                ChangelogEntryType::Added,
+                'Ship changelog automation',
+            ),
+        ]);
+
+        $output = (new MarkdownRenderer())->render($document, 'ssh://git@github.com/php-fast-forward/dev-tools.git');
+
+        self::assertStringContainsString(
+            '[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.2.0...HEAD',
+            $output,
+        );
+        self::assertStringContainsString(
+            '[1.2.0]: https://github.com/php-fast-forward/dev-tools/releases/tag/v1.2.0',
+            $output,
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function renderWillOmitReferencesWhenOnlyUnreleasedSectionExists(): void
+    {
+        $output = (new MarkdownRenderer())->render(
+            new ChangelogDocument([
+                (new ChangelogRelease(ChangelogDocument::UNRELEASED_VERSION))->withEntry(
+                    ChangelogEntryType::Added,
+                    'Pending change',
+                ),
+            ]),
+            'https://github.com/php-fast-forward/dev-tools'
+        );
+
+        self::assertStringNotContainsString('[unreleased]:', $output);
+        self::assertStringNotContainsString('releases/tag', $output);
+    }
 }

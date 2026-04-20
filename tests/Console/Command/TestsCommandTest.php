@@ -26,6 +26,7 @@ use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -332,6 +333,23 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWithFilterWillForwardTheFilterToPhpUnit(): void
+    {
+        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
+            $process->getCommandLine(),
+            '--filter=TestsCommandTest',
+        ));
+
+        $this->input->getOption('filter')
+            ->willReturn('TestsCommandTest');
+
+        $this->invokeExecute();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWithInvalidMinCoverageWillReturnFailure(): void
     {
         $this->output->writeln(Argument::type('string'))
@@ -341,6 +359,50 @@ final class TestsCommandTest extends TestCase
 
         $this->input->getOption('min-coverage')
             ->willReturn('abc');
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithOutOfRangeMinCoverageWillReturnFailure(): void
+    {
+        $this->output->writeln(Argument::type('string'))
+            ->will(static function (): void {});
+        $this->output->writeln(Argument::containingString('between 0 and 100'))
+            ->shouldBeCalled();
+
+        $this->input->getOption('min-coverage')
+            ->willReturn('101');
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureWhenCoverageSummaryCannotBeLoaded(): void
+    {
+        $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
+
+        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
+            $process->getCommandLine(),
+            '--coverage-php=' . $coverageReportPath,
+        ));
+
+        $this->output->writeln(Argument::type('string'))
+            ->will(static function (): void {});
+        $this->output->writeln('<error>coverage report missing</error>')
+            ->shouldBeCalledOnce();
+
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willThrow(new RuntimeException('coverage report missing'));
+
+        $this->input->getOption('min-coverage')
+            ->willReturn('80');
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }

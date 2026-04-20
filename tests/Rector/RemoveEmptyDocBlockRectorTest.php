@@ -33,6 +33,7 @@ use PhpParser\Node\Stmt\Function_;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 #[CoversClass(RemoveEmptyDocBlockRector::class)]
 final class RemoveEmptyDocBlockRectorTest extends TestCase
@@ -187,5 +188,17 @@ final class RemoveEmptyDocBlockRectorTest extends TestCase
     {
         $node = new Variable('var');
         self::assertNull($this->rector->refactor($node));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function isEmptyDocBlockWillDetectContentAfterNormalization(): void
+    {
+        $reflectionMethod = new ReflectionMethod($this->rector, 'isEmptyDocBlock');
+
+        self::assertTrue($reflectionMethod->invoke($this->rector, "/**\n *\n */"));
+        self::assertFalse($reflectionMethod->invoke($this->rector, "/**\n * Content\n */"));
     }
 }

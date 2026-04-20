@@ -34,8 +34,11 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use function Safe\getcwd;
 
@@ -72,6 +75,11 @@ final class LicenseCommandTest extends TestCase
      */
     private ObjectProphecy $fileDiffer;
 
+    /**
+     * @var ObjectProphecy<QuestionHelper>
+     */
+    private ObjectProphecy $questionHelper;
+
     private LicenseCommand $command;
 
     /**
@@ -86,6 +94,7 @@ final class LicenseCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
@@ -95,14 +104,23 @@ final class LicenseCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('interactive')
             ->willReturn(false);
+        $this->input->isInteractive()
+            ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->questionHelper->getName()
+            ->willReturn('question');
+        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
+            ->shouldBeCalled();
 
         $this->command = new LicenseCommand(
             $this->generator->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
         );
+        $this->command->setHelperSet(new HelperSet([
+            'question' => $this->questionHelper->reveal(),
+        ]));
     }
 
     /**
@@ -215,6 +233,121 @@ final class LicenseCommandTest extends TestCase
         $this->output->writeln(
             Argument::containingString('No supported license found in composer.json')
         )->shouldBeCalled();
+
+        self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureInCheckModeWhenLicenseWouldChange(): void
+    {
+        $targetPath = getcwd() . '/LICENSE';
+
+        $this->input->getOption('target')
+            ->willReturn('LICENSE');
+        $this->input->getOption('check')
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('LICENSE')
+            ->willReturn($targetPath);
+        $this->filesystem->exists($targetPath)
+            ->willReturn(true);
+        $this->filesystem->readFile($targetPath)
+            ->willReturn('Old license');
+        $this->generator->generateContent()
+            ->willReturn('New license');
+        $this->fileDiffer->diffContents(
+            'generated LICENSE content',
+            $targetPath,
+            'New license',
+            'Old license',
+            'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
+        ))->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(LicenseCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessInDryRunModeWhenLicenseWouldChange(): void
+    {
+        $targetPath = getcwd() . '/LICENSE';
+
+        $this->input->getOption('target')
+            ->willReturn('LICENSE');
+        $this->input->getOption('dry-run')
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('LICENSE')
+            ->willReturn($targetPath);
+        $this->filesystem->exists($targetPath)
+            ->willReturn(true);
+        $this->filesystem->readFile($targetPath)
+            ->willReturn('Old license');
+        $this->generator->generateContent()
+            ->willReturn('New license');
+        $this->fileDiffer->diffContents(
+            'generated LICENSE content',
+            $targetPath,
+            'New license',
+            'Old license',
+            'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
+        ))->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWritingWhenInteractiveConfirmationIsDeclined(): void
+    {
+        $targetPath = getcwd() . '/LICENSE';
+
+        $this->input->getOption('target')
+            ->willReturn('LICENSE');
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('LICENSE')
+            ->willReturn($targetPath);
+        $this->filesystem->exists($targetPath)
+            ->willReturn(true);
+        $this->filesystem->readFile($targetPath)
+            ->willReturn('Old license');
+        $this->generator->generateContent()
+            ->willReturn('New license');
+        $this->fileDiffer->diffContents(
+            'generated LICENSE content',
+            $targetPath,
+            'New license',
+            'Old license',
+            'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
+        ))->shouldBeCalledOnce();
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(false)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Skipped updating ' . $targetPath . '.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
     }
