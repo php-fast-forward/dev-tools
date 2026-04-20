@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Skip pull-request changelog entry validation for generated release branches so release PRs can promote `Unreleased` without failing CI (#138)
+- Restore dependency workflow documentation so README, AGENTS, and command guides match the required CI dependency-health behavior (#138)
+- Require the GitHub pull-request skill to refresh `main` from the remote before branching for a new implementation so changelog and release state start from the latest baseline (#138)
 
 ## [1.15.0] - 2026-04-20
 
