@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -1639,65 +1683,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Agent
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-agent-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-agent-html"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-agent-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent-skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Skills
-        </a>
-
-            </div>
-
-    </li>
-                        
-            </ul>
-        </div>
-    </li>
-                            <li class="nav-item">
     
     
     
@@ -2565,6 +2550,28 @@
             </div>
 
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-sync.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Sync
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2742,8 +2749,9 @@ That command adds the <code>dev-tools</code>
 after upgrading <code>fast-forward/dev-tools</code>
  and wanting to refresh consumer
 automation. That flow also runs <code>skills</code>
- so packaged skill links are kept up
-to date.</p>
+ and <code>agents</code>
+ so packaged skill
+links and packaged project-agent links are kept up to date.</p>
 
     </section>
 
@@ -2757,6 +2765,19 @@ to date.</p>
 consumer sync flow, especially after upgrading <code>fast-forward/dev-tools</code>
  or
 after deleting a packaged skill link locally.</p>
+
+    </section>
+
+            <section class="section " id="when-should-i-run-composer-agents-manually">
+            <h2>When should I run <code>composer agents</code>
+ manually?</h2>
+
+            
+    <p>Run it when you want to refresh <code>.agents/agents</code>
+ without rerunning the full
+consumer sync flow, especially after upgrading <code>fast-forward/dev-tools</code>
+ or
+after deleting a packaged project-agent link locally.</p>
 
     </section>
 
@@ -2850,6 +2871,18 @@ directory is missing.</p>
 
             
     <p>If that path is a real directory instead of a symlink, the <code>skills</code>
+ command
+preserves it and skips link creation. Broken symlinks are repaired, but
+consumer-owned directories are not overwritten automatically.</p>
+
+    </section>
+
+            <section class="section " id="what-happens-if-agents-agents-my-agent-already-exists">
+            <h2>What happens if <code>.agents/agents/my-agent</code>
+ already exists?</h2>
+
+            
+    <p>If that path is a real directory instead of a symlink, the <code>agents</code>
  command
 preserves it and skips link creation. Broken symlinks are repaired, but
 consumer-owned directories are not overwritten automatically.</p>

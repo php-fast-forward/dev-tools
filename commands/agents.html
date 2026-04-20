@@ -4,6 +4,7 @@
     <meta charset="utf-8">
             <title>fast-forward/dev-tools</title>
     
+
         
     
         
@@ -344,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -609,14 +632,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-commands-index-html"
-                aria-expanded="false"
+                aria-expanded="true"
                 aria-controls="sidebar-commands-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-commands-index-html" class="collapse">
+            <div id="sidebar-commands-index-html" class="collapse show">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -855,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
+        >
+            agents
         </a>
 
             </div>
@@ -1595,14 +1640,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-namespaces-fastforward-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-namespaces-fastforward-html" class="collapse show">
+            <div id="sidebar-namespaces-fastforward-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -1628,75 +1673,16 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse show">
+            <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
-        >
-            Agent
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-agent-html"
-                aria-expanded="true"
-                aria-controls="sidebar-namespaces-fastforward-devtools-agent-html"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-agent-html" class="collapse show">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent-skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Skills
-        </a>
-
-            </div>
-
-    </li>
-                        
-            </ul>
-        </div>
-    </li>
-                            <li class="nav-item">
     
     
     
@@ -2564,6 +2550,28 @@
             </div>
 
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-sync.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Sync
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2696,220 +2704,107 @@
                         <div class="container-fluid">
                             
                             <div class="row g-4">
-                                <div class="col-12 col-xl-9">
+                                <div class="col-12">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            
-<nav aria-label="breadcrumb" class="mb-4">
-    <ol class="breadcrumb mb-0">
-        <li class="breadcrumb-item">
-            <a href="" class="text-decoration-none">
-                <i class="fas fa-home text-primary me-1"></i>
-                <span>Home</span>
-            </a>
-        </li>
-
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward.html" class="text-decoration-none">
-                    FastForward
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools.html" class="text-decoration-none">
-                    DevTools
-                </a>
-            </li>
-            </ol>
-</nav>
-    <article class="phpdocumentor-element">
-        <div class="mb-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-    <div class="bg-primary-subtle text-primary rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
-        <i class="fas fa-book-open"></i>
-    </div>
-    <div>
-        <h2 class="display-5 mb-0">Agent</h2>
-        <div class="text-body-secondary">
-            Namespace
-        </div>
-    </div>
-</div>
-        </div>
-
-        <div class="d-grid gap-4">
-            
-<section class="mt-5">
-    <div class="d-flex align-items-center gap-2 mb-4">
-        <i class="fas fa-list-ul text-primary"></i>
-        <h3 id="toc" class="h4 mb-0">
-            Table of Contents
-            <a
-    href="namespaces/fastforward-devtools-agent.html#toc"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-        </h3>
-    </div>
-
-    <div class="d-grid gap-4">
-        
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-sitemap text-info"></i>
-                    <h4 id="namespaces" class="h6 mb-0 fw-semibold">Namespaces</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <a href="namespaces/fastforward-devtools-agent-skills.html" class="list-group-item list-group-item-action">
-                            Skills
-                        </a>
-                                    </div>
-            </section>
-        
-        
-        
-        
-        
-        
-        
-        
-        
-            </div>
-</section>
+                                            <section class="section " id="agents">
+            <h1>agents</h1>
 
             
-                    </div>
+    <p>Synchronizes Fast Forward project agents into <code>.agents/agents</code>
+ directory.</p>
 
-        <div class="modal fade" id="source-view" tabindex="-1" aria-labelledby="source-view-label" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-scrollable modal-xl">
-        <div class="modal-content border-0 shadow">
-            <div class="modal-header">
-                <h5 class="modal-title d-flex align-items-center gap-2" id="source-view-label">
-                    <i class="fas fa-code text-primary"></i>
-                    <span>Source View</span>
-                </h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
+            <section class="section " id="description">
+            <h2>Description</h2>
 
-            <div class="modal-body p-0">
-                <pre
-                    class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
-                    style="max-height: 70vh; overflow-y: auto;"
-                    data-src=""
-                ></pre>
-            </div>
-        </div>
-    </div>
-</div>
+            
+    <p>The <code>agents</code>
+ command synchronizes packaged project-agent prompts into the
+consumer repository&#039;s <code>.agents/agents</code>
+ directory using symlinks.</p>
 
-<script>
-    (function () {
-        function loadExternalCodeSnippet(el, url, line) {
-            const pre = el.querySelector('pre[data-src]');
-            if (!pre) return;
+    </section>
 
-            const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
-            const language = 'php';
+            <section class="section " id="usage">
+            <h2>Usage</h2>
 
-            const code = document.createElement('code');
-            code.className = 'language-' + language;
+            <pre><code class="language-bash">composer agents
+vendor/bin/dev-tools agents</code></pre>
 
-            pre.textContent = '';
-            if (line) {
-                pre.setAttribute('data-line', line);
-            } else {
-                pre.removeAttribute('data-line');
-            }
+    </section>
 
-            code.textContent = 'Loading…';
-            pre.appendChild(code);
+            <section class="section " id="options">
+            <h2>Options</h2>
 
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', src, true);
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState !== 4) return;
+            
+    <p>This command does not accept additional options.</p>
 
-                if (xhr.status < 400 && xhr.responseText) {
-                    code.textContent = xhr.responseText;
-                    Prism.highlightElement(code);
+    </section>
 
-                    if (line) {
-                        const lineElement = pre.querySelector('.line-numbers-rows > span:nth-child(' + line + ')');
-                        if (lineElement) {
-                            pre.scrollTop = lineElement.offsetTop - (pre.offsetHeight / 2);
-                        }
-                    }
+            <section class="section " id="examples">
+            <h2>Examples</h2>
 
-                    return;
-                }
+            
+    <p>Synchronize agents:</p>
 
-                if (xhr.status === 404) {
-                    code.textContent = '✖ Error: File could not be found';
-                    return;
-                }
+            <pre><code class="language-bash">composer agents</code></pre>
 
-                if (xhr.status >= 400) {
-                    code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
-                    return;
-                }
+    </section>
 
-                code.textContent = '✖ Error: An unknown error occurred';
-            };
+            <section class="section " id="exit-codes">
+            <h2>Exit Codes</h2>
 
-            xhr.send(null);
-        }
+            <table>
+                <thead>
+            <tr>
+                            <th>Code</th>
+                            <th>Meaning</th>
+                    </tr>
+        </thead>
+    <tbody>
+    <tr>
+            <td>0</td>
+            <td>Success. Agents synchronized.</td>
+    </tr>
+    <tr>
+            <td>1</td>
+            <td>Failure. No packaged agents or sync error.</td>
+    </tr>
+</tbody>
+</table>
 
-        document.querySelectorAll('[data-modal]').forEach(function (trigger) {
-            trigger.addEventListener('click', function (event) {
-                event.preventDefault();
+    </section>
 
-                const modalId = this.dataset.modal;
-                const modalEl = document.getElementById(modalId);
+            <section class="section " id="behavior">
+            <h2>Behavior</h2>
 
-                if (!modalEl) return;
+            
 
-                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
-                modal.show();
+<ul>
+    <li class="dash">Verifies the packaged <code>.agents/agents</code>
+ directory before doing any work.</li>
 
-                loadExternalCodeSnippet(
-                    modalEl,
-                    this.dataset.src || null,
-                    this.dataset.line || null
-                );
-            });
-        });
-    })();
-</script>
+    <li class="dash">Creates the consumer <code>.agents/agents</code>
+ directory when missing.</li>
 
-    </article>
+    <li class="dash">Creates missing symlinks to packaged project agents.</li>
+
+    <li class="dash">Repairs broken symlinks.</li>
+
+    <li class="dash">Preserves an existing non-symlink directory instead of overwriting it.</li>
+
+    <li class="dash">Reuses the same generic packaged-directory synchronizer as <code>skills</code>
+ so
+both commands follow identical safety rules.</li>
+
+</ul>
+
+    </section>
+
+    </section>
+
                                     </div>
                                 </div>
 
-                                                                    <aside class="col-12 col-xl-3 d-none d-xl-block">
-                                        <div class="position-sticky" style="top: 2rem;">
-                                            <div class="bg-body-tertiary border rounded-4 p-3 shadow-sm">
-                                                <div class="d-flex align-items-center gap-2 text-uppercase fw-semibold small text-body-secondary mb-3">
-                                                    <i class="fas fa-list-ul text-primary"></i>
-                                                    <span>On this page</span>
-                                                </div>
-
-                                                        
-    <section>
-        <div class="d-grid gap-4">
-            <div>
-                <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
-                <div class="list-group">
-                                                                                                                                                                                </div>
-            </div>
-
-            
-                    </div>
-    </section>
-
-                                            </div>
-                                        </div>
-                                    </aside>
                                                             </div>
                         </div>
                     </div>

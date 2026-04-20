@@ -344,6 +344,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -855,6 +877,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -1638,65 +1682,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Agent
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-agent-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-agent-html"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-agent-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent-skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Skills
-        </a>
-
-            </div>
-
-    </li>
-                        
-            </ul>
-        </div>
-    </li>
-                            <li class="nav-item">
     
     
     
@@ -2564,6 +2549,28 @@
             </div>
 
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-sync.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Sync
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2719,13 +2726,8 @@
                 </a>
             </li>
                     <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools-agent.html" class="text-decoration-none">
-                    Agent
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools-agent-skills.html" class="text-decoration-none">
-                    Skills
+                <a href="namespaces/fastforward-devtools-sync.html" class="text-decoration-none">
+                    Sync
                 </a>
             </li>
             </ol>
@@ -2738,7 +2740,7 @@
             <i class="fas fa-cube"></i>
         </div>
         <div>
-            <h2 class="display-5 mb-1">SkillsSynchronizer</h2>
+            <h2 class="display-5 mb-1">PackagedDirectorySynchronizer</h2>
             <div class="text-body-secondary">Class</div>
         </div>
     </div>
@@ -2783,41 +2785,24 @@
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">35</span>
+    <span class="badge text-bg-light border">31</span>
 
     </aside>
         </div>
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Synchronizes Fast Forward skills into consumer repositories.</p>
+        <p class="lead text-body-secondary mb-0">Synchronizes one packaged directory of symlinked entries into a consumer repository.</p>
     </div>
 
 
 
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>This class manages the creation and maintenance of symlinks from a consumer
-repository to the skills packaged within the fast-forward/dev-tools dependency.
-It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
 
 
@@ -2829,7 +2814,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
         <h3 id="toc" class="h4 mb-0">
             Table of Contents
             <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#toc"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#toc"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -2872,7 +2857,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_filesystem"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_filesystem"
         >
             $filesystem
         </a>
@@ -2888,7 +2873,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_finderFactory"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_finderFactory"
         >
             $finderFactory
         </a>
@@ -2904,7 +2889,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_logger"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_logger"
         >
             $logger
         </a>
@@ -2929,7 +2914,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method___construct"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method___construct"
         >
             __construct()
         </a>
@@ -2948,7 +2933,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_setLogger"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_setLogger"
         >
             setLogger()
         </a>
@@ -2967,18 +2952,18 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_synchronize"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_synchronize"
         >
             synchronize()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Synchronizes skills from the package to the consumer repository.
+                Synchronizes packaged directory entries into the consumer repository.
             </p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                                &nbsp;: <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>    </span>
+                                &nbsp;: <a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>    </span>
 </div>
                         </div>
                                             <div class="list-group-item">
@@ -2986,13 +2971,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_createNewLink"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_createNewLink"
         >
             createNewLink()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Creates a new symlink pointing to the packaged skill.
+                Creates a new symlink pointing to the packaged entry.
             </p>
             </div>
 
@@ -3005,7 +2990,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_isSymlink"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_isSymlink"
         >
             isSymlink()
         </a>
@@ -3024,7 +3009,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_preserveExistingNonSymlink"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_preserveExistingNonSymlink"
         >
             preserveExistingNonSymlink()
         </a>
@@ -3043,7 +3028,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processExistingSymlink"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processExistingSymlink"
         >
             processExistingSymlink()
         </a>
@@ -3062,13 +3047,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processSkillLink"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processLink"
         >
-            processSkillLink()
+            processLink()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Routes a skill link to the appropriate handling method based on target state.
+                Routes an entry link to the appropriate handling method based on target state.
             </p>
             </div>
 
@@ -3081,32 +3066,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_repairBrokenLink"
+            href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_repairBrokenLink"
         >
             repairBrokenLink()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
                 Removes a broken symlink and creates a fresh one pointing to the current source.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: void    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_syncPackageSkills"
-        >
-            syncPackageSkills()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Iterates through all packaged skills and processes each one.
             </p>
             </div>
 
@@ -3131,7 +3097,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
                         <span class="fw-semibold">
                             Properties
                             <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#properties"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#properties"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3150,7 +3116,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
             <h4 class="h5 mb-2" id="property_filesystem">
                 <span class="text-primary">$filesystem</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_filesystem"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_filesystem"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3176,13 +3142,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">45</span>
+    <span class="badge text-bg-light border">41</span>
 
     </aside>
     
@@ -3220,7 +3186,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
             <h4 class="h5 mb-2" id="property_finderFactory">
                 <span class="text-primary">$finderFactory</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_finderFactory"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_finderFactory"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3246,13 +3212,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">46</span>
+    <span class="badge text-bg-light border">42</span>
 
     </aside>
     
@@ -3290,7 +3256,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
             <h4 class="h5 mb-2" id="property_logger">
                 <span class="text-primary">$logger</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_logger"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_logger"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3315,13 +3281,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">47</span>
+    <span class="badge text-bg-light border">43</span>
 
     </aside>
     
@@ -3365,7 +3331,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
                         <span class="fw-semibold">
                             Methods
                             <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#methods"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#methods"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3384,7 +3350,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
             <h4 class="h5 mb-2" id="method___construct">
                 <span class="text-primary">__construct()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method___construct"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method___construct"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3408,13 +3374,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">44</span>
+    <span class="badge text-bg-light border">40</span>
 
     </aside>
         <div class="mb-4">
@@ -3504,7 +3470,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
                 </div>
 
                 <div>
-                    <p>Factory for locating skill directories in the package</p>
+                    <p>Factory for locating packaged directories</p>
 
                 </div>
             </div>
@@ -3559,7 +3525,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
             <h4 class="h5 mb-2" id="method_setLogger">
                 <span class="text-primary">setLogger()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_setLogger"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_setLogger"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3583,13 +3549,13 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">53</span>
+    <span class="badge text-bg-light border">49</span>
 
     </aside>
         <div class="mb-4">
@@ -3655,7 +3621,7 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
             <h4 class="h5 mb-2" id="method_synchronize">
                 <span class="text-primary">synchronize()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_synchronize"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_synchronize"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3679,17 +3645,17 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">70</span>
+    <span class="badge text-bg-light border">63</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Synchronizes skills from the package to the consumer repository.</p>
+        <p class="lead text-body-secondary mb-0">Synchronizes packaged directory entries into the consumer repository.</p>
     </div>
 
 
@@ -3703,9 +3669,11 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
     
     <span class="text-primary fw-semibold">synchronize</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$skillsDir</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                </span><span class="text-primary">$targetDir</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$packageSkillsPath</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a></span></code>
+                </span><span class="text-primary">$packagePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$directoryLabel</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a></span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3713,23 +3681,6 @@ It handles initial sync, idempotent re-runs, and cleanup of broken links.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>Ensures the consumer repository contains linked Fast Forward skills by
-creating symlinks to the packaged skills directory. Creates the target
-directory if missing, skips existing valid links, and repairs broken ones.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -3741,7 +3692,7 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$skillsDir</code>
+                            <code class="text-primary fw-semibold mb-0">$targetDir</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -3761,7 +3712,7 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
                 </div>
 
                 <div>
-                    <p>Absolute path to the consumer's .agents/skills directory</p>
+                    <p>Absolute path to the consumer directory to populate</p>
 
                 </div>
             </div>
@@ -3773,7 +3724,7 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$packageSkillsPath</code>
+                            <code class="text-primary fw-semibold mb-0">$packagePath</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -3793,7 +3744,39 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
                 </div>
 
                 <div>
-                    <p>Absolute path to the packaged skills in the dependency</p>
+                    <p>Absolute path to the packaged directory to mirror</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$directoryLabel</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>Human-readable directory label used in log messages</p>
 
                 </div>
             </div>
@@ -3819,7 +3802,7 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
             <div class="card-body p-3">
                                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         <span class="badge text-bg-light border text-dark">
-                            <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>
+                            <a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>
                         </span>
                     </div>
                 
@@ -3850,7 +3833,7 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
             <h4 class="h5 mb-2" id="method_createNewLink">
                 <span class="text-primary">createNewLink()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_createNewLink"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_createNewLink"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3874,17 +3857,17 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">164</span>
+    <span class="badge text-bg-light border">133</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Creates a new symlink pointing to the packaged skill.</p>
+        <p class="lead text-body-secondary mb-0">Creates a new symlink pointing to the packaged entry.</p>
     </div>
 
 
@@ -3898,11 +3881,11 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
     
     <span class="text-primary fw-semibold">createNewLink</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$skillName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                </span><span class="text-primary">$entryName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
                 </span><span class="text-primary">$targetLink</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
+                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
                 </span><span class="text-primary">$result</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
     </div>
 
@@ -3911,22 +3894,6 @@ directory if missing, skips existing valid links, and repairs broken ones.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>This method is called when no existing item exists at the target path.
-Creates the symlink, logs the creation, and records it in the result.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -3938,7 +3905,7 @@ Creates the symlink, logs the creation, and records it in the result.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$skillName</code>
+                            <code class="text-primary fw-semibold mb-0">$entryName</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -3958,7 +3925,7 @@ Creates the symlink, logs the creation, and records it in the result.</p>
                 </div>
 
                 <div>
-                    <p>Name identifying the skill</p>
+                    <p>Name identifying the entry</p>
 
                 </div>
             </div>
@@ -4022,7 +3989,7 @@ Creates the symlink, logs the creation, and records it in the result.</p>
                 </div>
 
                 <div>
-                    <p>Absolute path to the packaged skill directory</p>
+                    <p>Absolute path to the packaged directory</p>
 
                 </div>
             </div>
@@ -4039,7 +4006,7 @@ Creates the symlink, logs the creation, and records it in the result.</p>
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>
+                                <a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>
                             </span>
 
                                                     </div>
@@ -4077,7 +4044,7 @@ Creates the symlink, logs the creation, and records it in the result.</p>
             <h4 class="h5 mb-2" id="method_isSymlink">
                 <span class="text-primary">isSymlink()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_isSymlink"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_isSymlink"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -4101,13 +4068,13 @@ Creates the symlink, logs the creation, and records it in the result.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">250</span>
+    <span class="badge text-bg-light border">212</span>
 
     </aside>
         <div class="mb-4">
@@ -4156,6 +4123,19 @@ Creates the symlink, logs the creation, and records it in the result.</p>
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the target path</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -4181,6 +4161,23 @@ Creates the symlink, logs the creation, and records it in the result.</p>
                         </span>
                     </div>
                 
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>whether the path is a symbolic link</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
                             </div>
         </div>
     </section>
@@ -4191,7 +4188,7 @@ Creates the symlink, logs the creation, and records it in the result.</p>
             <h4 class="h5 mb-2" id="method_preserveExistingNonSymlink">
                 <span class="text-primary">preserveExistingNonSymlink()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_preserveExistingNonSymlink"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_preserveExistingNonSymlink"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -4215,13 +4212,13 @@ Creates the symlink, logs the creation, and records it in the result.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">185</span>
+    <span class="badge text-bg-light border">150</span>
 
     </aside>
         <div class="mb-4">
@@ -4239,7 +4236,7 @@ Creates the symlink, logs the creation, and records it in the result.</p>
     
     <span class="text-primary fw-semibold">preserveExistingNonSymlink</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$skillName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
+                </span><span class="text-primary">$entryName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
                 </span><span class="text-primary">$result</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
     </div>
 
@@ -4248,23 +4245,6 @@ Creates the symlink, logs the creation, and records it in the result.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>When the target exists but is a real directory (not a symlink), this method
-preserves it unchanged and logs the decision. Real directories are not
-replaced to avoid accidental data loss.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4276,7 +4256,7 @@ replaced to avoid accidental data loss.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$skillName</code>
+                            <code class="text-primary fw-semibold mb-0">$entryName</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -4296,7 +4276,7 @@ replaced to avoid accidental data loss.</p>
                 </div>
 
                 <div>
-                    <p>Name of the skill with the conflicting item</p>
+                    <p>Name of the entry with the conflicting item</p>
 
                 </div>
             </div>
@@ -4313,7 +4293,7 @@ replaced to avoid accidental data loss.</p>
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>
+                                <a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>
                             </span>
 
                                                     </div>
@@ -4351,7 +4331,7 @@ replaced to avoid accidental data loss.</p>
             <h4 class="h5 mb-2" id="method_processExistingSymlink">
                 <span class="text-primary">processExistingSymlink()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processExistingSymlink"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processExistingSymlink"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -4375,13 +4355,13 @@ replaced to avoid accidental data loss.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">202</span>
+    <span class="badge text-bg-light border">166</span>
 
     </aside>
         <div class="mb-4">
@@ -4399,11 +4379,11 @@ replaced to avoid accidental data loss.</p>
     
     <span class="text-primary fw-semibold">processExistingSymlink</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$skillName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                </span><span class="text-primary">$entryName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
                 </span><span class="text-primary">$targetLink</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
+                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
                 </span><span class="text-primary">$result</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
     </div>
 
@@ -4412,22 +4392,6 @@ replaced to avoid accidental data loss.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>Reads the symlink target and checks if it points to a valid, existing path.
-Delegates to repair if broken, otherwise preserves the valid link in place.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4439,7 +4403,7 @@ Delegates to repair if broken, otherwise preserves the valid link in place.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$skillName</code>
+                            <code class="text-primary fw-semibold mb-0">$entryName</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -4459,7 +4423,7 @@ Delegates to repair if broken, otherwise preserves the valid link in place.</p>
                 </div>
 
                 <div>
-                    <p>Name of the skill with the existing symlink</p>
+                    <p>Name of the entry with the existing symlink</p>
 
                 </div>
             </div>
@@ -4540,7 +4504,7 @@ Delegates to repair if broken, otherwise preserves the valid link in place.</p>
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>
+                                <a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>
                             </span>
 
                                                     </div>
@@ -4575,10 +4539,10 @@ Delegates to repair if broken, otherwise preserves the valid link in place.</p>
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="method_processSkillLink">
-                <span class="text-primary">processSkillLink()</span>
+            <h4 class="h5 mb-2" id="method_processLink">
+                <span class="text-primary">processLink()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processSkillLink"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processLink"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -4602,17 +4566,17 @@ Delegates to repair if broken, otherwise preserves the valid link in place.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">132</span>
+    <span class="badge text-bg-light border">104</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Routes a skill link to the appropriate handling method based on target state.</p>
+        <p class="lead text-body-secondary mb-0">Routes an entry link to the appropriate handling method based on target state.</p>
     </div>
 
 
@@ -4624,13 +4588,13 @@ Delegates to repair if broken, otherwise preserves the valid link in place.</p>
     
     
     
-    <span class="text-primary fw-semibold">processSkillLink</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+    <span class="text-primary fw-semibold">processLink</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$skillName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                </span><span class="text-primary">$entryName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
                 </span><span class="text-primary">$targetLink</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
+                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
                 </span><span class="text-primary">$result</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
     </div>
 
@@ -4639,22 +4603,6 @@ Delegates to repair if broken, otherwise preserves the valid link in place.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>Determines whether the target path needs creation, preservation, or repair
-based on filesystem checks, then delegates to the corresponding method.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4666,7 +4614,7 @@ based on filesystem checks, then delegates to the corresponding method.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$skillName</code>
+                            <code class="text-primary fw-semibold mb-0">$entryName</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -4686,7 +4634,7 @@ based on filesystem checks, then delegates to the corresponding method.</p>
                 </div>
 
                 <div>
-                    <p>Name of the skill being processed</p>
+                    <p>Name of the packaged entry being processed</p>
 
                 </div>
             </div>
@@ -4750,7 +4698,7 @@ based on filesystem checks, then delegates to the corresponding method.</p>
                 </div>
 
                 <div>
-                    <p>Absolute path to the packaged skill directory</p>
+                    <p>Absolute path to the packaged source directory</p>
 
                 </div>
             </div>
@@ -4767,7 +4715,7 @@ based on filesystem checks, then delegates to the corresponding method.</p>
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>
+                                <a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>
                             </span>
 
                                                     </div>
@@ -4805,7 +4753,7 @@ based on filesystem checks, then delegates to the corresponding method.</p>
             <h4 class="h5 mb-2" id="method_repairBrokenLink">
                 <span class="text-primary">repairBrokenLink()</span>
                 <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_repairBrokenLink"
+    href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_repairBrokenLink"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -4829,13 +4777,13 @@ based on filesystem checks, then delegates to the corresponding method.</p>
 
     <span>Defined in</span>
 
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
+    <abbr title="src/Sync/PackagedDirectorySynchronizer.php" class="text-decoration-none mb-0">
+        <a href="files/src-sync-packageddirectorysynchronizer.html"><abbr title="src/Sync/PackagedDirectorySynchronizer.php">PackagedDirectorySynchronizer.php</abbr></a>
     </abbr>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">232</span>
+    <span class="badge text-bg-light border">192</span>
 
     </aside>
         <div class="mb-4">
@@ -4853,11 +4801,11 @@ based on filesystem checks, then delegates to the corresponding method.</p>
     
     <span class="text-primary fw-semibold">repairBrokenLink</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$skillName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                </span><span class="text-primary">$entryName</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
                 </span><span class="text-primary">$targetLink</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     string&nbsp;
-                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
+                </span><span class="text-primary">$sourcePath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
                 </span><span class="text-primary">$result</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
     </div>
 
@@ -4866,23 +4814,6 @@ based on filesystem checks, then delegates to the corresponding method.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>Called when the existing symlink target either does not exist or points to
-an invalid path. Removes the broken link, logs the repair, records the removal,
-then delegates to createNewLink for the fresh symlink.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4894,7 +4825,7 @@ then delegates to createNewLink for the fresh symlink.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$skillName</code>
+                            <code class="text-primary fw-semibold mb-0">$entryName</code>
 
                             <span class="text-body-secondary">:</span>
 
@@ -4914,7 +4845,7 @@ then delegates to createNewLink for the fresh symlink.</p>
                 </div>
 
                 <div>
-                    <p>Name of the skill with the broken symlink</p>
+                    <p>Name of the entry with the broken symlink</p>
 
                 </div>
             </div>
@@ -4978,7 +4909,7 @@ then delegates to createNewLink for the fresh symlink.</p>
                 </div>
 
                 <div>
-                    <p>Absolute path to the current packaged skill</p>
+                    <p>Absolute path to the current packaged directory</p>
 
                 </div>
             </div>
@@ -4995,7 +4926,7 @@ then delegates to createNewLink for the fresh symlink.</p>
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>
+                                <a href="classes/FastForward-DevTools-Sync-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Sync\SynchronizeResult">SynchronizeResult</abbr></a>
                             </span>
 
                                                     </div>
@@ -5011,199 +4942,6 @@ then delegates to createNewLink for the fresh symlink.</p>
 
                 <div>
                     <p>Result tracker for removed and created items</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                    </div>
-    </section>
-
-    
-
-        
-    
-    
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
-            <h4 class="h5 mb-2" id="method_syncPackageSkills">
-                <span class="text-primary">syncPackageSkills()</span>
-                <a
-    href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_syncPackageSkills"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Agent/Skills/SkillsSynchronizer.php" class="text-decoration-none mb-0">
-        <a href="files/src-agent-skills-skillssynchronizer.html"><abbr title="src/Agent/Skills/SkillsSynchronizer.php">SkillsSynchronizer.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">101</span>
-
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Iterates through all packaged skills and processes each one.</p>
-    </div>
-
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">private</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">syncPackageSkills</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$skillsDir</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$packageSkillsPath</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>&nbsp;
-                </span><span class="text-primary">$result</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>Uses Finder to locate skill directories in the package, then processes
-each as a potential symlink in the consumer repository.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
-
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-sliders-h text-info"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
-        </div>
-
-        <div class="d-grid gap-3">
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$skillsDir</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                string
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>Target directory for symlinks</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$packageSkillsPath</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                string
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>Source directory containing packaged skills</p>
-
-                </div>
-            </div>
-            </section>
-
-                        </div>
-                    </div>
-                </div>
-                            <div class="card border-0 bg-body-tertiary shadow-sm">
-                    <div class="card-body p-3">
-                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$result</code>
-
-                            <span class="text-body-secondary">:</span>
-
-                            <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"><abbr title="\FastForward\DevTools\Agent\Skills\SynchronizeResult">SynchronizeResult</abbr></a>
-                            </span>
-
-                                                    </div>
-
-                        <div>
-                            
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>Result object to track outcomes</p>
 
                 </div>
             </div>
@@ -5242,7 +4980,7 @@ each as a potential symlink in the consumer repository.</p>
                 <pre
                     class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
                     style="max-height: 70vh; overflow-y: auto;"
-                    data-src="files/src/Agent/Skills/SkillsSynchronizer.php.txt"
+                    data-src="files/src/Sync/PackagedDirectorySynchronizer.php.txt"
                 ></pre>
             </div>
         </div>
@@ -5346,10 +5084,10 @@ each as a potential symlink in the consumer repository.</p>
             <div>
                 <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
                 <div class="list-group list-group-flush">
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#toc-properties">
+                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#toc-properties">
                             Properties
                         </a>
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#toc-methods">
+                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#toc-methods">
                             Methods
                         </a>
                                     </div>
@@ -5365,19 +5103,19 @@ each as a potential symlink in the consumer repository.</p>
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_filesystem"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_filesystem"
                             >
                                 <span class="text-truncate">$filesystem</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_finderFactory"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_finderFactory"
                             >
                                 <span class="text-truncate">$finderFactory</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_logger"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_logger"
                             >
                                 <span class="text-truncate">$logger</span>
                                                             </a>
@@ -5393,63 +5131,57 @@ each as a potential symlink in the consumer repository.</p>
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method___construct"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method___construct"
                             >
                                 <span class="text-truncate">__construct()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_setLogger"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_setLogger"
                             >
                                 <span class="text-truncate">setLogger()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_synchronize"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_synchronize"
                             >
                                 <span class="text-truncate">synchronize()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_createNewLink"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_createNewLink"
                             >
                                 <span class="text-truncate">createNewLink()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_isSymlink"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_isSymlink"
                             >
                                 <span class="text-truncate">isSymlink()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_preserveExistingNonSymlink"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_preserveExistingNonSymlink"
                             >
                                 <span class="text-truncate">preserveExistingNonSymlink()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processExistingSymlink"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processExistingSymlink"
                             >
                                 <span class="text-truncate">processExistingSymlink()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processSkillLink"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processLink"
                             >
-                                <span class="text-truncate">processSkillLink()</span>
+                                <span class="text-truncate">processLink()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_repairBrokenLink"
+                                href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_repairBrokenLink"
                             >
                                 <span class="text-truncate">repairBrokenLink()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_syncPackageSkills"
-                            >
-                                <span class="text-truncate">syncPackageSkills()</span>
                                                             </a>
                                             </div>
                 </div>

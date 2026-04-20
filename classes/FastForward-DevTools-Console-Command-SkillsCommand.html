@@ -344,6 +344,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -855,6 +877,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -1638,65 +1682,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Agent
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-agent-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-agent-html"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-agent-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent-skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Skills
-        </a>
-
-            </div>
-
-    </li>
-                        
-            </ul>
-        </div>
-    </li>
-                            <li class="nav-item">
     
     
     
@@ -2564,6 +2549,28 @@
             </div>
 
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-sync.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Sync
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2815,7 +2822,7 @@
 command MUST verify that the packaged skills directory exists before any
 synchronization is attempted. If the target skills directory does not exist,
 it SHALL be created before the synchronization process begins.</p>
-<p>The synchronization workflow is delegated to <a href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html"><abbr title="\FastForward\DevTools\Agent\Skills\SkillsSynchronizer">SkillsSynchronizer</abbr></a>. This
+<p>The synchronization workflow is delegated to <a href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html"><abbr title="\FastForward\DevTools\Sync\PackagedDirectorySynchronizer">PackagedDirectorySynchronizer</abbr></a>. This
 command MUST act as an orchestration layer only: it prepares the source and
 target paths, triggers synchronization, and translates the resulting status
 into Symfony Console output and process exit codes.</p>
@@ -2895,6 +2902,30 @@ into Symfony Console output and process exit codes.</p>
         
         
         
+                    <section class="card border-0 shadow-sm">
+                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-thumbtack text-warning"></i>
+                    <h4 id="toc-constants" class="h6 mb-0 fw-semibold">Constants</h4>
+                </div>
+                <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html#constant_DIRECTORY_LABEL"
+        >
+            DIRECTORY_LABEL
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+        &nbsp;= &#039;.agents/skills&#039;                            </span>
+</div>
+                        </div>
+                                    </div>
+            </section>
         
         
                     <section class="card border-0 shadow-sm">
@@ -2932,7 +2963,7 @@ into Symfony Console output and process exit codes.</p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                        &nbsp;: <a href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html"><abbr title="\FastForward\DevTools\Agent\Skills\SkillsSynchronizer">SkillsSynchronizer</abbr></a>            </span>
+                        &nbsp;: <a href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html"><abbr title="\FastForward\DevTools\Sync\PackagedDirectorySynchronizer">PackagedDirectorySynchronizer</abbr></a>            </span>
 </div>
                         </div>
                                     </div>
@@ -2992,6 +3023,104 @@ into Symfony Console output and process exit codes.</p>
 
         <div class="d-grid gap-4">
                                     
+                            <section class="card border-0 shadow-sm">
+                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                        <i class="fas fa-thumbtack text-warning"></i>
+                        <span class="fw-semibold">Constants</span>
+                    </div>
+                    <div class="card-body p-4">
+                        
+    <section>
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="fas fa-thumbtack text-warning"></i>
+            <h3 class="h4 mb-0" id="constants">
+                Constants
+                <a
+    href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html#constants"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h3>
+        </div>
+
+        <div class="d-grid gap-4">
+                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="constant_DIRECTORY_LABEL">
+                <span class="text-warning-emphasis">DIRECTORY_LABEL</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html#constant_DIRECTORY_LABEL"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Command/SkillsCommand.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-command-skillscommand.html"><abbr title="src/Console/Command/SkillsCommand.php">SkillsCommand.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">50</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">
+        private
+    </span>
+
+    
+    <span class="text-info-emphasis">
+        mixed
+    </span>
+
+    <span class="text-warning-emphasis fw-semibold">
+        DIRECTORY_LABEL
+    </span>
+
+    <span class="text-body-secondary">=</span>
+
+    <span class="text-success-emphasis">
+        &#039;.agents/skills&#039;
+    </span>
+</code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+    </article>                    </div>
+    </section>
+
+                    </div>
+                </section>
             
                             <section class="card border-0 shadow-sm">
                     <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
@@ -3050,7 +3179,7 @@ into Symfony Console output and process exit codes.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">62</span>
+    <span class="badge text-bg-light border">64</span>
 
     </aside>
     
@@ -3120,7 +3249,7 @@ into Symfony Console output and process exit codes.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">61</span>
+    <span class="badge text-bg-light border">63</span>
 
     </aside>
     
@@ -3134,7 +3263,7 @@ into Symfony Console output and process exit codes.</p>
     
     
     <span class="text-info-emphasis">
-        <a href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html"><abbr title="\FastForward\DevTools\Agent\Skills\SkillsSynchronizer">SkillsSynchronizer</abbr></a>
+        <a href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html"><abbr title="\FastForward\DevTools\Sync\PackagedDirectorySynchronizer">PackagedDirectorySynchronizer</abbr></a>
     </span>
 
     <span class="text-primary fw-semibold">
@@ -3213,7 +3342,7 @@ into Symfony Console output and process exit codes.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">60</span>
+    <span class="badge text-bg-light border">62</span>
 
     </aside>
         <div class="mb-4">
@@ -3229,7 +3358,7 @@ into Symfony Console output and process exit codes.</p>
     
     
     
-    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html"><abbr title="\FastForward\DevTools\Agent\Skills\SkillsSynchronizer">SkillsSynchronizer</abbr></a>&nbsp;
+    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html"><abbr title="\FastForward\DevTools\Sync\PackagedDirectorySynchronizer">PackagedDirectorySynchronizer</abbr></a>&nbsp;
                 </span><span class="text-primary">$synchronizer</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>&nbsp;
                 </span><span class="text-primary">$filesystem</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
@@ -3255,7 +3384,7 @@ into Symfony Console output and process exit codes.</p>
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                <a href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html"><abbr title="\FastForward\DevTools\Agent\Skills\SkillsSynchronizer">SkillsSynchronizer</abbr></a>
+                                <a href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html"><abbr title="\FastForward\DevTools\Sync\PackagedDirectorySynchronizer">PackagedDirectorySynchronizer</abbr></a>
                             </span>
 
                                                     </div>
@@ -3359,7 +3488,7 @@ directory structure</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">88</span>
+    <span class="badge text-bg-light border">90</span>
 
     </aside>
         <div class="mb-4">
@@ -3400,7 +3529,7 @@ directory structure</p>
 <li>resolve the packaged skills path and consumer target directory;</li>
 <li>fail when the packaged skills directory does not exist;</li>
 <li>create the target directory when it is missing;</li>
-<li>delegate synchronization to <a href="classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html"><abbr title="\FastForward\DevTools\Agent\Skills\SkillsSynchronizer">SkillsSynchronizer</abbr></a>;</li>
+<li>delegate synchronization to <a href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html"><abbr title="\FastForward\DevTools\Sync\PackagedDirectorySynchronizer">PackagedDirectorySynchronizer</abbr></a>;</li>
 <li>return a success or failure exit code based on the synchronization result.</li>
 </ul>
 <p>The command MUST return <abbr title="\FastForward\DevTools\Console\Command\self::FAILURE">self::FAILURE</abbr> when packaged skills are not
@@ -3652,6 +3781,9 @@ success and <abbr title="\FastForward\DevTools\Console\Command\self::FAILURE">se
             <div>
                 <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
                 <div class="list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html#toc-constants">
+                            Constants
+                        </a>
                                                                 <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html#toc-properties">
                             Properties
                         </a>
@@ -3661,6 +3793,21 @@ success and <abbr title="\FastForward\DevTools\Console\Command\self::FAILURE">se
                                     </div>
             </div>
 
+                            <div>
+                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
+                        <i class="fas fa-thumbtack text-warning"></i>
+                        <span>Constants</span>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html#constant_DIRECTORY_LABEL"
+                            >
+                                <span class="text-truncate">DIRECTORY_LABEL</span>
+                                                            </a>
+                                            </div>
+                </div>
             
                             <div>
                     <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">

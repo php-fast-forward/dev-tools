@@ -1,136 +1,6 @@
 Search.appendIndex(
     [
                 {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer",
-            "name": "SkillsSynchronizer",
-            "summary": "Synchronizes\u0020Fast\u0020Forward\u0020skills\u0020into\u0020consumer\u0020repositories.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "Initializes\u0020the\u0020synchronizer\u0020with\u0020a\u0020filesystem\u0020and\u0020finder\u0020factory.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method___construct"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003AsetLogger\u0028\u0029",
-            "name": "setLogger",
-            "summary": "\u007B\u0040inheritDoc\u007D",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_setLogger"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003Asynchronize\u0028\u0029",
-            "name": "synchronize",
-            "summary": "Synchronizes\u0020skills\u0020from\u0020the\u0020package\u0020to\u0020the\u0020consumer\u0020repository.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_synchronize"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003AsyncPackageSkills\u0028\u0029",
-            "name": "syncPackageSkills",
-            "summary": "Iterates\u0020through\u0020all\u0020packaged\u0020skills\u0020and\u0020processes\u0020each\u0020one.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_syncPackageSkills"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003AprocessSkillLink\u0028\u0029",
-            "name": "processSkillLink",
-            "summary": "Routes\u0020a\u0020skill\u0020link\u0020to\u0020the\u0020appropriate\u0020handling\u0020method\u0020based\u0020on\u0020target\u0020state.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processSkillLink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003AcreateNewLink\u0028\u0029",
-            "name": "createNewLink",
-            "summary": "Creates\u0020a\u0020new\u0020symlink\u0020pointing\u0020to\u0020the\u0020packaged\u0020skill.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_createNewLink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003ApreserveExistingNonSymlink\u0028\u0029",
-            "name": "preserveExistingNonSymlink",
-            "summary": "Handles\u0020an\u0020existing\u0020non\u002Dsymlink\u0020item\u0020at\u0020the\u0020target\u0020path.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_preserveExistingNonSymlink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003AprocessExistingSymlink\u0028\u0029",
-            "name": "processExistingSymlink",
-            "summary": "Evaluates\u0020an\u0020existing\u0020symlink\u0020and\u0020determines\u0020whether\u0020to\u0020preserve\u0020or\u0020repair\u0020it.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_processExistingSymlink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003ArepairBrokenLink\u0028\u0029",
-            "name": "repairBrokenLink",
-            "summary": "Removes\u0020a\u0020broken\u0020symlink\u0020and\u0020creates\u0020a\u0020fresh\u0020one\u0020pointing\u0020to\u0020the\u0020current\u0020source.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_repairBrokenLink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003AisSymlink\u0028\u0029",
-            "name": "isSymlink",
-            "summary": "Checks\u0020if\u0020a\u0020path\u0020is\u0020a\u0020symbolic\u0020link.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#method_isSymlink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A\u0024filesystem",
-            "name": "filesystem",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_filesystem"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A\u0024finderFactory",
-            "name": "finderFactory",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_finderFactory"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer\u003A\u003A\u0024logger",
-            "name": "logger",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SkillsSynchronizer.html#property_logger"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult",
-            "name": "SynchronizeResult",
-            "summary": "Result\u0020object\u0020for\u0020skill\u0020synchronization\u0020operations.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003AaddCreatedLink\u0028\u0029",
-            "name": "addCreatedLink",
-            "summary": "Records\u0020a\u0020skill\u0020for\u0020which\u0020a\u0020new\u0020symlink\u0020was\u0020created.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#method_addCreatedLink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003AaddPreservedLink\u0028\u0029",
-            "name": "addPreservedLink",
-            "summary": "Records\u0020a\u0020skill\u0020whose\u0020existing\u0020item\u0020was\u0020preserved\u0020unchanged.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#method_addPreservedLink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003AaddRemovedBrokenLink\u0028\u0029",
-            "name": "addRemovedBrokenLink",
-            "summary": "Records\u0020a\u0020skill\u0020whose\u0020broken\u0020symlink\u0020was\u0020removed\u0020during\u0020sync.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#method_addRemovedBrokenLink"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003AmarkFailed\u0028\u0029",
-            "name": "markFailed",
-            "summary": "Marks\u0020the\u0020synchronization\u0020as\u0020failed\u0020due\u0020to\u0020an\u0020error\u0020condition.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#method_markFailed"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003AgetCreatedLinks\u0028\u0029",
-            "name": "getCreatedLinks",
-            "summary": "Returns\u0020the\u0020list\u0020of\u0020skills\u0020for\u0020which\u0020new\u0020symlinks\u0020were\u0020created.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#method_getCreatedLinks"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003AgetPreservedLinks\u0028\u0029",
-            "name": "getPreservedLinks",
-            "summary": "Returns\u0020the\u0020list\u0020of\u0020skills\u0020whose\u0020existing\u0020items\u0020were\u0020preserved.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#method_getPreservedLinks"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003AgetRemovedBrokenLinks\u0028\u0029",
-            "name": "getRemovedBrokenLinks",
-            "summary": "Returns\u0020the\u0020list\u0020of\u0020skills\u0020whose\u0020broken\u0020symlinks\u0020were\u0020removed.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#method_getRemovedBrokenLinks"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003A\u0024failed",
-            "name": "failed",
-            "summary": "Indicates\u0020whether\u0020the\u0020synchronization\u0020encountered\u0020a\u0020failure.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#property_failed"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003A\u0024createdLinks",
-            "name": "createdLinks",
-            "summary": "List\u0020of\u0020skill\u0020names\u0020for\u0020which\u0020new\u0020symlinks\u0020were\u0020created.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#property_createdLinks"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003A\u0024preservedLinks",
-            "name": "preservedLinks",
-            "summary": "List\u0020of\u0020skill\u0020names\u0020for\u0020which\u0020existing\u0020items\u0020were\u0020left\u0020unchanged.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#property_preservedLinks"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills\\SynchronizeResult\u003A\u003A\u0024removedBrokenLinks",
-            "name": "removedBrokenLinks",
-            "summary": "List\u0020of\u0020skill\u0020names\u0020whose\u0020broken\u0020symlinks\u0020were\u0020removed\u0020during\u0020sync.",
-            "url": "classes/FastForward-DevTools-Agent-Skills-SynchronizeResult.html#property_removedBrokenLinks"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryChecker",
             "name": "UnreleasedEntryChecker",
             "summary": "Compares\u0020unreleased\u0020changelog\u0020entries\u0020against\u0020the\u0020current\u0020branch\u0020or\u0020a\u0020base\u0020ref.",
@@ -1176,6 +1046,36 @@ Search.appendIndex(
             "summary": "Creates\u0020the\u0020default\u0020Rector\u0020configuration.",
             "url": "classes/FastForward-DevTools-Config-RectorConfig.html#method_configure"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand",
+            "name": "AgentsCommand",
+            "summary": "Synchronizes\u0020packaged\u0020Fast\u0020Forward\u0020project\u0020agents\u0020into\u0020the\u0020consumer\u0020repository.",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003ADIRECTORY_LABEL",
+            "name": "DIRECTORY_LABEL",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#constant_DIRECTORY_LABEL"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003A\u0024synchronizer",
+            "name": "synchronizer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#property_synchronizer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#property_filesystem"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
             "name": "ChangelogCheckCommand",
             "summary": "Verifies\u0020that\u0020the\u0020changelog\u0020contains\u0020pending\u0020unreleased\u0020notes.",
@@ -2100,6 +2000,11 @@ Search.appendIndex(
             "name": "execute",
             "summary": "Executes\u0020the\u0020skills\u0020synchronization\u0020workflow.",
             "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003ADIRECTORY_LABEL",
+            "name": "DIRECTORY_LABEL",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#constant_DIRECTORY_LABEL"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003A\u0024synchronizer",
             "name": "synchronizer",
@@ -3816,30 +3721,135 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-ServiceProvider-DevToolsServiceProvider.html#method_getExtensions"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
+            "name": "PackagedDirectorySynchronizer",
+            "summary": "Synchronizes\u0020one\u0020packaged\u0020directory\u0020of\u0020symlinked\u0020entries\u0020into\u0020a\u0020consumer\u0020repository.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Initializes\u0020the\u0020synchronizer\u0020with\u0020a\u0020filesystem\u0020and\u0020finder\u0020factory.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AsetLogger\u0028\u0029",
+            "name": "setLogger",
+            "summary": "\u007B\u0040inheritDoc\u007D",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_setLogger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003Asynchronize\u0028\u0029",
+            "name": "synchronize",
+            "summary": "Synchronizes\u0020packaged\u0020directory\u0020entries\u0020into\u0020the\u0020consumer\u0020repository.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_synchronize"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AprocessLink\u0028\u0029",
+            "name": "processLink",
+            "summary": "Routes\u0020an\u0020entry\u0020link\u0020to\u0020the\u0020appropriate\u0020handling\u0020method\u0020based\u0020on\u0020target\u0020state.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processLink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AcreateNewLink\u0028\u0029",
+            "name": "createNewLink",
+            "summary": "Creates\u0020a\u0020new\u0020symlink\u0020pointing\u0020to\u0020the\u0020packaged\u0020entry.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_createNewLink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003ApreserveExistingNonSymlink\u0028\u0029",
+            "name": "preserveExistingNonSymlink",
+            "summary": "Handles\u0020an\u0020existing\u0020non\u002Dsymlink\u0020item\u0020at\u0020the\u0020target\u0020path.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_preserveExistingNonSymlink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AprocessExistingSymlink\u0028\u0029",
+            "name": "processExistingSymlink",
+            "summary": "Evaluates\u0020an\u0020existing\u0020symlink\u0020and\u0020determines\u0020whether\u0020to\u0020preserve\u0020or\u0020repair\u0020it.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_processExistingSymlink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003ArepairBrokenLink\u0028\u0029",
+            "name": "repairBrokenLink",
+            "summary": "Removes\u0020a\u0020broken\u0020symlink\u0020and\u0020creates\u0020a\u0020fresh\u0020one\u0020pointing\u0020to\u0020the\u0020current\u0020source.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_repairBrokenLink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AisSymlink\u0028\u0029",
+            "name": "isSymlink",
+            "summary": "Checks\u0020if\u0020a\u0020path\u0020is\u0020a\u0020symbolic\u0020link.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_isSymlink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003A\u0024finderFactory",
+            "name": "finderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_finderFactory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
+            "name": "SynchronizeResult",
+            "summary": "Result\u0020object\u0020for\u0020packaged\u0020directory\u0020synchronization\u0020operations.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003AaddCreatedLink\u0028\u0029",
+            "name": "addCreatedLink",
+            "summary": "Records\u0020the\u0020name\u0020of\u0020a\u0020link\u0020that\u0020was\u0020newly\u0020created.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#method_addCreatedLink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003AaddPreservedLink\u0028\u0029",
+            "name": "addPreservedLink",
+            "summary": "Records\u0020the\u0020name\u0020of\u0020an\u0020entry\u0020that\u0020was\u0020preserved\u0020as\u002Dis.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#method_addPreservedLink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003AaddRemovedBrokenLink\u0028\u0029",
+            "name": "addRemovedBrokenLink",
+            "summary": "Records\u0020the\u0020name\u0020of\u0020a\u0020broken\u0020link\u0020that\u0020was\u0020removed\u0020before\u0020recreation.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#method_addRemovedBrokenLink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003AmarkFailed\u0028\u0029",
+            "name": "markFailed",
+            "summary": "Marks\u0020the\u0020synchronization\u0020as\u0020failed.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#method_markFailed"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003AgetCreatedLinks\u0028\u0029",
+            "name": "getCreatedLinks",
+            "summary": "Returns\u0020the\u0020names\u0020of\u0020links\u0020created\u0020during\u0020synchronization.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#method_getCreatedLinks"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003AgetPreservedLinks\u0028\u0029",
+            "name": "getPreservedLinks",
+            "summary": "Returns\u0020the\u0020names\u0020of\u0020links\u0020or\u0020directories\u0020preserved\u0020during\u0020synchronization.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#method_getPreservedLinks"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003AgetRemovedBrokenLinks\u0028\u0029",
+            "name": "getRemovedBrokenLinks",
+            "summary": "Returns\u0020the\u0020names\u0020of\u0020broken\u0020links\u0020removed\u0020during\u0020synchronization\u0020repair.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#method_getRemovedBrokenLinks"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003A\u0024failed",
+            "name": "failed",
+            "summary": "Indicates\u0020whether\u0020the\u0020synchronization\u0020process\u0020encountered\u0020a\u0020fatal\u0020failure.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#property_failed"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003A\u0024createdLinks",
+            "name": "createdLinks",
+            "summary": "Stores\u0020the\u0020entry\u0020names\u0020for\u0020symlinks\u0020created\u0020during\u0020synchronization.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#property_createdLinks"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003A\u0024preservedLinks",
+            "name": "preservedLinks",
+            "summary": "Stores\u0020the\u0020entry\u0020names\u0020that\u0020were\u0020already\u0020valid\u0020and\u0020therefore\u0020preserved.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#property_preservedLinks"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\SynchronizeResult\u003A\u003A\u0024removedBrokenLinks",
+            "name": "removedBrokenLinks",
+            "summary": "Stores\u0020the\u0020entry\u0020names\u0020for\u0020broken\u0020links\u0020removed\u0020during\u0020repair.",
+            "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#property_removedBrokenLinks"
+        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
             "url": "namespaces/default.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent\\Skills",
-            "name": "Skills",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools-agent-skills.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Agent",
-            "name": "Agent",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools-agent.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools",
-            "name": "DevTools",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools.html"
-        },                {
-            "fqsen": "\\FastForward",
-            "name": "FastForward",
-            "summary": "",
-            "url": "namespaces/fastforward.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Changelog\\Checker",
             "name": "Checker",
@@ -3850,6 +3860,16 @@ Search.appendIndex(
             "name": "Changelog",
             "summary": "",
             "url": "namespaces/fastforward-devtools-changelog.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools",
+            "name": "DevTools",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools.html"
+        },                {
+            "fqsen": "\\FastForward",
+            "name": "FastForward",
+            "summary": "",
+            "url": "namespaces/fastforward.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Changelog\\Document",
             "name": "Document",
@@ -4010,5 +4030,10 @@ Search.appendIndex(
             "name": "ServiceProvider",
             "summary": "",
             "url": "namespaces/fastforward-devtools-serviceprovider.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync",
+            "name": "Sync",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-sync.html"
         }            ]
 );

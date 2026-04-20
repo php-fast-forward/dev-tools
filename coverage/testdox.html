@@ -73,6 +73,13 @@
             <li class="success">Refactor will add docblock with intersections and unions</li>
             <li class="success">Refactor will add docblock with fully qualified intersections</li>
         </ul>
+        <h2>Agents Command (FastForward\DevTools\Tests\Console\Command\AgentsCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will fail when packaged agents directory does not exist</li>
+            <li class="success">Execute will create agents directory when it does not exist</li>
+            <li class="success">Execute will return failure when synchronizer fails</li>
+        </ul>
         <h2>Author (FastForward\DevTools\Tests\Composer\Json\Schema\Author)</h2>
         <ul>
             <li class="success">Accessors will return values provided to constructor</li>
@@ -457,6 +464,11 @@
             <li class="success">Execute will skip unset optional reports</li>
             <li class="success">Execute will include junit report when requested</li>
         </ul>
+        <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>
+        <ul>
+            <li class="success">Synchronize with missing package path will return failed result</li>
+            <li class="success">Synchronize with missing target dir will create it and create links</li>
+        </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>
@@ -554,14 +566,6 @@
             <li class="success">Execute will create skills directory when it does not exist</li>
             <li class="success">Execute will return failure when synchronizer fails</li>
         </ul>
-        <h2>Skills Synchronizer (FastForward\DevTools\Tests\Agent\Skills\SkillsSynchronizer)</h2>
-        <ul>
-            <li class="success">Synchronize with missing package path will return failed result</li>
-            <li class="success">Synchronize with missing skills dir will create it and create links</li>
-            <li class="success">Synchronize will preserve existing valid symlink</li>
-            <li class="success">Synchronize will handle existing broken symlink</li>
-            <li class="success">Synchronize will preserve non symlink directory for same skill</li>
-        </ul>
         <h2>Standards Command (FastForward\DevTools\Tests\Console\Command\StandardsCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>
@@ -579,14 +583,12 @@
             <li class="success">Execute will queue dedicated synchronization commands</li>
             <li class="success">Execute will disable detached mode when checking drift</li>
         </ul>
-        <h2>Synchronize Result (FastForward\DevTools\Tests\Agent\Skills\SynchronizeResult)</h2>
+        <h2>Synchronize Result (FastForward\DevTools\Tests\Sync\SynchronizeResult)</h2>
         <ul>
-            <li class="success">New result will have empty lists and not failed</li>
-            <li class="success">Add created link will add to created list</li>
-            <li class="success">Add preserved link will add to preserved list</li>
-            <li class="success">Add removed broken link will add to removed list</li>
-            <li class="success">Mark failed will set failed flag</li>
-            <li class="success">Failed will return false after multiple operations</li>
+            <li class="success">Add created link will record the link name</li>
+            <li class="success">Add preserved link will record the link name</li>
+            <li class="success">Add removed broken link will record the link name</li>
+            <li class="success">Mark failed will set the failed flag</li>
         </ul>
         <h2>System Clock (FastForward\DevTools\Tests\Psr\Clock\SystemClock)</h2>
         <ul>

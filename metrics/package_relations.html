@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-20 06:01:07        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-20 06:47:26        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -292,6 +292,7 @@
             "FastForward\\DevTools\\Git",
             "Symfony\\Component\\Filesystem",
             "Symfony\\Component\\Config",
+            "FastForward\\DevTools\\Sync",
             "Twig",
             "Psr\\Clock",
             "Symfony\\Component\\Process",
@@ -299,7 +300,6 @@
             "FastForward\\DevTools\\License",
             "FastForward\\DevTools\\GitIgnore",
             "FastForward\\DevTools\\Changelog\\Entry",
-            "FastForward\\DevTools\\Agent\\Skills",
             "Composer",
             "Composer\\Json",
             "FastForward\\DevTools\\Funding",
@@ -422,6 +422,15 @@
         "relations": []
     },
     {
+        "name": "FastForward\\DevTools\\Sync",
+        "size": 3000,
+        "relations": [
+            "Psr\\Log",
+            "FastForward\\DevTools\\Filesystem",
+            "Symfony\\Component\\Filesystem"
+        ]
+    },
+    {
         "name": "Twig",
         "size": 3000,
         "relations": []
@@ -463,15 +472,6 @@
         "name": "FastForward\\DevTools\\Changelog\\Entry",
         "size": 3000,
         "relations": []
-    },
-    {
-        "name": "FastForward\\DevTools\\Agent\\Skills",
-        "size": 3000,
-        "relations": [
-            "Psr\\Log",
-            "FastForward\\DevTools\\Filesystem",
-            "Symfony\\Component\\Filesystem"
-        ]
     },
     {
         "name": "Composer",
@@ -677,12 +677,12 @@
         "relations": []
     },
     {
-        "name": "Psr\\Log",
+        "name": "Symfony\\Component\\Yaml",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "Symfony\\Component\\Yaml",
+        "name": "Psr\\Log",
         "size": 3000,
         "relations": []
     },

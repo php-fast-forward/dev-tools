@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -1639,65 +1683,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Agent
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-agent-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-agent-html"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-agent-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent-skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Skills
-        </a>
-
-            </div>
-
-    </li>
-                        
-            </ul>
-        </div>
-    </li>
-                            <li class="nav-item">
     
     
     
@@ -2565,6 +2550,28 @@
             </div>
 
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-sync.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Sync
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2748,10 +2755,13 @@
     <li value="10"><code>skills</code>
  - synchronizes packaged skills</li>
 
-    <li value="11"><code>license</code>
+    <li value="11"><code>agents</code>
+ - synchronizes packaged project agents</li>
+
+    <li value="12"><code>license</code>
  - generates LICENSE file</li>
 
-    <li value="12"><code>git-hooks</code>
+    <li value="13"><code>git-hooks</code>
  - installs Git hooks</li>
 
 </ol>
@@ -2895,10 +2905,16 @@ command is running in an interactive terminal.</li>
 
     <li class="dash">Calls other commands in sequence.</li>
 
+    <li class="dash">Runs <code>skills</code>
+ and <code>agents</code>
+ in normal mode so consumer repositories
+receive both packaged procedural skills and packaged role prompts.</li>
+
     <li class="dash"><code>wiki</code>
- and <code>skills</code>
- are skipped in preview/check modes until they expose a
-non-destructive verification path.</li>
+, <code>skills</code>
+, and <code>agents</code>
+ are skipped in preview/check modes
+until they expose a non-destructive verification path.</li>
 
 </ul>
 

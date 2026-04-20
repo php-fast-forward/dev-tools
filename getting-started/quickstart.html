@@ -345,6 +345,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./usage/syncing-packaged-agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Syncing Packaged Agents
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./usage/syncing-packaged-skills.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -856,6 +878,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="./commands/agents.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            agents
         </a>
 
             </div>
@@ -1639,65 +1683,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Agent
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-agent-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-agent-html"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-agent-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-agent-skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Skills
-        </a>
-
-            </div>
-
-    </li>
-                        
-            </ul>
-        </div>
-    </li>
-                            <li class="nav-item">
     
     
     
@@ -2565,6 +2550,28 @@
             </div>
 
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-sync.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Sync
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2712,7 +2719,7 @@
 
     <li value="2">Create a minimal guide directory.</li>
 
-    <li value="3">Synchronize shared automation and packaged skills.</li>
+    <li value="3">Synchronize shared automation, packaged skills, and packaged agents.</li>
 
     <li value="4">Run the focused commands once.</li>
 
@@ -2752,9 +2759,10 @@ Welcome to the project documentation.</code></pre>
     <p>Once the package is installed and the guide directory exists, run:</p>
 
             <pre><code class="language-bash">composer dev-tools:sync
-composer dev-tools skills
-composer dev-tools tests
-composer dev-tools docs
+composer skills
+composer agents
+composer tests
+composer docs
 composer dev-tools</code></pre>
 
     </section>
@@ -2767,19 +2775,26 @@ composer dev-tools</code></pre>
 <ul>
     <li class="dash"><code>composer dev-tools:sync</code>
  proves the consumer repository can receive the
-shared scripts, automation assets, and packaged skills during onboarding.</li>
+shared scripts, automation assets, packaged skills, and packaged agents
+during onboarding.</li>
 
-    <li class="dash"><code>composer dev-tools skills</code>
+    <li class="dash"><code>composer skills</code>
  proves the packaged skill set can be linked
 safely into <code>.agents/skills</code>
  without copying files into the consumer
 repository.</li>
 
-    <li class="dash"><code>composer dev-tools tests</code>
+    <li class="dash"><code>composer agents</code>
+ proves the packaged project-agent prompts can be linked
+safely into <code>.agents/agents</code>
+ without copying files into the consumer
+repository.</li>
+
+    <li class="dash"><code>composer tests</code>
  proves the packaged or local PHPUnit
 configuration can execute the current test suite.</li>
 
-    <li class="dash"><code>composer dev-tools docs</code>
+    <li class="dash"><code>composer docs</code>
  proves the PSR-4 source paths and the guide
 directory are usable by phpDocumentor.</li>
 
