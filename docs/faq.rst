@@ -142,6 +142,30 @@ Use the ``RectorConfig`` class to extend instead of replace:
 
 This approach automatically receives upstream updates while allowing additive customization.
 
+How do I extend the dependency analyser configuration without copying the whole file?
+-------------------------------------------------------------------------------------
+
+Use the ``ComposerDependencyAnalyserConfig`` class to extend instead of replace:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
+   use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
+   use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
+
+   return ComposerDependencyAnalyserConfig::configure(
+       static function (Configuration $configuration): void {
+           $configuration->ignoreErrorsOnPackage(
+               'vendor/package',
+               [ErrorType::UNUSED_DEPENDENCY],
+           );
+       }
+   );
+
+This keeps the packaged baseline while allowing project-specific analyser ignores.
+
 Can I generate coverage without running the full ``standards`` pipeline?
 ------------------------------------------------------------------------
 

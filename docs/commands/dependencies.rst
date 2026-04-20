@@ -114,6 +114,9 @@ Behavior
 - ``composer-dependency-analyser`` is configured with:
   - ``--config composer-dependency-analyser.php`` (resolved through the package
     file locator so consumer repositories can override it locally)
+  - the packaged ``composer-dependency-analyser.php`` delegates to
+    ``FastForward\DevTools\Config\ComposerDependencyAnalyserConfig`` so
+    consumer repositories can extend the baseline instead of copying it whole
   - ``--dump-usages <package>`` and ``--show-all-usages`` when ``--dump-usage``
     is passed to the DevTools command
 - ``jack breakpoint`` maps ``--max-outdated`` to Jack's ``--limit`` option.

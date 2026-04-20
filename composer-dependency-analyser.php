@@ -17,29 +17,6 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
-use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
+use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
 
-$configuration = new Configuration();
-
-$unusedPackages = [
-    'ergebnis/composer-normalize',
-    'fakerphp/faker',
-    'fast-forward/phpdoc-bootstrap-template',
-    'php-parallel-lint/php-parallel-lint',
-    'phpdocumentor/shim',
-    'phpmetrics/phpmetrics',
-    'phpro/grumphp-shim',
-    'pyrech/composer-changelogs',
-    'rector/jack',
-    'saggre/phpdocumentor-markdown',
-    'shipmonk/composer-dependency-analyser',
-    'symfony/var-dumper',
-];
-
-foreach ($unusedPackages as $unusedPackage) {
-    $configuration->ignoreErrorsOnPackage($unusedPackage, [ErrorType::UNUSED_DEPENDENCY]);
-}
-
-return $configuration
-    ->ignoreErrorsOnExtension('ext-pcntl', [ErrorType::SHADOW_DEPENDENCY]);
+return ComposerDependencyAnalyserConfig::configure();
