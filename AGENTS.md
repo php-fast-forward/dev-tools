@@ -166,6 +166,7 @@ procedural source of truth.
 
 - Use `issue-editor` for issue drafting, refinement, comments, updates, and closure workflows.
 - Use `issue-implementer` for issue-to-branch-to-PR execution.
+- Delegate to `agents-maintainer` when repository `AGENTS.md` guidance needs to be created, refreshed, or realigned with current workflows.
 - Delegate to `test-guardian` whenever behavior changes, regressions, or missing coverage are involved.
 - Delegate to `php-style-curator` for PHPDoc cleanup, file-header normalization, and repository style conformance.
 - Delegate to `readme-maintainer` when public commands, installation, usage, links, or badges change.
