@@ -117,6 +117,22 @@ final class ComposerJsonTest extends TestCase
      * @return void
      */
     #[Test]
+    public function metadataAccessorsWillReturnDefaultsWhenOptionalFieldsAreMissing(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'name' => 'fast-forward/dev-tools',
+        ]);
+
+        self::assertSame([], $composerJson->getKeywords());
+        self::assertSame('', $composerJson->getHomepage());
+        self::assertSame('', $composerJson->getReadme());
+        self::assertNull($composerJson->getTime());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function getLicenseWillReturnResolvedValue(): void
     {
         $composerJson = $this->createComposerJson([
@@ -201,6 +217,20 @@ final class ComposerJsonTest extends TestCase
      * @return void
      */
     #[Test]
+    public function getSupportWillReturnEmptySupportObjectWhenSectionIsInvalid(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'support' => 'invalid',
+        ]);
+
+        self::assertSame('', $composerJson->getSupport()->getIssues());
+        self::assertSame('', $composerJson->getSupport()->getSource());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function getFundingWillReturnFundingEntries(): void
     {
         $composerJson = $this->createComposerJson([
@@ -217,6 +247,38 @@ final class ComposerJsonTest extends TestCase
         self::assertCount(1, $funding);
         self::assertInstanceOf(Funding::class, $funding[0]);
         self::assertSame('github', $funding[0]->getType());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getFundingWillIgnoreInvalidEntriesAndInvalidSectionTypes(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'funding' => [
+                'invalid',
+                [
+                    'type' => 'custom',
+                    'url' => 'https://example.com/support',
+                ],
+                [
+                    'type' => 'github',
+                ],
+            ],
+        ]);
+
+        $funding = $composerJson->getFunding();
+        self::assertCount(2, $funding);
+        self::assertSame('custom', $funding[0]->getType());
+        self::assertSame('https://example.com/support', $funding[0]->getUrl());
+        self::assertSame('github', $funding[1]->getType());
+        self::assertSame('', $funding[1]->getUrl());
+
+        $composerJson = $this->createComposerJson([
+            'funding' => 'invalid',
+        ]);
+        self::assertSame([], $composerJson->getFunding());
     }
 
     /**
@@ -250,6 +312,25 @@ final class ComposerJsonTest extends TestCase
      * @return void
      */
     #[Test]
+    public function getAutoloadWillReturnEmptyArrayWhenSectionOrRequestedMappingIsInvalid(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'autoload' => 'invalid',
+        ]);
+        self::assertSame([], $composerJson->getAutoload());
+
+        $composerJson = $this->createComposerJson([
+            'autoload' => [
+                'files' => 'src/functions.php',
+            ],
+        ]);
+        self::assertSame([], $composerJson->getAutoload('files'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function getAutoloadDevWillReturnConfiguredMappings(): void
     {
         $composerJson = $this->createComposerJson([
@@ -268,6 +349,25 @@ final class ComposerJsonTest extends TestCase
         self::assertSame([
             'Foo\\Tests\\' => 'tests/',
         ], $composerJson->getAutoloadDev('psr-4'));
+        self::assertSame([], $composerJson->getAutoloadDev('files'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getAutoloadDevWillReturnEmptyArrayWhenSectionOrRequestedMappingIsInvalid(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'autoload-dev' => 'invalid',
+        ]);
+        self::assertSame([], $composerJson->getAutoloadDev());
+
+        $composerJson = $this->createComposerJson([
+            'autoload-dev' => [
+                'files' => 'tests/bootstrap.php',
+            ],
+        ]);
         self::assertSame([], $composerJson->getAutoloadDev('files'));
     }
 
@@ -339,6 +439,19 @@ final class ComposerJsonTest extends TestCase
      * @return void
      */
     #[Test]
+    public function getScriptsWillReturnEmptyArrayWhenSectionIsInvalid(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'scripts' => 'phpunit',
+        ]);
+
+        self::assertSame([], $composerJson->getScripts());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function getExtraWillReturnExtraSectionOrSpecificKey(): void
     {
         $composerJson = $this->createComposerJson([
@@ -364,6 +477,25 @@ final class ComposerJsonTest extends TestCase
      * @return void
      */
     #[Test]
+    public function getExtraWillReturnEmptyArrayWhenSectionOrRequestedValueIsInvalid(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'extra' => 'invalid',
+        ]);
+        self::assertSame([], $composerJson->getExtra());
+
+        $composerJson = $this->createComposerJson([
+            'extra' => [
+                'foo' => 'bar',
+            ],
+        ]);
+        self::assertSame([], $composerJson->getExtra('foo'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function getBinWillReturnConfiguredBinaries(): void
     {
         $composerJson = $this->createComposerJson([
@@ -375,6 +507,23 @@ final class ComposerJsonTest extends TestCase
             'bin' => ['bin/tool1', 'bin/tool2'],
         ]);
         self::assertSame(['bin/tool1', 'bin/tool2'], $composerJson->getBin());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getBinWillFilterInvalidEntriesAndReturnEmptyArrayForInvalidSections(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'bin' => ['bin/tool1', 42, 'bin/tool2'],
+        ]);
+        self::assertSame(['bin/tool1', 'bin/tool2'], $composerJson->getBin());
+
+        $composerJson = $this->createComposerJson([
+            'bin' => 42,
+        ]);
+        self::assertSame([], $composerJson->getBin());
     }
 
     /**
@@ -398,6 +547,28 @@ final class ComposerJsonTest extends TestCase
      * @return void
      */
     #[Test]
+    public function getSuggestWillIgnoreInvalidEntriesAndInvalidSections(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'suggest' => [
+                'foo/bar' => 'For extra features',
+                'foo/baz' => ['invalid'],
+            ],
+        ]);
+        self::assertSame([
+            'foo/bar' => 'For extra features',
+        ], $composerJson->getSuggest());
+
+        $composerJson = $this->createComposerJson([
+            'suggest' => 'invalid',
+        ]);
+        self::assertSame([], $composerJson->getSuggest());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function getCommentsWillReturnCommentData(): void
     {
         $composerJson = $this->createComposerJson([
@@ -409,6 +580,19 @@ final class ComposerJsonTest extends TestCase
             '_comment' => ['Comment 1', 'Comment 2'],
         ]);
         self::assertSame(['Comment 1', 'Comment 2'], $composerJson->getComments());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommentsWillReturnEmptyArrayWhenSectionIsInvalid(): void
+    {
+        $composerJson = $this->createComposerJson([
+            '_comment' => 42,
+        ]);
+
+        self::assertSame([], $composerJson->getComments());
     }
 
     /**
