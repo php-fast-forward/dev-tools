@@ -129,7 +129,7 @@ final readonly class CodeOwnersGenerator
     public function generate(?array $owners = null): string
     {
         $owners ??= $this->inferOwners();
-        $template = $this->filesystem->readFile($this->fileLocator->locate('resources/CODEOWNERS'));
+        $template = $this->filesystem->readFile($this->fileLocator->locate('resources/CODEOWNERS.dist'));
         $suggestionBlock = [] === $owners
             ? '# No GitHub owners could be inferred from composer.json metadata.'
             : '';

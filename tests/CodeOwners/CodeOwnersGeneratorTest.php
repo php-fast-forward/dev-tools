@@ -67,9 +67,9 @@ final class CodeOwnersGeneratorTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
 
-        $this->fileLocator->locate('resources/CODEOWNERS')
-            ->willReturn('/package/resources/CODEOWNERS');
-        $this->filesystem->readFile('/package/resources/CODEOWNERS')
+        $this->fileLocator->locate('resources/CODEOWNERS.dist')
+            ->willReturn('/package/resources/CODEOWNERS.dist');
+        $this->filesystem->readFile('/package/resources/CODEOWNERS.dist')
             ->willReturn(<<<'TEXT'
                 # Header
                 {{ suggestions }}
