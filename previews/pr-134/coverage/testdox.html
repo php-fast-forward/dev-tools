@@ -151,6 +151,9 @@
         <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
         <ul>
             <li class="success">Parse will extract release sections and entries</li>
+            <li class="success">Parse will return default document for empty contents</li>
+            <li class="success">Parse will return default document when no release headings exist</li>
+            <li class="success">Parse will ignore unsupported lines and deduplicate entries within a section</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
@@ -206,7 +209,10 @@
             <li class="success">Execute with min coverage will generate coverage php and validate it</li>
             <li class="success">Execute with coverage and min coverage will validate generated coverage report</li>
             <li class="success">Execute with coverage below minimum will return failure</li>
+            <li class="success">Execute with filter will forward the filter to php unit</li>
             <li class="success">Execute with invalid min coverage will return failure</li>
+            <li class="success">Execute with out of range min coverage will return failure</li>
+            <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
             <li class="success">Execute will return failure if process queue fails</li>
         </ul>
         <h2>Composer Funding Codec (FastForward\DevTools\Tests\Funding\ComposerFundingCodec)</h2>
@@ -275,6 +281,8 @@
         <h2>Dev Tools Command Loader (FastForward\DevTools\Tests\Console\CommandLoader\DevToolsCommandLoader)</h2>
         <ul>
             <li class="success">Constructor will register only instantiable commands</li>
+            <li class="success">Constructor will skip classes without as command attribute</li>
+            <li class="success">Constructor will skip non instantiable and non command classes</li>
         </ul>
         <h2>Dev Tools Command Provider (FastForward\DevTools\Tests\Composer\Capability\DevToolsCommandProvider)</h2>
         <ul>
@@ -333,6 +341,10 @@
             <li class="success">Filter will remove configured paths even with slash variants</li>
             <li class="success">Filter will preserve original candidate order</li>
         </ul>
+        <h2>File Diff (FastForward\DevTools\Tests\Resource\FileDiff)</h2>
+        <ul>
+            <li class="success">Accessors and status helpers will reflect the diff state</li>
+        </ul>
         <h2>File Differ (FastForward\DevTools\Tests\Resource\FileDiffer)</h2>
         <ul>
             <li class="success">Render will return changed result with unified diff</li>
@@ -385,6 +397,10 @@
             <li class="success">Parse will normalize supported and unsupported yaml entries</li>
             <li class="success">Dump will render scalar and list funding keys</li>
             <li class="success">Dump will render single custom url as list</li>
+            <li class="success">Parse will return empty profile for missing or invalid yaml payloads</li>
+            <li class="success">Parse will normalize lists and discard blank entries</li>
+            <li class="success">Parse will normalize scalar github and custom values</li>
+            <li class="success">Dump will collapse single github sponsor to scalar</li>
         </ul>
         <h2>Generator (FastForward\DevTools\Tests\License\Generator)</h2>
         <ul>
@@ -448,6 +464,9 @@
             <li class="success">Render will omit dangling release date separators when date is missing</li>
             <li class="success">Render will not insert extra blank lines between rendered sections</li>
             <li class="success">Render will keep only one blank line between an empty unreleased section and the next release</li>
+            <li class="success">Render will omit references when repository url is missing or blank</li>
+            <li class="success">Render will normalize ssh repository urls and trim trailing git suffix</li>
+            <li class="success">Render will omit references when only unreleased section exists</li>
         </ul>
         <h2>Merger (FastForward\DevTools\Tests\GitAttributes\Merger)</h2>
         <ul>
