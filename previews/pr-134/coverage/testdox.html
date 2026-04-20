@@ -197,6 +197,7 @@
             <li class="success">Generate will render group owner when author cannot be inferred</li>
             <li class="success">Normalize owners will preserve handles and emails</li>
             <li class="success">Normalize owners will drop empty tokens and deduplicate repeated owners</li>
+            <li class="success">Extract git hub helpers will handle supported and unsupported urls</li>
         </ul>
         <h2>Code Style Command (FastForward\DevTools\Tests\Console\Command\CodeStyleCommand)</h2>
         <ul>
@@ -363,6 +364,9 @@
             <li class="success">Render will return unreadable result when contents cannot be read</li>
             <li class="success">Render contents will use the injected differ without custom headers</li>
             <li class="success">Colorize will wrap unified diff lines with console colors</li>
+            <li class="success">Format for console will return null when diff is missing</li>
+            <li class="success">Format for console will return plain diff when output is not decorated</li>
+            <li class="success">Format for console will return colorized diff when output is decorated</li>
         </ul>
         <h2>Filesystem (FastForward\DevTools\Tests\Filesystem\Filesystem)</h2>
         <ul>
@@ -609,6 +613,7 @@
             <li class="success">Refactor will remove single line empty doc comment</li>
             <li class="success">Refactor will remove empty doc comment with spaces</li>
             <li class="success">Refactor will return null for non supported nodes</li>
+            <li class="success">Is empty doc block will detect content after normalization</li>
         </ul>
         <h2>Reports Command (FastForward\DevTools\Tests\Console\Command\ReportsCommand)</h2>
         <ul>
@@ -657,6 +662,10 @@
         <h2>System Clock (FastForward\DevTools\Tests\Psr\Clock\SystemClock)</h2>
         <ul>
             <li class="success">Now will return current date time immutable</li>
+        </ul>
+        <h2>Unified Differ (FastForward\DevTools\Tests\Resource\UnifiedDiffer)</h2>
+        <ul>
+            <li class="success">Diff will return trimmed unified diff output</li>
         </ul>
         <h2>Unreleased Entry Checker (FastForward\DevTools\Tests\Changelog\Checker\UnreleasedEntryChecker)</h2>
         <ul>
