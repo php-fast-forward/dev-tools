@@ -1046,10 +1046,15 @@ Search.appendIndex(
             "summary": "Detects\u0020whether\u0020the\u0020analyser\u0020is\u0020running\u0020inside\u0020the\u0020DevTools\u0020repository\u0020itself.",
             "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isDevToolsRepository"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGE_NAME",
-            "name": "PACKAGE_NAME",
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AisInstalledAsDependency\u0028\u0029",
+            "name": "isInstalledAsDependency",
+            "summary": "Detects\u0020whether\u0020the\u0020packaged\u0020config\u0020is\u0020being\u0020loaded\u0020from\u0020a\u0020consumer\u0020vendor\u0020directory.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isInstalledAsDependency"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AVENDOR_PACKAGE_PATH",
+            "name": "VENDOR_PACKAGE_PATH",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGE_NAME"
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_VENDOR_PACKAGE_PATH"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGED_UNUSED_DEPENDENCIES",
             "name": "PACKAGED_UNUSED_DEPENDENCIES",
