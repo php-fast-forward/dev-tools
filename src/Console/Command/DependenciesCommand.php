@@ -81,6 +81,11 @@ final class DependenciesCommand extends BaseCommand
                 name: 'upgrade',
                 mode: InputOption::VALUE_NONE,
                 description: 'Apply Jack dependency upgrades before executing the dependency analyzers.',
+            )
+            ->addOption(
+                name: 'dump-usage',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Dump usages for the given package pattern and show all matched usages.',
             );
     }
 
@@ -112,7 +117,7 @@ final class DependenciesCommand extends BaseCommand
 
         $output->writeln('<info>Running dependency analysis...</info>');
 
-        $this->processQueue->add($this->getComposerDependencyAnalyserCommand());
+        $this->processQueue->add($this->getComposerDependencyAnalyserCommand($input));
         $this->processQueue->add($this->getJackBreakpointCommand($input, $maximumOutdated));
 
         return $this->processQueue->run($output);
@@ -121,14 +126,24 @@ final class DependenciesCommand extends BaseCommand
     /**
      * Builds the Composer Dependency Analyser process.
      *
+     * @param InputInterface $input the runtime command input
+     *
      * @return Process the configured Composer Dependency Analyser process
      */
-    private function getComposerDependencyAnalyserCommand(): Process
+    private function getComposerDependencyAnalyserCommand(InputInterface $input): Process
     {
-        return $this->processBuilder
-            ->withArgument('--config', $this->fileLocator->locate(self::ANALYSER_CONFIG))
-            ->withArgument('--ignore-prod-only-in-dev-deps')
-            ->build('vendor/bin/composer-dependency-analyser');
+        $processBuilder = $this->processBuilder
+            ->withArgument('--config', $this->fileLocator->locate(self::ANALYSER_CONFIG));
+
+        $dumpUsage = $input->getOption('dump-usage');
+
+        if (\is_string($dumpUsage) && '' !== $dumpUsage) {
+            $processBuilder = $processBuilder
+                ->withArgument('--dump-usages', $dumpUsage)
+                ->withArgument('--show-all-usages');
+        }
+
+        return $processBuilder->build('vendor/bin/composer-dependency-analyser');
     }
 
     /**

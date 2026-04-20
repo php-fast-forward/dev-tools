@@ -48,6 +48,10 @@ Options
 ``--dev`` (optional)
    Prioritizes dev dependencies where Jack supports it.
 
+``--dump-usage=<package>`` (optional)
+   Asks ``composer-dependency-analyser`` to dump usages for the given package
+   or wildcard pattern and enables ``--show-all-usages`` automatically.
+
 Examples
 --------
 
@@ -68,6 +72,12 @@ Preview the upgrade workflow:
 .. code-block:: bash
 
    composer dependencies --dev
+
+Dump all matched usages for one package:
+
+.. code-block:: bash
+
+   composer dependencies --dump-usage=symfony/console
 
 Apply the upgrade workflow and then analyze dependencies:
 
@@ -104,7 +114,8 @@ Behavior
 - ``composer-dependency-analyser`` is configured with:
   - ``--config composer-dependency-analyser.php`` (resolved through the package
     file locator so consumer repositories can override it locally)
-  - ``--ignore-prod-only-in-dev-deps`` (ignores dev-only usage in production code)
+  - ``--dump-usages <package>`` and ``--show-all-usages`` when ``--dump-usage``
+    is passed to the DevTools command
 - ``jack breakpoint`` maps ``--max-outdated`` to Jack's ``--limit`` option.
 - ``--upgrade`` applies Jack's ``raise-to-installed`` and ``open-versions``
   commands before ``composer update -W`` and ``composer normalize``.

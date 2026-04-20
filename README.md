@@ -64,6 +64,7 @@ composer dev-tools tests
 composer dependencies
 composer dependencies --max-outdated=8
 composer dependencies --dev
+composer dependencies --dump-usage=symfony/console
 composer dependencies --upgrade --dev
 
 # Analyze code metrics with PhpMetrics

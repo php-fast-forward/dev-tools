@@ -296,8 +296,8 @@ final class MergerTest extends TestCase
             $parseExistingLines->invoke($this->merger, "\n/docs/ export-ignore\n\n# comment\n"),
         );
         self::assertSame([
-                'docs' => true,
-            ], $keepInExportLookup->invoke($this->merger, [' ', '/docs/']),);
+            'docs' => true,
+        ], $keepInExportLookup->invoke($this->merger, [' ', '/docs/']),);
         self::assertSame(
             [
                 'docs' => true,

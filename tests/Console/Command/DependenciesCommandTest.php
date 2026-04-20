@@ -112,8 +112,8 @@ final class DependenciesCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenPreviewAndAnalyzersSucceed(): void
     {
-        $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: false);
-        $this->configurePreviewBuilders(dev: false, maxOutdated: '5');
+        $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: false, dumpUsage: null);
+        $this->configurePreviewBuilders(dev: false, maxOutdated: '5', dumpUsage: null);
 
         $this->processQueue->add($this->processRaiseToInstalled->reveal())
             ->shouldBeCalledOnce();
@@ -139,8 +139,8 @@ final class DependenciesCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
-        $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: true);
-        $this->configurePreviewBuilders(dev: true, maxOutdated: '5');
+        $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: true, dumpUsage: null);
+        $this->configurePreviewBuilders(dev: true, maxOutdated: '5', dumpUsage: null);
 
         $this->processQueue->add($this->processRaiseToInstalled->reveal())
             ->shouldBeCalledOnce();
@@ -166,8 +166,8 @@ final class DependenciesCommandTest extends TestCase
     #[Test]
     public function executeWillQueueUpgradeWorkflowBeforeAnalysisWhenUpgradeIsRequested(): void
     {
-        $this->configureBaseExecution(maxOutdated: '8', upgrade: true, dev: true);
-        $this->configureUpgradeBuilders(dev: true, maxOutdated: '8');
+        $this->configureBaseExecution(maxOutdated: '8', upgrade: true, dev: true, dumpUsage: null);
+        $this->configureUpgradeBuilders(dev: true, maxOutdated: '8', dumpUsage: null);
 
         $this->processQueue->add($this->processRaiseToInstalled->reveal())
             ->shouldBeCalledOnce();
@@ -207,13 +207,41 @@ final class DependenciesCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillDumpPackageUsagesAndShowAllMatchesWhenRequested(): void
+    {
+        $this->configureBaseExecution(maxOutdated: '5', upgrade: false, dev: false, dumpUsage: 'symfony/console');
+        $this->configurePreviewBuilders(dev: false, maxOutdated: '5', dumpUsage: 'symfony/console');
+
+        $this->processQueue->add($this->processRaiseToInstalled->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->processOpenVersions->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->processDepAnalyser->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->processBreakpoint->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        $this->output->writeln('<info>Running dependency analysis...</info>')
+            ->shouldBeCalledOnce();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
      * @param string $maxOutdated
      * @param bool $upgrade
      * @param bool $dev
+     * @param string|null $dumpUsage
      *
      * @return void
      */
-    private function configureBaseExecution(string $maxOutdated, bool $upgrade, bool $dev): void
+    private function configureBaseExecution(string $maxOutdated, bool $upgrade, bool $dev, ?string $dumpUsage): void
     {
         $this->input->getOption('max-outdated')
             ->willReturn($maxOutdated);
@@ -221,18 +249,22 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn($upgrade);
         $this->input->getOption('dev')
             ->willReturn($dev);
+        $this->input->getOption('dump-usage')
+            ->willReturn($dumpUsage);
     }
 
     /**
      * @param bool $dev
      * @param string $maxOutdated
+     * @param string|null $dumpUsage
      *
      * @return void
      */
-    private function configurePreviewBuilders(bool $dev, string $maxOutdated): void
+    private function configurePreviewBuilders(bool $dev, string $maxOutdated, ?string $dumpUsage): void
     {
         $depAnalyserBuilder = $this->prophesize(ProcessBuilderInterface::class);
-        $depAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserCommandBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserFinalBuilder = null;
 
         $this->processBuilder
             ->build(
@@ -244,9 +276,18 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn($this->processOpenVersions->reveal());
         $this->processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
             ->willReturn($depAnalyserBuilder->reveal());
-        $depAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')
-            ->willReturn($depAnalyserFinalBuilder->reveal());
-        $depAnalyserFinalBuilder->build('vendor/bin/composer-dependency-analyser')
+
+        if (null !== $dumpUsage) {
+            $depAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
+
+            $depAnalyserBuilder->withArgument('--dump-usages', $dumpUsage)
+                ->willReturn($depAnalyserCommandBuilder->reveal());
+            $depAnalyserCommandBuilder->withArgument('--show-all-usages')
+                ->willReturn($depAnalyserFinalBuilder->reveal());
+        }
+
+        ($depAnalyserFinalBuilder ?? $depAnalyserBuilder)
+            ->build('vendor/bin/composer-dependency-analyser')
             ->willReturn($this->processDepAnalyser->reveal());
         $this->processBuilder
             ->build(
@@ -258,16 +299,18 @@ final class DependenciesCommandTest extends TestCase
     /**
      * @param bool $dev
      * @param string $maxOutdated
+     * @param string|null $dumpUsage
      *
      * @return void
      */
-    private function configureUpgradeBuilders(bool $dev, string $maxOutdated): void
+    private function configureUpgradeBuilders(bool $dev, string $maxOutdated, ?string $dumpUsage): void
     {
         $composerUpdateWithDependenciesBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $composerUpdateAnsiBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $composerUpdateBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $depAnalyserBuilder = $this->prophesize(ProcessBuilderInterface::class);
-        $depAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserCommandBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $depAnalyserFinalBuilder = null;
 
         $this->processBuilder
             ->build($dev ? 'vendor/bin/jack raise-to-installed --dev' : 'vendor/bin/jack raise-to-installed')
@@ -287,9 +330,18 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn($this->processComposerNormalize->reveal());
         $this->processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
             ->willReturn($depAnalyserBuilder->reveal());
-        $depAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')
-            ->willReturn($depAnalyserFinalBuilder->reveal());
-        $depAnalyserFinalBuilder->build('vendor/bin/composer-dependency-analyser')
+
+        if (null !== $dumpUsage) {
+            $depAnalyserFinalBuilder = $this->prophesize(ProcessBuilderInterface::class);
+
+            $depAnalyserBuilder->withArgument('--dump-usages', $dumpUsage)
+                ->willReturn($depAnalyserCommandBuilder->reveal());
+            $depAnalyserCommandBuilder->withArgument('--show-all-usages')
+                ->willReturn($depAnalyserFinalBuilder->reveal());
+        }
+
+        ($depAnalyserFinalBuilder ?? $depAnalyserBuilder)
+            ->build('vendor/bin/composer-dependency-analyser')
             ->willReturn($this->processDepAnalyser->reveal());
         $this->processBuilder
             ->build(
