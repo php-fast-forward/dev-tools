@@ -8,6 +8,5 @@
 #
 # Example:
 # * @your-github-user @your-org/platform-team
-
 {{ suggestions }}
 {{ rule }}
