@@ -52,10 +52,10 @@ After installation, these are the most useful sanity checks:
 
 .. code-block:: bash
 
-   composer dev-tools skills
+   composer skills
    composer agents
-   composer dev-tools tests
-   composer dev-tools docs
+   composer tests
+   composer docs
    composer dev-tools
 
 If Composer argument forwarding becomes awkward, call the binary directly:

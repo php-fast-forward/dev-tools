@@ -38,7 +38,7 @@ across Fast Forward libraries.
 ## 🚀 Installation
 
 ```bash
-composer require --dev fast-forward/dev-tools:dev-main
+composer require --dev fast-forward/dev-tools
 ```
 
 ## 🛠️ Usage

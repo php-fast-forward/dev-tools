@@ -38,10 +38,10 @@ Once the package is installed and the guide directory exists, run:
 .. code-block:: bash
 
    composer dev-tools:sync
-   composer dev-tools skills
+   composer skills
    composer agents
-   composer dev-tools tests
-   composer dev-tools docs
+   composer tests
+   composer docs
    composer dev-tools
 
 What Each Command Proves
@@ -50,15 +50,15 @@ What Each Command Proves
 - ``composer dev-tools:sync`` proves the consumer repository can receive the
   shared scripts, automation assets, packaged skills, and packaged agents
   during onboarding.
-- ``composer dev-tools skills`` proves the packaged skill set can be linked
+- ``composer skills`` proves the packaged skill set can be linked
   safely into ``.agents/skills`` without copying files into the consumer
   repository.
 - ``composer agents`` proves the packaged project-agent prompts can be linked
   safely into ``.agents/agents`` without copying files into the consumer
   repository.
-- ``composer dev-tools tests`` proves the packaged or local PHPUnit
+- ``composer tests`` proves the packaged or local PHPUnit
   configuration can execute the current test suite.
-- ``composer dev-tools docs`` proves the PSR-4 source paths and the guide
+- ``composer docs`` proves the PSR-4 source paths and the guide
   directory are usable by phpDocumentor.
 - ``composer dev-tools`` proves the complete pipeline can run in the expected
   order.
