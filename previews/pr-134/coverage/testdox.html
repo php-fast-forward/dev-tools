@@ -259,9 +259,14 @@
         <ul>
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will copy directory contents into target</li>
+            <li class="success">Execute will fail when source or target are missing</li>
+            <li class="success">Execute will skip existing target by default</li>
             <li class="success">Execute will show diff before overwriting changed file</li>
             <li class="success">Execute will report unchanged overwrite as no op</li>
             <li class="success">Execute will handle binary overwrite gracefully</li>
+            <li class="success">Execute will return failure in check mode when file would change</li>
+            <li class="success">Execute will return success in dry run mode when file would change</li>
+            <li class="success">Execute will skip replacing drifted file when interactive confirmation is declined</li>
         </ul>
         <h2>Coverage Summary (FastForward\DevTools\PhpUnit\Coverage\CoverageSummary)</h2>
         <ul>
@@ -373,6 +378,7 @@
             <li class="success">Get absolute path will return absolute for relative path</li>
             <li class="success">Get absolute path will return absolute for multiple relative paths</li>
             <li class="success">Get absolute path will use provided base path</li>
+            <li class="success">Get absolute path will resolve relative base paths against current working directory</li>
             <li class="success">Basename will return correct basename</li>
             <li class="success">Dirname will return correct dirname</li>
             <li class="success">Make path relative will return relative path against base</li>
@@ -380,6 +386,9 @@
             <li class="success">Mkdir will create directory with relative path</li>
             <li class="success">Remove will delete relative path against current working directory</li>
             <li class="success">Symlink and readlink will use absolute paths</li>
+            <li class="success">Copy will duplicate files using absolute paths</li>
+            <li class="success">Chmod will apply permissions to resolved paths</li>
+            <li class="success">Exists will accept iterables of relative paths</li>
         </ul>
         <h2>Finder Factory (FastForward\DevTools\Tests\Filesystem\FinderFactory)</h2>
         <ul>
