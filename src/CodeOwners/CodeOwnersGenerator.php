@@ -101,7 +101,7 @@ final readonly class CodeOwnersGenerator
      */
     public function normalizeOwners(string $owners): array
     {
-        $tokens = preg_split('/[\s,]+/', trim($owners)) ?: [];
+        $tokens = preg_split('/[\s,]+/', trim($owners));
         $normalized = array_map(
             static function (string $owner): string {
                 if ('' === $owner) {

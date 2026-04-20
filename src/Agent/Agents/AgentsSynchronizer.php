@@ -17,14 +17,17 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Agent\Skills;
+namespace FastForward\DevTools\Agent\Agents;
 
 use FastForward\DevTools\Agent\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Agent\Sync\SynchronizeResult;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 
-final readonly class SkillsSynchronizer implements LoggerAwareInterface
+/**
+ * Synchronizes packaged Fast Forward project agents into consumer repositories.
+ */
+final readonly class AgentsSynchronizer implements LoggerAwareInterface
 {
     /**
      * @param PackagedDirectorySynchronizer $synchronizer
@@ -44,13 +47,13 @@ final readonly class SkillsSynchronizer implements LoggerAwareInterface
     }
 
     /**
-     * @param string $skillsDir
-     * @param string $packageSkillsPath
+     * @param string $agentsDir
+     * @param string $packageAgentsPath
      *
      * @return SynchronizeResult
      */
-    public function synchronize(string $skillsDir, string $packageSkillsPath): SynchronizeResult
+    public function synchronize(string $agentsDir, string $packageAgentsPath): SynchronizeResult
     {
-        return $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, '.agents/skills');
+        return $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, '.agents/agents');
     }
 }

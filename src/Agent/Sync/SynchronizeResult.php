@@ -17,47 +17,34 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Agent\Skills;
+namespace FastForward\DevTools\Agent\Sync;
 
 /**
- * Result object for skill synchronization operations.
- *
- * Tracks the outcomes of a synchronization run, including newly created links,
- * existing items that were preserved, and broken links that were removed.
- * The failed flag indicates whether an error occurred during synchronization.
+ * Result object for packaged directory synchronization operations.
  */
 final class SynchronizeResult
 {
     /**
-     * List of skill names for which new symlinks were created.
-     *
      * @var list<string>
      */
     private array $createdLinks = [];
 
     /**
-     * List of skill names for which existing items were left unchanged.
-     *
      * @var list<string>
      */
     private array $preservedLinks = [];
 
     /**
-     * List of skill names whose broken symlinks were removed during sync.
-     *
      * @var list<string>
      */
     private array $removedBrokenLinks = [];
 
-    /**
-     * Indicates whether the synchronization encountered a failure.
-     */
     private bool $failed = false;
 
     /**
-     * Records a skill for which a new symlink was created.
+     * @param string $link
      *
-     * @param string $link Name of the skill that received a new symlink
+     * @return void
      */
     public function addCreatedLink(string $link): void
     {
@@ -65,9 +52,9 @@ final class SynchronizeResult
     }
 
     /**
-     * Records a skill whose existing item was preserved unchanged.
+     * @param string $link
      *
-     * @param string $link Name of the skill that was left in place
+     * @return void
      */
     public function addPreservedLink(string $link): void
     {
@@ -75,9 +62,9 @@ final class SynchronizeResult
     }
 
     /**
-     * Records a skill whose broken symlink was removed during sync.
+     * @param string $link
      *
-     * @param string $link Name of the skill whose broken link was removed
+     * @return void
      */
     public function addRemovedBrokenLink(string $link): void
     {
@@ -85,7 +72,7 @@ final class SynchronizeResult
     }
 
     /**
-     * Marks the synchronization as failed due to an error condition.
+     * @return void
      */
     public function markFailed(): void
     {
@@ -93,9 +80,7 @@ final class SynchronizeResult
     }
 
     /**
-     * Returns the list of skills for which new symlinks were created.
-     *
-     * @return list<string> Skill names of newly created links
+     * @return list<string>
      */
     public function getCreatedLinks(): array
     {
@@ -103,9 +88,7 @@ final class SynchronizeResult
     }
 
     /**
-     * Returns the list of skills whose existing items were preserved.
-     *
-     * @return list<string> Skill names of preserved items
+     * @return list<string>
      */
     public function getPreservedLinks(): array
     {
@@ -113,9 +96,7 @@ final class SynchronizeResult
     }
 
     /**
-     * Returns the list of skills whose broken symlinks were removed.
-     *
-     * @return list<string> Skill names of removed broken links
+     * @return list<string>
      */
     public function getRemovedBrokenLinks(): array
     {
@@ -123,9 +104,7 @@ final class SynchronizeResult
     }
 
     /**
-     * Indicates whether the synchronization encountered a failure.
-     *
-     * @return bool True if an error occurred, false otherwise
+     * @return bool
      */
     public function failed(): bool
     {

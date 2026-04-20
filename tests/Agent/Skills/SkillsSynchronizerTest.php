@@ -20,8 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Agent\Skills;
 
 use ArrayIterator;
+use FastForward\DevTools\Agent\Sync\PackagedDirectorySynchronizer;
+use FastForward\DevTools\Agent\Sync\SynchronizeResult;
 use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
-use FastForward\DevTools\Agent\Skills\SynchronizeResult;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -35,6 +36,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 #[CoversClass(SkillsSynchronizer::class)]
+#[UsesClass(PackagedDirectorySynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
 final class SkillsSynchronizerTest extends TestCase
 {
@@ -82,7 +84,7 @@ final class SkillsSynchronizerTest extends TestCase
     public function synchronizeWithMissingPackagePathWillReturnFailedResult(): void
     {
         $this->filesystem->exists(self::PACKAGE_SKILLS_PATH)->willReturn(false);
-        $this->logger->error('No packaged skills found at: ' . self::PACKAGE_SKILLS_PATH)->shouldBeCalledOnce();
+        $this->logger->error('No packaged .agents/skills found at: ' . self::PACKAGE_SKILLS_PATH)->shouldBeCalledOnce();
 
         $result = $this->createSynchronizer()
             ->synchronize(self::CONSUMER_SKILLS_PATH, self::PACKAGE_SKILLS_PATH);
@@ -274,9 +276,11 @@ final class SkillsSynchronizerTest extends TestCase
     private function createSynchronizer(): SkillsSynchronizer
     {
         return new SkillsSynchronizer(
-            $this->filesystem->reveal(),
-            $this->finderFactory->reveal(),
-            $this->logger->reveal(),
+            new PackagedDirectorySynchronizer(
+                $this->filesystem->reveal(),
+                $this->finderFactory->reveal(),
+                $this->logger->reveal(),
+            ),
         );
     }
 }

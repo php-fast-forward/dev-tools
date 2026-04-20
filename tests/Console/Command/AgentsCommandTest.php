@@ -21,9 +21,9 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use Composer\Console\Application;
 use Composer\IO\IOInterface;
-use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
+use FastForward\DevTools\Agent\Agents\AgentsSynchronizer;
 use FastForward\DevTools\Agent\Sync\SynchronizeResult;
-use FastForward\DevTools\Console\Command\SkillsCommand;
+use FastForward\DevTools\Console\Command\AgentsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -39,15 +39,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
 
-#[CoversClass(SkillsCommand::class)]
-#[UsesClass(SkillsSynchronizer::class)]
+#[CoversClass(AgentsCommand::class)]
+#[UsesClass(AgentsSynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
-final class SkillsCommandTest extends TestCase
+final class AgentsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy<SkillsSynchronizer>
+     * @var ObjectProphecy<AgentsSynchronizer>
      */
     private ObjectProphecy $synchronizer;
 
@@ -76,14 +76,14 @@ final class SkillsCommandTest extends TestCase
      */
     private ObjectProphecy $io;
 
-    private SkillsCommand $command;
+    private AgentsCommand $command;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->synchronizer = $this->prophesize(SkillsSynchronizer::class);
+        $this->synchronizer = $this->prophesize(AgentsSynchronizer::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -93,15 +93,15 @@ final class SkillsCommandTest extends TestCase
         $this->application->getHelperSet()
             ->willReturn(new HelperSet());
 
-        $this->command = new SkillsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
+        $this->command = new AgentsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
         $this->command->setApplication($this->application->reveal());
 
         $this->application->getIO()
             ->willReturn($this->io->reveal());
-        $this->filesystem->getAbsolutePath('.agents/skills', \dirname(__DIR__, 3))
-            ->willReturn(getcwd() . '/.agents/skills');
-        $this->filesystem->getAbsolutePath('.agents/skills')
-            ->willReturn(getcwd() . '/.agents/skills');
+        $this->filesystem->getAbsolutePath('.agents/agents', \dirname(__DIR__, 3))
+            ->willReturn(getcwd() . '/.agents/agents');
+        $this->filesystem->getAbsolutePath('.agents/agents')
+            ->willReturn(getcwd() . '/.agents/agents');
     }
 
     /**
@@ -110,13 +110,13 @@ final class SkillsCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('skills', $this->command->getName());
+        self::assertSame('agents', $this->command->getName());
         self::assertSame(
-            'Synchronizes Fast Forward skills into .agents/skills directory.',
+            'Synchronizes Fast Forward project agents into .agents/agents directory.',
             $this->command->getDescription()
         );
         self::assertSame(
-            'This command ensures the consumer repository contains linked Fast Forward skills by creating symlinks to the packaged skills and removing broken links.',
+            'This command ensures the consumer repository contains linked Fast Forward project agents by creating symlinks to the packaged prompts and removing broken links.',
             $this->command->getHelp()
         );
     }
@@ -125,49 +125,49 @@ final class SkillsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillFailWhenPackagedSkillsDirectoryDoesNotExist(): void
+    public function executeWillFailWhenPackagedAgentsDirectoryDoesNotExist(): void
     {
-        $skillsPath = getcwd() . '/.agents/skills';
+        $agentsPath = getcwd() . '/.agents/agents';
 
-        $this->filesystem->exists($skillsPath)
+        $this->filesystem->exists($agentsPath)
             ->willReturn(false);
-        $this->output->writeln('<info>Starting skills synchronization...</info>')
+        $this->output->writeln('<info>Starting agents synchronization...</info>')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>No packaged skills found at: ' . $skillsPath . '</comment>')
+        $this->output->writeln('<comment>No packaged .agents/agents found at: ' . $agentsPath . '</comment>')
             ->shouldBeCalledOnce();
         $this->synchronizer->setLogger(Argument::cetera())->shouldNotBeCalled();
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
 
-        self::assertSame(SkillsCommand::FAILURE, $this->invokeExecute());
+        self::assertSame(AgentsCommand::FAILURE, $this->invokeExecute());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillCreateSkillsDirectoryWhenItDoesNotExist(): void
+    public function executeWillCreateAgentsDirectoryWhenItDoesNotExist(): void
     {
-        $skillsPath = getcwd() . '/.agents/skills';
+        $agentsPath = getcwd() . '/.agents/agents';
         $result = new SynchronizeResult();
 
-        $this->filesystem->exists($skillsPath)
+        $this->filesystem->exists($agentsPath)
             ->willReturn(true, false);
-        $this->filesystem->mkdir($skillsPath)
+        $this->filesystem->mkdir($agentsPath)
             ->shouldBeCalledOnce();
         $this->synchronizer->setLogger($this->io->reveal())
             ->shouldBeCalledOnce();
-        $this->synchronizer->synchronize($skillsPath, $skillsPath)
+        $this->synchronizer->synchronize($agentsPath, $agentsPath)
             ->willReturn($result)
             ->shouldBeCalledOnce();
 
-        $this->output->writeln('<info>Starting skills synchronization...</info>')
+        $this->output->writeln('<info>Starting agents synchronization...</info>')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Created .agents/skills directory.</info>')
+        $this->output->writeln('<info>Created .agents/agents directory.</info>')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Skills synchronization completed successfully.</info>')
+        $this->output->writeln('<info>Agents synchronization completed successfully.</info>')
             ->shouldBeCalledOnce();
 
-        self::assertSame(SkillsCommand::SUCCESS, $this->invokeExecute());
+        self::assertSame(AgentsCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**
@@ -176,24 +176,24 @@ final class SkillsCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenSynchronizerFails(): void
     {
-        $skillsPath = getcwd() . '/.agents/skills';
+        $agentsPath = getcwd() . '/.agents/agents';
         $result = new SynchronizeResult();
         $result->markFailed();
 
-        $this->filesystem->exists($skillsPath)
+        $this->filesystem->exists($agentsPath)
             ->willReturn(true, true);
         $this->synchronizer->setLogger($this->io->reveal())
             ->shouldBeCalledOnce();
-        $this->synchronizer->synchronize($skillsPath, $skillsPath)
+        $this->synchronizer->synchronize($agentsPath, $agentsPath)
             ->willReturn($result)
             ->shouldBeCalledOnce();
 
-        $this->output->writeln('<info>Starting skills synchronization...</info>')
+        $this->output->writeln('<info>Starting agents synchronization...</info>')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<error>Skills synchronization failed.</error>')
+        $this->output->writeln('<error>Agents synchronization failed.</error>')
             ->shouldBeCalledOnce();
 
-        self::assertSame(SkillsCommand::FAILURE, $this->invokeExecute());
+        self::assertSame(AgentsCommand::FAILURE, $this->invokeExecute());
     }
 
     /**

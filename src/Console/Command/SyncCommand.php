@@ -34,7 +34,7 @@ use Symfony\Component\Filesystem\Path;
 #[AsCommand(
     name: 'dev-tools:sync',
     description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, CODEOWNERS, .editorconfig, and .gitattributes in the root project.',
-    help: 'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, Git metadata, skills, license, and Git hooks.'
+    help: 'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, git metadata, packaged skills, packaged agents, license, and Git hooks.'
 )]
 final class SyncCommand extends BaseCommand
 {
@@ -140,11 +140,12 @@ final class SyncCommand extends BaseCommand
         );
         if ($dryRun || $check || $interactive) {
             $output->writeln(
-                '<comment>Skipping wiki and skills during preview/check modes because they do not yet expose non-destructive verification.</comment>'
+                '<comment>Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.</comment>'
             );
         } else {
             $this->queueDevToolsCommand(['wiki', '--init'], true);
             $this->queueDevToolsCommand(['skills'], true);
+            $this->queueDevToolsCommand(['agents'], true);
         }
 
         $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached);
