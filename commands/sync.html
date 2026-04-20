@@ -940,6 +940,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./commands/codeowners.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            codeowners
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./commands/gitignore.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1857,6 +1879,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-codeowners.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            CodeOwners
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-composer.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2683,27 +2727,31 @@
     <li value="4"><code>copy-resource</code>
  - copies dependabot.yml</li>
 
-    <li value="5"><code>funding</code>
+    <li value="5"><code>codeowners</code>
+ - generates <code>.github/CODEOWNERS</code>
+ from local metadata</li>
+
+    <li value="6"><code>funding</code>
  - synchronizes <code>composer.json</code>
  funding metadata with <code>.github/FUNDING.yml</code>
 </li>
 
-    <li value="6"><code>wiki --init</code>
+    <li value="7"><code>wiki --init</code>
  - initializes wiki as submodule</li>
 
-    <li value="7"><code>gitignore</code>
+    <li value="8"><code>gitignore</code>
  - merges .gitignore files</li>
 
-    <li value="8"><code>gitattributes</code>
+    <li value="9"><code>gitattributes</code>
  - manages export-ignore rules</li>
 
-    <li value="9"><code>skills</code>
+    <li value="10"><code>skills</code>
  - synchronizes packaged skills</li>
 
-    <li value="10"><code>license</code>
+    <li value="11"><code>license</code>
  - generates LICENSE file</li>
 
-    <li value="11"><code>git-hooks</code>
+    <li value="12"><code>git-hooks</code>
  - installs Git hooks</li>
 
 </ol>
@@ -2714,8 +2762,7 @@
             <h2>Usage</h2>
 
             <pre><code class="language-bash">composer dev-tools:sync
-composer dev-tools:sync [options]
-vendor/bin/dev-tools dev-tools:sync [options]</code></pre>
+composer dev-tools:sync [options]</code></pre>
 
     </section>
 
@@ -2804,13 +2851,20 @@ required.</dd>
 
 <ul>
     <li class="dash">Updates <code>composer.json</code>
- scripts, extra configuration, and managed funding
-metadata.</li>
+ scripts, extra configuration, managed funding
+metadata, and managed <code>.github/CODEOWNERS</code>
+ content.</li>
 
     <li class="dash">Copies missing workflow stubs, including tests, reports, wiki, and changelog
 automation, plus <code>.editorconfig</code>
  and <code>dependabot.yml</code>
 .</li>
+
+    <li class="dash">Generates <code>.github/CODEOWNERS</code>
+ from local metadata and preserves existing
+ownership rules by default unless <code>--overwrite</code>
+ or an explicit preview
+mode is used.</li>
 
     <li class="dash">Synchronizes supported funding metadata between <code>composer.json</code>
  and
@@ -2825,10 +2879,11 @@ so terminal sessions and CI logs show what changed.</li>
  and <code>--check</code>
  verify managed-file drift for <code>composer.json</code>
 ,
-funding metadata, copied resources, <code>.gitignore</code>
-, <code>.gitattributes</code>
+<code>.github/CODEOWNERS</code>
+, funding metadata, copied resources, <code>.gitignore</code>
 ,
-<code>LICENSE</code>
+<code>.gitattributes</code>
+, <code>LICENSE</code>
 , and Git hooks.</li>
 
     <li class="dash"><code>--interactive</code>

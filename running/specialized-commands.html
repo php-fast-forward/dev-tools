@@ -940,6 +940,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./commands/codeowners.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            codeowners
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./commands/gitignore.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1843,6 +1865,28 @@
                         
             </ul>
         </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-codeowners.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            CodeOwners
+        </a>
+
+            </div>
+
     </li>
                             <li class="nav-item">
     
@@ -3097,6 +3141,45 @@ drift can be surfaced in CI and reviewed locally.</li>
 
     </section>
 
+            <section class="section " id="codeowners">
+            <h2><code>codeowners</code>
+</h2>
+
+            
+    <p>Generates managed CODEOWNERS files from repository metadata.</p>
+
+            <pre><code class="language-bash">composer codeowners
+composer codeowners --dry-run
+composer codeowners --interactive</code></pre>
+
+            
+    <p>Important details:</p>
+
+            
+
+<ul>
+    <li class="dash">it inspects <code>composer.json</code>
+ author homepages to infer GitHub handles for
+<code>.github/CODEOWNERS</code>
+;</li>
+
+    <li class="dash">when direct ownership cannot be inferred, it renders a commented fallback
+instead of copying hard-coded owners into the consumer repository;</li>
+
+    <li class="dash"><code>--interactive</code>
+ lets maintainers provide explicit owners before writing the
+catch-all <code>*</code>
+ rule;</li>
+
+    <li class="dash"><code>dev-tools:sync</code>
+ runs <code>codeowners</code>
+ automatically alongside the other
+consumer bootstrap steps.</li>
+
+</ul>
+
+    </section>
+
             <section class="section " id="dev-tools-sync">
             <h2><code>dev-tools:sync</code>
 </h2>
@@ -3126,6 +3209,11 @@ drift can be surfaced in CI and reviewed locally.</li>
     <li class="dash">it copies missing workflow stubs, <code>.editorconfig</code>
 , and <code>dependabot.yml</code>
 ;</li>
+
+    <li class="dash">it calls <code>codeowners</code>
+ to generate <code>.github/CODEOWNERS</code>
+ from local
+metadata;</li>
 
     <li class="dash">it creates <code>.github/wiki</code>
  as a git submodule when the directory is

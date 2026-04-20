@@ -152,6 +152,22 @@
             <li class="success">Is file with file pattern returns true</li>
             <li class="success">Is file with directory pattern returns false</li>
         </ul>
+        <h2>Code Owners Command (FastForward\DevTools\Tests\Console\Command\CodeOwnersCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will write generated code owners when file is missing</li>
+            <li class="success">Execute will skip existing code owners by default</li>
+            <li class="success">Execute will fail check mode when drift is detected</li>
+        </ul>
+        <h2>Code Owners Generator (FastForward\DevTools\Tests\CodeOwners\CodeOwnersGenerator)</h2>
+        <ul>
+            <li class="success">Infer owners will collect group and author owners</li>
+            <li class="success">Infer group owner will return repository owner from support source</li>
+            <li class="success">Generate will render explicit owners</li>
+            <li class="success">Generate will render commented fallback when owners cannot be inferred</li>
+            <li class="success">Generate will render group owner when author cannot be inferred</li>
+            <li class="success">Normalize owners will preserve handles and emails</li>
+        </ul>
         <h2>Code Style Command (FastForward\DevTools\Tests\Console\Command\CodeStyleCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>

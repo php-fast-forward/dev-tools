@@ -940,6 +940,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./commands/codeowners.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            codeowners
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./commands/gitignore.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -1857,6 +1879,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-codeowners.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            CodeOwners
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-composer.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2718,6 +2762,15 @@ For a first-time adoption path, see
 .</td>
     </tr>
     <tr>
+            <td><code>.github/CODEOWNERS</code>
+</td>
+            <td>Generates managed ownership rules from local <code>composer.json</code>
+ metadata,
+with commented suggestions when direct GitHub owners cannot be inferred.</td>
+            <td>Preserved by default; replaceable with <code>--overwrite</code>
+.</td>
+    </tr>
+    <tr>
             <td><code>.agents/skills/&lt;skill-name&gt;</code>
 </td>
             <td>Creates or repairs symlinks to packaged agent skills.</td>
@@ -2793,9 +2846,12 @@ when the target file does not already exist unless <code>--overwrite</code>
  is used.
 This protects consumer-specific customizations by default while still
 allowing explicit replacement during shared automation updates. The
-<code>skills</code>
- phase follows the same spirit by preserving existing
-non-symlink directories inside <code>.agents/skills</code>
+generated <code>.github/CODEOWNERS</code>
+ file follows the same principle by keeping
+an existing file unless you explicitly request replacement. The <code>skills</code>
+
+phase follows the same spirit by preserving existing non-symlink
+directories inside <code>.agents/skills</code>
 .</p>
 
     </article>

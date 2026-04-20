@@ -187,6 +187,7 @@
         "classes": [
             "FastForward\\DevTools\\Console\\Command\\ReportsCommand",
             "FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
+            "FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
             "FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
             "FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
             "FastForward\\DevTools\\Console\\Command\\WikiCommand",
@@ -226,6 +227,8 @@
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Resource\\FileDiffer",
             "Symfony\\Component\\Console\\Question\\ConfirmationQuestion",
+            "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+            "Symfony\\Component\\Console\\Question\\Question",
             "FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
             "FastForward\\DevTools\\Git\\GitClientInterface",
@@ -260,6 +263,7 @@
             "FastForward\\DevTools\\Filesystem\\",
             "FastForward\\DevTools\\Resource\\",
             "Symfony\\Component\\Console\\Question\\",
+            "FastForward\\DevTools\\CodeOwners\\",
             "FastForward\\DevTools\\Changelog\\Manager\\",
             "FastForward\\DevTools\\Changelog\\Checker\\",
             "FastForward\\DevTools\\Git\\",
@@ -283,9 +287,10 @@
         "dependent_instabilities": {
             "FastForward\\DevTools\\Process\\": 0.25,
             "FastForward\\DevTools\\GitAttributes\\": 0.6666666666666666,
-            "FastForward\\DevTools\\Composer\\Json\\": 0.5625,
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714,
-            "FastForward\\DevTools\\Resource\\": 0.2222222222222222,
+            "FastForward\\DevTools\\Composer\\Json\\": 0.5294117647058824,
+            "FastForward\\DevTools\\Filesystem\\": 0.1,
+            "FastForward\\DevTools\\Resource\\": 0.2,
+            "FastForward\\DevTools\\CodeOwners\\": 0.75,
             "FastForward\\DevTools\\Changelog\\Manager\\": 0.6666666666666666,
             "FastForward\\DevTools\\Changelog\\Checker\\": 0.8333333333333334,
             "FastForward\\DevTools\\Git\\": 0.625,
@@ -404,6 +409,111 @@
         "pageRank": 0,
         "afferentCoupling": 0,
         "efferentCoupling": 13,
+        "instability": 1,
+        "numberOfUnitTests": 1,
+        "violations": {},
+        "_type": "Hal\\Metric\\ClassMetric"
+    },
+    "FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand": {
+        "name": "FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
+        "interface": false,
+        "abstract": false,
+        "final": true,
+        "methods": [
+            {
+                "name": "__construct",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "configure",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "execute",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "promptForOwners",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "shouldWriteCodeOwners",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 5,
+        "nbMethods": 5,
+        "nbMethodsPrivate": 4,
+        "nbMethodsPublic": 1,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 25,
+        "ccn": 21,
+        "ccnMethodMax": 21,
+        "externals": [
+            "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+            "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "FastForward\\DevTools\\Resource\\FileDiffer",
+            "Symfony\\Component\\Console\\Input\\InputInterface",
+            "Symfony\\Component\\Console\\Output\\OutputInterface",
+            "Symfony\\Component\\Console\\Input\\InputInterface",
+            "Symfony\\Component\\Console\\Output\\OutputInterface",
+            "Symfony\\Component\\Console\\Question\\Question",
+            "Symfony\\Component\\Console\\Input\\InputInterface",
+            "Symfony\\Component\\Console\\Output\\OutputInterface",
+            "Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ],
+        "parents": [
+            "Composer\\Command\\BaseCommand"
+        ],
+        "implements": [],
+        "lcom": 3,
+        "length": 187,
+        "vocabulary": 49,
+        "volume": 1049.95,
+        "difficulty": 9.91,
+        "effort": 10401.84,
+        "level": 0.1,
+        "bugs": 0.35,
+        "time": 578,
+        "intelligentContent": 105.98,
+        "number_operators": 45,
+        "number_operands": 142,
+        "number_operators_unique": 6,
+        "number_operands_unique": 43,
+        "cloc": 39,
+        "loc": 108,
+        "lloc": 69,
+        "mi": 76.02,
+        "mIwoC": 35.91,
+        "commentWeight": 40.11,
+        "kanDefect": 0.78,
+        "relativeStructuralComplexity": 676,
+        "relativeDataComplexity": 0.37,
+        "relativeSystemComplexity": 676.37,
+        "totalStructuralComplexity": 3380,
+        "totalDataComplexity": 1.85,
+        "totalSystemComplexity": 3381.85,
+        "package": "FastForward\\DevTools\\Console\\Command\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 8,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {},
@@ -2082,9 +2192,9 @@
         "nbMethodsPublic": 1,
         "nbMethodsGetter": 0,
         "nbMethodsSetters": 0,
-        "wmc": 17,
-        "ccn": 13,
-        "ccnMethodMax": 12,
+        "wmc": 18,
+        "ccn": 14,
+        "ccnMethodMax": 13,
         "externals": [
             "Composer\\Command\\BaseCommand",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
@@ -2098,25 +2208,25 @@
         ],
         "implements": [],
         "lcom": 3,
-        "length": 139,
-        "vocabulary": 56,
-        "volume": 807.22,
-        "difficulty": 7.38,
-        "effort": 5957.3,
-        "level": 0.14,
-        "bugs": 0.27,
-        "time": 331,
-        "intelligentContent": 109.38,
+        "length": 146,
+        "vocabulary": 57,
+        "volume": 851.6,
+        "difficulty": 7.65,
+        "effort": 6512.25,
+        "level": 0.13,
+        "bugs": 0.28,
+        "time": 362,
+        "intelligentContent": 111.36,
         "number_operators": 16,
-        "number_operands": 123,
+        "number_operands": 130,
         "number_operators_unique": 6,
-        "number_operands_unique": 50,
+        "number_operands_unique": 51,
         "cloc": 32,
-        "loc": 82,
-        "lloc": 50,
-        "mi": 82.02,
-        "mIwoC": 40.84,
-        "commentWeight": 41.18,
+        "loc": 83,
+        "lloc": 51,
+        "mi": 81.37,
+        "mIwoC": 40.35,
+        "commentWeight": 41.01,
         "kanDefect": 0.45,
         "relativeStructuralComplexity": 144,
         "relativeDataComplexity": 0.25,
@@ -2769,7 +2879,7 @@
         "abstraction": 0,
         "instability": 1,
         "dependent_instabilities": {
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714
+            "FastForward\\DevTools\\Filesystem\\": 0.1
         },
         "distance": 0,
         "normalized_distance": 0,
@@ -2841,8 +2951,8 @@
         "abstraction": 0.5,
         "instability": 0.8,
         "dependent_instabilities": {
-            "FastForward\\DevTools\\Composer\\Json\\": 0.5625,
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714
+            "FastForward\\DevTools\\Composer\\Json\\": 0.5294117647058824,
+            "FastForward\\DevTools\\Filesystem\\": 0.1
         },
         "distance": 0.21213203435596428,
         "normalized_distance": 0.30000000000000004,
@@ -3176,7 +3286,7 @@
         "abstraction": 0.5,
         "instability": 0.8,
         "dependent_instabilities": {
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714
+            "FastForward\\DevTools\\Filesystem\\": 0.1
         },
         "distance": 0.21213203435596428,
         "normalized_distance": 0.30000000000000004,
@@ -3797,7 +3907,7 @@
         "afferentCoupling": 1,
         "efferentCoupling": 0,
         "instability": 0,
-        "numberOfUnitTests": 20,
+        "numberOfUnitTests": 22,
         "violations": {},
         "_type": "Hal\\Metric\\ClassMetric"
     },
@@ -3811,6 +3921,7 @@
         ],
         "incoming_class_dependencies": [
             "FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
+            "FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
             "FastForward\\DevTools\\Console\\Command\\LicenseCommand",
             "FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
             "FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
@@ -3830,12 +3941,12 @@
             "FastForward\\DevTools\\Filesystem\\"
         ],
         "abstraction": 0.25,
-        "instability": 0.2222222222222222,
+        "instability": 0.2,
         "dependent_instabilities": {
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714
+            "FastForward\\DevTools\\Filesystem\\": 0.1
         },
-        "distance": 0.3731952456262334,
-        "normalized_distance": 0.5277777777777778,
+        "distance": 0.38890872965260115,
+        "normalized_distance": 0.55,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\PackageMetric"
@@ -4013,9 +4124,9 @@
         "totalSystemComplexity": 162.17,
         "package": "FastForward\\DevTools\\Resource\\",
         "pageRank": 0.01,
-        "afferentCoupling": 7,
+        "afferentCoupling": 8,
         "efferentCoupling": 3,
-        "instability": 0.3,
+        "instability": 0.27,
         "numberOfUnitTests": 1,
         "violations": {},
         "_type": "Hal\\Metric\\ClassMetric"
@@ -4954,11 +5065,13 @@
             "FastForward\\DevTools\\Console\\Command\\DocsCommand",
             "FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
             "FastForward\\DevTools\\Console\\Command\\TestsCommand",
-            "FastForward\\DevTools\\License\\Generator"
+            "FastForward\\DevTools\\License\\Generator",
+            "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator"
         ],
         "incoming_package_dependencies": [
             "FastForward\\DevTools\\Console\\Command\\",
-            "FastForward\\DevTools\\License\\"
+            "FastForward\\DevTools\\License\\",
+            "FastForward\\DevTools\\CodeOwners\\"
         ],
         "outgoing_class_dependencies": [
             "Composer\\Factory",
@@ -4978,12 +5091,12 @@
             "FastForward\\DevTools\\Composer\\Json\\Schema\\"
         ],
         "abstraction": 0.5,
-        "instability": 0.5625,
+        "instability": 0.5294117647058824,
         "dependent_instabilities": {
             "FastForward\\DevTools\\Composer\\Json\\Schema\\": 0.3333333333333333
         },
-        "distance": 0.044194173824159216,
-        "normalized_distance": 0.0625,
+        "distance": 0.0207972582701925,
+        "normalized_distance": 0.02941176470588225,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\PackageMetric"
@@ -5077,7 +5190,7 @@
         "afferentCoupling": 1,
         "efferentCoupling": 1,
         "instability": 0.5,
-        "numberOfUnitTests": 6,
+        "numberOfUnitTests": 9,
         "violations": {},
         "_type": "Hal\\Metric\\ClassMetric"
     },
@@ -5245,7 +5358,7 @@
         "implements": [],
         "kanDefect": 0.15,
         "package": "FastForward\\DevTools\\Composer\\Json\\Schema\\",
-        "pageRank": 0.04,
+        "pageRank": 0.05,
         "afferentCoupling": 3,
         "efferentCoupling": 0,
         "instability": 0,
@@ -5365,7 +5478,7 @@
         "afferentCoupling": 1,
         "efferentCoupling": 1,
         "instability": 0.5,
-        "numberOfUnitTests": 3,
+        "numberOfUnitTests": 7,
         "violations": {},
         "_type": "Hal\\Metric\\ClassMetric"
     },
@@ -5675,9 +5788,9 @@
         "kanDefect": 0.15,
         "package": "FastForward\\DevTools\\Composer\\Json\\",
         "pageRank": 0.01,
-        "afferentCoupling": 8,
+        "afferentCoupling": 9,
         "efferentCoupling": 1,
-        "instability": 0.11,
+        "instability": 0.1,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\InterfaceMetric"
@@ -5953,7 +6066,7 @@
         "abstraction": 0,
         "instability": 0.8333333333333334,
         "dependent_instabilities": {
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714
+            "FastForward\\DevTools\\Filesystem\\": 0.1
         },
         "distance": 0.11785113019775789,
         "normalized_distance": 0.16666666666666663,
@@ -6206,7 +6319,7 @@
         "abstraction": 0.5,
         "instability": 0.6666666666666666,
         "dependent_instabilities": {
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714
+            "FastForward\\DevTools\\Filesystem\\": 0.1
         },
         "distance": 0.11785113019775781,
         "normalized_distance": 0.16666666666666652,
@@ -7498,6 +7611,154 @@
         "violations": {},
         "_type": "Hal\\Metric\\ClassMetric"
     },
+    "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator": {
+        "name": "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+        "interface": false,
+        "abstract": false,
+        "final": true,
+        "methods": [
+            {
+                "name": "__construct",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "inferOwners",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "normalizeOwners",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "generate",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "inferGroupOwner",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "extractGitHubHandleFromUrl",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "extractGitHubRepositoryOwner",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "githubPath",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 8,
+        "nbMethods": 8,
+        "nbMethodsPrivate": 3,
+        "nbMethodsPublic": 5,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 28,
+        "ccn": 21,
+        "ccnMethodMax": 6,
+        "externals": [
+            "FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "Symfony\\Component\\Config\\FileLocatorInterface"
+        ],
+        "parents": [],
+        "implements": [],
+        "lcom": 3,
+        "length": 180,
+        "vocabulary": 46,
+        "volume": 994.24,
+        "difficulty": 13.74,
+        "effort": 13664.1,
+        "level": 0.07,
+        "bugs": 0.33,
+        "time": 759,
+        "intelligentContent": 72.34,
+        "number_operators": 67,
+        "number_operands": 113,
+        "number_operators_unique": 9,
+        "number_operands_unique": 37,
+        "cloc": 55,
+        "loc": 150,
+        "lloc": 95,
+        "mi": 73.37,
+        "mIwoC": 33.04,
+        "commentWeight": 40.32,
+        "kanDefect": 1.29,
+        "relativeStructuralComplexity": 121,
+        "relativeDataComplexity": 1.58,
+        "relativeSystemComplexity": 122.58,
+        "totalStructuralComplexity": 968,
+        "totalDataComplexity": 12.67,
+        "totalSystemComplexity": 980.67,
+        "package": "FastForward\\DevTools\\CodeOwners\\",
+        "pageRank": 0,
+        "afferentCoupling": 1,
+        "efferentCoupling": 3,
+        "instability": 0.75,
+        "numberOfUnitTests": 1,
+        "violations": {},
+        "_type": "Hal\\Metric\\ClassMetric"
+    },
+    "FastForward\\DevTools\\CodeOwners\\": {
+        "name": "FastForward\\DevTools\\CodeOwners\\",
+        "classes": [
+            "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator"
+        ],
+        "incoming_class_dependencies": [
+            "FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand"
+        ],
+        "incoming_package_dependencies": [
+            "FastForward\\DevTools\\Console\\Command\\"
+        ],
+        "outgoing_class_dependencies": [
+            "FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "Symfony\\Component\\Config\\FileLocatorInterface"
+        ],
+        "outgoing_package_dependencies": [
+            "FastForward\\DevTools\\Composer\\Json\\",
+            "FastForward\\DevTools\\Filesystem\\",
+            "Symfony\\Component\\Config\\"
+        ],
+        "abstraction": 0,
+        "instability": 0.75,
+        "dependent_instabilities": {
+            "FastForward\\DevTools\\Composer\\Json\\": 0.5294117647058824,
+            "FastForward\\DevTools\\Filesystem\\": 0.1
+        },
+        "distance": 0.17677669529663687,
+        "normalized_distance": 0.25,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\PackageMetric"
+    },
     "FastForward\\DevTools\\Process\\ProcessBuilder": {
         "name": "FastForward\\DevTools\\Process\\ProcessBuilder",
         "interface": false,
@@ -7900,6 +8161,7 @@
         ],
         "incoming_class_dependencies": [
             "FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
+            "FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
             "FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
             "FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
             "FastForward\\DevTools\\Console\\Command\\WikiCommand",
@@ -7922,6 +8184,7 @@
             "FastForward\\DevTools\\Agent\\Skills\\SkillsSynchronizer",
             "FastForward\\DevTools\\GitAttributes\\Writer",
             "FastForward\\DevTools\\GitAttributes\\ExistenceChecker",
+            "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
             "FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryChecker",
             "FastForward\\DevTools\\Changelog\\Manager\\ChangelogManager"
         ],
@@ -7933,6 +8196,7 @@
             "FastForward\\DevTools\\Resource\\",
             "FastForward\\DevTools\\Agent\\Skills\\",
             "FastForward\\DevTools\\GitAttributes\\",
+            "FastForward\\DevTools\\CodeOwners\\",
             "FastForward\\DevTools\\Changelog\\Checker\\",
             "FastForward\\DevTools\\Changelog\\Manager\\"
         ],
@@ -7946,10 +8210,10 @@
             "Symfony\\Component\\Filesystem\\"
         ],
         "abstraction": 0.5,
-        "instability": 0.10714285714285714,
+        "instability": 0.1,
         "dependent_instabilities": [],
-        "distance": 0.27779194975185795,
-        "normalized_distance": 0.3928571428571429,
+        "distance": 0.282842712474619,
+        "normalized_distance": 0.4,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\PackageMetric"
@@ -8065,8 +8329,8 @@
         "implements": [],
         "kanDefect": 0.15,
         "package": "FastForward\\DevTools\\Filesystem\\",
-        "pageRank": 0.04,
-        "afferentCoupling": 25,
+        "pageRank": 0.05,
+        "afferentCoupling": 27,
         "efferentCoupling": 0,
         "instability": 0,
         "numberOfUnitTests": 0,
@@ -9331,7 +9595,7 @@
         "abstraction": 0.5,
         "instability": 0.8333333333333334,
         "dependent_instabilities": {
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714,
+            "FastForward\\DevTools\\Filesystem\\": 0.1,
             "FastForward\\DevTools\\Git\\": 0.625,
             "FastForward\\DevTools\\Changelog\\Parser\\": 0.6,
             "FastForward\\DevTools\\Changelog\\Document\\": 0.125
@@ -9866,7 +10130,7 @@
         "instability": 0.6666666666666666,
         "dependent_instabilities": {
             "FastForward\\DevTools\\Changelog\\Document\\": 0.125,
-            "FastForward\\DevTools\\Filesystem\\": 0.10714285714285714,
+            "FastForward\\DevTools\\Filesystem\\": 0.1,
             "FastForward\\DevTools\\Changelog\\Parser\\": 0.6,
             "FastForward\\DevTools\\Changelog\\Renderer\\": 0.75,
             "FastForward\\DevTools\\Git\\": 0.625
@@ -10014,6 +10278,11 @@
     "git": {
         "name": "git",
         "history": {
+            "2026-17": {
+                "nbFiles": 6,
+                "additions": 866,
+                "removes": 6
+            },
             "2026-16": {
                 "nbFiles": 565,
                 "additions": 19028,
@@ -10037,10 +10306,10 @@
         },
         "authors": {
             "GitHub": {
-                "nbFiles": 204,
-                "commits": 70,
-                "additions": 9990,
-                "removes": 1704
+                "nbFiles": 210,
+                "commits": 71,
+                "additions": 10856,
+                "removes": 1710
             },
             "Felipe Say\u00e3o Lobato Abreu": {
                 "nbFiles": 751,
@@ -10058,6 +10327,48 @@
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\ProjectMetric"
+    },
+    "src\/CodeOwners\/CodeOwnersGenerator.php": {
+        "name": "src\/CodeOwners\/CodeOwnersGenerator.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/CodeOwnersCommand.php": {
+        "name": "src\/Console\/Command\/CodeOwnersCommand.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "src\/Console\/Command\/SyncCommand.php": {
+        "name": "src\/Console\/Command\/SyncCommand.php",
+        "gitChanges": 13,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/CodeOwners\/CodeOwnersGeneratorTest.php": {
+        "name": "tests\/CodeOwners\/CodeOwnersGeneratorTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/CodeOwnersCommandTest.php": {
+        "name": "tests\/Console\/Command\/CodeOwnersCommandTest.php",
+        "gitChanges": 1,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
+    },
+    "tests\/Console\/Command\/SyncCommandTest.php": {
+        "name": "tests\/Console\/Command\/SyncCommandTest.php",
+        "gitChanges": 6,
+        "numberOfUnitTests": 0,
+        "violations": {},
+        "_type": "Hal\\Metric\\FileMetric"
     },
     "src\/Changelog\/Checker\/UnreleasedEntryChecker.php": {
         "name": "src\/Changelog\/Checker\/UnreleasedEntryChecker.php",
@@ -10328,20 +10639,6 @@
     "tests\/Git\/GitClientTest.php": {
         "name": "tests\/Git\/GitClientTest.php",
         "gitChanges": 1,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "src\/Console\/Command\/SyncCommand.php": {
-        "name": "src\/Console\/Command\/SyncCommand.php",
-        "gitChanges": 12,
-        "numberOfUnitTests": 0,
-        "violations": {},
-        "_type": "Hal\\Metric\\FileMetric"
-    },
-    "tests\/Console\/Command\/SyncCommandTest.php": {
-        "name": "tests\/Console\/Command\/SyncCommandTest.php",
-        "gitChanges": 5,
         "numberOfUnitTests": 0,
         "violations": {},
         "_type": "Hal\\Metric\\FileMetric"
@@ -11937,7 +12234,7 @@
     },
     "unitTesting": {
         "name": "unitTesting",
-        "assertions": 1021,
+        "assertions": 1041,
         "tests": {
             "FastForward\\DevTools\\Tests\\Agent\\Skills\\SkillsSynchronizerTest": {
                 "nbExternals": 4,
@@ -11950,7 +12247,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Agent\/Skills\/SkillsSynchronizerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Agent\\Skills\\SkillsSynchronizerTest",
                 "assertions": "46",
-                "time": "0.633909"
+                "time": "0.654475"
             },
             "FastForward\\DevTools\\Tests\\Agent\\Skills\\SynchronizeResultTest": {
                 "nbExternals": 2,
@@ -11961,7 +12258,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Agent\/Skills\/SynchronizeResultTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Agent\\Skills\\SynchronizeResultTest",
                 "assertions": "13",
-                "time": "0.001998"
+                "time": "0.002321"
             },
             "FastForward\\DevTools\\Tests\\Changelog\\Checker\\UnreleasedEntryCheckerTest": {
                 "nbExternals": 5,
@@ -11975,7 +12272,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Changelog\/Checker\/UnreleasedEntryCheckerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Changelog\\Checker\\UnreleasedEntryCheckerTest",
                 "assertions": "26",
-                "time": "0.011148"
+                "time": "0.014919"
             },
             "FastForward\\DevTools\\Tests\\Changelog\\Document\\ChangelogDocumentTest": {
                 "nbExternals": 3,
@@ -11987,7 +12284,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Changelog\/Document\/ChangelogDocumentTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Changelog\\Document\\ChangelogDocumentTest",
                 "assertions": "6",
-                "time": "0.001007"
+                "time": "0.001291"
             },
             "FastForward\\DevTools\\Tests\\Changelog\\Manager\\ChangelogManagerTest": {
                 "nbExternals": 6,
@@ -12002,7 +12299,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Changelog\/Manager\/ChangelogManagerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Changelog\\Manager\\ChangelogManagerTest",
                 "assertions": "55",
-                "time": "0.012746"
+                "time": "0.016868"
             },
             "FastForward\\DevTools\\Tests\\Changelog\\Parser\\ChangelogParserTest": {
                 "nbExternals": 2,
@@ -12013,7 +12310,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Changelog\/Parser\/ChangelogParserTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Changelog\\Parser\\ChangelogParserTest",
                 "assertions": "3",
-                "time": "0.001849"
+                "time": "0.002079"
             },
             "FastForward\\DevTools\\Tests\\Changelog\\Renderer\\MarkdownRendererTest": {
                 "nbExternals": 4,
@@ -12026,7 +12323,20 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Changelog\/Renderer\/MarkdownRendererTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Changelog\\Renderer\\MarkdownRendererTest",
                 "assertions": "18",
-                "time": "0.004683"
+                "time": "0.004609"
+            },
+            "FastForward\\DevTools\\Tests\\CodeOwners\\CodeOwnersGeneratorTest": {
+                "nbExternals": 4,
+                "externals": [
+                    "PHPUnit\\Framework\\TestCase",
+                    "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+                    "FastForward\\DevTools\\Composer\\Json\\Schema\\Support",
+                    "FastForward\\DevTools\\Composer\\Json\\Schema\\Author"
+                ],
+                "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/CodeOwners\/CodeOwnersGeneratorTest.php",
+                "classname": "FastForward\\DevTools\\Tests\\CodeOwners\\CodeOwnersGeneratorTest",
+                "assertions": "6",
+                "time": "0.010098"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Capability\\DevToolsCommandProviderTest": {
                 "nbExternals": 3,
@@ -12038,7 +12348,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Capability\/DevToolsCommandProviderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Capability\\DevToolsCommandProviderTest",
                 "assertions": "9",
-                "time": "0.036116"
+                "time": "0.040450"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\ComposerJsonTest": {
                 "nbExternals": 2,
@@ -12049,7 +12359,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/ComposerJsonTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\ComposerJsonTest",
                 "assertions": "51",
-                "time": "0.065605"
+                "time": "0.478304"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\AuthorTest": {
                 "nbExternals": 2,
@@ -12060,7 +12370,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/Schema\/AuthorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\AuthorTest",
                 "assertions": "8",
-                "time": "0.001611"
+                "time": "0.002217"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\FundingTest": {
                 "nbExternals": 2,
@@ -12071,7 +12381,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/Schema\/FundingTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\FundingTest",
                 "assertions": "2",
-                "time": "0.000300"
+                "time": "0.000413"
             },
             "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\SupportTest": {
                 "nbExternals": 2,
@@ -12082,7 +12392,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/Json\/Schema\/SupportTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\SupportTest",
                 "assertions": "20",
-                "time": "0.000655"
+                "time": "0.000900"
             },
             "FastForward\\DevTools\\Tests\\Composer\\PluginTest": {
                 "nbExternals": 2,
@@ -12093,7 +12403,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Composer\/PluginTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Composer\\PluginTest",
                 "assertions": "7",
-                "time": "0.017212"
+                "time": "0.198093"
             },
             "FastForward\\DevTools\\Tests\\Config\\ECSConfigTest": {
                 "nbExternals": 2,
@@ -12104,7 +12414,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Config\/ECSConfigTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Config\\ECSConfigTest",
                 "assertions": "1",
-                "time": "0.018507"
+                "time": "0.019834"
             },
             "FastForward\\DevTools\\Tests\\Config\\RectorConfigTest": {
                 "nbExternals": 2,
@@ -12115,7 +12425,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Config\/RectorConfigTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Config\\RectorConfigTest",
                 "assertions": "2",
-                "time": "0.001915"
+                "time": "0.002034"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCheckCommandTest": {
                 "nbExternals": 4,
@@ -12128,7 +12438,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/ChangelogCheckCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCheckCommandTest",
                 "assertions": "4",
-                "time": "0.006874"
+                "time": "0.007253"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCommandTest": {
                 "nbExternals": 7,
@@ -12144,7 +12454,21 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/ChangelogCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCommandTest",
                 "assertions": "14",
-                "time": "0.009821"
+                "time": "0.010673"
+            },
+            "FastForward\\DevTools\\Tests\\Console\\Command\\CodeOwnersCommandTest": {
+                "nbExternals": 5,
+                "externals": {
+                    "0": "PHPUnit\\Framework\\TestCase",
+                    "1": "Prophecy\\Argument",
+                    "3": "FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
+                    "4": "FastForward\\DevTools\\Resource\\FileDiff",
+                    "9": "ReflectionMethod"
+                },
+                "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/CodeOwnersCommandTest.php",
+                "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\CodeOwnersCommandTest",
+                "assertions": "14",
+                "time": "0.017769"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\CodeStyleCommandTest": {
                 "nbExternals": 4,
@@ -12157,7 +12481,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/CodeStyleCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\CodeStyleCommandTest",
                 "assertions": "13",
-                "time": "0.020886"
+                "time": "0.021494"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\CopyResourceCommandTest": {
                 "nbExternals": 6,
@@ -12172,7 +12496,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/CopyResourceCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\CopyResourceCommandTest",
                 "assertions": "23",
-                "time": "0.026655"
+                "time": "0.023319"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\DependenciesCommandTest": {
                 "nbExternals": 4,
@@ -12185,7 +12509,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/DependenciesCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\DependenciesCommandTest",
                 "assertions": "32",
-                "time": "0.080596"
+                "time": "0.080232"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\DocsCommandTest": {
                 "nbExternals": 4,
@@ -12198,7 +12522,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/DocsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\DocsCommandTest",
                 "assertions": "10",
-                "time": "0.017913"
+                "time": "0.017685"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\FundingCommandTest": {
                 "nbExternals": 9,
@@ -12216,7 +12540,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/FundingCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\FundingCommandTest",
                 "assertions": "27",
-                "time": "0.034411"
+                "time": "0.034662"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\GitAttributesCommandTest": {
                 "nbExternals": 5,
@@ -12230,7 +12554,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/GitAttributesCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\GitAttributesCommandTest",
                 "assertions": "18",
-                "time": "0.016868"
+                "time": "0.017761"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\GitHooksCommandTest": {
                 "nbExternals": 5,
@@ -12244,7 +12568,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/GitHooksCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\GitHooksCommandTest",
                 "assertions": "7",
-                "time": "0.006748"
+                "time": "0.007002"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\GitIgnoreCommandTest": {
                 "nbExternals": 5,
@@ -12258,7 +12582,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/GitIgnoreCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\GitIgnoreCommandTest",
                 "assertions": "9",
-                "time": "0.015021"
+                "time": "0.015287"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\LicenseCommandTest": {
                 "nbExternals": 5,
@@ -12272,7 +12596,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/LicenseCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\LicenseCommandTest",
                 "assertions": "13",
-                "time": "0.009522"
+                "time": "0.010020"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\MetricsCommandTest": {
                 "nbExternals": 4,
@@ -12285,7 +12609,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/MetricsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\MetricsCommandTest",
                 "assertions": "33",
-                "time": "0.024964"
+                "time": "0.025153"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\PhpDocCommandTest": {
                 "nbExternals": 9,
@@ -12303,7 +12627,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/PhpDocCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\PhpDocCommandTest",
                 "assertions": "14",
-                "time": "0.008265"
+                "time": "0.013535"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\RefactorCommandTest": {
                 "nbExternals": 4,
@@ -12316,7 +12640,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/RefactorCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\RefactorCommandTest",
                 "assertions": "15",
-                "time": "0.011243"
+                "time": "0.006723"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\ReportsCommandTest": {
                 "nbExternals": 4,
@@ -12329,7 +12653,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/ReportsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\ReportsCommandTest",
                 "assertions": "24",
-                "time": "0.027670"
+                "time": "0.028032"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\SkillsCommandTest": {
                 "nbExternals": 6,
@@ -12344,7 +12668,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/SkillsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\SkillsCommandTest",
                 "assertions": "20",
-                "time": "0.023092"
+                "time": "0.026674"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\StandardsCommandTest": {
                 "nbExternals": 5,
@@ -12358,7 +12682,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/StandardsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\StandardsCommandTest",
                 "assertions": "9",
-                "time": "0.004852"
+                "time": "0.005009"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\SyncCommandTest": {
                 "nbExternals": 5,
@@ -12372,7 +12696,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/SyncCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\SyncCommandTest",
                 "assertions": "11",
-                "time": "0.005917"
+                "time": "0.006265"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\TestsCommandTest": {
                 "nbExternals": 6,
@@ -12387,7 +12711,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/TestsCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\TestsCommandTest",
                 "assertions": "30",
-                "time": "0.087841"
+                "time": "0.087568"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\UpdateComposerJsonCommandTest": {
                 "nbExternals": 5,
@@ -12401,7 +12725,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/UpdateComposerJsonCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\UpdateComposerJsonCommandTest",
                 "assertions": "16",
-                "time": "0.018380"
+                "time": "0.014189"
             },
             "FastForward\\DevTools\\Tests\\Console\\Command\\WikiCommandTest": {
                 "nbExternals": 4,
@@ -12414,7 +12738,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/Command\/WikiCommandTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\Command\\WikiCommandTest",
                 "assertions": "21",
-                "time": "0.012153"
+                "time": "0.015828"
             },
             "FastForward\\DevTools\\Tests\\Console\\CommandLoader\\DevToolsCommandLoaderTest": {
                 "nbExternals": 5,
@@ -12428,21 +12752,21 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/CommandLoader\/DevToolsCommandLoaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\CommandLoader\\DevToolsCommandLoaderTest",
                 "assertions": "9",
-                "time": "0.002361"
+                "time": "0.002208"
             },
             "FastForward\\DevTools\\Tests\\Console\\DevToolsTest": {
                 "nbExternals": 5,
                 "externals": {
                     "0": "PHPUnit\\Framework\\TestCase",
                     "1": "FastForward\\DevTools\\Console\\DevTools",
-                    "2": "anonymous@0000000000001f9a0000000000000000",
+                    "2": "anonymous@00000000000012820000000000000000",
                     "3": "ReflectionProperty",
                     "7": "ReflectionMethod"
                 },
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Console\/DevToolsTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Console\\DevToolsTest",
                 "assertions": "10",
-                "time": "0.015998"
+                "time": "0.015688"
             },
             "FastForward\\DevTools\\Tests\\Filesystem\\FilesystemTest": {
                 "nbExternals": 3,
@@ -12454,7 +12778,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Filesystem\/FilesystemTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Filesystem\\FilesystemTest",
                 "assertions": "14",
-                "time": "0.016291"
+                "time": "0.018409"
             },
             "FastForward\\DevTools\\Tests\\Filesystem\\FinderFactoryTest": {
                 "nbExternals": 2,
@@ -12465,7 +12789,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Filesystem\/FinderFactoryTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Filesystem\\FinderFactoryTest",
                 "assertions": "3",
-                "time": "0.000325"
+                "time": "0.000344"
             },
             "FastForward\\DevTools\\Tests\\Funding\\ComposerFundingCodecTest": {
                 "nbExternals": 3,
@@ -12477,7 +12801,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Funding\/ComposerFundingCodecTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Funding\\ComposerFundingCodecTest",
                 "assertions": "4",
-                "time": "0.000815"
+                "time": "0.000863"
             },
             "FastForward\\DevTools\\Tests\\Funding\\FundingProfileMergerTest": {
                 "nbExternals": 3,
@@ -12502,7 +12826,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Funding\/FundingYamlCodecTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Funding\\FundingYamlCodecTest",
                 "assertions": "5",
-                "time": "0.001609"
+                "time": "0.001642"
             },
             "FastForward\\DevTools\\Tests\\Git\\GitClientTest": {
                 "nbExternals": 2,
@@ -12513,7 +12837,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Git\/GitClientTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Git\\GitClientTest",
                 "assertions": "36",
-                "time": "0.006030"
+                "time": "0.006149"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\CandidateProviderTest": {
                 "nbExternals": 2,
@@ -12524,7 +12848,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/CandidateProviderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\CandidateProviderTest",
                 "assertions": "11",
-                "time": "0.005044"
+                "time": "0.005141"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\ExistenceCheckerTest": {
                 "nbExternals": 2,
@@ -12535,7 +12859,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/ExistenceCheckerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\ExistenceCheckerTest",
                 "assertions": "12",
-                "time": "0.011305"
+                "time": "0.007057"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\ExportIgnoreFilterTest": {
                 "nbExternals": 2,
@@ -12546,7 +12870,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/ExportIgnoreFilterTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\ExportIgnoreFilterTest",
                 "assertions": "2",
-                "time": "0.001776"
+                "time": "0.001781"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\MergerTest": {
                 "nbExternals": 2,
@@ -12557,7 +12881,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/MergerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\MergerTest",
                 "assertions": "15",
-                "time": "0.008614"
+                "time": "0.012675"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\ReaderTest": {
                 "nbExternals": 2,
@@ -12568,7 +12892,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/ReaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\ReaderTest",
                 "assertions": "2",
-                "time": "0.001544"
+                "time": "0.001579"
             },
             "FastForward\\DevTools\\Tests\\GitAttributes\\WriterTest": {
                 "nbExternals": 2,
@@ -12579,7 +12903,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitAttributes\/WriterTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitAttributes\\WriterTest",
                 "assertions": "11",
-                "time": "0.008033"
+                "time": "0.007912"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\ClassifierTest": {
                 "nbExternals": 2,
@@ -12590,7 +12914,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/ClassifierTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\ClassifierTest",
                 "assertions": "15",
-                "time": "0.006742"
+                "time": "0.006479"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\GitIgnoreTest": {
                 "nbExternals": 2,
@@ -12601,7 +12925,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/GitIgnoreTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\GitIgnoreTest",
                 "assertions": "11",
-                "time": "0.003544"
+                "time": "0.003527"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\MergerTest": {
                 "nbExternals": 2,
@@ -12612,7 +12936,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/MergerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\MergerTest",
                 "assertions": "17",
-                "time": "0.008441"
+                "time": "0.008198"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\ReaderTest": {
                 "nbExternals": 2,
@@ -12623,7 +12947,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/ReaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\ReaderTest",
                 "assertions": "7",
-                "time": "0.002158"
+                "time": "0.002020"
             },
             "FastForward\\DevTools\\Tests\\GitIgnore\\WriterTest": {
                 "nbExternals": 4,
@@ -12636,7 +12960,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/GitIgnore\/WriterTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\GitIgnore\\WriterTest",
                 "assertions": "3",
-                "time": "0.002608"
+                "time": "0.002468"
             },
             "FastForward\\DevTools\\Tests\\License\\GeneratorTest": {
                 "nbExternals": 5,
@@ -12650,7 +12974,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/License\/GeneratorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\License\\GeneratorTest",
                 "assertions": "4",
-                "time": "0.004827"
+                "time": "0.004641"
             },
             "FastForward\\DevTools\\Tests\\License\\ResolverTest": {
                 "nbExternals": 2,
@@ -12661,7 +12985,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/License\/ResolverTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\License\\ResolverTest",
                 "assertions": "3",
-                "time": "0.002231"
+                "time": "0.001823"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Coverage\\CoverageSummaryLoaderTest": {
                 "nbExternals": 8,
@@ -12669,7 +12993,7 @@
                     "PHPUnit\\Framework\\TestCase",
                     "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
                     "RuntimeException",
-                    "anonymous@00000000000016f00000000000000000",
+                    "anonymous@00000000000013170000000000000000",
                     "SebastianBergmann\\CodeCoverage\\Filter",
                     "SebastianBergmann\\CodeCoverage\\CodeCoverage",
                     "SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",
@@ -12678,7 +13002,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Coverage\/CoverageSummaryLoaderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Coverage\\CoverageSummaryLoaderTest",
                 "assertions": "8",
-                "time": "0.004549"
+                "time": "0.003892"
             },
             "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryTest": {
                 "nbExternals": 2,
@@ -12689,7 +13013,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Coverage\/CoverageSummaryTest.php",
                 "classname": "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryTest",
                 "assertions": "9",
-                "time": "0.001097"
+                "time": "0.001069"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\EventTracerTest": {
                 "nbExternals": 4,
@@ -12702,7 +13026,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Event\/EventTracerTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\EventTracerTest",
                 "assertions": "5",
-                "time": "0.001743"
+                "time": "0.001824"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriberTest": {
                 "nbExternals": 3,
@@ -12714,7 +13038,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Event\/TestSuite\/ByPassfinalsStartedSubscriberTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriberTest",
                 "assertions": "0",
-                "time": "0.002261"
+                "time": "0.002326"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriberTest": {
                 "nbExternals": 4,
@@ -12727,7 +13051,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Event\/TestSuite\/JoliNotifExecutionFinishedSubscriberTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriberTest",
                 "assertions": "3",
-                "time": "0.004332"
+                "time": "0.004232"
             },
             "FastForward\\DevTools\\Tests\\PhpUnit\\Runner\\Extension\\DevToolsExtensionTest": {
                 "nbExternals": 2,
@@ -12738,7 +13062,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/PhpUnit\/Runner\/Extension\/DevToolsExtensionTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\PhpUnit\\Runner\\Extension\\DevToolsExtensionTest",
                 "assertions": "2",
-                "time": "0.002080"
+                "time": "0.001979"
             },
             "FastForward\\DevTools\\Tests\\Process\\ProcessBuilderTest": {
                 "nbExternals": 2,
@@ -12749,7 +13073,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Process\/ProcessBuilderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Process\\ProcessBuilderTest",
                 "assertions": "11",
-                "time": "0.002601"
+                "time": "0.002481"
             },
             "FastForward\\DevTools\\Tests\\Process\\ProcessQueueTest": {
                 "nbExternals": 5,
@@ -12763,7 +13087,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Process\/ProcessQueueTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Process\\ProcessQueueTest",
                 "assertions": "36",
-                "time": "0.014829"
+                "time": "0.014690"
             },
             "FastForward\\DevTools\\Tests\\Psr\\Clock\\SystemClockTest": {
                 "nbExternals": 3,
@@ -12775,7 +13099,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Psr\/Clock\/SystemClockTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Psr\\Clock\\SystemClockTest",
                 "assertions": "5",
-                "time": "0.001196"
+                "time": "0.001282"
             },
             "FastForward\\DevTools\\Tests\\Rector\\AddMissingClassPhpDocRectorTest": {
                 "nbExternals": 8,
@@ -12792,7 +13116,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Rector\/AddMissingClassPhpDocRectorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Rector\\AddMissingClassPhpDocRectorTest",
                 "assertions": "12",
-                "time": "0.034611"
+                "time": "0.035912"
             },
             "FastForward\\DevTools\\Tests\\Rector\\AddMissingMethodPhpDocRectorTest": {
                 "nbExternals": 17,
@@ -12818,7 +13142,7 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Rector\/AddMissingMethodPhpDocRectorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Rector\\AddMissingMethodPhpDocRectorTest",
                 "assertions": "22",
-                "time": "0.006854"
+                "time": "0.006621"
             },
             "FastForward\\DevTools\\Tests\\Rector\\RemoveEmptyDocBlockRectorTest": {
                 "nbExternals": 9,
@@ -12836,19 +13160,19 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Rector\/RemoveEmptyDocBlockRectorTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Rector\\RemoveEmptyDocBlockRectorTest",
                 "assertions": "13",
-                "time": "0.004795"
+                "time": "0.004851"
             },
             "FastForward\\DevTools\\Tests\\Resource\\FileDifferTest": {
                 "nbExternals": 3,
                 "externals": [
                     "PHPUnit\\Framework\\TestCase",
                     "FastForward\\DevTools\\Resource\\FileDiffer",
-                    "anonymous@00000000000016720000000000000000"
+                    "anonymous@00000000000017d50000000000000000"
                 ],
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/Resource\/FileDifferTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\Resource\\FileDifferTest",
                 "assertions": "34",
-                "time": "0.005951"
+                "time": "0.005914"
             },
             "FastForward\\DevTools\\Tests\\ServiceProvider\\DevToolsServiceProviderTest": {
                 "nbExternals": 2,
@@ -12859,14 +13183,14 @@
                 "filename": "\/home\/runner\/work\/dev-tools\/dev-tools\/tests\/ServiceProvider\/DevToolsServiceProviderTest.php",
                 "classname": "FastForward\\DevTools\\Tests\\ServiceProvider\\DevToolsServiceProviderTest",
                 "assertions": "4",
-                "time": "0.001140"
+                "time": "0.001201"
             }
         },
-        "nbSuites": 73,
-        "nbCoveredClasses": 77,
-        "percentCoveredClasses": 72.64,
+        "nbSuites": 75,
+        "nbCoveredClasses": 79,
+        "percentCoveredClasses": 73.15,
         "nbUncoveredClasses": 29,
-        "percentUncoveredClasses": 27.36,
+        "percentUncoveredClasses": 26.85,
         "violations": {},
         "_type": "Hal\\Metric\\ProjectMetric"
     },
@@ -13464,9 +13788,9 @@
                 "github_watchers": 12,
                 "github_forks": 26,
                 "github_open_issues": 1,
-                "download_total": 4085704,
-                "download_monthly": 64474,
-                "download_daily": 639,
+                "download_total": 4085946,
+                "download_monthly": 64716,
+                "download_daily": 793,
                 "favers": 597,
                 "name": "pyrech\/composer-changelogs",
                 "installed": "2.2.0",
@@ -13728,9 +14052,9 @@
                 "github_watchers": 16,
                 "github_forks": 100,
                 "github_open_issues": 0,
-                "download_total": 866340046,
-                "download_monthly": 14031127,
-                "download_daily": 227946,
+                "download_total": 866277783,
+                "download_monthly": 13968864,
+                "download_daily": 210210,
                 "favers": 7579,
                 "name": "symfony\/var-dumper",
                 "installed": "7.4.8",

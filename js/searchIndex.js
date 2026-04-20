@@ -526,6 +526,66 @@ Search.appendIndex(
             "summary": "Renders\u0020only\u0020the\u0020body\u0020content\u0020of\u0020one\u0020released\u0020version.",
             "url": "classes/FastForward-DevTools-Changelog-Renderer-MarkdownRendererInterface.html#method_renderReleaseBody"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+            "name": "CodeOwnersGenerator",
+            "summary": "Generates\u0020CODEOWNERS\u0020content\u0020from\u0020repository\u0020metadata.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020generator\u0020instance.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AinferOwners\u0028\u0029",
+            "name": "inferOwners",
+            "summary": "Returns\u0020the\u0020automatically\u0020inferred\u0020CODEOWNERS\u0020handles.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_inferOwners"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AnormalizeOwners\u0028\u0029",
+            "name": "normalizeOwners",
+            "summary": "Normalizes\u0020user\u002Dprovided\u0020owner\u0020tokens.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_normalizeOwners"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003Agenerate\u0028\u0029",
+            "name": "generate",
+            "summary": "Generates\u0020CODEOWNERS\u0020contents.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_generate"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AinferGroupOwner\u0028\u0029",
+            "name": "inferGroupOwner",
+            "summary": "Returns\u0020the\u0020repository\u0020or\u0020organization\u0020owner\u0020inferred\u0020from\u0020support\u0020metadata.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_inferGroupOwner"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AextractGitHubHandleFromUrl\u0028\u0029",
+            "name": "extractGitHubHandleFromUrl",
+            "summary": "Extracts\u0020a\u0020GitHub\u0020user\u0020handle\u0020from\u0020a\u0020homepage\u0020URL.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_extractGitHubHandleFromUrl"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AextractGitHubRepositoryOwner\u0028\u0029",
+            "name": "extractGitHubRepositoryOwner",
+            "summary": "Extracts\u0020the\u0020repository\u0020owner\u0020from\u0020a\u0020GitHub\u0020repository\u0020URL.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_extractGitHubRepositoryOwner"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AgithubPath\u0028\u0029",
+            "name": "githubPath",
+            "summary": "Returns\u0020the\u0020path\u0020portion\u0020of\u0020a\u0020GitHub\u0020URL\u0020when\u0020the\u0020host\u0020matches\u0020github.com.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_githubPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003A\u0024composer",
+            "name": "composer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#property_composer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003A\u0024fileLocator",
+            "name": "fileLocator",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#property_fileLocator"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider",
             "name": "DevToolsCommandProvider",
             "summary": "Provides\u0020a\u0020registry\u0020of\u0020custom\u0020dev\u002Dtools\u0020commands\u0020mapped\u0020for\u0020Composer\u0020integration.",
@@ -1270,6 +1330,51 @@ Search.appendIndex(
             "name": "changelogManager",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogShowCommand.html#property_changelogManager"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
+            "name": "CodeOwnersCommand",
+            "summary": "Generates\u0020and\u0020synchronizes\u0020CODEOWNERS\u0020files\u0020from\u0020local\u0020project\u0020metadata.",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020command\u0020instance.",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "\u007B\u0040inheritDoc\u007D",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Generates\u0020or\u0020updates\u0020the\u0020CODEOWNERS\u0020file.",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003ApromptForOwners\u0028\u0029",
+            "name": "promptForOwners",
+            "summary": "Prompts\u0020for\u0020CODEOWNERS\u0020entries\u0020when\u0020metadata\u0020inference\u0020is\u0020insufficient.",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#method_promptForOwners"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003AshouldWriteCodeOwners\u0028\u0029",
+            "name": "shouldWriteCodeOwners",
+            "summary": "Prompts\u0020whether\u0020the\u0020generated\u0020CODEOWNERS\u0020file\u0020should\u0020be\u0020written.",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#method_shouldWriteCodeOwners"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003A\u0024generator",
+            "name": "generator",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_generator"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003A\u0024fileDiffer",
+            "name": "fileDiffer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_fileDiffer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand",
             "name": "CodeStyleCommand",
@@ -3770,6 +3875,11 @@ Search.appendIndex(
             "name": "Renderer",
             "summary": "",
             "url": "namespaces/fastforward-devtools-changelog-renderer.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners",
+            "name": "CodeOwners",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-codeowners.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Capability",
             "name": "Capability",
