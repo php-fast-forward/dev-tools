@@ -67,9 +67,9 @@ final class CodeOwnersGeneratorTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
 
-        $this->fileLocator->locate('resources/CODEOWNERS.dist')
-            ->willReturn('/package/resources/CODEOWNERS.dist');
-        $this->filesystem->readFile('/package/resources/CODEOWNERS.dist')
+        $this->fileLocator->locate('resources/CODEOWNERS')
+            ->willReturn('/package/resources/CODEOWNERS');
+        $this->filesystem->readFile('/package/resources/CODEOWNERS')
             ->willReturn(<<<'TEXT'
                 # Header
                 {{ suggestions }}
@@ -87,8 +87,10 @@ final class CodeOwnersGeneratorTest extends TestCase
      * @return void
      */
     #[Test]
-    public function inferOwnersWillCollectGitHubHandlesFromAuthorHomepages(): void
+    public function inferOwnersWillCollectGroupAndAuthorOwners(): void
     {
+        $this->composerJson->getSupport()
+            ->willReturn(new Support(source: 'https://github.com/php-fast-forward/dev-tools'));
         $this->composerJson->getAuthors()
             ->willReturn([
                 new Author(homepage: 'https://github.com/php-fast-forward'),
@@ -103,12 +105,12 @@ final class CodeOwnersGeneratorTest extends TestCase
      * @return void
      */
     #[Test]
-    public function inferSuggestedOwnersWillReturnRepositoryOwnerFromSupportSource(): void
+    public function inferGroupOwnerWillReturnRepositoryOwnerFromSupportSource(): void
     {
         $this->composerJson->getSupport()
             ->willReturn(new Support(source: 'https://github.com/php-fast-forward/dev-tools'));
 
-        self::assertSame(['@php-fast-forward'], $this->generator->inferSuggestedOwners());
+        self::assertSame('@php-fast-forward', $this->generator->inferGroupOwner());
     }
 
     /**
@@ -117,11 +119,8 @@ final class CodeOwnersGeneratorTest extends TestCase
     #[Test]
     public function generateWillRenderExplicitOwners(): void
     {
-        $this->composerJson->getSupport()
-            ->willReturn(new Support());
-
         self::assertSame(
-            "# Header\n# No GitHub owners could be inferred from composer.json metadata.\n* @php-fast-forward @mentordosnerds",
+            "# Header\n\n* @php-fast-forward @mentordosnerds",
             $this->generator->generate(['@php-fast-forward', '@mentordosnerds']),
         );
     }
@@ -135,10 +134,27 @@ final class CodeOwnersGeneratorTest extends TestCase
         $this->composerJson->getAuthors()
             ->willReturn([]);
         $this->composerJson->getSupport()
+            ->willReturn(new Support());
+
+        self::assertSame(
+            "# Header\n# No GitHub owners could be inferred from composer.json metadata.\n# * @your-github-user",
+            $this->generator->generate(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function generateWillRenderGroupOwnerWhenAuthorCannotBeInferred(): void
+    {
+        $this->composerJson->getAuthors()
+            ->willReturn([]);
+        $this->composerJson->getSupport()
             ->willReturn(new Support(source: 'https://github.com/php-fast-forward/dev-tools'));
 
         self::assertSame(
-            "# Header\n# Suggested owner from composer support metadata: @php-fast-forward\n# * @your-github-user",
+            "# Header\n\n* @php-fast-forward",
             $this->generator->generate(),
         );
     }

@@ -61,13 +61,18 @@ final readonly class CodeOwnersGenerator
      */
     public function inferOwners(): array
     {
+        $owners = [];
+        $groupOwner = $this->inferGroupOwner();
+
+        if (null !== $groupOwner) {
+            $owners[] = $groupOwner;
+        }
+
         $authors = $this->composer->getAuthors();
 
         if (! is_iterable($authors)) {
-            return [];
+            return $owners;
         }
-
-        $owners = [];
 
         foreach ($authors as $author) {
             if (! $author instanceof AuthorInterface) {
@@ -84,29 +89,6 @@ final readonly class CodeOwnersGenerator
         }
 
         return array_values(array_unique($owners));
-    }
-
-    /**
-     * Returns best-effort commented suggestions when direct ownership cannot be inferred.
-     *
-     * @return list<string>
-     */
-    public function inferSuggestedOwners(): array
-    {
-        $source = $this->composer->getSupport()
-            ->getSource();
-
-        if ('' === $source) {
-            return [];
-        }
-
-        $owner = $this->extractGitHubRepositoryOwner($source);
-
-        if (null === $owner) {
-            return [];
-        }
-
-        return ['@' . $owner];
     }
 
     /**
@@ -147,21 +129,38 @@ final readonly class CodeOwnersGenerator
     public function generate(?array $owners = null): string
     {
         $owners ??= $this->inferOwners();
-        $suggestions = [];
-
-        if ([] === $owners) {
-            $suggestions = $this->inferSuggestedOwners();
-        }
-
-        $template = $this->filesystem->readFile($this->fileLocator->locate('resources/CODEOWNERS.dist'));
-        $suggestionBlock = [] === $suggestions
+        $template = $this->filesystem->readFile($this->fileLocator->locate('resources/CODEOWNERS'));
+        $suggestionBlock = [] === $owners
             ? '# No GitHub owners could be inferred from composer.json metadata.'
-            : \sprintf('# Suggested owner from composer support metadata: %s', implode(' ', $suggestions));
+            : '';
         $rule = [] === $owners
             ? '# * @your-github-user'
             : \sprintf('* %s', implode(' ', $owners));
 
         return str_replace(['{{ suggestions }}', '{{ rule }}'], [$suggestionBlock, $rule], $template);
+    }
+
+    /**
+     * Returns the repository or organization owner inferred from support metadata.
+     *
+     * @return string|null the inferred group owner with `@`, or null when unavailable
+     */
+    public function inferGroupOwner(): ?string
+    {
+        $source = $this->composer->getSupport()
+            ->getSource();
+
+        if ('' === $source) {
+            return null;
+        }
+
+        $owner = $this->extractGitHubRepositoryOwner($source);
+
+        if (null === $owner) {
+            return null;
+        }
+
+        return '@' . $owner;
     }
 
     /**
