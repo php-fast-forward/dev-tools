@@ -1,0 +1,50 @@
+{
+    "LOC": {
+        "linesOfCode": 7132,
+        "logicalLinesOfCode": 3656,
+        "commentLinesOfCode": 3483,
+        "avgVolume": 452.4,
+        "avgCommentWeight": 43.91,
+        "avgIntelligentContent": 43.91,
+        "logicalLinesByClass": 45,
+        "logicalLinesByMethod": 11
+    },
+    "OOP": {
+        "classes": 81,
+        "interface": 28,
+        "methods": 334,
+        "methodsByClass": 4.12,
+        "lackCohesionOfMethods": 2.11
+    },
+    "Coupling": {
+        "avgAfferentCoupling": 0.57,
+        "avgEfferentCoupling": 4.51,
+        "avgInstability": 0.85,
+        "inheritanceTreeDepth": 1.09
+    },
+    "Package": {
+        "packages": 30,
+        "acgClassesPerPackage": 3.63,
+        "avgDistance": 0.15,
+        "avgIncomingClassDependencies": 2.97,
+        "avgOutgoingClassDependencies": 5.27,
+        "avgIncomingPackageDependencies": 1.37,
+        "avgOutgoingPackageDependencies": 4
+    },
+    "Complexity": {
+        "avgCyclomaticComplexityByClass": 8.46,
+        "avgWeightedMethodCountByClass": 11.58,
+        "avgRelativeSystemComplexity": 168.03,
+        "avgDifficulty": 7.22
+    },
+    "Bugs": {
+        "avgBugsByClass": 0.15,
+        "avgDefectsByClass": 0.58
+    },
+    "Violations": {
+        "critical": 0,
+        "error": 12,
+        "warning": 10,
+        "information": 0
+    }
+}
