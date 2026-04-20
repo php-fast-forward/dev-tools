@@ -109,7 +109,10 @@ final class CodeOwnersCommand extends BaseCommand
 
         if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($targetPath)) {
             $output->writeln(
-                \sprintf('<comment>Managed file %s already exists. Skipping CODEOWNERS generation.</comment>', $targetPath)
+                \sprintf(
+                    '<comment>Managed file %s already exists. Skipping CODEOWNERS generation.</comment>',
+                    $targetPath
+                )
             );
 
             return self::SUCCESS;

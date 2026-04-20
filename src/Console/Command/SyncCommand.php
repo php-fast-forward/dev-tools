@@ -134,7 +134,10 @@ final class SyncCommand extends BaseCommand
             ],
             $allowDetached
         );
-        $this->queueDevToolsCommand(['codeowners', $input->getOption('overwrite') ? '--overwrite' : null, ...$modeArguments], $allowDetached);
+        $this->queueDevToolsCommand(
+            ['codeowners', $input->getOption('overwrite') ? '--overwrite' : null, ...$modeArguments],
+            $allowDetached
+        );
         if ($dryRun || $check || $interactive) {
             $output->writeln(
                 '<comment>Skipping wiki and skills during preview/check modes because they do not yet expose non-destructive verification.</comment>'

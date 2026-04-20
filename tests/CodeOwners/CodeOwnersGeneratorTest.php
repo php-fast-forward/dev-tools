@@ -153,10 +153,7 @@ final class CodeOwnersGeneratorTest extends TestCase
         $this->composerJson->getSupport()
             ->willReturn(new Support(source: 'https://github.com/php-fast-forward/dev-tools'));
 
-        self::assertSame(
-            "# Header\n\n* @php-fast-forward",
-            $this->generator->generate(),
-        );
+        self::assertSame("# Header\n\n* @php-fast-forward", $this->generator->generate());
     }
 
     /**

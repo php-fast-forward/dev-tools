@@ -24,14 +24,15 @@ use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 
+use function Safe\preg_match;
+use function Safe\parse_url;
+use function Safe\preg_replace;
+use function Safe\preg_split;
 use function array_filter;
 use function array_map;
 use function array_unique;
 use function implode;
 use function is_iterable;
-use function parse_url;
-use function preg_match;
-use function preg_replace;
 use function str_contains;
 use function str_starts_with;
 use function trim;
@@ -178,7 +179,7 @@ final readonly class CodeOwnersGenerator
             return null;
         }
 
-        if (! preg_match('#^/([^/]+)/?$#', $path, $matches)) {
+        if (0 === preg_match('#^/([^/]+)/?$#', $path, $matches)) {
             return null;
         }
 
@@ -200,7 +201,7 @@ final readonly class CodeOwnersGenerator
             return null;
         }
 
-        if (! preg_match('#^/([^/]+)/([^/]+)/?$#', $path, $matches)) {
+        if (0 === preg_match('#^/([^/]+)/([^/]+)/?$#', $path, $matches)) {
             return null;
         }
 
