@@ -72,6 +72,8 @@
             <li class="success">Resolve throws will handle multiple and duplicates</li>
             <li class="success">Refactor will add docblock with intersections and unions</li>
             <li class="success">Refactor will add docblock with fully qualified intersections</li>
+            <li class="success">Refactor will skip return tag for constructors and respect original type names</li>
+            <li class="success">Refactor will return original node when no tags can be generated</li>
         </ul>
         <h2>Agents Command (FastForward\DevTools\Tests\Console\Command\AgentsCommand)</h2>
         <ul>
@@ -154,6 +156,7 @@
             <li class="success">Parse will return default document for empty contents</li>
             <li class="success">Parse will return default document when no release headings exist</li>
             <li class="success">Parse will ignore unsupported lines and deduplicate entries within a section</li>
+            <li class="success">Parse will treat empty category bodies as empty entry lists</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
@@ -179,15 +182,21 @@
             <li class="success">Execute will write generated code owners when file is missing</li>
             <li class="success">Execute will skip existing code owners by default</li>
             <li class="success">Execute will fail check mode when drift is detected</li>
+            <li class="success">Execute will prompt for owners when interactive inference fails</li>
+            <li class="success">Execute will return success on dry run when drift is detected</li>
+            <li class="success">Execute will skip replacing existing code owners when confirmation is declined</li>
         </ul>
         <h2>Code Owners Generator (FastForward\DevTools\Tests\CodeOwners\CodeOwnersGenerator)</h2>
         <ul>
             <li class="success">Infer owners will collect group and author owners</li>
             <li class="success">Infer group owner will return repository owner from support source</li>
+            <li class="success">Infer owners will ignore unsupported author entries and invalid urls</li>
+            <li class="success">Infer group owner will return null when support source is missing or invalid</li>
             <li class="success">Generate will render explicit owners</li>
             <li class="success">Generate will render commented fallback when owners cannot be inferred</li>
             <li class="success">Generate will render group owner when author cannot be inferred</li>
             <li class="success">Normalize owners will preserve handles and emails</li>
+            <li class="success">Normalize owners will drop empty tokens and deduplicate repeated owners</li>
         </ul>
         <h2>Code Style Command (FastForward\DevTools\Tests\Console\Command\CodeStyleCommand)</h2>
         <ul>
@@ -221,6 +230,7 @@
             <li class="success">Dump will write supported funding and preserve unsupported entries</li>
             <li class="success">Parse will ignore invalid entries and deduplicate supported values</li>
             <li class="success">Parse will return empty profile when funding is not an array</li>
+            <li class="success">Parse will treat github entries without parsable url parts as unsupported</li>
             <li class="success">Dump will remove funding when the profile has no entries</li>
             <li class="success">Dump will insert funding immediately after support when present</li>
         </ul>
@@ -381,6 +391,12 @@
             <li class="success">Execute will create funding yaml from composer funding</li>
             <li class="success">Execute will merge both sources without duplicating entries</li>
             <li class="success">Execute will be idempotent when funding metadata already matches</li>
+            <li class="success">Execute will return success when composer file does not exist</li>
+            <li class="success">Execute will return failure in check mode when composer file would change</li>
+            <li class="success">Execute will not write managed files during dry run</li>
+            <li class="success">Execute will skip composer write when interactive confirmation is declined</li>
+            <li class="success">Execute will return failure when composer normalize fails</li>
+            <li class="success">Execute will pass working directory and alternate manifest to composer normalize</li>
             <li class="success">Command will set expected name description and help</li>
         </ul>
         <h2>Funding Profile (FastForward\DevTools\Tests\Funding\FundingProfile)</h2>
@@ -505,6 +521,7 @@
         </ul>
         <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>
         <ul>
+            <li class="success">Set logger will replace the active logger</li>
             <li class="success">Synchronize with missing package path will return failed result</li>
             <li class="success">Synchronize with missing target dir will create it and create links</li>
             <li class="success">Synchronize will preserve existing valid symlink</li>
@@ -552,6 +569,10 @@
             <li class="success">Run detached process start failure with ignore failure returns success</li>
             <li class="success">Run will write process output to output interface</li>
             <li class="success">Wait will block until detached processes finish</li>
+            <li class="success">Add will ignore pty failures and still queue the process</li>
+            <li class="success">Run will write error output to console error stream</li>
+            <li class="success">Run will flush remaining detached output when process finishes</li>
+            <li class="success">Wait will accept null output</li>
         </ul>
         <h2>Reader (FastForward\DevTools\Tests\GitAttributes\Reader)</h2>
         <ul>
@@ -568,6 +589,7 @@
         <ul>
             <li class="success">Configure will return callable</li>
             <li class="success">Configure with custom callback will return callable</li>
+            <li class="success">Configure will apply the default rector configuration and customization callback</li>
         </ul>
         <h2>Refactor Command (FastForward\DevTools\Tests\Console\Command\RefactorCommand)</h2>
         <ul>
