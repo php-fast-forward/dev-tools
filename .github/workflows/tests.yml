@@ -8,16 +8,11 @@ on:
                 required: false
                 type: number
                 default: 80
-            run-dependencies-check:
-                description: Whether to run the dependency health check during CI.
-                required: false
-                type: boolean
-                default: true
             max-outdated:
                 description: Maximum number of outdated packages allowed by the dependencies command.
                 required: false
                 type: number
-                default: 5
+                default: -1
     workflow_dispatch:
         inputs:
             min-coverage:
@@ -25,16 +20,11 @@ on:
                 required: false
                 type: number
                 default: 80
-            run-dependencies-check:
-                description: Whether to run the dependency health check during CI.
-                required: false
-                type: boolean
-                default: true
             max-outdated:
                 description: Maximum number of outdated packages allowed by the dependencies command.
                 required: false
                 type: number
-                default: 5
+                default: -1
     pull_request:
         paths:
           - 'src/**'
@@ -126,9 +116,7 @@ jobs:
     dependency-health:
         needs: resolve_php
         name: Dependency Health
-        if: ${{ github.event_name != 'workflow_call' || inputs.run-dependencies-check }}
         runs-on: ubuntu-latest
-        continue-on-error: true
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
             FORCE_COLOR: '1'
@@ -162,4 +150,4 @@ jobs:
             - name: Run dependency health check
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || 5 }}
+              run: composer dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || -1 }}
