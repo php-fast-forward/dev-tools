@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Agent\Agents\AgentsSynchronizer;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -36,12 +36,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class AgentsCommand extends BaseCommand
 {
+    private const string DIRECTORY_LABEL = '.agents/agents';
+
     /**
-     * @param AgentsSynchronizer $synchronizer
+     * @param PackagedDirectorySynchronizer $synchronizer
      * @param FilesystemInterface $filesystem
      */
     public function __construct(
-        private readonly AgentsSynchronizer $synchronizer,
+        private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
     ) {
         parent::__construct();
@@ -57,8 +59,8 @@ final class AgentsCommand extends BaseCommand
     {
         $output->writeln('<info>Starting agents synchronization...</info>');
 
-        $packageAgentsPath = $this->filesystem->getAbsolutePath('.agents/agents', \dirname(__DIR__, 3));
-        $agentsDir = $this->filesystem->getAbsolutePath('.agents/agents');
+        $packageAgentsPath = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL, \dirname(__DIR__, 3));
+        $agentsDir = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL);
 
         if (! $this->filesystem->exists($packageAgentsPath)) {
             $output->writeln('<comment>No packaged .agents/agents found at: ' . $packageAgentsPath . '</comment>');
@@ -73,7 +75,7 @@ final class AgentsCommand extends BaseCommand
 
         $this->synchronizer->setLogger($this->getIO());
 
-        $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath);
+        $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::DIRECTORY_LABEL);
 
         if ($result->failed()) {
             $output->writeln('<error>Agents synchronization failed.</error>');

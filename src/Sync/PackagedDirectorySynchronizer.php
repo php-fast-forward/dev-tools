@@ -17,7 +17,7 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Agent\Sync;
+namespace FastForward\DevTools\Sync;
 
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;

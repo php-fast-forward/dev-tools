@@ -21,10 +21,10 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use Composer\Console\Application;
 use Composer\IO\IOInterface;
-use FastForward\DevTools\Agent\Agents\AgentsSynchronizer;
-use FastForward\DevTools\Agent\Sync\SynchronizeResult;
 use FastForward\DevTools\Console\Command\AgentsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
+use FastForward\DevTools\Sync\SynchronizeResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -40,14 +40,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 #[CoversClass(AgentsCommand::class)]
-#[UsesClass(AgentsSynchronizer::class)]
+#[UsesClass(PackagedDirectorySynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
 final class AgentsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy<AgentsSynchronizer>
+     * @var ObjectProphecy<PackagedDirectorySynchronizer>
      */
     private ObjectProphecy $synchronizer;
 
@@ -83,7 +83,7 @@ final class AgentsCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->synchronizer = $this->prophesize(AgentsSynchronizer::class);
+        $this->synchronizer = $this->prophesize(PackagedDirectorySynchronizer::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -156,7 +156,7 @@ final class AgentsCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->synchronizer->setLogger($this->io->reveal())
             ->shouldBeCalledOnce();
-        $this->synchronizer->synchronize($agentsPath, $agentsPath)
+        $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
             ->shouldBeCalledOnce();
 
@@ -184,7 +184,7 @@ final class AgentsCommandTest extends TestCase
             ->willReturn(true, true);
         $this->synchronizer->setLogger($this->io->reveal())
             ->shouldBeCalledOnce();
-        $this->synchronizer->synchronize($agentsPath, $agentsPath)
+        $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
             ->shouldBeCalledOnce();
 

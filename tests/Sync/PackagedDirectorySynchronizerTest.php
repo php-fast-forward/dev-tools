@@ -17,11 +17,11 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Tests\Agent\Sync;
+namespace FastForward\DevTools\Tests\Sync;
 
 use ArrayIterator;
-use FastForward\DevTools\Agent\Sync\PackagedDirectorySynchronizer;
-use FastForward\DevTools\Agent\Sync\SynchronizeResult;
+use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
+use FastForward\DevTools\Sync\SynchronizeResult;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;

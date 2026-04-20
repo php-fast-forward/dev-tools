@@ -17,9 +17,9 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Tests\Agent\Sync;
+namespace FastForward\DevTools\Tests\Sync;
 
-use FastForward\DevTools\Agent\Sync\SynchronizeResult;
+use FastForward\DevTools\Sync\SynchronizeResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
