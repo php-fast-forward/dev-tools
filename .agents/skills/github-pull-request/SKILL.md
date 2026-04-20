@@ -19,6 +19,7 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 
 - Keep one branch and one PR per issue.
 - Branch from `main` or the repository integration branch, never from another feature branch.
+- When returning to `main` before starting a new implementation, always fetch and fast-forward from the remote before creating the next feature branch so release files, changelog state, and generated artifacts start from the latest published baseline.
 - Prefer local `git` for checkout, commit, and push.
 - Prefer connector-backed GitHub data for issue and PR context when available.
 - Use `phpunit-tests`, `package-readme`, and `sphinx-docs` when the change clearly affects tests or documentation.
