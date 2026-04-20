@@ -157,6 +157,7 @@
             <li class="success">Parse will return default document when no release headings exist</li>
             <li class="success">Parse will ignore unsupported lines and deduplicate entries within a section</li>
             <li class="success">Parse will treat empty category bodies as empty entry lists</li>
+            <li class="success">Extract entries will return empty array when category heading is missing</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
@@ -264,6 +265,9 @@
             <li class="success">Get suggest will ignore invalid entries and invalid sections</li>
             <li class="success">Get comments will return comment data</li>
             <li class="success">Get comments will return empty array when section is invalid</li>
+            <li class="success">Get minimum stability and config will return normalized values</li>
+            <li class="success">Get minimum stability and config will return defaults for invalid sections</li>
+            <li class="success">Get bin will return scalar string when declared as single binary</li>
         </ul>
         <h2>Copy Resource Command (FastForward\DevTools\Tests\Console\Command\CopyResourceCommand)</h2>
         <ul>
@@ -421,6 +425,8 @@
             <li class="success">Execute will return failure when composer normalize fails</li>
             <li class="success">Execute will pass working directory and alternate manifest to composer normalize</li>
             <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will skip funding file synchronization when no supported funding metadata exists</li>
+            <li class="success">Private helpers will prompt and normalize composer file arguments</li>
         </ul>
         <h2>Funding Profile (FastForward\DevTools\Tests\Funding\FundingProfile)</h2>
         <ul>
@@ -440,6 +446,7 @@
             <li class="success">Parse will normalize lists and discard blank entries</li>
             <li class="success">Parse will normalize scalar github and custom values</li>
             <li class="success">Dump will collapse single github sponsor to scalar</li>
+            <li class="success">Private list helpers will normalize and denormalize values</li>
         </ul>
         <h2>Generator (FastForward\DevTools\Tests\License\Generator)</h2>
         <ul>
@@ -453,6 +460,10 @@
             <li class="success">Execute will return success and write merged gitattributes</li>
             <li class="success">Execute will respect keep in export composer configuration</li>
             <li class="success">Execute with no candidates will skip synchronization</li>
+            <li class="success">Execute will return failure in check mode when gitattributes would change</li>
+            <li class="success">Execute will return success in dry run mode when gitattributes would change</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
+            <li class="success">Configured keep in export paths will merge primary and compatibility keys</li>
         </ul>
         <h2>Git Client (FastForward\DevTools\Tests\Git\GitClient)</h2>
         <ul>
@@ -533,6 +544,7 @@
             <li class="success">Merge will handle multiple whitespace normalize</li>
             <li class="success">Merge will remove duplicate non export ignore lines</li>
             <li class="success">Merge will preserve leading whitespace in custom entries</li>
+            <li class="success">Private helpers will normalize and filter path metadata consistently</li>
         </ul>
         <h2>Merger (FastForward\DevTools\Tests\GitIgnore\Merger)</h2>
         <ul>
@@ -606,6 +618,7 @@
             <li class="success">Run will write error output to console error stream</li>
             <li class="success">Run will flush remaining detached output when process finishes</li>
             <li class="success">Wait will accept null output</li>
+            <li class="success">Private helpers will handle startup failures and stream buffers</li>
         </ul>
         <h2>Reader (FastForward\DevTools\Tests\GitAttributes\Reader)</h2>
         <ul>
@@ -712,6 +725,11 @@
             <li class="success">Execute will add readme metadata when readme exists and composer json does not declare readme</li>
             <li class="success">Execute will preserve existing readme metadata</li>
             <li class="success">Execute will skip readme metadata when readme does not exist</li>
+            <li class="success">Execute will return success when composer file does not exist</li>
+            <li class="success">Execute will return success without writing when comparison is unchanged</li>
+            <li class="success">Execute will return failure in check mode when composer json would change</li>
+            <li class="success">Execute will return success in dry run mode when composer json would change</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
         </ul>
         <h2>Wiki Command (FastForward\DevTools\Tests\Console\Command\WikiCommand)</h2>
         <ul>
@@ -721,6 +739,8 @@
             <li class="success">Execute will return failure when process queue fails</li>
             <li class="success">Execute will build process with correct arguments</li>
             <li class="success">Execute with init will skip existing wiki submodule</li>
+            <li class="success">Execute with init will add wiki submodule when target does not exist</li>
+            <li class="success">Execute will skip default package name when psr 4 autoload is empty</li>
         </ul>
         <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>
         <ul>
