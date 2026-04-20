@@ -2794,6 +2794,13 @@ before the analyzers.</p>
  (optional)</dt>
         
         <dd>Prioritizes dev dependencies where Jack supports it.</dd>
+                                <dt><code>--dump-usage=&lt;package&gt;</code>
+ (optional)</dt>
+        
+        <dd>Asks <code>composer-dependency-analyser</code>
+ to dump usages for the given package
+or wildcard pattern and enables <code>--show-all-usages</code>
+ automatically.</dd>
             </dl>
 
     </section>
@@ -2815,6 +2822,11 @@ before the analyzers.</p>
     <p>Preview the upgrade workflow:</p>
 
             <pre><code class="language-bash">composer dependencies --dev</code></pre>
+
+            
+    <p>Dump all matched usages for one package:</p>
+
+            <pre><code class="language-bash">composer dependencies --dump-usage=symfony/console</code></pre>
 
             
     <p>Apply the upgrade workflow and then analyze dependencies:</p>
@@ -2873,8 +2885,11 @@ preview or upgrade phase.</li>
 - <code>--config composer-dependency-analyser.php</code>
  (resolved through the package
   file locator so consumer repositories can override it locally)
-- <code>--ignore-prod-only-in-dev-deps</code>
- (ignores dev-only usage in production code)</li>
+- <code>--dump-usages &lt;package&gt;</code>
+ and <code>--show-all-usages</code>
+ when <code>--dump-usage</code>
+
+is passed to the DevTools command</li>
 
     <li class="dash"><code>jack breakpoint</code>
  maps <code>--max-outdated</code>
