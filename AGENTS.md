@@ -150,6 +150,7 @@ composer dev-tools
 ## Skills Usage
 
 - **Creating/Updating Tests**: Use skill `phpunit-tests` in `.agents/skills/phpunit-tests/` for PHPUnit tests with Prophecy
+- **Creating/Refreshing AGENTS.md**: Use skill `create-agentsmd` in `.agents/skills/create-agentsmd/` to generate or update repository-root AGENTS instructions for coding agents
 - **Generating Documentation**: Use skill `sphinx-docs` in `.agents/skills/sphinx-docs/` for Sphinx documentation in `docs/`
 - **Updating README**: Use skill `package-readme` in `.agents/skills/package-readme/` for generating README.md files
 - **Updating PHPDoc / PHP Style**: Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
