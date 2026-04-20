@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward AGENTS.md"
+  short_description: "Create AGENTS.md files for repositories"
+  default_prompt: "Use $create-agentsmd to analyze this repository and write or refresh a focused AGENTS.md file at the project root."

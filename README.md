@@ -224,7 +224,10 @@ DevTools integrates with consumer repositories in two ways. The Composer plugin
 exposes the command set automatically after installation, and the local binary
 keeps the same command vocabulary when you prefer running tools directly from
 `vendor/bin/dev-tools`. The consumer sync flow also refreshes `.agents/skills`
-so agents can discover the packaged skills shipped with this repository.
+so agents can discover the packaged skills shipped with this repository,
+including workflows for GitHub issue/PR handling, changelog maintenance, PHP
+quality tasks, Sphinx docs, README generation, and repository `AGENTS.md`
+authoring.
 
 ## 🏗️ Architecture
 
