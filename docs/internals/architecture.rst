@@ -33,14 +33,16 @@ Consumer Synchronization Lifecycle
    ``composer.json`` scripts, funding metadata, workflow stubs,
    ``.editorconfig``, ``dependabot.yml``, ``.gitignore``,
    ``.gitattributes``, the project license, and packaged Git hooks.
-6. In normal mode, ``dev-tools:sync`` also runs ``wiki --init`` and
-   ``skills`` to initialize the wiki submodule and synchronize packaged skill
-   links into ``.agents/skills``.
-7. In ``--dry-run``, ``--check``, and ``--interactive`` modes, ``wiki`` and
-   ``skills`` are skipped because they do not yet expose non-destructive
-   verification paths.
-8. ``FastForward\DevTools\Agent\Skills\SkillsSynchronizer`` creates missing
-   links, repairs broken ones, and preserves consumer-owned directories.
+6. In normal mode, ``dev-tools:sync`` also runs ``wiki --init``,
+   ``skills``, and ``agents`` to initialize the wiki submodule and
+   synchronize packaged links into ``.agents/skills`` and
+   ``.agents/agents``.
+7. In ``--dry-run``, ``--check``, and ``--interactive`` modes, ``wiki``,
+   ``skills``, and ``agents`` are skipped because they do not yet expose
+   non-destructive verification paths.
+8. ``FastForward\DevTools\Sync\PackagedDirectorySynchronizer`` creates
+   missing links, repairs broken ones, and preserves consumer-owned
+   directories for both synchronization flows.
 
 Documentation Pipeline
 ----------------------

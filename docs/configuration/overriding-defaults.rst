@@ -46,6 +46,10 @@ Commands and Their Configuration Files
      - ``.agents/skills/``
      - Creates missing local links to packaged skills and preserves existing
        non-symlink directories.
+   * - ``agents``
+     - ``.agents/agents/``
+     - Creates missing local links to packaged project agents and preserves
+       existing non-symlink directories.
    * - ``dev-tools:sync``
      - Consumer repository files
      - Works directly against local project files such as ``composer.json`` and
@@ -114,6 +118,7 @@ What Is Not Overwritten Automatically
 - an existing ``.editorconfig``;
 - an existing ``.github/dependabot.yml``;
 - an existing non-symlink directory inside ``.agents/skills/``;
+- an existing non-symlink directory inside ``.agents/agents/``;
 - an existing ``.github/wiki`` directory or submodule.
 
 .. tip::

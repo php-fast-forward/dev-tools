@@ -29,15 +29,16 @@ across Fast Forward libraries.
   other onboarding defaults for consumer repositories
 - Generates `.github/CODEOWNERS` files from local project metadata instead of
   shipping repository-specific owners into consumers
-- Synchronizes packaged agent skills into consumer `.agents/skills`
-  directories using safe link-based updates
+- Synchronizes packaged skills and project-agent prompts into consumer
+  `.agents/skills` and `.agents/agents` directories using safe link-based
+  updates
 - Works both as a Composer plugin and as a local binary
 - Preserves local overrides through consumer-first configuration resolution
 
 ## 🚀 Installation
 
 ```bash
-composer require --dev fast-forward/dev-tools:dev-main
+composer require --dev fast-forward/dev-tools
 ```
 
 ## 🛠️ Usage
@@ -109,6 +110,9 @@ composer reports --target=.dev-tools --coverage=.dev-tools/coverage
 # Synchronize packaged agent skills into .agents/skills
 composer skills
 
+# Synchronize packaged project agents into .agents/agents
+composer agents
+
 # Synchronize Composer funding metadata with .github/FUNDING.yml
 composer funding
 composer funding --dry-run
@@ -136,8 +140,8 @@ composer git-hooks
 composer update-composer-json --force
 
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows,
-# .editorconfig, .gitignore rules, packaged skills, and the repository wiki
-# submodule in .github/wiki
+# .editorconfig, .gitignore rules, packaged skills, packaged agents, and the
+# repository wiki submodule in .github/wiki
 composer dev-tools:sync
 ```
 
@@ -180,6 +184,11 @@ preserves existing non-symlink directories. The `dev-tools:sync` command calls
 `skills` automatically after refreshing the rest of the consumer-facing
 automation assets.
 
+The `agents` command keeps `.agents/agents` aligned with the packaged Fast
+Forward project-agent prompt set. It follows the same symlink-preservation and
+broken-link-repair safety model as the packaged skill synchronization flow, and
+`dev-tools:sync` calls it automatically in normal synchronization mode.
+
 The packaged workflow stubs synchronized by `dev-tools:sync` now also include
 changelog automation for pull-request validation and release preparation, so
 consumer repositories can adopt the same changelog-driven release flow without
@@ -194,9 +203,9 @@ disabled, an organization or repository admin must unlock them before the
 release-preparation workflow can create pull requests.
 
 This repository also keeps role-based project agents in `.agents/agents`. They
-are mirrored through `.github/agents` for GitHub-oriented discovery, while the
-packaged `.agents/skills` directory remains the consumer-facing procedural
-source of truth.
+are packaged for consumer repositories alongside `.agents/skills`, so
+downstream projects can adopt both reusable role prompts and the procedural
+skills they depend on.
 
 ## 🧰 Command Summary
 
@@ -212,11 +221,12 @@ source of truth.
 | `composer changelog:promote` | Moves `Unreleased` entries into a published version section and records the release date. |
 | `composer changelog:show` | Renders one published changelog section for release notes and automation. |
 | `composer docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
+| `composer agents` | Creates or repairs packaged project-agent links in `.agents/agents`. |
 | `composer skills` | Creates or repairs packaged skill links in `.agents/skills`. |
 | `composer funding` | Synchronizes managed funding metadata between `composer.json` and `.github/FUNDING.yml`. |
 | `composer codeowners` | Generates managed `.github/CODEOWNERS` content from local repository metadata. |
 | `composer gitattributes` | Manages export-ignore rules in `.gitattributes`. |
-| `composer dev-tools:sync` | Updates scripts, CODEOWNERS, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
+| `composer dev-tools:sync` | Updates scripts, CODEOWNERS, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, packaged skills, and packaged agents. |
 
 ## 🔌 Integration
 
@@ -224,10 +234,10 @@ DevTools integrates with consumer repositories in two ways. The Composer plugin
 exposes the command set automatically after installation, and the local binary
 keeps the same command vocabulary when you prefer running tools directly from
 `vendor/bin/dev-tools`. The consumer sync flow also refreshes `.agents/skills`
-so agents can discover the packaged skills shipped with this repository,
-including workflows for GitHub issue/PR handling, changelog maintenance, PHP
-quality tasks, Sphinx docs, README generation, and repository `AGENTS.md`
-authoring.
+and `.agents/agents` so agents can discover the packaged skills and packaged
+role prompts shipped with this repository, including workflows for GitHub
+issue/PR handling, changelog maintenance, PHP quality tasks, Sphinx docs,
+README generation, and repository `AGENTS.md` authoring.
 
 ## 🏗️ Architecture
 
@@ -238,6 +248,10 @@ authoring.
   builds a shared container from `DevToolsServiceProvider`, which wires
   process execution, filesystem access, changelog services, Git helpers,
   diffing, reporting, and template loading.
+- `Generic Link Synchronization` -
+  `FastForward\DevTools\Sync\PackagedDirectorySynchronizer` provides the
+  shared symlink-preserving workflow used by both `skills` and `agents`,
+  keeping consumer-owned directories intact while repairing broken links.
 - `Lazy Command Loading` - `DevToolsCommandLoader` discovers `#[AsCommand]`
   classes and resolves most commands only when they are invoked, while
   orchestration commands such as `standards` dispatch other commands through
@@ -245,7 +259,7 @@ authoring.
 - `Consumer Sync Pipeline` - `dev-tools:sync` refreshes `composer.json`,
   CODEOWNERS, funding metadata, workflow stubs, repository defaults, git
   metadata files, packaged Git hooks, and, in normal mode, the wiki submodule
-  plus packaged skills.
+  plus packaged skills and packaged project agents.
 
 ## 🤝 Contributing
 

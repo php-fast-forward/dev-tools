@@ -18,8 +18,9 @@ The ``dev-tools:sync`` command synchronizes consumer-facing automation and defau
 8. ``gitignore`` - merges .gitignore files
 9. ``gitattributes`` - manages export-ignore rules
 10. ``skills`` - synchronizes packaged skills
-11. ``license`` - generates LICENSE file
-12. ``git-hooks`` - installs Git hooks
+11. ``agents`` - synchronizes packaged project agents
+12. ``license`` - generates LICENSE file
+13. ``git-hooks`` - installs Git hooks
 
 Usage
 -----
@@ -108,5 +109,7 @@ Behavior
   command is running in an interactive terminal.
 - Creates ``.github/wiki`` as a git submodule when missing.
 - Calls other commands in sequence.
-- ``wiki`` and ``skills`` are skipped in preview/check modes until they expose a
-  non-destructive verification path.
+- Runs ``skills`` and ``agents`` in normal mode so consumer repositories
+  receive both packaged procedural skills and packaged role prompts.
+- ``wiki``, ``skills``, and ``agents`` are skipped in preview/check modes
+  until they expose a non-destructive verification path.

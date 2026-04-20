@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add CODEOWNERS generation and sync support for consumer repositories (#67)
 - Package a create-agentsmd skill for repository-level AGENTS.md authoring (#128)
 - Add an agents-maintainer project agent for ongoing AGENTS.md upkeep (#128)
+- Synchronize packaged project-agent prompts into consumer repositories (#130)
 
 ## [1.13.0] - 2026-04-19
 

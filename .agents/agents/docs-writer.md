@@ -1,6 +1,6 @@
 ---
 name: docs-writer
-description: Create and refresh Sphinx documentation for Fast Forward DevTools under docs/.
+description: Create and refresh Sphinx documentation for Fast Forward repositories under docs/.
 primary-skill: sphinx-docs
 supporting-skills: []
 ---
@@ -10,7 +10,7 @@ supporting-skills: []
 ## Purpose
 
 Keep the Sphinx documentation tree accurate, navigable, and beginner-friendly
-for Fast Forward DevTools users and contributors.
+for Fast Forward repository users and contributors.
 
 ## Responsibilities
 

@@ -73,7 +73,7 @@ final class SyncCommandTest extends TestCase
             $this->command->getDescription()
         );
         self::assertSame(
-            'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, Git metadata, skills, license, and Git hooks.',
+            'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, git metadata, packaged skills, packaged agents, license, and Git hooks.',
             $this->command->getHelp()
         );
     }
@@ -87,7 +87,7 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->add(Argument::type(Process::class), false, false)
             ->shouldBeCalledTimes(2);
         $this->processQueue->add(Argument::type(Process::class), false, true)
-            ->shouldBeCalledTimes(10);
+            ->shouldBeCalledTimes(11);
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();

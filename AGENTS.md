@@ -38,11 +38,12 @@ composer dev-tools:fix
 composer dev-tools tests         # Run PHPUnit tests
 composer dev-tools code-style    # Check and fix code style (ECS + Composer Normalize)
 composer dev-tools refactor      # Refactor code using Rector
-composer dev-tools phpdoc         # Check and fix PHPDoc comments
+composer dev-tools phpdoc        # Check and fix PHPDoc comments
 composer dev-tools docs          # Generate HTML API documentation
-composer dev-tools wiki         # Generate Markdown documentation for wiki
+composer dev-tools wiki          # Generate Markdown documentation for wiki
 composer dev-tools reports       # Generate docs frontpage and reports
-composer dev-tools:sync         # Sync scripts, GitHub Actions, .editorconfig, wiki
+composer dev-tools agents        # Sync packaged project agents into .agents/agents
+composer dev-tools:sync          # Sync scripts, GitHub Actions, .editorconfig, wiki
 ```
 
 **Notable Specialized Commands:**
@@ -168,6 +169,7 @@ composer dev-tools
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
 - `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `wiki.yml`, and `changelog.yml`
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
+- `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
 - `.agents/skills/`: packaged procedural skills shipped to consumer repositories
 - `.agents/agents/`: repository-specific role prompts mirrored through `.github/agents`
 - `.github/wiki`: generated or synchronized wiki content published by repo workflows
@@ -179,6 +181,7 @@ composer dev-tools
 - **Documentation**: Sphinx-based docs in `docs/` directory
 - **Wiki**: GitHub wiki synced via `dev-tools wiki` and `dev-tools:sync`
 - **GitHub Actions**: Workflows in `.github/workflows/` (synced via `dev-tools:sync`)
+- **Project Agents**: Packaged role prompts synchronized via `composer agents` and `dev-tools:sync`
 
 ## Skills Usage
 
@@ -192,10 +195,10 @@ composer dev-tools
 
 ## Project Agents
 
-Repository-specific agent prompts live in `.agents/agents/` and are mirrored
-through `.github/agents` for GitHub-facing discovery. These role prompts define
-behavior and ownership boundaries, while `.agents/skills/` remains the
-procedural source of truth.
+Packaged project-agent prompts live in `.agents/agents/` for both this
+repository and consumer repositories that synchronize DevTools assets. These
+role prompts define behavior and ownership boundaries, while `.agents/skills/`
+remains the procedural source of truth.
 
 - Use `issue-editor` for issue drafting, refinement, comments, updates, and closure workflows.
 - Use `issue-implementer` for issue-to-branch-to-PR execution.
@@ -204,6 +207,6 @@ procedural source of truth.
 - Delegate to `php-style-curator` for PHPDoc cleanup, file-header normalization, and repository style conformance.
 - Delegate to `readme-maintainer` when public commands, installation, usage, links, or badges change.
 - Delegate to `docs-writer` when `docs/` must be created or updated.
-- Delegate to `consumer-sync-auditor` when packaged skills, sync assets, wiki, workflows, or consumer bootstrap behavior change.
+- Delegate to `consumer-sync-auditor` when packaged skills, packaged agents, sync assets, wiki, workflows, or consumer bootstrap behavior change.
 - Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
 - Delegate to `changelog-maintainer` when a task needs changelog authoring, changelog validation for PRs, release promotion, or release-note export.

@@ -29,6 +29,9 @@ Most day-to-day work falls into one of the flows below.
    * - Refresh packaged agent skills only
      - ``composer skills``
      - Creates or repairs symlinks in ``.agents/skills``.
+   * - Refresh packaged project agents only
+     - ``composer agents``
+     - Creates or repairs symlinks in ``.agents/agents``.
    * - Prepare a release from the current changelog
      - ``composer changelog:next-version`` then ``composer changelog:promote``
      - Infers the next semantic version, publishes ``Unreleased``, and leaves
@@ -36,7 +39,7 @@ Most day-to-day work falls into one of the flows below.
    * - Publish local automation defaults into a consumer repository
      - ``composer dev-tools:sync``
      - Updates scripts, copies missing automation assets, and refreshes
-       packaged skills.
+       packaged skills and packaged agents.
    * - Regenerate wiki pages
      - ``composer wiki``
      - Builds Markdown API pages in ``.github/wiki``.
@@ -57,9 +60,10 @@ A Safe Beginner Routine
 2. Run ``composer changelog:entry`` when the branch introduces a notable
    user-facing or automation-facing change.
 3. Run ``composer skills`` if you changed packaged consumer skills.
-4. Run ``composer docs`` if you changed guides or public APIs.
-5. Run ``composer dev-tools:fix`` when you want automated help.
-6. Run ``composer dev-tools`` before pushing.
+4. Run ``composer agents`` if you changed packaged project-agent prompts.
+5. Run ``composer docs`` if you changed guides or public APIs.
+6. Run ``composer dev-tools:fix`` when you want automated help.
+7. Run ``composer dev-tools`` before pushing.
 
 .. tip::
 

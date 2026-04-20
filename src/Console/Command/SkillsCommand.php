@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Agent\Skills\SkillsSynchronizer;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -35,7 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * synchronization is attempted. If the target skills directory does not exist,
  * it SHALL be created before the synchronization process begins.
  *
- * The synchronization workflow is delegated to {@see SkillsSynchronizer}. This
+ * The synchronization workflow is delegated to {@see PackagedDirectorySynchronizer}. This
  * command MUST act as an orchestration layer only: it prepares the source and
  * target paths, triggers synchronization, and translates the resulting status
  * into Symfony Console output and process exit codes.
@@ -47,18 +47,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class SkillsCommand extends BaseCommand
 {
+    private const string DIRECTORY_LABEL = '.agents/skills';
+
     /**
      * Initializes the command with an optional skills synchronizer instance.
      *
-     * @param SkillsSynchronizer $synchronizer the synchronizer responsible
-     *                                         for applying the skills
-     *                                         synchronization process
+     * @param PackagedDirectorySynchronizer $synchronizer the synchronizer responsible
+     *                                                    for applying the skills
+     *                                                    synchronization process
      * @param FilesystemInterface $filesystem filesystem used to resolve
      *                                        and manage the skills
      *                                        directory structure
      */
     public function __construct(
-        private readonly SkillsSynchronizer $synchronizer,
+        private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
     ) {
         parent::__construct();
@@ -72,7 +74,7 @@ final class SkillsCommand extends BaseCommand
      * - resolve the packaged skills path and consumer target directory;
      * - fail when the packaged skills directory does not exist;
      * - create the target directory when it is missing;
-     * - delegate synchronization to {@see SkillsSynchronizer};
+     * - delegate synchronization to {@see PackagedDirectorySynchronizer};
      * - return a success or failure exit code based on the synchronization result.
      *
      * The command MUST return {@see self::FAILURE} when packaged skills are not
@@ -89,8 +91,8 @@ final class SkillsCommand extends BaseCommand
     {
         $output->writeln('<info>Starting skills synchronization...</info>');
 
-        $packageSkillsPath = $this->filesystem->getAbsolutePath('.agents/skills', \dirname(__DIR__, 3));
-        $skillsDir = $this->filesystem->getAbsolutePath('.agents/skills');
+        $packageSkillsPath = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL, \dirname(__DIR__, 3));
+        $skillsDir = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL);
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
             $output->writeln('<comment>No packaged skills found at: ' . $packageSkillsPath . '</comment>');
@@ -105,7 +107,7 @@ final class SkillsCommand extends BaseCommand
 
         $this->synchronizer->setLogger($this->getIO());
 
-        $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath);
+        $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::DIRECTORY_LABEL);
 
         if ($result->failed()) {
             $output->writeln('<error>Skills synchronization failed.</error>');

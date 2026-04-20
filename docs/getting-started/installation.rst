@@ -41,9 +41,9 @@ following steps:
    submodule that points to the repository wiki.
 7. ``dev-tools:sync`` runs ``gitignore`` to merge canonical ignore rules into
    the consumer project.
-8. ``dev-tools:sync`` runs ``skills`` to create or repair packaged skill links
-   inside ``.agents/skills`` when sync runs in normal mode rather than
-   preview/check mode.
+8. ``dev-tools:sync`` runs ``skills`` and ``agents`` to create or repair
+   packaged links inside ``.agents/skills`` and ``.agents/agents`` when sync
+   runs in normal mode rather than preview/check mode.
 
 First commands to try
 ---------------------
@@ -52,9 +52,10 @@ After installation, these are the most useful sanity checks:
 
 .. code-block:: bash
 
-   composer dev-tools skills
-   composer dev-tools tests
-   composer dev-tools docs
+   composer skills
+   composer agents
+   composer tests
+   composer docs
    composer dev-tools
 
 If Composer argument forwarding becomes awkward, call the binary directly:
@@ -63,11 +64,12 @@ If Composer argument forwarding becomes awkward, call the binary directly:
 
    vendor/bin/dev-tools tests --filter=SyncCommandTest
 
-If you want to verify the packaged skills on their own, run:
+If you want to verify the packaged skills or project agents on their own, run:
 
 .. code-block:: bash
 
    vendor/bin/dev-tools skills
+   vendor/bin/dev-tools agents
 
 When manual sync is useful
 --------------------------
@@ -89,5 +91,6 @@ Or call the binary explicitly:
 
    The ``docs`` and ``reports`` commands require a ``docs/`` directory. If
    your package does not have one yet, create it before running those commands.
-   The ``skills`` command creates ``.agents/skills`` when needed, but it does
-   not overwrite an existing non-symlink directory inside that tree.
+   The ``skills`` and ``agents`` commands create ``.agents/skills`` and
+   ``.agents/agents`` when needed, but they do not overwrite existing
+   non-symlink directories inside those trees.

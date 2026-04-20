@@ -10,7 +10,7 @@ supporting-skills: []
 ## Purpose
 
 Shape bugs, features, and maintenance requests into implementation-ready GitHub
-issues for this repository.
+issues for the current repository.
 
 ## Responsibilities
 
