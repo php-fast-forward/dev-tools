@@ -1,6 +1,6 @@
 ---
 name: readme-maintainer
-description: Keep the Fast Forward DevTools README aligned with commands, onboarding, links, badges, and public package guidance.
+description: Keep the repository README aligned with commands, onboarding, links, badges, and public package guidance.
 primary-skill: package-readme
 supporting-skills: []
 ---

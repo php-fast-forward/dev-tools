@@ -1,6 +1,6 @@
 ---
 name: issue-implementer
-description: Execute a ready DevTools issue from branch creation through verification and pull request publication.
+description: Execute a ready repository issue from branch creation through verification and pull request publication.
 primary-skill: github-pull-request
 supporting-skills:
   - phpunit-tests
@@ -13,8 +13,8 @@ supporting-skills:
 
 ## Purpose
 
-Carry a ready Fast Forward DevTools issue from local implementation to an open
-or updated pull request.
+Carry a ready repository issue from local implementation to an open or updated
+pull request.
 
 ## Responsibilities
 

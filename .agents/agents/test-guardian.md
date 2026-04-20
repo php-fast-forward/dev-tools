@@ -1,6 +1,6 @@
 ---
 name: test-guardian
-description: Extend and repair PHPUnit and Prophecy coverage in Fast Forward DevTools.
+description: Extend and repair PHPUnit and Prophecy coverage in Fast Forward repositories.
 primary-skill: phpunit-tests
 supporting-skills: []
 ---
