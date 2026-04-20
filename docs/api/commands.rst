@@ -66,6 +66,9 @@ subprocess execution is needed.
    * - ``FastForward\DevTools\Console\Command\FundingCommand``
      - ``funding``
      - Synchronizes managed funding metadata between Composer and GitHub files.
+   * - ``FastForward\DevTools\Console\Command\CodeOwnersCommand``
+     - ``codeowners``
+     - Generates managed ``.github/CODEOWNERS`` content from project metadata.
    * - ``FastForward\DevTools\Console\Command\SyncCommand``
      - ``dev-tools:sync``
      - Synchronizes consumer-facing scripts, automation assets, and packaged

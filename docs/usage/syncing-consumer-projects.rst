@@ -32,6 +32,10 @@ What the Command Changes
    * - ``.github/dependabot.yml``
      - Copies the packaged Dependabot template.
      - Only when missing by default; replaceable with ``--overwrite``.
+   * - ``.github/CODEOWNERS``
+     - Generates managed ownership rules from local ``composer.json`` metadata,
+       with commented suggestions when direct GitHub owners cannot be inferred.
+     - Preserved by default; replaceable with ``--overwrite``.
    * - ``.agents/skills/<skill-name>``
      - Creates or repairs symlinks to packaged agent skills.
      - Creates missing links, repairs broken symlinks, and preserves existing
@@ -64,5 +68,7 @@ What It Needs
    when the target file does not already exist unless ``--overwrite`` is used.
    This protects consumer-specific customizations by default while still
    allowing explicit replacement during shared automation updates. The
-   ``skills`` phase follows the same spirit by preserving existing
-   non-symlink directories inside ``.agents/skills``.
+   generated ``.github/CODEOWNERS`` file follows the same principle by keeping
+   an existing file unless you explicitly request replacement. The ``skills``
+   phase follows the same spirit by preserving existing non-symlink
+   directories inside ``.agents/skills``.

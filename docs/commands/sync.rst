@@ -12,13 +12,14 @@ The ``dev-tools:sync`` command synchronizes consumer-facing automation and defau
 2. ``copy-resource`` - copies GitHub Actions workflows, including changelog automation
 3. ``copy-resource`` - copies .editorconfig
 4. ``copy-resource`` - copies dependabot.yml
-5. ``funding`` - synchronizes ``composer.json`` funding metadata with ``.github/FUNDING.yml``
-6. ``wiki --init`` - initializes wiki as submodule
-7. ``gitignore`` - merges .gitignore files
-8. ``gitattributes`` - manages export-ignore rules
-9. ``skills`` - synchronizes packaged skills
-10. ``license`` - generates LICENSE file
-11. ``git-hooks`` - installs Git hooks
+5. ``codeowners`` - generates ``.github/CODEOWNERS`` from local metadata
+6. ``funding`` - synchronizes ``composer.json`` funding metadata with ``.github/FUNDING.yml``
+7. ``wiki --init`` - initializes wiki as submodule
+8. ``gitignore`` - merges .gitignore files
+9. ``gitattributes`` - manages export-ignore rules
+10. ``skills`` - synchronizes packaged skills
+11. ``license`` - generates LICENSE file
+12. ``git-hooks`` - installs Git hooks
 
 Usage
 -----
@@ -27,7 +28,6 @@ Usage
 
    composer dev-tools:sync
    composer dev-tools:sync [options]
-   vendor/bin/dev-tools dev-tools:sync [options]
 
 Options
 -------
@@ -90,17 +90,20 @@ Exit Codes
 Behavior
 ---------
 
-- Updates ``composer.json`` scripts, extra configuration, and managed funding
-  metadata.
+- Updates ``composer.json`` scripts, extra configuration, managed funding
+  metadata, and managed ``.github/CODEOWNERS`` content.
 - Copies missing workflow stubs, including tests, reports, wiki, and changelog
   automation, plus ``.editorconfig`` and ``dependabot.yml``.
+- Generates ``.github/CODEOWNERS`` from local metadata and preserves existing
+  ownership rules by default unless ``--overwrite`` or an explicit preview
+  mode is used.
 - Synchronizes supported funding metadata between ``composer.json`` and
   ``.github/FUNDING.yml``.
 - When ``--overwrite`` is enabled, replaced text resources emit a unified diff
   so terminal sessions and CI logs show what changed.
 - ``--dry-run`` and ``--check`` verify managed-file drift for ``composer.json``,
-  funding metadata, copied resources, ``.gitignore``, ``.gitattributes``,
-  ``LICENSE``, and Git hooks.
+  ``.github/CODEOWNERS``, funding metadata, copied resources, ``.gitignore``,
+  ``.gitattributes``, ``LICENSE``, and Git hooks.
 - ``--interactive`` prompts before replacing drifted managed files when the
   command is running in an interactive terminal.
 - Creates ``.github/wiki`` as a git submodule when missing.

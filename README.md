@@ -27,6 +27,8 @@ across Fast Forward libraries.
   version inference, release promotion, and release-note rendering commands
 - Ships shared workflow stubs, `.editorconfig`, Dependabot configuration, and
   other onboarding defaults for consumer repositories
+- Generates `.github/CODEOWNERS` files from local project metadata instead of
+  shipping repository-specific owners into consumers
 - Synchronizes packaged agent skills into consumer `.agents/skills`
   directories using safe link-based updates
 - Works both as a Composer plugin and as a local binary
@@ -111,6 +113,10 @@ composer skills
 composer funding
 composer funding --dry-run
 
+# Generate .github/CODEOWNERS from composer.json metadata
+composer codeowners
+composer codeowners --interactive
+
 # Merges and synchronizes .gitignore files
 composer gitignore
 
@@ -163,6 +169,11 @@ with `.github/FUNDING.yml`, including GitHub Sponsors handles and `custom`
 URLs, while preserving unsupported providers in place and re-running
 `composer normalize` after manifest updates.
 
+The `codeowners` command generates `.github/CODEOWNERS` from local
+`composer.json` metadata. It prefers explicit GitHub profile URLs from author
+metadata, falls back to commented suggestions from support metadata, and can
+prompt for owners when `--interactive` is used in a terminal.
+
 The `skills` command keeps `.agents/skills` aligned with the packaged Fast
 Forward skill set. It creates missing links, repairs broken links, and
 preserves existing non-symlink directories. The `dev-tools:sync` command calls
@@ -203,8 +214,9 @@ source of truth.
 | `composer docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer skills` | Creates or repairs packaged skill links in `.agents/skills`. |
 | `composer funding` | Synchronizes managed funding metadata between `composer.json` and `.github/FUNDING.yml`. |
+| `composer codeowners` | Generates managed `.github/CODEOWNERS` content from local repository metadata. |
 | `composer gitattributes` | Manages export-ignore rules in `.gitattributes`. |
-| `composer dev-tools:sync` | Updates scripts, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
+| `composer dev-tools:sync` | Updates scripts, CODEOWNERS, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, and packaged skills. |
 
 ## 🔌 Integration
 
@@ -228,9 +240,9 @@ so agents can discover the packaged skills shipped with this repository.
   orchestration commands such as `standards` dispatch other commands through
   the console application itself.
 - `Consumer Sync Pipeline` - `dev-tools:sync` refreshes `composer.json`,
-  funding metadata, workflow stubs, repository defaults, git metadata files,
-  packaged Git hooks, and, in normal mode, the wiki submodule plus packaged
-  skills.
+  CODEOWNERS, funding metadata, workflow stubs, repository defaults, git
+  metadata files, packaged Git hooks, and, in normal mode, the wiki submodule
+  plus packaged skills.
 
 ## 🤝 Contributing
 

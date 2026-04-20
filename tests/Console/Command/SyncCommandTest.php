@@ -69,11 +69,11 @@ final class SyncCommandTest extends TestCase
     {
         self::assertSame('dev-tools:sync', $this->command->getName());
         self::assertSame(
-            'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, .editorconfig, and .gitattributes in the root project.',
+            'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, CODEOWNERS, .editorconfig, and .gitattributes in the root project.',
             $this->command->getDescription()
         );
         self::assertSame(
-            'This command runs the dedicated synchronization commands for composer.json, resources, funding metadata, wiki, Git metadata, skills, license, and Git hooks.',
+            'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, Git metadata, skills, license, and Git hooks.',
             $this->command->getHelp()
         );
     }
@@ -87,7 +87,7 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->add(Argument::type(Process::class), false, false)
             ->shouldBeCalledTimes(2);
         $this->processQueue->add(Argument::type(Process::class), false, true)
-            ->shouldBeCalledTimes(9);
+            ->shouldBeCalledTimes(10);
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
@@ -105,7 +105,7 @@ final class SyncCommandTest extends TestCase
             ->willReturn(true);
 
         $this->processQueue->add(Argument::type(Process::class), false, false)
-            ->shouldBeCalledTimes(9);
+            ->shouldBeCalledTimes(10);
         $this->processQueue->add(Argument::type(Process::class), false, true)
             ->shouldNotBeCalled();
         $this->processQueue->run($this->output->reveal())
