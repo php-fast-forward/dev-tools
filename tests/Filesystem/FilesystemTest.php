@@ -25,9 +25,13 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Path;
 
+use function Safe\fileperms;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
+use function Safe\mkdir;
 use function Safe\realpath;
+use function Safe\chmod;
+use function decoct;
 
 #[CoversClass(Filesystem::class)]
 final class FilesystemTest extends TestCase
@@ -87,6 +91,18 @@ final class FilesystemTest extends TestCase
     {
         $basePath = '/var/www';
         $expected = Path::makeAbsolute('test.php', $basePath);
+
+        self::assertSame($expected, $this->filesystem->getAbsolutePath('test.php', $basePath));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getAbsolutePathWillResolveRelativeBasePathsAgainstCurrentWorkingDirectory(): void
+    {
+        $basePath = 'var/www';
+        $expected = Path::makeAbsolute('test.php', Path::makeAbsolute($basePath, getcwd()));
 
         self::assertSame($expected, $this->filesystem->getAbsolutePath('test.php', $basePath));
     }
@@ -182,5 +198,48 @@ final class FilesystemTest extends TestCase
         $this->filesystem->symlink($origin, $target);
 
         self::assertSame(realpath($origin), $this->filesystem->readlink($target, true));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function copyWillDuplicateFilesUsingAbsolutePaths(): void
+    {
+        $origin = $this->tempDir . '/origin.txt';
+        $target = $this->tempDir . '/target.txt';
+        file_put_contents($origin, 'copied content');
+
+        $this->filesystem->copy($origin, $target);
+
+        self::assertSame('copied content', $this->filesystem->readFile($target));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function chmodWillApplyPermissionsToResolvedPaths(): void
+    {
+        $filename = $this->tempDir . '/permissions.txt';
+        file_put_contents($filename, 'permission check');
+        chmod($filename, 0o644);
+
+        $this->filesystem->chmod($filename, 0o600);
+
+        self::assertStringEndsWith('600', decoct(fileperms($filename) & 0o777));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function existsWillAcceptIterablesOfRelativePaths(): void
+    {
+        mkdir($this->tempDir . '/iterable');
+        file_put_contents($this->tempDir . '/iterable/a.txt', 'A');
+        file_put_contents($this->tempDir . '/iterable/b.txt', 'B');
+
+        self::assertTrue($this->filesystem->exists(['iterable/a.txt', 'iterable/b.txt'], $this->tempDir));
     }
 }

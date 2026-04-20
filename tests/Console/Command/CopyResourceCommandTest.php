@@ -33,8 +33,11 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Finder\Finder;
 
 use function Safe\mkdir;
@@ -60,6 +63,8 @@ final class CopyResourceCommandTest extends TestCase
 
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $questionHelper;
+
     private CopyResourceCommand $command;
 
     private string $sourceDirectory;
@@ -79,6 +84,7 @@ final class CopyResourceCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
@@ -88,8 +94,14 @@ final class CopyResourceCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('interactive')
             ->willReturn(false);
+        $this->input->isInteractive()
+            ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->will(static fn(array $arguments): ?string => $arguments[0]);
+        $this->questionHelper->getName()
+            ->willReturn('question');
+        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
+            ->shouldBeCalled();
 
         $this->command = new CopyResourceCommand(
             $this->filesystem->reveal(),
@@ -97,6 +109,9 @@ final class CopyResourceCommandTest extends TestCase
             $this->finderFactory->reveal(),
             $this->fileDiffer->reveal(),
         );
+        $this->command->setHelperSet(new HelperSet([
+            'question' => $this->questionHelper->reveal(),
+        ]));
     }
 
     /**
@@ -157,6 +172,52 @@ final class CopyResourceCommandTest extends TestCase
         )->shouldBeCalledOnce();
         $this->output->writeln(Argument::containingString('Copied resource'))
             ->shouldBeCalled();
+
+        self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillFailWhenSourceOrTargetAreMissing(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('');
+        $this->input->getOption('target')
+            ->willReturn('');
+        $this->input->getOption('overwrite')
+            ->willReturn(false);
+        $this->output->writeln('<error>The --source and --target options are required.</error>')
+            ->shouldBeCalledOnce();
+        $this->fileLocator->locate(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(CopyResourceCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipExistingTargetByDefault(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('target')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('overwrite')
+            ->willReturn(false);
+
+        $this->fileLocator->locate('.editorconfig')
+            ->willReturn('/package/.editorconfig');
+        $this->filesystem->getAbsolutePath('.editorconfig')
+            ->willReturn('/project/.editorconfig');
+        $this->filesystem->exists('/project/.editorconfig')
+            ->willReturn(true);
+        $this->output->writeln('<comment>Skipped existing resource /project/.editorconfig.</comment>')
+            ->shouldBeCalledOnce();
+        $this->fileDiffer->diff(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
     }
@@ -279,6 +340,107 @@ final class CopyResourceCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->output->writeln('<info>Copied resource /project/.editorconfig.</info>')
             ->shouldBeCalledOnce();
+
+        self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureInCheckModeWhenFileWouldChange(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('target')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('overwrite')
+            ->willReturn(false);
+        $this->input->getOption('check')
+            ->willReturn(true);
+
+        $this->fileLocator->locate('.editorconfig')
+            ->willReturn('/package/.editorconfig');
+        $this->filesystem->getAbsolutePath('.editorconfig')
+            ->willReturn('/project/.editorconfig');
+        $this->filesystem->exists('/project/.editorconfig')
+            ->willReturn(true);
+        $this->fileDiffer->diff('/package/.editorconfig', '/project/.editorconfig')
+            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', "@@ -1 +1 @@\n-old\n+new"))
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Changed summary</comment>')
+            ->shouldBeCalledOnce();
+        $this->output->writeln("@@ -1 +1 @@\n-old\n+new")
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(CopyResourceCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessInDryRunModeWhenFileWouldChange(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('target')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('overwrite')
+            ->willReturn(false);
+        $this->input->getOption('dry-run')
+            ->willReturn(true);
+
+        $this->fileLocator->locate('.editorconfig')
+            ->willReturn('/package/.editorconfig');
+        $this->filesystem->getAbsolutePath('.editorconfig')
+            ->willReturn('/project/.editorconfig');
+        $this->filesystem->exists('/project/.editorconfig')
+            ->willReturn(true);
+        $this->fileDiffer->diff('/package/.editorconfig', '/project/.editorconfig')
+            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', "@@ -1 +1 @@\n-old\n+new"))
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipReplacingDriftedFileWhenInteractiveConfirmationIsDeclined(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('target')
+            ->willReturn('.editorconfig');
+        $this->input->getOption('overwrite')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+
+        $this->fileLocator->locate('.editorconfig')
+            ->willReturn('/package/.editorconfig');
+        $this->filesystem->getAbsolutePath('.editorconfig')
+            ->willReturn('/project/.editorconfig');
+        $this->filesystem->exists('/project/.editorconfig')
+            ->willReturn(true);
+        $this->fileDiffer->diff('/package/.editorconfig', '/project/.editorconfig')
+            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', "@@ -1 +1 @@\n-old\n+new"))
+            ->shouldBeCalledOnce();
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(false)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Skipped replacing /project/.editorconfig.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
     }
