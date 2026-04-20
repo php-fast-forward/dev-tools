@@ -169,6 +169,7 @@ composer dev-tools
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
 - `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `wiki.yml`, and `changelog.yml`
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
+- `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
 - `.agents/skills/`: packaged procedural skills shipped to consumer repositories
 - `.agents/agents/`: repository-specific role prompts mirrored through `.github/agents`
 - `.github/wiki`: generated or synchronized wiki content published by repo workflows

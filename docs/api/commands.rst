@@ -60,6 +60,9 @@ subprocess execution is needed.
    * - ``FastForward\DevTools\Console\Command\ReportsCommand``
      - ``reports``
      - Combines documentation, coverage, and metrics generation.
+   * - ``FastForward\DevTools\Console\Command\AgentsCommand``
+     - ``agents``
+     - Synchronizes packaged project agents into ``.agents/agents``.
    * - ``FastForward\DevTools\Console\Command\SkillsCommand``
      - ``skills``
      - Synchronizes packaged agent skills into ``.agents/skills``.
@@ -72,7 +75,7 @@ subprocess execution is needed.
    * - ``FastForward\DevTools\Console\Command\SyncCommand``
      - ``dev-tools:sync``
      - Synchronizes consumer-facing scripts, automation assets, and packaged
-       skills.
+       skills and project agents.
    * - ``FastForward\DevTools\Console\Command\GitIgnoreCommand``
      - ``gitignore``
      - Merges and synchronizes .gitignore files.

@@ -64,8 +64,8 @@ Relationship with ``dev-tools:sync``
 ------------------------------------
 
 ``dev-tools:sync`` ends by running ``gitignore`` and ``skills``. That means
-the full onboarding command refreshes workflow stubs, repository defaults, and
-packaged skills in one pass.
+the full onboarding command refreshes workflow stubs, repository defaults,
+packaged skills, and packaged role prompts in one pass.
 
 What the Command Does Not Overwrite
 -----------------------------------
@@ -73,3 +73,8 @@ What the Command Does Not Overwrite
 The command does not replace an existing non-symlink directory inside
 ``.agents/skills``. This protects local experiments, package-specific custom
 skills, or directories managed by another tool.
+
+Internally, ``skills`` shares the same generic packaged-directory
+synchronization helper used by ``agents``. That keeps link creation, broken
+link repair, and consumer-owned-directory preservation consistent across both
+flows.

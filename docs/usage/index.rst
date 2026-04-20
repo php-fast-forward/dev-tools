@@ -12,5 +12,6 @@ task-oriented guidance instead of class-by-class reference.
    documentation-workflows
    github-actions
    migrating-consumer-repositories
+   syncing-packaged-agents
    syncing-packaged-skills
    syncing-consumer-projects

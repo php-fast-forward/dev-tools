@@ -17,6 +17,7 @@ Detailed documentation for each dev-tools command.
    docs
    wiki
    reports
+   agents
    skills
    sync
    funding

@@ -5,7 +5,7 @@ This walkthrough is the fastest way to get a new library into a healthy state.
 
 1. Install the package.
 2. Create a minimal guide directory.
-3. Synchronize shared automation and packaged skills.
+3. Synchronize shared automation, packaged skills, and packaged agents.
 4. Run the focused commands once.
 5. Run the full suite before opening a pull request.
 
@@ -39,6 +39,7 @@ Once the package is installed and the guide directory exists, run:
 
    composer dev-tools:sync
    composer dev-tools skills
+   composer agents
    composer dev-tools tests
    composer dev-tools docs
    composer dev-tools
@@ -47,9 +48,13 @@ What Each Command Proves
 ------------------------
 
 - ``composer dev-tools:sync`` proves the consumer repository can receive the
-  shared scripts, automation assets, and packaged skills during onboarding.
+  shared scripts, automation assets, packaged skills, and packaged agents
+  during onboarding.
 - ``composer dev-tools skills`` proves the packaged skill set can be linked
   safely into ``.agents/skills`` without copying files into the consumer
+  repository.
+- ``composer agents`` proves the packaged project-agent prompts can be linked
+  safely into ``.agents/agents`` without copying files into the consumer
   repository.
 - ``composer dev-tools tests`` proves the packaged or local PHPUnit
   configuration can execute the current test suite.

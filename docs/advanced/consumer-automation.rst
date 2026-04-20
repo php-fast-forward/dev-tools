@@ -6,7 +6,8 @@ FastForward DevTools plays two roles at once:
 - producer: this repository ships reusable workflow templates and default
   configuration files;
 - consumer helper: the ``dev-tools:sync`` command copies those assets and links
-  packaged skills into other Fast Forward libraries.
+  packaged skills and packaged project agents into other Fast Forward
+  libraries.
 
 Reusable Workflows Versus Consumer Stubs
 ----------------------------------------
@@ -28,6 +29,9 @@ Reusable Workflows Versus Consumer Stubs
    * - ``.agents/skills/*``
      - Packaged agent skills linked into consumer repositories by the
        ``skills`` command.
+   * - ``.agents/agents/*``
+     - Packaged project-agent prompts linked into consumer repositories by
+       the ``agents`` command.
    * - ``.github/wiki``
      - Generated Markdown API documentation locally and wiki submodule content
        in consumer repositories.
@@ -58,6 +62,6 @@ Producer Impact
 ---------------
 
 Any change to ``resources/github-actions``, ``resources/dependabot.yml``,
-``.agents/skills``, ``.github/workflows``, or
+``.agents/skills``, ``.agents/agents``, ``.github/workflows``, or
 ``FastForward\DevTools\Console\Command\SyncCommand`` changes the default onboarding
 story for every consumer library.

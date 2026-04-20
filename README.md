@@ -29,8 +29,9 @@ across Fast Forward libraries.
   other onboarding defaults for consumer repositories
 - Generates `.github/CODEOWNERS` files from local project metadata instead of
   shipping repository-specific owners into consumers
-- Synchronizes packaged agent skills into consumer `.agents/skills`
-  directories using safe link-based updates
+- Synchronizes packaged skills and project-agent prompts into consumer
+  `.agents/skills` and `.agents/agents` directories using safe link-based
+  updates
 - Works both as a Composer plugin and as a local binary
 - Preserves local overrides through consumer-first configuration resolution
 
@@ -108,6 +109,9 @@ composer reports --target=.dev-tools --coverage=.dev-tools/coverage
 
 # Synchronize packaged agent skills into .agents/skills
 composer skills
+
+# Synchronize packaged project agents into .agents/agents
+composer agents
 
 # Synchronize Composer funding metadata with .github/FUNDING.yml
 composer funding
@@ -244,6 +248,10 @@ README generation, and repository `AGENTS.md` authoring.
   builds a shared container from `DevToolsServiceProvider`, which wires
   process execution, filesystem access, changelog services, Git helpers,
   diffing, reporting, and template loading.
+- `Generic Link Synchronization` -
+  `FastForward\DevTools\Sync\PackagedDirectorySynchronizer` provides the
+  shared symlink-preserving workflow used by both `skills` and `agents`,
+  keeping consumer-owned directories intact while repairing broken links.
 - `Lazy Command Loading` - `DevToolsCommandLoader` discovers `#[AsCommand]`
   classes and resolves most commands only when they are invoked, while
   orchestration commands such as `standards` dispatch other commands through

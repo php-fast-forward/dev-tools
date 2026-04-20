@@ -5,6 +5,7 @@ The ``dev-tools:sync`` command is the bridge between this repository and the
 libraries that consume it.
 
 For the focused skills-only workflow, see :doc:`syncing-packaged-skills`.
+For packaged project agents, see :doc:`syncing-packaged-agents`.
 For a first-time adoption path, see
 :doc:`migrating-consumer-repositories`.
 
@@ -40,6 +41,10 @@ What the Command Changes
      - Creates or repairs symlinks to packaged agent skills.
      - Creates missing links, repairs broken symlinks, and preserves existing
        non-symlink directories.
+   * - ``.agents/agents/<agent-name>``
+     - Creates or repairs symlinks to packaged project agents.
+     - Creates missing links, repairs broken symlinks, and preserves existing
+       non-symlink directories.
    * - ``.github/wiki``
      - Adds a Git submodule derived from ``git remote origin``.
      - Only when missing.
@@ -60,7 +65,8 @@ What It Needs
 - a writable ``composer.json`` in the consumer project;
 - a configured ``git remote origin`` if the wiki submodule must be created;
 - permission to create local ``.github/`` files;
-- permission to create local ``.agents/skills`` entries.
+- permission to create local ``.agents/skills`` and ``.agents/agents``
+  entries.
 
 .. important::
 
@@ -70,5 +76,5 @@ What It Needs
    allowing explicit replacement during shared automation updates. The
    generated ``.github/CODEOWNERS`` file follows the same principle by keeping
    an existing file unless you explicitly request replacement. The ``skills``
-   phase follows the same spirit by preserving existing non-symlink
-   directories inside ``.agents/skills``.
+   and ``agents`` phases follow the same spirit by preserving existing
+   non-symlink directories inside ``.agents/skills`` and ``.agents/agents``.

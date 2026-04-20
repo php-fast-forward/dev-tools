@@ -12,7 +12,8 @@ By the end of this section you will know how to:
 - prepare the minimum ``docs/`` structure required by the documentation
   pipeline;
 - understand which files ``dev-tools:sync`` creates or updates, including
-  packaged skills under ``.agents/skills``.
+  packaged skills under ``.agents/skills`` and packaged project agents under
+  ``.agents/agents``.
 
 .. toctree::
    :maxdepth: 1

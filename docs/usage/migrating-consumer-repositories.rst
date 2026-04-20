@@ -84,6 +84,10 @@ Expected changes can include:
    * - ``.agents/skills``
      - Links packaged skills for issue, PR, tests, docs, README, and style work.
      - Preserve existing custom skills and non-symlink directories.
+   * - ``.agents/agents``
+     - Links packaged project agents for issue, PR, docs, README, and AGENTS
+       maintenance work.
+     - Preserve existing custom agents and non-symlink directories.
    * - ``LICENSE``
      - Adds the packaged license file when missing.
      - Confirm it matches the package metadata.
@@ -142,5 +146,6 @@ Related References
 ------------------
 
 - :doc:`syncing-consumer-projects`
+- :doc:`syncing-packaged-agents`
 - :doc:`syncing-packaged-skills`
 - :doc:`github-actions`

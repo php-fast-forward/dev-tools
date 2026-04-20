@@ -217,6 +217,24 @@ Important details:
 - it creates missing symlinks and repairs broken ones;
 - it preserves an existing non-symlink directory instead of overwriting it.
 
+``agents``
+----------
+
+Synchronizes packaged project-agent prompts into the consumer repository.
+
+.. code-block:: bash
+
+   composer agents
+
+Important details:
+
+- it verifies the packaged ``.agents/agents`` directory before doing any work;
+- it creates the consumer ``.agents/agents`` directory when missing;
+- it creates missing symlinks and repairs broken ones;
+- it preserves an existing non-symlink directory instead of overwriting it;
+- it uses the same generic synchronization rules as ``skills`` through
+  ``FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer``.
+
 ``funding``
 -----------
 
@@ -285,7 +303,9 @@ Important details:
   .gitignore;
 - it calls ``gitattributes`` to manage export-ignore rules in .gitattributes;
 - it calls ``skills`` so ``.agents/skills`` contains links to the packaged
-  skill set.
+  skill set;
+- it calls ``agents`` so ``.agents/agents`` contains links to the packaged
+  project-agent set.
 
 ``gitattributes``
 ----------------
