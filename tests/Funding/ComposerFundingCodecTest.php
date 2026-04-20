@@ -135,8 +135,13 @@ final class ComposerFundingCodecTest extends TestCase
                     'type' => 'github',
                     'url' => 'https://github.com/foo',
                 ],
-                ['type' => 'patreon', 'url' => ''],
-                ['type' => 'other'],
+                [
+                    'type' => 'patreon',
+                    'url' => '',
+                ],
+                [
+                    'type' => 'other',
+                ],
             ],
             $profile->getUnsupportedComposerEntries(),
         );

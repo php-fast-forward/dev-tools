@@ -90,9 +90,7 @@ final class ChangelogDocumentTest extends TestCase
     #[Test]
     public function documentAccessorsWillResolveExpectedReleaseVariants(): void
     {
-        $document = new ChangelogDocument([
-            new ChangelogRelease('1.2.0', '2026-04-19'),
-        ]);
+        $document = new ChangelogDocument([new ChangelogRelease('1.2.0', '2026-04-19')]);
 
         self::assertSame(ChangelogDocument::UNRELEASED_VERSION, $document->getUnreleased()->getVersion());
         self::assertNull($document->getRelease('9.9.9'));
@@ -172,7 +170,9 @@ final class ChangelogDocumentTest extends TestCase
 
         $updated = $release
             ->withEntry(ChangelogEntryType::Fixed, 'Repair behavior')
-            ->withEntries([ChangelogEntryType::Security->value => ['Security hardening']])
+            ->withEntries([
+                ChangelogEntryType::Security->value => ['Security hardening'],
+            ])
             ->withDate('2026-04-20');
 
         self::assertSame('2026-04-20', $updated->getDate());

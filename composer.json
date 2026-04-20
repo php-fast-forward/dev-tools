@@ -91,7 +91,10 @@
     "autoload-dev": {
         "psr-4": {
             "FastForward\\DevTools\\Tests\\": "tests/"
-        }
+        },
+        "classmap": [
+            "tests/Fixtures/"
+        ]
     },
     "bin": "bin/dev-tools",
     "config": {

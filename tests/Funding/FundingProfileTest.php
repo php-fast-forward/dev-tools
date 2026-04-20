@@ -36,15 +36,25 @@ final class FundingProfileTest extends TestCase
         $profile = new FundingProfile(
             ['fast-forward'],
             ['https://example.com/support'],
-            ['ko_fi' => 'fastforward'],
-            [['type' => 'patreon', 'url' => 'https://patreon.com/example']],
+            [
+                'ko_fi' => 'fastforward',
+            ],
+            [[
+                'type' => 'patreon',
+                'url' => 'https://patreon.com/example',
+            ]],
         );
 
         self::assertSame(['fast-forward'], $profile->getGithubSponsors());
         self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
-        self::assertSame(['ko_fi' => 'fastforward'], $profile->getUnsupportedYamlEntries());
+        self::assertSame([
+            'ko_fi' => 'fastforward',
+        ], $profile->getUnsupportedYamlEntries());
         self::assertSame(
-            [['type' => 'patreon', 'url' => 'https://patreon.com/example']],
+            [[
+                'type' => 'patreon',
+                'url' => 'https://patreon.com/example',
+            ]],
             $profile->getUnsupportedComposerEntries(),
         );
     }
@@ -58,6 +68,8 @@ final class FundingProfileTest extends TestCase
         self::assertFalse((new FundingProfile())->hasYamlContent());
         self::assertTrue((new FundingProfile(['fast-forward']))->hasYamlContent());
         self::assertTrue((new FundingProfile(customUrls: ['https://example.com/support']))->hasYamlContent());
-        self::assertTrue((new FundingProfile(unsupportedYamlEntries: ['ko_fi' => 'fastforward']))->hasYamlContent());
+        self::assertTrue((new FundingProfile(unsupportedYamlEntries: [
+            'ko_fi' => 'fastforward',
+        ]))->hasYamlContent());
     }
 }

@@ -97,4 +97,72 @@ final class FundingYamlCodecTest extends TestCase
             Yaml::parse($contents),
         );
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillReturnEmptyProfileForMissingOrInvalidYamlPayloads(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        self::assertSame([], $codec->parse(null)->getGithubSponsors());
+        self::assertSame([], $codec->parse(" \n")->getCustomUrls());
+        self::assertSame([], $codec->parse('true')->getGithubSponsors());
+        self::assertSame(['just-a-list'], $codec->parse('- just-a-list')->getUnsupportedYamlEntries());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillNormalizeListsAndDiscardBlankEntries(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        $profile = $codec->parse(<<<'YAML'
+            github:
+              - foo
+              - " "
+              - bar
+            custom:
+              - https://example.com/support
+              - ""
+            YAML);
+
+        self::assertSame(['foo', 'bar'], $profile->getGithubSponsors());
+        self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillNormalizeScalarGithubAndCustomValues(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        $profile = $codec->parse(<<<'YAML'
+            github: foo
+            custom: https://example.com/support
+            YAML);
+
+        self::assertSame(['foo'], $profile->getGithubSponsors());
+        self::assertSame(['https://example.com/support'], $profile->getCustomUrls());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function dumpWillCollapseSingleGithubSponsorToScalar(): void
+    {
+        $codec = new FundingYamlCodec();
+
+        $contents = $codec->dump(new FundingProfile(['foo']));
+
+        self::assertSame([
+                'github' => 'foo',
+            ], Yaml::parse($contents),);
+    }
 }
