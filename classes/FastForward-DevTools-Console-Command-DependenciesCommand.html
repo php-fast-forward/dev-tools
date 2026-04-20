@@ -2796,7 +2796,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">39</span>
+    <span class="badge text-bg-light border">40</span>
 
     </aside>
         </div>
@@ -2817,7 +2817,7 @@
                     </div>
 
                     <div>
-                        <p>This command MUST report missing and unused dependencies using a single,
+                        <p>This command MUST report missing, unused, and misplaced dependencies using a single,
 deterministic report that is friendly for local development and CI runs.</p>
 
                     </div>
@@ -2861,7 +2861,7 @@ deterministic report that is friendly for local development and CI runs.</p>
                             <div class="small">
                                             <span class="fw-semibold text-body-secondary">$description</span>
                         <span class="text-body-secondary">:</span>
-                                        <code>&#039;Analyzes missing, unused, and outdated Composer dependencies.&#039;</code>
+                                        <code>&#039;Analyzes missing, unused, misplaced, and outdated Composer dependencies.&#039;</code>
                 </div>
                             <div class="small">
                                             <span class="fw-semibold text-body-secondary">$aliases</span>
@@ -2871,7 +2871,7 @@ deterministic report that is friendly for local development and CI runs.</p>
                             <div class="small">
                                             <span class="fw-semibold text-body-secondary">$help</span>
                         <span class="text-body-secondary">:</span>
-                                        <code>&#039;This command runs composer-dependency-analyser, composer-unused, and Jack to report missing, unused, and outdated Composer dependencies.&#039;</code>
+                                        <code>&#039;This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.&#039;</code>
                 </div>
                     </div>
     </div>                            </div>
@@ -2900,6 +2900,46 @@ deterministic report that is friendly for local development and CI runs.</p>
         
         
         
+                    <section class="card border-0 shadow-sm">
+                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-thumbtack text-warning"></i>
+                    <h4 id="toc-constants" class="h6 mb-0 fw-semibold">Constants</h4>
+                </div>
+                <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_ANALYSER_CONFIG"
+        >
+            ANALYSER_CONFIG
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+        &nbsp;= &#039;composer-dependency-analyser.php&#039;                            </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_DISABLE_OUTDATED_THRESHOLD"
+        >
+            DISABLE_OUTDATED_THRESHOLD
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+        &nbsp;= -1                            </span>
+</div>
+                        </div>
+                                    </div>
+            </section>
         
         
                     <section class="card border-0 shadow-sm">
@@ -2908,6 +2948,22 @@ deterministic report that is friendly for local development and CI runs.</p>
                     <h4 id="toc-properties" class="h6 mb-0 fw-semibold">Properties</h4>
                 </div>
                 <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_fileLocator"
+        >
+            $fileLocator
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                        &nbsp;: <abbr title="\Symfony\Component\Config\FileLocatorInterface">FileLocatorInterface</abbr>            </span>
+</div>
+                        </div>
                                             <div class="list-group-item">
                             <div class="d-flex justify-content-between align-items-start gap-3">
     <div class="flex-grow-1">
@@ -3046,25 +3102,6 @@ deterministic report that is friendly for local development and CI runs.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUnusedCommand"
-        >
-            getComposerUnusedCommand()
-        </a>
-
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Builds the composer-unused process.
-            </p>
-            </div>
-
-    <span class="text-body-secondary small text-end">
-                                &nbsp;: <abbr title="\Symfony\Component\Process\Process">Process</abbr>    </span>
-</div>
-                        </div>
-                                            <div class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-start gap-3">
-    <div class="flex-grow-1">
-        <a
-            class="text-decoration-none fw-semibold text-primary"
             href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUpdateCommand"
         >
             getComposerUpdateCommand()
@@ -3155,6 +3192,25 @@ deterministic report that is friendly for local development and CI runs.</p>
                                 &nbsp;: int    </span>
 </div>
                         </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_shouldIgnoreOutdatedFailures"
+        >
+            shouldIgnoreOutdatedFailures()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Determines whether Jack outdated failures SHOULD be ignored for the given threshold.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
+</div>
+                        </div>
                                     </div>
             </section>
         
@@ -3165,6 +3221,173 @@ deterministic report that is friendly for local development and CI runs.</p>
 
         <div class="d-grid gap-4">
                                     
+                            <section class="card border-0 shadow-sm">
+                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                        <i class="fas fa-thumbtack text-warning"></i>
+                        <span class="fw-semibold">Constants</span>
+                    </div>
+                    <div class="card-body p-4">
+                        
+    <section>
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="fas fa-thumbtack text-warning"></i>
+            <h3 class="h4 mb-0" id="constants">
+                Constants
+                <a
+    href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constants"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h3>
+        </div>
+
+        <div class="d-grid gap-4">
+                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="constant_ANALYSER_CONFIG">
+                <span class="text-warning-emphasis">ANALYSER_CONFIG</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_ANALYSER_CONFIG"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Command/DependenciesCommand.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-command-dependenciescommand.html"><abbr title="src/Console/Command/DependenciesCommand.php">DependenciesCommand.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">48</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">
+        private
+    </span>
+
+    
+    <span class="text-info-emphasis">
+        mixed
+    </span>
+
+    <span class="text-warning-emphasis fw-semibold">
+        ANALYSER_CONFIG
+    </span>
+
+    <span class="text-body-secondary">=</span>
+
+    <span class="text-success-emphasis">
+        &#039;composer-dependency-analyser.php&#039;
+    </span>
+</code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+    </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="constant_DISABLE_OUTDATED_THRESHOLD">
+                <span class="text-warning-emphasis">DISABLE_OUTDATED_THRESHOLD</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_DISABLE_OUTDATED_THRESHOLD"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Command/DependenciesCommand.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-command-dependenciescommand.html"><abbr title="src/Console/Command/DependenciesCommand.php">DependenciesCommand.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">50</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">
+        private
+    </span>
+
+    
+    <span class="text-info-emphasis">
+        mixed
+    </span>
+
+    <span class="text-warning-emphasis fw-semibold">
+        DISABLE_OUTDATED_THRESHOLD
+    </span>
+
+    <span class="text-body-secondary">=</span>
+
+    <span class="text-success-emphasis">
+        -1
+    </span>
+</code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+    </article>                    </div>
+    </section>
+
+                    </div>
+                </section>
             
                             <section class="card border-0 shadow-sm">
                     <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
@@ -3186,6 +3409,76 @@ deterministic report that is friendly for local development and CI runs.</p>
     <section>
         <div class="d-grid gap-4">
                             <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="property_fileLocator">
+                <span class="text-primary">$fileLocator</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_fileLocator"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                                    <span class="badge text-bg-info">Read-only</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Command/DependenciesCommand.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-command-dependenciescommand.html"><abbr title="src/Console/Command/DependenciesCommand.php">DependenciesCommand.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">60</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+            <span class="badge text-bg-light border text-dark">
+            private
+        </span>
+    
+    
+    <span class="text-info-emphasis">
+        <abbr title="\Symfony\Component\Config\FileLocatorInterface">FileLocatorInterface</abbr>
+    </span>
+
+    <span class="text-primary fw-semibold">
+        $fileLocator
+    </span>
+
+    </code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+        
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
             <h4 class="h5 mb-2" id="property_processBuilder">
@@ -3223,7 +3516,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">52</span>
+    <span class="badge text-bg-light border">58</span>
 
     </aside>
     
@@ -3293,7 +3586,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">53</span>
+    <span class="badge text-bg-light border">59</span>
 
     </aside>
     
@@ -3386,7 +3679,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">51</span>
+    <span class="badge text-bg-light border">57</span>
 
     </aside>
     
@@ -3401,7 +3694,8 @@ deterministic report that is friendly for local development and CI runs.</p>
     
     <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Process-ProcessBuilderInterface.html"><abbr title="\FastForward\DevTools\Process\ProcessBuilderInterface">ProcessBuilderInterface</abbr></a>&nbsp;
                 </span><span class="text-primary">$processBuilder</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Process-ProcessQueueInterface.html"><abbr title="\FastForward\DevTools\Process\ProcessQueueInterface">ProcessQueueInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$processQueue</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+                </span><span class="text-primary">$processQueue</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Config\FileLocatorInterface">FileLocatorInterface</abbr>&nbsp;
+                </span><span class="text-primary">$fileLocator</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3481,6 +3775,38 @@ deterministic report that is friendly for local development and CI runs.</p>
                         </div>
                     </div>
                 </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$fileLocator</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Config\FileLocatorInterface">FileLocatorInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>resolves the dependency analyser configuration</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
                     </div>
     </section>
 
@@ -3525,7 +3851,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">61</span>
+    <span class="badge text-bg-light border">68</span>
 
     </aside>
         <div class="mb-4">
@@ -3592,7 +3918,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">90</span>
+    <span class="badge text-bg-light border">102</span>
 
     </aside>
         <div class="mb-4">
@@ -3768,7 +4094,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">122</span>
+    <span class="badge text-bg-light border">138</span>
 
     </aside>
         <div class="mb-4">
@@ -3784,7 +4110,8 @@ deterministic report that is friendly for local development and CI runs.</p>
     
     
     
-    <span class="text-primary fw-semibold">getComposerDependencyAnalyserCommand</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr></span></code>
+    <span class="text-primary fw-semibold">getComposerDependencyAnalyserCommand</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$input</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr></span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3793,7 +4120,48 @@ deterministic report that is friendly for local development and CI runs.</p>
     
     
 
-    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$input</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the runtime command input</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
     
 
         
@@ -3869,7 +4237,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">214</span>
+    <span class="badge text-bg-light border">240</span>
 
     </aside>
         <div class="mb-4">
@@ -3937,107 +4305,6 @@ deterministic report that is friendly for local development and CI runs.</p>
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="method_getComposerUnusedCommand">
-                <span class="text-primary">getComposerUnusedCommand()</span>
-                <a
-    href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUnusedCommand"
-    class="ms-2 text-decoration-none text-body-secondary"
-    aria-label="Permalink"
-    title="Permalink"
->
-    <i class="fas fa-link small"></i>
-</a>
-            </h4>
-
-            <div class="d-flex flex-wrap gap-2">
-                <span class="badge text-bg-light border text-dark">Private</span>
-
-                
-                
-                
-                            </div>
-        </div>
-    </div>
-
-    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
-    <i class="fas fa-map-marker-alt text-danger"></i>
-
-    <span>Defined in</span>
-
-    <abbr title="src/Console/Command/DependenciesCommand.php" class="text-decoration-none mb-0">
-        <a href="files/src-console-command-dependenciescommand.html"><abbr title="src/Console/Command/DependenciesCommand.php">DependenciesCommand.php</abbr></a>
-    </abbr>
-
-    <span class="text-body-tertiary">:</span>
-
-    <span class="badge text-bg-light border">224</span>
-
-    </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Builds the composer-unused process.</p>
-    </div>
-
-
-    <div class="mt-4">
-        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
-    <span class="badge text-bg-light border text-dark">private</span>
-
-    
-    
-    
-    
-    <span class="text-primary fw-semibold">getComposerUnusedCommand</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr></span></code>
-    </div>
-
-    <div class="mt-3 d-flex flex-wrap gap-2">
-            </div>
-
-    
-    
-
-    
-    
-
-        
-    
-        <section class="mt-4">
-        <div class="d-flex align-items-center gap-2 mb-3">
-            <i class="fas fa-reply text-success"></i>
-            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
-        </div>
-
-        <div class="card border-0 bg-body-tertiary shadow-sm">
-            <div class="card-body p-3">
-                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
-                        <span class="badge text-bg-light border text-dark">
-                            <abbr title="\Symfony\Component\Process\Process">Process</abbr>
-                        </span>
-                    </div>
-                
-                                    <div>
-                        
-    <section class="mt-2">
-                    <div>
-                <div class="d-flex align-items-center gap-2 mb-3">
-                    <i class="fas fa-align-left text-primary"></i>
-                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                </div>
-
-                <div>
-                    <p>the configured composer-unused process</p>
-
-                </div>
-            </div>
-            </section>
-
-                    </div>
-                            </div>
-        </div>
-    </section>
-
-</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
-    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
-        <div>
             <h4 class="h5 mb-2" id="method_getComposerUpdateCommand">
                 <span class="text-primary">getComposerUpdateCommand()</span>
                 <a
@@ -4071,7 +4338,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">200</span>
+    <span class="badge text-bg-light border">226</span>
 
     </aside>
         <div class="mb-4">
@@ -4172,7 +4439,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">138</span>
+    <span class="badge text-bg-light border">162</span>
 
     </aside>
         <div class="mb-4">
@@ -4349,7 +4616,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">158</span>
+    <span class="badge text-bg-light border">184</span>
 
     </aside>
         <div class="mb-4">
@@ -4492,7 +4759,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">180</span>
+    <span class="badge text-bg-light border">206</span>
 
     </aside>
         <div class="mb-4">
@@ -4635,7 +4902,7 @@ deterministic report that is friendly for local development and CI runs.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">236</span>
+    <span class="badge text-bg-light border">252</span>
 
     </aside>
         <div class="mb-4">
@@ -4732,6 +4999,150 @@ deterministic report that is friendly for local development and CI runs.</p>
 
                 <div>
                     <p>the validated maximum number of outdated packages</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_shouldIgnoreOutdatedFailures">
+                <span class="text-primary">shouldIgnoreOutdatedFailures()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_shouldIgnoreOutdatedFailures"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Command/DependenciesCommand.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-command-dependenciescommand.html"><abbr title="src/Console/Command/DependenciesCommand.php">DependenciesCommand.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">276</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Determines whether Jack outdated failures SHOULD be ignored for the given threshold.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">shouldIgnoreOutdatedFailures</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    int&nbsp;
+                </span><span class="text-primary">$maximumOutdated</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$maximumOutdated</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                int
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the validated outdated threshold option</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>true when the outdated threshold is explicitly disabled</p>
 
                 </div>
             </div>
@@ -4868,6 +5279,9 @@ deterministic report that is friendly for local development and CI runs.</p>
             <div>
                 <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
                 <div class="list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#toc-constants">
+                            Constants
+                        </a>
                                                                 <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#toc-properties">
                             Properties
                         </a>
@@ -4877,6 +5291,27 @@ deterministic report that is friendly for local development and CI runs.</p>
                                     </div>
             </div>
 
+                            <div>
+                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
+                        <i class="fas fa-thumbtack text-warning"></i>
+                        <span>Constants</span>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_ANALYSER_CONFIG"
+                            >
+                                <span class="text-truncate">ANALYSER_CONFIG</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_DISABLE_OUTDATED_THRESHOLD"
+                            >
+                                <span class="text-truncate">DISABLE_OUTDATED_THRESHOLD</span>
+                                                            </a>
+                                            </div>
+                </div>
             
                             <div>
                     <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
@@ -4885,6 +5320,12 @@ deterministic report that is friendly for local development and CI runs.</p>
                     </div>
 
                     <div class="list-group list-group-flush">
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_fileLocator"
+                            >
+                                <span class="text-truncate">$fileLocator</span>
+                                                            </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_processBuilder"
@@ -4939,12 +5380,6 @@ deterministic report that is friendly for local development and CI runs.</p>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUnusedCommand"
-                            >
-                                <span class="text-truncate">getComposerUnusedCommand()</span>
-                                                            </a>
-                                                    <a
-                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUpdateCommand"
                             >
                                 <span class="text-truncate">getComposerUpdateCommand()</span>
@@ -4972,6 +5407,12 @@ deterministic report that is friendly for local development and CI runs.</p>
                                 href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_resolveMaximumOutdated"
                             >
                                 <span class="text-truncate">resolveMaximumOutdated()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_shouldIgnoreOutdatedFailures"
+                            >
+                                <span class="text-truncate">shouldIgnoreOutdatedFailures()</span>
                                                             </a>
                                             </div>
                 </div>

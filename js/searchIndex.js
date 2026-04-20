@@ -1026,6 +1026,46 @@ Search.appendIndex(
             "summary": "Handles\u0020final\u0020uninstallation\u0020processes\u0020logically.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_uninstall"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig",
+            "name": "ComposerDependencyAnalyserConfig",
+            "summary": "Provides\u0020the\u0020default\u0020Composer\u0020Dependency\u0020Analyser\u0020configuration.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Creates\u0020the\u0020default\u0020Composer\u0020Dependency\u0020Analyser\u0020configuration.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AconfigurePackagedRepositoryIgnores\u0028\u0029",
+            "name": "configurePackagedRepositoryIgnores",
+            "summary": "Applies\u0020the\u0020ignores\u0020required\u0020only\u0020by\u0020the\u0020packaged\u0020DevTools\u0020repository.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configurePackagedRepositoryIgnores"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AisDevToolsRepository\u0028\u0029",
+            "name": "isDevToolsRepository",
+            "summary": "Detects\u0020whether\u0020the\u0020analyser\u0020is\u0020running\u0020inside\u0020the\u0020DevTools\u0020repository\u0020itself.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isDevToolsRepository"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AisInstalledAsDependency\u0028\u0029",
+            "name": "isInstalledAsDependency",
+            "summary": "Detects\u0020whether\u0020the\u0020packaged\u0020config\u0020is\u0020being\u0020loaded\u0020from\u0020a\u0020consumer\u0020vendor\u0020directory.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isInstalledAsDependency"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AVENDOR_PACKAGE_PATH",
+            "name": "VENDOR_PACKAGE_PATH",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_VENDOR_PACKAGE_PATH"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGED_UNUSED_DEPENDENCIES",
+            "name": "PACKAGED_UNUSED_DEPENDENCIES",
+            "summary": "Dependencies\u0020that\u0020are\u0020only\u0020required\u0020by\u0020the\u0020packaged\u0020DevTools\u0020distribution\u0020itself.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_UNUSED_DEPENDENCIES"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
+            "name": "PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
+            "summary": "Production\u0020dependencies\u0020intentionally\u0020kept\u0020in\u0020require\u0020for\u0020the\u0020packaged\u0020toolchain.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig",
             "name": "ECSConfig",
             "summary": "Provides\u0020the\u0020default\u0020ECS\u0020configuration.",
@@ -1421,15 +1461,25 @@ Search.appendIndex(
             "summary": "Builds\u0020the\u0020Composer\u0020Normalize\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerNormalizeCommand"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetComposerUnusedCommand\u0028\u0029",
-            "name": "getComposerUnusedCommand",
-            "summary": "Builds\u0020the\u0020composer\u002Dunused\u0020process.",
-            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerUnusedCommand"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AresolveMaximumOutdated\u0028\u0029",
             "name": "resolveMaximumOutdated",
             "summary": "Resolves\u0020the\u0020maximum\u0020outdated\u0020dependency\u0020threshold.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_resolveMaximumOutdated"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AshouldIgnoreOutdatedFailures\u0028\u0029",
+            "name": "shouldIgnoreOutdatedFailures",
+            "summary": "Determines\u0020whether\u0020Jack\u0020outdated\u0020failures\u0020SHOULD\u0020be\u0020ignored\u0020for\u0020the\u0020given\u0020threshold.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_shouldIgnoreOutdatedFailures"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AANALYSER_CONFIG",
+            "name": "ANALYSER_CONFIG",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_ANALYSER_CONFIG"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003ADISABLE_OUTDATED_THRESHOLD",
+            "name": "DISABLE_OUTDATED_THRESHOLD",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_DISABLE_OUTDATED_THRESHOLD"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
@@ -1440,6 +1490,11 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003A\u0024fileLocator",
+            "name": "fileLocator",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_fileLocator"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand",
             "name": "DocsCommand",

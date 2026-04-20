@@ -226,6 +226,13 @@
             <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
             <li class="success">Execute will return failure if process queue fails</li>
         </ul>
+        <h2>Composer Dependency Analyser Config (FastForward\DevTools\Tests\Config\ComposerDependencyAnalyserConfig)</h2>
+        <ul>
+            <li class="success">Configure will return configuration</li>
+            <li class="success">Configure will apply repository ignores and invoke customization callback</li>
+            <li class="success">Is installed as dependency will detect vendor package paths</li>
+            <li class="success">Is dev tools repository will detect repository paths</li>
+        </ul>
         <h2>Composer Funding Codec (FastForward\DevTools\Tests\Funding\ComposerFundingCodec)</h2>
         <ul>
             <li class="success">Parse will normalize supported and unsupported funding entries</li>
@@ -301,6 +308,9 @@
             <li class="success">Execute will return failure when process queue fails</li>
             <li class="success">Execute will queue upgrade workflow before analysis when upgrade is requested</li>
             <li class="success">Execute will fail when max outdated is not numeric</li>
+            <li class="success">Execute will fail when max outdated is lower than minus one</li>
+            <li class="success">Execute will dump package usages and show all matches when requested</li>
+            <li class="success">Execute will ignore jack failures when max outdated is disabled</li>
         </ul>
         <h2>Dev Tools (FastForward\DevTools\Tests\Console\DevTools)</h2>
         <ul>

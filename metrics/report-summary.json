@@ -1,41 +1,41 @@
 {
     "LOC": {
-        "linesOfCode": 7140,
-        "logicalLinesOfCode": 3660,
-        "commentLinesOfCode": 3487,
-        "avgVolume": 452.48,
-        "avgCommentWeight": 43.91,
-        "avgIntelligentContent": 43.91,
+        "linesOfCode": 7247,
+        "logicalLinesOfCode": 3700,
+        "commentLinesOfCode": 3554,
+        "avgVolume": 452.16,
+        "avgCommentWeight": 43.95,
+        "avgIntelligentContent": 43.95,
         "logicalLinesByClass": 45,
         "logicalLinesByMethod": 11
     },
     "OOP": {
-        "classes": 81,
+        "classes": 82,
         "interface": 28,
-        "methods": 335,
-        "methodsByClass": 4.14,
-        "lackCohesionOfMethods": 2.11
+        "methods": 339,
+        "methodsByClass": 4.13,
+        "lackCohesionOfMethods": 2.13
     },
     "Coupling": {
-        "avgAfferentCoupling": 0.57,
-        "avgEfferentCoupling": 4.49,
+        "avgAfferentCoupling": 0.56,
+        "avgEfferentCoupling": 4.46,
         "avgInstability": 0.85,
-        "inheritanceTreeDepth": 1.09
+        "inheritanceTreeDepth": 1.08
     },
     "Package": {
         "packages": 30,
-        "acgClassesPerPackage": 3.63,
+        "acgClassesPerPackage": 3.67,
         "avgDistance": 0.15,
         "avgIncomingClassDependencies": 2.97,
-        "avgOutgoingClassDependencies": 5.27,
+        "avgOutgoingClassDependencies": 5.3,
         "avgIncomingPackageDependencies": 1.37,
-        "avgOutgoingPackageDependencies": 4
+        "avgOutgoingPackageDependencies": 4.03
     },
     "Complexity": {
-        "avgCyclomaticComplexityByClass": 8.46,
-        "avgWeightedMethodCountByClass": 11.59,
-        "avgRelativeSystemComplexity": 168.03,
-        "avgDifficulty": 7.22
+        "avgCyclomaticComplexityByClass": 8.43,
+        "avgWeightedMethodCountByClass": 11.56,
+        "avgRelativeSystemComplexity": 167.87,
+        "avgDifficulty": 7.24
     },
     "Bugs": {
         "avgBugsByClass": 0.15,
@@ -44,7 +44,7 @@
     "Violations": {
         "critical": 0,
         "error": 12,
-        "warning": 10,
+        "warning": 11,
         "information": 0
     }
 }

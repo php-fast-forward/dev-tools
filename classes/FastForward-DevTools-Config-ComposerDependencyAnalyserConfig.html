@@ -4,13 +4,12 @@
     <meta charset="utf-8">
             <title>fast-forward/dev-tools</title>
     
-
         
     
         
-    
+                                                    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <base href="./">
+    <base href="../">
 
             <!-- Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
@@ -1599,7 +1598,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./faq.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             FAQ
         </a>
@@ -2704,289 +2703,1398 @@
                         <div class="container-fluid">
                             
                             <div class="row g-4">
-                                <div class="col-12">
+                                <div class="col-12 col-xl-9">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            <section class="section " id="faq">
-            <h1>FAQ</h1>
+                                            
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="" class="text-decoration-none">
+                <i class="fas fa-home text-primary me-1"></i>
+                <span>Home</span>
+            </a>
+        </li>
 
-            <section class="section " id="why-does-composer-dev-tools-docs-fail-in-a-new-package">
-            <h2>Why does <code>composer dev-tools docs</code>
- fail in a new package?</h2>
+                    <li class="breadcrumb-item">
+                <a href="namespaces/fastforward.html" class="text-decoration-none">
+                    FastForward
+                </a>
+            </li>
+                    <li class="breadcrumb-item">
+                <a href="namespaces/fastforward-devtools.html" class="text-decoration-none">
+                    DevTools
+                </a>
+            </li>
+                    <li class="breadcrumb-item">
+                <a href="namespaces/fastforward-devtools-config.html" class="text-decoration-none">
+                    Config
+                </a>
+            </li>
+            </ol>
+</nav>
+    <article class="phpdocumentor-element">
+        <div class="mb-4">
+            <div class="mb-5">
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="bg-primary-subtle text-primary rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+            <i class="fas fa-cube"></i>
+        </div>
+        <div>
+            <h2 class="display-5 mb-1">ComposerDependencyAnalyserConfig</h2>
+            <div class="text-body-secondary">Class</div>
+        </div>
+    </div>
 
-            
-    <p>Because the command requires a <code>docs/</code>
- directory. Create at least
-<code>docs/index.rst</code>
- before running <code>docs</code>
- or <code>reports</code>
-.</p>
+    
+            <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item text-body-secondary">in package</li>
+                                    <li class="breadcrumb-item">
+                        <a href="packages/FastForward.html" class="text-decoration-none">FastForward</a>
+                    </li>
+                                    <li class="breadcrumb-item">
+                        <a href="packages/FastForward-DevTools.html" class="text-decoration-none">DevTools</a>
+                    </li>
+                            </ol>
+        </nav>
+    
+    <div class="d-grid gap-2">
+        
+            </div>
 
+    <div class="mt-4 d-flex flex-wrap gap-2">
+        
+                    <span class="badge text-bg-danger px-3 py-2">
+    <span class="fw-normal">Final:</span>
+    <span class="fw-semibold ms-1">Yes</span>
+</span>
+        
+            </div>
+</div>
+        </div>
+
+        <div class="mb-4">
+            <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">41</span>
+
+    </aside>
+        </div>
+
+        <div class="mb-4">
+                <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Provides the default Composer Dependency Analyser configuration.</p>
+    </div>
+
+
+
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>Consumers can use this as a starting point and extend it:</p>
+<p>return \FastForward\DevTools\Config\ComposerDependencyAnalyserConfig::configure(
+static function (\ShipMonk\ComposerDependencyAnalyser\Config\Configuration $configuration): void {
+$configuration-&gt;ignoreErrorsOnPackage(
+'vendor/package',
+[\ShipMonk\ComposerDependencyAnalyser\Config\ErrorType::UNUSED_DEPENDENCY]
+);
+}
+);</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+
+    <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-tags text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0" id="tags">
+                Tags
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#tags"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                                                <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://github.com/shipmonk-rnd/composer-dependency-analyser">https://github.com/shipmonk-rnd/composer-dependency-analyser</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                                                </div>
     </section>
 
-            <section class="section " id="why-did-my-composer-json-change-after-installing-the-package">
-            <h2>Why did my <code>composer.json</code>
- change after installing the package?</h2>
+    
+    
+<section class="mt-5">
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <i class="fas fa-list-ul text-primary"></i>
+        <h3 id="toc" class="h4 mb-0">
+            Table of Contents
+            <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#toc"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+        </h3>
+    </div>
 
-            
-    <p>The Composer plugin runs <code>dev-tools:sync</code>
- after install and update.
-That command adds the <code>dev-tools</code>
- scripts and updates
-<code>extra.grumphp.config-default-path</code>
- in the consumer project.</p>
+    <div class="d-grid gap-4">
+        
+        
+        
+        
+        
+        
+                    <section class="card border-0 shadow-sm">
+                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-thumbtack text-warning"></i>
+                    <h4 id="toc-constants" class="h6 mb-0 fw-semibold">Constants</h4>
+                </div>
+                <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES"
+        >
+            PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES
+        </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Production dependencies intentionally kept in require for the packaged toolchain.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+        &nbsp;= [&#039;phpspec/prophecy&#039;, &#039;phpspec/prophecy-phpunit&#039;, &#039;symfony/var-exporter&#039;]                            </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_UNUSED_DEPENDENCIES"
+        >
+            PACKAGED_UNUSED_DEPENDENCIES
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Dependencies that are only required by the packaged DevTools distribution itself.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+        &nbsp;= [&#039;ergebnis/composer-normalize&#039;, &#039;fakerphp/faker&#039;, &#039;fast-forward/phpdoc-bootstrap-template&#039;, &#039;php-parallel-lint/php-parallel-lint&#039;, &#039;phpdocumentor/shim&#039;, &#039;phpmetrics/phpmetrics&#039;, &#039;phpro/grumphp-shim&#039;, &#039;pyrech/composer-changelogs&#039;, &#039;rector/jack&#039;, &#039;saggre/phpdocumentor-markdown&#039;, &#039;symfony/var-dumper&#039;]                            </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_VENDOR_PACKAGE_PATH"
+        >
+            VENDOR_PACKAGE_PATH
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+        &nbsp;= \DIRECTORY_SEPARATOR . &#039;vendor&#039; . \DIRECTORY_SEPARATOR . &#039;fast-forward&#039; . \DIRECTORY_SEPARATOR . &#039;dev-tools&#039;                            </span>
+</div>
+                        </div>
+                                    </div>
+            </section>
+        
+        
+        
+                    <section class="card border-0 shadow-sm">
+                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-code text-primary"></i>
+                    <h4 id="toc-methods" class="h6 mb-0 fw-semibold">Methods</h4>
+                </div>
+                <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
+        >
+            configure()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Creates the default Composer Dependency Analyser configuration.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configurePackagedRepositoryIgnores"
+        >
+            configurePackagedRepositoryIgnores()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Applies the ignores required only by the packaged DevTools repository.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: void    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isDevToolsRepository"
+        >
+            isDevToolsRepository()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the analyser is running inside the DevTools repository itself.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isInstalledAsDependency"
+        >
+            isInstalledAsDependency()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the packaged config is being loaded from a consumer vendor directory.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
+</div>
+                        </div>
+                                    </div>
+            </section>
+        
+            </div>
+</section>
+
+        </div>
+
+        <div class="d-grid gap-4">
+                                    
+                            <section class="card border-0 shadow-sm">
+                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                        <i class="fas fa-thumbtack text-warning"></i>
+                        <span class="fw-semibold">Constants</span>
+                    </div>
+                    <div class="card-body p-4">
+                        
+    <section>
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <i class="fas fa-thumbtack text-warning"></i>
+            <h3 class="h4 mb-0" id="constants">
+                Constants
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constants"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h3>
+        </div>
+
+        <div class="d-grid gap-4">
+                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="constant_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES">
+                <span class="text-warning-emphasis">PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">78</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Production dependencies intentionally kept in require for the packaged toolchain.</p>
+    </div>
+
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">
+        private
+    </span>
+
+    
+    <span class="text-info-emphasis">
+        array&lt;int, string&gt;
+    </span>
+
+    <span class="text-warning-emphasis fw-semibold">
+        PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES
+    </span>
+
+    <span class="text-body-secondary">=</span>
+
+    <span class="text-success-emphasis">
+        [&#039;phpspec/prophecy&#039;, &#039;phpspec/prophecy-phpunit&#039;, &#039;symfony/var-exporter&#039;]
+    </span>
+</code>
+    </div>
+
+    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>These dependencies are only exercised in test and development paths inside
+this repository, but they MUST remain available to the packaged DevTools
+runtime for consumer projects that choose to use those capabilities.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+    
+
+    
+
+        
+    </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="constant_PACKAGED_UNUSED_DEPENDENCIES">
+                <span class="text-warning-emphasis">PACKAGED_UNUSED_DEPENDENCIES</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_UNUSED_DEPENDENCIES"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">55</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Dependencies that are only required by the packaged DevTools distribution itself.</p>
+    </div>
+
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">
+        private
+    </span>
+
+    
+    <span class="text-info-emphasis">
+        array&lt;int, string&gt;
+    </span>
+
+    <span class="text-warning-emphasis fw-semibold">
+        PACKAGED_UNUSED_DEPENDENCIES
+    </span>
+
+    <span class="text-body-secondary">=</span>
+
+    <span class="text-success-emphasis">
+        [&#039;ergebnis/composer-normalize&#039;, &#039;fakerphp/faker&#039;, &#039;fast-forward/phpdoc-bootstrap-template&#039;, &#039;php-parallel-lint/php-parallel-lint&#039;, &#039;phpdocumentor/shim&#039;, &#039;phpmetrics/phpmetrics&#039;, &#039;phpro/grumphp-shim&#039;, &#039;pyrech/composer-changelogs&#039;, &#039;rector/jack&#039;, &#039;saggre/phpdocumentor-markdown&#039;, &#039;symfony/var-dumper&#039;]
+    </span>
+</code>
+    </div>
+
+    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>These packages MUST only be ignored when the analyser runs against the
+DevTools repository, because consumer repositories do not inherit them as
+direct requirements automatically.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+    
+
+    
+
+        
+    </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="constant_VENDOR_PACKAGE_PATH">
+                <span class="text-warning-emphasis">VENDOR_PACKAGE_PATH</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_VENDOR_PACKAGE_PATH"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">43</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">
+        private
+    </span>
+
+    
+    <span class="text-info-emphasis">
+        mixed
+    </span>
+
+    <span class="text-warning-emphasis fw-semibold">
+        VENDOR_PACKAGE_PATH
+    </span>
+
+    <span class="text-body-secondary">=</span>
+
+    <span class="text-success-emphasis">
+        \DIRECTORY_SEPARATOR . &#039;vendor&#039; . \DIRECTORY_SEPARATOR . &#039;fast-forward&#039; . \DIRECTORY_SEPARATOR . &#039;dev-tools&#039;
+    </span>
+</code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+    </article>                    </div>
     </section>
 
-            <section class="section " id="do-i-always-need-to-run-dev-tools-sync-manually">
-            <h2>Do I always need to run <code>dev-tools:sync</code>
- manually?</h2>
-
+                    </div>
+                </section>
             
-    <p>Usually no. The plugin already runs it after <code>composer install</code>
- and
-<code>composer update</code>
-. Manual sync is most useful when plugins were disabled or
-after upgrading <code>fast-forward/dev-tools</code>
- and wanting to refresh consumer
-automation. That flow also runs <code>skills</code>
- and <code>agents</code>
- so packaged skill
-links and packaged project-agent links are kept up to date.</p>
+            
+                            <section class="card border-0 shadow-sm">
+                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                        <i class="fas fa-code text-primary"></i>
+                        <span class="fw-semibold">
+                            Methods
+                            <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#methods"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+                        </span>
+                    </div>
+                    <div class="card-body p-4">
+                        
+    <section>
+        <div class="d-grid gap-4">
+                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_configure">
+                <span class="text-primary">configure()</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
 
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Public</span>
+
+                
+                                    <span class="badge text-bg-secondary">Static</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">91</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Creates the default Composer Dependency Analyser configuration.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">public</span>
+
+    
+    
+            <span class="badge text-bg-secondary">static</span>
+    
+    
+    <span class="text-primary fw-semibold">configure</span><span class="text-body-secondary">(</span><span><span class="text-body-secondary">[</span><span class="text-info-emphasis">
+                    callable|null&nbsp;
+                </span><span class="text-primary">$customize</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr></span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$customize</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                callable|null
+                            </span>
+
+                                                            <span class="text-body-secondary">=</span>
+                                <code class="text-success-emphasis mb-0">null</code>
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>optional callback to customize the configuration</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
-            <section class="section " id="when-should-i-run-composer-dev-tools-skills-manually">
-            <h2>When should I run <code>composer dev-tools skills</code>
- manually?</h2>
+    
 
-            
-    <p>Run it when you want to refresh <code>.agents/skills</code>
- without rerunning the full
-consumer sync flow, especially after upgrading <code>fast-forward/dev-tools</code>
- or
-after deleting a packaged skill link locally.</p>
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
 
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the configured analyser configuration</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
     </section>
 
-            <section class="section " id="when-should-i-run-composer-agents-manually">
-            <h2>When should I run <code>composer agents</code>
- manually?</h2>
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_configurePackagedRepositoryIgnores">
+                <span class="text-primary">configurePackagedRepositoryIgnores()</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configurePackagedRepositoryIgnores"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
 
-            
-    <p>Run it when you want to refresh <code>.agents/agents</code>
- without rerunning the full
-consumer sync flow, especially after upgrading <code>fast-forward/dev-tools</code>
- or
-after deleting a packaged project-agent link locally.</p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
 
+                
+                                    <span class="badge text-bg-secondary">Static</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">113</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Applies the ignores required only by the packaged DevTools repository.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+            <span class="badge text-bg-secondary">static</span>
+    
+    
+    <span class="text-primary fw-semibold">configurePackagedRepositoryIgnores</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>&nbsp;
+                </span><span class="text-primary">$configuration</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$configuration</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the analyser configuration to customize</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
-            <section class="section " id="why-does-code-style-touch-composer-lock">
-            <h2>Why does <code>code-style</code>
- touch <code>composer.lock</code>
-?</h2>
+    
 
-            
-    <p>Because <code>FastForward\DevTools\Console\Command\CodeStyleCommand</code>
- always runs
-<code>composer update --lock --quiet</code>
- before Composer Normalize and ECS.</p>
+        
+    
+    
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_isDevToolsRepository">
+                <span class="text-primary">isDevToolsRepository()</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isDevToolsRepository"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
 
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                                    <span class="badge text-bg-secondary">Static</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">130</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the analyser is running inside the DevTools repository itself.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+            <span class="badge text-bg-secondary">static</span>
+    
+    
+    <span class="text-primary fw-semibold">isDevToolsRepository</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$configDirectory</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$configDirectory</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the directory where the config class is loaded from</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
-            <section class="section " id="where-did-docheader-come-from">
-            <h2>Where did <code>.docheader</code>
- come from?</h2>
+    
 
-            
-    <p><code>FastForward\DevTools\Console\Command\PhpDocCommand</code>
- creates it automatically when it
-is missing. The template comes from the packaged file and is rewritten with the
-current package name when possible.</p>
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
 
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>true when the config is loaded from the repository checkout itself</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
     </section>
 
-            <section class="section " id="how-do-i-run-only-one-test-class-or-method">
-            <h2>How do I run only one test class or method?</h2>
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_isInstalledAsDependency">
+                <span class="text-primary">isInstalledAsDependency()</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isInstalledAsDependency"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
 
-            
-    <p>Use the <code>tests</code>
- command with <code>--filter</code>
-:</p>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
 
-            <pre><code class="language-bash">composer dev-tools tests -- --filter=SyncCommandTest</code></pre>
+                
+                                    <span class="badge text-bg-secondary">Static</span>
+                
+                
+                            </div>
+        </div>
+    </div>
 
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">142</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the packaged config is being loaded from a consumer vendor directory.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+            <span class="badge text-bg-secondary">static</span>
+    
+    
+    <span class="text-primary fw-semibold">isInstalledAsDependency</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$configDirectory</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$configDirectory</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the directory where the config class is loaded from</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
-            <section class="section " id="why-can-my-tests-double-final-classes">
-            <h2>Why can my tests double final classes?</h2>
+    
 
-            
-    <p>The packaged PHPUnit extension enables <code>DG\BypassFinals</code>
- at suite start
-through <code>ByPassfinalsStartedSubscriber</code>
-.</p>
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
 
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>true when DevTools is being used from vendor/fast-forward/dev-tools</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
     </section>
 
-            <section class="section " id="why-did-desktop-notifications-stop-appearing-after-i-customized-phpunit">
-            <h2>Why did desktop notifications stop appearing after I customized PHPUnit?</h2>
-
-            
-    <p>If you replaced the packaged <code>phpunit.xml</code>
-, you may also have removed
-<code>FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension</code>
-. Re-add the
-extension if you want the notification behavior back.</p>
-
+</article>                    </div>
     </section>
 
-            <section class="section " id="is-addmissingclassphpdocrector-enabled-by-default">
-            <h2>Is <code>AddMissingClassPhpDocRector</code>
- enabled by default?</h2>
+                    </div>
+                </section>
+                    </div>
 
-            
-    <p>No. The class is shipped and tested, but the packaged <code>rector.php</code>
- enables
-only <code>AddMissingMethodPhpDocRector</code>
- and <code>RemoveEmptyDocBlockRector</code>
-.</p>
+        <div class="modal fade" id="source-view" tabindex="-1" aria-labelledby="source-view-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2" id="source-view-label">
+                    <i class="fas fa-code text-primary"></i>
+                    <span>Source View</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-    </section>
+            <div class="modal-body p-0">
+                <pre
+                    class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
+                    style="max-height: 70vh; overflow-y: auto;"
+                    data-src="files/src/Config/ComposerDependencyAnalyserConfig.php.txt"
+                ></pre>
+            </div>
+        </div>
+    </div>
+</div>
 
-            <section class="section " id="what-happens-if-github-wiki-already-exists">
-            <h2>What happens if <code>.github/wiki</code>
- already exists?</h2>
+<script>
+    (function () {
+        function loadExternalCodeSnippet(el, url, line) {
+            const pre = el.querySelector('pre[data-src]');
+            if (!pre) return;
 
-            
-    <p><code>dev-tools:sync</code>
- leaves it alone. The wiki submodule is only created when the
-directory is missing.</p>
+            const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+            const language = 'php';
 
-    </section>
+            const code = document.createElement('code');
+            code.className = 'language-' + language;
 
-            <section class="section " id="what-happens-if-agents-skills-my-skill-already-exists">
-            <h2>What happens if <code>.agents/skills/my-skill</code>
- already exists?</h2>
+            pre.textContent = '';
+            if (line) {
+                pre.setAttribute('data-line', line);
+            } else {
+                pre.removeAttribute('data-line');
+            }
 
-            
-    <p>If that path is a real directory instead of a symlink, the <code>skills</code>
- command
-preserves it and skips link creation. Broken symlinks are repaired, but
-consumer-owned directories are not overwritten automatically.</p>
+            code.textContent = 'Loading…';
+            pre.appendChild(code);
 
-    </section>
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', src, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
 
-            <section class="section " id="what-happens-if-agents-agents-my-agent-already-exists">
-            <h2>What happens if <code>.agents/agents/my-agent</code>
- already exists?</h2>
+                if (xhr.status < 400 && xhr.responseText) {
+                    code.textContent = xhr.responseText;
+                    Prism.highlightElement(code);
 
-            
-    <p>If that path is a real directory instead of a symlink, the <code>agents</code>
- command
-preserves it and skips link creation. Broken symlinks are repaired, but
-consumer-owned directories are not overwritten automatically.</p>
+                    if (line) {
+                        const lineElement = pre.querySelector('.line-numbers-rows > span:nth-child(' + line + ')');
+                        if (lineElement) {
+                            pre.scrollTop = lineElement.offsetTop - (pre.offsetHeight / 2);
+                        }
+                    }
 
-    </section>
+                    return;
+                }
 
-            <section class="section " id="how-do-i-override-only-one-tool-without-forking-the-whole-package">
-            <h2>How do I override only one tool without forking the whole package?</h2>
+                if (xhr.status === 404) {
+                    code.textContent = '✖ Error: File could not be found';
+                    return;
+                }
 
-            
-    <p>Create only the local configuration file you want to customize, such as
-<code>rector.php</code>
- or <code>phpunit.xml</code>
-. DevTools will prefer that file and keep the
-rest on the packaged defaults.</p>
+                if (xhr.status >= 400) {
+                    code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    return;
+                }
 
-    </section>
+                code.textContent = '✖ Error: An unknown error occurred';
+            };
 
-            <section class="section " id="how-do-i-extend-the-ecs-configuration-without-copying-the-whole-file">
-            <h2>How do I extend the ECS configuration without copying the whole file?</h2>
+            xhr.send(null);
+        }
 
-            
-    <p>Use the <code>ECSConfig</code>
- class to extend instead of replace:</p>
+        document.querySelectorAll('[data-modal]').forEach(function (trigger) {
+            trigger.addEventListener('click', function (event) {
+                event.preventDefault();
 
-            <pre><code class="language-php">&lt;?php
+                const modalId = this.dataset.modal;
+                const modalEl = document.getElementById(modalId);
 
-use FastForward\DevTools\Config\ECSConfig;
+                if (!modalEl) return;
 
-$config = ECSConfig::configure();
-$config-&gt;withRules([CustomRule::class]);
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
 
-return $config;</code></pre>
+                loadExternalCodeSnippet(
+                    modalEl,
+                    this.dataset.src || null,
+                    this.dataset.line || null
+                );
+            });
+        });
+    })();
+</script>
 
-            
-    <p>This approach automatically receives upstream updates while allowing additive customization.</p>
-
-    </section>
-
-            <section class="section " id="how-do-i-extend-the-rector-configuration-without-copying-the-whole-file">
-            <h2>How do I extend the Rector configuration without copying the whole file?</h2>
-
-            
-    <p>Use the <code>RectorConfig</code>
- class to extend instead of replace:</p>
-
-            <pre><code class="language-php">&lt;?php
-
-use FastForward\DevTools\Config\RectorConfig;
-
-return RectorConfig::configure(
-    static function (\Rector\Config\RectorConfig $rectorConfig): void {
-        $rectorConfig-&gt;rules([CustomRule::class]);
-    }
-);</code></pre>
-
-            
-    <p>This approach automatically receives upstream updates while allowing additive customization.</p>
-
-    </section>
-
-            <section class="section " id="how-do-i-extend-the-dependency-analyser-configuration-without-copying-the-whole-file">
-            <h2>How do I extend the dependency analyser configuration without copying the whole file?</h2>
-
-            
-    <p>Use the <code>ComposerDependencyAnalyserConfig</code>
- class to extend instead of replace:</p>
-
-            <pre><code class="language-php">&lt;?php
-
-use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
-use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
-use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
-
-return ComposerDependencyAnalyserConfig::configure(
-    static function (Configuration $configuration): void {
-        $configuration-&gt;ignoreErrorsOnPackage(
-            &#039;vendor/package&#039;,
-            [ErrorType::UNUSED_DEPENDENCY],
-        );
-    }
-);</code></pre>
-
-            
-    <p>This keeps the packaged baseline while allowing project-specific analyser ignores.</p>
-
-    </section>
-
-            <section class="section " id="can-i-generate-coverage-without-running-the-full-standards-pipeline">
-            <h2>Can I generate coverage without running the full <code>standards</code>
- pipeline?</h2>
-
-            
-    <p>Yes. Run <code>vendor/bin/dev-tools tests --coverage=.dev-tools/coverage</code>
- to generate
-coverage directly.</p>
-
-    </section>
-
-    </section>
-
+    </article>
                                     </div>
                                 </div>
 
+                                                                    <aside class="col-12 col-xl-3 d-none d-xl-block">
+                                        <div class="position-sticky" style="top: 2rem;">
+                                            <div class="bg-body-tertiary border rounded-4 p-3 shadow-sm">
+                                                <div class="d-flex align-items-center gap-2 text-uppercase fw-semibold small text-body-secondary mb-3">
+                                                    <i class="fas fa-list-ul text-primary"></i>
+                                                    <span>On this page</span>
+                                                </div>
+
+                                                            
+    <section>
+        <div class="d-grid gap-4">
+            <div>
+                <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
+                <div class="list-group list-group-flush">
+                                            <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#toc-constants">
+                            Constants
+                        </a>
+                                                                                    <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#toc-methods">
+                            Methods
+                        </a>
+                                    </div>
+            </div>
+
+                            <div>
+                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
+                        <i class="fas fa-thumbtack text-warning"></i>
+                        <span>Constants</span>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES"
+                            >
+                                <span class="text-truncate">PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_UNUSED_DEPENDENCIES"
+                            >
+                                <span class="text-truncate">PACKAGED_UNUSED_DEPENDENCIES</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_VENDOR_PACKAGE_PATH"
+                            >
+                                <span class="text-truncate">VENDOR_PACKAGE_PATH</span>
+                                                            </a>
+                                            </div>
+                </div>
+            
+            
+                            <div>
+                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
+                        <i class="fas fa-code text-primary"></i>
+                        <span>Methods</span>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
+                            >
+                                <span class="text-truncate">configure()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configurePackagedRepositoryIgnores"
+                            >
+                                <span class="text-truncate">configurePackagedRepositoryIgnores()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isDevToolsRepository"
+                            >
+                                <span class="text-truncate">isDevToolsRepository()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isInstalledAsDependency"
+                            >
+                                <span class="text-truncate">isInstalledAsDependency()</span>
+                                                            </a>
+                                            </div>
+                </div>
+                    </div>
+    </section>
+
+                                            </div>
+                                        </div>
+                                    </aside>
                                                             </div>
                         </div>
                     </div>

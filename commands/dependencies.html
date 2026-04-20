@@ -2710,7 +2710,7 @@
             <h1>dependencies</h1>
 
             
-    <p>Analyzes missing, unused, and outdated Composer dependencies.</p>
+    <p>Analyzes missing, unused, misplaced, and outdated Composer dependencies.</p>
 
             <section class="section " id="description">
             <h2>Description</h2>
@@ -2718,17 +2718,14 @@
             
     <p>The <code>dependencies</code>
  command (alias: <code>deps</code>
-) analyzes missing, unused, and
-overly outdated Composer dependencies using three tools:</p>
+) analyzes missing, unused,
+misplaced, and overly outdated Composer dependencies using two tools:</p>
 
             
 
 <ul>
-    <li class="dash"><code>composer-unused</code>
- - detects unused packages</li>
-
     <li class="dash"><code>composer-dependency-analyser</code>
- - detects missing packages</li>
+ - detects missing, unused, and misplaced packages</li>
 
     <li class="dash"><code>jack breakpoint</code>
  - fails when too many outdated packages accumulate</li>
@@ -2766,6 +2763,10 @@ vendor/bin/dev-tools dependencies [options]</code></pre>
 
     <p>Default: <code>5</code>
 .</p>
+
+    <p>Use <code>-1</code>
+ to keep the outdated dependency report in the output while
+ignoring Jack failures in the final command status.</p>
 </dd>
                                 <dt><code>--upgrade</code>
  (optional)</dt>
@@ -2797,6 +2798,13 @@ before the analyzers.</p>
  (optional)</dt>
         
         <dd>Prioritizes dev dependencies where Jack supports it.</dd>
+                                <dt><code>--dump-usage=&lt;package&gt;</code>
+ (optional)</dt>
+        
+        <dd>Asks <code>composer-dependency-analyser</code>
+ to dump usages for the given package
+or wildcard pattern and enables <code>--show-all-usages</code>
+ automatically.</dd>
             </dl>
 
     </section>
@@ -2815,9 +2823,19 @@ before the analyzers.</p>
             <pre><code class="language-bash">composer dependencies --max-outdated=10</code></pre>
 
             
+    <p>Report outdated packages without failing on their count:</p>
+
+            <pre><code class="language-bash">composer dependencies --max-outdated=-1</code></pre>
+
+            
     <p>Preview the upgrade workflow:</p>
 
             <pre><code class="language-bash">composer dependencies --dev</code></pre>
+
+            
+    <p>Dump all matched usages for one package:</p>
+
+            <pre><code class="language-bash">composer dependencies --dump-usage=symfony/console</code></pre>
 
             
     <p>Apply the upgrade workflow and then analyze dependencies:</p>
@@ -2844,7 +2862,7 @@ before the analyzers.</p>
     <tbody>
     <tr>
             <td>0</td>
-            <td>Success. No missing, unused, or excessive outdated dependencies.</td>
+            <td>Success. No missing, unused, misplaced, or excessive outdated dependencies.</td>
     </tr>
     <tr>
             <td>1</td>
@@ -2866,24 +2884,37 @@ before the analyzers.</p>
 <code>jack open-versions</code>
  before running the analyzers.</li>
 
-    <li class="dash">Runs <code>composer-unused</code>
-, <code>composer-dependency-analyser</code>
-, and
-<code>jack breakpoint</code>
- after the Jack preview or upgrade phase.</li>
+    <li class="dash">Runs <code>composer-dependency-analyser</code>
+ and <code>jack breakpoint</code>
+ after the Jack
+preview or upgrade phase.</li>
 
     <li class="dash"><code>composer-dependency-analyser</code>
  is configured with:
-- <code>--ignore-unused-deps</code>
- (leaves unused detection to <code>composer-unused</code>
-)
-- <code>--ignore-prod-only-in-dev-deps</code>
- (ignores dev-only usage in production code)</li>
+- <code>--config composer-dependency-analyser.php</code>
+ (resolved through the package
+  file locator so consumer repositories can override it locally)
+- the packaged <code>composer-dependency-analyser.php</code>
+ delegates to
+  <code>FastForward\DevTools\Config\ComposerDependencyAnalyserConfig</code>
+ so
+  consumer repositories can extend the baseline instead of copying it whole
+- <code>--dump-usages &lt;package&gt;</code>
+ and <code>--show-all-usages</code>
+ when <code>--dump-usage</code>
+
+is passed to the DevTools command</li>
 
     <li class="dash"><code>jack breakpoint</code>
  maps <code>--max-outdated</code>
  to Jack&#039;s <code>--limit</code>
  option.</li>
+
+    <li class="dash"><code>--max-outdated=-1</code>
+ keeps <code>jack breakpoint</code>
+ in the workflow for reporting,
+but its failure is ignored so only missing or unused dependency findings fail
+the command.</li>
 
     <li class="dash"><code>--upgrade</code>
  applies Jack&#039;s <code>raise-to-installed</code>
@@ -2893,10 +2924,10 @@ commands before <code>composer update -W</code>
  and <code>composer normalize</code>
 .</li>
 
-    <li class="dash">Returns a non-zero exit code when missing, unused, or too many outdated
-dependencies are found.</li>
+    <li class="dash">Returns a non-zero exit code when missing, unused, misplaced, or too many
+outdated dependencies are found.</li>
 
-    <li class="dash">All three tools must be available in <code>vendor/bin/</code>
+    <li class="dash">Both tools must be available in <code>vendor/bin/</code>
 .</li>
 
 </ul>

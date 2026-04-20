@@ -2798,11 +2798,13 @@ composer tests -- --filter=EventTracerTest</code></pre>
 </h2>
 
             
-    <p>Analyzes missing, unused, and outdated Composer dependencies.</p>
+    <p>Analyzes missing, unused, misplaced, and outdated Composer dependencies.</p>
 
             <pre><code class="language-bash">composer dependencies
 composer dependencies --max-outdated=10
+composer dependencies --max-outdated=-1
 composer dependencies --dev
+composer dependencies --dump-usage=symfony/console
 composer dependencies --upgrade --dev</code></pre>
 
             
@@ -2812,21 +2814,28 @@ composer dependencies --upgrade --dev</code></pre>
 
 <ul>
     <li class="dash">it ships <code>shipmonk/composer-dependency-analyser</code>
- and
-<code>icanhazstring/composer-unused</code>
  and <code>rector/jack</code>
- as direct dependencies of
-<code>fast-forward/dev-tools</code>
+ as
+direct dependencies of <code>fast-forward/dev-tools</code>
 ;</li>
 
     <li class="dash">it uses <code>composer-dependency-analyser</code>
- only for missing dependency checks
-and leaves unused-package reporting to <code>composer-unused</code>
+ for missing, unused, and misplaced
+dependency checks, with a packaged config that consumer repositories can
+override locally;</li>
+
+    <li class="dash"><code>--dump-usage=&lt;package&gt;</code>
+ forwards to
+<code>composer-dependency-analyser --dump-usages &lt;package&gt; --show-all-usages</code>
 ;</li>
 
     <li class="dash">it uses <code>jack breakpoint --limit=&lt;max-outdated&gt;</code>
  to fail when too many
 outdated dependencies accumulate;</li>
+
+    <li class="dash"><code>--max-outdated=-1</code>
+ keeps the Jack outdated report in the output but
+ignores Jack&#039;s failure so only dependency-analyser findings fail the command;</li>
 
     <li class="dash">it previews <code>jack raise-to-installed</code>
  and <code>jack open-versions</code>
@@ -2841,8 +2850,8 @@ the analyzers;</li>
 , and <code>composer normalize</code>
  before the analyzers;</li>
 
-    <li class="dash">it returns a non-zero exit code when missing, unused, or too many outdated
-dependencies are found.</li>
+    <li class="dash">it returns a non-zero exit code when missing, unused, misplaced, or too many
+outdated dependencies are found.</li>
 
 </ul>
 
