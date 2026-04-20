@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PhpMetrics report</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/milligram.min.css?v=v2.9.1">
+    <link rel="stylesheet" href="css/style.css?v=v2.9.1">
+    <link rel="stylesheet" href="css/roboto.css?v=v2.9.1">
+    <link rel="stylesheet" href="css/normalize.css?v=v2.9.1">
+    <link rel="stylesheet" href="css/material-icons.css?v=v2.9.1">
+</head>
+<body>
+
+
+<header class="headerbar">
+    <div class="headerbarInner">
+        <div class="float-left navigation-title">
+            <a href="index.html">
+                <h1 class="title">PhpMetrics</h1>
+                <span class="subtitle">
+                Static analyzer for PHP
+            </span>
+            </a>
+        </div>
+        <ul class="navigation-list float-right">
+            <li class="navigation-item">
+                <a class="navigation-link" href="https://github.com/phpmetrics/phpmetrics">Support</a>
+                <a class="navigation-link" href="https://phpmetrics.github.io/website/">Documentation</a>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<a class="hidden-xs github" href="https://github.com/phpmetrics/phpmetrics"
+   title="PhpMetrics on Github" target="blank">
+    <svg width="80" height="80" viewBox="0 0 250 250" class="github">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path
+            d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+            fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path
+            d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+            fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+
+
+<div class="page">
+    <div class="content content-first">
+        <div class="report-details">
+            Created at 2026-04-20 06:57:19        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+        </div>
+
+        
+
+
+<div class="row">
+    <div class="column">
+        <div class="bloc">
+            <h4>Object relations</h4>
+            <div id="chart-relations"></div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<!-- Sidebar -->
+<div id="sidebar">
+    <div class="content">
+        <div class="logo">
+            <a href="index.html"><img src="images/phpmetrics-maintenability.png"
+                                                 alt="Logo PhpMetrics"></a>
+            <h1>PhpMetrics</h1>
+        </div>
+        <div class="links">
+            <ul>
+                <li>
+                    <a href="index.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none">
+                            <path
+                                d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z">
+                        </svg>
+                        Overview
+                    </a>
+                </li>
+                <li>
+                    <a href="violations.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none">
+                            <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z">
+                        </svg>
+                        Violations (22)
+                    </a>
+                </li>
+                                    <li>
+                        <a href="composer.html">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="24px" height="24px"><path d="M0 0h24v24H0z" fill="none"><path d="M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1zM8 13h8v-2H8v2zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5z"></svg>
+                            Composer
+                        </a>
+                    </li>
+                                                    <li>
+                        <a href="junit.html">
+                            <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M14 5h8v2h-8zm0 5.5h8v2h-8zm0 5.5h8v2h-8zM2 11.5C2 15.08 4.92 18 8.5 18H9v2l3-3-3-3v2h-.5C6.02 16 4 13.98 4 11.5S6.02 7 8.5 7H12V5H8.5C4.92 5 2 7.92 2 11.5z">
+                                <path d="M0 0h24v24H0z" fill="none">
+                            </svg>
+                            Unit testing
+                        </a>
+                    </li>
+                                <li>
+                    <a href="loc.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <defs>
+                                <path d="M0 0h24v24H0z" id="a">
+                            </defs>
+                            <clipPath id="b">
+                                <use overflow="visible" xlink:href="#a">
+                            </clipPath>
+                            <path clip-path="url(#b)"
+                                  d="M11 5.08V2c-5 .5-9 4.81-9 10s4 9.5 9 10v-3.08c-3-.48-6-3.4-6-6.92s3-6.44 6-6.92zM18.97 11H22c-.47-5-4-8.53-9-9v3.08C16 5.51 18.54 8 18.97 11zM13 18.92V22c5-.47 8.53-4 9-9h-3.03c-.43 3-2.97 5.49-5.97 5.92z">
+                        </svg>
+                        Size &amp; volume
+                    </a>
+                </li>
+                <li>
+                    <a href="complexity.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0V0z" fill="none">
+                            <path
+                                d="M19.07 4.93l-1.41 1.41C19.1 7.79 20 9.79 20 12c0 4.42-3.58 8-8 8s-8-3.58-8-8c0-4.08 3.05-7.44 7-7.93v2.02C8.16 6.57 6 9.03 6 12c0 3.31 2.69 6 6 6s6-2.69 6-6c0-1.66-.67-3.16-1.76-4.24l-1.41 1.41C15.55 9.9 16 10.9 16 12c0 2.21-1.79 4-4 4s-4-1.79-4-4c0-1.86 1.28-3.41 3-3.86v2.14c-.6.35-1 .98-1 1.72 0 1.1.9 2 2 2s2-.9 2-2c0-.74-.4-1.38-1-1.72V2h-1C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-2.76-1.12-5.26-2.93-7.07z">
+                        </svg>
+                        Complexity &amp; defects
+                    </a>
+                </li>
+                <li>
+                    <a href="oop.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none">
+                            <path
+                                d="M17 6c-3.31 0-6 2.69-6 6s2.69 6 6 6 6-2.69 6-6-2.69-6-6-6zM5 8c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4zm0 6c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2z">
+                        </svg>
+                        Object oriented metrics
+                    </a>
+                </li>
+                <li>
+                    <a href="relations.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none">
+                            <path
+                                d="M14 4l2.29 2.29-2.88 2.88 1.42 1.42 2.88-2.88L20 10V4zm-4 0H4v6l2.29-2.29 4.71 4.7V20h2v-8.41l-5.29-5.3z">
+                        </svg>
+                        Object relations
+                    </a>
+                </li>
+                <li>
+                    <a href="coupling.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <defs>
+                                <path d="M0 0h24v24H0V0z" id="a">
+                            </defs>
+                            <clipPath id="b">
+                                <use overflow="visible" xlink:href="#a">
+                            </clipPath>
+                            <path clip-path="url(#b)"
+                                  d="M9.01 14H2v2h7.01v3L13 15l-3.99-4v3zm5.98-1v-3H22V8h-7.01V5L11 9l3.99 4z">
+                        </svg>
+                        Coupling
+                    </a>
+                </li>
+                <li>
+                    <a href="packages.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <path d="M11 9.16V2c-5 .5-9 4.79-9 10s4 9.5 9 10v-7.16c-1-.41-2-1.52-2-2.84s1-2.43 2-2.84zM14.86 11H22c-.48-4.75-4-8.53-9-9v7.16c1 .3 1.52.98 1.86 1.84zM13 14.84V22c5-.47 8.52-4.25 9-9h-7.14c-.34.86-.86 1.54-1.86 1.84z">
+                        </svg>
+                        Package oriented metrics
+                    </a>
+                </li>
+                <li>
+                    <a href="package_relations.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 20.41L18.41 19 15 15.59 13.59 17 17 20.41zM7.5 8H11v5.59L5.59 19 7 20.41l6-6V8h3.5L12 3.5 7.5 8z">
+                        </svg>
+                        Package relations
+                    </a>
+                </li>
+                                <li>
+                    <a href="git.html">
+                        <img src="images/logo-git.png" alt="">
+                        Git
+                    </a>
+                </li>
+                                <!--<li>
+                    <a href="all.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"
+                             xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 3v18h18V3H3zm8 16H5v-6h6v6zm0-8H5V5h6v6zm8 8h-6v-6h6v6zm0-8h-6V5h6v6z">
+                            <path d="M0 0h24v24H0z" fill="none">
+                        </svg>
+                        All metrics
+                    </a>
+                </li>-->
+                <!--                <li>-->
+                <!--                    <a href="#">-->
+                <!--                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24"-->
+                <!--                             xmlns="http://www.w3.org/2000/svg">-->
+                <!--                            <path-->
+                <!--                                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 10.99h7c-.53 4.12-3.28 7.79-7 8.94V12H5V6.3l7-3.11v8.8z">-->
+                <!--                            <path d="M0 0h24v24H0z" fill="none">-->
+                <!--                        </svg>-->
+                <!--                        Third party-->
+                <!--                    </a>-->
+                <!--                </li>-->
+                <!--<li class="sep">
+                    <a href="panel.html">
+                        <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M0 0h24v24H0z" fill="none">
+                            <path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z">
+                        </svg>
+                        TV Panel
+                    </a>
+                </li>-->
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+
+<script src="js/functions.js?v=v2.9.1"></script>
+<script src="js/d3.v3.js"></script>
+<script src="js/d3.hexbin.v0.js"></script>
+<script src="js/sort-table.min.js?v=v2.9.1"></script>
+<script src="js/graph-maintainability.js?v=v2.9.1"></script>
+<script src="js/graph-licenses.js?v=v2.9.1"></script>
+<script src="js/FileSaver.min.js?v=v2.9.1"></script>
+
+<script src="js/clusterize.min.js?v=v2.9.1"></script>
+<link rel="stylesheet" href="css/clusterize.css?v=v2.9.1">
+
+<script src="classes.js?v=v2.9.1"></script>
+
+<script>
+    var accessibilityEnabled = false;
+</script>
+
+</body>
+</html>
+
+
+<script>
+
+
+    var relations = [
+    {
+        "name": "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Interop\\Container\\ServiceProviderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\Composer\\Command\\BaseCommand",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Input\\InputInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\GitAttributes\\CandidateProviderInterface",
+            "\\FastForward\\DevTools\\GitAttributes\\ExistenceCheckerInterface",
+            "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilterInterface",
+            "\\FastForward\\DevTools\\GitAttributes\\MergerInterface",
+            "\\FastForward\\DevTools\\GitAttributes\\ReaderInterface",
+            "\\FastForward\\DevTools\\GitAttributes\\WriterInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\CandidateProviderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\ExistenceCheckerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilterInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\MergerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\ReaderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\WriterInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\FileDiffer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Resource\\DifferInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiff"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Question\\Question",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Question\\Question",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Git\\GitClientInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Filesystem\\Path",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Config\\FileLocatorInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Input\\StringInput"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Input\\StringInput",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
+        "size": 3000,
+        "relations": [
+            "\\Psr\\Log\\LoggerAwareInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Twig\\Environment",
+            "\\Psr\\Clock\\ClockInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\Twig\\Environment",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Psr\\Clock\\ClockInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Process\\Process",
+            "\\InvalidArgumentException"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Process\\Process",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\InvalidArgumentException",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\Psr\\Clock\\ClockInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\License\\GeneratorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\GeneratorInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\RefactorCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Twig\\Environment",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Composer\\Factory",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Composer\\Json\\JsonManipulator",
+            "\\Symfony\\Component\\Filesystem\\Path",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\Composer\\Factory",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Json\\JsonManipulator",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec",
+            "\\FastForward\\DevTools\\Funding\\FundingYamlCodec",
+            "\\FastForward\\DevTools\\Funding\\FundingProfileMerger",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Composer\\Factory",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Funding\\FundingProfile",
+            "\\Composer\\Json\\JsonFile"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Funding\\FundingYamlCodec",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Funding\\FundingProfile",
+            "\\Symfony\\Component\\Yaml\\Yaml"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Funding\\FundingProfileMerger",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Funding\\FundingProfile"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\InvalidArgumentException"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Filesystem\\Path",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Filesystem\\Path",
+            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\DevTools",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Console\\Application",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\CommandLoader\\CommandLoaderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\DI\\Container",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ReflectionMethod",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\CommandLoader\\DevToolsCommandLoader",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\CommandLoader\\ContainerCommandLoader",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\Psr\\Container\\ContainerInterface",
+            "\\ReflectionClass"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\CommandLoader\\ContainerCommandLoader",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Psr\\Container\\ContainerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ReflectionClass",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\Resolver",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\License\\ResolverInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\ResolverInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\Generator",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\License\\GeneratorInterface",
+            "\\FastForward\\DevTools\\License\\ResolverInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Psr\\Clock\\ClockInterface",
+            "\\Twig\\Environment",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\GitIgnore",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ArrayIterator",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\SplFileObject",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Merger",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\Classifier",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnore"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Classifier",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Writer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Reader",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnore"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\FileDiff",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\UnifiedDiffer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Resource\\DifferInterface",
+            "\\SebastianBergmann\\Diff\\Differ"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\DifferInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\SebastianBergmann\\Diff\\Differ",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Rector\\RemoveEmptyDocBlockRector",
+        "size": 3000,
+        "relations": [
+            "\\Rector\\Rector\\AbstractRector",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+            "\\PhpParser\\Node",
+            "\\PhpParser\\Comment\\Doc"
+        ]
+    },
+    {
+        "name": "\\Rector\\Rector\\AbstractRector",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\Node",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\Comment\\Doc",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Rector\\AddMissingClassPhpDocRector",
+        "size": 3000,
+        "relations": [
+            "\\Rector\\Rector\\AbstractRector",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+            "\\PhpParser\\Node",
+            "\\PhpParser\\Comment\\Doc"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Rector\\AddMissingMethodPhpDocRector",
+        "size": 3000,
+        "relations": [
+            "\\Rector\\Rector\\AbstractRector",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+            "\\PhpParser\\Node",
+            "\\PhpParser\\Comment\\Doc",
+            "\\PhpParser\\Node\\Stmt\\ClassMethod",
+            "\\PhpParser\\NodeFinder",
+            "\\PhpParser\\Node\\Name"
+        ]
+    },
+    {
+        "name": "\\PhpParser\\Node\\Stmt\\ClassMethod",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\NodeFinder",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\Node\\Name",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Psr\\Clock\\SystemClock",
+        "size": 3000,
+        "relations": [
+            "\\Psr\\Clock\\ClockInterface",
+            "\\DateTimeImmutable"
+        ]
+    },
+    {
+        "name": "\\DateTimeImmutable",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Config\\ECSConfig",
+        "size": 3000,
+        "relations": [
+            "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder"
+        ]
+    },
+    {
+        "name": "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Config\\RectorConfig",
+        "size": 3000,
+        "relations": [
+            "\\Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver",
+            "\\Rector\\Configuration\\PhpLevelSetResolver",
+            "\\Composer\\InstalledVersions"
+        ]
+    },
+    {
+        "name": "\\Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Rector\\Configuration\\PhpLevelSetResolver",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\InstalledVersions",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Plugin\\Capability\\CommandProvider",
+            "\\FastForward\\DevTools\\Console\\DevTools"
+        ]
+    },
+    {
+        "name": "\\Composer\\Plugin\\Capability\\CommandProvider",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Composer\\Factory",
+            "\\Composer\\Json\\JsonFile",
+            "\\Composer\\InstalledVersions",
+            "\\DateTimeImmutable",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Author",
+            "\\UnderflowException",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Support",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Funding"
+        ]
+    },
+    {
+        "name": "\\Composer\\Json\\JsonFile",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Author",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\AuthorInterface"
+        ]
+    },
+    {
+        "name": "\\UnderflowException",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Support",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Funding",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\FundingInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\AuthorInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\FundingInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Plugin",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Plugin\\Capable",
+            "\\Composer\\EventDispatcher\\EventSubscriberInterface",
+            "\\Composer\\Plugin\\PluginInterface",
+            "\\Composer\\Script\\Event",
+            "\\Composer\\Composer",
+            "\\Composer\\IO\\IOInterface"
+        ]
+    },
+    {
+        "name": "\\Composer\\Plugin\\Capable",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\EventDispatcher\\EventSubscriberInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Plugin\\PluginInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Script\\Event",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Composer",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\IO\\IOInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilter",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilterInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\CandidateProvider",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\CandidateProviderInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\Merger",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\MergerInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\Writer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\WriterInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\ExistenceChecker",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\ExistenceCheckerInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Filesystem\\Filesystem"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Filesystem\\Filesystem",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\Reader",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\ReaderInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Funding\\FundingProfile",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Yaml\\Yaml",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Git\\GitClient",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Filesystem\\Path",
+            "\\Symfony\\Component\\Process\\Process",
+            "\\RuntimeException"
+        ]
+    },
+    {
+        "name": "\\RuntimeException",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Process\\ProcessBuilder",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\Symfony\\Component\\Process\\Process"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Process\\ProcessQueue",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Process\\Process",
+            "\\Symfony\\Component\\Console\\Output\\NullOutput",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Closure"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Output\\NullOutput",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Closure",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Psr\\Log\\LoggerAwareInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Psr\\Log\\LoggerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Filesystem\\FinderFactory",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\Symfony\\Component\\Finder\\Finder"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Finder\\Finder",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Filesystem\\Filesystem",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriber",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Event\\TestSuite\\StartedSubscriber",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Event\\TestSuite\\Started",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\DG\\BypassFinals",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriber",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Event\\TestRunner\\ExecutionFinishedSubscriber",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Event\\EventTracer",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Joli\\JoliNotif\\NotifierInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Joli\\JoliNotif\\DefaultNotifier",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Event\\TestRunner\\ExecutionFinished",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Joli\\JoliNotif\\Notification",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Helper\\Helper",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Event\\Tracer\\Tracer",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Event\\Event",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
+            "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
+            "\\RuntimeException"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Runner\\Extension\\DevToolsExtension",
+        "size": 3000,
+        "relations": [
+            "\\PHPUnit\\Runner\\Extension\\Extension",
+            "\\PHPUnit\\Event\\Tracer\\Tracer",
+            "\\PHPUnit\\Event\\TestSuite\\StartedSubscriber",
+            "\\FastForward\\DevTools\\PhpUnit\\Event\\EventTracer",
+            "\\FastForward\\DevTools\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriber",
+            "\\FastForward\\DevTools\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriber",
+            "\\PHPUnit\\TextUI\\Configuration\\Configuration",
+            "\\PHPUnit\\Runner\\Extension\\Facade",
+            "\\PHPUnit\\Runner\\Extension\\ParameterCollection"
+        ]
+    },
+    {
+        "name": "\\PHPUnit\\Runner\\Extension\\Extension",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\TextUI\\Configuration\\Configuration",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Runner\\Extension\\Facade",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PHPUnit\\Runner\\Extension\\ParameterCollection",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryChecker",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRenderer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParser",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManager",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+            "\\RuntimeException",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument"
+        ]
+    }
+];
+
+    /**
+     * Thanks to http://bl.ocks.org/mbostock/raw/7607999/
+     */
+    function updateRelationsChart() {
+
+
+        var diameter = document.getElementById('chart-relations').offsetWidth,
+            radius = diameter / 2,
+            innerRadius = radius - 120;
+
+        var cluster = d3.layout.cluster()
+            .size([360, innerRadius])
+            .sort(null)
+            .value(function (d) {
+                return d.size;
+            });
+
+        var bundle = d3.layout.bundle();
+
+        var line = d3.svg.line.radial()
+            .interpolate("bundle")
+            .tension(.85)
+            .radius(function (d) {
+                return d.y;
+            })
+            .angle(function (d) {
+                return d.x / 180 * Math.PI;
+            });
+
+        var svg = d3.select("#chart-relations").append("svg")
+            .attr("width", diameter)
+            .attr("height", diameter)
+            .append("g")
+            .attr("transform", "translate(" + radius + "," + radius + ")");
+
+        var link = svg.append("g").selectAll(".link"),
+            node = svg.append("g").selectAll(".node");
+
+
+        var nodes = cluster.nodes(packageHierarchy(relations)),
+            links = packageImports(nodes);
+        link = link
+            .data(bundle(links))
+            .enter().append("path")
+            .each(function (d) {
+                d.source = d[0], d.target = d[d.length - 1];
+            })
+            .attr("class", "link")
+            .attr("d", line);
+
+        node = node
+            .data(nodes.filter(function (n) {
+                return !n.children;
+            }))
+            .enter().append("text")
+            .attr("class", "node")
+            .attr("dy", ".31em")
+            .attr("transform", function (d) {
+                return "rotate(" + (d.x - 90) + ")translate(" + (d.y + 8) + ",0)" + (d.x < 180 ? "" : "rotate(180)");
+            })
+            .style("text-anchor", function (d) {
+                return d.x < 180 ? "start" : "end";
+            })
+            .text(function (d) {
+                return d.key;
+            })
+            .on("mouseover", mouseovered)
+            .on("mouseout", mouseouted);
+
+
+//        d3.data(relations);
+
+        function mouseovered(d) {
+            node
+                .each(function (n) {
+                    n.target = n.source = false;
+                });
+
+            link
+                .classed("link--target", function (l) {
+                    if (l.target === d) return l.source.source = true;
+                })
+                .classed("link--source", function (l) {
+                    if (l.source === d) return l.target.target = true;
+                })
+                .filter(function (l) {
+                    return l.target === d || l.source === d;
+                })
+                .each(function () {
+                    this.parentNode.appendChild(this);
+                });
+
+            node
+                .classed("node--target", function (n) {
+                    return n.target;
+                })
+                .classed("node--source", function (n) {
+                    return n.source;
+                });
+        }
+
+        function mouseouted(d) {
+            link
+                .classed("link--target", false)
+                .classed("link--source", false);
+
+            node
+                .classed("node--target", false)
+                .classed("node--source", false);
+        }
+
+        d3.select(self.frameElement).style("height", diameter + "px");
+
+        // Lazily construct the package hierarchy from class names.
+        function packageHierarchy(classes) {
+            var map = {};
+
+            function find(name, data) {
+                name = (data ? name + ' ' : name);
+                var node = map[name], i;
+                if (!node) {
+                    node = map[name] = data || {name: name, children: []};
+                    if (name.length) {
+                        node.parent = find(name.substring(0, i = name.lastIndexOf("\\")));
+                        if (!node.parent.children) {
+                            node.parent.children = []; // fix anomalies
+                        }
+                        node.parent.children.push(node);
+                        node.key = name;//name.substring(i + 1);
+                    }
+                }
+                return node;
+            }
+
+            classes.forEach(function (d) {
+                find(d.name, d);
+            });
+
+            return map[""];
+        }
+
+        // Return a list of imports for the given array of nodes.
+        function packageImports(nodes) {
+            var map = {},
+                imports = [];
+
+            // Compute a map from name to node.
+            nodes.forEach(function (d) {
+                map[d.name] = d;
+            });
+
+            // For each import, construct a link from the source to target node.
+            nodes.forEach(function (d) {
+                if (d.relations) d.relations.forEach(function (i) {
+                    imports.push({source: map[d.name], target: map[i]});
+                });
+            });
+
+            return imports;
+        }
+
+
+    }
+
+    document.onreadystatechange = function () {
+        if (document.readyState === 'complete') {
+            updateRelationsChart();
+        }
+    };
+
+</script>
