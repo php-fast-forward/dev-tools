@@ -92,7 +92,8 @@ wrapper in ``resources/github-actions/changelog.yml``.
         safely.
     *   Fetches the base branch changelog reference.
     *   Runs ``composer dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
-    *   Fails when the current branch does not add a meaningful ``Unreleased`` change.
+    *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
+    *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
 *   **Manual Release Preparation**:
     *   Checks out the repository default branch with full history.
     *   Resolves the next version from ``Unreleased`` unless a version input is provided.

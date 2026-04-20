@@ -97,7 +97,9 @@ used for recovery or exceptional maintenance.
 
 The same workflow also owns pull-request changelog validation. Regular feature
 and fix pull requests SHOULD expect ``changelog:check`` to run against the base
-branch and fail when no meaningful ``Unreleased`` entry is added.
+branch and fail when no meaningful ``Unreleased`` entry is added. Generated
+``release/v...`` pull requests are excluded from that validation because the
+release-preparation flow intentionally empties ``Unreleased`` after promotion.
 
 If maintainers must recover the release manually, create the tag from the
 verified ``main`` commit:
