@@ -541,11 +541,6 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020automatically\u0020inferred\u0020CODEOWNERS\u0020handles.",
             "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_inferOwners"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AinferSuggestedOwners\u0028\u0029",
-            "name": "inferSuggestedOwners",
-            "summary": "Returns\u0020best\u002Deffort\u0020commented\u0020suggestions\u0020when\u0020direct\u0020ownership\u0020cannot\u0020be\u0020inferred.",
-            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_inferSuggestedOwners"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AnormalizeOwners\u0028\u0029",
             "name": "normalizeOwners",
             "summary": "Normalizes\u0020user\u002Dprovided\u0020owner\u0020tokens.",
@@ -555,6 +550,11 @@ Search.appendIndex(
             "name": "generate",
             "summary": "Generates\u0020CODEOWNERS\u0020contents.",
             "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_generate"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AinferGroupOwner\u0028\u0029",
+            "name": "inferGroupOwner",
+            "summary": "Returns\u0020the\u0020repository\u0020or\u0020organization\u0020owner\u0020inferred\u0020from\u0020support\u0020metadata.",
+            "url": "classes/FastForward-DevTools-CodeOwners-CodeOwnersGenerator.html#method_inferGroupOwner"
         },                {
             "fqsen": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator\u003A\u003AextractGitHubHandleFromUrl\u0028\u0029",
             "name": "extractGitHubHandleFromUrl",
