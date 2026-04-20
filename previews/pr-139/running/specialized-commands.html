@@ -2837,6 +2837,12 @@ outdated dependencies accumulate;</li>
  keeps the Jack outdated report in the output but
 ignores Jack&#039;s failure so only dependency-analyser findings fail the command;</li>
 
+    <li class="dash">the packaged <code>tests.yml</code>
+ workflow uses <code>--max-outdated=-1</code>
+ by default,
+so dependency health stays required in CI while outdated-package counts are
+reported without failing the workflow on their own;</li>
+
     <li class="dash">it previews <code>jack raise-to-installed</code>
  and <code>jack open-versions</code>
  before

@@ -2840,7 +2840,12 @@ protection, bot commit, and submodule pointer conflict guidance.</p>
  or <code>composer.json</code>
  and builds the test matrix from that floor upward.</li>
 
-    <li>Runs dependency health as a separate non-blocking job when enabled.</li>
+    <li>Runs dependency health as a separate required job.</li>
+
+    <li>Defaults the dependency-health threshold to <code>--max-outdated=-1</code>
+ so
+outdated packages stay visible in CI without failing the workflow on count
+alone.</li>
 
     <li>Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.</li>
 
