@@ -4,16 +4,11 @@ on:
   push:
   workflow_dispatch:
     inputs:
-      run-dependencies-check:
-        description: Whether to run the dependency health check during CI.
-        required: false
-        type: boolean
-        default: true
       max-outdated:
         description: Maximum number of outdated packages allowed by the dependencies command.
         required: false
         type: number
-        default: 5
+        default: -1
 
 permissions:
   contents: read
@@ -22,6 +17,5 @@ jobs:
   tests:
     uses: php-fast-forward/dev-tools/.github/workflows/tests.yml@main
     with:
-      run-dependencies-check: ${{ inputs.run-dependencies-check || true }}
-      max-outdated: ${{ inputs.max-outdated || 5 }}
+      max-outdated: ${{ inputs.max-outdated || -1 }}
     secrets: inherit

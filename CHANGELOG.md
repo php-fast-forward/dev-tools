@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Consolidate dependency analysis on `composer-dependency-analyser`, add a reusable packaged analyzer config, remove the redundant `composer-unused` dependency, and expose `--dump-usage` plus report-only `--max-outdated=-1` support (#135)
+
 ## [1.14.0] - 2026-04-20
 
 ### Added

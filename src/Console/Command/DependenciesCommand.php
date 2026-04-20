@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,24 +34,30 @@ use function is_numeric;
 
 /**
  * Orchestrates dependency analysis across the supported Composer analyzers.
- * This command MUST report missing and unused dependencies using a single,
+ * This command MUST report missing, unused, and misplaced dependencies using a single,
  * deterministic report that is friendly for local development and CI runs.
  */
 #[AsCommand(
     name: 'dependencies',
-    description: 'Analyzes missing, unused, and outdated Composer dependencies.',
+    description: 'Analyzes missing, unused, misplaced, and outdated Composer dependencies.',
     aliases: ['deps'],
-    help: 'This command runs composer-dependency-analyser, composer-unused, and Jack to report missing, unused, and outdated Composer dependencies.'
+    help: 'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.'
 )]
 final class DependenciesCommand extends BaseCommand
 {
+    private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';
+
+    private const int DISABLE_OUTDATED_THRESHOLD = -1;
+
     /**
      * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
+     * @param FileLocatorInterface $fileLocator resolves the dependency analyser configuration
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly FileLocatorInterface $fileLocator,
     ) {
         return parent::__construct();
     }
@@ -64,7 +71,7 @@ final class DependenciesCommand extends BaseCommand
             ->addOption(
                 name: 'max-outdated',
                 mode: InputOption::VALUE_REQUIRED,
-                description: 'Maximum number of outdated packages allowed by jack breakpoint.',
+                description: 'Maximum number of outdated packages allowed by jack breakpoint. Use -1 to keep the report but ignore Jack failures.',
                 default: '5',
             )
             ->addOption(
@@ -76,6 +83,11 @@ final class DependenciesCommand extends BaseCommand
                 name: 'upgrade',
                 mode: InputOption::VALUE_NONE,
                 description: 'Apply Jack dependency upgrades before executing the dependency analyzers.',
+            )
+            ->addOption(
+                name: 'dump-usage',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Dump usages for the given package pattern and show all matched usages.',
             );
     }
 
@@ -107,9 +119,11 @@ final class DependenciesCommand extends BaseCommand
 
         $output->writeln('<info>Running dependency analysis...</info>');
 
-        $this->processQueue->add($this->getComposerUnusedCommand());
-        $this->processQueue->add($this->getComposerDependencyAnalyserCommand());
-        $this->processQueue->add($this->getJackBreakpointCommand($input, $maximumOutdated));
+        $this->processQueue->add($this->getComposerDependencyAnalyserCommand($input));
+        $this->processQueue->add(
+            $this->getJackBreakpointCommand($input, $maximumOutdated),
+            $this->shouldIgnoreOutdatedFailures($maximumOutdated),
+        );
 
         return $this->processQueue->run($output);
     }
@@ -117,14 +131,24 @@ final class DependenciesCommand extends BaseCommand
     /**
      * Builds the Composer Dependency Analyser process.
      *
+     * @param InputInterface $input the runtime command input
+     *
      * @return Process the configured Composer Dependency Analyser process
      */
-    private function getComposerDependencyAnalyserCommand(): Process
+    private function getComposerDependencyAnalyserCommand(InputInterface $input): Process
     {
-        return $this->processBuilder
-            ->withArgument('--ignore-unused-deps')
-            ->withArgument('--ignore-prod-only-in-dev-deps')
-            ->build('vendor/bin/composer-dependency-analyser');
+        $processBuilder = $this->processBuilder
+            ->withArgument('--config', $this->fileLocator->locate(self::ANALYSER_CONFIG));
+
+        $dumpUsage = $input->getOption('dump-usage');
+
+        if (\is_string($dumpUsage) && '' !== $dumpUsage) {
+            $processBuilder = $processBuilder
+                ->withArgument('--dump-usages', $dumpUsage)
+                ->withArgument('--show-all-usages');
+        }
+
+        return $processBuilder->build('vendor/bin/composer-dependency-analyser');
     }
 
     /**
@@ -143,7 +167,9 @@ final class DependenciesCommand extends BaseCommand
             $command .= ' --dev';
         }
 
-        $command .= ' --limit ' . $maximumOutdated;
+        if (! $this->shouldIgnoreOutdatedFailures($maximumOutdated)) {
+            $command .= ' --limit ' . $maximumOutdated;
+        }
 
         return $this->processBuilder->build($command);
     }
@@ -217,16 +243,6 @@ final class DependenciesCommand extends BaseCommand
     }
 
     /**
-     * Builds the composer-unused process.
-     *
-     * @return Process the configured composer-unused process
-     */
-    private function getComposerUnusedCommand(): Process
-    {
-        return $this->processBuilder->build('vendor/bin/composer-unused');
-    }
-
-    /**
      * Resolves the maximum outdated dependency threshold.
      *
      * @param InputInterface $input the runtime command input
@@ -243,10 +259,22 @@ final class DependenciesCommand extends BaseCommand
 
         $maximumOutdated = (int) $maximumOutdated;
 
-        if (0 > $maximumOutdated) {
-            throw new InvalidArgumentException('The --max-outdated option MUST be zero or greater.');
+        if (self::DISABLE_OUTDATED_THRESHOLD > $maximumOutdated) {
+            throw new InvalidArgumentException('The --max-outdated option MUST be -1 or greater.');
         }
 
         return $maximumOutdated;
+    }
+
+    /**
+     * Determines whether Jack outdated failures SHOULD be ignored for the given threshold.
+     *
+     * @param int $maximumOutdated the validated outdated threshold option
+     *
+     * @return bool true when the outdated threshold is explicitly disabled
+     */
+    private function shouldIgnoreOutdatedFailures(int $maximumOutdated): bool
+    {
+        return self::DISABLE_OUTDATED_THRESHOLD === $maximumOutdated;
     }
 }

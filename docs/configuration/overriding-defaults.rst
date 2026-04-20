@@ -35,6 +35,9 @@ Commands and Their Configuration Files
    * - ``tests``
      - ``phpunit.xml``
      - Falls back to the packaged PHPUnit configuration.
+   * - ``dependencies``
+     - ``composer-dependency-analyser.php``
+     - Falls back to the packaged Composer Dependency Analyser configuration.
    * - ``phpdoc``
      - ``.php-cs-fixer.dist.php`` and ``rector.php``
      - Falls back to the packaged files; ``.docheader`` is created locally
@@ -110,6 +113,33 @@ This approach:
 - Eliminates duplication of the base configuration
 - Automatically receives upstream updates
 - Only requires overriding what is needed
+
+Extending Composer Dependency Analyser Configuration
+----------------------------------------------------
+
+Instead of copying the entire ``composer-dependency-analyser.php`` file,
+consumers can extend the default configuration using the
+``ComposerDependencyAnalyserConfig`` class:
+
+.. code-block:: php
+
+   <?php
+
+   use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
+   use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
+   use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
+
+   return ComposerDependencyAnalyserConfig::configure(
+       static function (Configuration $configuration): void {
+           $configuration->ignoreErrorsOnPackage(
+               'vendor/package',
+               [ErrorType::UNUSED_DEPENDENCY],
+           );
+       }
+   );
+
+This approach keeps the Fast Forward baseline while letting consumer
+repositories add project-specific ignores or scan rules.
 
 What Is Not Overwritten Automatically
 --------------------------------------
