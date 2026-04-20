@@ -23,6 +23,7 @@ use FastForward\DevTools\GitAttributes\Merger;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 #[CoversClass(Merger::class)]
 final class MergerTest extends TestCase
@@ -273,5 +274,44 @@ final class MergerTest extends TestCase
         $result = $this->merger->merge($existingContent, []);
 
         self::assertStringContainsString('* text=auto', $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function privateHelpersWillNormalizeAndFilterPathMetadataConsistently(): void
+    {
+        $parseExistingLines = new ReflectionMethod($this->merger, 'parseExistingLines');
+        $keepInExportLookup = new ReflectionMethod($this->merger, 'keepInExportLookup');
+        $generatedDirectoryLookup = new ReflectionMethod($this->merger, 'generatedDirectoryLookup');
+        $normalizeLine = new ReflectionMethod($this->merger, 'normalizeLine');
+        $extractExportIgnorePathSpec = new ReflectionMethod($this->merger, 'extractExportIgnorePathSpec');
+        $sortKey = new ReflectionMethod($this->merger, 'sortKey');
+        $normalizePathKey = new ReflectionMethod($this->merger, 'normalizePathKey');
+        $isLiteralPathSpec = new ReflectionMethod($this->merger, 'isLiteralPathSpec');
+
+        self::assertSame(
+            ['/docs/ export-ignore', '# comment'],
+            $parseExistingLines->invoke($this->merger, "\n/docs/ export-ignore\n\n# comment\n"),
+        );
+        self::assertSame([
+                'docs' => true,
+            ], $keepInExportLookup->invoke($this->merger, [' ', '/docs/']),);
+        self::assertSame(
+            [
+                'docs' => true,
+            ],
+            $generatedDirectoryLookup->invoke($this->merger, [' /docs/ ', '/README.md']),
+        );
+        self::assertSame('# comment', $normalizeLine->invoke($this->merger, '  # comment  '));
+        self::assertSame(
+            'docs\\ path export-ignore',
+            $normalizeLine->invoke($this->merger, "docs\\ path\texport-ignore")
+        );
+        self::assertNull($extractExportIgnorePathSpec->invoke($this->merger, '*.zip -diff'));
+        self::assertSame('docs/file.txt', $sortKey->invoke($this->merger, '///docs//file.txt'));
+        self::assertSame('/*.md', $normalizePathKey->invoke($this->merger, '/*.md'));
+        self::assertFalse($isLiteralPathSpec->invoke($this->merger, '/*.md'));
     }
 }

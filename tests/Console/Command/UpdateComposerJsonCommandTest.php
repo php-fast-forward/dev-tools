@@ -33,8 +33,11 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use function Safe\json_decode;
 
@@ -56,6 +59,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
 
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $questionHelper;
+
     private UpdateComposerJsonCommand $command;
 
     /**
@@ -69,16 +74,23 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->questionHelper->getName()
+            ->willReturn('question');
+        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
+            ->shouldBeCalled();
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
             ->willReturn(false);
         $this->input->getOption('interactive')
+            ->willReturn(false);
+        $this->input->isInteractive()
             ->willReturn(false);
 
         $this->command = new UpdateComposerJsonCommand(
@@ -87,6 +99,9 @@ final class UpdateComposerJsonCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->fileDiffer->reveal(),
         );
+        $this->command->setHelperSet(new HelperSet([
+            'question' => $this->questionHelper->reveal(),
+        ]));
     }
 
     /**
@@ -260,6 +275,155 @@ final class UpdateComposerJsonCommandTest extends TestCase
                 return ! \array_key_exists('readme', $composerJson);
             }),
         )->shouldBeCalledOnce();
+
+        self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessWhenComposerFileDoesNotExist(): void
+    {
+        $this->input->getOption('file')
+            ->willReturn('/app/composer.json');
+        $this->filesystem->exists('/app/composer.json')
+            ->willReturn(false);
+        $this->filesystem->readFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessWithoutWritingWhenComparisonIsUnchanged(): void
+    {
+        $this->input->getOption('file')
+            ->willReturn('/app/composer.json');
+        $this->filesystem->exists('/app/composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('/app/composer.json')
+            ->willReturn('{"name":"example/package"}');
+        $this->composer->getReadme()
+            ->willReturn('');
+        $this->filesystem->exists('README.md', '/app')
+            ->willReturn(false);
+        $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
+            ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_UNCHANGED,
+                'composer.json is already synchronized.',
+            ))->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureInCheckModeWhenComposerJsonWouldChange(): void
+    {
+        $this->input->getOption('file')
+            ->willReturn('/app/composer.json');
+        $this->input->getOption('check')
+            ->willReturn(true);
+        $this->filesystem->exists('/app/composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('/app/composer.json')
+            ->willReturn('{"name":"example/package"}');
+        $this->composer->getReadme()
+            ->willReturn('');
+        $this->filesystem->exists('README.md', '/app')
+            ->willReturn(false);
+        $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
+            ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'composer.json must be updated.',
+                '@@ diff @@',
+            ))->shouldBeCalledOnce();
+        $this->fileDiffer->formatForConsole('@@ diff @@', false)
+            ->willReturn('@@ diff @@')
+            ->shouldBeCalledOnce();
+        $this->output->writeln('@@ diff @@')
+            ->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(UpdateComposerJsonCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessInDryRunModeWhenComposerJsonWouldChange(): void
+    {
+        $this->input->getOption('file')
+            ->willReturn('/app/composer.json');
+        $this->input->getOption('dry-run')
+            ->willReturn(true);
+        $this->filesystem->exists('/app/composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('/app/composer.json')
+            ->willReturn('{"name":"example/package"}');
+        $this->composer->getReadme()
+            ->willReturn('');
+        $this->filesystem->exists('README.md', '/app')
+            ->willReturn(false);
+        $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
+            ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'composer.json must be updated.',
+            ))->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWritingWhenInteractiveConfirmationIsDeclined(): void
+    {
+        $this->input->getOption('file')
+            ->willReturn('/app/composer.json');
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+        $this->filesystem->exists('/app/composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('/app/composer.json')
+            ->willReturn('{"name":"example/package"}');
+        $this->composer->getReadme()
+            ->willReturn('');
+        $this->filesystem->exists('README.md', '/app')
+            ->willReturn(false);
+        $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
+            ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'composer.json must be updated.',
+            ))->shouldBeCalledOnce();
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(false)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Skipped updating /app/composer.json.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
     }

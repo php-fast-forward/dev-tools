@@ -27,6 +27,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 #[CoversClass(ChangelogParser::class)]
 #[UsesClass(ChangelogDocument::class)]
@@ -145,5 +146,20 @@ final class ChangelogParserTest extends TestCase
 
         self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Added));
         self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Fixed));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function extractEntriesWillReturnEmptyArrayWhenCategoryHeadingIsMissing(): void
+    {
+        $parser = new ChangelogParser();
+        $reflectionMethod = new ReflectionMethod($parser, 'extractEntries');
+
+        self::assertSame(
+            [],
+            $reflectionMethod->invoke($parser, "### Fixed\n\n- Repair release notes", ChangelogEntryType::Added),
+        );
     }
 }

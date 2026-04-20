@@ -596,6 +596,63 @@ final class ComposerJsonTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function getMinimumStabilityAndConfigWillReturnNormalizedValues(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'minimum-stability' => 'dev',
+            'config' => [
+                'sort-packages' => true,
+                'preferred-install' => [
+                    '*' => 'dist',
+                ],
+            ],
+        ]);
+
+        self::assertSame('dev', $composerJson->getMinimumStability());
+        self::assertSame([
+            'sort-packages' => true,
+            'preferred-install' => [
+                '*' => 'dist',
+            ],
+        ], $composerJson->getConfig(null));
+        self::assertSame('1', $composerJson->getConfig('sort-packages'));
+        self::assertSame([
+            '*' => 'dist',
+        ], $composerJson->getConfig('preferred-install'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getMinimumStabilityAndConfigWillReturnDefaultsForInvalidSections(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'config' => 'invalid',
+        ]);
+
+        self::assertSame('stable', $composerJson->getMinimumStability());
+        self::assertSame([], $composerJson->getConfig(null));
+        self::assertSame('', $composerJson->getConfig('preferred-install'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getBinWillReturnScalarStringWhenDeclaredAsSingleBinary(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'bin' => 'bin/dev-tools',
+        ]);
+
+        self::assertSame('bin/dev-tools', $composerJson->getBin());
+    }
+
+    /**
      * @param array<string, mixed> $contents
      *
      * @return ComposerJson

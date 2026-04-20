@@ -35,6 +35,9 @@ use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+use Symfony\Component\Filesystem\Path;
+
+use function Safe\getcwd;
 
 #[CoversClass(WikiCommand::class)]
 final class WikiCommandTest extends TestCase
@@ -237,6 +240,77 @@ final class WikiCommandTest extends TestCase
 
         $this->output->writeln(Argument::containingString('already exists'))
             ->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithInitWillAddWikiSubmoduleWhenTargetDoesNotExist(): void
+    {
+        $wikiSubmodulePath = '/app/.github/wiki';
+        $expectedRelativePath = Path::makeRelative($wikiSubmodulePath, getcwd());
+
+        $this->input->getOption('target')
+            ->willReturn('.github/wiki');
+        $this->input->getOption('init')
+            ->willReturn(true);
+
+        $this->filesystem->getAbsolutePath('.github/wiki')
+            ->willReturn($wikiSubmodulePath);
+        $this->filesystem->exists($wikiSubmodulePath)
+            ->willReturn(false);
+        $this->gitClient->getConfig('remote.origin.url', getcwd())
+            ->willReturn('git@github.com:php-fast-forward/dev-tools.git')
+            ->shouldBeCalledOnce();
+        $this->processBuilder->withArgument('submodule')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processBuilder->withArgument('add')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processBuilder->withArgument('git@github.com:php-fast-forward/dev-tools.wiki.git')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processBuilder->withArgument($expectedRelativePath)
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processBuilder->build('git')
+            ->willReturn($this->process->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipDefaultPackageNameWhenPsr4AutoloadIsEmpty(): void
+    {
+        $this->composer->getAutoload('psr-4')
+            ->willReturn([]);
+        $this->input->getOption('target')
+            ->willReturn('.github/wiki');
+        $this->input->getOption('cache-dir')
+            ->willReturn('tmp/cache/phpdoc');
+        $this->input->getOption('init')
+            ->willReturn(false);
+
+        $this->processBuilder->withArgument('--defaultpackagename', Argument::any())
+            ->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run()
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalledOnce();
 
         self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
     }

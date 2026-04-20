@@ -599,6 +599,75 @@ final class FundingCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipFundingFileSynchronizationWhenNoSupportedFundingMetadataExists(): void
+    {
+        $composerContents = '{"name":"example/package"}';
+
+        $this->filesystem->exists('composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('composer.json')
+            ->willReturn($composerContents);
+        $this->filesystem->exists('.github/FUNDING.yml')
+            ->willReturn(false);
+        $this->fileDiffer->diffContents(
+            'generated funding metadata synchronization',
+            'composer.json',
+            Argument::type('string'),
+            $composerContents,
+            'Updating managed file composer.json from generated funding metadata synchronization.',
+        )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Composer unchanged'))->shouldBeCalledOnce();
+        $this->output->writeln(
+            '<comment>No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.</comment>'
+        )->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(FundingCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function privateHelpersWillPromptAndNormalizeComposerFileArguments(): void
+    {
+        $shouldWriteManagedFile = new ReflectionMethod($this->command, 'shouldWriteManagedFile');
+        $normalizeComposerFile = new ReflectionMethod($this->command, 'normalizeComposerFile');
+
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->filesystem->dirname('composer.alt.json')
+            ->willReturn('.');
+        $this->filesystem->basename('composer.alt.json')
+            ->willReturn('composer.alt.json');
+        $this->processBuilder->withArgument('--file', 'composer.alt.json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->normalizeProcess->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ProcessQueueInterface::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertTrue($shouldWriteManagedFile->invoke(
+            $this->command,
+            $this->input->reveal(),
+            $this->output->reveal(),
+            'composer.alt.json',
+        ));
+        self::assertSame(
+            ProcessQueueInterface::SUCCESS,
+            $normalizeComposerFile->invoke($this->command, 'composer.alt.json', $this->output->reveal()),
+        );
+    }
+
+    /**
      * @return int
      */
     private function executeCommand(): int

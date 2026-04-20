@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Process;
 
+use ReflectionProperty;
 use Closure;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -29,6 +30,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
+use ReflectionMethod;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
@@ -498,5 +500,66 @@ final class ProcessQueueTest extends TestCase
         $this->queue->wait(null);
 
         self::assertTrue(true);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function privateHelpersWillHandleStartupFailuresAndStreamBuffers(): void
+    {
+        $startDetachedProcess = new ReflectionMethod($this->queue, 'startDetachedProcess');
+        $runBlockingProcess = new ReflectionMethod($this->queue, 'runBlockingProcess');
+        $drainDetachedProcessesOutput = new ReflectionMethod($this->queue, 'drainDetachedProcessesOutput');
+
+        $failingDetachedProcess = $this->prophesize(Process::class);
+        $failingDetachedProcess->getCommandLine()
+            ->willReturn('php artisan');
+        $failingDetachedProcess->getWorkingDirectory()
+            ->willReturn('/tmp');
+        $failingDetachedProcess->isStarted()
+            ->willReturn(false);
+        $failingDetachedProcess->start(Argument::any())
+            ->willThrow(new ProcessStartFailedException($failingDetachedProcess->reveal(), 'failed'));
+
+        self::assertSame(
+            ProcessQueueInterface::FAILURE,
+            $startDetachedProcess->invoke($this->queue, $failingDetachedProcess->reveal(), $this->output->reveal()),
+        );
+
+        $failingBlockingProcess = $this->prophesize(Process::class);
+        $failingBlockingProcess->getCommandLine()
+            ->willReturn('php artisan');
+        $failingBlockingProcess->getWorkingDirectory()
+            ->willReturn('/tmp');
+        $failingBlockingProcess->isStarted()
+            ->willReturn(false);
+        $failingBlockingProcess->run(Argument::any())
+            ->willThrow(new ProcessStartFailedException($failingBlockingProcess->reveal(), 'failed'));
+
+        self::assertSame(
+            ProcessQueueInterface::FAILURE,
+            $runBlockingProcess->invoke($this->queue, $failingBlockingProcess->reveal(), $this->output->reveal()),
+        );
+
+        $detachedProcess = $this->prophesize(Process::class);
+        $detachedProcess->getIncrementalOutput()
+            ->willReturn('', 'late stdout');
+        $detachedProcess->getIncrementalErrorOutput()
+            ->willReturn('', 'late stderr');
+        $detachedProcess->isRunning()
+            ->willReturn(false);
+
+        $runningDetachedProcesses = new ReflectionProperty($this->queue, 'runningDetachedProcesses');
+        $runningDetachedProcesses->setValue($this->queue, [$detachedProcess->reveal()]);
+
+        $this->output->write('late stdout')
+            ->shouldBeCalledOnce();
+        $this->output->write('late stderr')
+            ->shouldBeCalledOnce();
+
+        $drainDetachedProcessesOutput->invoke($this->queue, $this->output->reveal(), true);
+
+        self::assertSame([], $runningDetachedProcesses->getValue($this->queue));
     }
 }

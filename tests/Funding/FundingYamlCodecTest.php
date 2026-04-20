@@ -25,6 +25,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use Symfony\Component\Yaml\Yaml;
 
 #[CoversClass(FundingYamlCodec::class)]
@@ -165,5 +166,21 @@ final class FundingYamlCodecTest extends TestCase
         self::assertSame([
             'github' => 'foo',
         ], Yaml::parse($contents),);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function privateListHelpersWillNormalizeAndDenormalizeValues(): void
+    {
+        $codec = new FundingYamlCodec();
+        $normalizeList = new ReflectionMethod($codec, 'normalizeList');
+        $denormalizeList = new ReflectionMethod($codec, 'denormalizeList');
+
+        self::assertSame(['foo'], $normalizeList->invoke($codec, ' foo '));
+        self::assertSame([], $normalizeList->invoke($codec, 42));
+        self::assertSame('foo', $denormalizeList->invoke($codec, ['foo']));
+        self::assertSame(['foo', 'bar'], $denormalizeList->invoke($codec, ['foo', 'bar']));
     }
 }

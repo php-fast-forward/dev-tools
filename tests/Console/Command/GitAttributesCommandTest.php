@@ -38,8 +38,11 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use function Safe\getcwd;
 
@@ -104,6 +107,8 @@ final class GitAttributesCommandTest extends TestCase
      */
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $questionHelper;
+
     private GitAttributesCommand $command;
 
     /**
@@ -122,16 +127,23 @@ final class GitAttributesCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->questionHelper->getName()
+            ->willReturn('question');
+        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
+            ->shouldBeCalled();
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
             ->willReturn(false);
         $this->input->getOption('interactive')
+            ->willReturn(false);
+        $this->input->isInteractive()
             ->willReturn(false);
 
         $this->composerJson->getExtra('gitattributes')
@@ -148,6 +160,9 @@ final class GitAttributesCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
         );
+        $this->command->setHelperSet(new HelperSet([
+            'question' => $this->questionHelper->reveal(),
+        ]));
     }
 
     /**
@@ -314,6 +329,165 @@ final class GitAttributesCommandTest extends TestCase
             ->shouldBeCalled();
 
         self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureInCheckModeWhenGitattributesWouldChange(): void
+    {
+        $entries = ['/docs/'];
+        $gitattributesPath = getcwd() . '/.gitattributes';
+
+        $this->input->getOption('check')
+            ->willReturn(true);
+        $this->candidateProvider->folders()
+            ->willReturn($entries);
+        $this->candidateProvider->files()
+            ->willReturn([]);
+        $this->exportIgnoreFilter->filter($entries, [])
+            ->willReturn($entries);
+        $this->exportIgnoreFilter->filter([], [])
+            ->willReturn([]);
+        $this->existenceChecker->filterExisting(getcwd(), $entries)
+            ->willReturn($entries);
+        $this->existenceChecker->filterExisting(getcwd(), [])
+            ->willReturn([]);
+        $this->filesystem->getAbsolutePath('.gitattributes')
+            ->willReturn($gitattributesPath);
+        $this->reader->read($gitattributesPath)
+            ->willReturn('');
+        $this->merger->merge('', $entries, [])
+            ->willReturn('/docs/ export-ignore');
+        $this->writer->render('/docs/ export-ignore')
+            ->willReturn("/docs/ export-ignore\n");
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'Managed file needs update.',
+                '@@ diff @@',
+            ))->shouldBeCalledOnce();
+        $this->fileDiffer->formatForConsole('@@ diff @@', false)
+            ->willReturn('@@ diff @@')
+            ->shouldBeCalledOnce();
+        $this->output->writeln('@@ diff @@')
+            ->shouldBeCalledOnce();
+        $this->writer->write(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitAttributesCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessInDryRunModeWhenGitattributesWouldChange(): void
+    {
+        $entries = ['/docs/'];
+        $gitattributesPath = getcwd() . '/.gitattributes';
+
+        $this->input->getOption('dry-run')
+            ->willReturn(true);
+        $this->candidateProvider->folders()
+            ->willReturn($entries);
+        $this->candidateProvider->files()
+            ->willReturn([]);
+        $this->exportIgnoreFilter->filter($entries, [])
+            ->willReturn($entries);
+        $this->exportIgnoreFilter->filter([], [])
+            ->willReturn([]);
+        $this->existenceChecker->filterExisting(getcwd(), $entries)
+            ->willReturn($entries);
+        $this->existenceChecker->filterExisting(getcwd(), [])
+            ->willReturn([]);
+        $this->filesystem->getAbsolutePath('.gitattributes')
+            ->willReturn($gitattributesPath);
+        $this->reader->read($gitattributesPath)
+            ->willReturn('');
+        $this->merger->merge('', $entries, [])
+            ->willReturn('/docs/ export-ignore');
+        $this->writer->render('/docs/ export-ignore')
+            ->willReturn("/docs/ export-ignore\n");
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'Managed file needs update.',
+            ))->shouldBeCalledOnce();
+        $this->writer->write(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWritingWhenInteractiveConfirmationIsDeclined(): void
+    {
+        $entries = ['/docs/'];
+        $gitattributesPath = getcwd() . '/.gitattributes';
+
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+        $this->candidateProvider->folders()
+            ->willReturn($entries);
+        $this->candidateProvider->files()
+            ->willReturn([]);
+        $this->exportIgnoreFilter->filter($entries, [])
+            ->willReturn($entries);
+        $this->exportIgnoreFilter->filter([], [])
+            ->willReturn([]);
+        $this->existenceChecker->filterExisting(getcwd(), $entries)
+            ->willReturn($entries);
+        $this->existenceChecker->filterExisting(getcwd(), [])
+            ->willReturn([]);
+        $this->filesystem->getAbsolutePath('.gitattributes')
+            ->willReturn($gitattributesPath);
+        $this->reader->read($gitattributesPath)
+            ->willReturn('');
+        $this->merger->merge('', $entries, [])
+            ->willReturn('/docs/ export-ignore');
+        $this->writer->render('/docs/ export-ignore')
+            ->willReturn("/docs/ export-ignore\n");
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'Managed file needs update.',
+            ))->shouldBeCalledOnce();
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(false)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Skipped updating ' . $gitattributesPath . '.</comment>')
+            ->shouldBeCalledOnce();
+        $this->writer->write(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function configuredKeepInExportPathsWillMergePrimaryAndCompatibilityKeys(): void
+    {
+        $reflectionMethod = new ReflectionMethod($this->command, 'configuredKeepInExportPaths');
+
+        $this->composerJson->getExtra('gitattributes')
+            ->willReturn([
+                'keep-in-export' => ['/README.md', '/docs/'],
+                'no-export-ignore' => ['/README.md', '/AGENTS.md'],
+            ]);
+
+        self::assertSame(
+            ['/README.md', '/docs/', '/AGENTS.md'],
+            array_values($reflectionMethod->invoke($this->command)),
+        );
     }
 
     /**
