@@ -2762,7 +2762,7 @@ vendor/bin/dev-tools dependencies [options]</code></pre>
 .</p>
 
     <p>Default: <code>5</code>
-.</p>
+ when you run the command directly.</p>
 
     <p>Use <code>-1</code>
  to keep the outdated dependency report in the output while
@@ -2923,6 +2923,12 @@ the command.</li>
 commands before <code>composer update -W</code>
  and <code>composer normalize</code>
 .</li>
+
+    <li class="dash">the packaged <code>tests.yml</code>
+ workflow uses <code>--max-outdated=-1</code>
+ by default so
+dependency health remains a required CI job while outdated-package counts are
+reported without failing the workflow on their own.</li>
 
     <li class="dash">Returns a non-zero exit code when missing, unused, misplaced, or too many
 outdated dependencies are found.</li>

@@ -2840,7 +2840,12 @@ protection, bot commit, and submodule pointer conflict guidance.</p>
  or <code>composer.json</code>
  and builds the test matrix from that floor upward.</li>
 
-    <li>Runs dependency health as a separate non-blocking job when enabled.</li>
+    <li>Runs dependency health as a separate required job.</li>
+
+    <li>Defaults the dependency-health threshold to <code>--max-outdated=-1</code>
+ so
+outdated packages stay visible in CI without failing the workflow on count
+alone.</li>
 
     <li>Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.</li>
 
@@ -2882,31 +2887,32 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
    Fetches the base branch changelog reference.
     <em>   Runs ``composer dev-tools changelog:check -- --against=&lt;base-ref&gt;`` against the base ref.
     </em>
-   Fails when the current branch does not add a meaningful <code>Unreleased</code>
+   Fails when a normal non-release branch does not add a meaningful <code>Unreleased</code>
  change.
-<em>   **Manual Release Preparation**:
-    </em>
-   Checks out the repository default branch with full history.
-    <em>   Resolves the next version from ``Unreleased`` unless a version input is provided.
-    </em>
-   Promotes <code>Unreleased</code>
- into the selected version with the current UTC release date.
-    <em>   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
-        ``composer dev-tools changelog:show -- &lt;version&gt;``.
-    </em>
-   Opens or updates a release-preparation pull request instead of committing directly to <code>main</code>
-.
-    <em>   Requires repository Actions permissions that allow the workflow token to create pull requests.
+    <em>   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
 </em>
-   <strong>Merged Release Pull Requests</strong>
+   <strong>Manual Release Preparation</strong>
 :
-    <em>   Detects merged branches that match the configured release branch prefix.
+    <em>   Checks out the repository default branch with full history.
     </em>
-   Renders the released changelog section with <code>composer dev-tools changelog:show -- &lt;version&gt;</code>
+   Resolves the next version from <code>Unreleased</code>
+ unless a version input is provided.
+    <em>   Promotes ``Unreleased`` into the selected version with the current UTC release date.
+    </em>
+   Writes a release-notes preview file to <code>.dev-tools/release-notes.md</code>
+ with
+        <code>composer dev-tools changelog:show -- &lt;version&gt;</code>
 .
-    <em>   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
-</em>
-   Does <strong>not</strong>
+    <em>   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
+    </em>
+   Requires repository Actions permissions that allow the workflow token to create pull requests.
+<em>   **Merged Release Pull Requests**:
+    </em>
+   Detects merged branches that match the configured release branch prefix.
+    <em>   Renders the released changelog section with ``composer dev-tools changelog:show -- &lt;version&gt;``.
+    </em>
+   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
+*   Does <strong>not</strong>
  run for ordinary feature or fix pull requests merged into <code>main</code>
 .</p>
 

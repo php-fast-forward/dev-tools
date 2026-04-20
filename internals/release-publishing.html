@@ -2862,7 +2862,11 @@ used for recovery or exceptional maintenance.</p>
 and fix pull requests SHOULD expect <code>changelog:check</code>
  to run against the base
 branch and fail when no meaningful <code>Unreleased</code>
- entry is added.</p>
+ entry is added. Generated
+<code>release/v...</code>
+ pull requests are excluded from that validation because the
+release-preparation flow intentionally empties <code>Unreleased</code>
+ after promotion.</p>
 
             
     <p>If maintainers must recover the release manually, create the tag from the
