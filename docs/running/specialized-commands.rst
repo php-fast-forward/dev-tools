@@ -50,7 +50,7 @@ Important details:
 ``dependencies``
 ----------------
 
-Analyzes missing, unused, and outdated Composer dependencies.
+Analyzes missing, unused, misplaced, and outdated Composer dependencies.
 
 .. code-block:: bash
 
@@ -61,19 +61,19 @@ Analyzes missing, unused, and outdated Composer dependencies.
 
 Important details:
 
-- it ships ``shipmonk/composer-dependency-analyser`` and
-  ``icanhazstring/composer-unused`` and ``rector/jack`` as direct dependencies of
-  ``fast-forward/dev-tools``;
-- it uses ``composer-dependency-analyser`` only for missing dependency checks
-  and leaves unused-package reporting to ``composer-unused``;
+- it ships ``shipmonk/composer-dependency-analyser`` and ``rector/jack`` as
+  direct dependencies of ``fast-forward/dev-tools``;
+- it uses ``composer-dependency-analyser`` for missing, unused, and misplaced
+  dependency checks, with a packaged config that consumer repositories can
+  override locally;
 - it uses ``jack breakpoint --limit=<max-outdated>`` to fail when too many
   outdated dependencies accumulate;
 - it previews ``jack raise-to-installed`` and ``jack open-versions`` before
   the analyzers;
 - ``--upgrade`` runs ``jack raise-to-installed``, ``jack open-versions``,
   ``composer update -W``, and ``composer normalize`` before the analyzers;
-- it returns a non-zero exit code when missing, unused, or too many outdated
-  dependencies are found.
+- it returns a non-zero exit code when missing, unused, misplaced, or too many
+  outdated dependencies are found.
 
 ``metrics``
 -----------

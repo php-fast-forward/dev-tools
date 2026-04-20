@@ -47,7 +47,7 @@ subprocess execution is needed.
      - Runs PHPUnit with optional coverage output.
    * - ``FastForward\DevTools\Console\Command\DependenciesCommand``
      - ``dependencies``
-     - Reports missing, unused, and outdated Composer dependencies.
+     - Reports missing, unused, misplaced, and outdated Composer dependencies.
    * - ``FastForward\DevTools\Console\Command\MetricsCommand``
      - ``metrics``
      - Builds the PhpMetrics site and JSON artifacts for the current project.

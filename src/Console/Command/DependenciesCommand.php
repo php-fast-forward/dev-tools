@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -33,24 +34,28 @@ use function is_numeric;
 
 /**
  * Orchestrates dependency analysis across the supported Composer analyzers.
- * This command MUST report missing and unused dependencies using a single,
+ * This command MUST report missing, unused, and misplaced dependencies using a single,
  * deterministic report that is friendly for local development and CI runs.
  */
 #[AsCommand(
     name: 'dependencies',
-    description: 'Analyzes missing, unused, and outdated Composer dependencies.',
+    description: 'Analyzes missing, unused, misplaced, and outdated Composer dependencies.',
     aliases: ['deps'],
-    help: 'This command runs composer-dependency-analyser, composer-unused, and Jack to report missing, unused, and outdated Composer dependencies.'
+    help: 'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.'
 )]
 final class DependenciesCommand extends BaseCommand
 {
+    private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';
+
     /**
      * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
+     * @param FileLocatorInterface $fileLocator resolves the dependency analyser configuration
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly FileLocatorInterface $fileLocator,
     ) {
         return parent::__construct();
     }
@@ -107,7 +112,6 @@ final class DependenciesCommand extends BaseCommand
 
         $output->writeln('<info>Running dependency analysis...</info>');
 
-        $this->processQueue->add($this->getComposerUnusedCommand());
         $this->processQueue->add($this->getComposerDependencyAnalyserCommand());
         $this->processQueue->add($this->getJackBreakpointCommand($input, $maximumOutdated));
 
@@ -122,7 +126,7 @@ final class DependenciesCommand extends BaseCommand
     private function getComposerDependencyAnalyserCommand(): Process
     {
         return $this->processBuilder
-            ->withArgument('--ignore-unused-deps')
+            ->withArgument('--config', $this->fileLocator->locate(self::ANALYSER_CONFIG))
             ->withArgument('--ignore-prod-only-in-dev-deps')
             ->build('vendor/bin/composer-dependency-analyser');
     }
@@ -214,16 +218,6 @@ final class DependenciesCommand extends BaseCommand
     private function getComposerNormalizeCommand(): Process
     {
         return $this->processBuilder->build('composer normalize');
-    }
-
-    /**
-     * Builds the composer-unused process.
-     *
-     * @return Process the configured composer-unused process
-     */
-    private function getComposerUnusedCommand(): Process
-    {
-        return $this->processBuilder->build('vendor/bin/composer-unused');
     }
 
     /**

@@ -36,10 +36,8 @@ QA and Refactoring
      - Extends the default Rector configuration with shared rules.
    * - ``friendsofphp/php-cs-fixer``
      - Powers the PHPDoc fixer phase.
-   * - ``icanhazstring/composer-unused``
-     - Reports unused Composer dependencies in ``dependencies``.
    * - ``shipmonk/composer-dependency-analyser``
-     - Reports missing Composer dependencies in ``dependencies``.
+     - Reports missing, unused, and misplaced Composer dependencies in ``dependencies``.
    * - ``rector/jack``
      - Previews or applies dependency version updates and enforces the
        outdated dependency threshold.

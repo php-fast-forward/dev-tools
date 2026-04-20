@@ -29,6 +29,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
+use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
@@ -46,6 +47,8 @@ final class DependenciesCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
+    private ObjectProphecy $fileLocator;
+
     private ObjectProphecy $processOpenVersions;
 
     private ObjectProphecy $processRaiseToInstalled;
@@ -53,8 +56,6 @@ final class DependenciesCommandTest extends TestCase
     private ObjectProphecy $processComposerUpdate;
 
     private ObjectProphecy $processComposerNormalize;
-
-    private ObjectProphecy $processUnused;
 
     private ObjectProphecy $processDepAnalyser;
 
@@ -71,15 +72,21 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->processOpenVersions = $this->prophesize(Process::class);
         $this->processRaiseToInstalled = $this->prophesize(Process::class);
         $this->processComposerUpdate = $this->prophesize(Process::class);
         $this->processComposerNormalize = $this->prophesize(Process::class);
-        $this->processUnused = $this->prophesize(Process::class);
         $this->processDepAnalyser = $this->prophesize(Process::class);
         $this->processBreakpoint = $this->prophesize(Process::class);
+        $this->fileLocator->locate('composer-dependency-analyser.php')
+            ->willReturn('/app/composer-dependency-analyser.php');
 
-        $this->command = new DependenciesCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
+        $this->command = new DependenciesCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->fileLocator->reveal(),
+        );
     }
 
     /**
@@ -90,11 +97,11 @@ final class DependenciesCommandTest extends TestCase
     {
         self::assertSame('dependencies', $this->command->getName());
         self::assertSame(
-            'Analyzes missing, unused, and outdated Composer dependencies.',
+            'Analyzes missing, unused, misplaced, and outdated Composer dependencies.',
             $this->command->getDescription()
         );
         self::assertSame(
-            'This command runs composer-dependency-analyser, composer-unused, and Jack to report missing, unused, and outdated Composer dependencies.',
+            'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.',
             $this->command->getHelp()
         );
     }
@@ -111,8 +118,6 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->add($this->processRaiseToInstalled->reveal())
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processOpenVersions->reveal())
-            ->shouldBeCalledOnce();
-        $this->processQueue->add($this->processUnused->reveal())
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalledOnce();
@@ -140,8 +145,6 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->add($this->processRaiseToInstalled->reveal())
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processOpenVersions->reveal())
-            ->shouldBeCalledOnce();
-        $this->processQueue->add($this->processUnused->reveal())
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalledOnce();
@@ -173,8 +176,6 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->add($this->processComposerUpdate->reveal())
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processComposerNormalize->reveal())
-            ->shouldBeCalledOnce();
-        $this->processQueue->add($this->processUnused->reveal())
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->processDepAnalyser->reveal())
             ->shouldBeCalledOnce();
@@ -241,9 +242,7 @@ final class DependenciesCommandTest extends TestCase
         $this->processBuilder
             ->build($dev ? 'vendor/bin/jack open-versions --dev --dry-run' : 'vendor/bin/jack open-versions --dry-run')
             ->willReturn($this->processOpenVersions->reveal());
-        $this->processBuilder->build('vendor/bin/composer-unused')
-            ->willReturn($this->processUnused->reveal());
-        $this->processBuilder->withArgument('--ignore-unused-deps')
+        $this->processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
             ->willReturn($depAnalyserBuilder->reveal());
         $depAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')
             ->willReturn($depAnalyserFinalBuilder->reveal());
@@ -286,9 +285,7 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn($this->processComposerUpdate->reveal());
         $this->processBuilder->build('composer normalize')
             ->willReturn($this->processComposerNormalize->reveal());
-        $this->processBuilder->build('vendor/bin/composer-unused')
-            ->willReturn($this->processUnused->reveal());
-        $this->processBuilder->withArgument('--ignore-unused-deps')
+        $this->processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
             ->willReturn($depAnalyserBuilder->reveal());
         $depAnalyserBuilder->withArgument('--ignore-prod-only-in-dev-deps')
             ->willReturn($depAnalyserFinalBuilder->reveal());

@@ -60,7 +60,7 @@ You can also run individual commands for specific development tasks:
 # Run PHPUnit tests
 composer dev-tools tests
 
-# Analyze missing, unused, and outdated Composer dependencies
+# Analyze missing, unused, misplaced, and outdated Composer dependencies
 composer dependencies
 composer dependencies --max-outdated=8
 composer dependencies --dev
