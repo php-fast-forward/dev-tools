@@ -165,6 +165,33 @@ final class ComposerFundingCodecTest extends TestCase
      * @return void
      */
     #[Test]
+    public function parseWillTreatGithubEntriesWithoutParsableUrlPartsAsUnsupported(): void
+    {
+        $codec = new ComposerFundingCodec();
+
+        $profile = $codec->parse(<<<'JSON'
+            {
+              "name": "example/package",
+              "funding": [
+                {"type": "github", "url": "mailto:team@example.com"}
+              ]
+            }
+            JSON);
+
+        self::assertSame([], $profile->getGithubSponsors());
+        self::assertSame(
+            [[
+                'type' => 'github',
+                'url' => 'mailto:team@example.com',
+            ]],
+            $profile->getUnsupportedComposerEntries(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function dumpWillRemoveFundingWhenTheProfileHasNoEntries(): void
     {
         $codec = new ComposerFundingCodec();

@@ -117,6 +117,36 @@ final class CodeOwnersGeneratorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function inferOwnersWillIgnoreUnsupportedAuthorEntriesAndInvalidUrls(): void
+    {
+        $this->composerJson->getSupport()
+            ->willReturn(new Support(source: 'https://github.com/php-fast-forward/dev-tools'));
+        $this->composerJson->getAuthors()
+            ->willReturn([
+                'not-an-author',
+                new Author(homepage: 'https://github.com/mentordosnerds/dev-tools'),
+                new Author(homepage: 'https://github.com'),
+            ]);
+
+        self::assertSame(['@php-fast-forward'], $this->generator->inferOwners());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function inferGroupOwnerWillReturnNullWhenSupportSourceIsMissingOrInvalid(): void
+    {
+        $this->composerJson->getSupport()
+            ->willReturn(new Support(source: 'https://example.com/php-fast-forward/dev-tools'));
+
+        self::assertNull($this->generator->inferGroupOwner());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function generateWillRenderExplicitOwners(): void
     {
         self::assertSame(
@@ -165,6 +195,18 @@ final class CodeOwnersGeneratorTest extends TestCase
         self::assertSame(
             ['@php-fast-forward', '@mentordosnerds', 'security@example.com'],
             $this->generator->normalizeOwners('php-fast-forward, @mentordosnerds security@example.com'),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function normalizeOwnersWillDropEmptyTokensAndDeduplicateRepeatedOwners(): void
+    {
+        self::assertSame(
+            ['@php-fast-forward', 'security@example.com'],
+            $this->generator->normalizeOwners('  php-fast-forward,, @php-fast-forward security@example.com  '),
         );
     }
 }

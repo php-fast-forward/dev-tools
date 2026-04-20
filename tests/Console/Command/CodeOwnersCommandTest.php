@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Console\Command\CodeOwnersCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -32,6 +34,8 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
+use Symfony\Component\Console\Helper\HelperSet;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -66,6 +70,11 @@ final class CodeOwnersCommandTest extends TestCase
      */
     private ObjectProphecy $fileDiffer;
 
+    /**
+     * @var ObjectProphecy<QuestionHelper>
+     */
+    private ObjectProphecy $questionHelper;
+
     private CodeOwnersCommand $command;
 
     /**
@@ -80,6 +89,7 @@ final class CodeOwnersCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->questionHelper = $this->prophesize(QuestionHelper::class);
 
         $this->input->getOption('file')
             ->willReturn('.github/CODEOWNERS');
@@ -98,12 +108,19 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
+        $this->questionHelper->getName()
+            ->willReturn('question');
+        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
+            ->shouldBeCalled();
 
         $this->command = new CodeOwnersCommand(
             $this->generator->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
         );
+        $this->command->setHelperSet(new HelperSet([
+            'question' => $this->questionHelper->reveal(),
+        ]));
     }
 
     /**
@@ -224,6 +241,147 @@ final class CodeOwnersCommandTest extends TestCase
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(CodeOwnersCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillPromptForOwnersWhenInteractiveInferenceFails(): void
+    {
+        $targetPath = '/project/.github/CODEOWNERS';
+        $targetDirectory = '/project/.github';
+        $generatedContent = "* @php-fast-forward @mentordosnerds\n";
+
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
+            ->willReturn($targetPath);
+        $this->filesystem->dirname($targetPath)
+            ->willReturn($targetDirectory);
+        $this->filesystem->exists($targetPath)
+            ->willReturn(false, false);
+        $this->filesystem->exists($targetDirectory)
+            ->willReturn(true);
+        $this->generator->inferOwners()
+            ->willReturn([]);
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(Question::class),
+        )->willReturn('php-fast-forward @mentordosnerds')
+            ->shouldBeCalledOnce();
+        $this->generator->normalizeOwners('php-fast-forward @mentordosnerds')
+            ->willReturn(['@php-fast-forward', '@mentordosnerds'])
+            ->shouldBeCalledOnce();
+        $this->generator->generate(['@php-fast-forward', '@mentordosnerds'])
+            ->willReturn($generatedContent)
+            ->shouldBeCalledOnce();
+        $this->fileDiffer->diffContents(
+            'generated CODEOWNERS content',
+            $targetPath,
+            $generatedContent,
+            null,
+            'Managed file ' . $targetPath . ' will be created from generated CODEOWNERS content.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Managed file ' . $targetPath . ' will be created from generated CODEOWNERS content.',
+        ))->shouldBeCalledOnce();
+        $this->filesystem->mkdir(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->dumpFile($targetPath, $generatedContent)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(CodeOwnersCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnSuccessOnDryRunWhenDriftIsDetected(): void
+    {
+        $targetPath = '/project/.github/CODEOWNERS';
+        $generatedContent = "* @php-fast-forward\n";
+        $existingContent = "* @legacy-owner\n";
+
+        $this->input->getOption('dry-run')
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
+            ->willReturn($targetPath);
+        $this->filesystem->dirname($targetPath)
+            ->willReturn('/project/.github');
+        $this->filesystem->exists($targetPath)
+            ->willReturn(true);
+        $this->filesystem->readFile($targetPath)
+            ->willReturn($existingContent);
+        $this->generator->inferOwners()
+            ->willReturn(['@php-fast-forward']);
+        $this->generator->generate(['@php-fast-forward'])
+            ->willReturn($generatedContent);
+        $this->fileDiffer->diffContents(
+            'generated CODEOWNERS content',
+            $targetPath,
+            $generatedContent,
+            $existingContent,
+            'Updating managed file ' . $targetPath . ' from generated CODEOWNERS content.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file ' . $targetPath . ' from generated CODEOWNERS content.',
+        ))->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(CodeOwnersCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipReplacingExistingCodeOwnersWhenConfirmationIsDeclined(): void
+    {
+        $targetPath = '/project/.github/CODEOWNERS';
+        $generatedContent = "* @php-fast-forward\n";
+        $existingContent = "* @legacy-owner\n";
+
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->isInteractive()
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
+            ->willReturn($targetPath);
+        $this->filesystem->dirname($targetPath)
+            ->willReturn('/project/.github');
+        $this->filesystem->exists($targetPath)
+            ->willReturn(true);
+        $this->filesystem->readFile($targetPath)
+            ->willReturn($existingContent);
+        $this->generator->inferOwners()
+            ->willReturn(['@php-fast-forward']);
+        $this->generator->generate(['@php-fast-forward'])
+            ->willReturn($generatedContent);
+        $this->fileDiffer->diffContents(
+            'generated CODEOWNERS content',
+            $targetPath,
+            $generatedContent,
+            $existingContent,
+            'Updating managed file ' . $targetPath . ' from generated CODEOWNERS content.',
+        )->willReturn(new FileDiff(
+            FileDiff::STATUS_CHANGED,
+            'Updating managed file ' . $targetPath . ' from generated CODEOWNERS content.',
+        ))->shouldBeCalledOnce();
+        $this->questionHelper->ask(
+            $this->input->reveal(),
+            $this->output->reveal(),
+            Argument::type(ConfirmationQuestion::class),
+        )->willReturn(false)
+            ->shouldBeCalledOnce();
+        $this->output->writeln('<comment>Skipped updating ' . $targetPath . '.</comment>')
+            ->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(CodeOwnersCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**

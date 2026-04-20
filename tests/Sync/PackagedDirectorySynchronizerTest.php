@@ -75,6 +75,29 @@ final class PackagedDirectorySynchronizerTest extends TestCase
      * @return void
      */
     #[Test]
+    public function setLoggerWillReplaceTheActiveLogger(): void
+    {
+        $replacementLogger = $this->prophesize(LoggerInterface::class);
+        $synchronizer = $this->createSynchronizer();
+
+        $this->filesystem->exists('/package/.agents/agents')
+            ->willReturn(false);
+
+        $synchronizer->setLogger($replacementLogger->reveal());
+
+        $replacementLogger->error('No packaged .agents/agents found at: /package/.agents/agents')
+            ->shouldBeCalledOnce();
+
+        $result = $synchronizer
+            ->synchronize('/consumer/.agents/agents', '/package/.agents/agents', '.agents/agents');
+
+        self::assertTrue($result->failed());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function synchronizeWithMissingPackagePathWillReturnFailedResult(): void
     {
         $this->filesystem->exists('/package/.agents/agents')
@@ -273,10 +296,20 @@ final class PackagedDirectorySynchronizerTest extends TestCase
      */
     private function createSynchronizer(): PackagedDirectorySynchronizer
     {
+        return $this->createSynchronizerWithLogger($this->logger->reveal());
+    }
+
+    /**
+     * @param LoggerInterface $logger
+     *
+     * @return PackagedDirectorySynchronizer
+     */
+    private function createSynchronizerWithLogger(LoggerInterface $logger): PackagedDirectorySynchronizer
+    {
         return new PackagedDirectorySynchronizer(
             $this->filesystem->reveal(),
             $this->finderFactory->reveal(),
-            $this->logger->reveal(),
+            $logger,
         );
     }
 }

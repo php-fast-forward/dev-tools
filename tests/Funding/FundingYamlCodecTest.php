@@ -110,6 +110,7 @@ final class FundingYamlCodecTest extends TestCase
         self::assertSame([], $codec->parse(" \n")->getCustomUrls());
         self::assertSame([], $codec->parse('true')->getGithubSponsors());
         self::assertSame(['just-a-list'], $codec->parse('- just-a-list')->getUnsupportedYamlEntries());
+        self::assertSame([], $codec->parse('42')->getGithubSponsors());
     }
 
     /**
@@ -162,7 +163,7 @@ final class FundingYamlCodecTest extends TestCase
         $contents = $codec->dump(new FundingProfile(['foo']));
 
         self::assertSame([
-                'github' => 'foo',
-            ], Yaml::parse($contents),);
+            'github' => 'foo',
+        ], Yaml::parse($contents),);
     }
 }

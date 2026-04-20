@@ -121,8 +121,29 @@ final class ChangelogParserTest extends TestCase
         self::assertSame(['Add sync command'], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Added));
         self::assertSame(
             ['Repair coverage report'],
-            $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Fixed)
+            $document->getUnreleased()
+                ->getEntriesFor(ChangelogEntryType::Fixed)
         );
         self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Security));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function parseWillTreatEmptyCategoryBodiesAsEmptyEntryLists(): void
+    {
+        $document = (new ChangelogParser())->parse(<<<'MD'
+            ## [Unreleased]
+
+            ### Added
+
+            ### Fixed
+
+            Not a bullet entry
+            MD);
+
+        self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Added));
+        self::assertSame([], $document->getUnreleased()->getEntriesFor(ChangelogEntryType::Fixed));
     }
 }
