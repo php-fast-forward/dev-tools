@@ -1466,10 +1466,20 @@ Search.appendIndex(
             "summary": "Resolves\u0020the\u0020maximum\u0020outdated\u0020dependency\u0020threshold.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_resolveMaximumOutdated"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AshouldIgnoreOutdatedFailures\u0028\u0029",
+            "name": "shouldIgnoreOutdatedFailures",
+            "summary": "Determines\u0020whether\u0020Jack\u0020outdated\u0020failures\u0020SHOULD\u0020be\u0020ignored\u0020for\u0020the\u0020given\u0020threshold.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_shouldIgnoreOutdatedFailures"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AANALYSER_CONFIG",
             "name": "ANALYSER_CONFIG",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_ANALYSER_CONFIG"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003ADISABLE_OUTDATED_THRESHOLD",
+            "name": "DISABLE_OUTDATED_THRESHOLD",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#constant_DISABLE_OUTDATED_THRESHOLD"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
