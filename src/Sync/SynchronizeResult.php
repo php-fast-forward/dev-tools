@@ -21,28 +21,45 @@ namespace FastForward\DevTools\Sync;
 
 /**
  * Result object for packaged directory synchronization operations.
+ *
+ * This value object tracks the outcome of a synchronization run by recording
+ * which links were created, which existing links or directories were
+ * preserved, and which broken links were removed before recreation. It also
+ * carries a failure flag so callers can distinguish successful runs from
+ * aborted or invalid synchronization attempts.
  */
 final class SynchronizeResult
 {
     /**
+     * Stores the entry names for symlinks created during synchronization.
+     *
      * @var list<string>
      */
     private array $createdLinks = [];
 
     /**
+     * Stores the entry names that were already valid and therefore preserved.
+     *
      * @var list<string>
      */
     private array $preservedLinks = [];
 
     /**
+     * Stores the entry names for broken links removed during repair.
+     *
      * @var list<string>
      */
     private array $removedBrokenLinks = [];
 
+    /**
+     * Indicates whether the synchronization process encountered a fatal failure.
+     */
     private bool $failed = false;
 
     /**
-     * @param string $link
+     * Records the name of a link that was newly created.
+     *
+     * @param string $link Entry name identifying the created link
      *
      * @return void
      */
@@ -52,7 +69,9 @@ final class SynchronizeResult
     }
 
     /**
-     * @param string $link
+     * Records the name of an entry that was preserved as-is.
+     *
+     * @param string $link Entry name identifying the preserved link or directory
      *
      * @return void
      */
@@ -62,7 +81,9 @@ final class SynchronizeResult
     }
 
     /**
-     * @param string $link
+     * Records the name of a broken link that was removed before recreation.
+     *
+     * @param string $link Entry name identifying the repaired broken link
      *
      * @return void
      */
@@ -72,6 +93,11 @@ final class SynchronizeResult
     }
 
     /**
+     * Marks the synchronization as failed.
+     *
+     * Callers SHOULD use this when a precondition or runtime error prevents
+     * the synchronization result from being considered successful.
+     *
      * @return void
      */
     public function markFailed(): void
@@ -80,6 +106,8 @@ final class SynchronizeResult
     }
 
     /**
+     * Returns the names of links created during synchronization.
+     *
      * @return list<string>
      */
     public function getCreatedLinks(): array
@@ -88,6 +116,8 @@ final class SynchronizeResult
     }
 
     /**
+     * Returns the names of links or directories preserved during synchronization.
+     *
      * @return list<string>
      */
     public function getPreservedLinks(): array
@@ -96,6 +126,8 @@ final class SynchronizeResult
     }
 
     /**
+     * Returns the names of broken links removed during synchronization repair.
+     *
      * @return list<string>
      */
     public function getRemovedBrokenLinks(): array
@@ -104,6 +136,8 @@ final class SynchronizeResult
     }
 
     /**
+     * Indicates whether the synchronization result represents a failed run.
+     *
      * @return bool
      */
     public function failed(): bool
