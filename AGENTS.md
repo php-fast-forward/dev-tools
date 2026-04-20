@@ -45,6 +45,19 @@ composer dev-tools reports       # Generate docs frontpage and reports
 composer dev-tools:sync         # Sync scripts, GitHub Actions, .editorconfig, wiki
 ```
 
+**Notable Specialized Commands:**
+
+- `composer skills`: Synchronize packaged skills into consumer `.agents/skills`
+- `composer funding`: Sync funding metadata between `composer.json` and `.github/FUNDING.yml`
+- `composer codeowners`: Generate `.github/CODEOWNERS` from repository metadata
+- `composer gitattributes`: Manage export-ignore rules in `.gitattributes`
+- `composer gitignore`: Synchronize managed `.gitignore` content
+- `composer license`: Generate or refresh repository `LICENSE` files
+- `composer dependencies`: Run dependency analysis workflows
+- `composer metrics`: Generate PhpMetrics reports and related artifacts
+- `composer update-composer-json`: Normalize managed `composer.json` settings
+- `composer changelog:entry|check|next-version|promote|show`: Manage changelog-driven release workflows
+
 ## Testing Instructions
 
 ```bash
@@ -91,7 +104,7 @@ composer dev-tools tests -- --coverage=public/coverage
 
 - Source code: `src/` (PSR-4: `FastForward\DevTools\`)
 - Tests: `tests/` (PSR-4: `FastForward\DevTools\Tests\`)
-- Commands: `src/Command/`
+- Commands: `src/Console/Command/`
 - PHPUnit events: `src/PhpUnit/Event/`
 - Rector rules: `src/Rector/`
 - Composer plugin: `src/Composer/`
@@ -112,7 +125,15 @@ composer dev-tools tests -- --coverage=public/coverage
 
 ## Build and Deployment
 
-This is a Composer plugin - no build step required. The package is published to Packagist.
+This repository ships a Composer plugin plus the local `bin/dev-tools` binary,
+so there is no separate frontend or asset build step. The package is published
+to Packagist, while consumer repositories adopt workflows, packaged skills, and
+other managed assets through `composer dev-tools:sync`.
+
+Release and publishing behavior is driven primarily through
+`.github/workflows/changelog.yml`, `reports.yml`, and `wiki.yml`, with packaged
+skills living under `.agents/skills/` and mirrored project-agent prompts under
+`.agents/agents/`.
 
 **Package Details:**
 
@@ -121,8 +142,6 @@ This is a Composer plugin - no build step required. The package is published to 
 - Minimum stability: `stable`
 
 ## Pull Request Guidelines
-
-**Title Format:** `[<area>] Brief description (#<issue-number>)`
 
 **Required Checks:**
 
@@ -138,6 +157,20 @@ composer dev-tools
 - PHPDoc must be valid
 - Coverage must meet threshold
 - Rector should handle refactoring automatically
+- Follow `.github/pull_request_template.md` and include issue linkage,
+  verification notes, documentation/generated-output review, and changelog
+  status
+
+## Canonical References
+
+- `README.md`: high-level command surface, architecture overview, and consumer-facing context
+- `docs/commands/`: command-specific behavior and option details
+- `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
+- `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `wiki.yml`, and `changelog.yml`
+- `.github/pull_request_template.md`: expected PR structure and reviewer checklist
+- `.agents/skills/`: packaged procedural skills shipped to consumer repositories
+- `.agents/agents/`: repository-specific role prompts mirrored through `.github/agents`
+- `.github/wiki`: generated or synchronized wiki content published by repo workflows
 
 ## Additional Notes
 
