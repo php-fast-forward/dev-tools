@@ -2774,6 +2774,13 @@ and <code>FileLocatorInterface</code>
             <td>Falls back to the packaged PHPUnit configuration.</td>
     </tr>
     <tr>
+            <td><code>dependencies</code>
+</td>
+            <td><code>composer-dependency-analyser.php</code>
+</td>
+            <td>Falls back to the packaged Composer Dependency Analyser configuration.</td>
+    </tr>
+    <tr>
             <td><code>phpdoc</code>
 </td>
             <td><code>.php-cs-fixer.dist.php</code>
@@ -2894,6 +2901,37 @@ return RectorConfig::configure(
     <li class="dash">Only requires overriding what is needed</li>
 
 </ul>
+
+    </section>
+
+            <section class="section " id="extending-composer-dependency-analyser-configuration">
+            <h2>Extending Composer Dependency Analyser Configuration</h2>
+
+            
+    <p>Instead of copying the entire <code>composer-dependency-analyser.php</code>
+ file,
+consumers can extend the default configuration using the
+<code>ComposerDependencyAnalyserConfig</code>
+ class:</p>
+
+            <pre><code class="language-php">&lt;?php
+
+use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
+use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
+use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
+
+return ComposerDependencyAnalyserConfig::configure(
+    static function (Configuration $configuration): void {
+        $configuration-&gt;ignoreErrorsOnPackage(
+            &#039;vendor/package&#039;,
+            [ErrorType::UNUSED_DEPENDENCY],
+        );
+    }
+);</code></pre>
+
+            
+    <p>This approach keeps the Fast Forward baseline while letting consumer
+repositories add project-specific ignores or scan rules.</p>
 
     </section>
 

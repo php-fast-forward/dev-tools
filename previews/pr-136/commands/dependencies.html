@@ -2885,6 +2885,11 @@ preview or upgrade phase.</li>
 - <code>--config composer-dependency-analyser.php</code>
  (resolved through the package
   file locator so consumer repositories can override it locally)
+- the packaged <code>composer-dependency-analyser.php</code>
+ delegates to
+  <code>FastForward\DevTools\Config\ComposerDependencyAnalyserConfig</code>
+ so
+  consumer repositories can extend the baseline instead of copying it whole
 - <code>--dump-usages &lt;package&gt;</code>
  and <code>--show-all-usages</code>
  when <code>--dump-usage</code>

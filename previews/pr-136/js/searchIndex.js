@@ -1026,6 +1026,41 @@ Search.appendIndex(
             "summary": "Handles\u0020final\u0020uninstallation\u0020processes\u0020logically.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_uninstall"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig",
+            "name": "ComposerDependencyAnalyserConfig",
+            "summary": "Provides\u0020the\u0020default\u0020Composer\u0020Dependency\u0020Analyser\u0020configuration.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Creates\u0020the\u0020default\u0020Composer\u0020Dependency\u0020Analyser\u0020configuration.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AconfigurePackagedRepositoryIgnores\u0028\u0029",
+            "name": "configurePackagedRepositoryIgnores",
+            "summary": "Applies\u0020the\u0020ignores\u0020required\u0020only\u0020by\u0020the\u0020packaged\u0020DevTools\u0020repository.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configurePackagedRepositoryIgnores"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AisDevToolsRepository\u0028\u0029",
+            "name": "isDevToolsRepository",
+            "summary": "Detects\u0020whether\u0020the\u0020analyser\u0020is\u0020running\u0020inside\u0020the\u0020DevTools\u0020repository\u0020itself.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isDevToolsRepository"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGE_NAME",
+            "name": "PACKAGE_NAME",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGE_NAME"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGED_UNUSED_DEPENDENCIES",
+            "name": "PACKAGED_UNUSED_DEPENDENCIES",
+            "summary": "Dependencies\u0020that\u0020are\u0020only\u0020required\u0020by\u0020the\u0020packaged\u0020DevTools\u0020distribution\u0020itself.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_UNUSED_DEPENDENCIES"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
+            "name": "PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
+            "summary": "Production\u0020dependencies\u0020intentionally\u0020kept\u0020in\u0020require\u0020for\u0020the\u0020packaged\u0020toolchain.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig",
             "name": "ECSConfig",
             "summary": "Provides\u0020the\u0020default\u0020ECS\u0020configuration.",
