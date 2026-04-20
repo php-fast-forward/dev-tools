@@ -147,10 +147,14 @@ composer update-composer-json --force
 composer dev-tools:sync
 ```
 
-The `dependencies` command ships with both dependency analyzers and
-`rector/jack` as direct
+The `dependencies` command ships with
+`shipmonk/composer-dependency-analyser` and `rector/jack` as direct
 dependencies of `fast-forward/dev-tools`, so it works without extra
 installation in the consumer project.
+
+The packaged `tests.yml` workflow runs dependency health as a required job and
+defaults to `--max-outdated=-1`, which keeps outdated-package findings visible
+in CI without failing the workflow for their count alone.
 
 The `metrics` command ships with `phpmetrics/phpmetrics` as a direct
 dependency of `fast-forward/dev-tools`, so consumer repositories can generate
@@ -215,7 +219,7 @@ skills they depend on.
 |---------|---------|
 | `composer dev-tools` | Runs the full `standards` pipeline. |
 | `composer tests` | Runs PHPUnit with local-or-packaged configuration. |
-| `composer dependencies` | Previews Jack dependency updates, then reports missing, unused, and overly outdated Composer dependencies. |
+| `composer dependencies` | Previews Jack dependency updates, then reports missing, unused, misplaced, and outdated Composer dependencies. |
 | `composer metrics` | Runs PhpMetrics for the current project and generates requested report artifacts. |
 | `composer changelog:entry` | Adds one categorized changelog entry to `Unreleased` or a published release section. |
 | `composer changelog:check` | Verifies that a changelog file contains meaningful `Unreleased` notes, optionally against a git base reference. |

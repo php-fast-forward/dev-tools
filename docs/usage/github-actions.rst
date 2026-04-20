@@ -68,7 +68,10 @@ The ``tests.yml`` workflow provides standard Continuous Integration.
 
 *   Runs PHPUnit tests across the supported PHP matrix.
 *   Resolves the minimum supported PHP minor version from ``composer.lock`` or ``composer.json`` and builds the test matrix from that floor upward.
-*   Runs dependency health as a separate non-blocking job when enabled.
+*   Runs dependency health as a separate required job.
+*   Defaults the dependency-health threshold to ``--max-outdated=-1`` so
+    outdated packages stay visible in CI without failing the workflow on count
+    alone.
 *   Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.
 
 Fast Forward Changelog
