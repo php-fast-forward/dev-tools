@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776738431">
-  <project timestamp="1776738431" name="Clover Coverage">
+<coverage generated="1776738724">
+  <project timestamp="1776738724" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -858,10 +858,9 @@
         <class name="FastForward\DevTools\Console\Command\ChangelogCheckCommand" namespace="FastForward\DevTools\Console\Command">
           <metrics complexity="5" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="58" coveredstatements="58" elements="61" coveredelements="61"/>
         </class>
-        <line num="50" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="56" type="stmt" count="4"/>
-        <line num="62" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="4"/>
-        <line num="64" type="stmt" count="4"/>
+        <line num="51" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="57" type="stmt" count="4"/>
+        <line num="63" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="4"/>
         <line num="65" type="stmt" count="4"/>
         <line num="66" type="stmt" count="4"/>
         <line num="67" type="stmt" count="4"/>
@@ -880,18 +879,18 @@
         <line num="80" type="stmt" count="4"/>
         <line num="81" type="stmt" count="4"/>
         <line num="82" type="stmt" count="4"/>
-        <line num="91" type="method" name="execute" visibility="protected" complexity="3" crap="3" count="4"/>
-        <line num="94" type="stmt" count="4"/>
-        <line num="95" type="stmt" count="1"/>
+        <line num="83" type="stmt" count="4"/>
+        <line num="92" type="method" name="execute" visibility="protected" complexity="3" crap="3" count="4"/>
+        <line num="95" type="stmt" count="4"/>
         <line num="96" type="stmt" count="1"/>
-        <line num="98" type="stmt" count="1"/>
-        <line num="101" type="stmt" count="3"/>
+        <line num="97" type="stmt" count="1"/>
+        <line num="99" type="stmt" count="1"/>
         <line num="102" type="stmt" count="3"/>
-        <line num="104" type="stmt" count="3"/>
+        <line num="103" type="stmt" count="3"/>
         <line num="105" type="stmt" count="3"/>
-        <line num="107" type="stmt" count="3"/>
-        <line num="109" type="stmt" count="3"/>
-        <line num="110" type="stmt" count="2"/>
+        <line num="106" type="stmt" count="3"/>
+        <line num="108" type="stmt" count="3"/>
+        <line num="110" type="stmt" count="3"/>
         <line num="111" type="stmt" count="2"/>
         <line num="112" type="stmt" count="2"/>
         <line num="113" type="stmt" count="2"/>
@@ -904,8 +903,8 @@
         <line num="120" type="stmt" count="2"/>
         <line num="121" type="stmt" count="2"/>
         <line num="122" type="stmt" count="2"/>
-        <line num="124" type="stmt" count="2"/>
-        <line num="127" type="stmt" count="1"/>
+        <line num="123" type="stmt" count="2"/>
+        <line num="125" type="stmt" count="2"/>
         <line num="128" type="stmt" count="1"/>
         <line num="129" type="stmt" count="1"/>
         <line num="130" type="stmt" count="1"/>
@@ -918,8 +917,9 @@
         <line num="137" type="stmt" count="1"/>
         <line num="138" type="stmt" count="1"/>
         <line num="139" type="stmt" count="1"/>
-        <line num="141" type="stmt" count="1"/>
-        <metrics loc="144" ncloc="112" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="58" coveredstatements="58" elements="61" coveredelements="61"/>
+        <line num="140" type="stmt" count="1"/>
+        <line num="142" type="stmt" count="1"/>
+        <metrics loc="145" ncloc="113" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="58" coveredstatements="58" elements="61" coveredelements="61"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/ChangelogEntryCommand.php">
         <class name="FastForward\DevTools\Console\Command\ChangelogEntryCommand" namespace="FastForward\DevTools\Console\Command">
@@ -2731,9 +2731,15 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Output/OutputFormat.php">
         <class name="FastForward\DevTools\Console\Output\OutputFormat" namespace="FastForward\DevTools\Console\Output">
-          <metrics complexity="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+          <metrics complexity="3" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
         </class>
-        <metrics loc="30" ncloc="13" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+        <line num="33" type="method" name="defaultValue" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="35" type="stmt" count="4"/>
+        <line num="41" type="method" name="supportedValues" visibility="public" complexity="1" crap="1" count="4"/>
+        <line num="43" type="stmt" count="4"/>
+        <line num="51" type="method" name="isSupported" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="53" type="stmt" count="0"/>
+        <metrics loc="56" ncloc="28" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Output/OutputFormatResolver.php">
         <class name="FastForward\DevTools\Console\Output\OutputFormatResolver" namespace="FastForward\DevTools\Console\Output">
@@ -4108,6 +4114,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="117" loc="14728" ncloc="8430" classes="84" methods="372" coveredmethods="350" conditionals="0" coveredconditionals="0" statements="3059" coveredstatements="3027" elements="3431" coveredelements="3377"/>
+    <metrics files="117" loc="14755" ncloc="8446" classes="85" methods="375" coveredmethods="352" conditionals="0" coveredconditionals="0" statements="3062" coveredstatements="3029" elements="3437" coveredelements="3381"/>
   </project>
 </coverage>

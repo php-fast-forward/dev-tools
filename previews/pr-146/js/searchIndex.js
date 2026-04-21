@@ -2426,6 +2426,21 @@ Search.appendIndex(
             "summary": "Enumerates\u0020the\u0020supported\u0020command\u0020output\u0020formats.",
             "url": "classes/FastForward-DevTools-Console-Output-OutputFormat.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputFormat\u003A\u003AdefaultValue\u0028\u0029",
+            "name": "defaultValue",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-OutputFormat.html#method_defaultValue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputFormat\u003A\u003AsupportedValues\u0028\u0029",
+            "name": "supportedValues",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-OutputFormat.html#method_supportedValues"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputFormat\u003A\u003AisSupported\u0028\u0029",
+            "name": "isSupported",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-OutputFormat.html#method_isSupported"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputFormat\u003A\u003ATEXT",
             "name": "TEXT",
             "summary": "",
