@@ -1291,6 +1291,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogShowCommand.html#property_changelogManager"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand\u003A\u003A\u0024outputFormatResolver",
+            "name": "outputFormatResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogShowCommand.html#property_outputFormatResolver"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand\u003A\u003A\u0024commandResultRenderer",
+            "name": "commandResultRenderer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogShowCommand.html#property_commandResultRenderer"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
             "name": "CodeOwnersCommand",
             "summary": "Generates\u0020and\u0020synchronizes\u0020CODEOWNERS\u0020files\u0020from\u0020local\u0020project\u0020metadata.",

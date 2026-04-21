@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-21 03:20:19        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-21 03:24:33        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -288,8 +288,8 @@
             "Symfony\\Component\\Console\\Question",
             "FastForward\\DevTools\\CodeOwners",
             "FastForward\\DevTools\\Changelog\\Manager",
-            "FastForward\\DevTools\\Changelog\\Checker",
             "FastForward\\DevTools\\Console\\Output",
+            "FastForward\\DevTools\\Changelog\\Checker",
             "FastForward\\DevTools\\Git",
             "Symfony\\Component\\Filesystem",
             "Symfony\\Component\\Config",
@@ -392,6 +392,15 @@
         ]
     },
     {
+        "name": "FastForward\\DevTools\\Console\\Output",
+        "size": 3000,
+        "relations": [
+            "Symfony\\Component\\Console\\Input",
+            "Symfony\\Component\\Console\\Output",
+            "global"
+        ]
+    },
+    {
         "name": "FastForward\\DevTools\\Changelog\\Checker",
         "size": 3000,
         "relations": [
@@ -400,15 +409,6 @@
             "FastForward\\DevTools\\Changelog\\Parser",
             "FastForward\\DevTools\\Changelog\\Document",
             "FastForward\\DevTools\\Changelog\\Entry"
-        ]
-    },
-    {
-        "name": "FastForward\\DevTools\\Console\\Output",
-        "size": 3000,
-        "relations": [
-            "Symfony\\Component\\Console\\Input",
-            "Symfony\\Component\\Console\\Output",
-            "global"
         ]
     },
     {
