@@ -183,8 +183,9 @@ the same structured payload indented for manual inspection in a terminal.
 `--pretty-json` also implies JSON output, so there is no need to pass both
 flags together. In agent environments, DevTools can also switch to JSON
 automatically when the runtime is detected as agent-driven. For
-`changelog:show`, the default text mode still prints the raw release-notes
-body so release workflows can keep piping it directly into GitHub releases.
+`changelog:next-version` and `changelog:show`, the default text mode still
+prints raw values so release workflows can keep capturing semantic versions
+and piping rendered release notes directly into GitHub releases.
 
 Progress output is disabled by default on the commands that support transient
 rendering, and `--progress` re-enables it for human-readable terminal runs.

@@ -28,6 +28,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
@@ -77,6 +78,10 @@ final class ChangelogNextVersionCommandTest extends TestCase
             ->willReturn('CHANGELOG.md');
         $this->input->getOption('current-version')
             ->willReturn(null);
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->filesystem->getAbsolutePath('CHANGELOG.md')
             ->willReturn('/repo/CHANGELOG.md');
 
@@ -91,8 +96,26 @@ final class ChangelogNextVersionCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillReturnSuccessWithTheInferredVersion(): void
+    public function executeWillWriteTheInferredVersionToOutputInPlainTextMode(): void
     {
+        $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
+            ->willReturn('1.3.0');
+        $this->output->writeln('1.3.0')
+            ->shouldBeCalled();
+        $this->logger->log(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillLogTheInferredVersionWhenJsonOutputIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
         $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
             ->willReturn('1.3.0');
         $this->logger->log(
@@ -112,21 +135,16 @@ final class ChangelogNextVersionCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillPassTheExplicitCurrentVersionToInference(): void
+    public function executeWillPassTheExplicitCurrentVersionToInferenceInPlainTextMode(): void
     {
         $this->input->getOption('current-version')
             ->willReturn('1.2.3');
         $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', '1.2.3')
             ->willReturn('2.0.0');
-        $this->logger->log(
-            'info',
-            '2.0.0',
-            [
-                'input' => $this->input->reveal(),
-                'current_version' => '1.2.3',
-                'next_version' => '2.0.0',
-            ],
-        )->shouldBeCalled();
+        $this->output->writeln('2.0.0')
+            ->shouldBeCalled();
+        $this->logger->log(Argument::cetera())
+            ->shouldNotBeCalled();
 
         self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
     }

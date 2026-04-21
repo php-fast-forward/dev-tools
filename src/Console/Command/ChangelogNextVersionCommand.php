@@ -89,6 +89,14 @@ final class ChangelogNextVersionCommand extends BaseCommand implements LoggerAwa
             $currentVersion = $input->getOption('current-version');
             $nextVersion = $this->changelogManager->inferNextVersion($path, $currentVersion);
 
+            // This command is consumed via shell capture in changelog.yml, so
+            // plain-text mode MUST keep emitting the raw version string.
+            if (! $this->isJsonOutput($input)) {
+                $output->writeln($nextVersion);
+
+                return self::SUCCESS;
+            }
+
             return $this->success(
                 $nextVersion,
                 $input,

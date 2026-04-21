@@ -28,6 +28,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
@@ -66,6 +67,10 @@ final class ChangelogShowCommandTest extends TestCase
 
         $this->input->getOption('file')
             ->willReturn('CHANGELOG.md');
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->input->getArgument('version')
             ->willReturn('1.2.0');
         $this->filesystem->getAbsolutePath('CHANGELOG.md')
@@ -82,10 +87,31 @@ final class ChangelogShowCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillLogReleaseNotes(): void
+    public function executeWillWriteReleaseNotesToOutputInPlainTextMode(): void
     {
         $releaseNotes = "### Added\n\n- Ship it\n";
 
+        $this->changelogManager->renderReleaseNotes('/repo/CHANGELOG.md', '1.2.0')
+            ->willReturn($releaseNotes)
+            ->shouldBeCalled();
+        $this->output->write($releaseNotes)
+            ->shouldBeCalled();
+        $this->logger->log(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        self::assertSame(ChangelogShowCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillLogReleaseNotesWhenJsonOutputIsRequested(): void
+    {
+        $releaseNotes = "### Added\n\n- Ship it\n";
+
+        $this->input->getOption('json')
+            ->willReturn(true);
         $this->changelogManager->renderReleaseNotes('/repo/CHANGELOG.md', '1.2.0')
             ->willReturn($releaseNotes)
             ->shouldBeCalled();
