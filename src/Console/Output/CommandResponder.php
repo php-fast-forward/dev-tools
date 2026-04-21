@@ -39,6 +39,14 @@ final readonly class CommandResponder implements CommandResponderInterface
     ) {}
 
     /**
+     * @return OutputFormat the validated output format for this execution
+     */
+    public function format(): OutputFormat
+    {
+        return $this->format;
+    }
+
+    /**
      * @param string $message the human-readable summary
      * @param array<string, mixed> $context structured response context
      *

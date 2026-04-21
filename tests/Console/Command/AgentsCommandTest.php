@@ -22,6 +22,9 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use Composer\Console\Application;
 use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\AgentsCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
@@ -40,6 +43,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 #[CoversClass(AgentsCommand::class)]
+#[CoversClass(OutputFormat::class)]
 #[UsesClass(PackagedDirectorySynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
 final class AgentsCommandTest extends TestCase
@@ -76,6 +80,16 @@ final class AgentsCommandTest extends TestCase
      */
     private ObjectProphecy $io;
 
+    /**
+     * @var ObjectProphecy<CommandResponderFactoryInterface>
+     */
+    private ObjectProphecy $commandResponderFactory;
+
+    /**
+     * @var ObjectProphecy<CommandResponderInterface>
+     */
+    private ObjectProphecy $commandResponder;
+
     private AgentsCommand $command;
 
     /**
@@ -89,11 +103,17 @@ final class AgentsCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->application = $this->prophesize(Application::class);
         $this->io = $this->prophesize(IOInterface::class);
+        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
+        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
 
         $this->application->getHelperSet()
             ->willReturn(new HelperSet());
 
-        $this->command = new AgentsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
+        $this->command = new AgentsCommand(
+            $this->synchronizer->reveal(),
+            $this->filesystem->reveal(),
+            $this->commandResponderFactory->reveal(),
+        );
         $this->command->setApplication($this->application->reveal());
 
         $this->application->getIO()
@@ -102,6 +122,10 @@ final class AgentsCommandTest extends TestCase
             ->willReturn(getcwd() . '/.agents/agents');
         $this->filesystem->getAbsolutePath('.agents/agents')
             ->willReturn(getcwd() . '/.agents/agents');
+        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
+            ->willReturn($this->commandResponder->reveal());
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::TEXT);
     }
 
     /**
@@ -133,10 +157,17 @@ final class AgentsCommandTest extends TestCase
             ->willReturn(false);
         $this->output->writeln('<info>Starting agents synchronization...</info>')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>No packaged .agents/agents found at: ' . $agentsPath . '</comment>')
-            ->shouldBeCalledOnce();
         $this->synchronizer->setLogger(Argument::cetera())->shouldNotBeCalled();
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
+        $this->commandResponder->failure(
+            'No packaged .agents/agents found at: ' . $agentsPath,
+            [
+                'command' => 'agents',
+                'packaged_agents_path' => $agentsPath,
+                'agents_dir' => $agentsPath,
+                'directory_created' => false,
+            ],
+        )->willReturn(AgentsCommand::FAILURE)->shouldBeCalledOnce();
 
         self::assertSame(AgentsCommand::FAILURE, $this->invokeExecute());
     }
@@ -164,8 +195,15 @@ final class AgentsCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->output->writeln('<info>Created .agents/agents directory.</info>')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Agents synchronization completed successfully.</info>')
-            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Agents synchronization completed successfully.',
+            [
+                'command' => 'agents',
+                'packaged_agents_path' => $agentsPath,
+                'agents_dir' => $agentsPath,
+                'directory_created' => true,
+            ],
+        )->willReturn(AgentsCommand::SUCCESS)->shouldBeCalledOnce();
 
         self::assertSame(AgentsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -190,10 +228,50 @@ final class AgentsCommandTest extends TestCase
 
         $this->output->writeln('<info>Starting agents synchronization...</info>')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<error>Agents synchronization failed.</error>')
-            ->shouldBeCalledOnce();
+        $this->commandResponder->failure(
+            'Agents synchronization failed.',
+            [
+                'command' => 'agents',
+                'packaged_agents_path' => $agentsPath,
+                'agents_dir' => $agentsPath,
+                'directory_created' => false,
+            ],
+        )->willReturn(AgentsCommand::FAILURE)->shouldBeCalledOnce();
 
         self::assertSame(AgentsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSuppressProgressMessagesWhenJsonOutputIsRequested(): void
+    {
+        $agentsPath = getcwd() . '/.agents/agents';
+        $result = new SynchronizeResult();
+
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::JSON);
+        $this->filesystem->exists($agentsPath)
+            ->willReturn(true, true);
+        $this->synchronizer->setLogger($this->io->reveal())
+            ->shouldBeCalledOnce();
+        $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
+            ->willReturn($result)
+            ->shouldBeCalledOnce();
+        $this->output->writeln(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->commandResponder->success(
+            'Agents synchronization completed successfully.',
+            [
+                'command' => 'agents',
+                'packaged_agents_path' => $agentsPath,
+                'agents_dir' => $agentsPath,
+                'directory_created' => false,
+            ],
+        )->willReturn(AgentsCommand::SUCCESS)->shouldBeCalledOnce();
+
+        self::assertSame(AgentsCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**

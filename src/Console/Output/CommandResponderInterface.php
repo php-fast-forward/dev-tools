@@ -25,6 +25,13 @@ namespace FastForward\DevTools\Console\Output;
 interface CommandResponderInterface
 {
     /**
+     * Returns the resolved output format for this execution.
+     *
+     * @return OutputFormat the validated output format
+     */
+    public function format(): OutputFormat;
+
+    /**
      * Renders a success response and returns the selected exit code.
      *
      * @param string $message the human-readable summary
