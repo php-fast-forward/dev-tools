@@ -72,8 +72,8 @@ final class CodeStyleCommandTest extends TestCase
 
         $this->input->getOption('fix')
             ->willReturn(false);
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()
@@ -152,8 +152,8 @@ final class CodeStyleCommandTest extends TestCase
     #[Test]
     public function executeWillCaptureBufferedOutputWhenJsonIsRequested(): void
     {
-        $this->input->getOption('output-format')
-            ->willReturn('json');
+        $this->input->getOption('json')
+            ->willReturn(true);
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();

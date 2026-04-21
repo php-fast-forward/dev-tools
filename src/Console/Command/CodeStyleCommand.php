@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -41,6 +42,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class CodeStyleCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @var string the default configuration file used for EasyCodingStandard
      */
@@ -78,19 +81,12 @@ final class CodeStyleCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
                 description: 'Automatically fix code style issues.'
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -107,7 +103,7 @@ final class CodeStyleCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $fix = (bool) $input->getOption('fix');

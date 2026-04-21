@@ -62,8 +62,8 @@ final class SyncCommandTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
 
         $this->input->getOption(Argument::type('string'))->willReturn(false);
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
 
         $this->command = new SyncCommand(
             new ProcessBuilder(),
@@ -134,13 +134,11 @@ final class SyncCommandTest extends TestCase
     #[Test]
     public function executeWillPropagateJsonOutputFormatToSubCommands(): void
     {
-        $this->input->getOption('output-format')
-            ->willReturn('json');
+        $this->input->getOption('json')
+            ->willReturn(true);
         $this->processQueue->add(Argument::type(Process::class), false, false)->shouldBeCalledTimes(2);
         $this->processQueue->add(
-            Argument::that(
-                static fn(Process $process): bool => str_contains($process->getCommandLine(), '--output-format=json')
-            ),
+            Argument::that(static fn(Process $process): bool => str_contains($process->getCommandLine(), '--json')),
             false,
             true,
         )->shouldBeCalledTimes(11);

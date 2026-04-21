@@ -89,8 +89,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn('tmp/cache/phpdoc');
         $this->input->getOption('init')
             ->willReturn(false);
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -47,6 +48,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class PhpDocCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @var string determines the template filename for docheaders
      */
@@ -97,7 +100,7 @@ final class PhpDocCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'path',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -115,13 +118,6 @@ final class PhpDocCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the cache directory for PHP-CS-Fixer.',
                 default: 'tmp/cache/php-cs-fixer',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -138,7 +134,7 @@ final class PhpDocCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
 

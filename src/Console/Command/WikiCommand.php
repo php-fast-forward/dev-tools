@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -47,6 +48,8 @@ use function Safe\getcwd;
 )]
 final class WikiCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * Creates a new WikiCommand instance.
      *
@@ -78,7 +81,7 @@ final class WikiCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'target',
                 shortcut: 't',
@@ -96,13 +99,6 @@ final class WikiCommand extends BaseCommand
                 name: 'init',
                 mode: InputOption::VALUE_NONE,
                 description: 'Initialize the configured wiki target as a Git submodule.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -119,7 +115,7 @@ final class WikiCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
 

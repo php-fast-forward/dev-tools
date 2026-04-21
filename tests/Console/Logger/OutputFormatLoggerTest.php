@@ -135,7 +135,7 @@ final class OutputFormatLoggerTest extends TestCase
     public function logWillWriteStructuredJsonWhenJsonOutputIsRequested(): void
     {
         $logger = new OutputFormatLogger(
-            new ArgvInput(['dev-tools', '--output-format=json']),
+            new ArgvInput(['dev-tools', '--json']),
             $this->output->reveal(),
             $this->clock->reveal(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),

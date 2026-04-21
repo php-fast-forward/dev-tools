@@ -72,8 +72,8 @@ final class MetricsCommandTest extends TestCase
             ->willReturn('.dev-tools/metrics');
         $this->input->getOption('junit')
             ->willReturn(null);
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()

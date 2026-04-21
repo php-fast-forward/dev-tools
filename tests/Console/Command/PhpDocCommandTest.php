@@ -98,8 +98,8 @@ final class PhpDocCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('cache-dir')
             ->willReturn('tmp/cache/php-cs-fixer');
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()

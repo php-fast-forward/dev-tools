@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -40,6 +41,8 @@ use Symfony\Component\Filesystem\Path;
 )]
 final class SyncCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @param ProcessBuilderInterface $processBuilder
      * @param ProcessQueueInterface $processQueue
@@ -58,7 +61,7 @@ final class SyncCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'overwrite',
                 shortcut: 'o',
@@ -79,13 +82,6 @@ final class SyncCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before applying managed-file replacements.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -95,7 +91,7 @@ final class SyncCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $overwrite = (bool) $input->getOption('overwrite');
         $dryRun = (bool) $input->getOption('dry-run');
@@ -199,8 +195,8 @@ final class SyncCommand extends BaseCommand
         $processBuilder = $this->processBuilder;
         $arguments = array_filter($arguments, static fn(?string $arg): bool => null !== $arg);
 
-        if ($jsonOutput && ! \in_array('--output-format=json', $arguments, true)) {
-            $arguments[] = '--output-format=json';
+        if ($jsonOutput && ! \in_array('--json', $arguments, true)) {
+            $arguments[] = '--json';
         }
 
         foreach ($arguments as $argument) {

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
@@ -41,6 +42,8 @@ use Symfony\Component\Console\Question\Question;
 )]
 final class CodeOwnersCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * Creates a new command instance.
      *
@@ -63,7 +66,7 @@ final class CodeOwnersCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'file',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -90,13 +93,6 @@ final class CodeOwnersCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt for owners and confirmation before replacing CODEOWNERS.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

@@ -73,8 +73,8 @@ final class ReportsCommandTest extends TestCase
             ->willReturn('.dev-tools/coverage');
         $this->input->getOption('metrics')
             ->willReturn('.dev-tools/metrics');
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()
@@ -123,8 +123,8 @@ final class ReportsCommandTest extends TestCase
     #[Test]
     public function executeWillCaptureBufferedOutputWhenJsonIsRequested(): void
     {
-        $this->input->getOption('output-format')
-            ->willReturn('json');
+        $this->input->getOption('json')
+            ->willReturn(true);
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(ReportsCommand::FAILURE)

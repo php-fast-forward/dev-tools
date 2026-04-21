@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
@@ -48,6 +49,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 )]
 final class GitIgnoreCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @var string the default filename for .gitignore files
      */
@@ -82,7 +85,7 @@ final class GitIgnoreCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'source',
                 shortcut: 's',
@@ -111,13 +114,6 @@ final class GitIgnoreCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before updating .gitignore.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

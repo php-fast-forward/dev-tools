@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
@@ -42,6 +43,8 @@ use Symfony\Component\Filesystem\Path;
 )]
 final class GitHooksCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * Creates a new GitHooksCommand instance.
      *
@@ -66,7 +69,7 @@ final class GitHooksCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'source',
                 shortcut: 's',
@@ -100,13 +103,6 @@ final class GitHooksCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before replacing drifted Git hooks.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

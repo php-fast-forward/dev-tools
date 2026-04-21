@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use Twig\Environment;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -45,6 +46,8 @@ use function Safe\getcwd;
 )]
 final class DocsCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * Creates a new DocsCommand instance.
      *
@@ -76,7 +79,7 @@ final class DocsCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'target',
                 shortcut: 't',
@@ -102,13 +105,6 @@ final class DocsCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the cache directory for phpDocumentor.',
                 default: 'tmp/cache/phpdoc',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -125,7 +121,7 @@ final class DocsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $source = $this->filesystem->getAbsolutePath($input->getOption('source'));

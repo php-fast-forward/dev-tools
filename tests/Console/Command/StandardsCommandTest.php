@@ -60,8 +60,8 @@ final class StandardsCommandTest extends TestCase
 
         $this->input->getOption('fix')
             ->willReturn(false);
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
         $this->application->getHelperSet()
             ->willReturn(new HelperSet());
 

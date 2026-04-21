@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
@@ -47,6 +48,8 @@ use function is_numeric;
 )]
 final class DependenciesCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';
 
     private const int DISABLE_OUTDATED_THRESHOLD = -1;
@@ -71,7 +74,7 @@ final class DependenciesCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'max-outdated',
                 mode: InputOption::VALUE_REQUIRED,
@@ -92,13 +95,6 @@ final class DependenciesCommand extends BaseCommand
                 name: 'dump-usage',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Dump usages for the given package pattern and show all matched usages.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -112,7 +108,7 @@ final class DependenciesCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         try {

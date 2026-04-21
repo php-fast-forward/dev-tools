@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -38,6 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogNextVersionCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
@@ -56,7 +59,7 @@ final class ChangelogNextVersionCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'file',
                 mode: InputOption::VALUE_REQUIRED,
@@ -67,13 +70,6 @@ final class ChangelogNextVersionCommand extends BaseCommand
                 name: 'current-version',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Explicit current version to use as the bump base.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

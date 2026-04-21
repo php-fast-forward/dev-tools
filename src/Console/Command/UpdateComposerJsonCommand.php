@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use Composer\Factory;
 use Composer\Json\JsonManipulator;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
@@ -46,6 +47,8 @@ use function Safe\getcwd;
 )]
 final class UpdateComposerJsonCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * Creates a new UpdateComposerJsonCommand instance.
      *
@@ -70,7 +73,7 @@ final class UpdateComposerJsonCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'file',
                 shortcut: 'f',
@@ -92,13 +95,6 @@ final class UpdateComposerJsonCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before updating composer.json.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

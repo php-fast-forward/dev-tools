@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Document\ChangelogDocument;
 use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -41,6 +42,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogEntryCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
@@ -59,7 +62,7 @@ final class ChangelogEntryCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'message',
                 mode: InputArgument::REQUIRED,
@@ -92,13 +95,6 @@ final class ChangelogEntryCommand extends BaseCommand
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Path to the changelog file.',
                 default: 'CHANGELOG.md',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

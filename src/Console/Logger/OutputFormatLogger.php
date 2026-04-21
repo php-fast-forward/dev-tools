@@ -36,8 +36,8 @@ use function Safe\json_encode;
  *
  * This logger writes messages to the Symfony console output streams and SHALL
  * route error-related log levels to stderr. Non-error log levels SHALL be
- * written to the standard output stream. When the "--output-format=json"
- * option is present, this logger MUST serialize the message payload as JSON.
+ * written to the standard output stream. When the "--json" option is present,
+ * this logger MUST serialize the message payload as JSON.
  *
  * The implementation SHOULD be used in CLI environments where an ArgvInput and
  * a ConsoleOutputInterface are available. Callers MAY rely on placeholder
@@ -138,19 +138,14 @@ final readonly class OutputFormatLogger implements LoggerInterface
     /**
      * Determines whether JSON output has been requested.
      *
-     * The "--output-format" option MAY be provided by the caller. When its
-     * value is exactly "json", this method SHALL return true. Any other value,
-     * or the absence of the option, MUST result in false.
+     * The "--json" option MAY be provided by the caller. When present, this
+     * method SHALL return true. Otherwise, it MUST return false.
      *
      * @return bool true when JSON output is enabled; otherwise, false
      */
     private function isJsonOutput(): bool
     {
-        $format = $this->input->hasParameterOption('--output-format', true)
-            ? $this->input->getParameterOption('--output-format', null, true)
-            : null;
-
-        return 'json' === $format;
+        return $this->input->hasParameterOption('--json', true);
     }
 
     /**

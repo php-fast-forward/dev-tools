@@ -86,8 +86,8 @@ final class DocsCommandTest extends TestCase
             ->willReturn('tmp/cache/phpdoc');
         $this->input->getOption('template')
             ->willReturn('vendor/fast-forward/phpdoc-bootstrap-template');
-        $this->input->getOption('output-format')
-            ->willReturn('text');
+        $this->input->getOption('json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()

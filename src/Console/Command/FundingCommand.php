@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use Composer\Factory;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Funding\ComposerFundingCodec;
 use FastForward\DevTools\Funding\FundingProfileMerger;
@@ -45,6 +46,8 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 )]
 final class FundingCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * Creates a new FundingCommand instance.
      *
@@ -75,7 +78,7 @@ final class FundingCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'composer-file',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -102,13 +105,6 @@ final class FundingCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before applying funding metadata updates.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

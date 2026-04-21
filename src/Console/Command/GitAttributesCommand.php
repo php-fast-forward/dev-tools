@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
@@ -52,6 +53,8 @@ use function Safe\getcwd;
 )]
 final class GitAttributesCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     private const string FILENAME = '.gitattributes';
 
     private const string EXTRA_NAMESPACE = 'gitattributes';
@@ -94,7 +97,7 @@ final class GitAttributesCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'dry-run',
                 mode: InputOption::VALUE_NONE,
@@ -109,13 +112,6 @@ final class GitAttributesCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before updating .gitattributes.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

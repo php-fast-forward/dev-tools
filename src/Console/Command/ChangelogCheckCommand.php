@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -38,6 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogCheckCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker
@@ -56,7 +59,7 @@ final class ChangelogCheckCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'against',
                 mode: InputOption::VALUE_REQUIRED,
@@ -67,13 +70,6 @@ final class ChangelogCheckCommand extends BaseCommand
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Path to the changelog file.',
                 default: 'CHANGELOG.md',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 

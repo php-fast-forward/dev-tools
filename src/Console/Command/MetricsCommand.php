@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -38,6 +39,8 @@ use function rtrim;
 )]
 final class MetricsCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @var string the bundled PhpMetrics binary path relative to the consumer root
      */
@@ -66,7 +69,7 @@ final class MetricsCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'exclude',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -83,13 +86,6 @@ final class MetricsCommand extends BaseCommand
                 name: 'junit',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Optional target file for the generated JUnit XML report.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -101,7 +97,7 @@ final class MetricsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $target = rtrim((string) $input->getOption('target'), '/');

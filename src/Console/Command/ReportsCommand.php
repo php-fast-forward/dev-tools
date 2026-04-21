@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use Composer\Console\Input\InputOption;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -40,6 +41,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ReportsCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * Initializes the command with required dependencies.
      *
@@ -60,7 +63,7 @@ final class ReportsCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -79,13 +82,6 @@ final class ReportsCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Generate code metrics and optionally choose the HTML output directory.',
                 default: '.dev-tools/metrics',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -102,7 +98,7 @@ final class ReportsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
         $coveragePath = (string) $input->getOption('coverage');
@@ -116,7 +112,7 @@ final class ReportsCommand extends BaseCommand
             ->withArgument('--target', $target);
 
         if ($jsonOutput) {
-            $docsBuilder = $docsBuilder->withArgument('--output-format', 'json');
+            $docsBuilder = $docsBuilder->withArgument('--json');
         }
 
         $docs = $docsBuilder->build('composer dev-tools docs --');
@@ -127,7 +123,7 @@ final class ReportsCommand extends BaseCommand
             ->withArgument('--coverage', $coveragePath);
 
         if ($jsonOutput) {
-            $coverageBuilder = $coverageBuilder->withArgument('--output-format', 'json');
+            $coverageBuilder = $coverageBuilder->withArgument('--json');
         }
 
         $coverage = $coverageBuilder->build('composer dev-tools tests --');
@@ -137,7 +133,7 @@ final class ReportsCommand extends BaseCommand
             ->withArgument('--target', $metricsPath);
 
         if ($jsonOutput) {
-            $metricsBuilder = $metricsBuilder->withArgument('--output-format', 'json');
+            $metricsBuilder = $metricsBuilder->withArgument('--json');
         }
 
         $metrics = $metricsBuilder->build('composer dev-tools metrics --');

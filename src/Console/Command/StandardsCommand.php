@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,6 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class StandardsCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @param LoggerInterface $logger
      */
@@ -55,19 +58,12 @@ final class StandardsCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
                 description: 'Automatically fix code standards issues.'
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -77,11 +73,11 @@ final class StandardsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
         $results = [];
         $commands = [];
-        $formatArgument = $jsonOutput ? ' --output-format=json' : '';
+        $formatArgument = $jsonOutput ? ' --json' : '';
 
         $this->logger->info('Running code standards checks...', [
             'input' => $input,

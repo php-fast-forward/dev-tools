@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
@@ -49,6 +50,8 @@ use function is_numeric;
 )]
 final class TestsCommand extends BaseCommand
 {
+    use HasJsonOption;
+
     /**
      * @var string identifies the local configuration file for PHPUnit processes
      */
@@ -85,7 +88,7 @@ final class TestsCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'path',
                 mode: InputArgument::OPTIONAL,
@@ -136,13 +139,6 @@ final class TestsCommand extends BaseCommand
                 name: 'no-progress',
                 mode: InputOption::VALUE_NONE,
                 description: 'Whether to disable progress output from PHPUnit.',
-            )
-            ->addOption(
-                name: 'output-format',
-                mode: InputOption::VALUE_REQUIRED,
-                description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -159,7 +155,7 @@ final class TestsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $jsonOutput = (bool) $input->getOption('json');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $this->logger->info('Running PHPUnit tests...', [
