@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776747002">
-  <project timestamp="1776747002" name="Clover Coverage">
+<coverage generated="1776747142">
+  <project timestamp="1776747142" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -2235,36 +2235,67 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/RefactorCommand.php">
         <class name="FastForward\DevTools\Console\Command\RefactorCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="4" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="27" coveredelements="27"/>
+          <metrics complexity="9" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="58" coveredelements="58"/>
         </class>
-        <line num="55" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="60" type="stmt" count="4"/>
-        <line num="71" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="4"/>
-        <line num="73" type="stmt" count="4"/>
-        <line num="74" type="stmt" count="4"/>
-        <line num="75" type="stmt" count="4"/>
-        <line num="76" type="stmt" count="4"/>
-        <line num="77" type="stmt" count="4"/>
-        <line num="78" type="stmt" count="4"/>
-        <line num="79" type="stmt" count="4"/>
-        <line num="80" type="stmt" count="4"/>
-        <line num="81" type="stmt" count="4"/>
-        <line num="82" type="stmt" count="4"/>
-        <line num="83" type="stmt" count="4"/>
-        <line num="84" type="stmt" count="4"/>
-        <line num="85" type="stmt" count="4"/>
-        <line num="86" type="stmt" count="4"/>
-        <line num="100" type="method" name="execute" visibility="protected" complexity="2" crap="2" count="2"/>
-        <line num="102" type="stmt" count="2"/>
-        <line num="104" type="stmt" count="2"/>
-        <line num="105" type="stmt" count="2"/>
-        <line num="106" type="stmt" count="2"/>
-        <line num="107" type="stmt" count="2"/>
-        <line num="109" type="stmt" count="2"/>
-        <line num="110" type="stmt" count="1"/>
-        <line num="113" type="stmt" count="2"/>
-        <line num="115" type="stmt" count="2"/>
-        <metrics loc="118" ncloc="71" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="24" coveredstatements="24" elements="27" coveredelements="27"/>
+        <line num="63" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
+        <line num="69" type="stmt" count="5"/>
+        <line num="80" type="method" name="configure" visibility="protected" complexity="1" crap="1" count="5"/>
+        <line num="82" type="stmt" count="5"/>
+        <line num="83" type="stmt" count="5"/>
+        <line num="84" type="stmt" count="5"/>
+        <line num="85" type="stmt" count="5"/>
+        <line num="86" type="stmt" count="5"/>
+        <line num="87" type="stmt" count="5"/>
+        <line num="88" type="stmt" count="5"/>
+        <line num="89" type="stmt" count="5"/>
+        <line num="90" type="stmt" count="5"/>
+        <line num="91" type="stmt" count="5"/>
+        <line num="92" type="stmt" count="5"/>
+        <line num="93" type="stmt" count="5"/>
+        <line num="94" type="stmt" count="5"/>
+        <line num="95" type="stmt" count="5"/>
+        <line num="96" type="stmt" count="5"/>
+        <line num="97" type="stmt" count="5"/>
+        <line num="98" type="stmt" count="5"/>
+        <line num="99" type="stmt" count="5"/>
+        <line num="100" type="stmt" count="5"/>
+        <line num="101" type="stmt" count="5"/>
+        <line num="102" type="stmt" count="5"/>
+        <line num="116" type="method" name="execute" visibility="protected" complexity="7" crap="7" count="3"/>
+        <line num="118" type="stmt" count="3"/>
+        <line num="119" type="stmt" count="3"/>
+        <line num="120" type="stmt" count="3"/>
+        <line num="121" type="stmt" count="3"/>
+        <line num="123" type="stmt" count="3"/>
+        <line num="124" type="stmt" count="2"/>
+        <line num="127" type="stmt" count="3"/>
+        <line num="128" type="stmt" count="3"/>
+        <line num="129" type="stmt" count="3"/>
+        <line num="130" type="stmt" count="3"/>
+        <line num="132" type="stmt" count="3"/>
+        <line num="133" type="stmt" count="2"/>
+        <line num="136" type="stmt" count="3"/>
+        <line num="138" type="stmt" count="3"/>
+        <line num="140" type="stmt" count="3"/>
+        <line num="141" type="stmt" count="3"/>
+        <line num="142" type="stmt" count="3"/>
+        <line num="143" type="stmt" count="3"/>
+        <line num="144" type="stmt" count="3"/>
+        <line num="145" type="stmt" count="3"/>
+        <line num="146" type="stmt" count="3"/>
+        <line num="147" type="stmt" count="3"/>
+        <line num="148" type="stmt" count="3"/>
+        <line num="149" type="stmt" count="3"/>
+        <line num="150" type="stmt" count="3"/>
+        <line num="151" type="stmt" count="3"/>
+        <line num="152" type="stmt" count="3"/>
+        <line num="153" type="stmt" count="3"/>
+        <line num="154" type="stmt" count="3"/>
+        <line num="155" type="stmt" count="3"/>
+        <line num="156" type="stmt" count="3"/>
+        <line num="157" type="stmt" count="3"/>
+        <line num="158" type="stmt" count="3"/>
+        <metrics loc="161" ncloc="109" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="55" coveredstatements="55" elements="58" coveredelements="58"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/ReportsCommand.php">
         <class name="FastForward\DevTools\Console\Command\ReportsCommand" namespace="FastForward\DevTools\Console\Command">
@@ -2924,10 +2955,10 @@
         <class name="FastForward\DevTools\Console\Output\OutputFormat" namespace="FastForward\DevTools\Console\Output">
           <metrics complexity="3" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
         </class>
-        <line num="33" type="method" name="defaultValue" visibility="public" complexity="1" crap="1" count="35"/>
-        <line num="35" type="stmt" count="35"/>
-        <line num="41" type="method" name="supportedValues" visibility="public" complexity="1" crap="1" count="35"/>
-        <line num="43" type="stmt" count="35"/>
+        <line num="33" type="method" name="defaultValue" visibility="public" complexity="1" crap="1" count="40"/>
+        <line num="35" type="stmt" count="40"/>
+        <line num="41" type="method" name="supportedValues" visibility="public" complexity="1" crap="1" count="40"/>
+        <line num="43" type="stmt" count="40"/>
         <line num="51" type="method" name="isSupported" visibility="public" complexity="1" crap="2" count="0"/>
         <line num="53" type="stmt" count="0"/>
         <metrics loc="56" ncloc="28" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="3" coveredstatements="2" elements="6" coveredelements="4"/>
@@ -4312,6 +4343,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="121" loc="15196" ncloc="8740" classes="87" methods="383" coveredmethods="359" conditionals="0" coveredconditionals="0" statements="3234" coveredstatements="3200" elements="3617" coveredelements="3559"/>
+    <metrics files="121" loc="15239" ncloc="8778" classes="87" methods="383" coveredmethods="359" conditionals="0" coveredconditionals="0" statements="3265" coveredstatements="3231" elements="3648" coveredelements="3590"/>
   </project>
 </coverage>

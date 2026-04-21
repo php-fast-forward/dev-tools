@@ -2056,6 +2056,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-RefactorCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\RefactorCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-RefactorCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand",
             "name": "ReportsCommand",
             "summary": "Coordinates\u0020the\u0020generation\u0020of\u0020Fast\u0020Forward\u0020documentation\u0020frontpage\u0020and\u0020related\u0020reports.",
