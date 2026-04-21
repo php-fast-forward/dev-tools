@@ -24,12 +24,16 @@ use LogicException;
 use Psr\Log\LoggerInterface;
 
 /**
- * Resolves and validates the logger required by command logging helpers.
+ * Resolves the logger expected by command result helper traits.
+ *
+ * The consuming command is expected to expose an initialized `$logger`
+ * property so reusable traits can log without coupling themselves to a
+ * specific constructor signature.
  */
 trait HasCommandLogger
 {
     /**
-     * Resolves the logger required by the consuming command.
+     * Returns the logger configured on the consuming command.
      *
      * @throws LogicException when the consuming command does not expose a valid logger property
      */

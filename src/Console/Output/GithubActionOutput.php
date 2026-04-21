@@ -23,7 +23,11 @@ use Composer\Util\Platform;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 /**
- * Emits GitHub Actions workflow commands when the current environment supports them.
+ * Emits GitHub Actions workflow commands through the console output stream.
+ *
+ * The helper becomes a no-op outside GitHub Actions, which lets callers route
+ * annotations and log groups through a single API without branching on the
+ * environment first.
  */
 final class GithubActionOutput
 {
@@ -47,7 +51,7 @@ final class GithubActionOutput
     }
 
     /**
-     * Emits an error annotation.
+     * Emits an error annotation for the current workflow step.
      *
      * @param string $message the annotation message
      * @param string|null $file the related file when known
@@ -76,7 +80,7 @@ final class GithubActionOutput
     }
 
     /**
-     * Emits a warning annotation.
+     * Emits a warning annotation for the current workflow step.
      *
      * @param string $message the annotation message
      * @param string|null $file the related file when known
@@ -105,7 +109,7 @@ final class GithubActionOutput
     }
 
     /**
-     * Emits a notice annotation.
+     * Emits a notice annotation for the current workflow step.
      *
      * @param string $message the annotation message
      * @param string|null $file the related file when known
@@ -134,7 +138,7 @@ final class GithubActionOutput
     }
 
     /**
-     * Emits a debug log line.
+     * Emits a debug workflow command.
      *
      * @param string $message the debug message
      *
@@ -146,7 +150,7 @@ final class GithubActionOutput
     }
 
     /**
-     * Starts a collapsible log group.
+     * Starts a collapsible GitHub Actions log group.
      *
      * @param string $title the group title
      *
@@ -199,11 +203,11 @@ final class GithubActionOutput
     }
 
     /**
+     * Emits a raw workflow command after escaping its properties and payload.
+     *
      * @param string $command the GitHub workflow command name
      * @param string $message the command message
      * @param array<string, string> $properties the optional command properties
-     *
-     * @return void
      */
     private function emit(string $command, string $message = '', array $properties = []): void
     {
@@ -232,6 +236,11 @@ final class GithubActionOutput
     }
 
     /**
+     * Determines whether workflow commands should be emitted for the current process.
+     *
+     * The helper suppresses workflow commands during the PHPUnit suite even
+     * when the tests themselves run inside GitHub Actions.
+     *
      * @return bool true when the current environment supports GitHub workflow commands
      */
     private function supportsWorkflowCommands(): bool
@@ -241,9 +250,9 @@ final class GithubActionOutput
     }
 
     /**
-     * @param string $data
+     * Escapes workflow-command payload data according to GitHub Actions rules.
      *
-     * @return string
+     * @param string $data
      */
     private function escapeData(string $data): string
     {
@@ -254,9 +263,9 @@ final class GithubActionOutput
     }
 
     /**
-     * @param string $property
+     * Escapes workflow-command property values according to GitHub Actions rules.
      *
-     * @return string
+     * @param string $property
      */
     private function escapeProperty(string $property): string
     {

@@ -43,10 +43,9 @@ use Symfony\Component\Process\Process;
  * as a startup failure and MAY affect the final status code unless its failure
  * is explicitly configured to be ignored.
  *
- * To ensure detached processes finish gracefully without being killed when the
- * main PHP script ends, the queue automatically registers a shutdown handler
- * during instantiation that implicitly awaits all detached processes. They can
- * also be awaited explicitly via `wait()`.
+ * Buffered detached output is flushed only after the blocking portion of the
+ * queue has finished, which keeps later process output from interleaving with
+ * currently running blocking commands.
  */
 final class ProcessQueue implements ProcessQueueInterface
 {
@@ -68,7 +67,7 @@ final class ProcessQueue implements ProcessQueueInterface
     private array $runningDetachedProcesses = [];
 
     /**
-     * @param GithubActionOutput $githubActionOutput
+     * @param GithubActionOutput $githubActionOutput wraps grouped queue output in GitHub Actions logs when supported
      */
     public function __construct(
         private readonly GithubActionOutput $githubActionOutput,
@@ -157,7 +156,7 @@ final class ProcessQueue implements ProcessQueueInterface
     }
 
     /**
-     * Waits for all detached processes to finish execution.
+     * Waits for detached processes to finish and flushes completed buffered output.
      *
      * @param ?OutputInterface $output the output interface to which process output and diagnostics MAY be written
      */
@@ -181,7 +180,7 @@ final class ProcessQueue implements ProcessQueueInterface
      * sequence completes without throwing an exception.
      *
      * @param Process $process the process to start
-     * @param ?string $label an optional label that MAY be used when presenting the buffered output
+     * @param string $label the label used when presenting the buffered output
      *
      * @return int returns 0 when the process starts successfully, or a non-zero
      *             value when startup fails
@@ -226,7 +225,7 @@ final class ProcessQueue implements ProcessQueueInterface
     }
 
     /**
-     * Runs a blocking process and wraps it in a GitHub Actions group when labeled.
+     * Runs a blocking process inside a grouped GitHub Actions log section.
      *
      * @param Process $process the process to execute
      * @param OutputInterface $output the output that SHALL receive process output
@@ -290,7 +289,7 @@ final class ProcessQueue implements ProcessQueueInterface
     }
 
     /**
-     * Flushes all buffered detached process output in enqueue order.
+     * Flushes completed detached process output in enqueue order.
      *
      * @param OutputInterface $output the output that SHALL receive detached process output
      *
@@ -353,7 +352,7 @@ final class ProcessQueue implements ProcessQueueInterface
     }
 
     /**
-     * Resolves the label that SHOULD be used when presenting queued process output.
+     * Resolves the label used when presenting queued process output.
      *
      * @param Process $process the queued process instance
      * @param ?string $label the optional label provided by the caller
@@ -389,6 +388,10 @@ final class ProcessQueue implements ProcessQueueInterface
 
     /**
      * Reads the raw configured Process command line.
+     *
+     * Symfony keeps the configured command line in a private property, so the
+     * queue reads it reflectively to build a cleaner default label than the
+     * shell-escaped output returned by `Process::getCommandLine()`.
      *
      * @param Process $process the queued process instance
      *

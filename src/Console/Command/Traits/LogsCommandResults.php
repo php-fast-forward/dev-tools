@@ -24,14 +24,18 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 
 /**
- * Provides reusable success and failure helpers for command logging.
+ * Provides reusable helpers for logging command outcomes and returning exit codes.
+ *
+ * Consuming commands stay focused on orchestration while this trait keeps the
+ * success, notice, and failure logging shape consistent across the command
+ * surface.
  */
 trait LogsCommandResults
 {
     use HasCommandLogger;
 
     /**
-     * Logs a notice-level command message.
+     * Logs an informational command message at notice level.
      *
      * @param string $message the notice message
      * @param InputInterface $input the originating command input
@@ -49,7 +53,7 @@ trait LogsCommandResults
     }
 
     /**
-     * Logs a successful command result and returns a success exit code.
+     * Logs a successful command result and returns the success exit code.
      *
      * @param string $message the success message
      * @param InputInterface $input the originating command input
@@ -76,7 +80,7 @@ trait LogsCommandResults
     }
 
     /**
-     * Logs a failed command result and returns a failure exit code.
+     * Logs a failed command result and returns the failure exit code.
      *
      * @param string $message the failure message
      * @param InputInterface $input the originating command input

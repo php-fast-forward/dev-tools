@@ -154,7 +154,7 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
 
         $this->notice($comparison->getSummary(), $input, [
             'target_path' => $merged->path(),
-        ],);
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());

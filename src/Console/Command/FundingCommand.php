@@ -283,7 +283,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
         )) {
             $this->notice('Skipped updating {composer_file}.', $input, [
                 'composer_file' => $composerFile,
-            ],);
+            ]);
 
             return $this->success(
                 'Funding synchronization was skipped for {composer_file}.',
@@ -386,7 +386,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
         $this->logger->notice($comparison->getSummary(), [
             'input' => $input,
             'funding_file' => $fundingFile,
-        ],);
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
@@ -438,7 +438,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($input, $output, $fundingFile)) {
             $this->notice('Skipped updating {funding_file}.', $input, [
                 'funding_file' => $fundingFile,
-            ],);
+            ]);
 
             return $this->success(
                 'Funding synchronization was skipped for {funding_file}.',

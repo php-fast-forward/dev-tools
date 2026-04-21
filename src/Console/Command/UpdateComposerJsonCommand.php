@@ -163,7 +163,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
                 $this->notice($consoleDiff, $input, [
                     'file' => $file,
                     'diff' => $comparison->getDiff(),
-                ],);
+                ]);
             }
         }
 
@@ -189,7 +189,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
 
         return $this->success('Updated composer.json dev-tools configuration.', $input, [
             'file' => $file,
-        ],);
+        ]);
     }
 
     /**

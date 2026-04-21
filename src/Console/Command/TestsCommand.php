@@ -170,7 +170,7 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
         } catch (InvalidArgumentException $invalidArgumentException) {
             return $this->failure($invalidArgumentException->getMessage(), $input, [
                 'output' => $processOutput,
-            ],);
+            ]);
         }
 
         $processBuilder = $this->processBuilder

@@ -22,12 +22,15 @@ namespace FastForward\DevTools\Console\Command;
 use Psr\Log\LoggerInterface;
 
 /**
- * Defines the logger contract expected by reusable command logging helpers.
+ * Defines the logger contract consumed by reusable command result helpers.
+ *
+ * Commands that compose shared logging traits expose their logger through this
+ * interface so the traits can stay agnostic of the concrete command class.
  */
 interface LoggerAwareCommandInterface
 {
     /**
-     * Returns the logger used by the command.
+     * Returns the logger used to emit command lifecycle messages.
      */
     public function getLogger(): LoggerInterface;
 }

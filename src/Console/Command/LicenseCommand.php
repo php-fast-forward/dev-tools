@@ -145,7 +145,7 @@ final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInte
         $this->logger->notice($comparison->getSummary(), [
             'input' => $input,
             'target_path' => $targetPath,
-        ],);
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
@@ -197,7 +197,7 @@ final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInte
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteLicense($input, $output, $targetPath)) {
             $this->notice('Skipped updating {target_path}.', $input, [
                 'target_path' => $targetPath,
-            ],);
+            ]);
 
             return $this->success(
                 'LICENSE generation was skipped.',

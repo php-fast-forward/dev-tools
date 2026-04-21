@@ -200,7 +200,7 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
 
         return $this->success('Updated CODEOWNERS in {target_path}.', $input, [
             'target_path' => $targetPath,
-        ],);
+        ]);
     }
 
     /**

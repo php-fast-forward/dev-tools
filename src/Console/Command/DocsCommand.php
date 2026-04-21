@@ -37,8 +37,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 /**
- * Handles the generation of API documentation for the project.
- * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
+ * Generates the package API documentation through phpDocumentor.
+ *
+ * The command prepares a temporary phpDocumentor configuration from the
+ * current package metadata, then delegates execution to the shared process
+ * queue so logging and grouped output stay consistent with the rest of the
+ * command surface.
  */
 #[AsCommand(
     name: 'docs',
@@ -72,12 +76,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
     }
 
     /**
-     * Configures the command instance.
-     *
-     * The method MUST set up the name and description. It MAY accept an optional `--target` option
-     * pointing to an alternative configuration target path.
-     *
-     * @return void
+     * Configures the command options used to generate API documentation.
      */
     protected function configure(): void
     {
@@ -116,10 +115,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
     }
 
     /**
-     * Executes the generation of the documentation files.
-     *
-     * This method MUST compile arguments based on PSR-4 namespaces to feed into phpDocumentor.
-     * It SHOULD provide feedback on generation progress, and SHALL return `self::SUCCESS` on success.
+     * Generates the HTML API documentation for the configured source tree.
      *
      * @param InputInterface $input the input details for the command
      * @param OutputInterface $output the output mechanism for logging

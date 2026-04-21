@@ -34,18 +34,12 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use function Safe\json_encode;
 
 /**
- * Provides formatted console logging for command-line execution contexts.
+ * Formats PSR-3 log messages for the DevTools console runtime.
  *
- * This logger writes messages to the Symfony console output streams and SHALL
- * route error-related log levels to stderr. Non-error log levels SHALL be
- * written to the standard output stream. When the "--json" or "--pretty-json"
- * option is present, or when an AI agent is detected in the current
- * environment, this logger MUST serialize the message payload as JSON.
- *
- * The implementation SHOULD be used in CLI environments where an ArgvInput and
- * a ConsoleOutputInterface are available. Callers MAY rely on placeholder
- * interpolation behavior compatible with PSR-3 expectations for scalar values,
- * stringable values, dates, arrays, and objects.
+ * The logger routes error-related levels to stderr, expands command context
+ * through the configured processor, and can switch between tagged text output
+ * and structured JSON output depending on CLI flags or detected agent
+ * execution.
  */
 final readonly class OutputFormatLogger implements LoggerInterface
 {
@@ -61,17 +55,12 @@ final readonly class OutputFormatLogger implements LoggerInterface
     /**
      * Creates a new console logger instance.
      *
-     * The provided input SHALL be inspected to determine whether JSON output
-     * has been requested. The provided output SHALL be used as the primary
-     * destination for normal log messages, while its error stream SHALL be
-     * used for error-level messages.
-     *
      * @param ArgvInput $input the CLI input instance used to inspect runtime options
      * @param ConsoleOutputInterface $output the console output instance used for writing log messages
-     * @param ClockInterface $clock
-     * @param Detector $agentDetector the detector used to infer whether the current runtime is an agent environment
+     * @param ClockInterface $clock provides timestamps for rendered log entries
+     * @param Detector $agentDetector detects agent-oriented execution environments
      * @param ContextProcessorInterface $contextProcessor expands command input and output metadata
-     * @param GithubActionOutput $githubActionOutput emits GitHub Actions workflow commands when supported
+     * @param GithubActionOutput $githubActionOutput emits GitHub Actions annotations when supported
      */
     public function __construct(
         private ArgvInput $input,
@@ -172,7 +161,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
     }
 
     /**
-     * Determines whether JSON output has been requested.
+     * Determines whether structured JSON output has been requested.
      *
      * The "--json" and "--pretty-json" options MAY be provided by the caller.
      * When either is present, this method SHALL return true. Otherwise,
@@ -194,7 +183,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
     }
 
     /**
-     * Determines whether pretty JSON output has been requested.
+     * Determines whether pretty-printed JSON output has been requested.
      */
     private function isPrettyJsonOutput(): bool
     {

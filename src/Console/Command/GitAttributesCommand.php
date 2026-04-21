@@ -129,7 +129,7 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
     {
         $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
             'input' => $input,
-        ],);
+        ]);
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
