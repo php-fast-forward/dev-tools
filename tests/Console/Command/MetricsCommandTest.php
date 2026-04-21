@@ -20,6 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\MetricsCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -37,6 +40,7 @@ use function Safe\unlink;
 use function uniqid;
 
 #[CoversClass(MetricsCommand::class)]
+#[CoversClass(OutputFormat::class)]
 final class MetricsCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -66,6 +70,16 @@ final class MetricsCommandTest extends TestCase
      */
     private ObjectProphecy $process;
 
+    /**
+     * @var ObjectProphecy<CommandResponderFactoryInterface>
+     */
+    private ObjectProphecy $commandResponderFactory;
+
+    /**
+     * @var ObjectProphecy<CommandResponderInterface>
+     */
+    private ObjectProphecy $commandResponder;
+
     private string $target;
 
     private MetricsCommand $command;
@@ -80,6 +94,8 @@ final class MetricsCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
+        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
+        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
         $this->target = sys_get_temp_dir() . '/metrics-' . uniqid();
 
         foreach (['exclude', 'target', 'junit'] as $option) {
@@ -94,10 +110,15 @@ final class MetricsCommandTest extends TestCase
         )
             ->willReturn($this->process->reveal());
 
-        $this->processQueue->run($this->output->reveal())
-            ->willReturn(MetricsCommand::SUCCESS);
-
-        $this->command = new MetricsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
+        $this->command = new MetricsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->commandResponderFactory->reveal(),
+        );
+        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
+            ->willReturn($this->commandResponder->reveal());
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::TEXT);
     }
 
     /**
@@ -143,6 +164,7 @@ final class MetricsCommandTest extends TestCase
         self::assertFalse($definition->hasOption('report-summary-json'));
         self::assertTrue($definition->hasOption('junit'));
         self::assertFalse($definition->hasOption('cache-dir'));
+        self::assertTrue($definition->hasOption('output-format'));
     }
 
     /**
@@ -152,6 +174,9 @@ final class MetricsCommandTest extends TestCase
     public function executeWillRunPhpMetrics(): void
     {
         $this->output->writeln('<info>Running code metrics analysis...</info>')
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(MetricsCommand::SUCCESS)
             ->shouldBeCalledOnce();
         $this->processBuilder->withArgument('--ansi')
             ->shouldBeCalledOnce()
@@ -183,6 +208,16 @@ final class MetricsCommandTest extends TestCase
             ->willReturn($this->processBuilder->reveal());
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Code metrics analysis completed successfully.',
+            [
+                'command' => 'metrics',
+                'exclude' => 'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources',
+                'target' => $this->target,
+                'junit' => null,
+                'process_output' => null,
+            ],
+        )->willReturn(MetricsCommand::SUCCESS)->shouldBeCalledOnce();
 
         self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
     }
@@ -211,6 +246,19 @@ final class MetricsCommandTest extends TestCase
             ->shouldNotBeCalled();
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(MetricsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Code metrics analysis completed successfully.',
+            [
+                'command' => 'metrics',
+                'exclude' => 'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources',
+                'target' => '.dev-tools/metrics',
+                'junit' => null,
+                'process_output' => null,
+            ],
+        )->willReturn(MetricsCommand::SUCCESS)->shouldBeCalledOnce();
 
         self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
     }
@@ -229,6 +277,48 @@ final class MetricsCommandTest extends TestCase
             ->willReturn($this->processBuilder->reveal());
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(MetricsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Code metrics analysis completed successfully.',
+            [
+                'command' => 'metrics',
+                'exclude' => 'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources',
+                'target' => $this->target,
+                'junit' => '.dev-tools/metrics/junit.xml',
+                'process_output' => null,
+            ],
+        )->willReturn(MetricsCommand::SUCCESS)->shouldBeCalledOnce();
+
+        self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillCapturePhpMetricsOutputWhenJsonOutputIsRequested(): void
+    {
+        $target = $this->target;
+
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::JSON);
+        $this->output->writeln(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run(Argument::type('object'))
+            ->willReturn(MetricsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Code metrics analysis completed successfully.',
+            Argument::that(static fn(array $context): bool => 'metrics' === $context['command']
+                && 'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources' === $context['exclude']
+                && $target === $context['target']
+                && null === $context['junit']
+                && \is_string($context['process_output'])),
+        )->willReturn(MetricsCommand::SUCCESS)->shouldBeCalledOnce();
 
         self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
     }

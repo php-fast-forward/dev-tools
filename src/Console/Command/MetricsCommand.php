@@ -20,11 +20,14 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function rtrim;
@@ -49,10 +52,16 @@ final class MetricsCommand extends BaseCommand
     /**
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PhpMetrics process
      * @param ProcessQueueInterface $processQueue the queue used to execute the PhpMetrics process
+     * @param CommandResponderFactoryInterface $commandResponderFactory the
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responder
+     *                                                                  factory
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -79,6 +88,13 @@ final class MetricsCommand extends BaseCommand
                 name: 'junit',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Optional target file for the generated JUnit XML report.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -90,20 +106,28 @@ final class MetricsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running code metrics analysis...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $textOutput = OutputFormat::TEXT === $responder->format();
+        $processOutput = $textOutput ? $output : new BufferedOutput();
 
         $target = rtrim((string) $input->getOption('target'), '/');
+        $exclude = (string) $input->getOption('exclude');
+        $junit = $input->getOption('junit');
+
+        if ($textOutput) {
+            $output->writeln('<info>Running code metrics analysis...</info>');
+        }
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--git', 'git')
-            ->withArgument('--exclude', (string) $input->getOption('exclude'))
+            ->withArgument('--exclude', $exclude)
             ->withArgument('--report-html', $target)
             ->withArgument('--report-json', $target . '/report.json')
             ->withArgument('--report-summary-json', $target . '/report-summary.json');
 
-        if (null !== $input->getOption('junit')) {
-            $processBuilder = $processBuilder->withArgument('--junit', $input->getOption('junit'));
+        if (null !== $junit) {
+            $processBuilder = $processBuilder->withArgument('--junit', $junit);
         }
 
         $this->processQueue->add(
@@ -112,6 +136,28 @@ final class MetricsCommand extends BaseCommand
                 ->build([\PHP_BINARY, '-derror_reporting=' . self::PHP_ERROR_REPORTING, self::BINARY])
         );
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        return self::SUCCESS === $result
+            ? $responder->success(
+                'Code metrics analysis completed successfully.',
+                [
+                    'command' => 'metrics',
+                    'exclude' => $exclude,
+                    'target' => $target,
+                    'junit' => $junit,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            )
+            : $responder->failure(
+                'Code metrics analysis failed.',
+                [
+                    'command' => 'metrics',
+                    'exclude' => $exclude,
+                    'target' => $target,
+                    'junit' => $junit,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            );
     }
 }
