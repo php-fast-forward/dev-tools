@@ -26,4 +26,30 @@ enum OutputFormat: string
 {
     case TEXT = 'text';
     case JSON = 'json';
+
+    /**
+     * @return string
+     */
+    public static function defaultValue(): string
+    {
+        return self::TEXT->value;
+    }
+
+    /**
+     * @return array
+     */
+    public static function supportedValues(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+
+    /**
+     * @param string $format
+     *
+     * @return bool
+     */
+    public static function isSupported(string $format): bool
+    {
+        return \in_array($format, self::supportedValues(), true);
+    }
 }

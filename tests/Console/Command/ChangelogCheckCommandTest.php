@@ -39,6 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogCheckCommand::class)]
 #[CoversClass(CommandResult::class)]
+#[CoversClass(OutputFormat::class)]
 final class ChangelogCheckCommandTest extends TestCase
 {
     use ProphecyTrait;

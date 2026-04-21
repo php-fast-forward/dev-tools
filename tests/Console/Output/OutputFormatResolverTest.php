@@ -28,6 +28,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Input\InputInterface;
 
+#[CoversClass(OutputFormat::class)]
 #[CoversClass(OutputFormatResolver::class)]
 final class OutputFormatResolverTest extends TestCase
 {

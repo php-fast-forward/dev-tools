@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\Output\CommandResult;
 use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use InvalidArgumentException;
@@ -77,8 +78,8 @@ final class ChangelogCheckCommand extends BaseCommand
                 name: 'format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: 'text',
-                suggestedValues: ['text', 'json'],
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
