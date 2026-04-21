@@ -19,15 +19,19 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 
@@ -43,8 +47,11 @@ use function Safe\getcwd;
     help: 'This command generates API documentation in Markdown format using phpDocumentor. '
     . 'It accepts an optional `--target` option to specify the output directory and `--init` to initialize the wiki submodule.'
 )]
-final class WikiCommand extends BaseCommand
+final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * Creates a new WikiCommand instance.
      *
@@ -53,6 +60,7 @@ final class WikiCommand extends BaseCommand
      * @param ProcessQueueInterface $processQueue
      * @param FilesystemInterface $filesystem the filesystem used to inspect the wiki target
      * @param GitClientInterface $gitClient
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -60,6 +68,7 @@ final class WikiCommand extends BaseCommand
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly GitClientInterface $gitClient,
+        private readonly LoggerInterface $logger,
     ) {
         return parent::__construct();
     }
@@ -74,7 +83,7 @@ final class WikiCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'target',
                 shortcut: 't',
@@ -108,17 +117,25 @@ final class WikiCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $jsonOutput = $this->isJsonOutput($input);
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $target = (string) $input->getOption('target');
+
         if ($input->getOption('init')) {
-            return $this->initializeWikiSubmodule((string) $input->getOption('target'), $output);
+            return $this->initializeWikiSubmodule($input, $target, $processOutput);
         }
 
-        $output->writeln('<info>Generating API documentation...</info>');
+        if (! $jsonOutput) {
+            $this->logger->info('Generating wiki documentation...', [
+                'input' => $input,
+            ]);
+        }
 
         $processBuilder = $this->processBuilder
             ->withArgument('--visibility', 'public,protected')
             ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
             ->withArgument('--title', $this->composer->getDescription())
-            ->withArgument('--target', $input->getOption('target'))
+            ->withArgument('--target', $target)
             ->withArgument('--cache-folder', $input->getOption('cache-dir'));
 
         $psr4Namespaces = $this->composer->getAutoload('psr-4');
@@ -133,7 +150,22 @@ final class WikiCommand extends BaseCommand
 
         $this->processQueue->add($processBuilder->build('vendor/bin/phpdoc'));
 
-        return $this->processQueue->run();
+        $result = $this->processQueue->run($processOutput);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('Wiki documentation generated successfully.', $input, [
+                'output' => $processOutput,
+            ]);
+        }
+
+        return $this->failure(
+            'Wiki documentation generation failed.',
+            $input,
+            [
+                'output' => $processOutput,
+            ],
+            (string) $input->getOption('target'),
+        );
     }
 
     /**
@@ -141,17 +173,23 @@ final class WikiCommand extends BaseCommand
      *
      * @param string $target the configured wiki target path
      * @param OutputInterface $output the output used for process feedback
+     * @param InputInterface $input
      *
      * @return int the command status code
      */
-    private function initializeWikiSubmodule(string $target, OutputInterface $output): int
+    private function initializeWikiSubmodule(InputInterface $input, string $target, OutputInterface $output): int
     {
         $wikiSubmodulePath = (string) $this->filesystem->getAbsolutePath($target);
 
         if ($this->filesystem->exists($wikiSubmodulePath)) {
-            $output->writeln(\sprintf('<info>Wiki submodule already exists at %s.</info>', $wikiSubmodulePath));
-
-            return self::SUCCESS;
+            return $this->success(
+                'Wiki submodule already exists at {wiki_submodule_path}.',
+                $input,
+                [
+                    'input' => $input,
+                    'wiki_submodule_path' => $wikiSubmodulePath,
+                ],
+            );
         }
 
         $repositoryUrl = $this->getGitRepositoryUrl();
@@ -166,7 +204,19 @@ final class WikiCommand extends BaseCommand
                 ->build('git')
         );
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($output);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('Wiki submodule initialized successfully.', $input, [
+                'wiki_submodule_path' => $wikiSubmodulePath,
+                'wiki_repository_url' => $wikiRepoUrl,
+            ]);
+        }
+
+        return $this->failure('Wiki submodule initialization failed.', $input, [
+            'wiki_submodule_path' => $wikiSubmodulePath,
+            'wiki_repository_url' => $wikiRepoUrl,
+        ], $target);
     }
 
     /**

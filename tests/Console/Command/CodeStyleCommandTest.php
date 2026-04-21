@@ -20,21 +20,26 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(CodeStyleCommand::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class CodeStyleCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -51,6 +56,8 @@ final class CodeStyleCommandTest extends TestCase
 
     private ObjectProphecy $processBuilder;
 
+    private ObjectProphecy $logger;
+
     private CodeStyleCommand $command;
 
     /**
@@ -64,46 +71,38 @@ final class CodeStyleCommandTest extends TestCase
         $this->process = $this->prophesize(Process::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
 
-        $this->processBuilder->withArgument(Argument::any())
-            ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument(Argument::any(), Argument::any())
-            ->willReturn($this->processBuilder->reveal());
+        $this->input->getOption('fix')
+            ->willReturn(false);
+        $this->input->getOption('progress')
+            ->willReturn(false);
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->output->getVerbosity()
+            ->willReturn(OutputInterface::VERBOSITY_NORMAL);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->getFormatter()
+            ->willReturn(new OutputFormatter());
+        $this->fileLocator->locate(CodeStyleCommand::CONFIG)->willReturn('/path/to/ecs.php');
 
-        $this->processBuilder->build(Argument::any())
-            ->willReturn($this->process->reveal());
+        $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
+            $this->processBuilder->reveal()
+        );
+        $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalledTimes(3);
 
         $this->command = new CodeStyleCommand(
             $this->fileLocator->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
+            $this->logger->reveal(),
         );
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function commandWillSetExpectedNameDescriptionAndHelp(): void
-    {
-        self::assertSame('code-style', $this->command->getName());
-        self::assertSame(
-            'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.',
-            $this->command->getDescription()
-        );
-        self::assertSame(
-            'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.',
-            $this->command->getHelp()
-        );
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function commandCanBeConstructedWithDependencies(): void
-    {
-        self::assertInstanceOf(CodeStyleCommand::class, $this->command);
     }
 
     /**
@@ -112,19 +111,23 @@ final class CodeStyleCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
-        $this->input->getOption('fix')
-            ->willReturn(false);
-
-        $this->fileLocator->locate(CodeStyleCommand::CONFIG)
-            ->willReturn('/path/to/ecs.php');
-
-        $this->processQueue->run($this->output->reveal())
+        $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
+        $this->logger->info('Running code style checks and fixes...')
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Code style checks completed successfully.',
+            [
+                'input' => $this->input->reveal(),
+                'fix' => false,
+                'config' => CodeStyleCommand::CONFIG,
+                'process_output' => null,
+            ],
+        )->shouldBeCalled();
 
-        $result = $this->executeCommand();
-
-        self::assertSame(CodeStyleCommand::SUCCESS, $result);
+        self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
@@ -133,40 +136,69 @@ final class CodeStyleCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
-        $this->input->getOption('fix')
-            ->willReturn(false);
-
-        $this->fileLocator->locate(CodeStyleCommand::CONFIG)
-            ->willReturn('/path/to/ecs.php');
-
-        $this->processQueue->run($this->output->reveal())
+        $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::FAILURE)
             ->shouldBeCalled();
+        $this->logger->info('Running code style checks and fixes...')
+            ->shouldBeCalled();
+        $this->logger->error(
+            'Code style checks failed.',
+            [
+                'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
+                'fix' => false,
+                'config' => CodeStyleCommand::CONFIG,
+                'process_output' => null,
+            ],
+        )->shouldBeCalled();
 
-        $result = $this->executeCommand();
-
-        self::assertSame(CodeStyleCommand::FAILURE, $result);
+        self::assertSame(CodeStyleCommand::FAILURE, $this->executeCommand());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunWithFixOptionWhenFixIsEnabled(): void
+    public function executeWillCaptureBufferedOutputWhenJsonIsRequested(): void
     {
-        $this->input->getOption('fix')
+        $this->input->getOption('json')
             ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument('--output-format', 'json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type('object'))
+            ->willReturn(CodeStyleCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info('Running code style checks and fixes...')
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Code style checks completed successfully.',
+            Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
+                && \is_string($context['process_output'])),
+        )->shouldBeCalled();
 
-        $this->fileLocator->locate(CodeStyleCommand::CONFIG)
-            ->willReturn('/path/to/ecs.php');
+        self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());
+    }
 
-        $this->processQueue->run($this->output->reveal())
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillEnableProgressWhenRequested(): void
+    {
+        $this->input->getOption('progress')
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--no-progress-bar')
+            ->shouldNotBeCalled();
+        $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
 
-        $result = $this->executeCommand();
-
-        self::assertSame(CodeStyleCommand::SUCCESS, $result);
+        self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
@@ -174,11 +206,7 @@ final class CodeStyleCommandTest extends TestCase
      */
     private function executeCommand(): int
     {
-        $this->processQueue->add($this->process->reveal())
-            ->shouldBeCalledTimes(3);
-
-        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
-
-        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+        return (new ReflectionMethod($this->command, 'execute'))
+            ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

@@ -55,6 +55,13 @@ Options
    Asks ``composer-dependency-analyser`` to dump usages for the given package
    or wildcard pattern and enables ``--show-all-usages`` automatically.
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 

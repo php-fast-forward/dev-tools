@@ -19,11 +19,14 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Document\ChangelogDocument;
 use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -38,15 +41,20 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Adds a changelog entry to Unreleased or a specific version section.',
     help: 'This command appends one categorized changelog entry to the selected changelog file so it can be reused by local authoring flows and skills.'
 )]
-final class ChangelogEntryCommand extends BaseCommand
+final class ChangelogEntryCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -56,7 +64,7 @@ final class ChangelogEntryCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'message',
                 mode: InputArgument::REQUIRED,
@@ -108,13 +116,16 @@ final class ChangelogEntryCommand extends BaseCommand
 
         $this->changelogManager->addEntry($file, $type, $message, $version, \is_string($date) ? $date : null);
 
-        $output->writeln(\sprintf(
-            '<info>Added %s changelog entry to [%s] in %s.</info>',
-            strtolower($type->value),
-            $version,
-            $file,
-        ));
-
-        return self::SUCCESS;
+        return $this->success(
+            'Added {type} changelog entry to [{release}] in {absolute_file}.',
+            $input,
+            [
+                'absolute_file' => $file,
+                'type' => strtolower($type->value),
+                'release' => $version,
+                'date' => \is_string($date) ? $date : null,
+                'message' => $message,
+            ],
+        );
     }
 }

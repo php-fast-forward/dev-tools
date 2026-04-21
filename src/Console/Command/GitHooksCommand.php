@@ -20,9 +20,12 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,8 +42,11 @@ use Symfony\Component\Filesystem\Path;
     description: 'Installs Fast Forward Git hooks.',
     help: 'This command copies packaged Git hooks into the current repository.'
 )]
-final class GitHooksCommand extends BaseCommand
+final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * Creates a new GitHooksCommand instance.
      *
@@ -48,12 +54,14 @@ final class GitHooksCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -63,7 +71,7 @@ final class GitHooksCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'source',
                 shortcut: 's',
@@ -128,7 +136,14 @@ final class GitHooksCommand extends BaseCommand
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
             if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($hookPath)) {
-                $output->writeln(\sprintf('<comment>Skipped existing %s hook.</comment>', $file->getFilename()));
+                $this->notice(
+                    'Skipped existing {hook_name} hook.',
+                    $input,
+                    [
+                        'hook_name' => $file->getFilename(),
+                        'hook_path' => $hookPath,
+                    ],
+                );
 
                 continue;
             }
@@ -136,13 +151,28 @@ final class GitHooksCommand extends BaseCommand
             if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($hookPath)) {
                 $comparison = $this->fileDiffer->diff($file->getRealPath(), $hookPath);
 
-                $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+                $this->logger->notice(
+                    $comparison->getSummary(),
+                    [
+                        'input' => $input,
+                        'hook_name' => $file->getFilename(),
+                        'hook_path' => $hookPath,
+                    ],
+                );
 
                 if ($comparison->isChanged()) {
                     $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
                     if (null !== $consoleDiff) {
-                        $output->writeln($consoleDiff);
+                        $this->logger->notice(
+                            $consoleDiff,
+                            [
+                                'input' => $input,
+                                'hook_name' => $file->getFilename(),
+                                'hook_path' => $hookPath,
+                                'diff' => $comparison->getDiff(),
+                            ],
+                        );
                     }
                 }
 
@@ -161,7 +191,14 @@ final class GitHooksCommand extends BaseCommand
                 }
 
                 if ($interactive && $input->isInteractive() && ! $this->shouldReplaceHook($input, $output, $hookPath)) {
-                    $output->writeln(\sprintf('<comment>Skipped replacing %s.</comment>', $hookPath));
+                    $this->notice(
+                        'Skipped replacing {hook_path}.',
+                        $input,
+                        [
+                            'hook_name' => $file->getFilename(),
+                            'hook_path' => $hookPath,
+                        ],
+                    );
 
                     continue;
                 }
@@ -170,10 +207,34 @@ final class GitHooksCommand extends BaseCommand
             $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite || $interactive);
             $this->filesystem->chmod($hookPath, 755, 0o755);
 
-            $output->writeln(\sprintf('<info>Installed %s hook.</info>', $file->getFilename()));
+            $this->success(
+                'Installed {hook_name} hook.',
+                $input,
+                [
+                    'hook_name' => $file->getFilename(),
+                    'hook_path' => $hookPath,
+                ],
+            );
         }
 
-        return $status;
+        if (self::FAILURE === $status) {
+            return $this->failure(
+                'One or more Git hooks require synchronization updates.',
+                $input,
+                [
+                    'target' => $targetPath,
+                ],
+                $targetPath,
+            );
+        }
+
+        return $this->success(
+            'Git hook synchronization completed successfully.',
+            $input,
+            [
+                'target' => $targetPath,
+            ],
+        );
     }
 
     /**

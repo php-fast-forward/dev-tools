@@ -19,9 +19,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -34,19 +37,32 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Synchronizes Fast Forward project agents into .agents/agents directory.',
     help: 'This command ensures the consumer repository contains linked Fast Forward project agents by creating symlinks to the packaged prompts and removing broken links.'
 )]
-final class AgentsCommand extends BaseCommand
+final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     private const string DIRECTORY_LABEL = '.agents/agents';
 
     /**
      * @param PackagedDirectorySynchronizer $synchronizer
      * @param FilesystemInterface $filesystem
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
+    }
+
+    /**
+     * Configures JSON output options for the synchronization command.
+     */
+    protected function configure(): void
+    {
+        $this->addJsonOption();
     }
 
     /**
@@ -57,20 +73,28 @@ final class AgentsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Starting agents synchronization...</info>');
-
         $packageAgentsPath = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL, \dirname(__DIR__, 3));
         $agentsDir = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL);
+        $this->logger->info('Starting agents synchronization...');
 
         if (! $this->filesystem->exists($packageAgentsPath)) {
-            $output->writeln('<comment>No packaged .agents/agents found at: ' . $packageAgentsPath . '</comment>');
-
-            return self::FAILURE;
+            return $this->failure(
+                'No packaged .agents/agents found at: {packaged_agents_path}',
+                $input,
+                [
+                    'packaged_agents_path' => $packageAgentsPath,
+                    'agents_dir' => $agentsDir,
+                    'directory_created' => false,
+                ],
+            );
         }
+
+        $directoryCreated = false;
 
         if (! $this->filesystem->exists($agentsDir)) {
             $this->filesystem->mkdir($agentsDir);
-            $output->writeln('<info>Created .agents/agents directory.</info>');
+            $directoryCreated = true;
+            $this->logger->info('Created .agents/agents directory.');
         }
 
         $this->synchronizer->setLogger($this->getIO());
@@ -78,13 +102,25 @@ final class AgentsCommand extends BaseCommand
         $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::DIRECTORY_LABEL);
 
         if ($result->failed()) {
-            $output->writeln('<error>Agents synchronization failed.</error>');
-
-            return self::FAILURE;
+            return $this->failure(
+                'Agents synchronization failed.',
+                $input,
+                [
+                    'packaged_agents_path' => $packageAgentsPath,
+                    'agents_dir' => $agentsDir,
+                    'directory_created' => $directoryCreated,
+                ],
+            );
         }
 
-        $output->writeln('<info>Agents synchronization completed successfully.</info>');
-
-        return self::SUCCESS;
+        return $this->success(
+            'Agents synchronization completed successfully.',
+            $input,
+            [
+                'packaged_agents_path' => $packageAgentsPath,
+                'agents_dir' => $agentsDir,
+                'directory_created' => $directoryCreated,
+            ],
+        );
     }
 }

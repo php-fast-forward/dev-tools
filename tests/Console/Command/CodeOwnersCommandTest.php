@@ -23,16 +23,19 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Console\Command\CodeOwnersCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -41,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(CodeOwnersCommand::class)]
 #[UsesClass(FileDiff::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class CodeOwnersCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -71,6 +75,11 @@ final class CodeOwnersCommandTest extends TestCase
     private ObjectProphecy $fileDiffer;
 
     /**
+     * @var ObjectProphecy<LoggerInterface>
+     */
+    private ObjectProphecy $logger;
+
+    /**
      * @var ObjectProphecy<QuestionHelper>
      */
     private ObjectProphecy $questionHelper;
@@ -89,6 +98,7 @@ final class CodeOwnersCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->questionHelper = $this->prophesize(QuestionHelper::class);
 
         $this->input->getOption('file')
@@ -108,6 +118,10 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
+        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log(Argument::cetera())->will(static function (): void {});
+        $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
         $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
@@ -117,6 +131,7 @@ final class CodeOwnersCommandTest extends TestCase
             $this->generator->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
+            $this->logger->reveal(),
         );
         $this->command->setHelperSet(new HelperSet([
             'question' => $this->questionHelper->reveal(),
@@ -195,7 +210,14 @@ final class CodeOwnersCommandTest extends TestCase
         $this->filesystem->exists($targetPath)
             ->willReturn(true);
 
-        $this->output->writeln(Argument::containingString('Skipping CODEOWNERS generation'))->shouldBeCalled();
+        $this->logger->log(
+            'notice',
+            'Managed file {target_path} already exists. Skipping CODEOWNERS generation.',
+            [
+                'input' => $this->input->reveal(),
+                'target_path' => $targetPath,
+            ],
+        )->shouldBeCalledOnce();
         $this->generator->inferOwners()
             ->shouldNotBeCalled();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
@@ -377,8 +399,14 @@ final class CodeOwnersCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Skipped updating ' . $targetPath . '.</comment>')
-            ->shouldBeCalledOnce();
+        $this->logger->log(
+            'notice',
+            'Skipped updating {target_path}.',
+            [
+                'input' => $this->input->reveal(),
+                'target_path' => $targetPath,
+            ],
+        )->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(CodeOwnersCommand::SUCCESS, $this->invokeExecute());

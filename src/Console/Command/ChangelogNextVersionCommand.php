@@ -19,9 +19,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,15 +39,20 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Infers the next semantic version from the Unreleased changelog section.',
     help: 'This command inspects Unreleased changelog categories and prints the next semantic version inferred from the current changelog state.'
 )]
-final class ChangelogNextVersionCommand extends BaseCommand
+final class ChangelogNextVersionCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -53,7 +62,7 @@ final class ChangelogNextVersionCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'file',
                 mode: InputOption::VALUE_REQUIRED,
@@ -75,11 +84,28 @@ final class ChangelogNextVersionCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
-        $currentVersion = $input->getOption('current-version');
+        try {
+            $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
+            $currentVersion = $input->getOption('current-version');
+            $nextVersion = $this->changelogManager->inferNextVersion($path, $currentVersion);
 
-        $output->writeln($this->changelogManager->inferNextVersion($path, $currentVersion));
-
-        return self::SUCCESS;
+            return $this->success(
+                $nextVersion,
+                $input,
+                [
+                    'current_version' => $currentVersion,
+                    'next_version' => $nextVersion,
+                ],
+            );
+        } catch (Throwable $throwable) {
+            return $this->failure(
+                'Unable to infer the next changelog version.',
+                $input,
+                [
+                    'exception_message' => $throwable->getMessage(),
+                ],
+                (string) $input->getOption('file'),
+            );
+        }
     }
 }

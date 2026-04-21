@@ -46,6 +46,16 @@ Options
    - ``report.json`` inside the target directory;
    - ``report-summary.json`` inside the target directory.
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
+``--progress``
+   Enable progress output from PhpMetrics.
+
 Examples
 --------
 
@@ -78,5 +88,9 @@ Behavior
 
 - the command derives ``report.json`` and ``report-summary.json`` from the
   selected ``--target`` directory;
+- progress output is disabled by default; use ``--progress`` to re-enable it in
+  text mode;
+- ``--json`` and ``--pretty-json`` keep DevTools itself structured while
+  running PhpMetrics in a quieter mode to avoid polluting the captured payload;
 - it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
   deprecation notices emitted by the dependency itself.

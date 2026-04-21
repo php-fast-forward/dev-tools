@@ -20,9 +20,12 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,19 +43,24 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
     description: 'Generates a LICENSE file from composer.json license information.',
     help: 'This command generates a LICENSE file if one does not exist and a supported license is declared in composer.json.'
 )]
-final class LicenseCommand extends BaseCommand
+final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * Creates a new LicenseCommand instance.
      *
      * @param GeneratorInterface $generator the generator component
      * @param FilesystemInterface $filesystem the filesystem component
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly GeneratorInterface $generator,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -62,7 +70,7 @@ final class LicenseCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -106,11 +114,22 @@ final class LicenseCommand extends BaseCommand
         $generatedContent = $this->generator->generateContent();
 
         if (null === $generatedContent) {
-            $output->writeln(
-                '<comment>No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.</comment>'
+            $this->notice(
+                'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
+                $input,
+                [
+                    'target_path' => $targetPath,
+                ],
             );
 
-            return self::SUCCESS;
+            return $this->success(
+                'LICENSE generation was skipped because no supported license metadata was available.',
+                $input,
+                [
+                    'target_path' => $targetPath,
+                ],
+                'notice',
+            );
         }
 
         $comparison = $this->fileDiffer->diffContents(
@@ -123,40 +142,83 @@ final class LicenseCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated LICENSE content.', $targetPath),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice($comparison->getSummary(), [
+            'input' => $input,
+            'target_path' => $targetPath,
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'input' => $input,
+                        'target_path' => $targetPath,
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
         if ($comparison->isUnchanged()) {
-            return self::SUCCESS;
+            return $this->success(
+                'LICENSE already matches the generated content.',
+                $input,
+                [
+                    'target_path' => $targetPath,
+                ],
+            );
         }
 
         if ($check) {
-            return self::FAILURE;
+            return $this->failure(
+                'LICENSE requires synchronization updates.',
+                $input,
+                [
+                    'target_path' => $targetPath,
+                ],
+                $targetPath,
+            );
         }
 
         if ($dryRun) {
-            return self::SUCCESS;
+            return $this->success(
+                'LICENSE generation preview completed.',
+                $input,
+                [
+                    'target_path' => $targetPath,
+                ],
+                'notice',
+            );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteLicense($input, $output, $targetPath)) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $targetPath));
+            $this->notice('Skipped updating {target_path}.', $input, [
+                'target_path' => $targetPath,
+            ]);
 
-            return self::SUCCESS;
+            return $this->success(
+                'LICENSE generation was skipped.',
+                $input,
+                [
+                    'target_path' => $targetPath,
+                ],
+                'notice',
+            );
         }
 
         $this->filesystem->dumpFile($targetPath, $generatedContent);
-        $output->writeln(
-            \sprintf('<info>%s file generated successfully at %s.</info>', basename($targetPath), $targetPath)
-        );
 
-        return self::SUCCESS;
+        return $this->success(
+            '{file_name} file generated successfully at {target_path}.',
+            $input,
+            [
+                'file_name' => basename($targetPath),
+                'target_path' => $targetPath,
+            ],
+        );
     }
 
     /**

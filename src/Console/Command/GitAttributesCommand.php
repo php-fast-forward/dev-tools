@@ -21,6 +21,8 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
@@ -29,6 +31,7 @@ use FastForward\DevTools\GitAttributes\MergerInterface;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -49,8 +52,11 @@ use function Safe\getcwd;
     help: 'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. '
     . 'Only paths that exist in the repository are added, existing custom rules are preserved, and "extra.gitattributes.keep-in-export" paths stay in exported archives.'
 )]
-final class GitAttributesCommand extends BaseCommand
+final class GitAttributesCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     private const string FILENAME = '.gitattributes';
 
     private const string EXTRA_NAMESPACE = 'gitattributes';
@@ -71,6 +77,7 @@ final class GitAttributesCommand extends BaseCommand
      * @param FilesystemInterface $filesystem the filesystem component
      * @param ComposerJsonInterface $composer the composer.json accessor
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly CandidateProviderInterface $candidateProvider,
@@ -82,6 +89,7 @@ final class GitAttributesCommand extends BaseCommand
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -91,7 +99,7 @@ final class GitAttributesCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'dry-run',
                 mode: InputOption::VALUE_NONE,
@@ -119,7 +127,9 @@ final class GitAttributesCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>');
+        $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
+            'input' => $input,
+        ]);
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
@@ -136,11 +146,13 @@ final class GitAttributesCommand extends BaseCommand
         $entries = [...$existingFolders, ...$existingFiles];
 
         if ([] === $entries) {
-            $output->writeln(
-                '<comment>No candidate paths found in repository. Skipping .gitattributes sync.</comment>'
-            );
+            $this->notice('No candidate paths found in repository. Skipping .gitattributes sync.', $input);
 
-            return self::SUCCESS;
+            return $this->success(
+                'No .gitattributes synchronization changes were required.',
+                $input,
+                logLevel: 'notice',
+            );
         }
 
         $gitattributesPath = $this->filesystem->getAbsolutePath(self::FILENAME);
@@ -155,26 +167,53 @@ final class GitAttributesCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated .gitattributes synchronization.', $gitattributesPath),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice(
+            $comparison->getSummary(),
+            [
+                'input' => $input,
+                'gitattributes_path' => $gitattributesPath,
+            ],
+        );
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'input' => $input,
+                        'gitattributes_path' => $gitattributesPath,
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
         if ($comparison->isUnchanged()) {
-            return self::SUCCESS;
+            return $this->success('.gitattributes already matches the generated export-ignore rules.', $input);
         }
 
         if ($check) {
-            return self::FAILURE;
+            return $this->failure(
+                '.gitattributes requires synchronization updates.',
+                $input,
+                [
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+                $gitattributesPath,
+            );
         }
 
         if ($dryRun) {
-            return self::SUCCESS;
+            return $this->success(
+                '.gitattributes synchronization preview completed.',
+                $input,
+                [
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+                'notice',
+            );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes(
@@ -182,19 +221,34 @@ final class GitAttributesCommand extends BaseCommand
             $output,
             $gitattributesPath
         )) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $gitattributesPath));
+            $this->notice(
+                'Skipped updating {gitattributes_path}.',
+                $input,
+                [
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+            );
 
-            return self::SUCCESS;
+            return $this->success(
+                '.gitattributes synchronization was skipped.',
+                $input,
+                [
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+                'notice',
+            );
         }
 
         $this->writer->write($gitattributesPath, $content);
 
-        $output->writeln(\sprintf(
-            '<info>Added %d export-ignore entries to .gitattributes.</info>',
-            \count($entries)
-        ));
-
-        return self::SUCCESS;
+        return $this->success(
+            'Added {entries_count} export-ignore entries to .gitattributes.',
+            $input,
+            [
+                'entries_count' => \count($entries),
+                'gitattributes_path' => $gitattributesPath,
+            ],
+        );
     }
 
     /**

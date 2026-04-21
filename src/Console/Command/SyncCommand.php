@@ -19,12 +19,16 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 
@@ -36,17 +40,20 @@ use Symfony\Component\Filesystem\Path;
     description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, CODEOWNERS, .editorconfig, and .gitattributes in the root project.',
     help: 'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, git metadata, packaged skills, packaged agents, license, and Git hooks.'
 )]
-final class SyncCommand extends BaseCommand
+final class SyncCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
-     * Creates a new SyncCommand instance.
-     *
-     * @param ProcessBuilderInterface $processBuilder the builder used to assemble dev-tools processes
-     * @param ProcessQueueInterface $processQueue the queue used to execute synchronization commands
+     * @param ProcessBuilderInterface $processBuilder
+     * @param ProcessQueueInterface $processQueue
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -56,7 +63,7 @@ final class SyncCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'overwrite',
                 shortcut: 'o',
@@ -81,17 +88,15 @@ final class SyncCommand extends BaseCommand
     }
 
     /**
-     * Queues and executes synchronization commands.
-     *
-     * @param InputInterface $input the input interface
-     * @param OutputInterface $output the output interface
-     *
-     * @return int the status code of the command
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Starting dev-tools synchronization...</info>');
-
+        $jsonOutput = $this->isJsonOutput($input);
+        $prettyJsonOutput = $this->isPrettyJsonOutput($input);
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $overwrite = (bool) $input->getOption('overwrite');
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
@@ -102,70 +107,115 @@ final class SyncCommand extends BaseCommand
         ];
         $allowDetached = ! $dryRun && ! $check && ! $interactive;
 
-        $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments]);
-        $this->queueDevToolsCommand(['funding', ...$modeArguments]);
+        $this->logger->info('Starting dev-tools synchronization...', [
+            'input' => $input,
+        ]);
+
+        $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);
+        $this->queueDevToolsCommand(['funding', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
                 '--source=resources/github-actions',
                 '--target=.github/workflows',
-                $input->getOption('overwrite') ? '--overwrite' : null,
+                $overwrite ? '--overwrite' : null,
                 ...$modeArguments,
             ],
-            $allowDetached
+            $allowDetached,
+            $jsonOutput,
+            $prettyJsonOutput,
         );
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
                 '--source=.editorconfig',
                 '--target=.editorconfig',
-                $input->getOption('overwrite') ? '--overwrite' : null,
+                $overwrite ? '--overwrite' : null,
                 ...$modeArguments,
             ],
-            $allowDetached
+            $allowDetached,
+            $jsonOutput,
+            $prettyJsonOutput,
         );
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
                 '--source=resources/dependabot.yml',
                 '--target=.github/dependabot.yml',
-                $input->getOption('overwrite') ? '--overwrite' : null,
+                $overwrite ? '--overwrite' : null,
                 ...$modeArguments,
             ],
-            $allowDetached
+            $allowDetached,
+            $jsonOutput,
+            $prettyJsonOutput,
         );
         $this->queueDevToolsCommand(
-            ['codeowners', $input->getOption('overwrite') ? '--overwrite' : null, ...$modeArguments],
-            $allowDetached
+            ['codeowners', $overwrite ? '--overwrite' : null, ...$modeArguments],
+            $allowDetached,
+            $jsonOutput,
+            $prettyJsonOutput,
         );
+
         if ($dryRun || $check || $interactive) {
-            $output->writeln(
-                '<comment>Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.</comment>'
+            $this->logger->warning(
+                'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
+                [
+                    'input' => $input,
+                ],
             );
         } else {
-            $this->queueDevToolsCommand(['wiki', '--init'], true);
-            $this->queueDevToolsCommand(['skills'], true);
-            $this->queueDevToolsCommand(['agents'], true);
+            $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput, $prettyJsonOutput);
+            $this->queueDevToolsCommand(['skills'], true, $jsonOutput, $prettyJsonOutput);
+            $this->queueDevToolsCommand(['agents'], true, $jsonOutput, $prettyJsonOutput);
         }
 
-        $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached);
-        $this->queueDevToolsCommand(['gitattributes', ...$modeArguments], $allowDetached);
-        $this->queueDevToolsCommand(['license', ...$modeArguments], $allowDetached);
-        $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached);
+        $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);
+        $this->queueDevToolsCommand(
+            ['gitattributes', ...$modeArguments],
+            $allowDetached,
+            $jsonOutput,
+            $prettyJsonOutput
+        );
+        $this->queueDevToolsCommand(['license', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);
+        $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('Dev-tools synchronization completed successfully.', $input, [
+                'output' => $processOutput,
+                'skipped_destructive_syncs' => $dryRun || $check || $interactive,
+            ]);
+        }
+
+        return $this->failure('Dev-tools synchronization failed.', $input, [
+            'output' => $processOutput,
+            'skipped_destructive_syncs' => $dryRun || $check || $interactive,
+        ]);
     }
 
     /**
-     * Adds a dev-tools command invocation to the process queue.
-     *
-     * @param list<string|null> $arguments the dev-tools command arguments
-     * @param bool $detached whether the command MAY run detached from subsequent queue entries
+     * @param list<string|null> $arguments
+     * @param bool $detached
+     * @param bool $jsonOutput
+     * @param bool $prettyJsonOutput
      */
-    private function queueDevToolsCommand(array $arguments, bool $detached = false): void
-    {
+    private function queueDevToolsCommand(
+        array $arguments,
+        bool $detached = false,
+        bool $jsonOutput = false,
+        bool $prettyJsonOutput = false,
+    ): void {
         $processBuilder = $this->processBuilder;
         $arguments = array_filter($arguments, static fn(?string $arg): bool => null !== $arg);
+
+        if ($jsonOutput && ! \in_array('--json', $arguments, true)) {
+            $arguments[] = '--json';
+        }
+
+        if ($prettyJsonOutput && ! \in_array('--pretty-json', $arguments, true)) {
+            $arguments[] = '--pretty-json';
+        }
 
         foreach ($arguments as $argument) {
             $processBuilder = $processBuilder->withArgument($argument);
@@ -175,9 +225,7 @@ final class SyncCommand extends BaseCommand
     }
 
     /**
-     * Resolves the packaged dev-tools binary path.
-     *
-     * @return string the absolute binary path
+     * @return string
      */
     private function devToolsBinary(): string
     {

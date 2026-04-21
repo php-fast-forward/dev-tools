@@ -62,12 +62,20 @@ final class DevTools extends ComposerApplication
      */
     public static function create(): self
     {
+        return self::getContainer()->get(self::class);
+    }
+
+    /**
+     * Retrieves the shared DevTools service container.
+     */
+    public static function getContainer(): ContainerInterface
+    {
         if (! self::$container instanceof ContainerInterface) {
             $serviceProvider = new DevToolsServiceProvider();
             self::$container = new Container($serviceProvider->getFactories());
         }
 
-        return self::$container->get(self::class);
+        return self::$container;
     }
 
     /**

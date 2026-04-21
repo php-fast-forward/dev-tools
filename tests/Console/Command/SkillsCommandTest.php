@@ -22,16 +22,19 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use Composer\Console\Application;
 use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\SkillsCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,38 +45,23 @@ use function Safe\getcwd;
 #[CoversClass(SkillsCommand::class)]
 #[UsesClass(PackagedDirectorySynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class SkillsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<PackagedDirectorySynchronizer>
-     */
     private ObjectProphecy $synchronizer;
 
-    /**
-     * @var ObjectProphecy<FilesystemInterface>
-     */
     private ObjectProphecy $filesystem;
 
-    /**
-     * @var ObjectProphecy<InputInterface>
-     */
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $input;
 
-    /**
-     * @var ObjectProphecy<OutputInterface>
-     */
     private ObjectProphecy $output;
 
-    /**
-     * @var ObjectProphecy<Application>
-     */
     private ObjectProphecy $application;
 
-    /**
-     * @var ObjectProphecy<IOInterface>
-     */
     private ObjectProphecy $io;
 
     private SkillsCommand $command;
@@ -85,6 +73,7 @@ final class SkillsCommandTest extends TestCase
     {
         $this->synchronizer = $this->prophesize(PackagedDirectorySynchronizer::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->application = $this->prophesize(Application::class);
@@ -92,33 +81,19 @@ final class SkillsCommandTest extends TestCase
 
         $this->application->getHelperSet()
             ->willReturn(new HelperSet());
-
-        $this->command = new SkillsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
-        $this->command->setApplication($this->application->reveal());
-
         $this->application->getIO()
             ->willReturn($this->io->reveal());
         $this->filesystem->getAbsolutePath('.agents/skills', \dirname(__DIR__, 3))
             ->willReturn(getcwd() . '/.agents/skills');
         $this->filesystem->getAbsolutePath('.agents/skills')
             ->willReturn(getcwd() . '/.agents/skills');
-    }
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function commandWillSetExpectedNameDescriptionAndHelp(): void
-    {
-        self::assertSame('skills', $this->command->getName());
-        self::assertSame(
-            'Synchronizes Fast Forward skills into .agents/skills directory.',
-            $this->command->getDescription()
+        $this->command = new SkillsCommand(
+            $this->synchronizer->reveal(),
+            $this->filesystem->reveal(),
+            $this->logger->reveal(),
         );
-        self::assertSame(
-            'This command ensures the consumer repository contains linked Fast Forward skills by creating symlinks to the packaged skills and removing broken links.',
-            $this->command->getHelp()
-        );
+        $this->command->setApplication($this->application->reveal());
     }
 
     /**
@@ -131,12 +106,21 @@ final class SkillsCommandTest extends TestCase
 
         $this->filesystem->exists($skillsPath)
             ->willReturn(false);
-        $this->output->writeln('<info>Starting skills synchronization...</info>')
-            ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>No packaged skills found at: ' . $skillsPath . '</comment>')
-            ->shouldBeCalledOnce();
         $this->synchronizer->setLogger(Argument::cetera())->shouldNotBeCalled();
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->info('Starting skills synchronization...')
+            ->shouldBeCalledOnce();
+        $this->logger->error(
+            'No packaged skills found at: {packaged_skills_path}',
+            [
+                'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
+                'packaged_skills_path' => $skillsPath,
+                'skills_dir' => $skillsPath,
+                'directory_created' => false,
+            ],
+        )->shouldBeCalledOnce();
 
         self::assertSame(SkillsCommand::FAILURE, $this->invokeExecute());
     }
@@ -159,13 +143,20 @@ final class SkillsCommandTest extends TestCase
         $this->synchronizer->synchronize($skillsPath, $skillsPath, '.agents/skills')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-
-        $this->output->writeln('<info>Starting skills synchronization...</info>')
+        $this->logger->info('Starting skills synchronization...')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Created .agents/skills directory.</info>')
+        $this->logger->info('Created .agents/skills directory.')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Skills synchronization completed successfully.</info>')
-            ->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'Skills synchronization completed successfully.',
+            [
+                'input' => $this->input->reveal(),
+                'packaged_skills_path' => $skillsPath,
+                'skills_dir' => $skillsPath,
+                'directory_created' => true,
+            ],
+        )->shouldBeCalledOnce();
 
         self::assertSame(SkillsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -187,11 +178,19 @@ final class SkillsCommandTest extends TestCase
         $this->synchronizer->synchronize($skillsPath, $skillsPath, '.agents/skills')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-
-        $this->output->writeln('<info>Starting skills synchronization...</info>')
+        $this->logger->info('Starting skills synchronization...')
             ->shouldBeCalledOnce();
-        $this->output->writeln('<error>Skills synchronization failed.</error>')
-            ->shouldBeCalledOnce();
+        $this->logger->error(
+            'Skills synchronization failed.',
+            [
+                'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
+                'packaged_skills_path' => $skillsPath,
+                'skills_dir' => $skillsPath,
+                'directory_created' => false,
+            ],
+        )->shouldBeCalledOnce();
 
         self::assertSame(SkillsCommand::FAILURE, $this->invokeExecute());
     }
@@ -201,8 +200,7 @@ final class SkillsCommandTest extends TestCase
      */
     private function invokeExecute(): int
     {
-        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
-
-        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+        return (new ReflectionMethod($this->command, 'execute'))
+            ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

@@ -44,6 +44,7 @@
         "composer/composer": "^2.9",
         "container-interop/service-provider": "^0.4.1",
         "dg/bypass-finals": "^1.9",
+        "ergebnis/agent-detector": "^1.1",
         "ergebnis/composer-normalize": "^2.51",
         "ergebnis/rector-rules": "^1.18",
         "fakerphp/faker": "^1.24",

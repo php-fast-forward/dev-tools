@@ -40,6 +40,16 @@ Options
    The target directory for the generated metrics report.
    Default: ``.dev-tools/metrics``.
 
+``--progress``
+   Enable progress output in nested ``docs``, ``tests``, and ``metrics`` steps.
+
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 
@@ -79,8 +89,15 @@ Behavior
 
 - Runs ``docs`` in parallel with ``tests --coverage``.
 - Runs ``metrics --target`` after tests so the JUnit report is available.
-- Runs tests with ``--no-progress`` and ``--coverage-summary`` so report builds
-  keep PHPUnit output concise.
+- Runs tests with progress disabled by default and ``--coverage-summary`` so
+  report builds keep PHPUnit output concise.
+- Progress output stays disabled by default across nested steps; use
+  ``--progress`` to re-enable it for human-readable runs.
+- When ``--json`` or ``--pretty-json`` is active, it forwards JSON mode to the
+  ``docs``, ``tests``, and ``metrics`` subprocesses and suppresses transient
+  progress output where those tools support it.
 - Passes ``--junit <coverage>/junit.xml`` to the metrics step.
 - Used by the ``standards`` command as the final phase.
 - This is the reporting stage used by GitHub Pages.
+- In GitHub Actions, the queued subprocess output is emitted inside collapsible
+  workflow groups for easier log navigation.

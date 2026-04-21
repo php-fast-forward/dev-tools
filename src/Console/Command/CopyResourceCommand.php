@@ -19,12 +19,17 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -39,8 +44,11 @@ use Symfony\Component\Filesystem\Path;
     description: 'Copies a file or directory resource into the current project.',
     help: 'This command copies a configured source file or every file in a source directory into the target path.'
 )]
-final class CopyResourceCommand extends BaseCommand
+final class CopyResourceCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * Creates a new CopyResourceCommand instance.
      *
@@ -48,12 +56,14 @@ final class CopyResourceCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the locator used to resolve source resources
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
      * @param FileDiffer $fileDiffer the service used to summarize overwrite changes
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -63,7 +73,7 @@ final class CopyResourceCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'source',
                 shortcut: 's',
@@ -117,9 +127,7 @@ final class CopyResourceCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if ('' === $source || '' === $target) {
-            $output->writeln('<error>The --source and --target options are required.</error>');
-
-            return self::FAILURE;
+            return $this->failure('The --source and --target options are required.', $input);
         }
 
         $sourcePath = $this->fileLocator->locate($source);
@@ -217,21 +225,42 @@ final class CopyResourceCommand extends BaseCommand
         OutputInterface $output,
     ): int {
         if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($targetPath)) {
-            $output->writeln(\sprintf('<comment>Skipped existing resource %s.</comment>', $targetPath));
-
-            return self::SUCCESS;
+            return $this->success(
+                'Skipped existing resource {target_path}.',
+                $input,
+                [
+                    'source_path' => $sourcePath,
+                    'target_path' => $targetPath,
+                ],
+                LogLevel::NOTICE,
+            );
         }
 
         if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($targetPath)) {
             $comparison = $this->fileDiffer->diff($sourcePath, $targetPath);
 
-            $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+            $this->logger->notice(
+                $comparison->getSummary(),
+                [
+                    'input' => $input,
+                    'source_path' => $sourcePath,
+                    'target_path' => $targetPath,
+                ],
+            );
 
             if ($comparison->isChanged()) {
                 $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
                 if (null !== $consoleDiff) {
-                    $output->writeln($consoleDiff);
+                    $this->notice(
+                        $consoleDiff,
+                        $input,
+                        [
+                            'source_path' => $sourcePath,
+                            'target_path' => $targetPath,
+                            'diff' => $comparison->getDiff(),
+                        ],
+                    );
                 }
             }
 
@@ -252,16 +281,28 @@ final class CopyResourceCommand extends BaseCommand
                 $output,
                 $targetPath
             )) {
-                $output->writeln(\sprintf('<comment>Skipped replacing %s.</comment>', $targetPath));
-
-                return self::SUCCESS;
+                return $this->success(
+                    'Skipped replacing {target_path}.',
+                    $input,
+                    [
+                        'source_path' => $sourcePath,
+                        'target_path' => $targetPath,
+                    ],
+                    LogLevel::NOTICE,
+                );
             }
         }
 
         $this->filesystem->copy($sourcePath, $targetPath, $overwrite || $interactive);
-        $output->writeln(\sprintf('<info>Copied resource %s.</info>', $targetPath));
 
-        return self::SUCCESS;
+        return $this->success(
+            'Copied resource {target_path}.',
+            $input,
+            [
+                'source_path' => $sourcePath,
+                'target_path' => $targetPath,
+            ],
+        );
     }
 
     /**
@@ -275,9 +316,10 @@ final class CopyResourceCommand extends BaseCommand
      */
     private function shouldReplaceResource(InputInterface $input, OutputInterface $output, string $targetPath): bool
     {
+        /** @var QuestionHelper $helper */
+        $helper = $this->getHelper('question');
         $question = new ConfirmationQuestion(\sprintf('Replace drifted resource %s? [y/N] ', $targetPath), false);
 
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return (bool) $helper->ask($input, $output, $question);
     }
 }

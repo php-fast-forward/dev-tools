@@ -19,9 +19,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,8 +48,11 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Synchronizes Fast Forward skills into .agents/skills directory.',
     help: 'This command ensures the consumer repository contains linked Fast Forward skills by creating symlinks to the packaged skills and removing broken links.'
 )]
-final class SkillsCommand extends BaseCommand
+final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     private const string DIRECTORY_LABEL = '.agents/skills';
 
     /**
@@ -58,12 +64,22 @@ final class SkillsCommand extends BaseCommand
      * @param FilesystemInterface $filesystem filesystem used to resolve
      *                                        and manage the skills
      *                                        directory structure
+     * @param LoggerInterface $logger logger used for command feedback
      */
     public function __construct(
         private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
+    }
+
+    /**
+     * Configures the supported JSON output option.
+     */
+    protected function configure(): void
+    {
+        $this->addJsonOption();
     }
 
     /**
@@ -89,20 +105,28 @@ final class SkillsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Starting skills synchronization...</info>');
-
         $packageSkillsPath = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL, \dirname(__DIR__, 3));
         $skillsDir = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL);
+        $this->logger->info('Starting skills synchronization...');
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
-            $output->writeln('<comment>No packaged skills found at: ' . $packageSkillsPath . '</comment>');
-
-            return self::FAILURE;
+            return $this->failure(
+                'No packaged skills found at: {packaged_skills_path}',
+                $input,
+                [
+                    'packaged_skills_path' => $packageSkillsPath,
+                    'skills_dir' => $skillsDir,
+                    'directory_created' => false,
+                ],
+            );
         }
+
+        $directoryCreated = false;
 
         if (! $this->filesystem->exists($skillsDir)) {
             $this->filesystem->mkdir($skillsDir);
-            $output->writeln('<info>Created .agents/skills directory.</info>');
+            $directoryCreated = true;
+            $this->logger->info('Created .agents/skills directory.');
         }
 
         $this->synchronizer->setLogger($this->getIO());
@@ -110,13 +134,25 @@ final class SkillsCommand extends BaseCommand
         $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::DIRECTORY_LABEL);
 
         if ($result->failed()) {
-            $output->writeln('<error>Skills synchronization failed.</error>');
-
-            return self::FAILURE;
+            return $this->failure(
+                'Skills synchronization failed.',
+                $input,
+                [
+                    'packaged_skills_path' => $packageSkillsPath,
+                    'skills_dir' => $skillsDir,
+                    'directory_created' => $directoryCreated,
+                ],
+            );
         }
 
-        $output->writeln('<info>Skills synchronization completed successfully.</info>');
-
-        return self::SUCCESS;
+        return $this->success(
+            'Skills synchronization completed successfully.',
+            $input,
+            [
+                'packaged_skills_path' => $packageSkillsPath,
+                'skills_dir' => $skillsDir,
+                'directory_created' => $directoryCreated,
+            ],
+        );
     }
 }

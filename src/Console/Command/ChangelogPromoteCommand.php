@@ -19,10 +19,14 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,17 +41,22 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Promotes Unreleased entries into a published changelog version.',
     help: 'This command moves the current Unreleased entries into a released version section, records the release date, and restores an empty Unreleased section.'
 )]
-final class ChangelogPromoteCommand extends BaseCommand
+final class ChangelogPromoteCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
      * @param ClockInterface $clock
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
         private readonly ClockInterface $clock,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -57,7 +66,7 @@ final class ChangelogPromoteCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'version',
                 mode: InputArgument::REQUIRED,
@@ -84,18 +93,31 @@ final class ChangelogPromoteCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $file = $this->filesystem->getAbsolutePath((string) $input->getOption('file'));
-        $version = (string) $input->getArgument('version');
-        $date = (string) ($input->getOption('date') ?: $this->clock->now()->format('Y-m-d'));
+        try {
+            $file = $this->filesystem->getAbsolutePath((string) $input->getOption('file'));
+            $version = (string) $input->getArgument('version');
+            $date = (string) ($input->getOption('date') ?: $this->clock->now()->format('Y-m-d'));
 
-        $this->changelogManager->promote($file, $version, $date);
+            $this->changelogManager->promote($file, $version, $date);
 
-        $output->writeln(\sprintf(
-            '<info>Promoted Unreleased changelog entries to [%s] in %s.</info>',
-            $version,
-            $file,
-        ));
-
-        return self::SUCCESS;
+            return $this->success(
+                'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
+                $input,
+                [
+                    'absolute_file' => $file,
+                    'version' => $version,
+                    'date' => $date,
+                ],
+            );
+        } catch (Throwable $throwable) {
+            return $this->failure(
+                'Unable to promote the changelog release.',
+                $input,
+                [
+                    'exception_message' => $throwable->getMessage(),
+                ],
+                (string) $input->getOption('file'),
+            );
+        }
     }
 }

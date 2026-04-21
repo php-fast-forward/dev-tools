@@ -13,20 +13,32 @@ workflow.
 .. code-block:: bash
 
    composer changelog:entry --type=added "Add release automation workflow (#28)"
+   composer changelog:entry --json "Add release automation workflow (#28)"
    composer changelog:check --against=origin/main
+   composer changelog:check --json
    composer changelog:next-version
+   composer changelog:next-version --json
    composer changelog:promote 1.3.0 --date=2026-04-19
+   composer changelog:promote 1.3.0 --json
    composer changelog:show 1.3.0
+   composer changelog:show 1.3.0 --json
 
 Important details:
 
 - ``changelog:entry`` creates the changelog file automatically when it does not
   exist yet;
+- ``--json`` is the standard machine-readable output flag across the local
+  DevTools command surface;
+- ``--pretty-json`` keeps the same structured payload but indents it for easier
+  manual inspection in the terminal;
+- when structured output is active, DevTools suppresses progress-heavy nested
+  tool output where possible and forwards JSON, quiet, or progress preferences
+  to subprocesses that support them;
 - ``changelog:check`` is the command used by pull-request validation;
 - ``changelog:next-version`` and ``changelog:promote`` support the manual
   release-preparation workflow;
-- ``changelog:show`` renders the published release body used by GitHub Release
-  publication.
+- ``changelog:show`` keeps its text-mode output as the raw published release
+  body used by GitHub Release publication.
 
 ``tests``
 ---------
@@ -43,7 +55,10 @@ Important details:
 - local ``phpunit.xml`` is preferred over the packaged default;
 - ``--coverage=<path>`` creates HTML, Testdox, Clover, and raw coverage output;
 - ``--coverage-summary`` keeps coverage text output to PHPUnit's summary;
-- ``--no-progress`` disables PHPUnit progress output;
+- progress output is disabled by default;
+- ``--progress`` re-enables PHPUnit progress output in text mode;
+- ``--json`` and ``--pretty-json`` still suppress PHPUnit progress output
+  automatically;
 - ``--no-cache`` disables ``tmp/cache/phpunit``;
 - the packaged configuration registers the DevTools PHPUnit extension.
 
@@ -105,6 +120,9 @@ Important details:
 - ``--target`` stores the HTML report plus ``report.json`` and
   ``report-summary.json`` in the same directory for CI artifacts or manual
   review;
+- ``--json`` and ``--pretty-json`` keep the top-level DevTools response
+  structured while forwarding JSON or quieter modes to the wrapped tools where
+  available;
 - it suppresses deprecation notices emitted by the PhpMetrics dependency
   itself so the command output stays readable.
 
@@ -122,7 +140,11 @@ Important details:
 
 - it always executes ``composer update --lock --quiet`` first;
 - without ``--fix``, Composer Normalize runs in ``--dry-run`` mode;
-- ECS uses local ``ecs.php`` when present, otherwise the packaged fallback.
+- ECS uses local ``ecs.php`` when present, otherwise the packaged fallback;
+- progress output is disabled by default; ``--progress`` re-enables it for text
+  mode;
+- ``--json`` and ``--pretty-json`` forward JSON mode to ECS and suppress its
+  progress bar.
 
 ``refactor``
 ------------
@@ -138,7 +160,11 @@ Important details:
 - without ``--fix``, Rector runs in dry-run mode;
 - local ``rector.php`` is preferred when present;
 - the packaged default includes Fast Forward custom Rector rules plus shared
-  Rector sets.
+  Rector sets;
+- progress output is disabled by default; ``--progress`` re-enables it for text
+  mode;
+- ``--json`` and ``--pretty-json`` forward ``--output-format json`` to Rector
+  and disable its progress bar.
 
 ``phpdoc``
 ----------
@@ -157,7 +183,12 @@ Important details:
 - it uses ``.php-cs-fixer.dist.php`` and ``rector.php`` through the same
   local-first fallback logic;
 - the Rector phase explicitly runs
-  ``FastForward\DevTools\Rector\AddMissingMethodPhpDocRector``.
+  ``FastForward\DevTools\Rector\AddMissingMethodPhpDocRector``;
+- progress output is disabled by default; ``--progress`` re-enables it for text
+  mode;
+- ``--json`` and ``--pretty-json`` switch PHP-CS-Fixer to JSON output with
+  progress disabled and run the Rector phase in JSON mode without its progress
+  bar.
 
 ``docs``
 --------
@@ -174,7 +205,10 @@ Important details:
 - API pages are built from the PSR-4 paths declared in ``composer.json``;
 - guide pages are built from the selected source directory;
 - ``--template`` defaults to
-  ``vendor/fast-forward/phpdoc-bootstrap-template``.
+  ``vendor/fast-forward/phpdoc-bootstrap-template``;
+- progress output is disabled by default; ``--progress`` re-enables it for text
+  mode;
+- ``--json`` and ``--pretty-json`` also disable phpDocumentor's progress output.
 
 ``wiki``
 --------
@@ -204,10 +238,14 @@ Runs the documentation and test-report pipeline used by GitHub Pages.
 Important details:
 
 - it calls ``docs --target .dev-tools``;
-- it calls ``tests --coverage .dev-tools/coverage --no-progress --coverage-summary``;
+- it calls ``tests --coverage .dev-tools/coverage --coverage-summary``;
 - it calls ``metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml``;
 - ``docs`` remains detached, while ``tests`` and ``metrics`` run in sequence so
   PhpMetrics can reuse the JUnit report generated by PHPUnit;
+- progress output stays disabled by default across the nested steps, and
+  ``--progress`` re-enables it for human-readable runs;
+- ``--json`` and ``--pretty-json`` are propagated to each subprocess, while
+  their progress output is suppressed where supported;
 - it is the reporting stage used by ``standards``.
 
 ``skills``

@@ -19,11 +19,14 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Twig\Environment;
 use Composer\Command\BaseCommand;
 use Throwable;
@@ -32,6 +35,7 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -43,8 +47,11 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Checks and fixes PHPDocs.',
     help: 'This command checks and fixes PHPDocs in your PHP files.',
 )]
-final class PhpDocCommand extends BaseCommand
+final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @var string determines the template filename for docheaders
      */
@@ -71,6 +78,7 @@ final class PhpDocCommand extends BaseCommand
      * @param ComposerJsonInterface $composer
      * @param Environment $renderer
      * @param ClockInterface $clock
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -80,6 +88,7 @@ final class PhpDocCommand extends BaseCommand
         private readonly FilesystemInterface $filesystem,
         private readonly Environment $renderer,
         private readonly ClockInterface $clock,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -93,12 +102,17 @@ final class PhpDocCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'path',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the file or directory to check.',
                 default: ['.'],
+            )
+            ->addOption(
+                name: 'progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to enable progress output from PHPDoc tooling.',
             )
             ->addOption(
                 name: 'fix',
@@ -127,9 +141,16 @@ final class PhpDocCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Checking and fixing PHPDocs...</info>');
+        $jsonOutput = $this->isJsonOutput($input);
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $fix = (bool) $input->getOption('fix');
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
-        $this->ensureDocHeaderExists($output);
+        $this->logger->info('Checking and fixing PHPDocs...', [
+            'input' => $input,
+        ]);
+
+        $this->ensureDocHeaderExists();
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -140,7 +161,16 @@ final class PhpDocCommand extends BaseCommand
                 $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
             );
 
-        if (! $input->getOption('fix')) {
+        if (! $progress) {
+            $processBuilder = $processBuilder->withArgument('--show-progress=none');
+        }
+
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder
+                ->withArgument('--format=json');
+        }
+
+        if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
@@ -151,7 +181,16 @@ final class PhpDocCommand extends BaseCommand
             ->withArgument('--autoload-file', 'vendor/autoload.php')
             ->withArgument('--only', AddMissingMethodPhpDocRector::class);
 
-        if (! $input->getOption('fix')) {
+        if (! $progress) {
+            $processBuilder = $processBuilder->withArgument('--no-progress-bar');
+        }
+
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder
+                ->withArgument('--output-format', 'json');
+        }
+
+        if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
@@ -160,7 +199,17 @@ final class PhpDocCommand extends BaseCommand
         $this->processQueue->add($phpCsFixer);
         $this->processQueue->add($rector);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('PHPDoc checks completed successfully.', $input, [
+                'output' => $processOutput,
+            ]);
+        }
+
+        return $this->failure('PHPDoc checks failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 
     /**
@@ -169,11 +218,9 @@ final class PhpDocCommand extends BaseCommand
      * The method MUST query the local filesystem. If the file is missing, it SHOULD copy
      * the tool template into the root folder.
      *
-     * @param OutputInterface $output the logger where missing capabilities are announced
-     *
      * @return void
      */
-    private function ensureDocHeaderExists(OutputInterface $output): void
+    private function ensureDocHeaderExists(): void
     {
         $support = $this->composer->getSupport();
 
@@ -198,13 +245,13 @@ final class PhpDocCommand extends BaseCommand
         try {
             $this->filesystem->dumpFile(self::FILENAME, $docHeader);
         } catch (Throwable) {
-            $output->writeln(
-                '<comment>Skipping .docheader creation because the destination file could not be written.</comment>'
+            $this->logger->warning(
+                'Skipping .docheader creation because the destination file could not be written.'
             );
 
             return;
         }
 
-        $output->writeln('<info>Created .docheader from repository template.</info>');
+        $this->logger->info('Created .docheader from repository template.');
     }
 }

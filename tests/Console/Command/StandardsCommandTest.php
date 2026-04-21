@@ -19,39 +19,38 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\Console\Application;
+use Symfony\Component\Process\Process;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\StandardsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(StandardsCommand::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class StandardsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<InputInterface>
-     */
+    private ObjectProphecy $processBuilder;
+
+    private ObjectProphecy $processQueue;
+
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $input;
 
-    /**
-     * @var ObjectProphecy<OutputInterface>
-     */
     private ObjectProphecy $output;
-
-    /**
-     * @var ObjectProphecy<Application>
-     */
-    private ObjectProphecy $application;
 
     private StandardsCommand $command;
 
@@ -60,31 +59,29 @@ final class StandardsCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->application = $this->prophesize(Application::class);
-        $this->command = new StandardsCommand();
-        $this->application->getHelperSet()
-            ->willReturn(new HelperSet());
-        $this->command->setApplication($this->application->reveal());
 
-        foreach ($this->command->getDefinition()->getOptions() as $option) {
-            $this->input->getOption($option->getName())
-                ->willReturn($option->getDefault());
-        }
-    }
+        $this->input->getOption('fix')
+            ->willReturn(false);
+        $this->input->getOption('progress')
+            ->willReturn(false);
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument(Argument::any())
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->build(Argument::any())
+            ->willReturn($this->prophesize(Process::class)->reveal());
 
-    /**
-     * @return void
-     */
-    #[Test]
-    public function commandWillSetExpectedNameDescriptionAndHelp(): void
-    {
-        self::assertSame('standards', $this->command->getName());
-        self::assertSame('Runs Fast Forward code standards checks.', $this->command->getDescription());
-        self::assertSame(
-            'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.',
-            $this->command->getHelp()
+        $this->command = new StandardsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->logger->reveal(),
         );
     }
 
@@ -94,14 +91,22 @@ final class StandardsCommandTest extends TestCase
     #[Test]
     public function executeWillRunSuiteSequentially(): void
     {
-        $this->application->doRun(Argument::type(StringInput::class), $this->output->reveal())
-            ->willReturn(StandardsCommand::SUCCESS)
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
             ->shouldBeCalledTimes(4);
-
-        $this->output->writeln('<info>Running code standards checks...</info>')
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(StandardsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->logger->info('Running code standards checks...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
-        $this->output->writeln('<info>All code standards checks completed!</info>')
-            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Code standards checks completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
+        )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -112,14 +117,21 @@ final class StandardsCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenAnyCommandFails(): void
     {
-        $this->application->doRun(Argument::type(StringInput::class), $this->output->reveal())
-            ->willReturn(
-                StandardsCommand::SUCCESS,
-                StandardsCommand::FAILURE,
-                StandardsCommand::SUCCESS,
-                StandardsCommand::SUCCESS,
-            )
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
             ->shouldBeCalledTimes(4);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(StandardsCommand::FAILURE)
+            ->shouldBeCalledOnce();
+        $this->logger->info('Running code standards checks...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->error(
+            'Code standards checks failed.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
+        )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::FAILURE, $this->invokeExecute());
     }
@@ -129,8 +141,7 @@ final class StandardsCommandTest extends TestCase
      */
     private function invokeExecute(): int
     {
-        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
-
-        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+        return (new ReflectionMethod($this->command, 'execute'))
+            ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

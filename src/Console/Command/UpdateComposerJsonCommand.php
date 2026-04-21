@@ -19,12 +19,16 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use Composer\Factory;
 use Composer\Json\JsonManipulator;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -43,8 +47,11 @@ use function Safe\getcwd;
     description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
     help: 'This command adds or updates composer.json scripts and GrumPHP extra configuration required by dev-tools.'
 )]
-final class UpdateComposerJsonCommand extends BaseCommand
+final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * Creates a new UpdateComposerJsonCommand instance.
      *
@@ -52,12 +59,14 @@ final class UpdateComposerJsonCommand extends BaseCommand
      * @param FilesystemInterface $filesystem the filesystem used to read and write composer.json
      * @param FileLocatorInterface $fileLocator the locator used to resolve packaged configuration files
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -67,7 +76,7 @@ final class UpdateComposerJsonCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'file',
                 shortcut: 'f',
@@ -108,9 +117,14 @@ final class UpdateComposerJsonCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if (! $this->filesystem->exists($file)) {
-            $output->writeln(\sprintf('<comment>Composer file %s does not exist.</comment>', $file));
-
-            return self::SUCCESS;
+            return $this->success(
+                'Composer file {file} does not exist.',
+                $input,
+                [
+                    'file' => $file,
+                ],
+                LogLevel::NOTICE,
+            );
         }
 
         $currentContents = $this->filesystem->readFile($file);
@@ -138,13 +152,18 @@ final class UpdateComposerJsonCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated dev-tools composer.json configuration.', $file),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->notice($comparison->getSummary(), $input, [
+            'file' => $file,
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->notice($consoleDiff, $input, [
+                    'file' => $file,
+                    'diff' => $comparison->getDiff(),
+                ]);
             }
         }
 
@@ -161,15 +180,16 @@ final class UpdateComposerJsonCommand extends BaseCommand
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldUpdateComposerJson($input, $output, $file)) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $file));
-
-            return self::SUCCESS;
+            return $this->success('Skipped updating {file}.', $input, [
+                'file' => $file,
+            ], LogLevel::NOTICE,);
         }
 
         $this->filesystem->dumpFile($file, $updatedContents);
-        $output->writeln('<info>Updated composer.json dev-tools configuration.</info>');
 
-        return self::SUCCESS;
+        return $this->success('Updated composer.json dev-tools configuration.', $input, [
+            'file' => $file,
+        ]);
     }
 
     /**

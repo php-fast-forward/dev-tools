@@ -34,6 +34,13 @@ use FastForward\DevTools\Changelog\Renderer\MarkdownRendererInterface;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
+use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
+use FastForward\DevTools\Console\Logger\OutputFormatLogger;
+use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
+use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
+use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
+use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
@@ -72,12 +79,13 @@ use FastForward\DevTools\Resource\UnifiedDiffer;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
 use SebastianBergmann\Diff\Output\DiffOutputBuilderInterface;
 use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Symfony\Component\Console\Output\ConsoleOutput;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 
@@ -123,12 +131,22 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             FileLocatorInterface::class => create(FileLocator::class)->constructor([getcwd(), \dirname(__DIR__, 2)]),
 
             // PSR
-            LoggerInterface::class => get(NullLogger::class),
+            LoggerInterface::class => get(OutputFormatLogger::class),
             ClockInterface::class => get(SystemClock::class),
 
             // Console
             CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
             CommandProvider::class => get(DevToolsCommandProvider::class),
+            ConsoleOutputInterface::class => create(ConsoleOutput::class)
+                ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)
+                ->method('setFormatter', get(LogLevelOutputFormatter::class)),
+            GithubActionOutput::class => create(GithubActionOutput::class)->constructor(
+                get(ConsoleOutputInterface::class)
+            ),
+            ContextProcessorInterface::class => create(CompositeContextProcessor::class)->constructor([
+                get(CommandInputProcessor::class),
+                get(CommandOutputProcessor::class),
+            ]),
 
             // Coverage
             CoverageSummaryLoaderInterface::class => get(CoverageSummaryLoader::class),

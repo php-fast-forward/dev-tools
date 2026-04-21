@@ -19,59 +19,42 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Symfony\Component\Console\Output\BufferedOutput;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class ReportsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<ProcessBuilderInterface>
-     */
     private ObjectProphecy $processBuilder;
 
-    /**
-     * @var ObjectProphecy<ProcessQueueInterface>
-     */
     private ObjectProphecy $processQueue;
 
-    /**
-     * @var ObjectProphecy<InputInterface>
-     */
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $input;
 
-    /**
-     * @var ObjectProphecy<OutputInterface>
-     */
     private ObjectProphecy $output;
 
-    /**
-     * @var ObjectProphecy<Process>
-     */
-    private ObjectProphecy $docsProcess;
-
-    /**
-     * @var ObjectProphecy<Process>
-     */
-    private ObjectProphecy $testsProcess;
-
-    /**
-     * @var ObjectProphecy<Process>
-     */
-    private ObjectProphecy $metricsProcess;
+    private ObjectProphecy $process;
 
     private ReportsCommand $command;
 
@@ -82,11 +65,10 @@ final class ReportsCommandTest extends TestCase
     {
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->docsProcess = $this->prophesize(Process::class);
-        $this->testsProcess = $this->prophesize(Process::class);
-        $this->metricsProcess = $this->prophesize(Process::class);
+        $this->process = $this->prophesize(Process::class);
 
         $this->input->getOption('target')
             ->willReturn('.dev-tools');
@@ -94,35 +76,28 @@ final class ReportsCommandTest extends TestCase
             ->willReturn('.dev-tools/coverage');
         $this->input->getOption('metrics')
             ->willReturn('.dev-tools/metrics');
+        $this->input->getOption('progress')
+            ->willReturn(false);
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->output->getVerbosity()
+            ->willReturn(OutputInterface::VERBOSITY_NORMAL);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->getFormatter()
+            ->willReturn(new OutputFormatter());
+        $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
+            $this->processBuilder->reveal()
+        );
+        $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
 
-        $this->processBuilder->withArgument(Argument::cetera())
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->build('composer dev-tools docs --')
-            ->willReturn($this->docsProcess->reveal());
-
-        $this->processBuilder->build('composer dev-tools tests --')
-            ->willReturn($this->testsProcess->reveal());
-        $this->processBuilder->build('composer dev-tools metrics --')
-            ->willReturn($this->metricsProcess->reveal());
-
-        $this->processQueue->run($this->output->reveal())
-            ->willReturn(ReportsCommand::SUCCESS);
-
-        $this->command = new ReportsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function commandWillSetExpectedNameDescriptionAndHelp(): void
-    {
-        self::assertSame('reports', $this->command->getName());
-        self::assertSame('Generates the frontpage for Fast Forward documentation.', $this->command->getDescription());
-        self::assertSame(
-            'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.',
-            $this->command->getHelp()
+        $this->command = new ReportsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->logger->reveal(),
         );
     }
 
@@ -130,86 +105,67 @@ final class ReportsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function commandWillHaveExpectedOptions(): void
+    public function executeWillRunReportsAndReturnSuccess(): void
     {
-        $definition = $this->command->getDefinition();
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->logger->info('Generating frontpage for Fast Forward documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Documentation reports generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
 
-        self::assertTrue($definition->hasOption('target'));
-        self::assertTrue($definition->hasOption('coverage'));
-        self::assertTrue($definition->hasOption('metrics'));
+        self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunDocsAsDetachedAndTestsAndMetricsInSequence(): void
+    public function executeWillCaptureBufferedOutputWhenJsonIsRequested(): void
     {
-        $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processQueue->run(Argument::type('object'))
+            ->willReturn(ReportsCommand::FAILURE)
             ->shouldBeCalledOnce();
+        $this->logger->info('Generating frontpage for Fast Forward documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->error(
+            'Documentation reports generation failed.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof BufferedOutput),
+        )->shouldBeCalled();
 
-        $this->processBuilder->withArgument('--ansi')
-            ->shouldBeCalled()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument('--target', '.dev-tools')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument('--coverage', '.dev-tools/coverage')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument('--no-progress')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument('--coverage-summary')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument('--target', '.dev-tools/metrics')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--junit', '.dev-tools/coverage/junit.xml')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processQueue->add($this->docsProcess->reveal(), false, true)
-            ->shouldBeCalledOnce();
-
-        $this->processQueue->add($this->testsProcess->reveal())
-            ->shouldBeCalledOnce();
-
-        $this->processQueue->add($this->metricsProcess->reveal())
-            ->shouldBeCalledOnce();
-
-        $result = $this->executeCommand();
-
-        self::assertSame(ReportsCommand::SUCCESS, $result);
+        self::assertSame(ReportsCommand::FAILURE, $this->executeCommand());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunMetricsCommandWhenRequested(): void
+    public function executeWillForwardProgressToNestedCommandsWhenRequested(): void
     {
-        $this->input->getOption('metrics')
-            ->willReturn('tmp/metrics');
-
-        $this->processBuilder->withArgument('--target', 'tmp/metrics')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-        $this->processBuilder->withArgument('--junit', '.dev-tools/coverage/junit.xml')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processQueue->add($this->docsProcess->reveal(), false, true)
-            ->shouldBeCalledOnce();
-        $this->processQueue->add($this->testsProcess->reveal())
-            ->shouldBeCalledOnce();
-        $this->processQueue->add($this->metricsProcess->reveal())
+        $this->input->getOption('progress')
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--progress')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(3);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
             ->shouldBeCalledOnce();
 
         self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
@@ -220,8 +176,7 @@ final class ReportsCommandTest extends TestCase
      */
     private function executeCommand(): int
     {
-        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
-
-        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+        return (new ReflectionMethod($this->command, 'execute'))
+            ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

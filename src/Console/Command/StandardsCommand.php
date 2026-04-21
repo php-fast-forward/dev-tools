@@ -19,11 +19,16 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -35,19 +40,37 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Runs Fast Forward code standards checks.',
     help: 'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.'
 )]
-final class StandardsCommand extends BaseCommand
+final class StandardsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
+    /**
+     * @param ProcessBuilderInterface $processBuilder
+     * @param ProcessQueueInterface $processQueue
+     * @param LoggerInterface $logger
+     */
+    public function __construct(
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
+        private readonly LoggerInterface $logger,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Configures constraints and arguments for the collective standard runner.
-     *
-     * This method MUST specify definitions and help texts appropriately. It SHALL
-     * expose an optional `--fix` mode.
      *
      * @return void
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
+            ->addOption(
+                name: 'progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to enable progress output from nested standards commands.'
+            )
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',
@@ -57,45 +80,58 @@ final class StandardsCommand extends BaseCommand
     }
 
     /**
-     * Evaluates multiple commands seamlessly in a sequential execution.
-     *
-     * The method MUST trigger refactoring, phpdoc generation, code styling, and reports building block consecutively.
-     * It SHALL reliably return a standard SUCCESS execution state on completion.
-     *
-     * @param InputInterface $input internal input arguments retrieved via terminal runtime constraints
-     * @param OutputInterface $output external output mechanisms
-     *
-     * @return int the status indicator describing the completion
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running code standards checks...</info>');
+        $jsonOutput = $this->isJsonOutput($input);
+        $prettyJsonOutput = $this->isPrettyJsonOutput($input);
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
-        $results = [];
+        $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $commands = [];
+        $fix = (bool) $input->getOption('fix');
 
-        $fix = $input->getOption('fix') ? '--fix' : '';
+        $this->logger->info('Running code standards checks...', [
+            'input' => $input,
+        ]);
 
-        $results[] = $this->runCommand('refactor ' . $fix, $output);
-        $results[] = $this->runCommand('phpdoc ' . $fix, $output);
-        $results[] = $this->runCommand('code-style ' . $fix, $output);
-        $results[] = $this->runCommand('reports', $output);
+        foreach (['refactor', 'phpdoc', 'code-style', 'reports'] as $command) {
+            $commands[] = $command;
+            $processBuilder = $this->processBuilder;
 
-        $output->writeln('<info>All code standards checks completed!</info>');
+            if ($progress) {
+                $processBuilder = $processBuilder->withArgument('--progress');
+            }
 
-        return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
-    }
+            if ('reports' !== $command && $fix) {
+                $processBuilder = $processBuilder->withArgument('--fix');
+            }
 
-    /**
-     * Runs a registered command through the current console application.
-     *
-     * @param string $command the command line to execute
-     * @param OutputInterface $output the output that receives command feedback
-     *
-     * @return int the dispatched command status code
-     */
-    private function runCommand(string $command, OutputInterface $output): int
-    {
-        return $this->getApplication()
-            ->doRun(new StringInput($command), $output);
+            if ($jsonOutput) {
+                $processBuilder = $processBuilder->withArgument('--json');
+            }
+
+            if ($prettyJsonOutput) {
+                $processBuilder = $processBuilder->withArgument('--pretty-json');
+            }
+
+            $this->processQueue->add($processBuilder->build('composer dev-tools ' . $command . ' --'));
+        }
+
+        $result = $this->processQueue->run($commandOutput);
+
+        if (self::FAILURE === $result) {
+            return $this->failure('Code standards checks failed.', $input, [
+                'output' => $commandOutput,
+                'commands' => $commands,
+            ]);
+        }
+
+        return $this->success('Code standards checks completed successfully.', $input, [
+            'output' => $commandOutput,
+            'commands' => $commands,
+        ]);
     }
 }

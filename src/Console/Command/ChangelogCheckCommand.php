@@ -19,9 +19,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -35,15 +38,20 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Checks whether a changelog file contains meaningful unreleased entries.',
     help: 'This command validates the current Unreleased section and may compare it against a base git reference to enforce pull request changelog updates.'
 )]
-final class ChangelogCheckCommand extends BaseCommand
+final class ChangelogCheckCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -53,7 +61,7 @@ final class ChangelogCheckCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'against',
                 mode: InputOption::VALUE_REQUIRED,
@@ -81,16 +89,23 @@ final class ChangelogCheckCommand extends BaseCommand
         $hasPendingChanges = $this->unreleasedEntryChecker
             ->hasPendingChanges($path, $against);
 
-        $file = (string) $input->getOption('file');
-
         if ($hasPendingChanges) {
-            $output->writeln(\sprintf('<info>%s contains unreleased changes ready for review.</info>', $file));
-
-            return self::SUCCESS;
+            return $this->success(
+                'The changelog contains unreleased changes ready for review.',
+                $input,
+                [
+                    'has_pending_changes' => true,
+                ],
+            );
         }
 
-        $output->writeln(\sprintf('<error>%s must add a meaningful entry to the Unreleased section.</error>', $file));
-
-        return self::FAILURE;
+        return $this->failure(
+            'The changelog must add a meaningful entry to the Unreleased section.',
+            $input,
+            [
+                'has_pending_changes' => false,
+            ],
+            (string) $input->getOption('file'),
+        );
     }
 }

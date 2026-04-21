@@ -19,9 +19,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -36,15 +40,20 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Prints the notes body for a released changelog version.',
     help: 'This command renders the body of one released changelog section so it can be reused for GitHub release notes.'
 )]
-final class ChangelogShowCommand extends BaseCommand
+final class ChangelogShowCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -54,7 +63,7 @@ final class ChangelogShowCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'version',
                 mode: InputArgument::REQUIRED,
@@ -76,11 +85,31 @@ final class ChangelogShowCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->write($this->changelogManager->renderReleaseNotes(
-            $this->filesystem->getAbsolutePath((string) $input->getOption('file')),
-            (string) $input->getArgument('version'),
-        ));
+        try {
+            $version = (string) $input->getArgument('version');
+            $file = (string) $input->getOption('file');
+            $releaseNotes = $this->changelogManager->renderReleaseNotes(
+                $this->filesystem->getAbsolutePath($file),
+                $version,
+            );
 
-        return self::SUCCESS;
+            return $this->success(
+                $releaseNotes,
+                $input,
+                [
+                    'version' => $version,
+                    'release_notes' => $releaseNotes,
+                ],
+            );
+        } catch (Throwable $throwable) {
+            return $this->failure(
+                'Unable to render changelog release notes.',
+                $input,
+                [
+                    'exception_message' => $throwable->getMessage(),
+                ],
+                (string) $input->getOption('file'),
+            );
+        }
     }
 }

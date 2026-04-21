@@ -19,14 +19,18 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -43,8 +47,11 @@ use function is_numeric;
     aliases: ['deps'],
     help: 'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.'
 )]
-final class DependenciesCommand extends BaseCommand
+final class DependenciesCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';
 
     private const int DISABLE_OUTDATED_THRESHOLD = -1;
@@ -53,11 +60,13 @@ final class DependenciesCommand extends BaseCommand
      * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
      * @param FileLocatorInterface $fileLocator resolves the dependency analyser configuration
+     * @param LoggerInterface $logger writes command feedback
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly FileLocatorInterface $fileLocator,
+        private readonly LoggerInterface $logger,
     ) {
         return parent::__construct();
     }
@@ -67,7 +76,7 @@ final class DependenciesCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'max-outdated',
                 mode: InputOption::VALUE_REQUIRED,
@@ -101,12 +110,13 @@ final class DependenciesCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $jsonOutput = $this->isJsonOutput($input);
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+
         try {
             $maximumOutdated = $this->resolveMaximumOutdated($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
-
-            return self::FAILURE;
+            return $this->failure($invalidArgumentException->getMessage(), $input);
         }
 
         $this->processQueue->add($this->getRaiseToInstalledCommand($input));
@@ -117,7 +127,11 @@ final class DependenciesCommand extends BaseCommand
             $this->processQueue->add($this->getComposerNormalizeCommand());
         }
 
-        $output->writeln('<info>Running dependency analysis...</info>');
+        if (! $jsonOutput) {
+            $this->logger->info('Running dependency analysis...', [
+                'input' => $input,
+            ]);
+        }
 
         $this->processQueue->add($this->getComposerDependencyAnalyserCommand($input));
         $this->processQueue->add(
@@ -125,7 +139,17 @@ final class DependenciesCommand extends BaseCommand
             $this->shouldIgnoreOutdatedFailures($maximumOutdated),
         );
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('Dependency analysis completed successfully.', $input, [
+                'output' => $processOutput,
+            ]);
+        }
+
+        return $this->failure('Dependency analysis failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 
     /**

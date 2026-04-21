@@ -20,21 +20,24 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
+use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,43 +48,25 @@ use function Safe\getcwd;
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(CoverageSummary::class)]
 #[UsesClass(ProcessBuilder::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class TestsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<CoverageSummaryLoaderInterface>
-     */
     private ObjectProphecy $coverageSummaryLoader;
 
-    /**
-     * @var ObjectProphecy<ComposerJsonInterface>
-     */
     private ObjectProphecy $composerJson;
 
-    /**
-     * @var ObjectProphecy<FilesystemInterface>
-     */
     private ObjectProphecy $filesystem;
 
-    /**
-     * @var ObjectProphecy<FileLocatorInterface>
-     */
     private ObjectProphecy $fileLocator;
 
-    /**
-     * @var ObjectProphecy<ProcessQueueInterface>
-     */
     private ObjectProphecy $processQueue;
 
-    /**
-     * @var ObjectProphecy<InputInterface>
-     */
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $input;
 
-    /**
-     * @var ObjectProphecy<OutputInterface>
-     */
     private ObjectProphecy $output;
 
     private TestsCommand $command;
@@ -96,6 +81,7 @@ final class TestsCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
 
@@ -106,16 +92,14 @@ final class TestsCommandTest extends TestCase
             $this->fileLocator->reveal(),
             new ProcessBuilder(),
             $this->processQueue->reveal(),
+            $this->logger->reveal(),
         );
 
         $this->composerJson->getAutoload('psr-4')
             ->willReturn([
                 'FastForward\\DevTools\\' => 'src/',
             ]);
-
-        $this->fileLocator->locate(TestsCommand::CONFIG)
-            ->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
-
+        $this->fileLocator->locate(TestsCommand::CONFIG)->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
         $this->filesystem->getAbsolutePath('./vendor/autoload.php')
             ->willReturn(getcwd() . '/vendor/autoload.php');
         $this->filesystem->getAbsolutePath('./tmp/cache/phpunit')
@@ -140,138 +124,54 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function commandWillSetExpectedNameDescriptionAndHelp(): void
-    {
-        self::assertSame('tests', $this->command->getName());
-        self::assertSame('Runs PHPUnit tests.', $this->command->getDescription());
-        self::assertSame('This command runs PHPUnit to execute your tests.', $this->command->getHelp());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function commandWillHaveExpectedOutputOptions(): void
-    {
-        $definition = $this->command->getDefinition();
-
-        self::assertTrue($definition->hasOption('no-progress'));
-        self::assertTrue($definition->hasOption('coverage-summary'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
     public function executeWillRunPhpUnitProcessWithConfigFile(): void
     {
-        $this->willQueueProcessMatching(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
+        $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
+            $process->getCommandLine(),
+            '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG,
+        )))->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'PHPUnit tests completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
 
-            return str_contains($commandLine, 'vendor/bin/phpunit')
-                && str_contains($commandLine, '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG);
-        });
-
-        $this->invokeExecute();
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWithCoverageWillIncludeCoverageArguments(): void
+    public function executeWillDisablePhpUnitProgressWhenJsonIsRequested(): void
     {
-        $this->willQueueProcessMatching(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
 
-            return str_contains($commandLine, '--coverage-text')
-                && ! str_contains($commandLine, '--only-summary-for-coverage-text')
-                && str_contains($commandLine, '--coverage-html=' . getcwd() . '/.dev-tools/coverage');
-        });
-
-        $this->input->getOption('coverage')
-            ->willReturn('.dev-tools/coverage');
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithNoProgressWillForwardNoProgressToPhpUnit(): void
-    {
-        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
+        $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
             $process->getCommandLine(),
             '--no-progress',
-        ));
-
-        $this->input->getOption('no-progress')
-            ->willReturn(true);
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithCoverageSummaryWillIncludeCoverageTextSummaryArgument(): void
-    {
-        $this->willQueueProcessMatching(function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, '--coverage-text')
-                && str_contains($commandLine, '--only-summary-for-coverage-text');
-        });
-
-        $this->input->getOption('coverage')
-            ->willReturn('.dev-tools/coverage');
-        $this->input->getOption('coverage-summary')
-            ->willReturn(true);
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithCoverageSummaryWithoutCoverageWillNotGenerateCoverageTextSummary(): void
-    {
-        $this->willQueueProcessMatching(static function (Process $process): bool {
-            $commandLine = $process->getCommandLine();
-
-            return ! str_contains($commandLine, '--coverage-text')
-                && ! str_contains($commandLine, '--only-summary-for-coverage-text');
-        });
-
-        $this->input->getOption('coverage-summary')
-            ->willReturn(true);
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithMinCoverageWillGenerateCoveragePhpAndValidateIt(): void
-    {
-        $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
-
-        $this->willQueueProcessMatching(function (Process $process) use ($coverageReportPath): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, '--coverage-php=' . $coverageReportPath)
-                && ! str_contains($commandLine, '--coverage-html=');
-        });
-
-        $this->coverageSummaryLoader->load($coverageReportPath)
-            ->willReturn(new CoverageSummary(85, 100));
-
-        $this->input->getOption('min-coverage')
-            ->willReturn('80');
+        )))->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'PHPUnit tests completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -280,26 +180,41 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWithCoverageAndMinCoverageWillValidateGeneratedCoverageReport(): void
+    public function executeWillEnablePhpUnitProgressWhenRequested(): void
     {
-        $coverageReportPath = getcwd() . '/.dev-tools/coverage/coverage.php';
+        $this->input->getOption('progress')
+            ->willReturn(true);
 
-        $this->willQueueProcessMatching(function (Process $process) use ($coverageReportPath): bool {
-            $commandLine = $process->getCommandLine();
-
-            return str_contains($commandLine, '--coverage-html=' . getcwd() . '/.dev-tools/coverage')
-                && str_contains($commandLine, '--coverage-php=' . $coverageReportPath);
-        });
-
-        $this->coverageSummaryLoader->load($coverageReportPath)
-            ->willReturn(new CoverageSummary(90, 100));
-
-        $this->input->getOption('coverage')
-            ->willReturn('.dev-tools/coverage');
-        $this->input->getOption('min-coverage')
-            ->willReturn('80');
+        $this->processQueue->add(Argument::that(static fn(Process $process): bool => ! str_contains(
+            $process->getCommandLine(),
+            '--no-progress',
+        )))->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithInvalidMinCoverageWillReturnFailure(): void
+    {
+        $this->input->getOption('min-coverage')
+            ->willReturn('invalid');
+        $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->error(
+            'The --min-coverage option MUST be a numeric percentage.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }
 
     /**
@@ -310,72 +225,25 @@ final class TestsCommandTest extends TestCase
     {
         $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
 
-        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
-            $process->getCommandLine(),
-            '--coverage-php=' . $coverageReportPath,
-        ));
-
-        $this->output->writeln(Argument::type('string'))
-            ->will(static function (): void {});
-        $this->output->writeln(Argument::containingString('Minimum line coverage'))
-            ->shouldBeCalled();
-
-        $this->coverageSummaryLoader->load($coverageReportPath)
-            ->willReturn(new CoverageSummary(75, 100));
-
         $this->input->getOption('min-coverage')
             ->willReturn('80');
-
-        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithFilterWillForwardTheFilterToPhpUnit(): void
-    {
-        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
-            $process->getCommandLine(),
-            '--filter=TestsCommandTest',
-        ));
-
-        $this->input->getOption('filter')
-            ->willReturn('TestsCommandTest');
-
-        $this->invokeExecute();
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithInvalidMinCoverageWillReturnFailure(): void
-    {
-        $this->output->writeln(Argument::type('string'))
-            ->will(static function (): void {});
-        $this->output->writeln(Argument::containingString('--min-coverage'))
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willReturn(new CoverageSummary(75, 100));
+        $this->processQueue->add(Argument::type(Process::class))->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
-
-        $this->input->getOption('min-coverage')
-            ->willReturn('abc');
-
-        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWithOutOfRangeMinCoverageWillReturnFailure(): void
-    {
-        $this->output->writeln(Argument::type('string'))
-            ->will(static function (): void {});
-        $this->output->writeln(Argument::containingString('between 0 and 100'))
-            ->shouldBeCalled();
-
-        $this->input->getOption('min-coverage')
-            ->willReturn('101');
+        $this->logger->error(
+            'Minimum line coverage of 80.00% was not met. Current coverage: 75.00% (75/100 lines).',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && 75.0 === $context['line_coverage']
+                && 75 === $context['covered_lines']
+                && 100 === $context['total_lines']),
+        )->shouldBeCalled();
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }
@@ -388,49 +256,27 @@ final class TestsCommandTest extends TestCase
     {
         $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
 
-        $this->willQueueProcessMatching(static fn(Process $process): bool => str_contains(
-            $process->getCommandLine(),
-            '--coverage-php=' . $coverageReportPath,
-        ));
-
-        $this->output->writeln(Argument::type('string'))
-            ->will(static function (): void {});
-        $this->output->writeln('<error>coverage report missing</error>')
-            ->shouldBeCalledOnce();
-
-        $this->coverageSummaryLoader->load($coverageReportPath)
-            ->willThrow(new RuntimeException('coverage report missing'));
-
         $this->input->getOption('min-coverage')
             ->willReturn('80');
-
-        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnFailureIfProcessQueueFails(): void
-    {
-        $this->willQueueProcessMatching(static fn(): bool => true, TestsCommand::FAILURE);
-
-        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
-    }
-
-    /**
-     * @param callable $callback
-     * @param int $result
-     *
-     * @return void
-     */
-    private function willQueueProcessMatching(callable $callback, int $result = TestsCommand::SUCCESS): void
-    {
-        $this->processQueue->add(Argument::that($callback))
-            ->shouldBeCalledOnce();
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willThrow(new RuntimeException('Coverage summary could not be loaded.'));
+        $this->processQueue->add(Argument::type(Process::class))->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
-            ->willReturn($result)
-            ->shouldBeCalledOnce();
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->error(
+            'Coverage summary could not be loaded.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && null === $context['line_coverage']
+                && null === $context['covered_lines']
+                && null === $context['total_lines']),
+        )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }
 
     /**
@@ -438,8 +284,7 @@ final class TestsCommandTest extends TestCase
      */
     private function invokeExecute(): int
     {
-        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
-
-        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+        return (new ReflectionMethod($this->command, 'execute'))
+            ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

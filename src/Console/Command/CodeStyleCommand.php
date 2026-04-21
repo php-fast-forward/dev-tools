@@ -19,11 +19,15 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -37,8 +41,11 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.',
     help: 'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.'
 )]
-final class CodeStyleCommand extends BaseCommand
+final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @var string the default configuration file used for EasyCodingStandard
      */
@@ -55,11 +62,13 @@ final class CodeStyleCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator locates the configuration file required by EasyCodingStandard
      * @param ProcessBuilderInterface $processBuilder builds the process instances used to execute Composer and ECS commands
      * @param ProcessQueueInterface $processQueue queues and executes the generated processes in the required order
+     * @param LoggerInterface $logger logs command feedback
      */
     public function __construct(
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -74,7 +83,12 @@ final class CodeStyleCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
+            ->addOption(
+                name: 'progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to enable progress output from code style tools.',
+            )
             ->addOption(
                 name: 'fix',
                 shortcut: 'f',
@@ -96,7 +110,13 @@ final class CodeStyleCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running code style checks and fixes...</info>');
+        $jsonOutput = $this->isJsonOutput($input);
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+
+        $fix = (bool) $input->getOption('fix');
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
+
+        $this->logger->info('Running code style checks and fixes...');
 
         $composerUpdate = $this->processBuilder
             ->withArgument('--lock')
@@ -105,14 +125,21 @@ final class CodeStyleCommand extends BaseCommand
 
         $composerNormalize = $this->processBuilder
             ->withArgument('--ansi')
-            ->withArgument($input->getOption('fix') ? '--quiet' : '--dry-run')
+            ->withArgument($fix ? '--quiet' : '--dry-run')
             ->build('composer normalize');
 
         $processBuilder = $this->processBuilder
-            ->withArgument('--no-progress-bar')
             ->withArgument('--config', $this->fileLocator->locate(self::CONFIG));
 
-        if ($input->getOption('fix')) {
+        if (! $progress) {
+            $processBuilder = $processBuilder->withArgument('--no-progress-bar');
+        }
+
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder->withArgument('--output-format', 'json');
+        }
+
+        if ($fix) {
             $processBuilder = $processBuilder->withArgument('--fix');
         }
 
@@ -122,6 +149,20 @@ final class CodeStyleCommand extends BaseCommand
         $this->processQueue->add($composerNormalize);
         $this->processQueue->add($ecs);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('Code style checks completed successfully.', $input, [
+                'fix' => $fix,
+                'config' => self::CONFIG,
+                'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            ]);
+        }
+
+        return $this->failure('Code style checks failed.', $input, [
+            'fix' => $fix,
+            'config' => self::CONFIG,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ]);
     }
 }

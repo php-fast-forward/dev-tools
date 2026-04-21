@@ -76,19 +76,26 @@ composer --working-dir=packages/example metrics
 # Add one changelog entry to Unreleased or a published version
 composer changelog:entry "Add changelog automation for release workflows (#28)"
 composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
+composer changelog:entry --json "Add changelog automation for release workflows (#28)"
+composer changelog:entry --pretty-json "Add changelog automation for release workflows (#28)"
 
 # Verify that the current branch added a meaningful Unreleased entry
 composer changelog:check
 composer changelog:check --against=origin/main
+composer changelog:check --json
+composer changelog:check --pretty-json
 
 # Infer the next semantic version from Unreleased
 composer changelog:next-version
+composer changelog:next-version --json
 
 # Promote Unreleased into a published version
 composer changelog:promote 1.3.0
+composer changelog:promote 1.3.0 --json
 
 # Render one published section as release notes
 composer changelog:show 1.3.0
+composer changelog:show 1.3.0 --json
 
 # Check and fix code style using ECS and Composer Normalize
 composer code-style
@@ -167,6 +174,27 @@ missing changelog file on first use, `changelog:check` enforces meaningful
 next semantic version from pending changes, `changelog:promote` publishes the
 current `Unreleased` section into a tagged version, and `changelog:show`
 renders one published section for GitHub release notes.
+
+Structured output is available across the DevTools command surface through
+`--json`, which returns deterministic `message` / `level` / `context` payloads
+for CI, bots, and AI-agent workflows while preserving the normal
+human-readable terminal output by default. Use `--pretty-json` when you want
+the same structured payload indented for manual inspection in a terminal.
+`--pretty-json` also implies JSON output, so there is no need to pass both
+flags together. In agent environments, DevTools can also switch to JSON
+automatically when the runtime is detected as agent-driven. For
+`changelog:show`, the default text mode still prints the raw release-notes
+body so release workflows can keep piping it directly into GitHub releases.
+
+Progress output is disabled by default on the commands that support transient
+rendering, and `--progress` re-enables it for human-readable terminal runs.
+When `--json` or `--pretty-json` is active on commands that orchestrate other
+tools, DevTools keeps progress suppressed, forwards JSON flags where the
+underlying tool supports structured output, and otherwise falls back to
+quieter subprocess modes so the captured payload stays machine-readable. In
+GitHub Actions, queued subprocess output is grouped into collapsible sections,
+and logged failures emit native workflow error annotations, including file and
+line metadata when commands provide it.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

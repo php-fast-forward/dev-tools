@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add structured command output across the DevTools command surface with `--json` and `--pretty-json`, including pretty-printed JSON and agent-aware JSON defaults (#33)
+- Group queued subprocess output and emit GitHub Actions workflow annotations for clearer CI logs and error surfaces (#33)
+
+### Changed
+
+- Propagate structured output flags through nested DevTools subprocesses, simplify logger context extraction, and keep machine-readable runs quieter by default (#33)
+- Adopt `--progress` as the positive opt-in for transient progress rendering while keeping supported commands quiet by default (#33)
+
+### Fixed
+
+- Stabilize logger and process-queue test expectations in CI by making GitHub Actions output detection deterministic during the PHPUnit suite (#33)
+
 ## [1.16.0] - 2026-04-20
 
 ### Changed

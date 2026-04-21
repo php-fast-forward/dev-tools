@@ -19,30 +19,41 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use Twig\Environment;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
 
 /**
- * Handles the generation of API documentation for the project.
- * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
+ * Generates the package API documentation through phpDocumentor.
+ *
+ * The command prepares a temporary phpDocumentor configuration from the
+ * current package metadata, then delegates execution to the shared process
+ * queue so logging and grouped output stay consistent with the rest of the
+ * command surface.
  */
 #[AsCommand(
     name: 'docs',
     description: 'Generates API documentation.',
     help: 'This command generates API documentation using phpDocumentor.',
 )]
-final class DocsCommand extends BaseCommand
+final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * Creates a new DocsCommand instance.
      *
@@ -51,6 +62,7 @@ final class DocsCommand extends BaseCommand
      * @param Environment $renderer
      * @param FilesystemInterface $filesystem the filesystem for handling file operations
      * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -58,21 +70,22 @@ final class DocsCommand extends BaseCommand
         private readonly Environment $renderer,
         private readonly FilesystemInterface $filesystem,
         private readonly ComposerJsonInterface $composer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
 
     /**
-     * Configures the command instance.
-     *
-     * The method MUST set up the name and description. It MAY accept an optional `--target` option
-     * pointing to an alternative configuration target path.
-     *
-     * @return void
+     * Configures the command options used to generate API documentation.
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
+            ->addOption(
+                name: 'progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to enable progress output from phpDocumentor.',
+            )
             ->addOption(
                 name: 'target',
                 shortcut: 't',
@@ -102,10 +115,7 @@ final class DocsCommand extends BaseCommand
     }
 
     /**
-     * Executes the generation of the documentation files.
-     *
-     * This method MUST compile arguments based on PSR-4 namespaces to feed into phpDocumentor.
-     * It SHOULD provide feedback on generation progress, and SHALL return `self::SUCCESS` on success.
+     * Generates the HTML API documentation for the configured source tree.
      *
      * @param InputInterface $input the input details for the command
      * @param OutputInterface $output the output mechanism for logging
@@ -114,18 +124,23 @@ final class DocsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Generating API documentation...</info>');
+        $jsonOutput = $this->isJsonOutput($input);
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
         $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
-
-        if (! $this->filesystem->exists($source)) {
-            $output->writeln(\sprintf('<error>Source directory not found: %s</error>', $source));
-
-            return self::FAILURE;
-        }
-
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
         $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
+
+        $this->logger->info('Generating API documentation...', [
+            'input' => $input,
+        ]);
+
+        if (! $this->filesystem->exists($source)) {
+            return $this->failure('Source directory not found: {source}', $input, [
+                'source' => $source,
+            ]);
+        }
 
         $config = $this->createPhpDocumentorConfig(
             source: $source,
@@ -134,16 +149,30 @@ final class DocsCommand extends BaseCommand
             cacheDir: $cacheDir
         );
 
-        $phpdoc = $this->processBuilder
+        $processBuilder = $this->processBuilder
             ->withArgument('--config', $config)
             ->withArgument('--ansi')
-            ->withArgument('--no-progress')
-            ->withArgument('--markers', 'TODO,FIXME,BUG,HACK')
-            ->build('vendor/bin/phpdoc');
+            ->withArgument('--markers', 'TODO,FIXME,BUG,HACK');
+
+        if (! $progress) {
+            $processBuilder = $processBuilder->withArgument('--no-progress');
+        }
+
+        $phpdoc = $processBuilder->build('vendor/bin/phpdoc');
 
         $this->processQueue->add($phpdoc);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('API documentation generated successfully.', $input, [
+                'output' => $processOutput,
+            ]);
+        }
+
+        return $this->failure('API documentation generation failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 
     /**

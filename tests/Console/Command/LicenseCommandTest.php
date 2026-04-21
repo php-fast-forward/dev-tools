@@ -20,15 +20,19 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\LicenseCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\License\Resolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -46,6 +50,8 @@ use function Safe\getcwd;
 #[UsesClass(FileDiff::class)]
 #[UsesClass(Resolver::class)]
 #[UsesClass(Generator::class)]
+#[UsesClass(GithubActionOutput::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class LicenseCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -75,6 +81,8 @@ final class LicenseCommandTest extends TestCase
      */
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $logger;
+
     /**
      * @var ObjectProphecy<QuestionHelper>
      */
@@ -94,10 +102,10 @@ final class LicenseCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
-        $this->output->writeln(Argument::any());
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
@@ -108,6 +116,10 @@ final class LicenseCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log(Argument::cetera())->will(static function (): void {});
+        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
         $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
@@ -117,6 +129,7 @@ final class LicenseCommandTest extends TestCase
             $this->generator->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
+            $this->logger->reveal(),
         );
         $this->command->setHelperSet(new HelperSet([
             'question' => $this->questionHelper->reveal(),
@@ -169,10 +182,22 @@ final class LicenseCommandTest extends TestCase
         $this->filesystem->dumpFile($targetPath, 'MIT License content')
             ->shouldBeCalledOnce();
 
-        $this->output->writeln(
-            Argument::containingString('will be created from generated LICENSE content')
-        )->shouldBeCalled();
-        $this->output->writeln(Argument::containingString('LICENSE file generated successfully'))->shouldBeCalled();
+        $this->logger->notice(
+            'Managed file ' . $targetPath . ' will be created from generated LICENSE content.',
+            [
+                'input' => $this->input->reveal(),
+                'target_path' => $targetPath,
+            ],
+        )->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            '{file_name} file generated successfully at {target_path}.',
+            [
+                'input' => $this->input->reveal(),
+                'file_name' => 'LICENSE',
+                'target_path' => $targetPath,
+            ],
+        )->shouldBeCalledOnce();
 
         self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
     }
@@ -206,9 +231,13 @@ final class LicenseCommandTest extends TestCase
             'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
         ))->shouldBeCalledOnce();
 
-        $this->output->writeln(
-            Argument::containingString('already matches source generated LICENSE content')
-        )->shouldBeCalled();
+        $this->logger->notice(
+            'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
+            [
+                'input' => $this->input->reveal(),
+                'target_path' => $targetPath,
+            ],
+        )->shouldBeCalledOnce();
 
         self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
     }
@@ -230,9 +259,18 @@ final class LicenseCommandTest extends TestCase
         $this->generator->generateContent()
             ->willReturn(null);
 
-        $this->output->writeln(
-            Argument::containingString('No supported license found in composer.json')
-        )->shouldBeCalled();
+        $this->logger->notice(
+            'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
+            [
+                'input' => $this->input->reveal(),
+                'target_path' => $targetPath,
+            ],
+        )->shouldBeCalledOnce();
+        $this->logger->log(
+            'notice',
+            'LICENSE generation was skipped because no supported license metadata was available.',
+            Argument::type('array'),
+        )->shouldBeCalledOnce();
 
         self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
     }
@@ -267,6 +305,8 @@ final class LicenseCommandTest extends TestCase
             FileDiff::STATUS_CHANGED,
             'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
         ))->shouldBeCalledOnce();
+        $this->logger->error('LICENSE requires synchronization updates.', Argument::type('array'))
+            ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(LicenseCommand::FAILURE, $this->invokeExecute());
@@ -302,6 +342,8 @@ final class LicenseCommandTest extends TestCase
             FileDiff::STATUS_CHANGED,
             'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
         ))->shouldBeCalledOnce();
+        $this->logger->log('notice', 'LICENSE generation preview completed.', Argument::type('array'))
+            ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(LicenseCommand::SUCCESS, $this->invokeExecute());
@@ -345,7 +387,15 @@ final class LicenseCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Skipped updating ' . $targetPath . '.</comment>')
+        $this->logger->notice(
+            'Skipped updating {target_path}.',
+            [
+                'input' => $this->input->reveal(),
+                'target_path' => $targetPath,
+            ],
+        )
+            ->shouldBeCalledOnce();
+        $this->logger->log('notice', 'LICENSE generation was skipped.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 

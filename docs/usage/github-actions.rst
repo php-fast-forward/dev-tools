@@ -40,6 +40,7 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
     *   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.
     *   Verifies the preview index and coverage URLs after deployment before posting preview links.
     *   Posts a **Sticky Comment** on the PR with links to the live preview, coverage report, and metrics site.
+    *   Groups nested command output into collapsible GitHub Actions log sections so docs, tests, and metrics are easier to inspect independently.
     *   **Cleanup**: When a PR is closed, the workflow automatically removes the preview directory from the ``gh-pages`` branch to keep the repository clean.
     *   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
 *   **Scheduled Cleanup**: A scheduled/manual cleanup removes stale ``previews/pr-{number}/`` directories for already closed pull requests.
@@ -72,6 +73,8 @@ The ``tests.yml`` workflow provides standard Continuous Integration.
 *   Defaults the dependency-health threshold to ``--max-outdated=-1`` so
     outdated packages stay visible in CI without failing the workflow on count
     alone.
+*   Surfaces logged command failures as native GitHub Actions error annotations,
+    including file and line metadata when the command provides them.
 *   Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.
 
 Fast Forward Changelog

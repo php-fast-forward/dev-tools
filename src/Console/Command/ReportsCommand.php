@@ -19,12 +19,16 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use Composer\Console\Input\InputOption;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -36,17 +40,22 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Generates the frontpage for Fast Forward documentation.',
     help: 'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.'
 )]
-final class ReportsCommand extends BaseCommand
+final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * Initializes the command with required dependencies.
      *
      * @param ProcessBuilderInterface $processBuilder the builder instance used to construct execution processes
      * @param ProcessQueueInterface $processQueue the execution queue mechanism for running sub-processes
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -56,7 +65,12 @@ final class ReportsCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
+            ->addOption(
+                name: 'progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to enable progress output from generated report commands.',
+            )
             ->addOption(
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -91,30 +105,85 @@ final class ReportsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>');
+        $jsonOutput = $this->isJsonOutput($input);
+        $prettyJsonOutput = $this->isPrettyJsonOutput($input);
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $target = (string) $input->getOption('target');
+        $coveragePath = (string) $input->getOption('coverage');
+        $metricsPath = (string) $input->getOption('metrics');
 
-        $docs = $this->processBuilder
-            ->withArgument('--ansi')
-            ->withArgument('--target', $input->getOption('target'))
-            ->build('composer dev-tools docs --');
+        $this->logger->info('Generating frontpage for Fast Forward documentation...', [
+            'input' => $input,
+        ]);
 
-        $coverage = $this->processBuilder
-            ->withArgument('--ansi')
-            ->withArgument('--no-progress')
+        $docsBuilder = $this->processBuilder
+            ->withArgument('--target', $target);
+
+        if ($progress) {
+            $docsBuilder = $docsBuilder->withArgument('--progress');
+        }
+
+        if ($jsonOutput) {
+            $docsBuilder = $docsBuilder->withArgument('--json');
+        }
+
+        if ($prettyJsonOutput) {
+            $docsBuilder = $docsBuilder->withArgument('--pretty-json');
+        }
+
+        $docs = $docsBuilder->build('composer dev-tools docs --');
+
+        $coverageBuilder = $this->processBuilder
             ->withArgument('--coverage-summary')
-            ->withArgument('--coverage', $input->getOption('coverage'))
-            ->build('composer dev-tools tests --');
+            ->withArgument('--coverage', $coveragePath);
 
-        $metrics = $this->processBuilder
-            ->withArgument('--ansi')
-            ->withArgument('--junit', $input->getOption('coverage') . '/junit.xml')
-            ->withArgument('--target', $input->getOption('metrics'))
-            ->build('composer dev-tools metrics --');
+        if ($progress) {
+            $coverageBuilder = $coverageBuilder->withArgument('--progress');
+        }
+
+        if ($jsonOutput) {
+            $coverageBuilder = $coverageBuilder->withArgument('--json');
+        }
+
+        if ($prettyJsonOutput) {
+            $coverageBuilder = $coverageBuilder->withArgument('--pretty-json');
+        }
+
+        $coverage = $coverageBuilder->build('composer dev-tools tests --');
+
+        $metricsBuilder = $this->processBuilder
+            ->withArgument('--junit', $coveragePath . '/junit.xml')
+            ->withArgument('--target', $metricsPath);
+
+        if ($progress) {
+            $metricsBuilder = $metricsBuilder->withArgument('--progress');
+        }
+
+        if ($jsonOutput) {
+            $metricsBuilder = $metricsBuilder->withArgument('--json');
+        }
+
+        if ($prettyJsonOutput) {
+            $metricsBuilder = $metricsBuilder->withArgument('--pretty-json');
+        }
+
+        $metrics = $metricsBuilder->build('composer dev-tools metrics --');
 
         $this->processQueue->add(process: $docs, detached: true);
         $this->processQueue->add(process: $coverage);
         $this->processQueue->add(process: $metrics);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        if (self::SUCCESS === $result) {
+            return $this->success('Documentation reports generated successfully.', $input, [
+                'output' => $processOutput,
+            ]);
+        }
+
+        return $this->failure('Documentation reports generation failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 }

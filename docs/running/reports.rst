@@ -11,7 +11,7 @@ What the Command Runs
 ``reports`` executes the following steps:
 
 1. ``docs --target .dev-tools``
-2. ``tests --coverage .dev-tools/coverage --no-progress --coverage-summary``
+2. ``tests --coverage .dev-tools/coverage --coverage-summary``
 3. ``metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml``
 
 Outputs

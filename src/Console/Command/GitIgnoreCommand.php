@@ -19,11 +19,15 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,8 +49,11 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
     description: 'Merges and synchronizes .gitignore files.',
     help: "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore."
 )]
-final class GitIgnoreCommand extends BaseCommand
+final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @var string the default filename for .gitignore files
      */
@@ -60,6 +67,7 @@ final class GitIgnoreCommand extends BaseCommand
      * @param WriterInterface|null $writer the writer component
      * @param FileLocatorInterface $fileLocator the file locator
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly MergerInterface $merger,
@@ -67,6 +75,7 @@ final class GitIgnoreCommand extends BaseCommand
         private readonly WriterInterface $writer,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -79,7 +88,7 @@ final class GitIgnoreCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addOption(
                 name: 'source',
                 shortcut: 's',
@@ -121,7 +130,9 @@ final class GitIgnoreCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Merging .gitignore files...</info>');
+        $this->logger->info('Merging .gitignore files...', [
+            'input' => $input,
+        ]);
 
         $sourcePath = $input->getOption('source');
         $targetPath = $input->getOption('target');
@@ -141,13 +152,22 @@ final class GitIgnoreCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated .gitignore synchronization.', $merged->path()),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->notice($comparison->getSummary(), $input, [
+            'target_path' => $merged->path(),
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->notice(
+                    $consoleDiff,
+                    $input,
+                    [
+                        'target_path' => $merged->path(),
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
@@ -168,16 +188,25 @@ final class GitIgnoreCommand extends BaseCommand
             $output,
             $merged->path()
         )) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $merged->path()));
-
-            return self::SUCCESS;
+            return $this->success(
+                'Skipped updating {target_path}.',
+                $input,
+                [
+                    'target_path' => $merged->path(),
+                ],
+                LogLevel::NOTICE,
+            );
         }
 
         $this->writer->write($merged);
 
-        $output->writeln('<info>Successfully merged .gitignore file.</info>');
-
-        return self::SUCCESS;
+        return $this->success(
+            'Successfully merged .gitignore file.',
+            $input,
+            [
+                'target_path' => $merged->path(),
+            ],
+        );
     }
 
     /**

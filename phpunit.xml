@@ -11,5 +11,5 @@
          failOnWarning="true">
     <extensions>
         <bootstrap class="FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension" />
-    </extensions>   
-</phpunit>  
+    </extensions>
+</phpunit>

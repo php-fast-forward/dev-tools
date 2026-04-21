@@ -19,19 +19,23 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function is_numeric;
@@ -45,8 +49,11 @@ use function is_numeric;
     description: 'Runs PHPUnit tests.',
     help: 'This command runs PHPUnit to execute your tests.'
 )]
-final class TestsCommand extends BaseCommand
+final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasJsonOption;
+    use LogsCommandResults;
+
     /**
      * @var string identifies the local configuration file for PHPUnit processes
      */
@@ -59,6 +66,7 @@ final class TestsCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the file locator used to resolve PHPUnit configuration
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
@@ -67,6 +75,7 @@ final class TestsCommand extends BaseCommand
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -81,7 +90,7 @@ final class TestsCommand extends BaseCommand
      */
     protected function configure(): void
     {
-        $this
+        $this->addJsonOption()
             ->addArgument(
                 name: 'path',
                 mode: InputArgument::OPTIONAL,
@@ -129,9 +138,9 @@ final class TestsCommand extends BaseCommand
                 description: 'Minimum line coverage percentage required for a successful run.',
             )
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from PHPUnit.',
+                description: 'Whether to enable progress output from PHPUnit.',
             );
     }
 
@@ -148,14 +157,20 @@ final class TestsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running PHPUnit tests...</info>');
+        $jsonOutput = $this->isJsonOutput($input);
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+
+        $this->getLogger()
+            ->info('Running PHPUnit tests...', [
+                'input' => $input,
+            ]);
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
-
-            return self::FAILURE;
+            return $this->failure($invalidArgumentException->getMessage(), $input, [
+                'output' => $processOutput,
+            ]);
         }
 
         $processBuilder = $this->processBuilder
@@ -166,7 +181,7 @@ final class TestsCommand extends BaseCommand
             ->withArgument('--display-incomplete')
             ->withArgument('--display-skipped');
 
-        if ($input->getOption('no-progress')) {
+        if (! $input->getOption('progress') || $jsonOutput) {
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 
@@ -193,13 +208,40 @@ final class TestsCommand extends BaseCommand
                 ->build('vendor/bin/phpunit')
         );
 
-        $result = $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
 
         if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
-            return $result;
+            if (self::SUCCESS === $result) {
+                return $this->success(
+                    'PHPUnit tests completed successfully.',
+                    $input,
+                    [
+                        'output' => $processOutput,
+                    ],
+                );
+            }
+
+            return $this->failure('PHPUnit tests failed.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        return $this->validateMinimumCoverage($coverageReportPath, $minimumCoverage, $output);
+        [$validationResult, $message, $coverageContext] = $this->validateMinimumCoverage(
+            $coverageReportPath,
+            $minimumCoverage,
+        );
+
+        if (self::SUCCESS === $validationResult) {
+            return $this->success($message, $input, [
+                'output' => $processOutput,
+                ...$coverageContext,
+            ]);
+        }
+
+        return $this->failure($message, $input, [
+            'output' => $processOutput,
+            ...$coverageContext,
+        ]);
     }
 
     /**
@@ -295,21 +337,23 @@ final class TestsCommand extends BaseCommand
     /**
      * @param string $coverageReportPath the generated `coverage-php` report path
      * @param float $minimumCoverage the required line coverage percentage
-     * @param OutputInterface $output the output interface to log validation results
      *
-     * @return int the final status code after validating minimum coverage
+     * @return array{int, string, array<string, float|int|string|null>} validation result, human message, and structured coverage context
      */
-    private function validateMinimumCoverage(
-        string $coverageReportPath,
-        float $minimumCoverage,
-        OutputInterface $output,
-    ): int {
+    private function validateMinimumCoverage(string $coverageReportPath, float $minimumCoverage): array
+    {
         try {
             $coverageSummary = $this->coverageSummaryLoader->load($coverageReportPath);
         } catch (RuntimeException $runtimeException) {
-            $output->writeln('<error>' . $runtimeException->getMessage() . '</error>');
-
-            return self::FAILURE;
+            return [
+                self::FAILURE,
+                $runtimeException->getMessage(),
+                [
+                    'line_coverage' => null,
+                    'covered_lines' => null,
+                    'total_lines' => null,
+                ],
+            ];
         }
 
         $message = \sprintf(
@@ -321,14 +365,14 @@ final class TestsCommand extends BaseCommand
             $coverageSummary->executableLines(),
         );
 
-        if ($coverageSummary->percentage() >= $minimumCoverage) {
-            $output->writeln('<info>' . $message . '</info>');
-
-            return self::SUCCESS;
-        }
-
-        $output->writeln('<error>' . $message . '</error>');
-
-        return self::FAILURE;
+        return [
+            $coverageSummary->percentage() >= $minimumCoverage ? self::SUCCESS : self::FAILURE,
+            $message,
+            [
+                'line_coverage' => $coverageSummary->percentage(),
+                'covered_lines' => $coverageSummary->executedLines(),
+                'total_lines' => $coverageSummary->executableLines(),
+            ],
+        ];
     }
 }

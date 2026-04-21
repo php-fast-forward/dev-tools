@@ -42,6 +42,16 @@ Options
    Path to the cache directory for phpDocumentor.
    Default: ``tmp/cache/phpdoc``.
 
+``--progress``
+   Enable progress output from phpDocumentor.
+
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 
@@ -83,4 +93,8 @@ Behavior
 - API pages are built from the PSR-4 paths declared in ``composer.json``.
 - Guide pages are built from the selected source directory.
 - A temporary ``phpdocumentor.xml`` is created in the cache directory.
+- Progress output is disabled by default; use ``--progress`` to re-enable it in
+  text mode.
+- ``--json`` and ``--pretty-json`` suppress phpDocumentor progress rendering so
+  the structured payload stays readable.
 - Markers: TODO, FIXME, BUG, HACK are included.
