@@ -2221,6 +2221,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand",
             "name": "TestsCommand",
             "summary": "Facilitates\u0020the\u0020execution\u0020of\u0020the\u0020PHPUnit\u0020testing\u0020framework.",
