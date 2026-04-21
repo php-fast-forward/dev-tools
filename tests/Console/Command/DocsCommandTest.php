@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\DocsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -41,6 +42,7 @@ use Symfony\Component\Process\Process;
 use Twig\Environment;
 
 #[CoversClass(DocsCommand::class)]
+#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class DocsCommandTest extends TestCase
 {
@@ -89,6 +91,8 @@ final class DocsCommandTest extends TestCase
             ->willReturn('tmp/cache/phpdoc');
         $this->input->getOption('template')
             ->willReturn('vendor/fast-forward/phpdoc-bootstrap-template');
+        $this->input->getOption('no-progress')
+            ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
         $this->input->getOption('pretty-json')

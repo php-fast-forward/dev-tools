@@ -85,6 +85,11 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
     {
         $this->addJsonOption()
             ->addOption(
+                name: 'no-progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to disable progress output from code style tools.',
+            )
+            ->addOption(
                 name: 'fix',
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
@@ -109,6 +114,7 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $fix = (bool) $input->getOption('fix');
+        $noProgress = $jsonOutput || (bool) $input->getOption('no-progress');
 
         $this->logger->info('Running code style checks and fixes...');
 
@@ -123,8 +129,11 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
             ->build('composer normalize');
 
         $processBuilder = $this->processBuilder
-            ->withArgument('--no-progress-bar')
             ->withArgument('--config', $this->fileLocator->locate(self::CONFIG));
+
+        if ($noProgress) {
+            $processBuilder = $processBuilder->withArgument('--no-progress-bar');
+        }
 
         if ($jsonOutput) {
             $processBuilder = $processBuilder->withArgument('--output-format', 'json');
@@ -141,13 +150,6 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
         $this->processQueue->add($ecs);
 
         $result = $this->processQueue->run($processOutput);
-
-        [
-            'input' => $input,
-            'fix' => $fix,
-            'config' => self::CONFIG,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-        ];
 
         if (self::SUCCESS === $result) {
             return $this->success('Code style checks completed successfully.', $input, [

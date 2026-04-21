@@ -110,6 +110,11 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
                 default: ['.'],
             )
             ->addOption(
+                name: 'no-progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to disable progress output from PHPDoc tooling.',
+            )
+            ->addOption(
                 name: 'fix',
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
@@ -139,6 +144,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
+        $noProgress = $jsonOutput || (bool) $input->getOption('no-progress');
 
         $this->logger->info('Checking and fixing PHPDocs...', [
             'input' => $input,
@@ -155,10 +161,13 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
                 $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
             );
 
+        if ($noProgress) {
+            $processBuilder = $processBuilder->withArgument('--show-progress=none');
+        }
+
         if ($jsonOutput) {
             $processBuilder = $processBuilder
-                ->withArgument('--format=json')
-                ->withArgument('--show-progress=none');
+                ->withArgument('--format=json');
         }
 
         if (! $fix) {
@@ -172,9 +181,12 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
             ->withArgument('--autoload-file', 'vendor/autoload.php')
             ->withArgument('--only', AddMissingMethodPhpDocRector::class);
 
+        if ($noProgress) {
+            $processBuilder = $processBuilder->withArgument('--no-progress-bar');
+        }
+
         if ($jsonOutput) {
             $processBuilder = $processBuilder
-                ->withArgument('--no-progress-bar')
                 ->withArgument('--output-format', 'json');
         }
 

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
+use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -39,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(CodeStyleCommand::class)]
+#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class CodeStyleCommandTest extends TestCase
 {
@@ -74,6 +76,8 @@ final class CodeStyleCommandTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
 
         $this->input->getOption('fix')
+            ->willReturn(false);
+        $this->input->getOption('no-progress')
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
@@ -176,6 +180,24 @@ final class CodeStyleCommandTest extends TestCase
             Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
                 && \is_string($context['process_output'])),
         )->shouldBeCalled();
+
+        self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillDisableProgressWhenRequested(): void
+    {
+        $this->input->getOption('no-progress')
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--no-progress-bar')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type('object'))
+            ->willReturn(CodeStyleCommand::SUCCESS)
+            ->shouldBeCalled();
 
         self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());
     }

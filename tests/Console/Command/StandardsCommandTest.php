@@ -19,9 +19,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\Console\Application;
-use Composer\IO\IOInterface;
+use Symfony\Component\Process\Process;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\StandardsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -32,25 +34,25 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(StandardsCommand::class)]
+#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class StandardsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    private ObjectProphecy $logger;
+    private ObjectProphecy $processBuilder;
 
-    private ObjectProphecy $application;
+    private ObjectProphecy $processQueue;
+
+    private ObjectProphecy $logger;
 
     private ObjectProphecy $input;
 
     private ObjectProphecy $output;
-
-    private ObjectProphecy $io;
 
     private StandardsCommand $command;
 
@@ -59,11 +61,11 @@ final class StandardsCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->application = $this->prophesize(Application::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->io = $this->prophesize(IOInterface::class);
 
         $this->input->getOption('fix')
             ->willReturn(false);
@@ -71,13 +73,16 @@ final class StandardsCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('pretty-json')
             ->willReturn(false);
-        $this->application->getHelperSet()
-            ->willReturn(new HelperSet());
-        $this->application->getIO()
-            ->willReturn($this->io->reveal());
+        $this->processBuilder->withArgument(Argument::any())
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->build(Argument::any())
+            ->willReturn($this->prophesize(Process::class)->reveal());
 
-        $this->command = new StandardsCommand($this->logger->reveal());
-        $this->command->setApplication($this->application->reveal());
+        $this->command = new StandardsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->logger->reveal(),
+        );
     }
 
     /**
@@ -86,14 +91,14 @@ final class StandardsCommandTest extends TestCase
     #[Test]
     public function executeWillRunSuiteSequentially(): void
     {
-        $commands = [];
-
-        $this->application->doRun(Argument::type('object'), $this->output->reveal())
-            ->will(function (array $arguments) use (&$commands): int {
-                $commands[] = (string) $arguments[0];
-
-                return StandardsCommand::SUCCESS;
-            })->shouldBeCalledTimes(4);
+        $this->processBuilder->withArgument('--no-progress')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(StandardsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
         $this->logger->info('Running code standards checks...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
@@ -107,7 +112,6 @@ final class StandardsCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
-        self::assertSame(['refactor', 'phpdoc', 'code-style', 'reports'], array_map(trim(...), $commands));
     }
 
     /**
@@ -116,14 +120,14 @@ final class StandardsCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenAnyCommandFails(): void
     {
-        $calls = 0;
-
-        $this->application->doRun(Argument::type('object'), $this->output->reveal())
-            ->will(function () use (&$calls): int {
-                ++$calls;
-
-                return 2 === $calls ? StandardsCommand::FAILURE : StandardsCommand::SUCCESS;
-            })->shouldBeCalledTimes(4);
+        $this->processBuilder->withArgument('--no-progress')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(StandardsCommand::FAILURE)
+            ->shouldBeCalledOnce();
         $this->logger->info('Running code standards checks...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))

@@ -22,11 +22,12 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -45,9 +46,13 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
     use LogsCommandResults;
 
     /**
+     * @param ProcessBuilderInterface $processBuilder
+     * @param ProcessQueueInterface $processQueue
      * @param LoggerInterface $logger
      */
     public function __construct(
+        private readonly ProcessBuilderInterface $processBuilder,
+        private readonly ProcessQueueInterface $processQueue,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -76,30 +81,39 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $jsonOutput = $this->isJsonOutput($input);
-        $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
-        $results = [];
-        $commands = [];
-        $formatArgument = $jsonOutput ? ' --json' : '';
+        $prettyJsonOutput = $this->isPrettyJsonOutput($input);
 
-        if ($this->isPrettyJsonOutput($input)) {
-            $formatArgument .= ' --pretty-json';
-        }
+        $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $commands = [];
+        $fix = (bool) $input->getOption('fix');
 
         $this->logger->info('Running code standards checks...', [
             'input' => $input,
         ]);
 
-        $fixArgument = $input->getOption('fix') ? ' --fix' : '';
-
         foreach (['refactor', 'phpdoc', 'code-style', 'reports'] as $command) {
             $commands[] = $command;
-            $results[] = $this->runCommand(
-                $command . ('reports' === $command ? '' : $fixArgument) . $formatArgument,
-                $commandOutput,
-            );
+            $processBuilder = $this->processBuilder;
+            $processBuilder = $processBuilder->withArgument('--no-progress');
+
+            if ('reports' !== $command && $fix) {
+                $processBuilder = $processBuilder->withArgument('--fix');
+            }
+
+            if ($jsonOutput) {
+                $processBuilder = $processBuilder->withArgument('--json');
+            }
+
+            if ($prettyJsonOutput) {
+                $processBuilder = $processBuilder->withArgument('--pretty-json');
+            }
+
+            $this->processQueue->add($processBuilder->build('composer dev-tools ' . $command . ' --'));
         }
 
-        if (\in_array(self::FAILURE, $results, true)) {
+        $result = $this->processQueue->run($commandOutput);
+
+        if (self::FAILURE === $result) {
             return $this->failure('Code standards checks failed.', $input, [
                 'output' => $commandOutput,
                 'commands' => $commands,
@@ -110,15 +124,5 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
             'output' => $commandOutput,
             'commands' => $commands,
         ]);
-    }
-
-    /**
-     * @param string $command
-     * @param OutputInterface $output
-     */
-    private function runCommand(string $command, OutputInterface $output): int
-    {
-        return $this->getApplication()
-            ->doRun(new StringInput($command), $output);
     }
 }

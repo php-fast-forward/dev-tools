@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Sync;
 
 use ArrayIterator;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
@@ -35,6 +36,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 #[CoversClass(PackagedDirectorySynchronizer::class)]
+#[UsesClass(GithubActionOutput::class)]
 #[UsesClass(SynchronizeResult::class)]
 final class PackagedDirectorySynchronizerTest extends TestCase
 {

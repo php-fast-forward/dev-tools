@@ -79,8 +79,14 @@ interface ProcessQueueInterface
      * @param Process $process the process instance that SHALL be added to the queue
      * @param bool $ignoreFailure indicates whether a failure of this process MUST NOT affect the final queue result
      * @param bool $detached indicates whether this process SHALL be started without blocking the next queued process
+     * @param ?string $label an optional label that MAY be used to present the process output as a grouped block
      */
-    public function add(Process $process, bool $ignoreFailure = false, bool $detached = false): void;
+    public function add(
+        Process $process,
+        bool $ignoreFailure = false,
+        bool $detached = false,
+        ?string $label = null
+    ): void;
 
     /**
      * Runs the queued processes and returns the resulting status code.

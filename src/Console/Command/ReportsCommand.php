@@ -67,6 +67,11 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
     {
         $this->addJsonOption()
             ->addOption(
+                name: 'no-progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to disable progress output from generated report commands.',
+            )
+            ->addOption(
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The target directory for the generated reports.',
@@ -102,6 +107,7 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
     {
         $jsonOutput = $this->isJsonOutput($input);
         $prettyJsonOutput = $this->isPrettyJsonOutput($input);
+        $noProgress = (bool) $input->getOption('no-progress');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
         $coveragePath = (string) $input->getOption('coverage');
@@ -113,6 +119,10 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
 
         $docsBuilder = $this->processBuilder
             ->withArgument('--target', $target);
+
+        if ($noProgress) {
+            $docsBuilder = $docsBuilder->withArgument('--no-progress');
+        }
 
         if ($jsonOutput) {
             $docsBuilder = $docsBuilder->withArgument('--json');
@@ -142,6 +152,10 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
         $metricsBuilder = $this->processBuilder
             ->withArgument('--junit', $coveragePath . '/junit.xml')
             ->withArgument('--target', $metricsPath);
+
+        if ($noProgress) {
+            $metricsBuilder = $metricsBuilder->withArgument('--no-progress');
+        }
 
         if ($jsonOutput) {
             $metricsBuilder = $metricsBuilder->withArgument('--json');

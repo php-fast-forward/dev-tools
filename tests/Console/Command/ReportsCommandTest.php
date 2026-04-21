@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use Symfony\Component\Console\Output\BufferedOutput;
-use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -40,7 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
-#[UsesTrait(EmitsGithubActionErrors::class)]
+#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ReportsCommandTest extends TestCase
 {
@@ -78,6 +78,8 @@ final class ReportsCommandTest extends TestCase
             ->willReturn('.dev-tools/coverage');
         $this->input->getOption('metrics')
             ->willReturn('.dev-tools/metrics');
+        $this->input->getOption('no-progress')
+            ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
         $this->input->getOption('pretty-json')
@@ -150,6 +152,25 @@ final class ReportsCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(ReportsCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillForwardNoProgressToDocsAndMetricsWhenRequested(): void
+    {
+        $this->input->getOption('no-progress')
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--no-progress')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(3);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
     }
 
     /**

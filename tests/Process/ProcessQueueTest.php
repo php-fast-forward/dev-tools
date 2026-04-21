@@ -19,31 +19,37 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Process;
 
-use ReflectionProperty;
 use Closure;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use ReflectionMethod;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ProcessQueue::class)]
+#[UsesClass(GithubActionOutput::class)]
 final class ProcessQueueTest extends TestCase
 {
     use ProphecyTrait;
 
     /**
-     * @var ObjectProphecy<OutputInterface>
+     * @var ObjectProphecy<ConsoleOutputInterface>
      */
     private ObjectProphecy $output;
+
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
+    private ObjectProphecy $errorOutput;
 
     private ProcessQueue $queue;
 
@@ -52,8 +58,12 @@ final class ProcessQueueTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->output = $this->prophesize(OutputInterface::class);
-        $this->queue = new ProcessQueue();
+        $this->output = $this->prophesize(ConsoleOutputInterface::class);
+        $this->errorOutput = $this->prophesize(OutputInterface::class);
+        $this->output->getErrorOutput()
+            ->willReturn($this->errorOutput->reveal());
+
+        $this->queue = new ProcessQueue(new GithubActionOutput($this->output->reveal()));
     }
 
     /**
@@ -73,22 +83,23 @@ final class ProcessQueueTest extends TestCase
     }
 
     /**
-     * @param int $exitCode
+     * @param ?int $exitCode
      * @param bool $isRunning
      *
-     * @return ObjectProphecy
+     * @return ObjectProphecy<Process>
      */
-    private function createProcessMock(
+    private function createBlockingProcessMock(
         ?int $exitCode = ProcessQueueInterface::SUCCESS,
-        bool $isRunning = false
+        bool $isRunning = false,
     ): ObjectProphecy {
         $process = $this->prophesize(Process::class);
         $this->expectPtyConfiguration($process);
-        $process->run(Argument::any())->willReturn($exitCode ?? ProcessQueueInterface::FAILURE);
-        $process->getIncrementalOutput()
-            ->willReturn('');
-        $process->getIncrementalErrorOutput()
-            ->willReturn('');
+        $process->run(Argument::any())
+            ->willReturn($exitCode ?? ProcessQueueInterface::FAILURE);
+        $process->getCommandLine()
+            ->willReturn('test-command');
+        $process->getWorkingDirectory()
+            ->willReturn('/tmp');
         $process->getExitCode()
             ->willReturn($exitCode);
         $process->isRunning()
@@ -100,17 +111,26 @@ final class ProcessQueueTest extends TestCase
     }
 
     /**
-     * @param int $exitCode
-     * @param bool $isRunning
+     * @param bool ...$runningSequence
      *
-     * @return ObjectProphecy
+     * @return ObjectProphecy<Process>
      */
-    private function createDetachedProcessMock(
-        int $exitCode = ProcessQueueInterface::SUCCESS,
-        bool $isRunning = false
-    ): ObjectProphecy {
-        $process = $this->createProcessMock($exitCode, $isRunning);
-        $process->start(Argument::any())->shouldBeCalled();
+    private function createDetachedProcessMock(bool ...$runningSequence): ObjectProphecy
+    {
+        $process = $this->prophesize(Process::class);
+        $this->expectPtyConfiguration($process);
+        $process->getCommandLine()
+            ->willReturn('test-command');
+        $process->getWorkingDirectory()
+            ->willReturn('/tmp');
+        $process->start(Argument::type(Closure::class))
+            ->shouldBeCalled();
+        $process->isRunning()
+            ->willReturn(...$runningSequence);
+        $process->isStarted()
+            ->willReturn(false);
+        $process->wait()
+            ->shouldBeCalled();
 
         return $process;
     }
@@ -119,120 +139,48 @@ final class ProcessQueueTest extends TestCase
      * @return void
      */
     #[Test]
-    public function addWithBlockingProcessWillAddToQueue(): void
-    {
-        $process = $this->createProcessMock();
-
-        $this->queue->add($process->reveal(), false, false);
-
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function addWithDetachedProcessWillAddToQueue(): void
-    {
-        $process = $this->createDetachedProcessMock();
-
-        $this->queue->add($process->reveal(), false, true);
-
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function addWithIgnoreFailureWillAddToQueue(): void
-    {
-        $process = $this->createProcessMock();
-
-        $this->queue->add($process->reveal(), true, false);
-
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
     public function runWithEmptyQueueReturnsSuccess(): void
     {
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
+        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function runWithSuccessfulProcessReturnsSuccess(): void
+    public function runWithSuccessfulBlockingProcessReturnsSuccess(): void
     {
-        $process = $this->createProcessMock();
+        $process = $this->createBlockingProcessMock();
 
-        $this->queue->add($process->reveal(), false, false);
+        $this->queue->add($process->reveal());
 
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
+        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function runWithFailingProcessReturnsFailure(): void
+    public function runWithFailingBlockingProcessReturnsFailure(): void
     {
-        $process = $this->createProcessMock(ProcessQueueInterface::FAILURE);
+        $process = $this->createBlockingProcessMock(ProcessQueueInterface::FAILURE);
 
-        $this->queue->add($process->reveal(), false, false);
+        $this->queue->add($process->reveal());
 
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::FAILURE, $result);
+        self::assertSame(ProcessQueueInterface::FAILURE, $this->queue->run($this->output->reveal()));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function runWithFailingProcessAndIgnoreFailureReturnsSuccess(): void
+    public function runWithIgnoredFailingBlockingProcessReturnsSuccess(): void
     {
-        $process = $this->createProcessMock(ProcessQueueInterface::FAILURE);
+        $process = $this->createBlockingProcessMock(ProcessQueueInterface::FAILURE);
 
-        $this->queue->add($process->reveal(), true, false);
+        $this->queue->add($process->reveal(), true);
 
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function runDetachedProcessStartsWithoutBlocking(): void
-    {
-        $detachedProcess = $this->createDetachedProcessMock();
-        $detachedProcess->isRunning()
-            ->willReturn(true, false);
-        $blockingProcess = $this->createProcessMock();
-
-        $this->queue->add($detachedProcess->reveal(), false, true);
-        $this->queue->add($blockingProcess->reveal(), false, false);
-
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
+        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
 
     /**
@@ -241,30 +189,11 @@ final class ProcessQueueTest extends TestCase
     #[Test]
     public function runWithNullExitCodeReturnsFailure(): void
     {
-        $process = $this->createProcessMock(exitCode: null);
+        $process = $this->createBlockingProcessMock(exitCode: null);
 
-        $this->queue->add($process->reveal(), false, false);
+        $this->queue->add($process->reveal());
 
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::FAILURE, $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function runMultipleProcessesWithOneFailureReturnsFailure(): void
-    {
-        $successProcess = $this->createProcessMock();
-        $failingProcess = $this->createProcessMock(ProcessQueueInterface::FAILURE);
-
-        $this->queue->add($successProcess->reveal(), false, false);
-        $this->queue->add($failingProcess->reveal(), false, false);
-
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::FAILURE, $result);
+        self::assertSame(ProcessQueueInterface::FAILURE, $this->queue->run($this->output->reveal()));
     }
 
     /**
@@ -273,18 +202,35 @@ final class ProcessQueueTest extends TestCase
     #[Test]
     public function runBlockingProcessExceptionReturnsFailure(): void
     {
-        $process = $this->createProcessMock(isRunning: false);
+        $process = $this->prophesize(Process::class);
+        $this->expectPtyConfiguration($process);
         $process->getCommandLine()
             ->willReturn('test-command');
         $process->getWorkingDirectory()
             ->willReturn('/tmp');
-        $process->run(Argument::any())->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
+        $process->isStarted()
+            ->willReturn(false);
+        $process->run(Argument::any())
+            ->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
 
-        $this->queue->add($process->reveal(), false, false);
+        $this->queue->add($process->reveal());
 
-        $result = $this->queue->run($this->output->reveal());
+        self::assertSame(ProcessQueueInterface::FAILURE, $this->queue->run($this->output->reveal()));
+    }
 
-        self::assertSame(ProcessQueueInterface::FAILURE, $result);
+    /**
+     * @return void
+     */
+    #[Test]
+    public function runDetachedProcessStartsWithoutBlockingAndWaitsAtTheEnd(): void
+    {
+        $detachedProcess = $this->createDetachedProcessMock(true, false);
+        $blockingProcess = $this->createBlockingProcessMock();
+
+        $this->queue->add($detachedProcess->reveal(), detached: true);
+        $this->queue->add($blockingProcess->reveal());
+
+        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
 
     /**
@@ -293,18 +239,20 @@ final class ProcessQueueTest extends TestCase
     #[Test]
     public function runDetachedProcessStartFailureReturnsFailure(): void
     {
-        $process = $this->createDetachedProcessMock(isRunning: false);
+        $process = $this->prophesize(Process::class);
+        $this->expectPtyConfiguration($process);
         $process->getCommandLine()
             ->willReturn('test-command');
         $process->getWorkingDirectory()
             ->willReturn('/tmp');
-        $process->start(Argument::any())->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
+        $process->isStarted()
+            ->willReturn(false);
+        $process->start(Argument::type(Closure::class))
+            ->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
 
-        $this->queue->add($process->reveal(), false, true);
+        $this->queue->add($process->reveal(), detached: true);
 
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::FAILURE, $result);
+        self::assertSame(ProcessQueueInterface::FAILURE, $this->queue->run($this->output->reveal()));
     }
 
     /**
@@ -321,99 +269,10 @@ final class ProcessQueueTest extends TestCase
             ->willReturn('/tmp');
         $process->isStarted()
             ->willReturn(false);
-        $process->start(Argument::any())->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
+        $process->start(Argument::type(Closure::class))
+            ->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
 
-        $this->queue->add($process->reveal(), true, true);
-
-        $result = $this->queue->run($this->output->reveal());
-
-        self::assertSame(ProcessQueueInterface::SUCCESS, $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function runWillWriteProcessOutputToOutputInterface(): void
-    {
-        $capturedCallback = null;
-
-        $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
-        $process->run(Argument::that(function ($cb) use (&$capturedCallback): bool {
-            $capturedCallback = $cb;
-
-            return $cb instanceof Closure;
-        }))->will(function () use (&$capturedCallback): int {
-            $capturedCallback(Process::OUT, 'stdout output');
-            $capturedCallback(Process::ERR, 'stderr output');
-
-            return ProcessQueueInterface::SUCCESS;
-        });
-        $process->getExitCode()
-            ->willReturn(ProcessQueueInterface::SUCCESS);
-        $process->getIncrementalOutput()
-            ->willReturn('');
-        $process->getIncrementalErrorOutput()
-            ->willReturn('');
-        $process->isRunning()
-            ->willReturn(false);
-        $process->isStarted()
-            ->willReturn(false);
-
-        $this->output->write('stdout output')
-            ->shouldBeCalled();
-        $this->output->write('stderr output')
-            ->shouldBeCalled();
-
-        $this->queue->add($process->reveal(), false, false);
-
-        $this->queue->run($this->output->reveal());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function waitWillBlockUntilDetachedProcessesFinish(): void
-    {
-        $detachedProcess = $this->createDetachedProcessMock();
-        $detachedProcess->isRunning()
-            ->willReturn(true, false);
-
-        $this->queue->add($detachedProcess->reveal(), false, true);
-        $this->queue->run($this->output->reveal());
-
-        // Call wait explicitly. It should retrieve the process from tracking
-        // and loop exactly once before it exits because isRunning returns false.
-        $this->queue->wait($this->output->reveal());
-
-        // The assertion simply verifies the test completes and doesn't run infinitely.
-        self::assertTrue(true);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function addWillQueueTheProcessWhenPtySupportIsConfigured(): void
-    {
-        $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
-        $process->run(Argument::any())
-            ->willReturn(ProcessQueueInterface::SUCCESS);
-        $process->getExitCode()
-            ->willReturn(ProcessQueueInterface::SUCCESS);
-        $process->getIncrementalOutput()
-            ->willReturn('');
-        $process->getIncrementalErrorOutput()
-            ->willReturn('');
-        $process->isRunning()
-            ->willReturn(false);
-        $process->isStarted()
-            ->willReturn(false);
-
-        $this->queue->add($process->reveal());
+        $this->queue->add($process->reveal(), ignoreFailure: true, detached: true);
 
         self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
@@ -422,13 +281,11 @@ final class ProcessQueueTest extends TestCase
      * @return void
      */
     #[Test]
-    public function runWillWriteErrorOutputToConsoleErrorStream(): void
+    public function runWillWriteBlockingProcessOutputToStandardAndErrorOutputs(): void
     {
         $capturedCallback = null;
-        $consoleOutput = $this->prophesize(ConsoleOutputInterface::class);
-        $errorOutput = $this->prophesize(OutputInterface::class);
-        $process = $this->prophesize(Process::class);
 
+        $process = $this->prophesize(Process::class);
         $this->expectPtyConfiguration($process);
         $process->run(Argument::that(function ($callback) use (&$capturedCallback): bool {
             $capturedCallback = $callback;
@@ -440,134 +297,82 @@ final class ProcessQueueTest extends TestCase
 
             return ProcessQueueInterface::SUCCESS;
         });
+        $process->getCommandLine()
+            ->willReturn('test-command');
+        $process->getWorkingDirectory()
+            ->willReturn('/tmp');
         $process->getExitCode()
             ->willReturn(ProcessQueueInterface::SUCCESS);
-        $process->getIncrementalOutput()
-            ->willReturn('');
-        $process->getIncrementalErrorOutput()
-            ->willReturn('');
         $process->isRunning()
             ->willReturn(false);
-        $process->isStarted()
-            ->willReturn(false);
 
-        $consoleOutput->write('stdout output')
-            ->shouldBeCalledOnce();
-        $consoleOutput->getErrorOutput()
-            ->willReturn($errorOutput->reveal())
-            ->shouldBeCalledOnce();
-        $errorOutput->write('stderr output')
-            ->shouldBeCalledOnce();
+        $this->output->write('stdout output')
+            ->shouldBeCalled();
+        $this->errorOutput->write('stderr output')
+            ->shouldBeCalled();
 
         $this->queue->add($process->reveal());
 
-        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($consoleOutput->reveal()));
+        $this->queue->run($this->output->reveal());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function runWillFlushRemainingDetachedOutputWhenProcessFinishes(): void
+    public function waitWillFlushFinishedDetachedOutputWithoutWaitingForEveryProcess(): void
     {
-        $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
-        $process->start(Argument::any())
-            ->shouldBeCalledOnce();
-        $process->getIncrementalOutput()
-            ->willReturn('', 'remaining stdout');
-        $process->getIncrementalErrorOutput()
-            ->willReturn('', 'remaining stderr');
-        $process->isRunning()
+        $capturedFirstCallback = null;
+        $capturedSecondCallback = null;
+
+        $firstProcess = $this->prophesize(Process::class);
+        $this->expectPtyConfiguration($firstProcess);
+        $firstProcess->getCommandLine()
+            ->willReturn('first-command');
+        $firstProcess->getWorkingDirectory()
+            ->willReturn('/tmp');
+        $firstProcess->start(Argument::that(function ($callback) use (&$capturedFirstCallback): bool {
+            $capturedFirstCallback = $callback;
+
+            return $callback instanceof Closure;
+        }))->shouldBeCalled();
+        $firstProcess->isRunning()
             ->willReturn(false);
-        $process->isStarted()
-            ->willReturn(true);
+        $firstProcess->wait()
+            ->will(function () use (&$capturedFirstCallback): int {
+                $capturedFirstCallback(Process::OUT, 'first output');
 
-        $this->output->write('remaining stdout')
-            ->shouldBeCalledOnce();
-        $this->output->write('remaining stderr')
-            ->shouldBeCalledOnce();
+                return ProcessQueueInterface::SUCCESS;
+            })->shouldBeCalled();
 
-        $this->queue->add($process->reveal(), false, true);
+        $secondProcess = $this->prophesize(Process::class);
+        $this->expectPtyConfiguration($secondProcess);
+        $secondProcess->getCommandLine()
+            ->willReturn('second-command');
+        $secondProcess->getWorkingDirectory()
+            ->willReturn('/tmp');
+        $secondProcess->start(Argument::that(function ($callback) use (&$capturedSecondCallback): bool {
+            $capturedSecondCallback = $callback;
+
+            return $callback instanceof Closure;
+        }))->shouldBeCalled();
+        $secondProcess->isRunning()
+            ->willReturn(true, false);
+        $secondProcess->wait()
+            ->will(function () use (&$capturedSecondCallback): int {
+                $capturedSecondCallback(Process::OUT, 'second output');
+
+                return ProcessQueueInterface::SUCCESS;
+            })->shouldBeCalled();
+
+        $this->output->write('first output')
+            ->shouldBeCalled();
+        $this->output->write('second output')
+            ->shouldBeCalled();
+
+        $this->queue->add($firstProcess->reveal(), detached: true);
+        $this->queue->add($secondProcess->reveal(), detached: true);
 
         self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function waitWillAcceptNullOutput(): void
-    {
-        $detachedProcess = $this->createDetachedProcessMock();
-        $detachedProcess->isRunning()
-            ->willReturn(true, false);
-
-        $this->queue->add($detachedProcess->reveal(), false, true);
-        $this->queue->run($this->output->reveal());
-        $this->queue->wait(null);
-
-        self::assertTrue(true);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function privateHelpersWillHandleStartupFailuresAndStreamBuffers(): void
-    {
-        $startDetachedProcess = new ReflectionMethod($this->queue, 'startDetachedProcess');
-        $runBlockingProcess = new ReflectionMethod($this->queue, 'runBlockingProcess');
-        $drainDetachedProcessesOutput = new ReflectionMethod($this->queue, 'drainDetachedProcessesOutput');
-
-        $failingDetachedProcess = $this->prophesize(Process::class);
-        $failingDetachedProcess->getCommandLine()
-            ->willReturn('php artisan');
-        $failingDetachedProcess->getWorkingDirectory()
-            ->willReturn('/tmp');
-        $failingDetachedProcess->isStarted()
-            ->willReturn(false);
-        $failingDetachedProcess->start(Argument::any())
-            ->willThrow(new ProcessStartFailedException($failingDetachedProcess->reveal(), 'failed'));
-
-        self::assertSame(
-            ProcessQueueInterface::FAILURE,
-            $startDetachedProcess->invoke($this->queue, $failingDetachedProcess->reveal(), $this->output->reveal()),
-        );
-
-        $failingBlockingProcess = $this->prophesize(Process::class);
-        $failingBlockingProcess->getCommandLine()
-            ->willReturn('php artisan');
-        $failingBlockingProcess->getWorkingDirectory()
-            ->willReturn('/tmp');
-        $failingBlockingProcess->isStarted()
-            ->willReturn(false);
-        $failingBlockingProcess->run(Argument::any())
-            ->willThrow(new ProcessStartFailedException($failingBlockingProcess->reveal(), 'failed'));
-
-        self::assertSame(
-            ProcessQueueInterface::FAILURE,
-            $runBlockingProcess->invoke($this->queue, $failingBlockingProcess->reveal(), $this->output->reveal()),
-        );
-
-        $detachedProcess = $this->prophesize(Process::class);
-        $detachedProcess->getIncrementalOutput()
-            ->willReturn('', 'late stdout');
-        $detachedProcess->getIncrementalErrorOutput()
-            ->willReturn('', 'late stderr');
-        $detachedProcess->isRunning()
-            ->willReturn(false);
-
-        $runningDetachedProcesses = new ReflectionProperty($this->queue, 'runningDetachedProcesses');
-        $runningDetachedProcesses->setValue($this->queue, [$detachedProcess->reveal()]);
-
-        $this->output->write('late stdout')
-            ->shouldBeCalledOnce();
-        $this->output->write('late stderr')
-            ->shouldBeCalledOnce();
-
-        $drainDetachedProcessesOutput->invoke($this->queue, $this->output->reveal(), true);
-
-        self::assertSame([], $runningDetachedProcesses->getValue($this->queue));
     }
 }

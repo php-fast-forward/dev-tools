@@ -24,6 +24,7 @@ use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Composer\Json\Schema\Author;
 use FastForward\DevTools\Composer\Json\Schema\Support;
+use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\PhpDocCommand;
 use FastForward\DevTools\Console\Command\RefactorCommand;
@@ -51,6 +52,7 @@ use Twig\Environment;
 #[CoversClass(PhpDocCommand::class)]
 #[UsesClass(Author::class)]
 #[UsesClass(Support::class)]
+#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class PhpDocCommandTest extends TestCase
 {
@@ -101,6 +103,8 @@ final class PhpDocCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('cache-dir')
             ->willReturn('tmp/cache/php-cs-fixer');
+        $this->input->getOption('no-progress')
+            ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
         $this->input->getOption('pretty-json')
@@ -231,6 +235,28 @@ final class PhpDocCommandTest extends TestCase
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();
         $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalled();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillDisableProgressWhenRequested(): void
+    {
+        $this->input->getOption('no-progress')
+            ->willReturn(true);
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalled();
+        $this->processBuilder->withArgument('--show-progress=none')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--no-progress-bar')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
 

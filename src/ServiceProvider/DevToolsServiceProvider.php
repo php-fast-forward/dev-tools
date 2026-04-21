@@ -40,6 +40,7 @@ use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
 use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
@@ -139,6 +140,7 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             ConsoleOutputInterface::class => create(ConsoleOutput::class)
                 ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),
+            GithubActionOutput::class => create(GithubActionOutput::class)->constructor(create(ConsoleOutput::class)),
             ContextProcessorInterface::class => create(CompositeContextProcessor::class)->constructor([
                 get(CommandInputProcessor::class),
                 get(CommandOutputProcessor::class),

@@ -83,6 +83,11 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
     {
         $this->addJsonOption()
             ->addOption(
+                name: 'no-progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to disable progress output from phpDocumentor.',
+            )
+            ->addOption(
                 name: 'target',
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,

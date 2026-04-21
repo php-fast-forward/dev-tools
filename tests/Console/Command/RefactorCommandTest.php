@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\RefactorCommand;
+use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -39,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(RefactorCommand::class)]
+#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class RefactorCommandTest extends TestCase
 {
@@ -74,6 +76,8 @@ final class RefactorCommandTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
 
         $this->input->getOption('fix')
+            ->willReturn(false);
+        $this->input->getOption('no-progress')
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
@@ -162,6 +166,24 @@ final class RefactorCommandTest extends TestCase
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();
         $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(RefactorCommand::SUCCESS)
+            ->shouldBeCalled();
+
+        self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillDisableProgressWhenRequested(): void
+    {
+        $this->input->getOption('no-progress')
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--no-progress-bar')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
             ->willReturn(RefactorCommand::SUCCESS)
             ->shouldBeCalled();
 
