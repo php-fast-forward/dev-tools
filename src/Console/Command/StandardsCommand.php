@@ -20,10 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\StringInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -37,6 +40,19 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class StandardsCommand extends BaseCommand
 {
+    /**
+     * @param CommandResponderFactoryInterface $commandResponderFactory the
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responder
+     *                                                                  factory
+     */
+    public function __construct(
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Configures constraints and arguments for the collective standard runner.
      *
@@ -53,6 +69,13 @@ final class StandardsCommand extends BaseCommand
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
                 description: 'Automatically fix code standards issues.'
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -69,20 +92,52 @@ final class StandardsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running code standards checks...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $format = $responder->format();
+        $textOutput = OutputFormat::TEXT === $format;
+        $commandOutput = $textOutput ? $output : new BufferedOutput();
 
         $results = [];
+        $commands = [];
+        $formatArgument = OutputFormat::JSON === $format ? ' --output-format=json' : '';
 
-        $fix = $input->getOption('fix') ? '--fix' : '';
+        if ($textOutput) {
+            $output->writeln('<info>Running code standards checks...</info>');
+        }
 
-        $results[] = $this->runCommand('refactor ' . $fix, $output);
-        $results[] = $this->runCommand('phpdoc ' . $fix, $output);
-        $results[] = $this->runCommand('code-style ' . $fix, $output);
-        $results[] = $this->runCommand('reports', $output);
+        $fixArgument = $input->getOption('fix') ? ' --fix' : '';
 
-        $output->writeln('<info>All code standards checks completed!</info>');
+        foreach (['refactor', 'phpdoc', 'code-style', 'reports'] as $command) {
+            $commands[] = $command;
+            $results[] = $this->runCommand(
+                $command . ('reports' === $command ? '' : $fixArgument) . $formatArgument,
+                $commandOutput,
+            );
+        }
 
-        return \in_array(self::FAILURE, $results, true) ? self::FAILURE : self::SUCCESS;
+        if ($textOutput) {
+            $output->writeln('<info>All code standards checks completed!</info>');
+        }
+
+        return \in_array(self::FAILURE, $results, true)
+            ? $responder->failure(
+                'Code standards checks failed.',
+                [
+                    'command' => 'standards',
+                    'fix' => (bool) $input->getOption('fix'),
+                    'commands' => $commands,
+                    'process_output' => $commandOutput instanceof BufferedOutput ? $commandOutput->fetch() : null,
+                ],
+            )
+            : $responder->success(
+                'Code standards checks completed successfully.',
+                [
+                    'command' => 'standards',
+                    'fix' => (bool) $input->getOption('fix'),
+                    'commands' => $commands,
+                    'process_output' => $commandOutput instanceof BufferedOutput ? $commandOutput->fetch() : null,
+                ],
+            );
     }
 
     /**
