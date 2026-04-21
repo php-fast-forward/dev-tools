@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Process;
 
-use RuntimeException;
 use Closure;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
@@ -83,10 +82,8 @@ final class ProcessQueue implements ProcessQueueInterface
      */
     public function add(Process $process, bool $ignoreFailure = false, bool $detached = false): void
     {
-        try {
+        if (Process::isPtySupported()) {
             $process->setPty(true);
-        } catch (RuntimeException) {
-            // PTY is not available in the current environment.
         }
 
         $this->entries[] = [

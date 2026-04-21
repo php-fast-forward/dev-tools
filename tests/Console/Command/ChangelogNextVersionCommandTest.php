@@ -19,25 +19,20 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use InvalidArgumentException;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogNextVersionCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\CommandResponderInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogNextVersionCommand::class)]
-#[CoversClass(OutputFormat::class)]
 final class ChangelogNextVersionCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -52,19 +47,14 @@ final class ChangelogNextVersionCommandTest extends TestCase
      */
     private ObjectProphecy $changelogManager;
 
+    /**
+     * @var ObjectProphecy<LoggerInterface>
+     */
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $input;
 
     private ObjectProphecy $output;
-
-    /**
-     * @var ObjectProphecy<CommandResponderFactoryInterface>
-     */
-    private ObjectProphecy $commandResponderFactory;
-
-    /**
-     * @var ObjectProphecy<CommandResponderInterface>
-     */
-    private ObjectProphecy $commandResponder;
 
     private ChangelogNextVersionCommand $command;
 
@@ -75,10 +65,9 @@ final class ChangelogNextVersionCommandTest extends TestCase
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->changelogManager = $this->prophesize(ChangelogManagerInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
-        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
 
         $this->input->getOption('file')
             ->willReturn('CHANGELOG.md');
@@ -90,7 +79,7 @@ final class ChangelogNextVersionCommandTest extends TestCase
         $this->command = new ChangelogNextVersionCommand(
             $this->filesystem->reveal(),
             $this->changelogManager->reveal(),
-            $this->commandResponderFactory->reveal(),
+            $this->logger->reveal(),
         );
     }
 
@@ -100,11 +89,9 @@ final class ChangelogNextVersionCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWithTheInferredVersion(): void
     {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
         $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
             ->willReturn('1.3.0');
-        $this->commandResponder->success(
+        $this->logger->info(
             '1.3.0',
             [
                 'command' => 'changelog:next-version',
@@ -112,7 +99,7 @@ final class ChangelogNextVersionCommandTest extends TestCase
                 'current_version' => null,
                 'next_version' => '1.3.0',
             ],
-        )->willReturn(ChangelogNextVersionCommand::SUCCESS)->shouldBeCalled();
+        )->shouldBeCalled();
 
         self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
     }
@@ -125,11 +112,9 @@ final class ChangelogNextVersionCommandTest extends TestCase
     {
         $this->input->getOption('current-version')
             ->willReturn('1.2.3');
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
         $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', '1.2.3')
             ->willReturn('2.0.0');
-        $this->commandResponder->success(
+        $this->logger->info(
             '2.0.0',
             [
                 'command' => 'changelog:next-version',
@@ -137,44 +122,9 @@ final class ChangelogNextVersionCommandTest extends TestCase
                 'current_version' => '1.2.3',
                 'next_version' => '2.0.0',
             ],
-        )->willReturn(ChangelogNextVersionCommand::SUCCESS)->shouldBeCalled();
+        )->shouldBeCalled();
 
         self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnSuccessWhenJsonOutputIsRequested(): void
-    {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
-        $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
-            ->willReturn('1.3.0');
-        $this->commandResponder->success(
-            '1.3.0',
-            Argument::type('array'),
-        )->willReturn(ChangelogNextVersionCommand::SUCCESS)->shouldBeCalled();
-
-        self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnFailureWhenFormatIsInvalid(): void
-    {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willThrow(new InvalidArgumentException('The --output-format option MUST be one of: text, json.'));
-        $this->changelogManager->inferNextVersion(Argument::cetera())
-            ->shouldNotBeCalled();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The --output-format option MUST be one of: text, json.');
-
-        $this->invokeExecute();
     }
 
     /**

@@ -20,10 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -52,16 +51,12 @@ final class MetricsCommand extends BaseCommand
     /**
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PhpMetrics process
      * @param ProcessQueueInterface $processQueue the queue used to execute the PhpMetrics process
-     * @param CommandResponderFactoryInterface $commandResponderFactory the
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responder
-     *                                                                  factory
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -93,8 +88,8 @@ final class MetricsCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -106,17 +101,14 @@ final class MetricsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $textOutput = OutputFormat::TEXT === $responder->format();
-        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $target = rtrim((string) $input->getOption('target'), '/');
         $exclude = (string) $input->getOption('exclude');
         $junit = $input->getOption('junit');
 
-        if ($textOutput) {
-            $output->writeln('<info>Running code metrics analysis...</info>');
-        }
+        $this->logger->info('Running code metrics analysis...');
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -138,26 +130,22 @@ final class MetricsCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        return self::SUCCESS === $result
-            ? $responder->success(
-                'Code metrics analysis completed successfully.',
-                [
-                    'command' => 'metrics',
-                    'exclude' => $exclude,
-                    'target' => $target,
-                    'junit' => $junit,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            )
-            : $responder->failure(
-                'Code metrics analysis failed.',
-                [
-                    'command' => 'metrics',
-                    'exclude' => $exclude,
-                    'target' => $target,
-                    'junit' => $junit,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            );
+        $context = [
+            'command' => 'metrics',
+            'exclude' => $exclude,
+            'target' => $target,
+            'junit' => $junit,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('Code metrics analysis completed successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('Code metrics analysis failed.', $context);
+
+        return self::FAILURE;
     }
 }

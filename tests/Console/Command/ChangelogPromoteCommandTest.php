@@ -20,58 +20,36 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogPromoteCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\CommandResponderInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogPromoteCommand::class)]
-#[CoversClass(OutputFormat::class)]
 final class ChangelogPromoteCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<FilesystemInterface>
-     */
     private ObjectProphecy $filesystem;
 
-    /**
-     * @var ObjectProphecy<ChangelogManagerInterface>
-     */
     private ObjectProphecy $changelogManager;
 
-    /**
-     * @var ObjectProphecy<ClockInterface>
-     */
     private ObjectProphecy $clock;
+
+    private ObjectProphecy $logger;
 
     private ObjectProphecy $input;
 
     private ObjectProphecy $output;
-
-    /**
-     * @var ObjectProphecy<CommandResponderFactoryInterface>
-     */
-    private ObjectProphecy $commandResponderFactory;
-
-    /**
-     * @var ObjectProphecy<CommandResponderInterface>
-     */
-    private ObjectProphecy $commandResponder;
 
     private ChangelogPromoteCommand $command;
 
@@ -83,10 +61,9 @@ final class ChangelogPromoteCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->changelogManager = $this->prophesize(ChangelogManagerInterface::class);
         $this->clock = $this->prophesize(ClockInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
-        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
 
         $this->input->getOption('file')
             ->willReturn('CHANGELOG.md');
@@ -96,12 +73,14 @@ final class ChangelogPromoteCommandTest extends TestCase
             ->willReturn('1.2.0');
         $this->filesystem->getAbsolutePath('CHANGELOG.md')
             ->willReturn('/repo/CHANGELOG.md');
+        $this->clock->now()
+            ->willReturn(new DateTimeImmutable('2026-04-21'));
 
         $this->command = new ChangelogPromoteCommand(
             $this->filesystem->reveal(),
             $this->changelogManager->reveal(),
             $this->clock->reveal(),
-            $this->commandResponderFactory->reveal(),
+            $this->logger->reveal(),
         );
     }
 
@@ -109,23 +88,20 @@ final class ChangelogPromoteCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillUseTheCurrentDateWhenOneIsNotProvided(): void
+    public function executeWillUseTheCurrentDateByDefault(): void
     {
-        $this->clock->now()
-            ->willReturn(new DateTimeImmutable('2026-04-19T12:00:00+00:00'));
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
-        $this->changelogManager->promote('/repo/CHANGELOG.md', '1.2.0', '2026-04-19')
-            ->shouldBeCalledOnce();
-        $this->commandResponder->success(
-            'Promoted Unreleased changelog entries to [1.2.0] in /repo/CHANGELOG.md.',
+        $this->changelogManager->promote('/repo/CHANGELOG.md', '1.2.0', '2026-04-21')
+            ->shouldBeCalled();
+        $this->logger->info(
+            'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
             [
                 'command' => 'changelog:promote',
                 'file' => 'CHANGELOG.md',
+                'absolute_file' => '/repo/CHANGELOG.md',
                 'version' => '1.2.0',
-                'date' => '2026-04-19',
+                'date' => '2026-04-21',
             ],
-        )->willReturn(ChangelogPromoteCommand::SUCCESS)->shouldBeCalled();
+        )->shouldBeCalled();
 
         self::assertSame(ChangelogPromoteCommand::SUCCESS, $this->invokeExecute());
     }
@@ -134,62 +110,24 @@ final class ChangelogPromoteCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillUseTheProvidedDateWhenPresent(): void
+    public function executeWillPreferTheExplicitDate(): void
     {
         $this->input->getOption('date')
             ->willReturn('2026-04-20');
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
         $this->changelogManager->promote('/repo/CHANGELOG.md', '1.2.0', '2026-04-20')
-            ->shouldBeCalledOnce();
-        $this->commandResponder->success(
-            'Promoted Unreleased changelog entries to [1.2.0] in /repo/CHANGELOG.md.',
+            ->shouldBeCalled();
+        $this->logger->info(
+            'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
             [
                 'command' => 'changelog:promote',
                 'file' => 'CHANGELOG.md',
+                'absolute_file' => '/repo/CHANGELOG.md',
                 'version' => '1.2.0',
                 'date' => '2026-04-20',
             ],
-        )->willReturn(ChangelogPromoteCommand::SUCCESS)->shouldBeCalled();
+        )->shouldBeCalled();
 
         self::assertSame(ChangelogPromoteCommand::SUCCESS, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnSuccessWhenJsonOutputIsRequested(): void
-    {
-        $this->clock->now()
-            ->willReturn(new DateTimeImmutable('2026-04-19T12:00:00+00:00'));
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
-        $this->changelogManager->promote('/repo/CHANGELOG.md', '1.2.0', '2026-04-19')
-            ->shouldBeCalledOnce();
-        $this->commandResponder->success(
-            'Promoted Unreleased changelog entries to [1.2.0] in /repo/CHANGELOG.md.',
-            Argument::type('array'),
-        )->willReturn(ChangelogPromoteCommand::SUCCESS)->shouldBeCalled();
-
-        self::assertSame(ChangelogPromoteCommand::SUCCESS, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnFailureWhenFormatIsInvalid(): void
-    {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willThrow(new InvalidArgumentException('The --output-format option MUST be one of: text, json.'));
-        $this->changelogManager->promote(Argument::cetera())
-            ->shouldNotBeCalled();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The --output-format option MUST be one of: text, json.');
-
-        $this->invokeExecute();
     }
 
     /**

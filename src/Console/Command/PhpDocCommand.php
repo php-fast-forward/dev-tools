@@ -20,12 +20,11 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Clock\ClockInterface;
+use Psr\Log\LoggerInterface;
 use Twig\Environment;
 use Composer\Command\BaseCommand;
 use Throwable;
@@ -74,11 +73,7 @@ final class PhpDocCommand extends BaseCommand
      * @param ComposerJsonInterface $composer
      * @param Environment $renderer
      * @param ClockInterface $clock
-     * @param CommandResponderFactoryInterface $commandResponderFactory the
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responder
-     *                                                                  factory
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -88,7 +83,7 @@ final class PhpDocCommand extends BaseCommand
         private readonly FilesystemInterface $filesystem,
         private readonly Environment $renderer,
         private readonly ClockInterface $clock,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -125,8 +120,8 @@ final class PhpDocCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -143,16 +138,13 @@ final class PhpDocCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $textOutput = OutputFormat::TEXT === $responder->format();
-        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
 
-        if ($textOutput) {
-            $output->writeln('<info>Checking and fixing PHPDocs...</info>');
-        }
+        $this->logger->info('Checking and fixing PHPDocs...');
 
-        $this->ensureDocHeaderExists($processOutput);
+        $this->ensureDocHeaderExists();
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -185,27 +177,23 @@ final class PhpDocCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        return self::SUCCESS === $result
-            ? $responder->success(
-                'PHPDoc checks completed successfully.',
-                [
-                    'command' => 'phpdoc',
-                    'fix' => $fix,
-                    'cache_dir' => $input->getOption('cache-dir'),
-                    'config' => self::CONFIG,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            )
-            : $responder->failure(
-                'PHPDoc checks failed.',
-                [
-                    'command' => 'phpdoc',
-                    'fix' => $fix,
-                    'cache_dir' => $input->getOption('cache-dir'),
-                    'config' => self::CONFIG,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            );
+        $context = [
+            'command' => 'phpdoc',
+            'fix' => $fix,
+            'cache_dir' => $input->getOption('cache-dir'),
+            'config' => self::CONFIG,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('PHPDoc checks completed successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('PHPDoc checks failed.', $context);
+
+        return self::FAILURE;
     }
 
     /**
@@ -214,11 +202,9 @@ final class PhpDocCommand extends BaseCommand
      * The method MUST query the local filesystem. If the file is missing, it SHOULD copy
      * the tool template into the root folder.
      *
-     * @param OutputInterface $output the logger where missing capabilities are announced
-     *
      * @return void
      */
-    private function ensureDocHeaderExists(OutputInterface $output): void
+    private function ensureDocHeaderExists(): void
     {
         $support = $this->composer->getSupport();
 
@@ -243,13 +229,13 @@ final class PhpDocCommand extends BaseCommand
         try {
             $this->filesystem->dumpFile(self::FILENAME, $docHeader);
         } catch (Throwable) {
-            $output->writeln(
-                '<comment>Skipping .docheader creation because the destination file could not be written.</comment>'
+            $this->logger->warning(
+                'Skipping .docheader creation because the destination file could not be written.'
             );
 
             return;
         }
 
-        $output->writeln('<info>Created .docheader from repository template.</info>');
+        $this->logger->info('Created .docheader from repository template.');
     }
 }

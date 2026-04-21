@@ -25,9 +25,11 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 
@@ -53,6 +55,7 @@ final class WikiCommand extends BaseCommand
      * @param ProcessQueueInterface $processQueue
      * @param FilesystemInterface $filesystem the filesystem used to inspect the wiki target
      * @param GitClientInterface $gitClient
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -60,6 +63,7 @@ final class WikiCommand extends BaseCommand
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly GitClientInterface $gitClient,
+        private readonly LoggerInterface $logger,
     ) {
         return parent::__construct();
     }
@@ -92,6 +96,13 @@ final class WikiCommand extends BaseCommand
                 name: 'init',
                 mode: InputOption::VALUE_NONE,
                 description: 'Initialize the configured wiki target as a Git submodule.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -108,17 +119,23 @@ final class WikiCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $target = (string) $input->getOption('target');
+
         if ($input->getOption('init')) {
-            return $this->initializeWikiSubmodule((string) $input->getOption('target'), $output);
+            return $this->initializeWikiSubmodule($target, $processOutput);
         }
 
-        $output->writeln('<info>Generating API documentation...</info>');
+        if (! $jsonOutput) {
+            $this->logger->info('Generating wiki documentation...');
+        }
 
         $processBuilder = $this->processBuilder
             ->withArgument('--visibility', 'public,protected')
             ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
             ->withArgument('--title', $this->composer->getDescription())
-            ->withArgument('--target', $input->getOption('target'))
+            ->withArgument('--target', $target)
             ->withArgument('--cache-folder', $input->getOption('cache-dir'));
 
         $psr4Namespaces = $this->composer->getAutoload('psr-4');
@@ -133,7 +150,23 @@ final class WikiCommand extends BaseCommand
 
         $this->processQueue->add($processBuilder->build('vendor/bin/phpdoc'));
 
-        return $this->processQueue->run();
+        $result = $this->processQueue->run($processOutput);
+        $context = [
+            'command' => 'wiki',
+            'target' => $target,
+            'cache_dir' => (string) $input->getOption('cache-dir'),
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('Wiki documentation generated successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('Wiki documentation generation failed.', $context);
+
+        return self::FAILURE;
     }
 
     /**
@@ -149,7 +182,14 @@ final class WikiCommand extends BaseCommand
         $wikiSubmodulePath = (string) $this->filesystem->getAbsolutePath($target);
 
         if ($this->filesystem->exists($wikiSubmodulePath)) {
-            $output->writeln(\sprintf('<info>Wiki submodule already exists at %s.</info>', $wikiSubmodulePath));
+            $this->logger->info(
+                'Wiki submodule already exists at {wiki_submodule_path}.',
+                [
+                    'command' => 'wiki',
+                    'target' => $target,
+                    'wiki_submodule_path' => $wikiSubmodulePath,
+                ],
+            );
 
             return self::SUCCESS;
         }
@@ -166,7 +206,27 @@ final class WikiCommand extends BaseCommand
                 ->build('git')
         );
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($output);
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('Wiki submodule initialized successfully.', [
+                'command' => 'wiki',
+                'target' => $target,
+                'wiki_submodule_path' => $wikiSubmodulePath,
+                'wiki_repository_url' => $wikiRepoUrl,
+            ]);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('Wiki submodule initialization failed.', [
+            'command' => 'wiki',
+            'target' => $target,
+            'wiki_submodule_path' => $wikiSubmodulePath,
+            'wiki_repository_url' => $wikiRepoUrl,
+        ]);
+
+        return self::FAILURE;
     }
 
     /**

@@ -23,10 +23,12 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
@@ -53,11 +55,13 @@ final class DependenciesCommand extends BaseCommand
      * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
      * @param FileLocatorInterface $fileLocator resolves the dependency analyser configuration
+     * @param LoggerInterface $logger writes command feedback
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly FileLocatorInterface $fileLocator,
+        private readonly LoggerInterface $logger,
     ) {
         return parent::__construct();
     }
@@ -88,6 +92,13 @@ final class DependenciesCommand extends BaseCommand
                 name: 'dump-usage',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Dump usages for the given package pattern and show all matched usages.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -101,10 +112,19 @@ final class DependenciesCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+
         try {
             $maximumOutdated = $this->resolveMaximumOutdated($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
+            $this->logger->error($invalidArgumentException->getMessage(), [
+                'command' => 'dependencies',
+                'max_outdated' => $input->getOption('max-outdated'),
+                'dev' => (bool) $input->getOption('dev'),
+                'upgrade' => (bool) $input->getOption('upgrade'),
+                'dump_usage' => $input->getOption('dump-usage'),
+            ]);
 
             return self::FAILURE;
         }
@@ -117,7 +137,9 @@ final class DependenciesCommand extends BaseCommand
             $this->processQueue->add($this->getComposerNormalizeCommand());
         }
 
-        $output->writeln('<info>Running dependency analysis...</info>');
+        if (! $jsonOutput) {
+            $this->logger->info('Running dependency analysis...');
+        }
 
         $this->processQueue->add($this->getComposerDependencyAnalyserCommand($input));
         $this->processQueue->add(
@@ -125,7 +147,25 @@ final class DependenciesCommand extends BaseCommand
             $this->shouldIgnoreOutdatedFailures($maximumOutdated),
         );
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+        $context = [
+            'command' => 'dependencies',
+            'max_outdated' => $maximumOutdated,
+            'dev' => (bool) $input->getOption('dev'),
+            'upgrade' => (bool) $input->getOption('upgrade'),
+            'dump_usage' => $input->getOption('dump-usage'),
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('Dependency analysis completed successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('Dependency analysis failed.', $context);
+
+        return self::FAILURE;
     }
 
     /**

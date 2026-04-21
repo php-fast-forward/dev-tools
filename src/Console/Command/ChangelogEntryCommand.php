@@ -23,9 +23,8 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Document\ChangelogDocument;
 use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,12 +44,12 @@ final class ChangelogEntryCommand extends BaseCommand
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
-     * @param CommandResponderFactoryInterface $commandResponderFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -98,8 +97,8 @@ final class ChangelogEntryCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -111,8 +110,6 @@ final class ChangelogEntryCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-
         $file = $this->filesystem->getAbsolutePath((string) $input->getOption('file'));
         $type = ChangelogEntryType::fromInput((string) $input->getOption('type'));
         $version = (string) $input->getOption('release');
@@ -121,16 +118,19 @@ final class ChangelogEntryCommand extends BaseCommand
 
         $this->changelogManager->addEntry($file, $type, $message, $version, \is_string($date) ? $date : null);
 
-        return $responder->success(
-            \sprintf('Added %s changelog entry to [%s] in %s.', strtolower($type->value), $version, $file),
+        $this->logger->info(
+            'Added {type} changelog entry to [{release}] in {absolute_file}.',
             [
                 'command' => 'changelog:entry',
                 'file' => (string) $input->getOption('file'),
+                'absolute_file' => $file,
                 'type' => strtolower($type->value),
                 'release' => $version,
                 'date' => \is_string($date) ? $date : null,
                 'message' => $message,
             ],
         );
+
+        return self::SUCCESS;
     }
 }

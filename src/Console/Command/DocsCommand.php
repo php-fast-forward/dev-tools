@@ -22,11 +22,10 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use Twig\Environment;
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -54,11 +53,7 @@ final class DocsCommand extends BaseCommand
      * @param Environment $renderer
      * @param FilesystemInterface $filesystem the filesystem for handling file operations
      * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
-     * @param CommandResponderFactoryInterface $commandResponderFactory the
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responder
-     *                                                                  factory
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -66,7 +61,7 @@ final class DocsCommand extends BaseCommand
         private readonly Environment $renderer,
         private readonly FilesystemInterface $filesystem,
         private readonly ComposerJsonInterface $composer,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -112,8 +107,8 @@ final class DocsCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -130,21 +125,18 @@ final class DocsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $textOutput = OutputFormat::TEXT === $responder->format();
-        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
         $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
 
-        if ($textOutput) {
-            $output->writeln('<info>Generating API documentation...</info>');
-        }
+        $this->logger->info('Generating API documentation...');
 
         if (! $this->filesystem->exists($source)) {
-            return $responder->failure(
-                \sprintf('Source directory not found: %s', $source),
+            $this->logger->error(
+                'Source directory not found: {source}',
                 [
                     'command' => 'docs',
                     'source' => $source,
@@ -152,6 +144,8 @@ final class DocsCommand extends BaseCommand
                     'cache_dir' => $cacheDir,
                 ],
             );
+
+            return self::FAILURE;
         }
 
         $config = $this->createPhpDocumentorConfig(
@@ -172,27 +166,23 @@ final class DocsCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        return self::SUCCESS === $result
-            ? $responder->success(
-                'API documentation generated successfully.',
-                [
-                    'command' => 'docs',
-                    'source' => $source,
-                    'target' => $target,
-                    'cache_dir' => $cacheDir,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            )
-            : $responder->failure(
-                'API documentation generation failed.',
-                [
-                    'command' => 'docs',
-                    'source' => $source,
-                    'target' => $target,
-                    'cache_dir' => $cacheDir,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            );
+        $context = [
+            'command' => 'docs',
+            'source' => $source,
+            'target' => $target,
+            'cache_dir' => $cacheDir,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('API documentation generated successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('API documentation generation failed.', $context);
+
+        return self::FAILURE;
     }
 
     /**

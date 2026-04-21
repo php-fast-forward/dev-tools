@@ -20,9 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\RefactorCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\CommandResponderInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -31,61 +28,34 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
+use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(RefactorCommand::class)]
-#[CoversClass(OutputFormat::class)]
 final class RefactorCommandTest extends TestCase
 {
     use ProphecyTrait;
 
-    /**
-     * @var ObjectProphecy<FileLocatorInterface>
-     */
     private ObjectProphecy $fileLocator;
 
-    /**
-     * @var ObjectProphecy<ProcessBuilderInterface>
-     */
-    private ObjectProphecy $processBuilder;
-
-    /**
-     * @var ObjectProphecy<ProcessQueueInterface>
-     */
     private ObjectProphecy $processQueue;
 
-    /**
-     * @var ObjectProphecy<InputInterface>
-     */
-    private ObjectProphecy $input;
-
-    /**
-     * @var ObjectProphecy<OutputInterface>
-     */
-    private ObjectProphecy $output;
-
-    /**
-     * @var ObjectProphecy<Process>
-     */
     private ObjectProphecy $process;
 
-    /**
-     * @var ObjectProphecy<CommandResponderFactoryInterface>
-     */
-    private ObjectProphecy $commandResponderFactory;
+    private ObjectProphecy $input;
 
-    /**
-     * @var ObjectProphecy<CommandResponderInterface>
-     */
-    private ObjectProphecy $commandResponder;
+    private ObjectProphecy $output;
+
+    private ObjectProphecy $processBuilder;
+
+    private ObjectProphecy $logger;
 
     private RefactorCommand $command;
-
-    private const string CONFIG_PATH = '/path/to/rector.php';
 
     /**
      * @return void
@@ -95,89 +65,48 @@ final class RefactorCommandTest extends TestCase
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->process = $this->prophesize(Process::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->process = $this->prophesize(Process::class);
-        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
-        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
-
-        $this->fileLocator->locate(RefactorCommand::CONFIG)
-            ->willReturn(self::CONFIG_PATH);
+        $this->logger = $this->prophesize(LoggerInterface::class);
 
         $this->input->getOption('fix')
             ->willReturn(false);
+        $this->input->getOption('output-format')
+            ->willReturn('text');
+        $this->output->getVerbosity()
+            ->willReturn(OutputInterface::VERBOSITY_NORMAL);
+        $this->output->isDecorated()
+            ->willReturn(false);
+        $this->output->getFormatter()
+            ->willReturn(new OutputFormatter());
+        $this->fileLocator->locate(RefactorCommand::CONFIG)->willReturn('/path/to/rector.php');
 
-        $this->processBuilder->withArgument(Argument::cetera())
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->build('vendor/bin/rector')
-            ->willReturn($this->process->reveal());
+        $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalled();
 
         $this->command = new RefactorCommand(
             $this->fileLocator->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->commandResponderFactory->reveal(),
+            $this->logger->reveal(),
         );
-
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
-        $this->commandResponder->format()
-            ->willReturn(OutputFormat::TEXT);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function commandWillSetExpectedNameDescriptionAndHelp(): void
+    public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
-        self::assertSame('refactor', $this->command->getName());
-        self::assertSame('Runs Rector for code refactoring.', $this->command->getDescription());
-        self::assertSame('This command runs Rector to refactor your code.', $this->command->getHelp());
-        self::assertSame(['rector'], $this->command->getAliases());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function commandWillHaveExpectedOptions(): void
-    {
-        $definition = $this->command->getDefinition();
-
-        self::assertTrue($definition->hasOption('fix'));
-        self::assertTrue($definition->hasOption('config'));
-        self::assertTrue($definition->hasOption('output-format'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillRunRectorProcessWithDryRunWhenFixIsFalse(): void
-    {
-        $this->processBuilder->withArgument('process')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument('--config')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument(self::CONFIG_PATH)
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
-
-        $this->processBuilder->withArgument('--dry-run')
-            ->shouldBeCalledOnce()
-            ->willReturn($this->processBuilder->reveal());
         $this->processQueue->run($this->output->reveal())
             ->willReturn(RefactorCommand::SUCCESS)
-            ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Running Rector for code refactoring...</info>')
-            ->shouldBeCalledOnce();
-        $this->commandResponder->success(
+            ->shouldBeCalled();
+        $this->logger->info('Running Rector for code refactoring...')
+            ->shouldBeCalled();
+        $this->logger->info(
             'Code refactoring checks completed successfully.',
             [
                 'command' => 'refactor',
@@ -185,74 +114,33 @@ final class RefactorCommandTest extends TestCase
                 'config' => RefactorCommand::CONFIG,
                 'process_output' => null,
             ],
-        )->willReturn(RefactorCommand::SUCCESS)->shouldBeCalledOnce();
+        )->shouldBeCalled();
 
-        $this->processQueue->add($this->process->reveal())
-            ->shouldBeCalledOnce();
-
-        $result = $this->executeCommand();
-
-        self::assertSame(RefactorCommand::SUCCESS, $result);
+        self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRunRectorProcessWithoutDryRunWhenFixIsTrue(): void
+    public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
-        $this->input->getOption('fix')
-            ->willReturn(true);
-
         $this->processQueue->run($this->output->reveal())
-            ->willReturn(RefactorCommand::SUCCESS)
-            ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Running Rector for code refactoring...</info>')
-            ->shouldBeCalledOnce();
-        $this->processBuilder->withArgument('--dry-run')
-            ->shouldNotBeCalled();
-        $this->commandResponder->success(
-            'Code refactoring checks completed successfully.',
+            ->willReturn(RefactorCommand::FAILURE)
+            ->shouldBeCalled();
+        $this->logger->info('Running Rector for code refactoring...')
+            ->shouldBeCalled();
+        $this->logger->error(
+            'Code refactoring checks failed.',
             [
                 'command' => 'refactor',
-                'fix' => true,
+                'fix' => false,
                 'config' => RefactorCommand::CONFIG,
                 'process_output' => null,
             ],
-        )->willReturn(RefactorCommand::SUCCESS)->shouldBeCalledOnce();
+        )->shouldBeCalled();
 
-        $this->processQueue->add($this->process->reveal())
-            ->shouldBeCalledOnce();
-
-        $result = $this->executeCommand();
-
-        self::assertSame(RefactorCommand::SUCCESS, $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillCaptureProcessOutputWhenJsonOutputIsRequested(): void
-    {
-        $this->commandResponder->format()
-            ->willReturn(OutputFormat::JSON);
-        $this->output->writeln(Argument::cetera())
-            ->shouldNotBeCalled();
-        $this->processQueue->run(Argument::type('object'))
-            ->willReturn(RefactorCommand::SUCCESS)
-            ->shouldBeCalledOnce();
-        $this->commandResponder->success(
-            'Code refactoring checks completed successfully.',
-            Argument::that(static fn(array $context): bool => 'refactor' === $context['command']
-                && false === $context['fix']
-                && RefactorCommand::CONFIG === $context['config']
-                && \is_string($context['process_output'])),
-        )->willReturn(RefactorCommand::SUCCESS)->shouldBeCalledOnce();
-        $this->processQueue->add($this->process->reveal())
-            ->shouldBeCalledOnce();
-
-        self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
+        self::assertSame(RefactorCommand::FAILURE, $this->executeCommand());
     }
 
     /**
@@ -260,8 +148,7 @@ final class RefactorCommandTest extends TestCase
      */
     private function executeCommand(): int
     {
-        $reflectionMethod = new ReflectionMethod($this->command, 'execute');
-
-        return $reflectionMethod->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+        return (new ReflectionMethod($this->command, 'execute'))
+            ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
     }
 }

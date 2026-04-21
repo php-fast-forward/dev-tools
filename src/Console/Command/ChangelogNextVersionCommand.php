@@ -21,9 +21,8 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -42,12 +41,12 @@ final class ChangelogNextVersionCommand extends BaseCommand
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
-     * @param CommandResponderFactoryInterface $commandResponderFactory
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -73,8 +72,8 @@ final class ChangelogNextVersionCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -86,12 +85,11 @@ final class ChangelogNextVersionCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
         $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
         $currentVersion = $input->getOption('current-version');
         $nextVersion = $this->changelogManager->inferNextVersion($path, $currentVersion);
 
-        return $responder->success(
+        $this->logger->info(
             $nextVersion,
             [
                 'command' => 'changelog:next-version',
@@ -100,5 +98,7 @@ final class ChangelogNextVersionCommand extends BaseCommand
                 'next_version' => $nextVersion,
             ],
         );
+
+        return self::SUCCESS;
     }
 }

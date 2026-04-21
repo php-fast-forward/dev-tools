@@ -21,13 +21,12 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
+use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -62,11 +61,7 @@ final class TestsCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the file locator used to resolve PHPUnit configuration
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
-     * @param CommandResponderFactoryInterface $commandResponderFactory the
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responder
-     *                                                                  factory
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
@@ -75,7 +70,7 @@ final class TestsCommand extends BaseCommand
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -146,8 +141,8 @@ final class TestsCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -164,21 +159,20 @@ final class TestsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $textOutput = OutputFormat::TEXT === $responder->format();
-        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
-        if ($textOutput) {
-            $output->writeln('<info>Running PHPUnit tests...</info>');
-        }
+        $this->logger->info('Running PHPUnit tests...');
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            return $responder->failure(
+            $this->logger->error(
                 $invalidArgumentException->getMessage(),
                 $this->commandContext($input, null, null, $processOutput),
             );
+
+            return self::FAILURE;
         }
 
         $processBuilder = $this->processBuilder
@@ -219,15 +213,21 @@ final class TestsCommand extends BaseCommand
         $result = $this->processQueue->run($processOutput);
 
         if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
-            return self::SUCCESS === $result
-                ? $responder->success(
+            if (self::SUCCESS === $result) {
+                $this->logger->info(
                     'PHPUnit tests completed successfully.',
                     $this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
-                )
-                : $responder->failure(
-                    'PHPUnit tests failed.',
-                    $this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
                 );
+
+                return self::SUCCESS;
+            }
+
+            $this->logger->error(
+                'PHPUnit tests failed.',
+                $this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+            );
+
+            return self::FAILURE;
         }
 
         [$validationResult, $message, $coverageContext] = $this->validateMinimumCoverage(
@@ -235,21 +235,20 @@ final class TestsCommand extends BaseCommand
             $minimumCoverage,
         );
 
-        return self::SUCCESS === $validationResult
-            ? $responder->success(
-                $message,
-                [
-                    ...$this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
-                    ...$coverageContext,
-                ],
-            )
-            : $responder->failure(
-                $message,
-                [
-                    ...$this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
-                    ...$coverageContext,
-                ],
-            );
+        $context = [
+            ...$this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+            ...$coverageContext,
+        ];
+
+        if (self::SUCCESS === $validationResult) {
+            $this->logger->info($message, $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error($message, $context);
+
+        return self::FAILURE;
     }
 
     /**

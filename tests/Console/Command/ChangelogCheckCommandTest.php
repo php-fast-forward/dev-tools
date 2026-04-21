@@ -19,17 +19,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use InvalidArgumentException;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\Command\ChangelogCheckCommand;
-use FastForward\DevTools\Console\Output\CommandResponderInterface;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
@@ -37,7 +33,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogCheckCommand::class)]
-#[CoversClass(OutputFormat::class)]
 final class ChangelogCheckCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -56,15 +51,7 @@ final class ChangelogCheckCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
-    /**
-     * @var ObjectProphecy<CommandResponderFactoryInterface>
-     */
-    private ObjectProphecy $commandResponderFactory;
-
-    /**
-     * @var ObjectProphecy<CommandResponderInterface>
-     */
-    private ObjectProphecy $commandResponder;
+    private ObjectProphecy $logger;
 
     private ChangelogCheckCommand $command;
 
@@ -75,10 +62,9 @@ final class ChangelogCheckCommandTest extends TestCase
     {
         $this->checker = $this->prophesize(UnreleasedEntryCheckerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
-        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
         $this->input->getOption('against')
             ->willReturn(null);
         $this->input->getOption('file')
@@ -88,7 +74,7 @@ final class ChangelogCheckCommandTest extends TestCase
         $this->command = new ChangelogCheckCommand(
             $this->filesystem->reveal(),
             $this->checker->reveal(),
-            $this->commandResponderFactory->reveal(),
+            $this->logger->reveal(),
         );
     }
 
@@ -98,19 +84,17 @@ final class ChangelogCheckCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenUnreleasedEntriesExist(): void
     {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
         $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
             ->willReturn(true);
-        $this->commandResponder->success(
-            'CHANGELOG.md contains unreleased changes ready for review.',
+        $this->logger->info(
+            '{file} contains unreleased changes ready for review.',
             [
                 'command' => 'changelog:check',
                 'file' => 'CHANGELOG.md',
                 'against' => null,
                 'has_pending_changes' => true,
             ],
-        )->willReturn(ChangelogCheckCommand::SUCCESS)->shouldBeCalled();
+        )->shouldBeCalled();
 
         self::assertSame(ChangelogCheckCommand::SUCCESS, $this->invokeExecute());
     }
@@ -121,19 +105,17 @@ final class ChangelogCheckCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenUnreleasedEntriesAreMissing(): void
     {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
         $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
             ->willReturn(false);
-        $this->commandResponder->failure(
-            'CHANGELOG.md must add a meaningful entry to the Unreleased section.',
+        $this->logger->error(
+            '{file} must add a meaningful entry to the Unreleased section.',
             [
                 'command' => 'changelog:check',
                 'file' => 'CHANGELOG.md',
                 'against' => null,
                 'has_pending_changes' => false,
             ],
-        )->willReturn(ChangelogCheckCommand::FAILURE)->shouldBeCalled();
+        )->shouldBeCalled();
 
         self::assertSame(ChangelogCheckCommand::FAILURE, $this->invokeExecute());
     }
@@ -142,35 +124,23 @@ final class ChangelogCheckCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillRenderJsonOutputWhenRequested(): void
+    public function executeWillLogFailureContextWhenAgainstReferenceIsProvided(): void
     {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willReturn($this->commandResponder->reveal());
-        $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
-            ->willReturn(true);
-        $this->commandResponder->success(
-            'CHANGELOG.md contains unreleased changes ready for review.',
-            Argument::type('array'),
-        )->willReturn(ChangelogCheckCommand::SUCCESS)->shouldBeCalled();
+        $this->input->getOption('against')
+            ->willReturn('origin/main');
+        $this->checker->hasPendingChanges('/repo/CHANGELOG.md', 'origin/main')
+            ->willReturn(false);
+        $this->logger->error(
+            '{file} must add a meaningful entry to the Unreleased section.',
+            [
+                'command' => 'changelog:check',
+                'file' => 'CHANGELOG.md',
+                'against' => 'origin/main',
+                'has_pending_changes' => false,
+            ],
+        )->shouldBeCalled();
 
-        self::assertSame(ChangelogCheckCommand::SUCCESS, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillReturnFailureWhenFormatIsInvalid(): void
-    {
-        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
-            ->willThrow(new InvalidArgumentException('The --output-format option MUST be one of: text, json.'));
-        $this->checker->hasPendingChanges(Argument::cetera())
-            ->shouldNotBeCalled();
-
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The --output-format option MUST be one of: text, json.');
-
-        $this->invokeExecute();
+        self::assertSame(ChangelogCheckCommand::FAILURE, $this->invokeExecute());
     }
 
     /**

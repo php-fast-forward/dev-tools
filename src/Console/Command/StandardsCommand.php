@@ -20,8 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -41,23 +40,16 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class StandardsCommand extends BaseCommand
 {
     /**
-     * @param CommandResponderFactoryInterface $commandResponderFactory the
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responder
-     *                                                                  factory
+     * @param LoggerInterface $logger
      */
     public function __construct(
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
 
     /**
      * Configures constraints and arguments for the collective standard runner.
-     *
-     * This method MUST specify definitions and help texts appropriately. It SHALL
-     * expose an optional `--fix` mode.
      *
      * @return void
      */
@@ -74,36 +66,24 @@ final class StandardsCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
     /**
-     * Evaluates multiple commands seamlessly in a sequential execution.
-     *
-     * The method MUST trigger refactoring, phpdoc generation, code styling, and reports building block consecutively.
-     * It SHALL reliably return a standard SUCCESS execution state on completion.
-     *
-     * @param InputInterface $input internal input arguments retrieved via terminal runtime constraints
-     * @param OutputInterface $output external output mechanisms
-     *
-     * @return int the status indicator describing the completion
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $format = $responder->format();
-        $textOutput = OutputFormat::TEXT === $format;
-        $commandOutput = $textOutput ? $output : new BufferedOutput();
-
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
         $results = [];
         $commands = [];
-        $formatArgument = OutputFormat::JSON === $format ? ' --output-format=json' : '';
+        $formatArgument = $jsonOutput ? ' --output-format=json' : '';
 
-        if ($textOutput) {
-            $output->writeln('<info>Running code standards checks...</info>');
-        }
+        $this->logger->info('Running code standards checks...');
 
         $fixArgument = $input->getOption('fix') ? ' --fix' : '';
 
@@ -115,38 +95,27 @@ final class StandardsCommand extends BaseCommand
             );
         }
 
-        if ($textOutput) {
-            $output->writeln('<info>All code standards checks completed!</info>');
+        $context = [
+            'command' => 'standards',
+            'fix' => (bool) $input->getOption('fix'),
+            'commands' => $commands,
+            'process_output' => $commandOutput instanceof BufferedOutput ? $commandOutput->fetch() : null,
+        ];
+
+        if (\in_array(self::FAILURE, $results, true)) {
+            $this->logger->error('Code standards checks failed.', $context);
+
+            return self::FAILURE;
         }
 
-        return \in_array(self::FAILURE, $results, true)
-            ? $responder->failure(
-                'Code standards checks failed.',
-                [
-                    'command' => 'standards',
-                    'fix' => (bool) $input->getOption('fix'),
-                    'commands' => $commands,
-                    'process_output' => $commandOutput instanceof BufferedOutput ? $commandOutput->fetch() : null,
-                ],
-            )
-            : $responder->success(
-                'Code standards checks completed successfully.',
-                [
-                    'command' => 'standards',
-                    'fix' => (bool) $input->getOption('fix'),
-                    'commands' => $commands,
-                    'process_output' => $commandOutput instanceof BufferedOutput ? $commandOutput->fetch() : null,
-                ],
-            );
+        $this->logger->info('Code standards checks completed successfully.', $context);
+
+        return self::SUCCESS;
     }
 
     /**
-     * Runs a registered command through the current console application.
-     *
-     * @param string $command the command line to execute
-     * @param OutputInterface $output the output that receives command feedback
-     *
-     * @return int the dispatched command status code
+     * @param string $command
+     * @param OutputInterface $output
      */
     private function runCommand(string $command, OutputInterface $output): int
     {

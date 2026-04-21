@@ -27,12 +27,6 @@ use FastForward\DevTools\Changelog\Parser\ChangelogParserInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Console\Output\CommandResponderFactory;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\CommandResultRenderer;
-use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
-use FastForward\DevTools\Console\Output\OutputFormatResolver;
-use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
 use FastForward\DevTools\Git\GitClient;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Changelog\Renderer\MarkdownRenderer;
@@ -141,10 +135,6 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),
             CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
             CommandProvider::class => get(DevToolsCommandProvider::class),
-            CommandResponderFactoryInterface::class => get(CommandResponderFactory::class),
-            OutputFormatResolverInterface::class => get(OutputFormatResolver::class),
-            CommandResultRendererInterface::class => get(CommandResultRenderer::class),
-
             // Coverage
             CoverageSummaryLoaderInterface::class => get(CoverageSummaryLoader::class),
 

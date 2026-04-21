@@ -29,7 +29,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use RuntimeException;
 use ReflectionMethod;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -58,6 +57,22 @@ final class ProcessQueueTest extends TestCase
     }
 
     /**
+     * @param ObjectProphecy<Process> $process
+     *
+     * @return void
+     */
+    private function expectPtyConfiguration(ObjectProphecy $process): void
+    {
+        if (! Process::isPtySupported()) {
+            return;
+        }
+
+        $process->setPty(true)
+            ->willReturn($process->reveal())
+            ->shouldBeCalled();
+    }
+
+    /**
      * @param int $exitCode
      * @param bool $isRunning
      *
@@ -68,8 +83,7 @@ final class ProcessQueueTest extends TestCase
         bool $isRunning = false
     ): ObjectProphecy {
         $process = $this->prophesize(Process::class);
-        $process->setPty(true)
-            ->shouldBeCalled();
+        $this->expectPtyConfiguration($process);
         $process->run(Argument::any())->willReturn($exitCode ?? ProcessQueueInterface::FAILURE);
         $process->getIncrementalOutput()
             ->willReturn('');
@@ -300,8 +314,7 @@ final class ProcessQueueTest extends TestCase
     public function runDetachedProcessStartFailureWithIgnoreFailureReturnsSuccess(): void
     {
         $process = $this->prophesize(Process::class);
-        $process->setPty(true)
-            ->shouldBeCalled();
+        $this->expectPtyConfiguration($process);
         $process->getCommandLine()
             ->willReturn('test-command');
         $process->getWorkingDirectory()
@@ -326,8 +339,7 @@ final class ProcessQueueTest extends TestCase
         $capturedCallback = null;
 
         $process = $this->prophesize(Process::class);
-        $process->setPty(true)
-            ->shouldBeCalled();
+        $this->expectPtyConfiguration($process);
         $process->run(Argument::that(function ($cb) use (&$capturedCallback): bool {
             $capturedCallback = $cb;
 
@@ -384,12 +396,10 @@ final class ProcessQueueTest extends TestCase
      * @return void
      */
     #[Test]
-    public function addWillIgnorePtyFailuresAndStillQueueTheProcess(): void
+    public function addWillQueueTheProcessWhenPtySupportIsConfigured(): void
     {
         $process = $this->prophesize(Process::class);
-        $process->setPty(true)
-            ->willThrow(new RuntimeException('PTY unsupported'))
-            ->shouldBeCalled();
+        $this->expectPtyConfiguration($process);
         $process->run(Argument::any())
             ->willReturn(ProcessQueueInterface::SUCCESS);
         $process->getExitCode()
@@ -419,8 +429,7 @@ final class ProcessQueueTest extends TestCase
         $errorOutput = $this->prophesize(OutputInterface::class);
         $process = $this->prophesize(Process::class);
 
-        $process->setPty(true)
-            ->shouldBeCalled();
+        $this->expectPtyConfiguration($process);
         $process->run(Argument::that(function ($callback) use (&$capturedCallback): bool {
             $capturedCallback = $callback;
 
@@ -462,8 +471,7 @@ final class ProcessQueueTest extends TestCase
     public function runWillFlushRemainingDetachedOutputWhenProcessFinishes(): void
     {
         $process = $this->prophesize(Process::class);
-        $process->setPty(true)
-            ->shouldBeCalled();
+        $this->expectPtyConfiguration($process);
         $process->start(Argument::any())
             ->shouldBeCalledOnce();
         $process->getIncrementalOutput()

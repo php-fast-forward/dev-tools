@@ -20,10 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -58,16 +57,13 @@ final class CodeStyleCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator locates the configuration file required by EasyCodingStandard
      * @param ProcessBuilderInterface $processBuilder builds the process instances used to execute Composer and ECS commands
      * @param ProcessQueueInterface $processQueue queues and executes the generated processes in the required order
-     * @param CommandResponderFactoryInterface $commandResponderFactory creates
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responders
+     * @param LoggerInterface $logger logs command feedback
      */
     public function __construct(
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -93,8 +89,8 @@ final class CodeStyleCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -111,15 +107,12 @@ final class CodeStyleCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $textOutput = OutputFormat::TEXT === $responder->format();
-        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $fix = (bool) $input->getOption('fix');
 
-        if ($textOutput) {
-            $output->writeln('<info>Running code style checks and fixes...</info>');
-        }
+        $this->logger->info('Running code style checks and fixes...');
 
         $composerUpdate = $this->processBuilder
             ->withArgument('--lock')
@@ -147,24 +140,21 @@ final class CodeStyleCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        return self::SUCCESS === $result
-            ? $responder->success(
-                'Code style checks completed successfully.',
-                [
-                    'command' => 'code-style',
-                    'fix' => $fix,
-                    'config' => self::CONFIG,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            )
-            : $responder->failure(
-                'Code style checks failed.',
-                [
-                    'command' => 'code-style',
-                    'fix' => $fix,
-                    'config' => self::CONFIG,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            );
+        $context = [
+            'command' => 'code-style',
+            'fix' => $fix,
+            'config' => self::CONFIG,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('Code style checks completed successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('Code style checks failed.', $context);
+
+        return self::FAILURE;
     }
 }

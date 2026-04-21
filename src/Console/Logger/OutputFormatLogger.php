@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Logger;
 
 use Stringable;
 use DateTimeInterface;
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
@@ -63,10 +64,12 @@ final readonly class OutputFormatLogger implements LoggerInterface
      *
      * @param ArgvInput $input the CLI input instance used to inspect runtime options
      * @param ConsoleOutputInterface $output the console output instance used for writing log messages
+     * @param ClockInterface $clock
      */
     public function __construct(
         private ArgvInput $input,
         private ConsoleOutputInterface $output,
+        private ClockInterface $clock,
     ) {}
 
     /**
@@ -108,12 +111,16 @@ final readonly class OutputFormatLogger implements LoggerInterface
      */
     private function formatMessage(string $level, string $message, array $context): string
     {
+        $timestamp = $this->clock->now()
+            ->format(DateTimeInterface::RFC3339);
+
         if ($this->isJsonOutput()) {
             return json_encode(
                 [
                     'message' => $message,
                     'level' => $level,
                     'context' => $context,
+                    'timestamp' => $timestamp,
                 ],
                 \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES
             );
@@ -121,7 +128,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
 
         $message = $this->interpolate($message, $context);
 
-        return \sprintf('<%s>[%s] %s</%s>', $level, strtoupper($level), $message, $level);
+        return \sprintf('<%s>%s [%s] %s</%s>', $level, $timestamp, strtoupper($level), $message, $level);
     }
 
     /**

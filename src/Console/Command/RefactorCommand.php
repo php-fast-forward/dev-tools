@@ -20,10 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -54,17 +53,13 @@ final class RefactorCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the file locator
      * @param ProcessBuilderInterface $processBuilder the process builder
      * @param ProcessQueueInterface $processQueue the process queue
-     * @param CommandResponderFactoryInterface $commandResponderFactory the
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responder
-     *                                                                  factory
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -97,8 +92,8 @@ final class RefactorCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -115,14 +110,11 @@ final class RefactorCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $textOutput = OutputFormat::TEXT === $responder->format();
-        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
 
-        if ($textOutput) {
-            $output->writeln('<info>Running Rector for code refactoring...</info>');
-        }
+        $this->logger->info('Running Rector for code refactoring...');
 
         $processBuilder = $this->processBuilder
             ->withArgument('process')
@@ -137,24 +129,21 @@ final class RefactorCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        return self::SUCCESS === $result
-            ? $responder->success(
-                'Code refactoring checks completed successfully.',
-                [
-                    'command' => 'refactor',
-                    'fix' => $fix,
-                    'config' => self::CONFIG,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            )
-            : $responder->failure(
-                'Code refactoring checks failed.',
-                [
-                    'command' => 'refactor',
-                    'fix' => $fix,
-                    'config' => self::CONFIG,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            );
+        $context = [
+            'command' => 'refactor',
+            'fix' => $fix,
+            'config' => self::CONFIG,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('Code refactoring checks completed successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('Code refactoring checks failed.', $context);
+
+        return self::FAILURE;
     }
 }

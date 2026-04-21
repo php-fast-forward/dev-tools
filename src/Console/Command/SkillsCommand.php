@@ -20,10 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -61,16 +60,12 @@ final class SkillsCommand extends BaseCommand
      * @param FilesystemInterface $filesystem filesystem used to resolve
      *                                        and manage the skills
      *                                        directory structure
-     * @param CommandResponderFactoryInterface $commandResponderFactory responder
-     *                                                                  factory used
-     *                                                                  for text and
-     *                                                                  machine-readable
-     *                                                                  output
+     * @param LoggerInterface $logger logger used for command feedback
      */
     public function __construct(
         private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -84,8 +79,8 @@ final class SkillsCommand extends BaseCommand
             name: 'output-format',
             mode: InputOption::VALUE_REQUIRED,
             description: 'Output format for the command result. Supported values: text, json.',
-            default: OutputFormat::defaultValue(),
-            suggestedValues: OutputFormat::supportedValues(),
+            default: 'text',
+            suggestedValues: ['text', 'json'],
         );
     }
 
@@ -112,19 +107,13 @@ final class SkillsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $textOutput = OutputFormat::TEXT === $responder->format();
-
         $packageSkillsPath = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL, \dirname(__DIR__, 3));
         $skillsDir = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL);
-
-        if ($textOutput) {
-            $output->writeln('<info>Starting skills synchronization...</info>');
-        }
+        $this->logger->info('Starting skills synchronization...');
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
-            return $responder->failure(
-                \sprintf('No packaged skills found at: %s', $packageSkillsPath),
+            $this->logger->error(
+                'No packaged skills found at: {packaged_skills_path}',
                 [
                     'command' => 'skills',
                     'packaged_skills_path' => $packageSkillsPath,
@@ -132,6 +121,8 @@ final class SkillsCommand extends BaseCommand
                     'directory_created' => false,
                 ],
             );
+
+            return self::FAILURE;
         }
 
         $directoryCreated = false;
@@ -139,10 +130,7 @@ final class SkillsCommand extends BaseCommand
         if (! $this->filesystem->exists($skillsDir)) {
             $this->filesystem->mkdir($skillsDir);
             $directoryCreated = true;
-
-            if ($textOutput) {
-                $output->writeln('<info>Created .agents/skills directory.</info>');
-            }
+            $this->logger->info('Created .agents/skills directory.');
         }
 
         $this->synchronizer->setLogger($this->getIO());
@@ -150,7 +138,7 @@ final class SkillsCommand extends BaseCommand
         $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::DIRECTORY_LABEL);
 
         if ($result->failed()) {
-            return $responder->failure(
+            $this->logger->error(
                 'Skills synchronization failed.',
                 [
                     'command' => 'skills',
@@ -159,9 +147,11 @@ final class SkillsCommand extends BaseCommand
                     'directory_created' => $directoryCreated,
                 ],
             );
+
+            return self::FAILURE;
         }
 
-        return $responder->success(
+        $this->logger->info(
             'Skills synchronization completed successfully.',
             [
                 'command' => 'skills',
@@ -170,5 +160,7 @@ final class SkillsCommand extends BaseCommand
                 'directory_created' => $directoryCreated,
             ],
         );
+
+        return self::SUCCESS;
     }
 }

@@ -21,11 +21,8 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
-use FastForward\DevTools\Console\Output\CommandResult;
-use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
-use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,14 +42,12 @@ final class ChangelogShowCommand extends BaseCommand
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
-     * @param OutputFormatResolverInterface $outputFormatResolver
-     * @param CommandResultRendererInterface $commandResultRenderer
+     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
-        private readonly OutputFormatResolverInterface $outputFormatResolver,
-        private readonly CommandResultRendererInterface $commandResultRenderer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -78,8 +73,8 @@ final class ChangelogShowCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -91,7 +86,6 @@ final class ChangelogShowCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $format = $this->outputFormatResolver->resolve($input);
         $version = (string) $input->getArgument('version');
         $file = (string) $input->getOption('file');
         $releaseNotes = $this->changelogManager->renderReleaseNotes(
@@ -99,24 +93,14 @@ final class ChangelogShowCommand extends BaseCommand
             $version,
         );
 
-        if (OutputFormat::TEXT === $format) {
-            $output->write($releaseNotes);
-
-            return self::SUCCESS;
-        }
-
-        $this->commandResultRenderer->render(
-            $output,
-            CommandResult::success(
-                $releaseNotes,
-                [
-                    'command' => 'changelog:show',
-                    'file' => $file,
-                    'version' => $version,
-                    'release_notes' => $releaseNotes,
-                ],
-            ),
-            $format,
+        $this->logger->info(
+            $releaseNotes,
+            [
+                'command' => 'changelog:show',
+                'file' => $file,
+                'version' => $version,
+                'release_notes' => $releaseNotes,
+            ],
         );
 
         return self::SUCCESS;

@@ -21,10 +21,9 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use Composer\Console\Input\InputOption;
-use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
-use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -46,16 +45,12 @@ final class ReportsCommand extends BaseCommand
      *
      * @param ProcessBuilderInterface $processBuilder the builder instance used to construct execution processes
      * @param ProcessQueueInterface $processQueue the execution queue mechanism for running sub-processes
-     * @param CommandResponderFactoryInterface $commandResponderFactory the
-     *                                                                  structured
-     *                                                                  command
-     *                                                                  responder
-     *                                                                  factory
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly CommandResponderFactoryInterface $commandResponderFactory,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -89,8 +84,8 @@ final class ReportsCommand extends BaseCommand
                 name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
-                default: OutputFormat::defaultValue(),
-                suggestedValues: OutputFormat::supportedValues(),
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -107,47 +102,40 @@ final class ReportsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponderFactory->from($input, $output);
-        $format = $responder->format();
-        $textOutput = OutputFormat::TEXT === $format;
-        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $jsonOutput = 'json' === (string) $input->getOption('output-format');
+        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
         $coveragePath = (string) $input->getOption('coverage');
         $metricsPath = (string) $input->getOption('metrics');
 
-        if ($textOutput) {
-            $output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>');
-        }
+        $this->logger->info('Generating frontpage for Fast Forward documentation...');
 
         $docsBuilder = $this->processBuilder
-            ->withArgument('--ansi')
             ->withArgument('--target', $target);
 
-        if (OutputFormat::JSON === $format) {
-            $docsBuilder = $docsBuilder->withArgument('--output-format', OutputFormat::JSON->value);
+        if ($jsonOutput) {
+            $docsBuilder = $docsBuilder->withArgument('--output-format', 'json');
         }
 
         $docs = $docsBuilder->build('composer dev-tools docs --');
 
         $coverageBuilder = $this->processBuilder
-            ->withArgument('--ansi')
             ->withArgument('--no-progress')
             ->withArgument('--coverage-summary')
             ->withArgument('--coverage', $coveragePath);
 
-        if (OutputFormat::JSON === $format) {
-            $coverageBuilder = $coverageBuilder->withArgument('--output-format', OutputFormat::JSON->value);
+        if ($jsonOutput) {
+            $coverageBuilder = $coverageBuilder->withArgument('--output-format', 'json');
         }
 
         $coverage = $coverageBuilder->build('composer dev-tools tests --');
 
         $metricsBuilder = $this->processBuilder
-            ->withArgument('--ansi')
             ->withArgument('--junit', $coveragePath . '/junit.xml')
             ->withArgument('--target', $metricsPath);
 
-        if (OutputFormat::JSON === $format) {
-            $metricsBuilder = $metricsBuilder->withArgument('--output-format', OutputFormat::JSON->value);
+        if ($jsonOutput) {
+            $metricsBuilder = $metricsBuilder->withArgument('--output-format', 'json');
         }
 
         $metrics = $metricsBuilder->build('composer dev-tools metrics --');
@@ -158,26 +146,22 @@ final class ReportsCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        return self::SUCCESS === $result
-            ? $responder->success(
-                'Documentation reports generated successfully.',
-                [
-                    'command' => 'reports',
-                    'target' => $target,
-                    'coverage' => $coveragePath,
-                    'metrics' => $metricsPath,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            )
-            : $responder->failure(
-                'Documentation reports generation failed.',
-                [
-                    'command' => 'reports',
-                    'target' => $target,
-                    'coverage' => $coveragePath,
-                    'metrics' => $metricsPath,
-                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
-                ],
-            );
+        $context = [
+            'command' => 'reports',
+            'target' => $target,
+            'coverage' => $coveragePath,
+            'metrics' => $metricsPath,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
+
+        if (self::SUCCESS === $result) {
+            $this->logger->info('Documentation reports generated successfully.', $context);
+
+            return self::SUCCESS;
+        }
+
+        $this->logger->error('Documentation reports generation failed.', $context);
+
+        return self::FAILURE;
     }
 }
