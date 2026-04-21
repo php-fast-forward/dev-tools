@@ -1591,6 +1591,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_composer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
             "name": "FundingCommand",
             "summary": "Synchronizes\u0020funding\u0020metadata\u0020between\u0020composer.json\u0020and\u0020.github\/FUNDING.yml.",
