@@ -28,6 +28,7 @@ use FastForward\DevTools\Funding\FundingYamlCodec;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -54,6 +55,7 @@ final class FundingCommand extends BaseCommand
      * @param FileDiffer $fileDiffer the differ used to summarize managed-file drift
      * @param ProcessBuilderInterface $processBuilder the process builder used to normalize composer.json after updates
      * @param ProcessQueueInterface $processQueue the process queue used to execute composer normalize
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
@@ -63,6 +65,7 @@ final class FundingCommand extends BaseCommand
         private readonly FileDiffer $fileDiffer,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -99,6 +102,13 @@ final class FundingCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before applying funding metadata updates.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -118,14 +128,18 @@ final class FundingCommand extends BaseCommand
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
 
-        $output->writeln('<info>Synchronizing funding metadata...</info>');
+        $this->logger->info('Synchronizing funding metadata...', [
+            'command' => 'funding',
+        ]);
 
         if (! $this->filesystem->exists($composerFile)) {
-            $output->writeln(
-                \sprintf(
-                    '<comment>Composer file %s does not exist. Skipping funding synchronization.</comment>',
-                    $composerFile
-                )
+            $this->logger->notice(
+                'Composer file {composer_file} does not exist. Skipping funding synchronization.',
+                [
+                    'command' => 'funding',
+                    'composer_file' => $composerFile,
+                    'funding_file' => $fundingFile,
+                ],
             );
 
             return self::SUCCESS;
@@ -201,13 +215,26 @@ final class FundingCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated funding metadata synchronization.', $composerFile),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice(
+            $comparison->getSummary(),
+            [
+                'command' => 'funding',
+                'composer_file' => $composerFile,
+            ],
+        );
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'command' => 'funding',
+                        'composer_file' => $composerFile,
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
@@ -228,7 +255,13 @@ final class FundingCommand extends BaseCommand
             $output,
             $composerFile
         )) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $composerFile));
+            $this->logger->notice(
+                'Skipped updating {composer_file}.',
+                [
+                    'command' => 'funding',
+                    'composer_file' => $composerFile,
+                ],
+            );
 
             return self::SUCCESS;
         }
@@ -239,7 +272,13 @@ final class FundingCommand extends BaseCommand
             return self::FAILURE;
         }
 
-        $output->writeln(\sprintf('<info>Updated funding metadata in %s.</info>', $composerFile));
+        $this->logger->info(
+            'Updated funding metadata in {composer_file}.',
+            [
+                'command' => 'funding',
+                'composer_file' => $composerFile,
+            ],
+        );
 
         return self::SUCCESS;
     }
@@ -269,8 +308,12 @@ final class FundingCommand extends BaseCommand
         OutputInterface $output,
     ): int {
         if (null === $updatedFundingContents && null === $currentFundingContents) {
-            $output->writeln(
-                '<comment>No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.</comment>'
+            $this->logger->notice(
+                'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
+                [
+                    'command' => 'funding',
+                    'funding_file' => $fundingFile,
+                ],
             );
 
             return self::SUCCESS;
@@ -293,13 +336,26 @@ final class FundingCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated funding metadata synchronization.', $fundingFile),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice(
+            $comparison->getSummary(),
+            [
+                'command' => 'funding',
+                'funding_file' => $fundingFile,
+            ],
+        );
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'command' => 'funding',
+                        'funding_file' => $fundingFile,
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
@@ -316,7 +372,13 @@ final class FundingCommand extends BaseCommand
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($input, $output, $fundingFile)) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $fundingFile));
+            $this->logger->notice(
+                'Skipped updating {funding_file}.',
+                [
+                    'command' => 'funding',
+                    'funding_file' => $fundingFile,
+                ],
+            );
 
             return self::SUCCESS;
         }
@@ -324,7 +386,13 @@ final class FundingCommand extends BaseCommand
         $this->filesystem->mkdir($this->filesystem->dirname($fundingFile));
         $this->filesystem->dumpFile($fundingFile, $updatedFundingContents);
 
-        $output->writeln(\sprintf('<info>Updated funding metadata in %s.</info>', $fundingFile));
+        $this->logger->info(
+            'Updated funding metadata in {funding_file}.',
+            [
+                'command' => 'funding',
+                'funding_file' => $fundingFile,
+            ],
+        );
 
         return self::SUCCESS;
     }

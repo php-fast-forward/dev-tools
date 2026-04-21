@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -63,6 +64,8 @@ final class CopyResourceCommandTest extends TestCase
 
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $questionHelper;
 
     private CopyResourceCommand $command;
@@ -84,6 +87,7 @@ final class CopyResourceCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
@@ -98,6 +102,9 @@ final class CopyResourceCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->will(static fn(array $arguments): ?string => $arguments[0]);
+        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
         $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
@@ -108,6 +115,7 @@ final class CopyResourceCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->finderFactory->reveal(),
             $this->fileDiffer->reveal(),
+            $this->logger->reveal(),
         );
         $this->command->setHelperSet(new HelperSet([
             'question' => $this->questionHelper->reveal(),
@@ -170,7 +178,7 @@ final class CopyResourceCommandTest extends TestCase
             '/app/.github/workflows/nested/example.yml',
             false,
         )->shouldBeCalledOnce();
-        $this->output->writeln(Argument::containingString('Copied resource'))
+        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
             ->shouldBeCalled();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -188,8 +196,12 @@ final class CopyResourceCommandTest extends TestCase
             ->willReturn('');
         $this->input->getOption('overwrite')
             ->willReturn(false);
-        $this->output->writeln('<error>The --source and --target options are required.</error>')
-            ->shouldBeCalledOnce();
+        $this->logger->error(
+            'The --source and --target options are required.',
+            [
+                'command' => 'copy-resource',
+            ],
+        )->shouldBeCalledOnce();
         $this->fileLocator->locate(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(CopyResourceCommand::FAILURE, $this->executeCommand());
@@ -214,7 +226,7 @@ final class CopyResourceCommandTest extends TestCase
             ->willReturn('/project/.editorconfig');
         $this->filesystem->exists('/project/.editorconfig')
             ->willReturn(true);
-        $this->output->writeln('<comment>Skipped existing resource /project/.editorconfig.</comment>')
+        $this->logger->notice('Skipped existing resource {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->fileDiffer->diff(Argument::cetera())->shouldNotBeCalled();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
@@ -250,17 +262,17 @@ final class CopyResourceCommandTest extends TestCase
             ))
             ->shouldBeCalledOnce();
 
-        $this->output->writeln(
-            '<comment>Overwriting resource /project/.editorconfig from /package/.editorconfig.</comment>'
-        )
-            ->shouldBeCalledOnce();
-        $this->output->writeln(
-            "--- Current: /project/.editorconfig\n+++ Source: /package/.editorconfig\n@@ -1 +1 @@\n-old\n+new"
-        )
-            ->shouldBeCalledOnce();
+        $this->logger->notice(
+            'Overwriting resource /project/.editorconfig from /package/.editorconfig.',
+            Argument::type('array'),
+        )->shouldBeCalledOnce();
+        $this->logger->notice(
+            "--- Current: /project/.editorconfig\n+++ Source: /package/.editorconfig\n@@ -1 +1 @@\n-old\n+new",
+            Argument::type('array'),
+        )->shouldBeCalledOnce();
         $this->filesystem->copy('/package/.editorconfig', '/project/.editorconfig', true)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Copied resource /project/.editorconfig.</info>')
+        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -293,13 +305,13 @@ final class CopyResourceCommandTest extends TestCase
             ))
             ->shouldBeCalledOnce();
 
-        $this->output->writeln(
-            '<comment>Target /project/.editorconfig already matches source /package/.editorconfig; overwrite skipped.</comment>'
-        )
-            ->shouldBeCalledOnce();
+        $this->logger->notice(
+            'Target /project/.editorconfig already matches source /package/.editorconfig; overwrite skipped.',
+            Argument::type('array'),
+        )->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::any(), Argument::any(), Argument::any())
             ->shouldNotBeCalled();
-        $this->output->writeln('<info>Copied resource /project/.editorconfig.</info>')
+        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
             ->shouldNotBeCalled();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -332,13 +344,13 @@ final class CopyResourceCommandTest extends TestCase
             ))
             ->shouldBeCalledOnce();
 
-        $this->output->writeln(
-            '<comment>Target /project/.editorconfig will be overwritten from /package/.editorconfig, but a text diff is unavailable for binary content.</comment>'
-        )
-            ->shouldBeCalledOnce();
+        $this->logger->notice(
+            'Target /project/.editorconfig will be overwritten from /package/.editorconfig, but a text diff is unavailable for binary content.',
+            Argument::type('array'),
+        )->shouldBeCalledOnce();
         $this->filesystem->copy('/package/.editorconfig', '/project/.editorconfig', true)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<info>Copied resource /project/.editorconfig.</info>')
+        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -368,9 +380,9 @@ final class CopyResourceCommandTest extends TestCase
         $this->fileDiffer->diff('/package/.editorconfig', '/project/.editorconfig')
             ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', "@@ -1 +1 @@\n-old\n+new"))
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Changed summary</comment>')
+        $this->logger->notice('Changed summary', Argument::type('array'))
             ->shouldBeCalledOnce();
-        $this->output->writeln("@@ -1 +1 @@\n-old\n+new")
+        $this->logger->notice("@@ -1 +1 @@\n-old\n+new", Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
@@ -438,7 +450,7 @@ final class CopyResourceCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Skipped replacing /project/.editorconfig.</comment>')
+        $this->logger->notice('Skipped replacing {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 

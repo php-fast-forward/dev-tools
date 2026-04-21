@@ -37,6 +37,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -73,6 +74,8 @@ final class FundingCommandTest extends TestCase
 
     private ObjectProphecy $questionHelper;
 
+    private ObjectProphecy $logger;
+
     private FundingCommand $command;
 
     /**
@@ -88,6 +91,7 @@ final class FundingCommandTest extends TestCase
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->normalizeProcess = $this->prophesize(Process::class);
         $this->questionHelper = $this->prophesize(QuestionHelper::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->questionHelper->getName()
             ->willReturn('question');
         $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
@@ -96,6 +100,9 @@ final class FundingCommandTest extends TestCase
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
+        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('composer-file')
             ->willReturn('composer.json');
         $this->input->getOption('funding-file')
@@ -127,6 +134,7 @@ final class FundingCommandTest extends TestCase
             $this->fileDiffer->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
+            $this->logger->reveal(),
         );
         $this->command->setHelperSet(new HelperSet([
             'question' => $this->questionHelper->reveal(),
@@ -341,10 +349,17 @@ final class FundingCommandTest extends TestCase
     {
         $this->filesystem->exists('composer.json')
             ->willReturn(false);
-        $this->output->writeln('<info>Synchronizing funding metadata...</info>')
+        $this->logger->info('Synchronizing funding metadata...', [
+            'command' => 'funding',
+        ])
             ->shouldBeCalledOnce();
-        $this->output->writeln(
-            '<comment>Composer file composer.json does not exist. Skipping funding synchronization.</comment>'
+        $this->logger->notice(
+            'Composer file {composer_file} does not exist. Skipping funding synchronization.',
+            [
+                'command' => 'funding',
+                'composer_file' => 'composer.json',
+                'funding_file' => '.github/FUNDING.yml',
+            ],
         )->shouldBeCalledOnce();
         $this->filesystem->readFile(Argument::cetera())->shouldNotBeCalled();
         $this->fileDiffer->diffContents(Argument::cetera())->shouldNotBeCalled();
@@ -472,7 +487,7 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Skipped updating composer.json.</comment>')
+        $this->logger->notice('Skipped updating {composer_file}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
@@ -519,7 +534,7 @@ final class FundingCommandTest extends TestCase
             'composer.json',
             Argument::that(static fn(string $contents): bool => str_contains($contents, '"funding"')),
         )->shouldBeCalledOnce();
-        $this->output->writeln('<info>Updated funding metadata in composer.json.</info>')
+        $this->logger->info('Updated funding metadata in {composer_file}.', Argument::type('array'))
             ->shouldNotBeCalled();
 
         self::assertSame(FundingCommand::FAILURE, $this->executeCommand());
@@ -619,8 +634,12 @@ final class FundingCommandTest extends TestCase
             $composerContents,
             'Updating managed file composer.json from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Composer unchanged'))->shouldBeCalledOnce();
-        $this->output->writeln(
-            '<comment>No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.</comment>'
+        $this->logger->notice(
+            'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
+            [
+                'command' => 'funding',
+                'funding_file' => '.github/FUNDING.yml',
+            ],
         )->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 

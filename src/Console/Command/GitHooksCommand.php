@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,12 +49,14 @@ final class GitHooksCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -97,6 +100,13 @@ final class GitHooksCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before replacing drifted Git hooks.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -128,7 +138,14 @@ final class GitHooksCommand extends BaseCommand
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
             if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($hookPath)) {
-                $output->writeln(\sprintf('<comment>Skipped existing %s hook.</comment>', $file->getFilename()));
+                $this->logger->notice(
+                    'Skipped existing {hook_name} hook.',
+                    [
+                        'command' => 'git-hooks',
+                        'hook_name' => $file->getFilename(),
+                        'hook_path' => $hookPath,
+                    ],
+                );
 
                 continue;
             }
@@ -136,13 +153,28 @@ final class GitHooksCommand extends BaseCommand
             if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($hookPath)) {
                 $comparison = $this->fileDiffer->diff($file->getRealPath(), $hookPath);
 
-                $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+                $this->logger->notice(
+                    $comparison->getSummary(),
+                    [
+                        'command' => 'git-hooks',
+                        'hook_name' => $file->getFilename(),
+                        'hook_path' => $hookPath,
+                    ],
+                );
 
                 if ($comparison->isChanged()) {
                     $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
                     if (null !== $consoleDiff) {
-                        $output->writeln($consoleDiff);
+                        $this->logger->notice(
+                            $consoleDiff,
+                            [
+                                'command' => 'git-hooks',
+                                'hook_name' => $file->getFilename(),
+                                'hook_path' => $hookPath,
+                                'diff' => $comparison->getDiff(),
+                            ],
+                        );
                     }
                 }
 
@@ -161,7 +193,14 @@ final class GitHooksCommand extends BaseCommand
                 }
 
                 if ($interactive && $input->isInteractive() && ! $this->shouldReplaceHook($input, $output, $hookPath)) {
-                    $output->writeln(\sprintf('<comment>Skipped replacing %s.</comment>', $hookPath));
+                    $this->logger->notice(
+                        'Skipped replacing {hook_path}.',
+                        [
+                            'command' => 'git-hooks',
+                            'hook_name' => $file->getFilename(),
+                            'hook_path' => $hookPath,
+                        ],
+                    );
 
                     continue;
                 }
@@ -170,7 +209,14 @@ final class GitHooksCommand extends BaseCommand
             $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite || $interactive);
             $this->filesystem->chmod($hookPath, 755, 0o755);
 
-            $output->writeln(\sprintf('<info>Installed %s hook.</info>', $file->getFilename()));
+            $this->logger->info(
+                'Installed {hook_name} hook.',
+                [
+                    'command' => 'git-hooks',
+                    'hook_name' => $file->getFilename(),
+                    'hook_path' => $hookPath,
+                ],
+            );
         }
 
         return $status;

@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Command\UpdateComposerJsonCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -59,6 +60,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
 
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $questionHelper;
 
     private UpdateComposerJsonCommand $command;
@@ -74,12 +77,15 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
-        $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
         $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
@@ -98,6 +104,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
             $this->fileDiffer->reveal(),
+            $this->logger->reveal(),
         );
         $this->command->setHelperSet(new HelperSet([
             'question' => $this->questionHelper->reveal(),
@@ -290,6 +297,13 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->filesystem->exists('/app/composer.json')
             ->willReturn(false);
         $this->filesystem->readFile(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->notice(
+            'Composer file {file} does not exist.',
+            [
+                'command' => 'update-composer-json',
+                'file' => '/app/composer.json',
+            ],
+        )->shouldBeCalledOnce();
 
         self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
     }
@@ -351,7 +365,14 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->fileDiffer->formatForConsole('@@ diff @@', false)
             ->willReturn('@@ diff @@')
             ->shouldBeCalledOnce();
-        $this->output->writeln('@@ diff @@')
+        $this->logger->notice(
+            '@@ diff @@',
+            [
+                'command' => 'update-composer-json',
+                'file' => '/app/composer.json',
+                'diff' => '@@ diff @@',
+            ],
+        )
             ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 
@@ -421,7 +442,13 @@ final class UpdateComposerJsonCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Skipped updating /app/composer.json.</comment>')
+        $this->logger->notice(
+            'Skipped updating {file}.',
+            [
+                'command' => 'update-composer-json',
+                'file' => '/app/composer.json',
+            ],
+        )
             ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 

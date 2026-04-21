@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,12 +49,14 @@ final class CopyResourceCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the locator used to resolve source resources
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
      * @param FileDiffer $fileDiffer the service used to summarize overwrite changes
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -96,6 +99,13 @@ final class CopyResourceCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before replacing drifted resources.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -117,7 +127,12 @@ final class CopyResourceCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if ('' === $source || '' === $target) {
-            $output->writeln('<error>The --source and --target options are required.</error>');
+            $this->logger->error(
+                'The --source and --target options are required.',
+                [
+                    'command' => 'copy-resource',
+                ],
+            );
 
             return self::FAILURE;
         }
@@ -217,7 +232,14 @@ final class CopyResourceCommand extends BaseCommand
         OutputInterface $output,
     ): int {
         if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($targetPath)) {
-            $output->writeln(\sprintf('<comment>Skipped existing resource %s.</comment>', $targetPath));
+            $this->logger->notice(
+                'Skipped existing resource {target_path}.',
+                [
+                    'command' => 'copy-resource',
+                    'source_path' => $sourcePath,
+                    'target_path' => $targetPath,
+                ],
+            );
 
             return self::SUCCESS;
         }
@@ -225,13 +247,28 @@ final class CopyResourceCommand extends BaseCommand
         if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($targetPath)) {
             $comparison = $this->fileDiffer->diff($sourcePath, $targetPath);
 
-            $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+            $this->logger->notice(
+                $comparison->getSummary(),
+                [
+                    'command' => 'copy-resource',
+                    'source_path' => $sourcePath,
+                    'target_path' => $targetPath,
+                ],
+            );
 
             if ($comparison->isChanged()) {
                 $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
                 if (null !== $consoleDiff) {
-                    $output->writeln($consoleDiff);
+                    $this->logger->notice(
+                        $consoleDiff,
+                        [
+                            'command' => 'copy-resource',
+                            'source_path' => $sourcePath,
+                            'target_path' => $targetPath,
+                            'diff' => $comparison->getDiff(),
+                        ],
+                    );
                 }
             }
 
@@ -252,14 +289,28 @@ final class CopyResourceCommand extends BaseCommand
                 $output,
                 $targetPath
             )) {
-                $output->writeln(\sprintf('<comment>Skipped replacing %s.</comment>', $targetPath));
+                $this->logger->notice(
+                    'Skipped replacing {target_path}.',
+                    [
+                        'command' => 'copy-resource',
+                        'source_path' => $sourcePath,
+                        'target_path' => $targetPath,
+                    ],
+                );
 
                 return self::SUCCESS;
             }
         }
 
         $this->filesystem->copy($sourcePath, $targetPath, $overwrite || $interactive);
-        $output->writeln(\sprintf('<info>Copied resource %s.</info>', $targetPath));
+        $this->logger->info(
+            'Copied resource {target_path}.',
+            [
+                'command' => 'copy-resource',
+                'source_path' => $sourcePath,
+                'target_path' => $targetPath,
+            ],
+        );
 
         return self::SUCCESS;
     }

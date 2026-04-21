@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Command\GitHooksCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -63,6 +64,8 @@ final class GitHooksCommandTest extends TestCase
 
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $logger;
+
     private ObjectProphecy $questionHelper;
 
     private GitHooksCommand $command;
@@ -84,12 +87,15 @@ final class GitHooksCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
-        $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
         $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
@@ -108,6 +114,7 @@ final class GitHooksCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->finderFactory->reveal(),
             $this->fileDiffer->reveal(),
+            $this->logger->reveal(),
         );
         $this->command->setHelperSet(new HelperSet([
             'question' => $this->questionHelper->reveal(),
@@ -191,7 +198,14 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn('/app/.git/hooks');
         $this->filesystem->exists('/app/.git/hooks/post-merge')
             ->willReturn(true);
-        $this->output->writeln('<comment>Skipped existing post-merge hook.</comment>')
+        $this->logger->notice(
+            'Skipped existing {hook_name} hook.',
+            [
+                'command' => 'git-hooks',
+                'hook_name' => 'post-merge',
+                'hook_path' => '/app/.git/hooks/post-merge',
+            ],
+        )
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
@@ -231,9 +245,24 @@ final class GitHooksCommandTest extends TestCase
         $this->fileDiffer->formatForConsole("@@ -1 +1 @@\n-old\n+new", false)
             ->willReturn("@@ -1 +1 @@\n-old\n+new")
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Changed summary</comment>')
+        $this->logger->notice(
+            'Changed summary',
+            [
+                'command' => 'git-hooks',
+                'hook_name' => 'post-merge',
+                'hook_path' => '/app/.git/hooks/post-merge',
+            ],
+        )
             ->shouldBeCalledOnce();
-        $this->output->writeln("@@ -1 +1 @@\n-old\n+new")
+        $this->logger->notice(
+            "@@ -1 +1 @@\n-old\n+new",
+            [
+                'command' => 'git-hooks',
+                'hook_name' => 'post-merge',
+                'hook_path' => '/app/.git/hooks/post-merge',
+                'diff' => "@@ -1 +1 @@\n-old\n+new",
+            ],
+        )
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
@@ -281,7 +310,14 @@ final class GitHooksCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Skipped replacing /app/.git/hooks/post-merge.</comment>')
+        $this->logger->notice(
+            'Skipped replacing {hook_path}.',
+            [
+                'command' => 'git-hooks',
+                'hook_name' => 'post-merge',
+                'hook_path' => '/app/.git/hooks/post-merge',
+            ],
+        )
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 

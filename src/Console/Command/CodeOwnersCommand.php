@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -46,11 +47,13 @@ final class CodeOwnersCommand extends BaseCommand
      * @param CodeOwnersGenerator $generator the generator used to infer and render CODEOWNERS contents
      * @param FilesystemInterface $filesystem the filesystem used to read and write the target file
      * @param FileDiffer $fileDiffer the differ used to report managed-file drift
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly CodeOwnersGenerator $generator,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -87,6 +90,13 @@ final class CodeOwnersCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt for owners and confirmation before replacing CODEOWNERS.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -108,11 +118,12 @@ final class CodeOwnersCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($targetPath)) {
-            $output->writeln(
-                \sprintf(
-                    '<comment>Managed file %s already exists. Skipping CODEOWNERS generation.</comment>',
-                    $targetPath
-                )
+            $this->logger->notice(
+                'Managed file {target_path} already exists. Skipping CODEOWNERS generation.',
+                [
+                    'command' => 'codeowners',
+                    'target_path' => $targetPath,
+                ],
             );
 
             return self::SUCCESS;
@@ -137,13 +148,26 @@ final class CodeOwnersCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated CODEOWNERS content.', $targetPath),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice(
+            $comparison->getSummary(),
+            [
+                'command' => 'codeowners',
+                'target_path' => $targetPath,
+            ],
+        );
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'command' => 'codeowners',
+                        'target_path' => $targetPath,
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
@@ -164,7 +188,13 @@ final class CodeOwnersCommand extends BaseCommand
             $output,
             $targetPath
         )) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $targetPath));
+            $this->logger->notice(
+                'Skipped updating {target_path}.',
+                [
+                    'command' => 'codeowners',
+                    'target_path' => $targetPath,
+                ],
+            );
 
             return self::SUCCESS;
         }
@@ -174,7 +204,13 @@ final class CodeOwnersCommand extends BaseCommand
         }
 
         $this->filesystem->dumpFile($targetPath, $generatedContent);
-        $output->writeln(\sprintf('<info>Updated CODEOWNERS in %s.</info>', $targetPath));
+        $this->logger->info(
+            'Updated CODEOWNERS in {target_path}.',
+            [
+                'command' => 'codeowners',
+                'target_path' => $targetPath,
+            ],
+        );
 
         return self::SUCCESS;
     }

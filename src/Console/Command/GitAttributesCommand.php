@@ -29,6 +29,7 @@ use FastForward\DevTools\GitAttributes\MergerInterface;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -71,6 +72,7 @@ final class GitAttributesCommand extends BaseCommand
      * @param FilesystemInterface $filesystem the filesystem component
      * @param ComposerJsonInterface $composer the composer.json accessor
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly CandidateProviderInterface $candidateProvider,
@@ -82,6 +84,7 @@ final class GitAttributesCommand extends BaseCommand
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -106,6 +109,13 @@ final class GitAttributesCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before updating .gitattributes.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -119,7 +129,12 @@ final class GitAttributesCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Synchronizing .gitattributes export-ignore rules...</info>');
+        $this->logger->info(
+            'Synchronizing .gitattributes export-ignore rules...',
+            [
+                'command' => 'gitattributes',
+            ],
+        );
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
@@ -136,8 +151,11 @@ final class GitAttributesCommand extends BaseCommand
         $entries = [...$existingFolders, ...$existingFiles];
 
         if ([] === $entries) {
-            $output->writeln(
-                '<comment>No candidate paths found in repository. Skipping .gitattributes sync.</comment>'
+            $this->logger->notice(
+                'No candidate paths found in repository. Skipping .gitattributes sync.',
+                [
+                    'command' => 'gitattributes',
+                ],
             );
 
             return self::SUCCESS;
@@ -155,13 +173,26 @@ final class GitAttributesCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated .gitattributes synchronization.', $gitattributesPath),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice(
+            $comparison->getSummary(),
+            [
+                'command' => 'gitattributes',
+                'gitattributes_path' => $gitattributesPath,
+            ],
+        );
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'command' => 'gitattributes',
+                        'gitattributes_path' => $gitattributesPath,
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
@@ -182,17 +213,27 @@ final class GitAttributesCommand extends BaseCommand
             $output,
             $gitattributesPath
         )) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $gitattributesPath));
+            $this->logger->notice(
+                'Skipped updating {gitattributes_path}.',
+                [
+                    'command' => 'gitattributes',
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+            );
 
             return self::SUCCESS;
         }
 
         $this->writer->write($gitattributesPath, $content);
 
-        $output->writeln(\sprintf(
-            '<info>Added %d export-ignore entries to .gitattributes.</info>',
-            \count($entries)
-        ));
+        $this->logger->info(
+            'Added {entries_count} export-ignore entries to .gitattributes.',
+            [
+                'command' => 'gitattributes',
+                'entries_count' => \count($entries),
+                'gitattributes_path' => $gitattributesPath,
+            ],
+        );
 
         return self::SUCCESS;
     }

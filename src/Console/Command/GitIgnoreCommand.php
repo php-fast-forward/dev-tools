@@ -24,6 +24,7 @@ use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,6 +61,7 @@ final class GitIgnoreCommand extends BaseCommand
      * @param WriterInterface|null $writer the writer component
      * @param FileLocatorInterface $fileLocator the file locator
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly MergerInterface $merger,
@@ -67,6 +69,7 @@ final class GitIgnoreCommand extends BaseCommand
         private readonly WriterInterface $writer,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -108,6 +111,13 @@ final class GitIgnoreCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before updating .gitignore.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -121,7 +131,9 @@ final class GitIgnoreCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Merging .gitignore files...</info>');
+        $this->logger->info('Merging .gitignore files...', [
+            'command' => 'gitignore',
+        ]);
 
         $sourcePath = $input->getOption('source');
         $targetPath = $input->getOption('target');
@@ -141,13 +153,26 @@ final class GitIgnoreCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated .gitignore synchronization.', $merged->path()),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice(
+            $comparison->getSummary(),
+            [
+                'command' => 'gitignore',
+                'target_path' => $merged->path(),
+            ],
+        );
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'command' => 'gitignore',
+                        'target_path' => $merged->path(),
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
@@ -168,14 +193,26 @@ final class GitIgnoreCommand extends BaseCommand
             $output,
             $merged->path()
         )) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $merged->path()));
+            $this->logger->notice(
+                'Skipped updating {target_path}.',
+                [
+                    'command' => 'gitignore',
+                    'target_path' => $merged->path(),
+                ],
+            );
 
             return self::SUCCESS;
         }
 
         $this->writer->write($merged);
 
-        $output->writeln('<info>Successfully merged .gitignore file.</info>');
+        $this->logger->info(
+            'Successfully merged .gitignore file.',
+            [
+                'command' => 'gitignore',
+                'target_path' => $merged->path(),
+            ],
+        );
 
         return self::SUCCESS;
     }

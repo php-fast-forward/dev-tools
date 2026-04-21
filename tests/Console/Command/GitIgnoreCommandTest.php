@@ -26,6 +26,7 @@ use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -82,6 +83,8 @@ final class GitIgnoreCommandTest extends TestCase
      */
     private ObjectProphecy $fileDiffer;
 
+    private ObjectProphecy $logger;
+
     /**
      * @var ObjectProphecy<QuestionHelper>
      */
@@ -123,12 +126,15 @@ final class GitIgnoreCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
+        $this->logger = $this->prophesize(LoggerInterface::class);
         $this->questionHelper = $this->prophesize(QuestionHelper::class);
         $this->output->isDecorated()
             ->willReturn(false);
-        $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
+        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
         $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
@@ -182,6 +188,7 @@ final class GitIgnoreCommandTest extends TestCase
             $this->writer->reveal(),
             $this->fileLocator->reveal(),
             $this->fileDiffer->reveal(),
+            $this->logger->reveal(),
         );
         $this->command->setHelperSet(new HelperSet([
             'question' => $this->questionHelper->reveal(),
@@ -223,9 +230,17 @@ final class GitIgnoreCommandTest extends TestCase
         $this->writer->write($this->gitIgnoreMerged->reveal())
             ->shouldBeCalled();
 
-        $this->output->writeln('<info>Merging .gitignore files...</info>')
+        $this->logger->info('Merging .gitignore files...', [
+            'command' => 'gitignore',
+        ])
             ->shouldBeCalled();
-        $this->output->writeln('<info>Successfully merged .gitignore file.</info>')
+        $this->logger->info(
+            'Successfully merged .gitignore file.',
+            [
+                'command' => 'gitignore',
+                'target_path' => self::TARGET_PATH,
+            ],
+        )
             ->shouldBeCalled();
 
         $result = $this->executeCommand();
@@ -299,7 +314,13 @@ final class GitIgnoreCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->output->writeln('<comment>Skipped updating /path/to/target/.gitignore.</comment>')
+        $this->logger->notice(
+            'Skipped updating {target_path}.',
+            [
+                'command' => 'gitignore',
+                'target_path' => self::TARGET_PATH,
+            ],
+        )
             ->shouldBeCalledOnce();
         $this->writer->write(Argument::cetera())->shouldNotBeCalled();
 

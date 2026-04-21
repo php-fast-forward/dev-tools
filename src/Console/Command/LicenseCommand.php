@@ -23,6 +23,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\Resource\FileDiffer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -48,11 +49,13 @@ final class LicenseCommand extends BaseCommand
      * @param GeneratorInterface $generator the generator component
      * @param FilesystemInterface $filesystem the filesystem component
      * @param FileDiffer $fileDiffer
+     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly GeneratorInterface $generator,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
+        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -83,6 +86,13 @@ final class LicenseCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before writing LICENSE changes.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -106,8 +116,12 @@ final class LicenseCommand extends BaseCommand
         $generatedContent = $this->generator->generateContent();
 
         if (null === $generatedContent) {
-            $output->writeln(
-                '<comment>No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.</comment>'
+            $this->logger->notice(
+                'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
+                [
+                    'command' => 'license',
+                    'target_path' => $targetPath,
+                ],
             );
 
             return self::SUCCESS;
@@ -123,13 +137,26 @@ final class LicenseCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated LICENSE content.', $targetPath),
         );
 
-        $output->writeln(\sprintf('<comment>%s</comment>', $comparison->getSummary()));
+        $this->logger->notice(
+            $comparison->getSummary(),
+            [
+                'command' => 'license',
+                'target_path' => $targetPath,
+            ],
+        );
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $output->writeln($consoleDiff);
+                $this->logger->notice(
+                    $consoleDiff,
+                    [
+                        'command' => 'license',
+                        'target_path' => $targetPath,
+                        'diff' => $comparison->getDiff(),
+                    ],
+                );
             }
         }
 
@@ -146,14 +173,25 @@ final class LicenseCommand extends BaseCommand
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteLicense($input, $output, $targetPath)) {
-            $output->writeln(\sprintf('<comment>Skipped updating %s.</comment>', $targetPath));
+            $this->logger->notice(
+                'Skipped updating {target_path}.',
+                [
+                    'command' => 'license',
+                    'target_path' => $targetPath,
+                ],
+            );
 
             return self::SUCCESS;
         }
 
         $this->filesystem->dumpFile($targetPath, $generatedContent);
-        $output->writeln(
-            \sprintf('<info>%s file generated successfully at %s.</info>', basename($targetPath), $targetPath)
+        $this->logger->info(
+            '{file_name} file generated successfully at {target_path}.',
+            [
+                'command' => 'license',
+                'file_name' => basename($targetPath),
+                'target_path' => $targetPath,
+            ],
         );
 
         return self::SUCCESS;
