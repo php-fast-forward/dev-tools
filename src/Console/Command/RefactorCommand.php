@@ -20,12 +20,15 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -51,11 +54,17 @@ final class RefactorCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the file locator
      * @param ProcessBuilderInterface $processBuilder the process builder
      * @param ProcessQueueInterface $processQueue the process queue
+     * @param CommandResponderFactoryInterface $commandResponderFactory the
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responder
+     *                                                                  factory
      */
     public function __construct(
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -83,6 +92,13 @@ final class RefactorCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The path to the Rector configuration file.',
                 default: self::CONFIG
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -99,19 +115,46 @@ final class RefactorCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running Rector for code refactoring...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $textOutput = OutputFormat::TEXT === $responder->format();
+        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $fix = (bool) $input->getOption('fix');
+
+        if ($textOutput) {
+            $output->writeln('<info>Running Rector for code refactoring...</info>');
+        }
 
         $processBuilder = $this->processBuilder
             ->withArgument('process')
             ->withArgument('--config')
             ->withArgument($this->fileLocator->locate(self::CONFIG));
 
-        if (! $input->getOption('fix')) {
+        if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
         $this->processQueue->add($processBuilder->build('vendor/bin/rector'));
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        return self::SUCCESS === $result
+            ? $responder->success(
+                'Code refactoring checks completed successfully.',
+                [
+                    'command' => 'refactor',
+                    'fix' => $fix,
+                    'config' => self::CONFIG,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            )
+            : $responder->failure(
+                'Code refactoring checks failed.',
+                [
+                    'command' => 'refactor',
+                    'fix' => $fix,
+                    'config' => self::CONFIG,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            );
     }
 }
