@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776812207">
-  <project timestamp="1776812207" name="Clover Coverage">
+<coverage generated="1776813103">
+  <project timestamp="1776813103" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -3381,14 +3381,14 @@
       </file>
     </package>
     <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/LoggerAwareCommandInterface.php">
-      <metrics loc="26" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="34" ncloc="14" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <package name="FastForward\DevTools\Console\Command\Traits">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/Traits/HasCommandLogger.php">
         <class name="FastForward\DevTools\Console\Command\Traits\HasCommandLogger" namespace="FastForward\DevTools\Console\Command\Traits">
           <metrics complexity="5" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="4" elements="11" coveredelements="4"/>
         </class>
-        <line num="36" type="method" name="getLogger" visibility="protected" complexity="5" crap="10.40" count="111"/>
+        <line num="36" type="method" name="getLogger" visibility="public" complexity="5" crap="10.40" count="111"/>
         <line num="39" type="stmt" count="111"/>
         <line num="40" type="stmt" count="111"/>
         <line num="41" type="stmt" count="111"/>
@@ -5205,6 +5205,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="122" loc="16870" ncloc="10152" classes="90" methods="415" coveredmethods="347" conditionals="0" coveredconditionals="0" statements="4073" coveredstatements="3802" elements="4488" coveredelements="4149"/>
+    <metrics files="122" loc="16878" ncloc="10157" classes="90" methods="415" coveredmethods="347" conditionals="0" coveredconditionals="0" statements="4073" coveredstatements="3802" elements="4488" coveredelements="4149"/>
   </project>
 </coverage>

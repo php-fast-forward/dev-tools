@@ -1943,8 +1943,13 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "name": "LoggerAwareCommandInterface",
-            "summary": "Marks\u0020commands\u0020that\u0020provide\u0020an\u0020initialized\u0020logger\u0020for\u0020reusable\u0020logging\u0020helpers.",
+            "summary": "Defines\u0020the\u0020logger\u0020contract\u0020expected\u0020by\u0020reusable\u0020command\u0020logging\u0020helpers.",
             "url": "classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface\u003A\u003AgetLogger\u0028\u0029",
+            "name": "getLogger",
+            "summary": "Returns\u0020the\u0020logger\u0020used\u0020by\u0020the\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html#method_getLogger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
             "name": "MetricsCommand",
