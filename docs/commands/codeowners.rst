@@ -40,6 +40,13 @@ Options
    Prompt for owners when metadata inference is insufficient and confirm before
    replacing an existing file.
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 

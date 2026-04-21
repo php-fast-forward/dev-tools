@@ -124,6 +124,10 @@ final class CodeStyleCommand extends BaseCommand
             ->withArgument('--no-progress-bar')
             ->withArgument('--config', $this->fileLocator->locate(self::CONFIG));
 
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder->withArgument('--output-format', 'json');
+        }
+
         if ($fix) {
             $processBuilder = $processBuilder->withArgument('--fix');
         }

@@ -184,7 +184,7 @@ final class TestsCommand extends BaseCommand
             ->withArgument('--display-incomplete')
             ->withArgument('--display-skipped');
 
-        if ($input->getOption('no-progress')) {
+        if ($jsonOutput || $input->getOption('no-progress')) {
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 

@@ -119,6 +119,12 @@ final class RefactorCommand extends BaseCommand
             ->withArgument('--config')
             ->withArgument($this->fileLocator->locate(self::CONFIG));
 
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder
+                ->withArgument('--no-progress-bar')
+                ->withArgument('--output-format', 'json');
+        }
+
         if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }

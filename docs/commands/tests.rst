@@ -60,6 +60,15 @@ Options
 ``--min-coverage`` (required)
    Minimum line coverage percentage required for a successful run (0-100).
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+   This also suppresses PHPUnit progress output automatically so the JSON
+   payload is not polluted by transient progress rendering.
+
 Examples
 --------
 
@@ -134,5 +143,7 @@ Behavior
 - Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.
 - ``--coverage-summary`` forwards PHPUnit's ``--only-summary-for-coverage-text``
   only when coverage text output is generated.
+- ``--json`` and ``--pretty-json`` implicitly add ``--no-progress`` so the
+  structured payload stays clean.
 - The command fails if minimum coverage is not met (when ``--min-coverage`` is set).
 - The packaged configuration registers the DevTools PHPUnit extension.

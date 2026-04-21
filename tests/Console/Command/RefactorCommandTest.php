@@ -142,6 +142,29 @@ final class RefactorCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRequestJsonOutputAndDisableProgressWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument('--no-progress-bar')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--output-format', 'json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(RefactorCommand::SUCCESS)
+            ->shouldBeCalled();
+
+        self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
      * @return int
      */
     private function executeCommand(): int

@@ -204,6 +204,36 @@ final class PhpDocCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRequestStructuredOutputAndDisableProgressWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalled();
+        $this->processBuilder->withArgument('--format=json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--show-progress=none')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--no-progress-bar')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--output-format', 'json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalled();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
      * @return int
      */
     private function invokeExecute(): int

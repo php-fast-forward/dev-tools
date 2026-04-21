@@ -44,6 +44,13 @@ Options
 ``--interactive``
    Prompt before replacing a drifted Git hook.
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 

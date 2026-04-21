@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add a reusable structured-output foundation and expose the first machine-readable `--output-format=json` rollouts on `changelog:entry`, `changelog:check`, `changelog:next-version`, `changelog:promote`, and `changelog:show` for automation workflows (#33)
+- Add structured JSON command output across the DevTools command surface with `--json` and `--pretty-json`, including agent-aware JSON defaults, simplified logger context processing, and quieter subprocess execution whenever machine-readable output is active (#33)
 
 ## [1.16.0] - 2026-04-20
 

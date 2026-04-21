@@ -158,6 +158,9 @@ final class CodeStyleCommandTest extends TestCase
             ->willReturn(true);
         $this->input->getOption('pretty-json')
             ->willReturn(false);
+        $this->processBuilder->withArgument('--output-format', 'json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();

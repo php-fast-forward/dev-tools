@@ -142,6 +142,26 @@ final class MetricsCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRunPhpMetricsInQuietModeWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument('--quiet')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(MetricsCommand::SUCCESS)
+            ->shouldBeCalled();
+
+        self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
      * @return int
      */
     private function executeCommand(): int

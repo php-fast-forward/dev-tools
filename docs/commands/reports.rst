@@ -40,6 +40,13 @@ Options
    The target directory for the generated metrics report.
    Default: ``.dev-tools/metrics``.
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 
@@ -81,6 +88,9 @@ Behavior
 - Runs ``metrics --target`` after tests so the JUnit report is available.
 - Runs tests with ``--no-progress`` and ``--coverage-summary`` so report builds
   keep PHPUnit output concise.
+- When ``--json`` or ``--pretty-json`` is active, it forwards JSON mode to the
+  ``docs``, ``tests``, and ``metrics`` subprocesses and suppresses transient
+  progress output where those tools support it.
 - Passes ``--junit <coverage>/junit.xml`` to the metrics step.
 - Used by the ``standards`` command as the final phase.
 - This is the reporting stage used by GitHub Pages.

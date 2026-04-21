@@ -116,6 +116,10 @@ final class MetricsCommand extends BaseCommand
             ->withArgument('--report-json', $target . '/report.json')
             ->withArgument('--report-summary-json', $target . '/report-summary.json');
 
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder->withArgument('--quiet');
+        }
+
         if (null !== $junit) {
             $processBuilder = $processBuilder->withArgument('--junit', $junit);
         }

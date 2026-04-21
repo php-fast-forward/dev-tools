@@ -77,11 +77,13 @@ composer --working-dir=packages/example metrics
 composer changelog:entry "Add changelog automation for release workflows (#28)"
 composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
 composer changelog:entry --json "Add changelog automation for release workflows (#28)"
+composer changelog:entry --pretty-json "Add changelog automation for release workflows (#28)"
 
 # Verify that the current branch added a meaningful Unreleased entry
 composer changelog:check
 composer changelog:check --against=origin/main
 composer changelog:check --json
+composer changelog:check --pretty-json
 
 # Infer the next semantic version from Unreleased
 composer changelog:next-version
@@ -179,9 +181,16 @@ The first structured-output rollouts are available on `changelog:entry`,
 status/message/context payload for CI, bots, and AI-agent workflows while
 preserving the normal human-readable terminal output by default. Use
 `--pretty-json` when you want the same structured payload indented for manual
-inspection in a terminal. For `changelog:show`, the default text mode still
-prints the raw release-notes body so release workflows can keep piping it
-directly into GitHub releases.
+inspection in a terminal. `--pretty-json` also implies JSON output, so there
+is no need to pass both flags together. For `changelog:show`, the default
+text mode still prints the raw release-notes body so release workflows can
+keep piping it directly into GitHub releases.
+
+When `--json` or `--pretty-json` is active on commands that orchestrate other
+tools, DevTools also suppresses progress bars and similar transient output.
+Where the underlying tool supports structured output, DevTools forwards JSON
+flags as well; otherwise it falls back to quieter subprocess modes so the
+captured payload stays machine-readable.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

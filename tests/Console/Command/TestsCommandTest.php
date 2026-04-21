@@ -146,6 +146,35 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillDisablePhpUnitProgressWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+
+        $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
+            $process->getCommandLine(),
+            '--no-progress',
+        )))->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->info(
+            'PHPUnit tests completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWithInvalidMinCoverageWillReturnFailure(): void
     {
         $this->input->getOption('min-coverage')

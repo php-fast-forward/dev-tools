@@ -29,6 +29,13 @@ Options
 ``--config, -c`` (optional)
    Path to the Rector configuration file. Default: ``rector.php``.
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 
@@ -62,4 +69,6 @@ Behavior
 
 - Local ``rector.php`` is preferred when present.
 - Packaged default includes Fast Forward custom Rector rules plus shared Rector sets.
+- ``--json`` and ``--pretty-json`` forward JSON mode to Rector and suppress its
+  progress bar.
 - Uses ``--dry-run`` mode unless ``--fix`` is specified.

@@ -20,7 +20,12 @@ Usage
 Options
 -------
 
-This command does not accept additional options.
+This command supports:
+
+- ``--json`` to emit a structured machine-readable payload instead of the
+  normal terminal output;
+- ``--pretty-json`` to emit the same structured payload with indentation for
+  terminal inspection.
 
 Examples
 --------

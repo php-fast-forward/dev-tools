@@ -153,6 +153,12 @@ final class PhpDocCommand extends BaseCommand
                 $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
             );
 
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder
+                ->withArgument('--format=json')
+                ->withArgument('--show-progress=none');
+        }
+
         if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
@@ -163,6 +169,12 @@ final class PhpDocCommand extends BaseCommand
             ->withArgument('--config', $this->fileLocator->locate(RefactorCommand::CONFIG))
             ->withArgument('--autoload-file', 'vendor/autoload.php')
             ->withArgument('--only', AddMissingMethodPhpDocRector::class);
+
+        if ($jsonOutput) {
+            $processBuilder = $processBuilder
+                ->withArgument('--no-progress-bar')
+                ->withArgument('--output-format', 'json');
+        }
 
         if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');

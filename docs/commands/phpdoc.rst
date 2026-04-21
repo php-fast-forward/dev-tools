@@ -38,6 +38,13 @@ Options
 ``--cache-dir`` (optional)
    Path to the cache directory for PHP-CS-Fixer. Default: ``tmp/cache/php-cs-fixer``.
 
+``--json``
+   Emit a structured machine-readable payload instead of the normal terminal
+   output.
+
+``--pretty-json``
+   Emit the same structured payload with indentation for terminal inspection.
+
 Examples
 --------
 
@@ -78,4 +85,6 @@ Behavior
 - Creates ``.docheader`` from the packaged template when the file is missing.
 - Uses ``.php-cs-fixer.dist.php`` and ``rector.php`` through local-first fallback.
 - The Rector phase explicitly runs ``FastForward\DevTools\Rector\AddMissingMethodPhpDocRector``.
+- ``--json`` and ``--pretty-json`` forward JSON mode to PHP-CS-Fixer and
+  Rector while disabling their progress rendering.
 - Uses ``--dry-run`` mode unless ``--fix`` is specified.
