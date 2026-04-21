@@ -2156,6 +2156,11 @@ Search.appendIndex(
             "summary": "Executes\u0020the\u0020full\u0020suite\u0020of\u0020Fast\u0020Forward\u0020code\u0020standard\u0020checks.",
             "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#method___construct"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
             "summary": "Configures\u0020constraints\u0020and\u0020arguments\u0020for\u0020the\u0020collective\u0020standard\u0020runner.",
@@ -2170,6 +2175,11 @@ Search.appendIndex(
             "name": "runCommand",
             "summary": "Runs\u0020a\u0020registered\u0020command\u0020through\u0020the\u0020current\u0020console\u0020application.",
             "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#method_runCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#property_commandResponderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand",
             "name": "SyncCommand",
