@@ -30,6 +30,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -64,7 +65,7 @@ final class CommandResponderTest extends TestCase
      * @return void
      */
     #[Test]
-    public function successWillRenderSuccessResultAndReturnConfiguredExitCode(): void
+    public function successWillRenderSuccessResultAndReturnSuccessExitCode(): void
     {
         $output = $this->prophesize(OutputInterface::class);
         $commandResultRenderer = $this->prophesize(CommandResultRendererInterface::class);
@@ -82,14 +83,14 @@ final class CommandResponderTest extends TestCase
             $commandResultRenderer->reveal(),
         );
 
-        self::assertSame(5, $responder->success('Everything is fine.', [], 5));
+        self::assertSame(Command::SUCCESS, $responder->success('Everything is fine.'));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function failureWillRenderFailureResultAndReturnConfiguredExitCode(): void
+    public function failureWillRenderFailureResultAndReturnFailureExitCode(): void
     {
         $output = $this->prophesize(OutputInterface::class);
         $commandResultRenderer = $this->prophesize(CommandResultRendererInterface::class);
@@ -107,6 +108,6 @@ final class CommandResponderTest extends TestCase
             $commandResultRenderer->reveal(),
         );
 
-        self::assertSame(9, $responder->failure('Something failed.', [], 9));
+        self::assertSame(Command::FAILURE, $responder->failure('Something failed.'));
     }
 }

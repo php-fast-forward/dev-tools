@@ -29,20 +29,18 @@ interface CommandResponderInterface
      *
      * @param string $message the human-readable summary
      * @param array<string, mixed> $context structured response context
-     * @param int $exitCode the exit code to return
      *
      * @return int the selected exit code
      */
-    public function success(string $message, array $context = [], int $exitCode = 0): int;
+    public function success(string $message, array $context = []): int;
 
     /**
      * Renders a failure response and returns the selected exit code.
      *
      * @param string $message the human-readable summary
      * @param array<string, mixed> $context structured response context
-     * @param int $exitCode the exit code to return
      *
      * @return int the selected exit code
      */
-    public function failure(string $message, array $context = [], int $exitCode = 1): int;
+    public function failure(string $message, array $context = []): int;
 }

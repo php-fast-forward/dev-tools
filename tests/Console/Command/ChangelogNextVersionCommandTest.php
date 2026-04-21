@@ -20,10 +20,10 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use InvalidArgumentException;
-use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
-use FastForward\DevTools\Console\Command\ChangelogCheckCommand;
-use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Command\ChangelogNextVersionCommand;
 use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\CommandResponderInterface;
 use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -36,21 +36,21 @@ use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[CoversClass(ChangelogCheckCommand::class)]
+#[CoversClass(ChangelogNextVersionCommand::class)]
 #[CoversClass(OutputFormat::class)]
-final class ChangelogCheckCommandTest extends TestCase
+final class ChangelogNextVersionCommandTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var ObjectProphecy<UnreleasedEntryCheckerInterface>
-     */
-    private ObjectProphecy $checker;
 
     /**
      * @var ObjectProphecy<FilesystemInterface>
      */
     private ObjectProphecy $filesystem;
+
+    /**
+     * @var ObjectProphecy<ChangelogManagerInterface>
+     */
+    private ObjectProphecy $changelogManager;
 
     private ObjectProphecy $input;
 
@@ -66,28 +66,30 @@ final class ChangelogCheckCommandTest extends TestCase
      */
     private ObjectProphecy $commandResponder;
 
-    private ChangelogCheckCommand $command;
+    private ChangelogNextVersionCommand $command;
 
     /**
      * @return void
      */
     protected function setUp(): void
     {
-        $this->checker = $this->prophesize(UnreleasedEntryCheckerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
+        $this->changelogManager = $this->prophesize(ChangelogManagerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
         $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
-        $this->input->getOption('against')
-            ->willReturn(null);
+
         $this->input->getOption('file')
             ->willReturn('CHANGELOG.md');
+        $this->input->getOption('current-version')
+            ->willReturn(null);
         $this->filesystem->getAbsolutePath('CHANGELOG.md')
             ->willReturn('/repo/CHANGELOG.md');
-        $this->command = new ChangelogCheckCommand(
+
+        $this->command = new ChangelogNextVersionCommand(
             $this->filesystem->reveal(),
-            $this->checker->reveal(),
+            $this->changelogManager->reveal(),
             $this->commandResponderFactory->reveal(),
         );
     }
@@ -96,64 +98,66 @@ final class ChangelogCheckCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillReturnSuccessWhenUnreleasedEntriesExist(): void
+    public function executeWillReturnSuccessWithTheInferredVersion(): void
     {
         $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
             ->willReturn($this->commandResponder->reveal());
-        $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
-            ->willReturn(true);
+        $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
+            ->willReturn('1.3.0');
         $this->commandResponder->success(
-            'CHANGELOG.md contains unreleased changes ready for review.',
+            '1.3.0',
             [
-                'command' => 'changelog:check',
+                'command' => 'changelog:next-version',
                 'file' => 'CHANGELOG.md',
-                'against' => null,
-                'has_pending_changes' => true,
+                'current_version' => null,
+                'next_version' => '1.3.0',
             ],
-        )->willReturn(ChangelogCheckCommand::SUCCESS)->shouldBeCalled();
+        )->willReturn(ChangelogNextVersionCommand::SUCCESS)->shouldBeCalled();
 
-        self::assertSame(ChangelogCheckCommand::SUCCESS, $this->invokeExecute());
+        self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillReturnFailureWhenUnreleasedEntriesAreMissing(): void
+    public function executeWillPassTheExplicitCurrentVersionToInference(): void
     {
+        $this->input->getOption('current-version')
+            ->willReturn('1.2.3');
         $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
             ->willReturn($this->commandResponder->reveal());
-        $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
-            ->willReturn(false);
-        $this->commandResponder->failure(
-            'CHANGELOG.md must add a meaningful entry to the Unreleased section.',
+        $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', '1.2.3')
+            ->willReturn('2.0.0');
+        $this->commandResponder->success(
+            '2.0.0',
             [
-                'command' => 'changelog:check',
+                'command' => 'changelog:next-version',
                 'file' => 'CHANGELOG.md',
-                'against' => null,
-                'has_pending_changes' => false,
+                'current_version' => '1.2.3',
+                'next_version' => '2.0.0',
             ],
-        )->willReturn(ChangelogCheckCommand::FAILURE)->shouldBeCalled();
+        )->willReturn(ChangelogNextVersionCommand::SUCCESS)->shouldBeCalled();
 
-        self::assertSame(ChangelogCheckCommand::FAILURE, $this->invokeExecute());
+        self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function executeWillRenderJsonOutputWhenRequested(): void
+    public function executeWillReturnSuccessWhenJsonOutputIsRequested(): void
     {
         $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
             ->willReturn($this->commandResponder->reveal());
-        $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
-            ->willReturn(true);
+        $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
+            ->willReturn('1.3.0');
         $this->commandResponder->success(
-            'CHANGELOG.md contains unreleased changes ready for review.',
+            '1.3.0',
             Argument::type('array'),
-        )->willReturn(ChangelogCheckCommand::SUCCESS)->shouldBeCalled();
+        )->willReturn(ChangelogNextVersionCommand::SUCCESS)->shouldBeCalled();
 
-        self::assertSame(ChangelogCheckCommand::SUCCESS, $this->invokeExecute());
+        self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**
@@ -164,7 +168,7 @@ final class ChangelogCheckCommandTest extends TestCase
     {
         $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
             ->willThrow(new InvalidArgumentException('The --format option MUST be one of: text, json.'));
-        $this->checker->hasPendingChanges(Argument::cetera())
+        $this->changelogManager->inferNextVersion(Argument::cetera())
             ->shouldNotBeCalled();
 
         $this->expectException(InvalidArgumentException::class);

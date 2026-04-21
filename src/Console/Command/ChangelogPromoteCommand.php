@@ -21,6 +21,8 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -43,11 +45,13 @@ final class ChangelogPromoteCommand extends BaseCommand
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
      * @param ClockInterface $clock
+     * @param CommandResponderFactoryInterface $commandResponderFactory
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
         private readonly ClockInterface $clock,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -73,6 +77,13 @@ final class ChangelogPromoteCommand extends BaseCommand
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Path to the changelog file.',
                 default: 'CHANGELOG.md',
+            )
+            ->addOption(
+                name: 'format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -84,18 +95,21 @@ final class ChangelogPromoteCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $responder = $this->commandResponderFactory->from($input, $output);
         $file = $this->filesystem->getAbsolutePath((string) $input->getOption('file'));
         $version = (string) $input->getArgument('version');
         $date = (string) ($input->getOption('date') ?: $this->clock->now()->format('Y-m-d'));
 
         $this->changelogManager->promote($file, $version, $date);
 
-        $output->writeln(\sprintf(
-            '<info>Promoted Unreleased changelog entries to [%s] in %s.</info>',
-            $version,
-            $file,
-        ));
-
-        return self::SUCCESS;
+        return $responder->success(
+            \sprintf('Promoted Unreleased changelog entries to [%s] in %s.', $version, $file),
+            [
+                'command' => 'changelog:promote',
+                'file' => (string) $input->getOption('file'),
+                'version' => $version,
+                'date' => $date,
+            ],
+        );
     }
 }

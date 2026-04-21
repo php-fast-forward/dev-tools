@@ -105,7 +105,6 @@ final class ChangelogCheckCommand extends BaseCommand
                     'against' => $against,
                     'has_pending_changes' => true,
                 ],
-                self::SUCCESS,
             );
         }
 
@@ -117,7 +116,6 @@ final class ChangelogCheckCommand extends BaseCommand
                 'against' => $against,
                 'has_pending_changes' => false,
             ],
-            self::FAILURE,
         );
     }
 }

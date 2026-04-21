@@ -84,9 +84,11 @@ composer changelog:check --format=json
 
 # Infer the next semantic version from Unreleased
 composer changelog:next-version
+composer changelog:next-version --format=json
 
 # Promote Unreleased into a published version
 composer changelog:promote 1.3.0
+composer changelog:promote 1.3.0 --format=json
 
 # Render one published section as release notes
 composer changelog:show 1.3.0
@@ -169,10 +171,11 @@ next semantic version from pending changes, `changelog:promote` publishes the
 current `Unreleased` section into a tagged version, and `changelog:show`
 renders one published section for GitHub release notes.
 
-The first structured-output rollout is available on `changelog:check` through
-`--format=json`, which returns a deterministic status/message/context payload
-for CI, bots, and AI-agent workflows while preserving the normal human-readable
-terminal output by default.
+The first structured-output rollouts are available on `changelog:check`,
+`changelog:next-version`, and `changelog:promote` through `--format=json`,
+which returns a deterministic status/message/context payload for CI, bots, and
+AI-agent workflows while preserving the normal human-readable terminal output
+by default.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

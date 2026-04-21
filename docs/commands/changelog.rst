@@ -37,9 +37,11 @@ Usage
    composer changelog:check --format=json
 
    composer changelog:next-version
+   composer changelog:next-version --format=json
 
    composer changelog:promote 1.3.0
    composer changelog:promote 1.3.0 --date=2026-04-19
+   composer changelog:promote 1.3.0 --format=json
 
    composer changelog:show 1.3.0
 
@@ -72,14 +74,18 @@ Options
 
    - ``--current-version=<semver>`` when the current published version should
      be supplied explicitly instead of inferred from the changelog;
-   - ``--file=<path>`` to inspect another changelog path.
+   - ``--file=<path>`` to inspect another changelog path;
+   - ``--format=<text|json>`` to switch between normal terminal output and a
+     structured machine-readable payload.
 
 ``changelog:promote``
    Supports:
 
    - the required version argument;
    - ``--date=<YYYY-MM-DD>`` to control the published release date;
-   - ``--file=<path>`` to promote another changelog path.
+   - ``--file=<path>`` to promote another changelog path;
+   - ``--format=<text|json>`` to switch between normal terminal output and a
+     structured machine-readable payload.
 
 ``changelog:show``
    Supports:
@@ -96,9 +102,15 @@ Behavior
   or does not differ from the selected baseline ref;
 - ``changelog:check --format=json`` emits a deterministic JSON payload with
   ``status``, ``message``, and ``context`` keys for automation consumers;
+- ``changelog:next-version --format=json`` emits the inferred semantic version
+  as the ``message`` plus structured context describing the inspected changelog
+  path and optional current version;
 - ``changelog:next-version`` uses ``Removed`` or ``Deprecated`` entries for a
   major bump, ``Added`` or ``Changed`` entries for a minor bump, and otherwise
   falls back to a patch bump;
+- ``changelog:promote --format=json`` emits the promotion summary as the
+  ``message`` plus structured context describing the file, version, and
+  release date written to the changelog;
 - ``changelog:promote`` restores an empty ``Unreleased`` section after
   publishing the requested version;
 - ``changelog:show`` prints only the release body so workflows can feed it

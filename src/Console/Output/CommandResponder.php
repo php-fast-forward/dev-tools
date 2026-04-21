@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Output;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -40,11 +41,10 @@ final readonly class CommandResponder implements CommandResponderInterface
     /**
      * @param string $message the human-readable summary
      * @param array<string, mixed> $context structured response context
-     * @param int $exitCode the exit code to return
      *
      * @return int the selected exit code
      */
-    public function success(string $message, array $context = [], int $exitCode = 0): int
+    public function success(string $message, array $context = []): int
     {
         $this->commandResultRenderer->render(
             $this->output,
@@ -52,17 +52,16 @@ final readonly class CommandResponder implements CommandResponderInterface
             $this->format,
         );
 
-        return $exitCode;
+        return Command::SUCCESS;
     }
 
     /**
      * @param string $message the human-readable summary
      * @param array<string, mixed> $context structured response context
-     * @param int $exitCode the exit code to return
      *
      * @return int the selected exit code
      */
-    public function failure(string $message, array $context = [], int $exitCode = 1): int
+    public function failure(string $message, array $context = []): int
     {
         $this->commandResultRenderer->render(
             $this->output,
@@ -70,6 +69,6 @@ final readonly class CommandResponder implements CommandResponderInterface
             $this->format,
         );
 
-        return $exitCode;
+        return Command::FAILURE;
     }
 }

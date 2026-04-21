@@ -27,7 +27,6 @@ use FastForward\DevTools\Changelog\Parser\ChangelogParserInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Console\Output\CommandResponderInterface;
 use FastForward\DevTools\Console\Output\CommandResponderFactory;
 use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
 use FastForward\DevTools\Console\Output\CommandResultRenderer;
