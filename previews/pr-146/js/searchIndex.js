@@ -1096,6 +1096,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020output\u002Dformat\u0020options\u0020for\u0020the\u0020synchronization\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method_configure"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
             "summary": "",
@@ -1115,6 +1120,11 @@ Search.appendIndex(
             "name": "filesystem",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#property_commandResponderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
             "name": "ChangelogCheckCommand",
@@ -2391,6 +2401,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A\u0024format",
+            "name": "format",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#property_format"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003Asuccess\u0028\u0029",
             "name": "success",
             "summary": "Renders\u0020a\u0020success\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
@@ -2405,11 +2420,6 @@ Search.appendIndex(
             "name": "output",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#property_output"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A\u0024format",
-            "name": "format",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#property_format"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A\u0024commandResultRenderer",
             "name": "commandResultRenderer",
@@ -2455,6 +2465,11 @@ Search.appendIndex(
             "name": "CommandResponderInterface",
             "summary": "Responds\u0020to\u0020a\u0020command\u0020after\u0020its\u0020output\u0020format\u0020has\u0020already\u0020been\u0020resolved.",
             "url": "classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface\u003A\u003Aformat\u0028\u0029",
+            "name": "format",
+            "summary": "Returns\u0020the\u0020resolved\u0020output\u0020format\u0020for\u0020this\u0020execution.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html#method_format"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface\u003A\u003Asuccess\u0028\u0029",
             "name": "success",
