@@ -89,7 +89,7 @@ final class DocsCommandTest extends TestCase
             ->willReturn('tmp/cache/phpdoc');
         $this->input->getOption('template')
             ->willReturn('vendor/fast-forward/phpdoc-bootstrap-template');
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);

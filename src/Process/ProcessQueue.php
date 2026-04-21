@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Process;
 
 use Closure;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
+use ReflectionProperty;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,6 +50,8 @@ use Symfony\Component\Process\Process;
  */
 final class ProcessQueue implements ProcessQueueInterface
 {
+    private static ?ReflectionProperty $commandLineProperty = null;
+
     /**
      * Stores queued process entries in insertion order.
      *
@@ -363,6 +366,45 @@ final class ProcessQueue implements ProcessQueueInterface
             return $label;
         }
 
-        return 'Running ' . $process->getCommandLine();
+        return 'Running ' . $this->formatProcessCommandLine($process);
+    }
+
+    /**
+     * Formats the configured process command line without shell escaping noise.
+     *
+     * @param Process $process the queued process instance
+     *
+     * @return string the human-readable command line
+     */
+    private function formatProcessCommandLine(Process $process): string
+    {
+        $commandLine = $this->getProcessCommandLine($process);
+
+        if (\is_array($commandLine)) {
+            return implode(' ', array_map(strval(...), $commandLine));
+        }
+
+        return $commandLine;
+    }
+
+    /**
+     * Reads the raw configured Process command line.
+     *
+     * @param Process $process the queued process instance
+     *
+     * @return array<int, string>|string
+     */
+    private function getProcessCommandLine(Process $process): array|string
+    {
+        self::$commandLineProperty ??= new ReflectionProperty(Process::class, 'commandline');
+
+        if (! self::$commandLineProperty->isInitialized($process)) {
+            return 'process';
+        }
+
+        /** @var array<int, string>|string $commandLine */
+        $commandLine = self::$commandLineProperty->getValue($process);
+
+        return $commandLine;
     }
 }

@@ -138,9 +138,9 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
                 description: 'Minimum line coverage percentage required for a successful run.',
             )
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from PHPUnit.',
+                description: 'Whether to enable progress output from PHPUnit.',
             );
     }
 
@@ -181,7 +181,7 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
             ->withArgument('--display-incomplete')
             ->withArgument('--display-skipped');
 
-        if ($jsonOutput || $input->getOption('no-progress')) {
+        if (! $input->getOption('progress') || $jsonOutput) {
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 

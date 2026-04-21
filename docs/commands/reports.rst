@@ -86,8 +86,8 @@ Behavior
 
 - Runs ``docs`` in parallel with ``tests --coverage``.
 - Runs ``metrics --target`` after tests so the JUnit report is available.
-- Runs tests with ``--no-progress`` and ``--coverage-summary`` so report builds
-  keep PHPUnit output concise.
+- Runs tests with progress disabled by default and ``--coverage-summary`` so
+  report builds keep PHPUnit output concise.
 - When ``--json`` or ``--pretty-json`` is active, it forwards JSON mode to the
   ``docs``, ``tests``, and ``metrics`` subprocesses and suppresses transient
   progress output where those tools support it.

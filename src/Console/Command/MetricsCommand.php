@@ -73,9 +73,9 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
     {
         $this->addJsonOption()
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from PhpMetrics.',
+                description: 'Whether to enable progress output from PhpMetrics.',
             )
             ->addOption(
                 name: 'exclude',
@@ -106,7 +106,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
     {
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
-        $noProgress = $jsonOutput || (bool) $input->getOption('no-progress');
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
         $target = rtrim((string) $input->getOption('target'), '/');
         $exclude = (string) $input->getOption('exclude');
@@ -124,7 +124,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
             ->withArgument('--report-json', $target . '/report.json')
             ->withArgument('--report-summary-json', $target . '/report-summary.json');
 
-        if ($noProgress) {
+        if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--quiet');
         }
 

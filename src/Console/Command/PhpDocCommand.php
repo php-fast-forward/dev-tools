@@ -110,9 +110,9 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
                 default: ['.'],
             )
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from PHPDoc tooling.',
+                description: 'Whether to enable progress output from PHPDoc tooling.',
             )
             ->addOption(
                 name: 'fix',
@@ -144,7 +144,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
-        $noProgress = $jsonOutput || (bool) $input->getOption('no-progress');
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
         $this->logger->info('Checking and fixing PHPDocs...', [
             'input' => $input,
@@ -161,7 +161,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
                 $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
             );
 
-        if ($noProgress) {
+        if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--show-progress=none');
         }
 
@@ -181,7 +181,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
             ->withArgument('--autoload-file', 'vendor/autoload.php')
             ->withArgument('--only', AddMissingMethodPhpDocRector::class);
 
-        if ($noProgress) {
+        if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--no-progress-bar');
         }
 

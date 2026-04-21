@@ -67,6 +67,11 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
     {
         $this->addJsonOption()
             ->addOption(
+                name: 'progress',
+                mode: InputOption::VALUE_NONE,
+                description: 'Whether to enable progress output from nested standards commands.'
+            )
+            ->addOption(
                 name: 'fix',
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
@@ -82,6 +87,7 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
     {
         $jsonOutput = $this->isJsonOutput($input);
         $prettyJsonOutput = $this->isPrettyJsonOutput($input);
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
         $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
         $commands = [];
@@ -94,7 +100,10 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
         foreach (['refactor', 'phpdoc', 'code-style', 'reports'] as $command) {
             $commands[] = $command;
             $processBuilder = $this->processBuilder;
-            $processBuilder = $processBuilder->withArgument('--no-progress');
+
+            if ($progress) {
+                $processBuilder = $processBuilder->withArgument('--progress');
+            }
 
             if ('reports' !== $command && $fix) {
                 $processBuilder = $processBuilder->withArgument('--fix');

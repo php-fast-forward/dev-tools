@@ -76,7 +76,7 @@ final class ReportsCommandTest extends TestCase
             ->willReturn('.dev-tools/coverage');
         $this->input->getOption('metrics')
             ->willReturn('.dev-tools/metrics');
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
@@ -156,11 +156,11 @@ final class ReportsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillForwardNoProgressToDocsAndMetricsWhenRequested(): void
+    public function executeWillForwardProgressToNestedCommandsWhenRequested(): void
     {
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(true);
-        $this->processBuilder->withArgument('--no-progress')
+        $this->processBuilder->withArgument('--progress')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalledTimes(3);
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);

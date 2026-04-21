@@ -101,7 +101,7 @@ final class PhpDocCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('cache-dir')
             ->willReturn('tmp/cache/php-cs-fixer');
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
@@ -243,17 +243,15 @@ final class PhpDocCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillDisableProgressWhenRequested(): void
+    public function executeWillEnableProgressWhenRequested(): void
     {
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(true);
         $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalled();
         $this->processBuilder->withArgument('--show-progress=none')
-            ->willReturn($this->processBuilder->reveal())
-            ->shouldBeCalled();
+            ->shouldNotBeCalled();
         $this->processBuilder->withArgument('--no-progress-bar')
-            ->willReturn($this->processBuilder->reveal())
-            ->shouldBeCalled();
+            ->shouldNotBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();

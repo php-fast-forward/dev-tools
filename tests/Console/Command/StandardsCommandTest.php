@@ -67,6 +67,8 @@ final class StandardsCommandTest extends TestCase
 
         $this->input->getOption('fix')
             ->willReturn(false);
+        $this->input->getOption('progress')
+            ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
         $this->input->getOption('pretty-json')
@@ -89,9 +91,6 @@ final class StandardsCommandTest extends TestCase
     #[Test]
     public function executeWillRunSuiteSequentially(): void
     {
-        $this->processBuilder->withArgument('--no-progress')
-            ->willReturn($this->processBuilder->reveal())
-            ->shouldBeCalledTimes(4);
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
             ->shouldBeCalledTimes(4);
         $this->processQueue->run($this->output->reveal())
@@ -118,9 +117,6 @@ final class StandardsCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenAnyCommandFails(): void
     {
-        $this->processBuilder->withArgument('--no-progress')
-            ->willReturn($this->processBuilder->reveal())
-            ->shouldBeCalledTimes(4);
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
             ->shouldBeCalledTimes(4);
         $this->processQueue->run($this->output->reveal())

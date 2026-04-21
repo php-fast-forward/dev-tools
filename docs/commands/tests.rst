@@ -44,8 +44,8 @@ Options
 ``--no-cache``
    Disable PHPUnit caching.
 
-``--no-progress``
-   Disable PHPUnit progress output.
+``--progress``
+   Enable PHPUnit progress output.
 
 ``--coverage, -c`` (optional)
    Generate code coverage reports. If a path is provided, reports are saved there.
@@ -114,11 +114,11 @@ Run without cache:
 
    composer tests --no-cache
 
-Run without PHPUnit progress output:
+Run with PHPUnit progress output enabled:
 
 .. code-block:: bash
 
-   composer tests --no-progress
+   composer tests --progress
 
 Exit Codes
 ---------
@@ -143,7 +143,8 @@ Behavior
 - Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.
 - ``--coverage-summary`` forwards PHPUnit's ``--only-summary-for-coverage-text``
   only when coverage text output is generated.
-- ``--json`` and ``--pretty-json`` implicitly add ``--no-progress`` so the
-  structured payload stays clean.
+- progress output is disabled by default.
+- ``--json`` and ``--pretty-json`` keep progress output disabled so the
+  structured payload stays clean, even when ``--progress`` is provided.
 - The command fails if minimum coverage is not met (when ``--min-coverage`` is set).
 - The packaged configuration registers the DevTools PHPUnit extension.

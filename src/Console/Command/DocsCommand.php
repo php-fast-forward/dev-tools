@@ -83,9 +83,9 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
     {
         $this->addJsonOption()
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from phpDocumentor.',
+                description: 'Whether to enable progress output from phpDocumentor.',
             )
             ->addOption(
                 name: 'target',
@@ -130,6 +130,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
     {
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
         $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
@@ -150,12 +151,16 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
             cacheDir: $cacheDir
         );
 
-        $phpdoc = $this->processBuilder
+        $processBuilder = $this->processBuilder
             ->withArgument('--config', $config)
             ->withArgument('--ansi')
-            ->withArgument('--no-progress')
-            ->withArgument('--markers', 'TODO,FIXME,BUG,HACK')
-            ->build('vendor/bin/phpdoc');
+            ->withArgument('--markers', 'TODO,FIXME,BUG,HACK');
+
+        if (! $progress) {
+            $processBuilder = $processBuilder->withArgument('--no-progress');
+        }
+
+        $phpdoc = $processBuilder->build('vendor/bin/phpdoc');
 
         $this->processQueue->add($phpdoc);
 

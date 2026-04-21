@@ -67,9 +67,9 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
     {
         $this->addJsonOption()
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from generated report commands.',
+                description: 'Whether to enable progress output from generated report commands.',
             )
             ->addOption(
                 name: 'target',
@@ -107,7 +107,7 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
     {
         $jsonOutput = $this->isJsonOutput($input);
         $prettyJsonOutput = $this->isPrettyJsonOutput($input);
-        $noProgress = (bool) $input->getOption('no-progress');
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
         $coveragePath = (string) $input->getOption('coverage');
@@ -120,8 +120,8 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
         $docsBuilder = $this->processBuilder
             ->withArgument('--target', $target);
 
-        if ($noProgress) {
-            $docsBuilder = $docsBuilder->withArgument('--no-progress');
+        if ($progress) {
+            $docsBuilder = $docsBuilder->withArgument('--progress');
         }
 
         if ($jsonOutput) {
@@ -135,9 +135,12 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
         $docs = $docsBuilder->build('composer dev-tools docs --');
 
         $coverageBuilder = $this->processBuilder
-            ->withArgument('--no-progress')
             ->withArgument('--coverage-summary')
             ->withArgument('--coverage', $coveragePath);
+
+        if ($progress) {
+            $coverageBuilder = $coverageBuilder->withArgument('--progress');
+        }
 
         if ($jsonOutput) {
             $coverageBuilder = $coverageBuilder->withArgument('--json');
@@ -153,8 +156,8 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
             ->withArgument('--junit', $coveragePath . '/junit.xml')
             ->withArgument('--target', $metricsPath);
 
-        if ($noProgress) {
-            $metricsBuilder = $metricsBuilder->withArgument('--no-progress');
+        if ($progress) {
+            $metricsBuilder = $metricsBuilder->withArgument('--progress');
         }
 
         if ($jsonOutput) {

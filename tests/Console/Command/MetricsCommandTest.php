@@ -75,7 +75,7 @@ final class MetricsCommandTest extends TestCase
             ->willReturn('.dev-tools/metrics');
         $this->input->getOption('junit')
             ->willReturn(null);
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
@@ -171,13 +171,12 @@ final class MetricsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillRunPhpMetricsInQuietModeWhenNoProgressIsRequested(): void
+    public function executeWillNotRunPhpMetricsInQuietModeWhenProgressIsRequested(): void
     {
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(true);
         $this->processBuilder->withArgument('--quiet')
-            ->willReturn($this->processBuilder->reveal())
-            ->shouldBeCalled();
+            ->shouldNotBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::SUCCESS)
             ->shouldBeCalled();

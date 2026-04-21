@@ -81,9 +81,9 @@ final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInt
     {
         $this->addJsonOption()
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from Rector.',
+                description: 'Whether to enable progress output from Rector.',
             )
             ->addOption(
                 name: 'fix',
@@ -116,7 +116,7 @@ final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInt
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
-        $noProgress = $jsonOutput || (bool) $input->getOption('no-progress');
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
         $this->logger->info('Running Rector for code refactoring...', [
             'input' => $input,
@@ -127,7 +127,7 @@ final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInt
             ->withArgument('--config')
             ->withArgument($this->fileLocator->locate(self::CONFIG));
 
-        if ($noProgress) {
+        if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--no-progress-bar');
         }
 

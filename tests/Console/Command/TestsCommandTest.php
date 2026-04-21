@@ -180,6 +180,25 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillEnablePhpUnitProgressWhenRequested(): void
+    {
+        $this->input->getOption('progress')
+            ->willReturn(true);
+
+        $this->processQueue->add(Argument::that(static fn(Process $process): bool => ! str_contains(
+            $process->getCommandLine(),
+            '--no-progress',
+        )))->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWithInvalidMinCoverageWillReturnFailure(): void
     {
         $this->input->getOption('min-coverage')

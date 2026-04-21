@@ -85,9 +85,9 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
     {
         $this->addJsonOption()
             ->addOption(
-                name: 'no-progress',
+                name: 'progress',
                 mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable progress output from code style tools.',
+                description: 'Whether to enable progress output from code style tools.',
             )
             ->addOption(
                 name: 'fix',
@@ -114,7 +114,7 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $fix = (bool) $input->getOption('fix');
-        $noProgress = $jsonOutput || (bool) $input->getOption('no-progress');
+        $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
         $this->logger->info('Running code style checks and fixes...');
 
@@ -131,7 +131,7 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
         $processBuilder = $this->processBuilder
             ->withArgument('--config', $this->fileLocator->locate(self::CONFIG));
 
-        if ($noProgress) {
+        if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--no-progress-bar');
         }
 

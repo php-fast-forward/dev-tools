@@ -75,7 +75,7 @@ final class CodeStyleCommandTest extends TestCase
 
         $this->input->getOption('fix')
             ->willReturn(false);
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
@@ -188,13 +188,12 @@ final class CodeStyleCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillDisableProgressWhenRequested(): void
+    public function executeWillEnableProgressWhenRequested(): void
     {
-        $this->input->getOption('no-progress')
+        $this->input->getOption('progress')
             ->willReturn(true);
         $this->processBuilder->withArgument('--no-progress-bar')
-            ->willReturn($this->processBuilder->reveal())
-            ->shouldBeCalled();
+            ->shouldNotBeCalled();
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
