@@ -2091,6 +2091,11 @@ Search.appendIndex(
             "summary": "Initializes\u0020the\u0020command\u0020with\u0020an\u0020optional\u0020skills\u0020synchronizer\u0020instance.",
             "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020the\u0020supported\u0020output\u002Dformat\u0020options.",
+            "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#method_configure"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
             "summary": "Executes\u0020the\u0020skills\u0020synchronization\u0020workflow.",
@@ -2110,6 +2115,11 @@ Search.appendIndex(
             "name": "filesystem",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#property_commandResponderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand",
             "name": "StandardsCommand",
