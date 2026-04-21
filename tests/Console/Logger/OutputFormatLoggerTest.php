@@ -40,6 +40,8 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function Safe\putenv;
+
 #[CoversClass(OutputFormatLogger::class)]
 #[UsesClass(CommandInputProcessor::class)]
 #[UsesClass(CommandOutputProcessor::class)]
@@ -60,6 +62,8 @@ final class OutputFormatLoggerTest extends TestCase
      */
     private array $server;
 
+    private string|false $composerTestsAreRunningEnv;
+
     /**
      * @return void
      */
@@ -67,6 +71,8 @@ final class OutputFormatLoggerTest extends TestCase
     {
         $this->server = $_SERVER;
         $_SERVER = [];
+        $this->composerTestsAreRunningEnv = getenv('COMPOSER_TESTS_ARE_RUNNING');
+        putenv('COMPOSER_TESTS_ARE_RUNNING=1');
 
         $this->output = $this->prophesize(ConsoleOutputInterface::class);
         $this->errorOutput = $this->prophesize(OutputInterface::class);
@@ -231,5 +237,13 @@ final class OutputFormatLoggerTest extends TestCase
     protected function tearDown(): void
     {
         $_SERVER = $this->server;
+
+        if (false === $this->composerTestsAreRunningEnv) {
+            putenv('COMPOSER_TESTS_ARE_RUNNING');
+
+            return;
+        }
+
+        putenv('COMPOSER_TESTS_ARE_RUNNING=' . $this->composerTestsAreRunningEnv);
     }
 }

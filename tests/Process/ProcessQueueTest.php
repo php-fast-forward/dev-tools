@@ -35,11 +35,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
 use Symfony\Component\Process\Process;
 
+use function Safe\putenv;
+
 #[CoversClass(ProcessQueue::class)]
 #[UsesClass(GithubActionOutput::class)]
 final class ProcessQueueTest extends TestCase
 {
     use ProphecyTrait;
+
+    private string|false $composerTestsAreRunningEnv;
 
     /**
      * @var ObjectProphecy<ConsoleOutputInterface>
@@ -58,6 +62,9 @@ final class ProcessQueueTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->composerTestsAreRunningEnv = getenv('COMPOSER_TESTS_ARE_RUNNING');
+        putenv('COMPOSER_TESTS_ARE_RUNNING=1');
+
         $this->output = $this->prophesize(ConsoleOutputInterface::class);
         $this->errorOutput = $this->prophesize(OutputInterface::class);
         $this->output->getErrorOutput()
@@ -374,5 +381,19 @@ final class ProcessQueueTest extends TestCase
         $this->queue->add($secondProcess->reveal(), detached: true);
 
         self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        if (false === $this->composerTestsAreRunningEnv) {
+            putenv('COMPOSER_TESTS_ARE_RUNNING');
+
+            return;
+        }
+
+        putenv('COMPOSER_TESTS_ARE_RUNNING=' . $this->composerTestsAreRunningEnv);
     }
 }

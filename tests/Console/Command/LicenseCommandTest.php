@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\LicenseCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
@@ -49,6 +50,7 @@ use function Safe\getcwd;
 #[UsesClass(FileDiff::class)]
 #[UsesClass(Resolver::class)]
 #[UsesClass(Generator::class)]
+#[UsesClass(GithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class LicenseCommandTest extends TestCase
 {
