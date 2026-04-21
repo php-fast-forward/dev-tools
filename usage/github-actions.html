@@ -2065,8 +2065,45 @@
             Command
         </a>
 
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-command-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-command-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
             </div>
 
+            <div id="sidebar-namespaces-fastforward-devtools-console-command-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-command-traits.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Traits
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
     </li>
                             <li class="nav-item">
     
@@ -2085,6 +2122,131 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             CommandLoader
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-formatter.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Formatter
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-input.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Input
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Logger
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-logger-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-logger-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-console-logger-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger-processor.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Processor
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-output.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Output
         </a>
 
             </div>
@@ -2771,11 +2933,14 @@ secrets: inherit</code></pre>
     </em>
    Posts a <strong>Sticky Comment</strong>
  on the PR with links to the live preview, coverage report, and metrics site.
-    <em>   **Cleanup**: When a PR is closed, the workflow automatically removes the preview directory from the ``gh-pages`` branch to keep the repository clean.
+    <em>   Groups nested command output into collapsible GitHub Actions log sections so docs, tests, and metrics are easier to inspect independently.
     </em>
-   <strong>Concurrency</strong>
-: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
-*   <strong>Scheduled Cleanup</strong>
+   <strong>Cleanup</strong>
+: When a PR is closed, the workflow automatically removes the preview directory from the <code>gh-pages</code>
+ branch to keep the repository clean.
+    <em>   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
+</em>
+   <strong>Scheduled Cleanup</strong>
 : A scheduled/manual cleanup removes stale <code>previews/pr-{number}/</code>
  directories for already closed pull requests.</p>
 
@@ -2846,6 +3011,9 @@ protection, bot commit, and submodule pointer conflict guidance.</p>
  so
 outdated packages stay visible in CI without failing the workflow on count
 alone.</li>
+
+    <li>Surfaces logged command failures as native GitHub Actions error annotations,
+including file and line metadata when the command provides them.</li>
 
     <li>Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.</li>
 

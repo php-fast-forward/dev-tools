@@ -1096,6 +1096,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020JSON\u0020output\u0020options\u0020for\u0020the\u0020synchronization\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method_configure"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
             "summary": "",
@@ -1115,6 +1120,11 @@ Search.appendIndex(
             "name": "filesystem",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
             "name": "ChangelogCheckCommand",
@@ -1146,6 +1156,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogCheckCommand.html#property_unreleasedEntryChecker"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCheckCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand",
             "name": "ChangelogEntryCommand",
             "summary": "Inserts\u0020a\u0020changelog\u0020entry\u0020into\u0020the\u0020managed\u0020changelog\u0020file.",
@@ -1176,6 +1191,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogEntryCommand.html#property_changelogManager"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogEntryCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand",
             "name": "ChangelogNextVersionCommand",
             "summary": "Infers\u0020the\u0020next\u0020semantic\u0020version\u0020from\u0020changelog\u0020content.",
@@ -1205,6 +1225,11 @@ Search.appendIndex(
             "name": "changelogManager",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogNextVersionCommand.html#property_changelogManager"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogNextVersionCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand",
             "name": "ChangelogPromoteCommand",
@@ -1241,6 +1266,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogPromoteCommand.html#property_clock"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogPromoteCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
             "name": "ChangelogShowCommand",
             "summary": "Prints\u0020the\u0020rendered\u0020notes\u0020body\u0020for\u0020a\u0020released\u0020changelog\u0020version.",
@@ -1270,6 +1300,11 @@ Search.appendIndex(
             "name": "changelogManager",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogShowCommand.html#property_changelogManager"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogShowCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
             "name": "CodeOwnersCommand",
@@ -1316,6 +1351,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_fileDiffer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand",
             "name": "CodeStyleCommand",
             "summary": "Represents\u0020the\u0020command\u0020responsible\u0020for\u0020checking\u0020and\u0020fixing\u0020code\u0020style\u0020issues.",
@@ -1355,6 +1395,11 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CodeStyleCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeStyleCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand",
             "name": "CopyResourceCommand",
@@ -1410,6 +1455,11 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
             "name": "DependenciesCommand",
@@ -1496,9 +1546,14 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_fileLocator"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand",
             "name": "DocsCommand",
-            "summary": "Handles\u0020the\u0020generation\u0020of\u0020API\u0020documentation\u0020for\u0020the\u0020project.",
+            "summary": "Generates\u0020the\u0020package\u0020API\u0020documentation\u0020through\u0020phpDocumentor.",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003A__construct\u0028\u0029",
@@ -1508,12 +1563,12 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configures\u0020the\u0020command\u0020instance.",
+            "summary": "Configures\u0020the\u0020command\u0020options\u0020used\u0020to\u0020generate\u0020API\u0020documentation.",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_configure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Executes\u0020the\u0020generation\u0020of\u0020the\u0020documentation\u0020files.",
+            "summary": "Generates\u0020the\u0020HTML\u0020API\u0020documentation\u0020for\u0020the\u0020configured\u0020source\u0020tree.",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_execute"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003AcreatePhpDocumentorConfig\u0028\u0029",
@@ -1545,6 +1600,11 @@ Search.appendIndex(
             "name": "composer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_composer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
             "name": "FundingCommand",
@@ -1620,6 +1680,11 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
             "name": "GitAttributesCommand",
@@ -1716,6 +1781,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_fileDiffer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
             "name": "GitHooksCommand",
             "summary": "Installs\u0020packaged\u0020Git\u0020hooks\u0020for\u0020the\u0020consumer\u0020repository.",
@@ -1760,6 +1830,11 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
             "name": "GitIgnoreCommand",
@@ -1816,6 +1891,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_fileDiffer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand",
             "name": "LicenseCommand",
             "summary": "Generates\u0020and\u0020copies\u0020LICENSE\u0020files\u0020to\u0020projects.",
@@ -1856,6 +1936,21 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_fileDiffer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "name": "LoggerAwareCommandInterface",
+            "summary": "Defines\u0020the\u0020logger\u0020contract\u0020consumed\u0020by\u0020reusable\u0020command\u0020result\u0020helpers.",
+            "url": "classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface\u003A\u003AgetLogger\u0028\u0029",
+            "name": "getLogger",
+            "summary": "Returns\u0020the\u0020logger\u0020used\u0020to\u0020emit\u0020command\u0020lifecycle\u0020messages.",
+            "url": "classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html#method_getLogger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
             "name": "MetricsCommand",
             "summary": "",
@@ -1895,6 +1990,11 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand",
             "name": "PhpDocCommand",
@@ -1971,6 +2071,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-PhpDocCommand.html#property_clock"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-PhpDocCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\RefactorCommand",
             "name": "RefactorCommand",
             "summary": "Provides\u0020functionality\u0020to\u0020execute\u0020automated\u0020code\u0020refactoring\u0020using\u0020Rector.",
@@ -2011,6 +2116,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-RefactorCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\RefactorCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-RefactorCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand",
             "name": "ReportsCommand",
             "summary": "Coordinates\u0020the\u0020generation\u0020of\u0020Fast\u0020Forward\u0020documentation\u0020frontpage\u0020and\u0020related\u0020reports.",
@@ -2041,6 +2151,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ReportsCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ReportsCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand",
             "name": "SkillsCommand",
             "summary": "Synchronizes\u0020packaged\u0020Fast\u0020Forward\u0020skills\u0020into\u0020the\u0020consumer\u0020repository.",
@@ -2050,6 +2165,11 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "Initializes\u0020the\u0020command\u0020with\u0020an\u0020optional\u0020skills\u0020synchronizer\u0020instance.",
             "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020the\u0020supported\u0020JSON\u0020output\u0020option.",
+            "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#method_configure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
@@ -2071,10 +2191,20 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#property_filesystem"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand",
             "name": "StandardsCommand",
             "summary": "Executes\u0020the\u0020full\u0020suite\u0020of\u0020Fast\u0020Forward\u0020code\u0020standard\u0020checks.",
             "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#method___construct"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
@@ -2083,13 +2213,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Evaluates\u0020multiple\u0020commands\u0020seamlessly\u0020in\u0020a\u0020sequential\u0020execution.",
+            "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#method_execute"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003ArunCommand\u0028\u0029",
-            "name": "runCommand",
-            "summary": "Runs\u0020a\u0020registered\u0020command\u0020through\u0020the\u0020current\u0020console\u0020application.",
-            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#method_runCommand"
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003A\u0024processBuilder",
+            "name": "processBuilder",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#property_processBuilder"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003A\u0024processQueue",
+            "name": "processQueue",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand",
             "name": "SyncCommand",
@@ -2098,7 +2238,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Creates\u0020a\u0020new\u0020SyncCommand\u0020instance.",
+            "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#method___construct"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003Aconfigure\u0028\u0029",
@@ -2108,17 +2248,17 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "Queues\u0020and\u0020executes\u0020synchronization\u0020commands.",
+            "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#method_execute"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003AqueueDevToolsCommand\u0028\u0029",
             "name": "queueDevToolsCommand",
-            "summary": "Adds\u0020a\u0020dev\u002Dtools\u0020command\u0020invocation\u0020to\u0020the\u0020process\u0020queue.",
+            "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#method_queueDevToolsCommand"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003AdevToolsBinary\u0028\u0029",
             "name": "devToolsBinary",
-            "summary": "Resolves\u0020the\u0020packaged\u0020dev\u002Dtools\u0020binary\u0020path.",
+            "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#method_devToolsBinary"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003A\u0024processBuilder",
@@ -2130,6 +2270,11 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand",
             "name": "TestsCommand",
@@ -2206,6 +2351,41 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger",
+            "name": "HasCommandLogger",
+            "summary": "Resolves\u0020the\u0020logger\u0020expected\u0020by\u0020command\u0020result\u0020helper\u0020traits.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-HasCommandLogger.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger\u003A\u003AgetLogger\u0028\u0029",
+            "name": "getLogger",
+            "summary": "Returns\u0020the\u0020logger\u0020configured\u0020on\u0020the\u0020consuming\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-HasCommandLogger.html#method_getLogger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
+            "name": "LogsCommandResults",
+            "summary": "Provides\u0020reusable\u0020helpers\u0020for\u0020logging\u0020command\u0020outcomes\u0020and\u0020returning\u0020exit\u0020codes.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003Anotice\u0028\u0029",
+            "name": "notice",
+            "summary": "Logs\u0020an\u0020informational\u0020command\u0020message\u0020at\u0020notice\u0020level.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html#method_notice"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003Asuccess\u0028\u0029",
+            "name": "success",
+            "summary": "Logs\u0020a\u0020successful\u0020command\u0020result\u0020and\u0020returns\u0020the\u0020success\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html#method_success"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003Afailure\u0028\u0029",
+            "name": "failure",
+            "summary": "Logs\u0020a\u0020failed\u0020command\u0020result\u0020and\u0020returns\u0020the\u0020failure\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html#method_failure"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
             "name": "UpdateComposerJsonCommand",
             "summary": "Updates\u0020composer.json\u0020with\u0020the\u0020Fast\u0020Forward\u0020dev\u002Dtools\u0020integration\u0020metadata.",
@@ -2255,6 +2435,11 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand",
             "name": "WikiCommand",
@@ -2311,6 +2496,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#property_gitClient"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\CommandLoader\\DevToolsCommandLoader",
             "name": "DevToolsCommandLoader",
             "summary": "Responsible\u0020for\u0020dynamically\u0020discovering\u0020and\u0020loading\u0020Symfony\u0020Console\u0020commands\nwithin\u0020the\u0020DevTools\u0020context.\u0020This\u0020class\u0020extends\u0020the\u0020ContainerCommandLoader\nand\u0020integrates\u0020with\u0020a\u0020PSR\u002D11\u0020compatible\u0020container\u0020to\u0020lazily\u0020instantiate\u0020commands.",
@@ -2341,6 +2531,11 @@ Search.appendIndex(
             "summary": "Create\u0020DevTools\u0020instance\u0020from\u0020container.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_create"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetContainer\u0028\u0029",
+            "name": "getContainer",
+            "summary": "Retrieves\u0020the\u0020shared\u0020DevTools\u0020service\u0020container.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getContainer"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetDefaultCommands\u0028\u0029",
             "name": "getDefaultCommands",
             "summary": "Retrieves\u0020the\u0020default\u0020set\u0020of\u0020commands\u0020provided\u0020by\u0020the\u0020Symfony\u0020Application.",
@@ -2350,6 +2545,281 @@ Search.appendIndex(
             "name": "container",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#property_container"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter",
+            "name": "LogLevelOutputFormatter",
+            "summary": "Defines\u0020additional\u0020console\u0020styles\u0020for\u0020log\u0020level\u0020tags.",
+            "url": "classes/FastForward-DevTools-Console-Formatter-LogLevelOutputFormatter.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Initializes\u0020the\u0020formatter\u0020with\u0020predefined\u0020styles\u0020for\u0020log\u0020levels.",
+            "url": "classes/FastForward-DevTools-Console-Formatter-LogLevelOutputFormatter.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption",
+            "name": "HasJsonOption",
+            "summary": "Provides\u0020the\u0020standard\u0020JSON\u0020output\u0020options\u0020used\u0020by\u0020DevTools\u0020commands.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AaddJsonOption\u0028\u0029",
+            "name": "addJsonOption",
+            "summary": "Adds\u0020the\u0020standard\u0020JSON\u0020output\u0020options\u0020to\u0020the\u0020current\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_addJsonOption"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AisJsonOutput\u0028\u0029",
+            "name": "isJsonOutput",
+            "summary": "Determines\u0020whether\u0020JSON\u0020output\u0020was\u0020requested.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isJsonOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AisPrettyJsonOutput\u0028\u0029",
+            "name": "isPrettyJsonOutput",
+            "summary": "Determines\u0020whether\u0020pretty\u0020JSON\u0020output\u0020was\u0020requested.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isPrettyJsonOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
+            "name": "OutputFormatLogger",
+            "summary": "Formats\u0020PSR\u002D3\u0020log\u0020messages\u0020for\u0020the\u0020DevTools\u0020console\u0020runtime.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020new\u0020console\u0020logger\u0020instance.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003Alog\u0028\u0029",
+            "name": "log",
+            "summary": "Logs\u0020a\u0020message\u0020at\u0020the\u0020specified\u0020level.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_log"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003AemitGithubActionAnnotation\u0028\u0029",
+            "name": "emitGithubActionAnnotation",
+            "summary": "Emits\u0020GitHub\u0020Actions\u0020annotations\u0020for\u0020supported\u0020error\u0020levels.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_emitGithubActionAnnotation"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003AformatMessage\u0028\u0029",
+            "name": "formatMessage",
+            "summary": "Formats\u0020a\u0020log\u0020entry\u0020for\u0020console\u0020output.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_formatMessage"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003AisJsonOutput\u0028\u0029",
+            "name": "isJsonOutput",
+            "summary": "Determines\u0020whether\u0020structured\u0020JSON\u0020output\u0020has\u0020been\u0020requested.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_isJsonOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003AisPrettyJsonOutput\u0028\u0029",
+            "name": "isPrettyJsonOutput",
+            "summary": "Determines\u0020whether\u0020pretty\u002Dprinted\u0020JSON\u0020output\u0020has\u0020been\u0020requested.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_isPrettyJsonOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003Ainterpolate\u0028\u0029",
+            "name": "interpolate",
+            "summary": "Interpolates\u0020context\u0020values\u0020into\u0020PSR\u002D3\u002Dstyle\u0020message\u0020placeholders.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_interpolate"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003AERROR_LEVELS",
+            "name": "ERROR_LEVELS",
+            "summary": "Lists\u0020the\u0020log\u0020levels\u0020that\u0020MUST\u0020be\u0020written\u0020to\u0020the\u0020error\u0020output\u0020stream.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#constant_ERROR_LEVELS"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024input",
+            "name": "input",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_input"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024output",
+            "name": "output",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_output"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024clock",
+            "name": "clock",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_clock"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024agentDetector",
+            "name": "agentDetector",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_agentDetector"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024contextProcessor",
+            "name": "contextProcessor",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_contextProcessor"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024githubActionOutput",
+            "name": "githubActionOutput",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_githubActionOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor",
+            "name": "CommandInputProcessor",
+            "summary": "Expands\u0020command\u0020input\u0020instances\u0020into\u0020structured\u0020context\u0020entries.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_process"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AprocessInputContext\u0028\u0029",
+            "name": "processInputContext",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_processInputContext"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AinferCommandName\u0028\u0029",
+            "name": "inferCommandName",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_inferCommandName"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AextractProvidedArguments\u0028\u0029",
+            "name": "extractProvidedArguments",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_extractProvidedArguments"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AextractProvidedOptions\u0028\u0029",
+            "name": "extractProvidedOptions",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_extractProvidedOptions"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AresolveDefinition\u0028\u0029",
+            "name": "resolveDefinition",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_resolveDefinition"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AresolveArrayParameters\u0028\u0029",
+            "name": "resolveArrayParameters",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_resolveArrayParameters"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AoptionTokens\u0028\u0029",
+            "name": "optionTokens",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_optionTokens"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
+            "name": "CommandOutputProcessor",
+            "summary": "Converts\u0020buffered\u0020command\u0020output\u0020objects\u0020into\u0020serializable\u0020context\u0020entries.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_process"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AextractBufferedOutput\u0028\u0029",
+            "name": "extractBufferedOutput",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_extractBufferedOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
+            "name": "CompositeContextProcessor",
+            "summary": "Applies\u0020multiple\u0020context\u0020processors\u0020in\u0020sequence.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html#method_process"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor\u003A\u003A\u0024processors",
+            "name": "processors",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html#property_processors"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
+            "name": "ContextProcessorInterface",
+            "summary": "Defines\u0020a\u0020processor\u0020that\u0020transforms\u0020log\u0020context\u0020payloads.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-ContextProcessorInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-ContextProcessorInterface.html#method_process"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput",
+            "name": "GithubActionOutput",
+            "summary": "Emits\u0020GitHub\u0020Actions\u0020workflow\u0020commands\u0020through\u0020the\u0020console\u0020output\u0020stream.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003A__destruct\u0028\u0029",
+            "name": "__destruct",
+            "summary": "Closes\u0020any\u0020open\u0020group\u0020before\u0020the\u0020output\u0020instance\u0020is\u0020destroyed.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method___destruct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003Aerror\u0028\u0029",
+            "name": "error",
+            "summary": "Emits\u0020an\u0020error\u0020annotation\u0020for\u0020the\u0020current\u0020workflow\u0020step.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_error"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003Awarning\u0028\u0029",
+            "name": "warning",
+            "summary": "Emits\u0020a\u0020warning\u0020annotation\u0020for\u0020the\u0020current\u0020workflow\u0020step.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_warning"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003Anotice\u0028\u0029",
+            "name": "notice",
+            "summary": "Emits\u0020a\u0020notice\u0020annotation\u0020for\u0020the\u0020current\u0020workflow\u0020step.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_notice"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003Adebug\u0028\u0029",
+            "name": "debug",
+            "summary": "Emits\u0020a\u0020debug\u0020workflow\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_debug"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AstartGroup\u0028\u0029",
+            "name": "startGroup",
+            "summary": "Starts\u0020a\u0020collapsible\u0020GitHub\u0020Actions\u0020log\u0020group.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_startGroup"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AendGroup\u0028\u0029",
+            "name": "endGroup",
+            "summary": "Ends\u0020the\u0020current\u0020collapsible\u0020log\u0020group.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_endGroup"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003Agroup\u0028\u0029",
+            "name": "group",
+            "summary": "Runs\u0020a\u0020callback\u0020wrapped\u0020inside\u0020a\u0020GitHub\u0020Actions\u0020log\u0020group.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_group"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003Aemit\u0028\u0029",
+            "name": "emit",
+            "summary": "Emits\u0020a\u0020raw\u0020workflow\u0020command\u0020after\u0020escaping\u0020its\u0020properties\u0020and\u0020payload.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_emit"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AsupportsWorkflowCommands\u0028\u0029",
+            "name": "supportsWorkflowCommands",
+            "summary": "Determines\u0020whether\u0020workflow\u0020commands\u0020should\u0020be\u0020emitted\u0020for\u0020the\u0020current\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_supportsWorkflowCommands"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AescapeData\u0028\u0029",
+            "name": "escapeData",
+            "summary": "Escapes\u0020workflow\u002Dcommand\u0020payload\u0020data\u0020according\u0020to\u0020GitHub\u0020Actions\u0020rules.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_escapeData"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AescapeProperty\u0028\u0029",
+            "name": "escapeProperty",
+            "summary": "Escapes\u0020workflow\u002Dcommand\u0020property\u0020values\u0020according\u0020to\u0020GitHub\u0020Actions\u0020rules.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_escapeProperty"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003A\u0024currentGroup",
+            "name": "currentGroup",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#property_currentGroup"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003A\u0024output",
+            "name": "output",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#property_output"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
@@ -3448,7 +3918,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Initializes\u0020the\u0020queue\u0020and\u0020secures\u0020child\u0020processes\u0020from\u0020early\u0020termination.",
+            "summary": "",
             "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method___construct"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003Aadd\u0028\u0029",
@@ -3463,7 +3933,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003Await\u0028\u0029",
             "name": "wait",
-            "summary": "Waits\u0020for\u0020all\u0020detached\u0020processes\u0020to\u0020finish\u0020execution.",
+            "summary": "Waits\u0020for\u0020detached\u0020processes\u0020to\u0020finish\u0020and\u0020flushes\u0020completed\u0020buffered\u0020output.",
             "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_wait"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AstartDetachedProcess\u0028\u0029",
@@ -3476,15 +3946,50 @@ Search.appendIndex(
             "summary": "Runs\u0020a\u0020process\u0020synchronously\u0020and\u0020returns\u0020its\u0020exit\u0020code.",
             "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_runBlockingProcess"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003ArunLabeledBlockingProcess\u0028\u0029",
+            "name": "runLabeledBlockingProcess",
+            "summary": "Runs\u0020a\u0020blocking\u0020process\u0020inside\u0020a\u0020grouped\u0020GitHub\u0020Actions\u0020log\u0020section.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_runLabeledBlockingProcess"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AcreateOutputCallback\u0028\u0029",
             "name": "createOutputCallback",
             "summary": "Creates\u0020a\u0020callback\u0020that\u0020forwards\u0020process\u0020output\u0020to\u0020the\u0020configured\u0020output.",
             "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_createOutputCallback"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AdrainDetachedProcessesOutput\u0028\u0029",
-            "name": "drainDetachedProcessesOutput",
-            "summary": "Drains\u0020buffered\u0020output\u0020from\u0020detached\u0020processes\u0020and\u0020removes\u0020finished\u0020ones.",
-            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_drainDetachedProcessesOutput"
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AcreateBufferedOutputCallback\u0028\u0029",
+            "name": "createBufferedOutputCallback",
+            "summary": "Creates\u0020a\u0020callback\u0020that\u0020buffers\u0020detached\u0020process\u0020output\u0020until\u0020flushing.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_createBufferedOutputCallback"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AflushDetachedProcessesOutput\u0028\u0029",
+            "name": "flushDetachedProcessesOutput",
+            "summary": "Flushes\u0020completed\u0020detached\u0020process\u0020output\u0020in\u0020enqueue\u0020order.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_flushDetachedProcessesOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AwriteDetachedOutput\u0028\u0029",
+            "name": "writeDetachedOutput",
+            "summary": "Writes\u0020buffered\u0020detached\u0020output\u0020to\u0020the\u0020configured\u0020output.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_writeDetachedOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AresolveLabel\u0028\u0029",
+            "name": "resolveLabel",
+            "summary": "Resolves\u0020the\u0020label\u0020used\u0020when\u0020presenting\u0020queued\u0020process\u0020output.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_resolveLabel"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AformatProcessCommandLine\u0028\u0029",
+            "name": "formatProcessCommandLine",
+            "summary": "Formats\u0020the\u0020configured\u0020process\u0020command\u0020line\u0020without\u0020shell\u0020escaping\u0020noise.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_formatProcessCommandLine"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AgetProcessCommandLine\u0028\u0029",
+            "name": "getProcessCommandLine",
+            "summary": "Reads\u0020the\u0020raw\u0020configured\u0020Process\u0020command\u0020line.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_getProcessCommandLine"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A\u0024commandLineProperty",
+            "name": "commandLineProperty",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#property_commandLineProperty"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A\u0024entries",
             "name": "entries",
@@ -3493,8 +3998,13 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A\u0024runningDetachedProcesses",
             "name": "runningDetachedProcesses",
-            "summary": "Stores\u0020detached\u0020processes\u0020that\u0020have\u0020already\u0020been\u0020started\u0020and\u0020whose\u0020output\nmay\u0020still\u0020need\u0020to\u0020be\u0020drained.",
+            "summary": "Stores\u0020detached\u0020processes\u0020that\u0020have\u0020already\u0020been\u0020started\u0020and\u0020whose\u0020output\nSHALL\u0020be\u0020emitted\u0020only\u0020after\u0020blocking\u0020processes\u0020finish.",
             "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#property_runningDetachedProcesses"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A\u0024githubActionOutput",
+            "name": "githubActionOutput",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#property_githubActionOutput"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "name": "ProcessQueueInterface",
@@ -3986,6 +4496,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-console-command.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits",
+            "name": "Traits",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-command-traits.html"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\CommandLoader",
             "name": "CommandLoader",
             "summary": "",
@@ -3995,6 +4510,31 @@ Search.appendIndex(
             "name": "Console",
             "summary": "",
             "url": "namespaces/fastforward-devtools-console.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Formatter",
+            "name": "Formatter",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-formatter.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input",
+            "name": "Input",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-input.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger",
+            "name": "Logger",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-logger.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor",
+            "name": "Processor",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-logger-processor.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output",
+            "name": "Output",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-output.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem",
             "name": "Filesystem",

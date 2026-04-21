@@ -2065,8 +2065,45 @@
             Command
         </a>
 
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-command-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-command-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
             </div>
 
+            <div id="sidebar-namespaces-fastforward-devtools-console-command-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-command-traits.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Traits
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
     </li>
                             <li class="nav-item">
     
@@ -2085,6 +2122,131 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             CommandLoader
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-formatter.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Formatter
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-input.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Input
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Logger
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-logger-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-logger-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-console-logger-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger-processor.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Processor
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-output.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Output
         </a>
 
             </div>
@@ -2723,10 +2885,15 @@
 workflow.</p>
 
             <pre><code class="language-bash">composer changelog:entry --type=added &quot;Add release automation workflow (#28)&quot;
+composer changelog:entry --json &quot;Add release automation workflow (#28)&quot;
 composer changelog:check --against=origin/main
+composer changelog:check --json
 composer changelog:next-version
+composer changelog:next-version --json
 composer changelog:promote 1.3.0 --date=2026-04-19
-composer changelog:show 1.3.0</code></pre>
+composer changelog:promote 1.3.0 --json
+composer changelog:show 1.3.0
+composer changelog:show 1.3.0 --json</code></pre>
 
             
     <p>Important details:</p>
@@ -2738,6 +2905,18 @@ composer changelog:show 1.3.0</code></pre>
  creates the changelog file automatically when it does not
 exist yet;</li>
 
+    <li class="dash"><code>--json</code>
+ is the standard machine-readable output flag across the local
+DevTools command surface;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ keeps the same structured payload but indents it for easier
+manual inspection in the terminal;</li>
+
+    <li class="dash">when structured output is active, DevTools suppresses progress-heavy nested
+tool output where possible and forwards JSON, quiet, or progress preferences
+to subprocesses that support them;</li>
+
     <li class="dash"><code>changelog:check</code>
  is the command used by pull-request validation;</li>
 
@@ -2747,8 +2926,8 @@ exist yet;</li>
 release-preparation workflow;</li>
 
     <li class="dash"><code>changelog:show</code>
- renders the published release body used by GitHub Release
-publication.</li>
+ keeps its text-mode output as the raw published release
+body used by GitHub Release publication.</li>
 
 </ul>
 
@@ -2780,8 +2959,15 @@ composer tests -- --filter=EventTracerTest</code></pre>
     <li class="dash"><code>--coverage-summary</code>
  keeps coverage text output to PHPUnit&#039;s summary;</li>
 
-    <li class="dash"><code>--no-progress</code>
- disables PHPUnit progress output;</li>
+    <li class="dash">progress output is disabled by default;</li>
+
+    <li class="dash"><code>--progress</code>
+ re-enables PHPUnit progress output in text mode;</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ still suppress PHPUnit progress output
+automatically;</li>
 
     <li class="dash"><code>--no-cache</code>
  disables <code>tmp/cache/phpunit</code>
@@ -2897,6 +3083,12 @@ directories first;</li>
  in the same directory for CI artifacts or manual
 review;</li>
 
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ keep the top-level DevTools response
+structured while forwarding JSON or quieter modes to the wrapped tools where
+available;</li>
+
     <li class="dash">it suppresses deprecation notices emitted by the PhpMetrics dependency
 itself so the command output stays readable.</li>
 
@@ -2928,7 +3120,16 @@ composer code-style --fix</code></pre>
  mode;</li>
 
     <li class="dash">ECS uses local <code>ecs.php</code>
- when present, otherwise the packaged fallback.</li>
+ when present, otherwise the packaged fallback;</li>
+
+    <li class="dash">progress output is disabled by default; <code>--progress</code>
+ re-enables it for text
+mode;</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ forward JSON mode to ECS and suppress its
+progress bar.</li>
 
 </ul>
 
@@ -2956,7 +3157,17 @@ composer code-style --fix</code></pre>
  is preferred when present;</li>
 
     <li class="dash">the packaged default includes Fast Forward custom Rector rules plus shared
-Rector sets.</li>
+Rector sets;</li>
+
+    <li class="dash">progress output is disabled by default; <code>--progress</code>
+ re-enables it for text
+mode;</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ forward <code>--output-format json</code>
+ to Rector
+and disable its progress bar.</li>
 
 </ul>
 
@@ -2989,7 +3200,17 @@ local-first fallback logic;</li>
 
     <li class="dash">the Rector phase explicitly runs
 <code>FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
-.</li>
+;</li>
+
+    <li class="dash">progress output is disabled by default; <code>--progress</code>
+ re-enables it for text
+mode;</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ switch PHP-CS-Fixer to JSON output with
+progress disabled and run the Rector phase in JSON mode without its progress
+bar.</li>
 
 </ul>
 
@@ -3022,7 +3243,15 @@ local-first fallback logic;</li>
     <li class="dash"><code>--template</code>
  defaults to
 <code>vendor/fast-forward/phpdoc-bootstrap-template</code>
-.</li>
+;</li>
+
+    <li class="dash">progress output is disabled by default; <code>--progress</code>
+ re-enables it for text
+mode;</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ also disable phpDocumentor&#039;s progress output.</li>
 
 </ul>
 
@@ -3074,7 +3303,7 @@ local-first fallback logic;</li>
     <li class="dash">it calls <code>docs --target .dev-tools</code>
 ;</li>
 
-    <li class="dash">it calls <code>tests --coverage .dev-tools/coverage --no-progress --coverage-summary</code>
+    <li class="dash">it calls <code>tests --coverage .dev-tools/coverage --coverage-summary</code>
 ;</li>
 
     <li class="dash">it calls <code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
@@ -3085,6 +3314,15 @@ local-first fallback logic;</li>
  and <code>metrics</code>
  run in sequence so
 PhpMetrics can reuse the JUnit report generated by PHPUnit;</li>
+
+    <li class="dash">progress output stays disabled by default across the nested steps, and
+<code>--progress</code>
+ re-enables it for human-readable runs;</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ are propagated to each subprocess, while
+their progress output is suppressed where supported;</li>
 
     <li class="dash">it is the reporting stage used by <code>standards</code>
 .</li>

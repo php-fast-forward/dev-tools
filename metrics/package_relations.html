@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-20 22:03:28        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-21 23:25:51        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -93,7 +93,7 @@
                             <path d="M0 0h24v24H0z" fill="none">
                             <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z">
                         </svg>
-                        Violations (23)
+                        Violations (36)
                     </a>
                 </li>
                                     <li>
@@ -274,11 +274,36 @@
         "relations": []
     },
     {
+        "name": "FastForward\\DevTools\\Console\\Command\\Traits",
+        "size": 3000,
+        "relations": [
+            "Symfony\\Component\\Console\\Input",
+            "Psr\\Log",
+            "global"
+        ]
+    },
+    {
+        "name": "Symfony\\Component\\Console\\Input",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "Psr\\Log",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "global",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "FastForward\\DevTools\\Console\\Command",
         "size": 3000,
         "relations": [
             "Composer\\Command",
             "FastForward\\DevTools\\Process",
+            "Psr\\Log",
             "Symfony\\Component\\Console\\Input",
             "Symfony\\Component\\Console\\Output",
             "FastForward\\DevTools\\GitAttributes",
@@ -316,14 +341,10 @@
         "size": 3000,
         "relations": [
             "Symfony\\Component\\Process",
+            "FastForward\\DevTools\\Console\\Output",
             "Symfony\\Component\\Console\\Output",
             "global"
         ]
-    },
-    {
-        "name": "Symfony\\Component\\Console\\Input",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "Symfony\\Component\\Console\\Output",
@@ -446,11 +467,6 @@
         "relations": []
     },
     {
-        "name": "global",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "FastForward\\DevTools\\License",
         "size": 3000,
         "relations": [
@@ -499,11 +515,64 @@
         ]
     },
     {
+        "name": "FastForward\\DevTools\\Console\\Logger\\Processor",
+        "size": 3000,
+        "relations": [
+            "Symfony\\Component\\Console\\Input",
+            "global",
+            "Symfony\\Component\\Console\\Output"
+        ]
+    },
+    {
+        "name": "FastForward\\DevTools\\Console\\Logger",
+        "size": 3000,
+        "relations": [
+            "Psr\\Log",
+            "Symfony\\Component\\Console\\Input",
+            "Symfony\\Component\\Console\\Output",
+            "Psr\\Clock",
+            "Ergebnis\\AgentDetector",
+            "FastForward\\DevTools\\Console\\Logger\\Processor",
+            "FastForward\\DevTools\\Console\\Output"
+        ]
+    },
+    {
+        "name": "Ergebnis\\AgentDetector",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "FastForward\\DevTools\\Console\\Output",
+        "size": 3000,
+        "relations": [
+            "Symfony\\Component\\Console\\Output",
+            "Composer\\Util"
+        ]
+    },
+    {
+        "name": "FastForward\\DevTools\\Console\\Formatter",
+        "size": 3000,
+        "relations": [
+            "Symfony\\Component\\Console\\Formatter"
+        ]
+    },
+    {
+        "name": "Symfony\\Component\\Console\\Formatter",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "Composer\\Util",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "FastForward\\DevTools\\Console",
         "size": 3000,
         "relations": [
             "Composer\\Console",
             "Symfony\\Component\\Console\\CommandLoader",
+            "Psr\\Container",
             "FastForward\\DevTools\\ServiceProvider",
             "DI",
             "global"
@@ -520,9 +589,21 @@
         "relations": []
     },
     {
+        "name": "Psr\\Container",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "DI",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "FastForward\\DevTools\\Console\\Input",
+        "size": 3000,
+        "relations": [
+            "Symfony\\Component\\Console\\Input"
+        ]
     },
     {
         "name": "FastForward\\DevTools\\Console\\CommandLoader",
@@ -533,11 +614,6 @@
             "Psr\\Container",
             "global"
         ]
-    },
-    {
-        "name": "Psr\\Container",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "SebastianBergmann\\Diff",
@@ -684,11 +760,6 @@
     },
     {
         "name": "Symfony\\Component\\Yaml",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "Psr\\Log",
         "size": 3000,
         "relations": []
     },

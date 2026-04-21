@@ -2065,8 +2065,45 @@
             Command
         </a>
 
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-command-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-command-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
             </div>
 
+            <div id="sidebar-namespaces-fastforward-devtools-console-command-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-command-traits.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Traits
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
     </li>
                             <li class="nav-item">
     
@@ -2085,6 +2122,131 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             CommandLoader
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-formatter.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Formatter
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-input.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Input
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Logger
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-logger-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-logger-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-console-logger-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger-processor.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Processor
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-output.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Output
         </a>
 
             </div>
@@ -2761,16 +2923,21 @@ repositories.</p>
 
             <pre><code class="language-bash">composer changelog:entry &quot;Add changelog automation for release workflows (#28)&quot;
 composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 &quot;Preserve published release sections during backfill (#28)&quot;
+composer changelog:entry --json &quot;Add changelog automation for release workflows (#28)&quot;
 
 composer changelog:check
 composer changelog:check --against=origin/main
+composer changelog:check --json
 
 composer changelog:next-version
+composer changelog:next-version --json
 
 composer changelog:promote 1.3.0
 composer changelog:promote 1.3.0 --date=2026-04-19
+composer changelog:promote 1.3.0 --json
 
-composer changelog:show 1.3.0</code></pre>
+composer changelog:show 1.3.0
+composer changelog:show 1.3.0 --json</code></pre>
 
     </section>
 
@@ -2808,7 +2975,15 @@ date immediately;</li>
     <li class="dash"><code>--file=&lt;path&gt;</code>
  to work with a changelog file other than
 <code>CHANGELOG.md</code>
-.</li>
+;</li>
+
+    <li class="dash"><code>--json</code>
+ to emit a structured machine-readable payload instead of the
+normal terminal output;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ to emit the same structured payload with indentation for
+terminal inspection.</li>
 
 </ul>
 </dd>
@@ -2825,7 +3000,15 @@ date immediately;</li>
 branch or commit;</li>
 
     <li class="dash"><code>--file=&lt;path&gt;</code>
- to validate another changelog path.</li>
+ to validate another changelog path;</li>
+
+    <li class="dash"><code>--json</code>
+ to emit a structured machine-readable payload instead of the
+normal terminal output;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ to emit the same structured payload with indentation for
+terminal inspection.</li>
 
 </ul>
 </dd>
@@ -2842,7 +3025,15 @@ branch or commit;</li>
 be supplied explicitly instead of inferred from the changelog;</li>
 
     <li class="dash"><code>--file=&lt;path&gt;</code>
- to inspect another changelog path.</li>
+ to inspect another changelog path;</li>
+
+    <li class="dash"><code>--json</code>
+ to emit a structured machine-readable payload instead of the
+normal terminal output;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ to emit the same structured payload with indentation for
+terminal inspection.</li>
 
 </ul>
 </dd>
@@ -2860,7 +3051,15 @@ be supplied explicitly instead of inferred from the changelog;</li>
  to control the published release date;</li>
 
     <li class="dash"><code>--file=&lt;path&gt;</code>
- to promote another changelog path.</li>
+ to promote another changelog path;</li>
+
+    <li class="dash"><code>--json</code>
+ to emit a structured machine-readable payload instead of the
+normal terminal output;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ to emit the same structured payload with indentation for
+terminal inspection.</li>
 
 </ul>
 </dd>
@@ -2875,7 +3074,15 @@ be supplied explicitly instead of inferred from the changelog;</li>
     <li class="dash">the required version argument;</li>
 
     <li class="dash"><code>--file=&lt;path&gt;</code>
- to render another changelog path.</li>
+ to render another changelog path;</li>
+
+    <li class="dash"><code>--json</code>
+ to emit a structured machine-readable payload instead of the
+raw release-note text;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ to emit the same structured payload with indentation for
+terminal inspection.</li>
 
 </ul>
 </dd>
@@ -2898,6 +3105,25 @@ when the selected file does not exist yet;</li>
  is empty
 or does not differ from the selected baseline ref;</li>
 
+    <li class="dash"><code>changelog:entry --json</code>
+ emits the authoring summary as the
+<code>message</code>
+ plus structured context describing the file, category, release,
+optional date, and entry text;</li>
+
+    <li class="dash"><code>changelog:check --json</code>
+ emits a deterministic JSON payload with
+<code>status</code>
+, <code>message</code>
+, and <code>context</code>
+ keys for automation consumers;</li>
+
+    <li class="dash"><code>changelog:next-version --json</code>
+ emits the inferred semantic version
+as the <code>message</code>
+ plus structured context describing the inspected changelog
+path and optional current version;</li>
+
     <li class="dash"><code>changelog:next-version</code>
  uses <code>Removed</code>
  or <code>Deprecated</code>
@@ -2907,14 +3133,26 @@ major bump, <code>Added</code>
  entries for a minor bump, and otherwise
 falls back to a patch bump;</li>
 
+    <li class="dash"><code>changelog:promote --json</code>
+ emits the promotion summary as the
+<code>message</code>
+ plus structured context describing the file, version, and
+release date written to the changelog;</li>
+
     <li class="dash"><code>changelog:promote</code>
  restores an empty <code>Unreleased</code>
  section after
 publishing the requested version;</li>
 
     <li class="dash"><code>changelog:show</code>
- prints only the release body so workflows can feed it
-directly into GitHub release notes.</li>
+ prints only the release body in text mode so workflows can
+feed it directly into GitHub release notes;</li>
+
+    <li class="dash"><code>changelog:show --json</code>
+ emits the rendered release-notes body as the
+<code>message</code>
+ plus structured context describing the file, version, and
+release notes content.</li>
 
 </ul>
 

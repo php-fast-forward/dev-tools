@@ -2065,8 +2065,45 @@
             Command
         </a>
 
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-command-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-command-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
             </div>
 
+            <div id="sidebar-namespaces-fastforward-devtools-console-command-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-command-traits.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Traits
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
     </li>
                             <li class="nav-item">
     
@@ -2085,6 +2122,131 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             CommandLoader
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-formatter.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Formatter
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-input.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Input
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Logger
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-console-logger-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-console-logger-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-console-logger-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger-processor.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Processor
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-output.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Output
         </a>
 
             </div>
@@ -2771,6 +2933,22 @@ Default: <code>.dev-tools/coverage</code>
         <dd>The target directory for the generated metrics report.
 Default: <code>.dev-tools/metrics</code>
 .</dd>
+                                <dt><code>--progress</code>
+</dt>
+        
+        <dd>Enable progress output in nested <code>docs</code>
+, <code>tests</code>
+, and <code>metrics</code>
+ steps.</dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
             </dl>
 
     </section>
@@ -2832,10 +3010,22 @@ Default: <code>.dev-tools/metrics</code>
     <li class="dash">Runs <code>metrics --target</code>
  after tests so the JUnit report is available.</li>
 
-    <li class="dash">Runs tests with <code>--no-progress</code>
- and <code>--coverage-summary</code>
- so report builds
-keep PHPUnit output concise.</li>
+    <li class="dash">Runs tests with progress disabled by default and <code>--coverage-summary</code>
+ so
+report builds keep PHPUnit output concise.</li>
+
+    <li class="dash">Progress output stays disabled by default across nested steps; use
+<code>--progress</code>
+ to re-enable it for human-readable runs.</li>
+
+    <li class="dash">When <code>--json</code>
+ or <code>--pretty-json</code>
+ is active, it forwards JSON mode to the
+<code>docs</code>
+, <code>tests</code>
+, and <code>metrics</code>
+ subprocesses and suppresses transient
+progress output where those tools support it.</li>
 
     <li class="dash">Passes <code>--junit &lt;coverage&gt;/junit.xml</code>
  to the metrics step.</li>
@@ -2844,6 +3034,9 @@ keep PHPUnit output concise.</li>
  command as the final phase.</li>
 
     <li class="dash">This is the reporting stage used by GitHub Pages.</li>
+
+    <li class="dash">In GitHub Actions, the queued subprocess output is emitted inside collapsible
+workflow groups for easier log navigation.</li>
 
 </ul>
 

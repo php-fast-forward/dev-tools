@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-20 22:03:28        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-21 23:25:51        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -60,24 +60,24 @@
         <div class="bloc bloc-number">
             <div class="label">Test suites</div>
             <div class="number">
-                81            </div>
+                89            </div>
         </div>
     </div>
     <div class="column">
         <div class="bloc bloc-number">
             <div class="label">Assertions</div>
             <div class="number">
-                1507            </div>
+                1483            </div>
         </div>
     </div>
     <div class="column">
         <div class="bloc bloc-number">
             <div class="label">
                 classes never called by tests
-                <small>(25.45 %)</small>
+                <small>(27.27 %)</small>
             </div>
             <div class="number">
-                28            </div>
+                33            </div>
         </div>
     </div>
 </div>
@@ -102,7 +102,40 @@
                         </tr>
                         </thead>
                         <tbody id="contentAreaJunitNeverCalled" class="clusterize-content">
-                                                </tbody>
+                                                    <tr>
+                                <td><span class="path">FastForward\DevTools\Console\Command\Traits\LogsCommandResults</span></td>
+                                                                    <td>
+                                        <span class="badge"  style="background-color: hsla(203, 82%, 76%, 0);">
+                                        1                                        </span>
+                                    </td>
+                                                                    <td>
+                                        <span class="badge"  style="background-color: hsla(203, 82%, 76%, 0.04);">
+                                        0.04                                        </span>
+                                    </td>
+                                                            </tr>
+                                                        <tr>
+                                <td><span class="path">FastForward\DevTools\Console\Command\Traits\HasCommandLogger</span></td>
+                                                                    <td>
+                                        <span class="badge"  style="background-color: hsla(203, 82%, 76%, 0.05);">
+                                        5                                        </span>
+                                    </td>
+                                                                    <td>
+                                        <span class="badge"  style="background-color: hsla(203, 82%, 76%, 0.01);">
+                                        0.01                                        </span>
+                                    </td>
+                                                            </tr>
+                                                        <tr>
+                                <td><span class="path">FastForward\DevTools\Console\Input\HasJsonOption</span></td>
+                                                                    <td>
+                                        <span class="badge"  style="background-color: hsla(203, 82%, 76%, 0.01);">
+                                        2                                        </span>
+                                    </td>
+                                                                    <td>
+                                        <span class="badge"  style="background-color: hsla(203, 82%, 76%, 0.02);">
+                                        0.02                                        </span>
+                                    </td>
+                                                            </tr>
+                                                    </tbody>
                     </table>
                 </div>
             </div>
@@ -410,26 +443,68 @@
                                                                     </td>
                             </tr>
                                                     <tr>
-                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Command\ChangelogCommandTest</span></td>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Command\ChangelogEntryCommandTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            3                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Command\ChangelogEntryCommand</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">ReflectionMethod</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Command\ChangelogNextVersionCommandTest</span></td>
                                 <td style="padding-bottom: 1em;">
                                                                                                                     <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             2                                        </span>
-                                        <span class="path">FastForward\DevTools\Console\Command\ChangelogEntryCommand</span>
+                                        <span class="path">FastForward\DevTools\Console\Command\ChangelogNextVersionCommand</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">RuntimeException</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">ReflectionMethod</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Command\ChangelogPromoteCommandTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">DateTimeImmutable</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            2                                        </span>
+                                            3                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\ChangelogPromoteCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            1                                        </span>
-                                        <span class="path">FastForward\DevTools\Console\Command\ChangelogNextVersionCommand</span>
+                                            -                                        </span>
+                                        <span class="path">RuntimeException</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            1                                        </span>
+                                            -                                        </span>
+                                        <span class="path">ReflectionMethod</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Command\ChangelogShowCommandTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            2                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\ChangelogShowCommand</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">RuntimeException</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">ReflectionMethod</span>
@@ -466,9 +541,12 @@
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatter</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            3                                        </span>
+                                            10                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\CodeStyleCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
@@ -508,7 +586,13 @@
                                             -                                        </span>
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            13                                        </span>
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatter</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            3                                        </span>
+                                        <span class="path">FastForward\DevTools\Process\ProcessBuilder</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            16                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\DependenciesCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
@@ -525,11 +609,14 @@
                                             -                                        </span>
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            3                                        </span>
-                                        <span class="path">FastForward\DevTools\Console\Command\DocsCommand</span>
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatter</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            7                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Command\DocsCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">ReflectionMethod</span>
@@ -603,7 +690,7 @@
                                             -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            21                                        </span>
+                                            22                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\GitHooksCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
@@ -673,9 +760,12 @@
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatter</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            2                                        </span>
+                                            6                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\MetricsCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
@@ -689,17 +779,8 @@
                                             -                                        </span>
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            3                                        </span>
-                                        <span class="path">FastForward\DevTools\Process\ProcessBuilder</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            5                                        </span>
-                                        <span class="path">FastForward\DevTools\Console\Command\PhpDocCommand</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
-                                        <span class="path">Prophecy\Argument</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            -                                        </span>
-                                        <span class="path">RuntimeException</span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatter</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             1                                        </span>
                                         <span class="path">FastForward\DevTools\Composer\Json\Schema\Support</span>
@@ -709,6 +790,15 @@
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">DateTimeImmutable</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Prophecy\Argument</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            12                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Command\PhpDocCommand</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">RuntimeException</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">ReflectionMethod</span>
@@ -722,9 +812,12 @@
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatter</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            2                                        </span>
+                                            7                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\RefactorCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
@@ -739,9 +832,12 @@
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatter</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            1                                        </span>
+                                            13                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\ReportsCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
@@ -778,14 +874,11 @@
                                             -                                        </span>
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            3                                        </span>
-                                        <span class="path">FastForward\DevTools\Console\Command\StandardsCommand</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            -                                        </span>
-                                        <span class="path">Symfony\Component\Console\Helper\HelperSet</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            10                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Command\StandardsCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">ReflectionMethod</span>
@@ -804,7 +897,7 @@
                                             3                                        </span>
                                         <span class="path">FastForward\DevTools\Process\ProcessBuilder</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            14                                        </span>
+                                            24                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\SyncCommand</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
@@ -821,14 +914,14 @@
                                             3                                        </span>
                                         <span class="path">FastForward\DevTools\Process\ProcessBuilder</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            21                                        </span>
+                                            25                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\TestsCommand</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            2                                        </span>
-                                        <span class="path">FastForward\DevTools\PhpUnit\Coverage\CoverageSummary</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            2                                        </span>
+                                        <span class="path">FastForward\DevTools\PhpUnit\Coverage\CoverageSummary</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">RuntimeException</span>
@@ -870,11 +963,8 @@
                                             -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            5                                        </span>
+                                            9                                        </span>
                                         <span class="path">FastForward\DevTools\Console\Command\WikiCommand</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            -                                        </span>
-                                        <span class="path">Symfony\Component\Filesystem\Path</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">ReflectionMethod</span>
@@ -911,13 +1001,116 @@
                                         <span class="path">FastForward\DevTools\Console\DevTools</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
-                                        <span class="path">anonymous@000000000000197c0000000000000000</span>
+                                        <span class="path">anonymous@00000000000016880000000000000000</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">ReflectionProperty</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">ReflectionMethod</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Formatter\LogLevelOutputFormatterTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            1                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Formatter\OutputFormatterStyle</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Logger\OutputFormatLoggerTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">DateTimeImmutable</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Input\ArgvInput</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Ergebnis\AgentDetector\Detector</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            34                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            8                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            2                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            17                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Output\GithubActionOutput</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            19                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Logger\OutputFormatLogger</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Prophecy\Argument</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">anonymous@0000000000001ce00000000000000000</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">stdClass</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Logger\Processor\CommandInputProcessorTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            34                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Input\InputArgument</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Input\InputOption</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Input\InputDefinition</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Input\ArrayInput</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Logger\Processor\CommandOutputProcessorTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            8                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">Symfony\Component\Console\Output\BufferedOutput</span>
+                                                                    </td>
+                            </tr>
+                                                    <tr>
+                                <td valign="top"><span class="path">FastForward\DevTools\Tests\Console\Logger\Processor\CompositeContextProcessorTest</span></td>
+                                <td style="padding-bottom: 1em;">
+                                                                                                                    <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
+                                        <span class="path">PHPUnit\Framework\TestCase</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            2                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor</span>
                                                                     </td>
                             </tr>
                                                     <tr>
@@ -1190,7 +1383,7 @@
                                         <span class="path">RuntimeException</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
-                                        <span class="path">anonymous@00000000000028170000000000000000</span>
+                                        <span class="path">anonymous@00000000000020110000000000000000</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">SebastianBergmann\CodeCoverage\Filter</span>
@@ -1293,26 +1486,23 @@
                                             -                                        </span>
                                         <span class="path">PHPUnit\Framework\TestCase</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            22                                        </span>
+                                            17                                        </span>
+                                        <span class="path">FastForward\DevTools\Console\Output\GithubActionOutput</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            27                                        </span>
                                         <span class="path">FastForward\DevTools\Process\ProcessQueue</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">Prophecy\Prophecy\ObjectProphecy</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
+                                        <span class="path">Symfony\Component\Process\Process</span>
+                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
+                                            -                                        </span>
                                         <span class="path">Prophecy\Argument</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
                                         <span class="path">Symfony\Component\Process\Exception\ProcessStartFailedException</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            -                                        </span>
-                                        <span class="path">RuntimeException</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            -                                        </span>
-                                        <span class="path">ReflectionMethod</span>
-                                                                            <br>                                        <span class="badge" title="Cyclomatic complexity of class">
-                                            -                                        </span>
-                                        <span class="path">ReflectionProperty</span>
                                                                     </td>
                             </tr>
                                                     <tr>
@@ -1474,7 +1664,7 @@
                                         <span class="path">FastForward\DevTools\Resource\FileDiffer</span>
                                                                             <br>                                        <span class="badge" title="Cyclomatic complexity of class">
                                             -                                        </span>
-                                        <span class="path">anonymous@00000000000020d10000000000000000</span>
+                                        <span class="path">anonymous@00000000000018b10000000000000000</span>
                                                                     </td>
                             </tr>
                                                     <tr>
@@ -1571,7 +1761,7 @@
                             <path d="M0 0h24v24H0z" fill="none">
                             <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z">
                         </svg>
-                        Violations (23)
+                        Violations (36)
                     </a>
                 </li>
                                     <li>
@@ -1780,7 +1970,7 @@
 
 
             
-            var json = {"name":"Execution time","children":[{"name":"FastForward\\DevTools\\Tests\\Changelog\\Checker\\UnreleasedEntryCheckerTest","time":0.676569},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Document\\ChangelogDocumentTest","time":0.002993},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Entry\\ChangelogEntryTypeTest","time":0.000934},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Manager\\ChangelogManagerTest","time":0.015147},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Parser\\ChangelogParserTest","time":0.00424},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Renderer\\MarkdownRendererTest","time":0.006183},{"name":"FastForward\\DevTools\\Tests\\CodeOwners\\CodeOwnersGeneratorTest","time":0.014126},{"name":"FastForward\\DevTools\\Tests\\Composer\\Capability\\DevToolsCommandProviderTest","time":0.036426},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\ComposerJsonTest","time":0.101765},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\AuthorTest","time":0.001583},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\FundingTest","time":0.000305},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\SupportTest","time":0.000635},{"name":"FastForward\\DevTools\\Tests\\Composer\\PluginTest","time":0.01773},{"name":"FastForward\\DevTools\\Tests\\Config\\ComposerDependencyAnalyserConfigTest","time":0.003652},{"name":"FastForward\\DevTools\\Tests\\Config\\ECSConfigTest","time":0.018887},{"name":"FastForward\\DevTools\\Tests\\Config\\RectorConfigTest","time":0.241585},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\AgentsCommandTest","time":0.029527},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCheckCommandTest","time":0.003918},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCommandTest","time":0.009859},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\CodeOwnersCommandTest","time":0.033456},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\CodeStyleCommandTest","time":0.023493},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\CopyResourceCommandTest","time":0.050583},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\DependenciesCommandTest","time":0.086002},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\DocsCommandTest","time":0.017657},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\FundingCommandTest","time":0.076785},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\GitAttributesCommandTest","time":0.030676},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\GitHooksCommandTest","time":0.022928},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\GitIgnoreCommandTest","time":0.040016},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\LicenseCommandTest","time":0.018782},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\MetricsCommandTest","time":0.025817},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\PhpDocCommandTest","time":0.009472},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\RefactorCommandTest","time":0.006958},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ReportsCommandTest","time":0.028275},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\SkillsCommandTest","time":0.007197},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\StandardsCommandTest","time":0.005154},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\SyncCommandTest","time":0.006223},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\TestsCommandTest","time":0.110796},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\UpdateComposerJsonCommandTest","time":0.036002},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\WikiCommandTest","time":0.021521},{"name":"FastForward\\DevTools\\Tests\\Console\\CommandLoader\\DevToolsCommandLoaderTest","time":0.007806},{"name":"FastForward\\DevTools\\Tests\\Console\\DevToolsTest","time":0.015206},{"name":"FastForward\\DevTools\\Tests\\Filesystem\\FilesystemTest","time":0.027457},{"name":"FastForward\\DevTools\\Tests\\Filesystem\\FinderFactoryTest","time":0.000339},{"name":"FastForward\\DevTools\\Tests\\Funding\\ComposerFundingCodecTest","time":0.002779},{"name":"FastForward\\DevTools\\Tests\\Funding\\FundingProfileMergerTest","time":0.000353},{"name":"FastForward\\DevTools\\Tests\\Funding\\FundingProfileTest","time":0.000621},{"name":"FastForward\\DevTools\\Tests\\Funding\\FundingYamlCodecTest","time":0.003864},{"name":"FastForward\\DevTools\\Tests\\Git\\GitClientTest","time":0.006336},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\CandidateProviderTest","time":0.005229},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\ExistenceCheckerTest","time":0.007155},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\ExportIgnoreFilterTest","time":0.001609},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\MergerTest","time":0.009123},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\ReaderTest","time":0.00198},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\WriterTest","time":0.011703},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\ClassifierTest","time":0.006899},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\GitIgnoreTest","time":0.003482},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\MergerTest","time":0.008237},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\ReaderTest","time":0.002039},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\WriterTest","time":0.002431},{"name":"FastForward\\DevTools\\Tests\\License\\GeneratorTest","time":0.004431},{"name":"FastForward\\DevTools\\Tests\\License\\ResolverTest","time":0.00186},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Coverage\\CoverageSummaryLoaderTest","time":0.004087},{"name":"FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryTest","time":0.001086},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Event\\EventTracerTest","time":0.001761},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriberTest","time":0.002139},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriberTest","time":0.004157},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Runner\\Extension\\DevToolsExtensionTest","time":0.002093},{"name":"FastForward\\DevTools\\Tests\\Process\\ProcessBuilderTest","time":0.007016},{"name":"FastForward\\DevTools\\Tests\\Process\\ProcessQueueTest","time":0.020805},{"name":"FastForward\\DevTools\\Tests\\Psr\\Clock\\SystemClockTest","time":0.001202},{"name":"FastForward\\DevTools\\Tests\\Rector\\AddMissingClassPhpDocRectorTest","time":0.005995},{"name":"FastForward\\DevTools\\Tests\\Rector\\AddMissingMethodPhpDocRectorTest","time":0.005957},{"name":"FastForward\\DevTools\\Tests\\Rector\\RemoveEmptyDocBlockRectorTest","time":0.00384},{"name":"FastForward\\DevTools\\Tests\\Resource\\FileDiffTest","time":0.000333},{"name":"FastForward\\DevTools\\Tests\\Resource\\FileDifferTest","time":0.014485},{"name":"FastForward\\DevTools\\Tests\\Resource\\UnifiedDifferTest","time":0.00156},{"name":"FastForward\\DevTools\\Tests\\ServiceProvider\\DevToolsServiceProviderTest","time":0.001161},{"name":"FastForward\\DevTools\\Tests\\Sync\\PackagedDirectorySynchronizerTest","time":0.011391},{"name":"FastForward\\DevTools\\Tests\\Sync\\SynchronizeResultTest","time":0.001364}]};
+            var json = {"name":"Execution time","children":[{"name":"FastForward\\DevTools\\Tests\\Changelog\\Checker\\UnreleasedEntryCheckerTest","time":0.814588},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Document\\ChangelogDocumentTest","time":0.003036},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Entry\\ChangelogEntryTypeTest","time":0.000909},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Manager\\ChangelogManagerTest","time":0.017146},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Parser\\ChangelogParserTest","time":0.004495},{"name":"FastForward\\DevTools\\Tests\\Changelog\\Renderer\\MarkdownRendererTest","time":0.010828},{"name":"FastForward\\DevTools\\Tests\\CodeOwners\\CodeOwnersGeneratorTest","time":0.019719},{"name":"FastForward\\DevTools\\Tests\\Composer\\Capability\\DevToolsCommandProviderTest","time":0.052946},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\ComposerJsonTest","time":0.18607},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\AuthorTest","time":0.001574},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\FundingTest","time":0.00031},{"name":"FastForward\\DevTools\\Tests\\Composer\\Json\\Schema\\SupportTest","time":0.000668},{"name":"FastForward\\DevTools\\Tests\\Composer\\PluginTest","time":0.018889},{"name":"FastForward\\DevTools\\Tests\\Config\\ComposerDependencyAnalyserConfigTest","time":0.004042},{"name":"FastForward\\DevTools\\Tests\\Config\\ECSConfigTest","time":0.022027},{"name":"FastForward\\DevTools\\Tests\\Config\\RectorConfigTest","time":0.266866},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\AgentsCommandTest","time":0.032695},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCheckCommandTest","time":0.005326},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogEntryCommandTest","time":0.008118},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogNextVersionCommandTest","time":0.005691},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogPromoteCommandTest","time":0.006685},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogShowCommandTest","time":0.003719},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\CodeOwnersCommandTest","time":0.038993},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\CodeStyleCommandTest","time":0.037868},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\CopyResourceCommandTest","time":0.051885},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\DependenciesCommandTest","time":0.015501},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\DocsCommandTest","time":0.022823},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\FundingCommandTest","time":0.088905},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\GitAttributesCommandTest","time":0.035882},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\GitHooksCommandTest","time":0.040016},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\GitIgnoreCommandTest","time":0.039486},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\LicenseCommandTest","time":0.025076},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\MetricsCommandTest","time":0.020542},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\PhpDocCommandTest","time":0.028447},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\RefactorCommandTest","time":0.012629},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\ReportsCommandTest","time":0.017534},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\SkillsCommandTest","time":0.00673},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\StandardsCommandTest","time":0.00628},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\SyncCommandTest","time":0.014986},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\TestsCommandTest","time":0.068626},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\UpdateComposerJsonCommandTest","time":0.043867},{"name":"FastForward\\DevTools\\Tests\\Console\\Command\\WikiCommandTest","time":0.008575},{"name":"FastForward\\DevTools\\Tests\\Console\\CommandLoader\\DevToolsCommandLoaderTest","time":0.009273},{"name":"FastForward\\DevTools\\Tests\\Console\\DevToolsTest","time":0.017126},{"name":"FastForward\\DevTools\\Tests\\Console\\Formatter\\LogLevelOutputFormatterTest","time":0.002518},{"name":"FastForward\\DevTools\\Tests\\Console\\Logger\\OutputFormatLoggerTest","time":0.01453},{"name":"FastForward\\DevTools\\Tests\\Console\\Logger\\Processor\\CommandInputProcessorTest","time":0.001196},{"name":"FastForward\\DevTools\\Tests\\Console\\Logger\\Processor\\CommandOutputProcessorTest","time":0.001045},{"name":"FastForward\\DevTools\\Tests\\Console\\Logger\\Processor\\CompositeContextProcessorTest","time":0.000943},{"name":"FastForward\\DevTools\\Tests\\Filesystem\\FilesystemTest","time":0.032555},{"name":"FastForward\\DevTools\\Tests\\Filesystem\\FinderFactoryTest","time":0.000366},{"name":"FastForward\\DevTools\\Tests\\Funding\\ComposerFundingCodecTest","time":0.002858},{"name":"FastForward\\DevTools\\Tests\\Funding\\FundingProfileMergerTest","time":0.000356},{"name":"FastForward\\DevTools\\Tests\\Funding\\FundingProfileTest","time":0.000631},{"name":"FastForward\\DevTools\\Tests\\Funding\\FundingYamlCodecTest","time":0.003972},{"name":"FastForward\\DevTools\\Tests\\Git\\GitClientTest","time":0.006802},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\CandidateProviderTest","time":0.005628},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\ExistenceCheckerTest","time":0.007653},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\ExportIgnoreFilterTest","time":0.002103},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\MergerTest","time":0.009596},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\ReaderTest","time":0.001798},{"name":"FastForward\\DevTools\\Tests\\GitAttributes\\WriterTest","time":0.012707},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\ClassifierTest","time":0.00728},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\GitIgnoreTest","time":0.003735},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\MergerTest","time":0.008623},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\ReaderTest","time":0.002289},{"name":"FastForward\\DevTools\\Tests\\GitIgnore\\WriterTest","time":0.002765},{"name":"FastForward\\DevTools\\Tests\\License\\GeneratorTest","time":0.004904},{"name":"FastForward\\DevTools\\Tests\\License\\ResolverTest","time":0.002212},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Coverage\\CoverageSummaryLoaderTest","time":0.004539},{"name":"FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryTest","time":0.00111},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Event\\EventTracerTest","time":0.001832},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriberTest","time":0.003027},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Event\\TestSuite\\JoliNotifExecutionFinishedSubscriberTest","time":0.005202},{"name":"FastForward\\DevTools\\Tests\\PhpUnit\\Runner\\Extension\\DevToolsExtensionTest","time":0.002619},{"name":"FastForward\\DevTools\\Tests\\Process\\ProcessBuilderTest","time":0.010724},{"name":"FastForward\\DevTools\\Tests\\Process\\ProcessQueueTest","time":0.025425},{"name":"FastForward\\DevTools\\Tests\\Psr\\Clock\\SystemClockTest","time":0.001503},{"name":"FastForward\\DevTools\\Tests\\Rector\\AddMissingClassPhpDocRectorTest","time":0.006812},{"name":"FastForward\\DevTools\\Tests\\Rector\\AddMissingMethodPhpDocRectorTest","time":0.006243},{"name":"FastForward\\DevTools\\Tests\\Rector\\RemoveEmptyDocBlockRectorTest","time":0.003984},{"name":"FastForward\\DevTools\\Tests\\Resource\\FileDiffTest","time":0.000355},{"name":"FastForward\\DevTools\\Tests\\Resource\\FileDifferTest","time":0.008414},{"name":"FastForward\\DevTools\\Tests\\Resource\\UnifiedDifferTest","time":0.001639},{"name":"FastForward\\DevTools\\Tests\\ServiceProvider\\DevToolsServiceProviderTest","time":0.001313},{"name":"FastForward\\DevTools\\Tests\\Sync\\PackagedDirectorySynchronizerTest","time":0.018944},{"name":"FastForward\\DevTools\\Tests\\Sync\\SynchronizeResultTest","time":0.00135}]};
             root = json;
             var nodes = treemap.nodes(json)
                 .filter(function (d) {
