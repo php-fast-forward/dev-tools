@@ -2783,6 +2783,7 @@ repositories.</p>
 
             <pre><code class="language-bash">composer changelog:entry &quot;Add changelog automation for release workflows (#28)&quot;
 composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 &quot;Preserve published release sections during backfill (#28)&quot;
+composer changelog:entry --format=json &quot;Add changelog automation for release workflows (#28)&quot;
 
 composer changelog:check
 composer changelog:check --against=origin/main
@@ -2833,7 +2834,11 @@ date immediately;</li>
     <li class="dash"><code>--file=&lt;path&gt;</code>
  to work with a changelog file other than
 <code>CHANGELOG.md</code>
-.</li>
+;</li>
+
+    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+ to switch between normal terminal output and a
+structured machine-readable payload.</li>
 
 </ul>
 </dd>
@@ -2934,6 +2939,12 @@ when the selected file does not exist yet;</li>
  returns a failing exit code when <code>Unreleased</code>
  is empty
 or does not differ from the selected baseline ref;</li>
+
+    <li class="dash"><code>changelog:entry --format=json</code>
+ emits the authoring summary as the
+<code>message</code>
+ plus structured context describing the file, category, release,
+optional date, and entry text;</li>
 
     <li class="dash"><code>changelog:check --format=json</code>
  emits a deterministic JSON payload with

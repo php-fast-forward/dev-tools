@@ -2745,6 +2745,7 @@
 workflow.</p>
 
             <pre><code class="language-bash">composer changelog:entry --type=added &quot;Add release automation workflow (#28)&quot;
+composer changelog:entry --format=json &quot;Add release automation workflow (#28)&quot;
 composer changelog:check --against=origin/main
 composer changelog:check --format=json
 composer changelog:next-version
@@ -2763,16 +2764,18 @@ composer changelog:show 1.3.0</code></pre>
  creates the changelog file automatically when it does not
 exist yet;</li>
 
-    <li class="dash"><code>changelog:check</code>
- is the command used by pull-request validation;</li>
-
-    <li class="dash"><code>changelog:check --format=json</code>
+    <li class="dash"><code>changelog:entry --format=json</code>
+ and
+<code>changelog:check --format=json</code>
  and
 <code>changelog:next-version --format=json</code>
  and
 <code>changelog:promote --format=json</code>
  are the initial structured-output
 rollouts for automation, CI, and AI-agent consumers;</li>
+
+    <li class="dash"><code>changelog:check</code>
+ is the command used by pull-request validation;</li>
 
     <li class="dash"><code>changelog:next-version</code>
  and <code>changelog:promote</code>

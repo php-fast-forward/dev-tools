@@ -117,7 +117,6 @@
         </ul>
         <h2>Changelog Command (FastForward\DevTools\Tests\Console\Command\ChangelogCommand)</h2>
         <ul>
-            <li class="success">Entry command will delegate to the manager</li>
             <li class="success">Show command will print the rendered release notes</li>
         </ul>
         <h2>Changelog Document (FastForward\DevTools\Tests\Changelog\Document\ChangelogDocument)</h2>
@@ -129,6 +128,13 @@
             <li class="success">With release will replace existing version and insert unreleased at the top</li>
             <li class="success">Promote unreleased will create published release when document is empty</li>
             <li class="success">Release helpers will normalize entries and support immutable mutators</li>
+        </ul>
+        <h2>Changelog Entry Command (FastForward\DevTools\Tests\Console\Command\ChangelogEntryCommand)</h2>
+        <ul>
+            <li class="success">Execute will delegate to the manager and return success</li>
+            <li class="success">Execute will include an explicit release date when provided</li>
+            <li class="success">Execute will return success when json output is requested</li>
+            <li class="success">Execute will return failure when format is invalid</li>
         </ul>
         <h2>Changelog Entry Type (FastForward\DevTools\Tests\Changelog\Entry\ChangelogEntryType)</h2>
         <ul>

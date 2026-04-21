@@ -1181,6 +1181,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogEntryCommand.html#property_changelogManager"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogEntryCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand",
             "name": "ChangelogNextVersionCommand",
             "summary": "Infers\u0020the\u0020next\u0020semantic\u0020version\u0020from\u0020changelog\u0020content.",
