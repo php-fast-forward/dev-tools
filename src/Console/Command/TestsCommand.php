@@ -21,6 +21,8 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -32,6 +34,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function is_numeric;
@@ -59,6 +62,11 @@ final class TestsCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator the file locator used to resolve PHPUnit configuration
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
+     * @param CommandResponderFactoryInterface $commandResponderFactory the
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responder
+     *                                                                  factory
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
@@ -67,6 +75,7 @@ final class TestsCommand extends BaseCommand
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -132,6 +141,13 @@ final class TestsCommand extends BaseCommand
                 name: 'no-progress',
                 mode: InputOption::VALUE_NONE,
                 description: 'Whether to disable progress output from PHPUnit.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -148,14 +164,21 @@ final class TestsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running PHPUnit tests...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $textOutput = OutputFormat::TEXT === $responder->format();
+        $processOutput = $textOutput ? $output : new BufferedOutput();
+
+        if ($textOutput) {
+            $output->writeln('<info>Running PHPUnit tests...</info>');
+        }
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
-
-            return self::FAILURE;
+            return $responder->failure(
+                $invalidArgumentException->getMessage(),
+                $this->commandContext($input, null, null, $processOutput),
+            );
         }
 
         $processBuilder = $this->processBuilder
@@ -193,13 +216,40 @@ final class TestsCommand extends BaseCommand
                 ->build('vendor/bin/phpunit')
         );
 
-        $result = $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
 
         if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
-            return $result;
+            return self::SUCCESS === $result
+                ? $responder->success(
+                    'PHPUnit tests completed successfully.',
+                    $this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+                )
+                : $responder->failure(
+                    'PHPUnit tests failed.',
+                    $this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+                );
         }
 
-        return $this->validateMinimumCoverage($coverageReportPath, $minimumCoverage, $output);
+        [$validationResult, $message, $coverageContext] = $this->validateMinimumCoverage(
+            $coverageReportPath,
+            $minimumCoverage,
+        );
+
+        return self::SUCCESS === $validationResult
+            ? $responder->success(
+                $message,
+                [
+                    ...$this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+                    ...$coverageContext,
+                ],
+            )
+            : $responder->failure(
+                $message,
+                [
+                    ...$this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+                    ...$coverageContext,
+                ],
+            );
     }
 
     /**
@@ -295,21 +345,23 @@ final class TestsCommand extends BaseCommand
     /**
      * @param string $coverageReportPath the generated `coverage-php` report path
      * @param float $minimumCoverage the required line coverage percentage
-     * @param OutputInterface $output the output interface to log validation results
      *
-     * @return int the final status code after validating minimum coverage
+     * @return array{int, string, array<string, float|int|string|null>} validation result, human message, and structured coverage context
      */
-    private function validateMinimumCoverage(
-        string $coverageReportPath,
-        float $minimumCoverage,
-        OutputInterface $output,
-    ): int {
+    private function validateMinimumCoverage(string $coverageReportPath, float $minimumCoverage): array
+    {
         try {
             $coverageSummary = $this->coverageSummaryLoader->load($coverageReportPath);
         } catch (RuntimeException $runtimeException) {
-            $output->writeln('<error>' . $runtimeException->getMessage() . '</error>');
-
-            return self::FAILURE;
+            return [
+                self::FAILURE,
+                $runtimeException->getMessage(),
+                [
+                    'line_coverage' => null,
+                    'covered_lines' => null,
+                    'total_lines' => null,
+                ],
+            ];
         }
 
         $message = \sprintf(
@@ -321,14 +373,44 @@ final class TestsCommand extends BaseCommand
             $coverageSummary->executableLines(),
         );
 
-        if ($coverageSummary->percentage() >= $minimumCoverage) {
-            $output->writeln('<info>' . $message . '</info>');
+        return [
+            $coverageSummary->percentage() >= $minimumCoverage ? self::SUCCESS : self::FAILURE,
+            $message,
+            [
+                'line_coverage' => $coverageSummary->percentage(),
+                'covered_lines' => $coverageSummary->executedLines(),
+                'total_lines' => $coverageSummary->executableLines(),
+            ],
+        ];
+    }
 
-            return self::SUCCESS;
-        }
-
-        $output->writeln('<error>' . $message . '</error>');
-
-        return self::FAILURE;
+    /**
+     * @param InputInterface $input the raw parameter definitions
+     * @param ?float $minimumCoverage the validated minimum coverage threshold, if configured
+     * @param ?string $coverageReportPath the generated coverage report path, if available
+     * @param OutputInterface $processOutput the output stream used while the command is executing
+     *
+     * @return array<string, bool|float|string|null>
+     */
+    private function commandContext(
+        InputInterface $input,
+        ?float $minimumCoverage,
+        ?string $coverageReportPath,
+        OutputInterface $processOutput,
+    ): array {
+        return [
+            'command' => 'tests',
+            'path' => (string) $input->getArgument('path'),
+            'bootstrap' => (string) $input->getOption('bootstrap'),
+            'cache_dir' => (string) $input->getOption('cache-dir'),
+            'coverage' => $input->getOption('coverage'),
+            'coverage_summary' => (bool) $input->getOption('coverage-summary'),
+            'filter' => $input->getOption('filter'),
+            'min_coverage' => $minimumCoverage,
+            'no_cache' => (bool) $input->getOption('no-cache'),
+            'no_progress' => (bool) $input->getOption('no-progress'),
+            'coverage_report_path' => $coverageReportPath,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ];
     }
 }
