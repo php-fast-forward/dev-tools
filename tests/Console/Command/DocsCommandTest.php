@@ -21,6 +21,9 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DocsCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -37,6 +40,7 @@ use Symfony\Component\Process\Process;
 use Twig\Environment;
 
 #[CoversClass(DocsCommand::class)]
+#[CoversClass(OutputFormat::class)]
 final class DocsCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -81,6 +85,16 @@ final class DocsCommandTest extends TestCase
      */
     private ObjectProphecy $process;
 
+    /**
+     * @var ObjectProphecy<CommandResponderFactoryInterface>
+     */
+    private ObjectProphecy $commandResponderFactory;
+
+    /**
+     * @var ObjectProphecy<CommandResponderInterface>
+     */
+    private ObjectProphecy $commandResponder;
+
     private DocsCommand $command;
 
     /**
@@ -96,6 +110,8 @@ final class DocsCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
+        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
+        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
 
         $this->composerJson->getAutoload('psr-4')
             ->willReturn([
@@ -118,8 +134,13 @@ final class DocsCommandTest extends TestCase
             $this->processQueue->reveal(),
             $this->renderer->reveal(),
             $this->filesystem->reveal(),
-            $this->composerJson->reveal()
+            $this->composerJson->reveal(),
+            $this->commandResponderFactory->reveal(),
         );
+        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
+            ->willReturn($this->commandResponder->reveal());
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::TEXT);
     }
 
     /**
@@ -144,11 +165,21 @@ final class DocsCommandTest extends TestCase
 
         $this->filesystem->getAbsolutePath('docs')
             ->willReturn('/app/docs');
+        $this->filesystem->getAbsolutePath('.dev-tools')
+            ->willReturn('/app/.dev-tools');
+        $this->filesystem->getAbsolutePath('tmp/cache/phpdoc')
+            ->willReturn('/app/tmp/cache/phpdoc');
         $this->filesystem->exists('/app/docs')
             ->willReturn(false);
-
-        $this->output->writeln('<error>Source directory not found: /app/docs</error>')
-            ->shouldBeCalled();
+        $this->commandResponder->failure(
+            'Source directory not found: /app/docs',
+            [
+                'command' => 'docs',
+                'source' => '/app/docs',
+                'target' => '/app/.dev-tools',
+                'cache_dir' => '/app/tmp/cache/phpdoc',
+            ],
+        )->willReturn(DocsCommand::FAILURE)->shouldBeCalledOnce();
 
         $result = $this->executeCommand();
 
@@ -199,11 +230,75 @@ final class DocsCommandTest extends TestCase
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
-            ->willReturn(DocsCommand::SUCCESS);
+            ->willReturn(DocsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'API documentation generated successfully.',
+            [
+                'command' => 'docs',
+                'source' => '/app/docs',
+                'target' => '/app/.dev-tools',
+                'cache_dir' => '/app/tmp/cache/phpdoc',
+                'process_output' => null,
+            ],
+        )->willReturn(DocsCommand::SUCCESS)->shouldBeCalledOnce();
 
         $result = $this->executeCommand();
 
         self::assertSame(DocsCommand::SUCCESS, $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillCapturePhpDocumentorOutputWhenJsonOutputIsRequested(): void
+    {
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::JSON);
+        $this->filesystem->getAbsolutePath('docs')
+            ->willReturn('/app/docs');
+        $this->filesystem->exists('/app/docs')
+            ->willReturn(true);
+        $this->filesystem->getAbsolutePath('.dev-tools')
+            ->willReturn('/app/.dev-tools');
+        $this->filesystem->getAbsolutePath('tmp/cache/phpdoc')
+            ->willReturn('/app/tmp/cache/phpdoc');
+        $this->filesystem->makePathRelative('/app/docs')
+            ->willReturn('docs/');
+        $this->renderer->render('phpdocumentor.xml', Argument::type('array'))
+            ->willReturn('RenderedXML');
+        $this->filesystem->dumpFile('phpdocumentor.xml', 'RenderedXML', '/app/tmp/cache/phpdoc')
+            ->shouldBeCalledOnce();
+        $this->filesystem->getAbsolutePath('phpdocumentor.xml', '/app/tmp/cache/phpdoc')
+            ->willReturn('/app/tmp/cache/phpdoc/phpdocumentor.xml');
+        $this->processBuilder->withArgument('--config', '/app/tmp/cache/phpdoc/phpdocumentor.xml')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--ansi')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--no-progress')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->withArgument('--markers', 'TODO,FIXME,BUG,HACK')
+            ->willReturn($this->processBuilder->reveal());
+        $this->processBuilder->build('vendor/bin/phpdoc')
+            ->willReturn($this->process->reveal());
+        $this->output->writeln(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run(Argument::type('object'))
+            ->willReturn(DocsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'API documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => 'docs' === $context['command']
+                && '/app/docs' === $context['source']
+                && '/app/.dev-tools' === $context['target']
+                && '/app/tmp/cache/phpdoc' === $context['cache_dir']
+                && \is_string($context['process_output'])),
+        )->willReturn(DocsCommand::SUCCESS)->shouldBeCalledOnce();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
     }
 
     /**

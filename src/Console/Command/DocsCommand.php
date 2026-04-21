@@ -22,12 +22,15 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use Twig\Environment;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
@@ -51,6 +54,11 @@ final class DocsCommand extends BaseCommand
      * @param Environment $renderer
      * @param FilesystemInterface $filesystem the filesystem for handling file operations
      * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
+     * @param CommandResponderFactoryInterface $commandResponderFactory the
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responder
+     *                                                                  factory
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -58,6 +66,7 @@ final class DocsCommand extends BaseCommand
         private readonly Environment $renderer,
         private readonly FilesystemInterface $filesystem,
         private readonly ComposerJsonInterface $composer,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -98,6 +107,13 @@ final class DocsCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the cache directory for phpDocumentor.',
                 default: 'tmp/cache/phpdoc',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -114,18 +130,29 @@ final class DocsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Generating API documentation...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $textOutput = OutputFormat::TEXT === $responder->format();
+        $processOutput = $textOutput ? $output : new BufferedOutput();
 
         $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
-
-        if (! $this->filesystem->exists($source)) {
-            $output->writeln(\sprintf('<error>Source directory not found: %s</error>', $source));
-
-            return self::FAILURE;
-        }
-
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
         $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
+
+        if ($textOutput) {
+            $output->writeln('<info>Generating API documentation...</info>');
+        }
+
+        if (! $this->filesystem->exists($source)) {
+            return $responder->failure(
+                \sprintf('Source directory not found: %s', $source),
+                [
+                    'command' => 'docs',
+                    'source' => $source,
+                    'target' => $target,
+                    'cache_dir' => $cacheDir,
+                ],
+            );
+        }
 
         $config = $this->createPhpDocumentorConfig(
             source: $source,
@@ -143,7 +170,29 @@ final class DocsCommand extends BaseCommand
 
         $this->processQueue->add($phpdoc);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        return self::SUCCESS === $result
+            ? $responder->success(
+                'API documentation generated successfully.',
+                [
+                    'command' => 'docs',
+                    'source' => $source,
+                    'target' => $target,
+                    'cache_dir' => $cacheDir,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            )
+            : $responder->failure(
+                'API documentation generation failed.',
+                [
+                    'command' => 'docs',
+                    'source' => $source,
+                    'target' => $target,
+                    'cache_dir' => $cacheDir,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            );
     }
 
     /**
