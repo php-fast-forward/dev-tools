@@ -31,6 +31,7 @@ Usage
 
    composer changelog:entry "Add changelog automation for release workflows (#28)"
    composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
+   composer changelog:entry --format=json "Add changelog automation for release workflows (#28)"
 
    composer changelog:check
    composer changelog:check --against=origin/main
@@ -58,7 +59,9 @@ Options
    - ``--date=<YYYY-MM-DD>`` when a published section should carry a release
      date immediately;
    - ``--file=<path>`` to work with a changelog file other than
-     ``CHANGELOG.md``.
+     ``CHANGELOG.md``;
+   - ``--format=<text|json>`` to switch between normal terminal output and a
+     structured machine-readable payload.
 
 ``changelog:check``
    Supports:
@@ -100,6 +103,9 @@ Behavior
   when the selected file does not exist yet;
 - ``changelog:check`` returns a failing exit code when ``Unreleased`` is empty
   or does not differ from the selected baseline ref;
+- ``changelog:entry --format=json`` emits the authoring summary as the
+  ``message`` plus structured context describing the file, category, release,
+  optional date, and entry text;
 - ``changelog:check --format=json`` emits a deterministic JSON payload with
   ``status``, ``message``, and ``context`` keys for automation consumers;
 - ``changelog:next-version --format=json`` emits the inferred semantic version

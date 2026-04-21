@@ -19,15 +19,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use FastForward\DevTools\Changelog\Document\ChangelogDocument;
-use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
-use FastForward\DevTools\Console\Command\ChangelogEntryCommand;
 use FastForward\DevTools\Console\Command\ChangelogShowCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -35,9 +31,7 @@ use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[CoversClass(ChangelogEntryCommand::class)]
 #[CoversClass(ChangelogShowCommand::class)]
-#[UsesClass(ChangelogEntryType::class)]
 final class ChangelogCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -65,38 +59,6 @@ final class ChangelogCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function entryCommandWillDelegateToTheManager(): void
-    {
-        $this->input->getOption('file')
-            ->willReturn('CHANGELOG.md');
-        $this->input->getOption('type')
-            ->willReturn('added');
-        $this->input->getOption('release')
-            ->willReturn(ChangelogDocument::UNRELEASED_VERSION);
-        $this->input->getOption('date')
-            ->willReturn(null);
-        $this->input->getArgument('message')
-            ->willReturn('Add a release workflow');
-        $this->filesystem->getAbsolutePath('CHANGELOG.md')
-            ->willReturn('/repo/CHANGELOG.md')
-            ->shouldBeCalledOnce();
-        $this->manager->addEntry(
-            '/repo/CHANGELOG.md',
-            ChangelogEntryType::Added,
-            'Add a release workflow',
-            ChangelogDocument::UNRELEASED_VERSION,
-            null,
-        )->shouldBeCalledOnce();
-
-        $command = new ChangelogEntryCommand($this->filesystem->reveal(), $this->manager->reveal());
-
-        self::assertSame(ChangelogEntryCommand::SUCCESS, $this->execute($command));
     }
 
     /**

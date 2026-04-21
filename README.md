@@ -76,6 +76,7 @@ composer --working-dir=packages/example metrics
 # Add one changelog entry to Unreleased or a published version
 composer changelog:entry "Add changelog automation for release workflows (#28)"
 composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
+composer changelog:entry --format=json "Add changelog automation for release workflows (#28)"
 
 # Verify that the current branch added a meaningful Unreleased entry
 composer changelog:check
@@ -171,11 +172,11 @@ next semantic version from pending changes, `changelog:promote` publishes the
 current `Unreleased` section into a tagged version, and `changelog:show`
 renders one published section for GitHub release notes.
 
-The first structured-output rollouts are available on `changelog:check`,
-`changelog:next-version`, and `changelog:promote` through `--format=json`,
-which returns a deterministic status/message/context payload for CI, bots, and
-AI-agent workflows while preserving the normal human-readable terminal output
-by default.
+The first structured-output rollouts are available on `changelog:entry`,
+`changelog:check`, `changelog:next-version`, and `changelog:promote` through
+`--format=json`, which returns a deterministic status/message/context payload
+for CI, bots, and AI-agent workflows while preserving the normal
+human-readable terminal output by default.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

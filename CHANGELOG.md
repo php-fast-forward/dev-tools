@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Add a reusable structured-output foundation and expose the first machine-readable `--format=json` rollouts on `changelog:check`, `changelog:next-version`, and `changelog:promote` for automation workflows (#33)
+- Add a reusable structured-output foundation and expose the first machine-readable `--format=json` rollouts on `changelog:entry`, `changelog:check`, `changelog:next-version`, and `changelog:promote` for automation workflows (#33)
 
 ## [1.16.0] - 2026-04-20
 
