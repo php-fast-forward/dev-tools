@@ -2106,6 +2106,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ReportsCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ReportsCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand",
             "name": "SkillsCommand",
             "summary": "Synchronizes\u0020packaged\u0020Fast\u0020Forward\u0020skills\u0020into\u0020the\u0020consumer\u0020repository.",
