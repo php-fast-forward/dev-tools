@@ -91,15 +91,11 @@ final class ChangelogCheckCommand extends BaseCommand
         $hasPendingChanges = $this->unreleasedEntryChecker
             ->hasPendingChanges($path, $against);
 
-        $file = (string) $input->getOption('file');
-
         if ($hasPendingChanges) {
             $this->logger->info(
-                '{file} contains unreleased changes ready for review.',
+                'The changelog contains unreleased changes ready for review.',
                 [
-                    'command' => 'changelog:check',
-                    'file' => $file,
-                    'against' => $against,
+                    'input' => $input,
                     'has_pending_changes' => true,
                 ],
             );
@@ -108,11 +104,9 @@ final class ChangelogCheckCommand extends BaseCommand
         }
 
         $this->logger->error(
-            '{file} must add a meaningful entry to the Unreleased section.',
+            'The changelog must add a meaningful entry to the Unreleased section.',
             [
-                'command' => 'changelog:check',
-                'file' => $file,
-                'against' => $against,
+                'input' => $input,
                 'has_pending_changes' => false,
             ],
         );

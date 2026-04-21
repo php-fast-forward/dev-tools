@@ -83,19 +83,15 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting dev-tools synchronization...')
+        $this->logger->info('Starting dev-tools synchronization...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'Dev-tools synchronization completed successfully.',
-            [
-                'command' => 'dev-tools:sync',
-                'overwrite' => false,
-                'dry_run' => false,
-                'check' => false,
-                'interactive' => false,
-                'skipped_destructive_syncs' => false,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && false === $context['skipped_destructive_syncs']),
         )->shouldBeCalled();
 
         self::assertSame(SyncCommand::SUCCESS, $this->executeCommand());
@@ -114,22 +110,19 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::FAILURE)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting dev-tools synchronization...')
+        $this->logger->info('Starting dev-tools synchronization...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->warning(
-            'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.'
+            'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
         $this->logger->error(
             'Dev-tools synchronization failed.',
-            [
-                'command' => 'dev-tools:sync',
-                'overwrite' => false,
-                'dry_run' => false,
-                'check' => true,
-                'interactive' => false,
-                'skipped_destructive_syncs' => true,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && true === $context['skipped_destructive_syncs']),
         )->shouldBeCalled();
 
         self::assertSame(SyncCommand::FAILURE, $this->executeCommand());
@@ -154,12 +147,14 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting dev-tools synchronization...')
+        $this->logger->info('Starting dev-tools synchronization...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'Dev-tools synchronization completed successfully.',
-            Argument::that(static fn(array $context): bool => 'dev-tools:sync' === $context['command']
-                && \is_string($context['process_output'])),
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(SyncCommand::SUCCESS, $this->executeCommand());

@@ -108,7 +108,9 @@ final class MetricsCommand extends BaseCommand
         $exclude = (string) $input->getOption('exclude');
         $junit = $input->getOption('junit');
 
-        $this->logger->info('Running code metrics analysis...');
+        $this->logger->info('Running code metrics analysis...', [
+            'input' => $input,
+        ]);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -131,11 +133,8 @@ final class MetricsCommand extends BaseCommand
         $result = $this->processQueue->run($processOutput);
 
         $context = [
-            'command' => 'metrics',
-            'exclude' => $exclude,
-            'target' => $target,
-            'junit' => $junit,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'input' => $input,
+            'output' => $processOutput,
         ];
 
         if (self::SUCCESS === $result) {

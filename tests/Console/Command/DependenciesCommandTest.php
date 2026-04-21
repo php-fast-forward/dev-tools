@@ -104,18 +104,14 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running dependency analysis...')
+        $this->logger->info('Running dependency analysis...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalledOnce();
         $this->logger->info(
             'Dependency analysis completed successfully.',
-            [
-                'command' => 'dependencies',
-                'max_outdated' => 5,
-                'dev' => false,
-                'upgrade' => false,
-                'dump_usage' => null,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalledOnce();
 
         self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());
@@ -132,13 +128,7 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
         $this->logger->error(
             'The --max-outdated option MUST be a numeric threshold.',
-            [
-                'command' => 'dependencies',
-                'max_outdated' => 'invalid',
-                'dev' => false,
-                'upgrade' => false,
-                'dump_usage' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
         )->shouldBeCalledOnce();
 
         self::assertSame(DependenciesCommand::FAILURE, $this->executeCommand());
@@ -157,18 +147,14 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running dependency analysis...')
+        $this->logger->info('Running dependency analysis...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalledOnce();
         $this->logger->info(
             'Dependency analysis completed successfully.',
-            [
-                'command' => 'dependencies',
-                'max_outdated' => -1,
-                'dev' => false,
-                'upgrade' => false,
-                'dump_usage' => null,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalledOnce();
 
         self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());

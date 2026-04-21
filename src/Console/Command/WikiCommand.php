@@ -128,7 +128,9 @@ final class WikiCommand extends BaseCommand
         }
 
         if (! $jsonOutput) {
-            $this->logger->info('Generating wiki documentation...');
+            $this->logger->info('Generating wiki documentation...', [
+                'input' => $input,
+            ]);
         }
 
         $processBuilder = $this->processBuilder
@@ -152,10 +154,8 @@ final class WikiCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
         $context = [
-            'command' => 'wiki',
-            'target' => $target,
-            'cache_dir' => (string) $input->getOption('cache-dir'),
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'input' => $input,
+            'output' => $processOutput,
         ];
 
         if (self::SUCCESS === $result) {
@@ -185,8 +185,7 @@ final class WikiCommand extends BaseCommand
             $this->logger->info(
                 'Wiki submodule already exists at {wiki_submodule_path}.',
                 [
-                    'command' => 'wiki',
-                    'target' => $target,
+                    'command' => $this->getName(),
                     'wiki_submodule_path' => $wikiSubmodulePath,
                 ],
             );
@@ -210,8 +209,7 @@ final class WikiCommand extends BaseCommand
 
         if (self::SUCCESS === $result) {
             $this->logger->info('Wiki submodule initialized successfully.', [
-                'command' => 'wiki',
-                'target' => $target,
+                'command' => $this->getName(),
                 'wiki_submodule_path' => $wikiSubmodulePath,
                 'wiki_repository_url' => $wikiRepoUrl,
             ]);
@@ -220,8 +218,7 @@ final class WikiCommand extends BaseCommand
         }
 
         $this->logger->error('Wiki submodule initialization failed.', [
-            'command' => 'wiki',
-            'target' => $target,
+            'command' => $this->getName(),
             'wiki_submodule_path' => $wikiSubmodulePath,
             'wiki_repository_url' => $wikiRepoUrl,
         ]);

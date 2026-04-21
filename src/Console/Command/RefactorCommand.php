@@ -114,7 +114,9 @@ final class RefactorCommand extends BaseCommand
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
 
-        $this->logger->info('Running Rector for code refactoring...');
+        $this->logger->info('Running Rector for code refactoring...', [
+            'input' => $input,
+        ]);
 
         $processBuilder = $this->processBuilder
             ->withArgument('process')
@@ -130,10 +132,8 @@ final class RefactorCommand extends BaseCommand
         $result = $this->processQueue->run($processOutput);
 
         $context = [
-            'command' => 'refactor',
-            'fix' => $fix,
-            'config' => self::CONFIG,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'input' => $input,
+            'output' => $processOutput,
         ];
 
         if (self::SUCCESS === $result) {

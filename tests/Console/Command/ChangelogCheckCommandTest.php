@@ -26,6 +26,7 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
@@ -87,13 +88,9 @@ final class ChangelogCheckCommandTest extends TestCase
         $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
             ->willReturn(true);
         $this->logger->info(
-            '{file} contains unreleased changes ready for review.',
-            [
-                'command' => 'changelog:check',
-                'file' => 'CHANGELOG.md',
-                'against' => null,
-                'has_pending_changes' => true,
-            ],
+            'The changelog contains unreleased changes ready for review.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && true === $context['has_pending_changes']),
         )->shouldBeCalled();
 
         self::assertSame(ChangelogCheckCommand::SUCCESS, $this->invokeExecute());
@@ -108,13 +105,9 @@ final class ChangelogCheckCommandTest extends TestCase
         $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
             ->willReturn(false);
         $this->logger->error(
-            '{file} must add a meaningful entry to the Unreleased section.',
-            [
-                'command' => 'changelog:check',
-                'file' => 'CHANGELOG.md',
-                'against' => null,
-                'has_pending_changes' => false,
-            ],
+            'The changelog must add a meaningful entry to the Unreleased section.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && false === $context['has_pending_changes']),
         )->shouldBeCalled();
 
         self::assertSame(ChangelogCheckCommand::FAILURE, $this->invokeExecute());
@@ -131,13 +124,9 @@ final class ChangelogCheckCommandTest extends TestCase
         $this->checker->hasPendingChanges('/repo/CHANGELOG.md', 'origin/main')
             ->willReturn(false);
         $this->logger->error(
-            '{file} must add a meaningful entry to the Unreleased section.',
-            [
-                'command' => 'changelog:check',
-                'file' => 'CHANGELOG.md',
-                'against' => 'origin/main',
-                'has_pending_changes' => false,
-            ],
+            'The changelog must add a meaningful entry to the Unreleased section.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && false === $context['has_pending_changes']),
         )->shouldBeCalled();
 
         self::assertSame(ChangelogCheckCommand::FAILURE, $this->invokeExecute());

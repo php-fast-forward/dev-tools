@@ -159,19 +159,16 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Checking and fixing PHPDocs...')
+        $this->logger->info('Checking and fixing PHPDocs...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info('Created .docheader from repository template.')
             ->shouldBeCalled();
         $this->logger->info(
             'PHPDoc checks completed successfully.',
-            [
-                'command' => 'phpdoc',
-                'fix' => false,
-                'cache_dir' => 'tmp/cache/php-cs-fixer',
-                'config' => PhpDocCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
@@ -188,20 +185,17 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Checking and fixing PHPDocs...')
+        $this->logger->info('Checking and fixing PHPDocs...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->warning(
             'Skipping .docheader creation because the destination file could not be written.'
         )->shouldBeCalled();
         $this->logger->error(
             'PHPDoc checks failed.',
-            [
-                'command' => 'phpdoc',
-                'fix' => false,
-                'cache_dir' => 'tmp/cache/php-cs-fixer',
-                'config' => PhpDocCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::FAILURE, $this->invokeExecute());

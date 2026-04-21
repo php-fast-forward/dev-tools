@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Logger;
 
 use Stringable;
 use DateTimeInterface;
+use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -65,11 +66,13 @@ final readonly class OutputFormatLogger implements LoggerInterface
      * @param ArgvInput $input the CLI input instance used to inspect runtime options
      * @param ConsoleOutputInterface $output the console output instance used for writing log messages
      * @param ClockInterface $clock
+     * @param ContextProcessorInterface $contextProcessor expands command input and output metadata
      */
     public function __construct(
         private ArgvInput $input,
         private ConsoleOutputInterface $output,
         private ClockInterface $clock,
+        private ContextProcessorInterface $contextProcessor,
     ) {}
 
     /**
@@ -85,6 +88,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
      */
     public function log($level, $message, array $context = []): void
     {
+        $context = $this->contextProcessor->process($context);
         $formattedMessage = $this->formatMessage((string) $level, (string) $message, $context);
         $output = $this->output;
 

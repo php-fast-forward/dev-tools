@@ -104,17 +104,14 @@ final class MetricsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running code metrics analysis...')
+        $this->logger->info('Running code metrics analysis...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'Code metrics analysis completed successfully.',
-            [
-                'command' => 'metrics',
-                'exclude' => 'vendor,tests',
-                'target' => '.dev-tools/metrics',
-                'junit' => null,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
@@ -129,17 +126,14 @@ final class MetricsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Running code metrics analysis...')
+        $this->logger->info('Running code metrics analysis...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Code metrics analysis failed.',
-            [
-                'command' => 'metrics',
-                'exclude' => 'vendor,tests',
-                'target' => '.dev-tools/metrics',
-                'junit' => null,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(MetricsCommand::FAILURE, $this->executeCommand());

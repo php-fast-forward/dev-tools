@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Symfony\Component\Console\Output\BufferedOutput;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -103,17 +104,14 @@ final class ReportsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ReportsCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Generating frontpage for Fast Forward documentation...')
+        $this->logger->info('Generating frontpage for Fast Forward documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'Documentation reports generated successfully.',
-            [
-                'command' => 'reports',
-                'target' => '.dev-tools',
-                'coverage' => '.dev-tools/coverage',
-                'metrics' => '.dev-tools/metrics',
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
@@ -131,12 +129,14 @@ final class ReportsCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(ReportsCommand::FAILURE)
             ->shouldBeCalledOnce();
-        $this->logger->info('Generating frontpage for Fast Forward documentation...')
+        $this->logger->info('Generating frontpage for Fast Forward documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Documentation reports generation failed.',
-            Argument::that(static fn(array $context): bool => 'reports' === $context['command']
-                && \is_string($context['process_output'])),
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof BufferedOutput),
         )->shouldBeCalled();
 
         self::assertSame(ReportsCommand::FAILURE, $this->executeCommand());

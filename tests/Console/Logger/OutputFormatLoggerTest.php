@@ -22,8 +22,12 @@ namespace FastForward\DevTools\Tests\Console\Logger;
 use stdClass;
 use DateTimeImmutable;
 use FastForward\DevTools\Console\Logger\OutputFormatLogger;
+use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
+use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
+use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -35,6 +39,9 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(OutputFormatLogger::class)]
+#[UsesClass(CommandInputProcessor::class)]
+#[UsesClass(CommandOutputProcessor::class)]
+#[UsesClass(CompositeContextProcessor::class)]
 final class OutputFormatLoggerTest extends TestCase
 {
     use ProphecyTrait;
@@ -70,6 +77,7 @@ final class OutputFormatLoggerTest extends TestCase
             new ArgvInput(['dev-tools']),
             $this->output->reveal(),
             $this->clock->reveal(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
         );
 
         $this->output->writeln(
@@ -103,6 +111,7 @@ final class OutputFormatLoggerTest extends TestCase
             new ArgvInput(['dev-tools']),
             $this->output->reveal(),
             $this->clock->reveal(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
         );
 
         $this->output->writeln(Argument::type('string'))
@@ -129,6 +138,7 @@ final class OutputFormatLoggerTest extends TestCase
             new ArgvInput(['dev-tools', '--output-format=json']),
             $this->output->reveal(),
             $this->clock->reveal(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
         );
 
         $this->output->writeln(

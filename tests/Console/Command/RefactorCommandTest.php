@@ -104,16 +104,14 @@ final class RefactorCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(RefactorCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running Rector for code refactoring...')
+        $this->logger->info('Running Rector for code refactoring...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'Code refactoring checks completed successfully.',
-            [
-                'command' => 'refactor',
-                'fix' => false,
-                'config' => RefactorCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
@@ -128,16 +126,14 @@ final class RefactorCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(RefactorCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Running Rector for code refactoring...')
+        $this->logger->info('Running Rector for code refactoring...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Code refactoring checks failed.',
-            [
-                'command' => 'refactor',
-                'fix' => false,
-                'config' => RefactorCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(RefactorCommand::FAILURE, $this->executeCommand());

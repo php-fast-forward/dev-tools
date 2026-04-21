@@ -129,24 +129,14 @@ final class TestsCommandTest extends TestCase
         )))->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...')
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'PHPUnit tests completed successfully.',
-            [
-                'command' => 'tests',
-                'path' => './tests',
-                'bootstrap' => './vendor/autoload.php',
-                'cache_dir' => './tmp/cache/phpunit',
-                'coverage' => null,
-                'coverage_summary' => false,
-                'filter' => null,
-                'min_coverage' => null,
-                'no_cache' => false,
-                'no_progress' => false,
-                'coverage_report_path' => null,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
@@ -161,24 +151,14 @@ final class TestsCommandTest extends TestCase
         $this->input->getOption('min-coverage')
             ->willReturn('invalid');
         $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->info('Running PHPUnit tests...')
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'The --min-coverage option MUST be a numeric percentage.',
-            [
-                'command' => 'tests',
-                'path' => './tests',
-                'bootstrap' => './vendor/autoload.php',
-                'cache_dir' => './tmp/cache/phpunit',
-                'coverage' => null,
-                'coverage_summary' => false,
-                'filter' => null,
-                'min_coverage' => null,
-                'no_cache' => false,
-                'no_progress' => false,
-                'coverage_report_path' => null,
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
@@ -199,13 +179,17 @@ final class TestsCommandTest extends TestCase
         $this->processQueue->add(Argument::type(Process::class))->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...')
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Minimum line coverage of 80.00% was not met. Current coverage: 75.00% (75/100 lines).',
-            Argument::that(static fn(array $context): bool => 80.0 === $context['min_coverage']
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
                 && 75.0 === $context['line_coverage']
-                && $coverageReportPath === $context['coverage_report_path']),
+                && 75 === $context['covered_lines']
+                && 100 === $context['total_lines']),
         )->shouldBeCalled();
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
@@ -226,13 +210,17 @@ final class TestsCommandTest extends TestCase
         $this->processQueue->add(Argument::type(Process::class))->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...')
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Coverage summary could not be loaded.',
-            Argument::that(static fn(array $context): bool => 80.0 === $context['min_coverage']
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
                 && null === $context['line_coverage']
-                && $coverageReportPath === $context['coverage_report_path']),
+                && null === $context['covered_lines']
+                && null === $context['total_lines']),
         )->shouldBeCalled();
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());

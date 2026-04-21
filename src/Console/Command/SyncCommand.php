@@ -108,7 +108,9 @@ final class SyncCommand extends BaseCommand
         ];
         $allowDetached = ! $dryRun && ! $check && ! $interactive;
 
-        $this->logger->info('Starting dev-tools synchronization...');
+        $this->logger->info('Starting dev-tools synchronization...', [
+            'input' => $input,
+        ]);
 
         $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments], false, $jsonOutput);
         $this->queueDevToolsCommand(['funding', ...$modeArguments], false, $jsonOutput);
@@ -153,7 +155,10 @@ final class SyncCommand extends BaseCommand
 
         if ($dryRun || $check || $interactive) {
             $this->logger->warning(
-                'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.'
+                'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
+                [
+                    'input' => $input,
+                ],
             );
         } else {
             $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput);
@@ -168,13 +173,9 @@ final class SyncCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
         $context = [
-            'command' => 'dev-tools:sync',
-            'overwrite' => $overwrite,
-            'dry_run' => $dryRun,
-            'check' => $check,
-            'interactive' => $interactive,
+            'input' => $input,
+            'output' => $processOutput,
             'skipped_destructive_syncs' => $dryRun || $check || $interactive,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
         ];
 
         if (self::SUCCESS === $result) {

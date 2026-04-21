@@ -132,18 +132,14 @@ final class DocsCommand extends BaseCommand
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
         $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
 
-        $this->logger->info('Generating API documentation...');
+        $this->logger->info('Generating API documentation...', [
+            'input' => $input,
+        ]);
 
         if (! $this->filesystem->exists($source)) {
-            $this->logger->error(
-                'Source directory not found: {source}',
-                [
-                    'command' => 'docs',
-                    'source' => $source,
-                    'target' => $target,
-                    'cache_dir' => $cacheDir,
-                ],
-            );
+            $this->logger->error('Source directory not found: {source}', [
+                'input' => $input,
+            ],);
 
             return self::FAILURE;
         }
@@ -167,11 +163,8 @@ final class DocsCommand extends BaseCommand
         $result = $this->processQueue->run($processOutput);
 
         $context = [
-            'command' => 'docs',
-            'source' => $source,
-            'target' => $target,
-            'cache_dir' => $cacheDir,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'input' => $input,
+            'output' => $processOutput,
         ];
 
         if (self::SUCCESS === $result) {

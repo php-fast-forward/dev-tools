@@ -162,14 +162,19 @@ final class TestsCommand extends BaseCommand
         $jsonOutput = 'json' === (string) $input->getOption('output-format');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
-        $this->logger->info('Running PHPUnit tests...');
+        $this->logger->info('Running PHPUnit tests...', [
+            'input' => $input,
+        ]);
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->logger->error(
                 $invalidArgumentException->getMessage(),
-                $this->commandContext($input, null, null, $processOutput),
+                [
+                    'input' => $input,
+                    'output' => $processOutput,
+                ],
             );
 
             return self::FAILURE;
@@ -216,16 +221,19 @@ final class TestsCommand extends BaseCommand
             if (self::SUCCESS === $result) {
                 $this->logger->info(
                     'PHPUnit tests completed successfully.',
-                    $this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+                    [
+                        'input' => $input,
+                        'output' => $processOutput,
+                    ],
                 );
 
                 return self::SUCCESS;
             }
 
-            $this->logger->error(
-                'PHPUnit tests failed.',
-                $this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
-            );
+            $this->logger->error('PHPUnit tests failed.', [
+                'input' => $input,
+                'output' => $processOutput,
+            ],);
 
             return self::FAILURE;
         }
@@ -236,7 +244,8 @@ final class TestsCommand extends BaseCommand
         );
 
         $context = [
-            ...$this->commandContext($input, $minimumCoverage, $coverageReportPath, $processOutput),
+            'input' => $input,
+            'output' => $processOutput,
             ...$coverageContext,
         ];
 
@@ -380,36 +389,6 @@ final class TestsCommand extends BaseCommand
                 'covered_lines' => $coverageSummary->executedLines(),
                 'total_lines' => $coverageSummary->executableLines(),
             ],
-        ];
-    }
-
-    /**
-     * @param InputInterface $input the raw parameter definitions
-     * @param ?float $minimumCoverage the validated minimum coverage threshold, if configured
-     * @param ?string $coverageReportPath the generated coverage report path, if available
-     * @param OutputInterface $processOutput the output stream used while the command is executing
-     *
-     * @return array<string, bool|float|string|null>
-     */
-    private function commandContext(
-        InputInterface $input,
-        ?float $minimumCoverage,
-        ?string $coverageReportPath,
-        OutputInterface $processOutput,
-    ): array {
-        return [
-            'command' => 'tests',
-            'path' => (string) $input->getArgument('path'),
-            'bootstrap' => (string) $input->getOption('bootstrap'),
-            'cache_dir' => (string) $input->getOption('cache-dir'),
-            'coverage' => $input->getOption('coverage'),
-            'coverage_summary' => (bool) $input->getOption('coverage-summary'),
-            'filter' => $input->getOption('filter'),
-            'min_coverage' => $minimumCoverage,
-            'no_cache' => (bool) $input->getOption('no-cache'),
-            'no_progress' => (bool) $input->getOption('no-progress'),
-            'coverage_report_path' => $coverageReportPath,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
         ];
     }
 }

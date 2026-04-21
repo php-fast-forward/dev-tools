@@ -83,7 +83,9 @@ final class StandardsCommand extends BaseCommand
         $commands = [];
         $formatArgument = $jsonOutput ? ' --output-format=json' : '';
 
-        $this->logger->info('Running code standards checks...');
+        $this->logger->info('Running code standards checks...', [
+            'input' => $input,
+        ]);
 
         $fixArgument = $input->getOption('fix') ? ' --fix' : '';
 
@@ -96,10 +98,9 @@ final class StandardsCommand extends BaseCommand
         }
 
         $context = [
-            'command' => 'standards',
-            'fix' => (bool) $input->getOption('fix'),
+            'input' => $input,
+            'output' => $commandOutput,
             'commands' => $commands,
-            'process_output' => $commandOutput instanceof BufferedOutput ? $commandOutput->fetch() : null,
         ];
 
         if (\in_array(self::FAILURE, $results, true)) {

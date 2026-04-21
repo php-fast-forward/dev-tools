@@ -36,6 +36,10 @@ use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
 use FastForward\DevTools\Console\Logger\OutputFormatLogger;
+use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
+use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
+use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
+use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
@@ -130,11 +134,16 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             ClockInterface::class => get(SystemClock::class),
 
             // Console
+            CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
+            CommandProvider::class => get(DevToolsCommandProvider::class),
             ConsoleOutputInterface::class => create(ConsoleOutput::class)
                 ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),
-            CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
-            CommandProvider::class => get(DevToolsCommandProvider::class),
+            ContextProcessorInterface::class => create(CompositeContextProcessor::class)->constructor([
+                get(CommandInputProcessor::class),
+                get(CommandOutputProcessor::class),
+            ]),
+
             // Coverage
             CoverageSummaryLoaderInterface::class => get(CoverageSummaryLoader::class),
 

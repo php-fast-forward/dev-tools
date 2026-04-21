@@ -118,16 +118,14 @@ final class WikiCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating wiki documentation...')
+        $this->logger->info('Generating wiki documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'Wiki documentation generated successfully.',
-            [
-                'command' => 'wiki',
-                'target' => '.github/wiki',
-                'cache_dir' => 'tmp/cache/phpdoc',
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
@@ -147,11 +145,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn(true);
         $this->logger->info(
             'Wiki submodule already exists at {wiki_submodule_path}.',
-            [
-                'command' => 'wiki',
-                'target' => '.github/wiki',
-                'wiki_submodule_path' => '/repo/.github/wiki',
-            ],
+            Argument::that(static fn(array $context): bool => '/repo/.github/wiki' === $context['wiki_submodule_path']
+                && 'wiki' === $context['command']),
         )->shouldBeCalled();
 
         self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());

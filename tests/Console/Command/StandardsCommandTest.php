@@ -83,16 +83,15 @@ final class StandardsCommandTest extends TestCase
 
                 return StandardsCommand::SUCCESS;
             })->shouldBeCalledTimes(4);
-        $this->logger->info('Running code standards checks...')
+        $this->logger->info('Running code standards checks...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'Code standards checks completed successfully.',
-            [
-                'command' => 'standards',
-                'fix' => false,
-                'commands' => ['refactor', 'phpdoc', 'code-style', 'reports'],
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
         )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
@@ -113,16 +112,15 @@ final class StandardsCommandTest extends TestCase
 
                 return 2 === $calls ? StandardsCommand::FAILURE : StandardsCommand::SUCCESS;
             })->shouldBeCalledTimes(4);
-        $this->logger->info('Running code standards checks...')
+        $this->logger->info('Running code standards checks...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Code standards checks failed.',
-            [
-                'command' => 'standards',
-                'fix' => false,
-                'commands' => ['refactor', 'phpdoc', 'code-style', 'reports'],
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
         )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::FAILURE, $this->invokeExecute());

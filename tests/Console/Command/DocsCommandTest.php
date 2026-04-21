@@ -138,16 +138,13 @@ final class DocsCommandTest extends TestCase
     {
         $this->filesystem->exists('/repo/docs')
             ->willReturn(false);
-        $this->logger->info('Generating API documentation...')
+        $this->logger->info('Generating API documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Source directory not found: {source}',
-            [
-                'command' => 'docs',
-                'source' => '/repo/docs',
-                'target' => '/repo/.dev-tools',
-                'cache_dir' => '/repo/tmp/cache/phpdoc',
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
 
         self::assertSame(DocsCommand::FAILURE, $this->executeCommand());
@@ -166,17 +163,14 @@ final class DocsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(DocsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating API documentation...')
+        $this->logger->info('Generating API documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->info(
             'API documentation generated successfully.',
-            [
-                'command' => 'docs',
-                'source' => '/repo/docs',
-                'target' => '/repo/.dev-tools',
-                'cache_dir' => '/repo/tmp/cache/phpdoc',
-                'process_output' => null,
-            ],
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());

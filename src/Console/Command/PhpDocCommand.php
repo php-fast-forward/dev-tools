@@ -142,7 +142,9 @@ final class PhpDocCommand extends BaseCommand
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
 
-        $this->logger->info('Checking and fixing PHPDocs...');
+        $this->logger->info('Checking and fixing PHPDocs...', [
+            'input' => $input,
+        ]);
 
         $this->ensureDocHeaderExists();
 
@@ -178,11 +180,8 @@ final class PhpDocCommand extends BaseCommand
         $result = $this->processQueue->run($processOutput);
 
         $context = [
-            'command' => 'phpdoc',
-            'fix' => $fix,
-            'cache_dir' => $input->getOption('cache-dir'),
-            'config' => self::CONFIG,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'input' => $input,
+            'output' => $processOutput,
         ];
 
         if (self::SUCCESS === $result) {

@@ -108,7 +108,9 @@ final class ReportsCommand extends BaseCommand
         $coveragePath = (string) $input->getOption('coverage');
         $metricsPath = (string) $input->getOption('metrics');
 
-        $this->logger->info('Generating frontpage for Fast Forward documentation...');
+        $this->logger->info('Generating frontpage for Fast Forward documentation...', [
+            'input' => $input,
+        ]);
 
         $docsBuilder = $this->processBuilder
             ->withArgument('--target', $target);
@@ -147,11 +149,8 @@ final class ReportsCommand extends BaseCommand
         $result = $this->processQueue->run($processOutput);
 
         $context = [
-            'command' => 'reports',
-            'target' => $target,
-            'coverage' => $coveragePath,
-            'metrics' => $metricsPath,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'input' => $input,
+            'output' => $processOutput,
         ];
 
         if (self::SUCCESS === $result) {

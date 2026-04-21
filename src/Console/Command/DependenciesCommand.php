@@ -119,11 +119,7 @@ final class DependenciesCommand extends BaseCommand
             $maximumOutdated = $this->resolveMaximumOutdated($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
             $this->logger->error($invalidArgumentException->getMessage(), [
-                'command' => 'dependencies',
-                'max_outdated' => $input->getOption('max-outdated'),
-                'dev' => (bool) $input->getOption('dev'),
-                'upgrade' => (bool) $input->getOption('upgrade'),
-                'dump_usage' => $input->getOption('dump-usage'),
+                'input' => $input,
             ]);
 
             return self::FAILURE;
@@ -138,7 +134,9 @@ final class DependenciesCommand extends BaseCommand
         }
 
         if (! $jsonOutput) {
-            $this->logger->info('Running dependency analysis...');
+            $this->logger->info('Running dependency analysis...', [
+                'input' => $input,
+            ]);
         }
 
         $this->processQueue->add($this->getComposerDependencyAnalyserCommand($input));
@@ -149,12 +147,8 @@ final class DependenciesCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
         $context = [
-            'command' => 'dependencies',
-            'max_outdated' => $maximumOutdated,
-            'dev' => (bool) $input->getOption('dev'),
-            'upgrade' => (bool) $input->getOption('upgrade'),
-            'dump_usage' => $input->getOption('dump-usage'),
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'input' => $input,
+            'output' => $processOutput,
         ];
 
         if (self::SUCCESS === $result) {
