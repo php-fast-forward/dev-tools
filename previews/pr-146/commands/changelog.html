@@ -2783,21 +2783,21 @@ repositories.</p>
 
             <pre><code class="language-bash">composer changelog:entry &quot;Add changelog automation for release workflows (#28)&quot;
 composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 &quot;Preserve published release sections during backfill (#28)&quot;
-composer changelog:entry --format=json &quot;Add changelog automation for release workflows (#28)&quot;
+composer changelog:entry --output-format=json &quot;Add changelog automation for release workflows (#28)&quot;
 
 composer changelog:check
 composer changelog:check --against=origin/main
-composer changelog:check --format=json
+composer changelog:check --output-format=json
 
 composer changelog:next-version
-composer changelog:next-version --format=json
+composer changelog:next-version --output-format=json
 
 composer changelog:promote 1.3.0
 composer changelog:promote 1.3.0 --date=2026-04-19
-composer changelog:promote 1.3.0 --format=json
+composer changelog:promote 1.3.0 --output-format=json
 
 composer changelog:show 1.3.0
-composer changelog:show 1.3.0 --format=json</code></pre>
+composer changelog:show 1.3.0 --output-format=json</code></pre>
 
     </section>
 
@@ -2837,7 +2837,7 @@ date immediately;</li>
 <code>CHANGELOG.md</code>
 ;</li>
 
-    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+    <li class="dash"><code>--output-format=&lt;text|json&gt;</code>
  to switch between normal terminal output and a
 structured machine-readable payload.</li>
 
@@ -2858,7 +2858,7 @@ branch or commit;</li>
     <li class="dash"><code>--file=&lt;path&gt;</code>
  to validate another changelog path;</li>
 
-    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+    <li class="dash"><code>--output-format=&lt;text|json&gt;</code>
  to switch between normal terminal output and a
 structured machine-readable payload.</li>
 
@@ -2879,7 +2879,7 @@ be supplied explicitly instead of inferred from the changelog;</li>
     <li class="dash"><code>--file=&lt;path&gt;</code>
  to inspect another changelog path;</li>
 
-    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+    <li class="dash"><code>--output-format=&lt;text|json&gt;</code>
  to switch between normal terminal output and a
 structured machine-readable payload.</li>
 
@@ -2901,7 +2901,7 @@ structured machine-readable payload.</li>
     <li class="dash"><code>--file=&lt;path&gt;</code>
  to promote another changelog path;</li>
 
-    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+    <li class="dash"><code>--output-format=&lt;text|json&gt;</code>
  to switch between normal terminal output and a
 structured machine-readable payload.</li>
 
@@ -2920,7 +2920,7 @@ structured machine-readable payload.</li>
     <li class="dash"><code>--file=&lt;path&gt;</code>
  to render another changelog path;</li>
 
-    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+    <li class="dash"><code>--output-format=&lt;text|json&gt;</code>
  to switch between raw release-note text and a
 structured machine-readable payload.</li>
 
@@ -2945,20 +2945,20 @@ when the selected file does not exist yet;</li>
  is empty
 or does not differ from the selected baseline ref;</li>
 
-    <li class="dash"><code>changelog:entry --format=json</code>
+    <li class="dash"><code>changelog:entry --output-format=json</code>
  emits the authoring summary as the
 <code>message</code>
  plus structured context describing the file, category, release,
 optional date, and entry text;</li>
 
-    <li class="dash"><code>changelog:check --format=json</code>
+    <li class="dash"><code>changelog:check --output-format=json</code>
  emits a deterministic JSON payload with
 <code>status</code>
 , <code>message</code>
 , and <code>context</code>
  keys for automation consumers;</li>
 
-    <li class="dash"><code>changelog:next-version --format=json</code>
+    <li class="dash"><code>changelog:next-version --output-format=json</code>
  emits the inferred semantic version
 as the <code>message</code>
  plus structured context describing the inspected changelog
@@ -2973,7 +2973,7 @@ major bump, <code>Added</code>
  entries for a minor bump, and otherwise
 falls back to a patch bump;</li>
 
-    <li class="dash"><code>changelog:promote --format=json</code>
+    <li class="dash"><code>changelog:promote --output-format=json</code>
  emits the promotion summary as the
 <code>message</code>
  plus structured context describing the file, version, and
@@ -2988,7 +2988,7 @@ publishing the requested version;</li>
  prints only the release body in text mode so workflows can
 feed it directly into GitHub release notes;</li>
 
-    <li class="dash"><code>changelog:show --format=json</code>
+    <li class="dash"><code>changelog:show --output-format=json</code>
  emits the rendered release-notes body as the
 <code>message</code>
  plus structured context describing the file, version, and

@@ -1396,6 +1396,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CodeStyleCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeStyleCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand",
             "name": "CopyResourceCommand",
             "summary": "Copies\u0020packaged\u0020or\u0020local\u0020resources\u0020into\u0020the\u0020consumer\u0020repository.",
