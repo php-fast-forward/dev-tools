@@ -1606,16 +1606,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_logger"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\EmitsGithubActionErrors",
-            "name": "EmitsGithubActionErrors",
-            "summary": "Provides\u0020reusable\u0020GitHub\u0020Actions\u0020error\u0020annotations\u0020for\u0020Composer\u0020commands.",
-            "url": "classes/FastForward-DevTools-Console-Command-EmitsGithubActionErrors.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\EmitsGithubActionErrors\u003A\u003AemitGithubActionError\u0028\u0029",
-            "name": "emitGithubActionError",
-            "summary": "Emits\u0020a\u0020GitHub\u0020Actions\u0020error\u0020annotation\u0020when\u0020supported\u0020by\u0020the\u0020current\u0020environment.",
-            "url": "classes/FastForward-DevTools-Console-Command-EmitsGithubActionErrors.html#method_emitGithubActionError"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
             "name": "FundingCommand",
             "summary": "Synchronizes\u0020funding\u0020metadata\u0020between\u0020composer.json\u0020and\u0020.github\/FUNDING.yml.",
@@ -1951,25 +1941,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_logger"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults",
-            "name": "LogsCommandResults",
-            "summary": "Provides\u0020reusable\u0020success\u0020and\u0020failure\u0020helpers\u0020for\u0020command\u0020logging.",
-            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults\u003A\u003Anotice\u0028\u0029",
-            "name": "notice",
-            "summary": "Logs\u0020a\u0020notice\u002Dlevel\u0020command\u0020message.",
-            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html#method_notice"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults\u003A\u003Asuccess\u0028\u0029",
-            "name": "success",
-            "summary": "Logs\u0020a\u0020successful\u0020command\u0020result\u0020and\u0020returns\u0020a\u0020success\u0020exit\u0020code.",
-            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html#method_success"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults\u003A\u003Afailure\u0028\u0029",
-            "name": "failure",
-            "summary": "Logs\u0020a\u0020failed\u0020command\u0020result,\u0020emits\u0020a\u0020GitHub\u0020Actions\u0020error\u0020annotation,\u0020and\u0020returns\u0020a\u0020failure\u0020exit\u0020code.",
-            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html#method_failure"
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "name": "LoggerAwareCommandInterface",
+            "summary": "Marks\u0020commands\u0020that\u0020provide\u0020an\u0020initialized\u0020logger\u0020for\u0020reusable\u0020logging\u0020helpers.",
+            "url": "classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
             "name": "MetricsCommand",
@@ -2370,6 +2345,46 @@ Search.appendIndex(
             "name": "logger",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\EmitsGithubActionErrors",
+            "name": "EmitsGithubActionErrors",
+            "summary": "Provides\u0020reusable\u0020GitHub\u0020Actions\u0020error\u0020annotations\u0020for\u0020Composer\u0020commands.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-EmitsGithubActionErrors.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\EmitsGithubActionErrors\u003A\u003AemitGithubActionError\u0028\u0029",
+            "name": "emitGithubActionError",
+            "summary": "Emits\u0020a\u0020GitHub\u0020Actions\u0020error\u0020annotation\u0020when\u0020supported\u0020by\u0020the\u0020current\u0020environment.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-EmitsGithubActionErrors.html#method_emitGithubActionError"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger",
+            "name": "HasCommandLogger",
+            "summary": "Resolves\u0020and\u0020validates\u0020the\u0020logger\u0020required\u0020by\u0020command\u0020logging\u0020helpers.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-HasCommandLogger.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger\u003A\u003AgetLogger\u0028\u0029",
+            "name": "getLogger",
+            "summary": "Resolves\u0020the\u0020logger\u0020required\u0020by\u0020the\u0020consuming\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-HasCommandLogger.html#method_getLogger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
+            "name": "LogsCommandResults",
+            "summary": "Provides\u0020reusable\u0020success\u0020and\u0020failure\u0020helpers\u0020for\u0020command\u0020logging.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003Anotice\u0028\u0029",
+            "name": "notice",
+            "summary": "Logs\u0020a\u0020notice\u002Dlevel\u0020command\u0020message.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html#method_notice"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003Asuccess\u0028\u0029",
+            "name": "success",
+            "summary": "Logs\u0020a\u0020successful\u0020command\u0020result\u0020and\u0020returns\u0020a\u0020success\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html#method_success"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003Afailure\u0028\u0029",
+            "name": "failure",
+            "summary": "Logs\u0020a\u0020failed\u0020command\u0020result,\u0020emits\u0020a\u0020GitHub\u0020Actions\u0020error\u0020annotation,\u0020and\u0020returns\u0020a\u0020failure\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html#method_failure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
             "name": "UpdateComposerJsonCommand",
@@ -4345,6 +4360,11 @@ Search.appendIndex(
             "name": "Command",
             "summary": "",
             "url": "namespaces/fastforward-devtools-console-command.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits",
+            "name": "Traits",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-command-traits.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\CommandLoader",
             "name": "CommandLoader",

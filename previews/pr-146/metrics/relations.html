@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-21 19:15:17        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-21 19:50:01        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -93,7 +93,7 @@
                             <path d="M0 0h24v24H0z" fill="none">
                             <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z">
                         </svg>
-                        Violations (30)
+                        Violations (31)
                     </a>
                 </li>
                                     <li>
@@ -272,10 +272,53 @@
         "relations": []
     },
     {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\Input\\InputInterface"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Input\\InputInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger",
+        "size": 3000,
+        "relations": [
+            "\\Psr\\Log\\LoggerInterface",
+            "\\LogicException"
+        ]
+    },
+    {
+        "name": "\\Psr\\Log\\LoggerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\LogicException",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\EmitsGithubActionErrors",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Console\\GithubActionError"
+        ]
+    },
+    {
+        "name": "\\Composer\\Console\\GithubActionError",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand",
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -290,22 +333,17 @@
         "relations": []
     },
     {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
         "size": 3000,
         "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Psr\\Log\\LoggerInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\Input\\InputInterface",
         "size": 3000,
         "relations": []
     },
@@ -324,6 +362,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\GitAttributes\\CandidateProviderInterface",
             "\\FastForward\\DevTools\\GitAttributes\\ExistenceCheckerInterface",
             "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilterInterface",
@@ -398,6 +437,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
@@ -427,6 +467,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -444,6 +485,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -461,6 +503,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
@@ -488,6 +531,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
@@ -503,17 +547,11 @@
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Console\\Input\\InputInterface"
-        ]
-    },
-    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand",
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
@@ -531,6 +569,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -555,6 +594,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
@@ -579,22 +619,11 @@
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\EmitsGithubActionErrors",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Console\\GithubActionError"
-        ]
-    },
-    {
-        "name": "\\Composer\\Console\\GithubActionError",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
@@ -621,6 +650,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -634,6 +664,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "\\Psr\\Clock\\ClockInterface",
@@ -647,6 +678,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\License\\GeneratorInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
@@ -666,6 +698,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
             "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
             "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
@@ -697,6 +730,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -715,6 +749,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
@@ -729,6 +764,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -741,6 +777,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Twig\\Environment",
@@ -757,6 +794,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
@@ -785,6 +823,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec",
             "\\FastForward\\DevTools\\Funding\\FundingYamlCodec",
@@ -827,6 +866,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -841,6 +881,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "\\Psr\\Log\\LoggerInterface",
@@ -853,6 +894,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
             "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
@@ -876,6 +918,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
             "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
@@ -897,6 +940,7 @@
         "size": 3000,
         "relations": [
             "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
             "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",

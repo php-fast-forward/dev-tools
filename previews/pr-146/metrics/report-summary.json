@@ -1,41 +1,41 @@
 {
     "LOC": {
-        "linesOfCode": 7982,
-        "logicalLinesOfCode": 4178,
-        "commentLinesOfCode": 3811,
-        "avgVolume": 496.1,
-        "avgCommentWeight": 43.55,
-        "avgIntelligentContent": 43.55,
+        "linesOfCode": 7998,
+        "logicalLinesOfCode": 4186,
+        "commentLinesOfCode": 3819,
+        "avgVolume": 500.71,
+        "avgCommentWeight": 43.54,
+        "avgIntelligentContent": 43.54,
         "logicalLinesByClass": 46,
         "logicalLinesByMethod": 11
     },
     "OOP": {
-        "classes": 90,
-        "interface": 29,
-        "methods": 368,
-        "methodsByClass": 4.09,
-        "lackCohesionOfMethods": 2.1
+        "classes": 91,
+        "interface": 30,
+        "methods": 369,
+        "methodsByClass": 4.05,
+        "lackCohesionOfMethods": 2.09
     },
     "Coupling": {
         "avgAfferentCoupling": 0.51,
-        "avgEfferentCoupling": 4.68,
-        "avgInstability": 0.86,
+        "avgEfferentCoupling": 4.93,
+        "avgInstability": 0.87,
         "inheritanceTreeDepth": 1.09
     },
     "Package": {
-        "packages": 34,
-        "acgClassesPerPackage": 3.5,
-        "avgDistance": 0.15,
-        "avgIncomingClassDependencies": 2.65,
-        "avgOutgoingClassDependencies": 5.15,
-        "avgIncomingPackageDependencies": 1.24,
-        "avgOutgoingPackageDependencies": 3.94
+        "packages": 35,
+        "acgClassesPerPackage": 3.46,
+        "avgDistance": 0.17,
+        "avgIncomingClassDependencies": 2.57,
+        "avgOutgoingClassDependencies": 5.09,
+        "avgIncomingPackageDependencies": 1.2,
+        "avgOutgoingPackageDependencies": 3.91
     },
     "Complexity": {
-        "avgCyclomaticComplexityByClass": 9.02,
-        "avgWeightedMethodCountByClass": 12.11,
-        "avgRelativeSystemComplexity": 195.92,
-        "avgDifficulty": 7.75
+        "avgCyclomaticComplexityByClass": 8.97,
+        "avgWeightedMethodCountByClass": 12.02,
+        "avgRelativeSystemComplexity": 198.94,
+        "avgDifficulty": 7.66
     },
     "Bugs": {
         "avgBugsByClass": 0.17,
@@ -44,7 +44,7 @@
     "Violations": {
         "critical": 0,
         "error": 14,
-        "warning": 16,
+        "warning": 17,
         "information": 0
     }
 }

@@ -72,6 +72,212 @@ var classes = [
         "violations": {}
     },
     {
+        "name": "FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
+        "interface": false,
+        "abstract": true,
+        "final": false,
+        "methods": [
+            {
+                "name": "notice",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "success",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "failure",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 3,
+        "nbMethods": 3,
+        "nbMethodsPrivate": 3,
+        "nbMethodsPublic": 0,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 3,
+        "ccn": 1,
+        "ccnMethodMax": 1,
+        "externals": [
+            "Symfony\\Component\\Console\\Input\\InputInterface",
+            "Symfony\\Component\\Console\\Input\\InputInterface",
+            "Symfony\\Component\\Console\\Input\\InputInterface"
+        ],
+        "parents": [],
+        "implements": [],
+        "lcom": 1,
+        "length": 37,
+        "vocabulary": 9,
+        "volume": 117.29,
+        "difficulty": 4.86,
+        "effort": 569.68,
+        "level": 0.21,
+        "bugs": 0.04,
+        "time": 32,
+        "intelligentContent": 24.15,
+        "number_operators": 3,
+        "number_operands": 34,
+        "number_operators_unique": 2,
+        "number_operands_unique": 7,
+        "cloc": 33,
+        "loc": 55,
+        "lloc": 22,
+        "mi": 102.69,
+        "mIwoC": 56.09,
+        "commentWeight": 46.6,
+        "kanDefect": 0.15,
+        "relativeStructuralComplexity": 25,
+        "relativeDataComplexity": 1,
+        "relativeSystemComplexity": 26,
+        "totalStructuralComplexity": 75,
+        "totalDataComplexity": 3,
+        "totalSystemComplexity": 78,
+        "package": "FastForward\\DevTools\\Console\\Command\\Traits\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 1,
+        "instability": 1,
+        "numberOfUnitTests": 0,
+        "violations": {}
+    },
+    {
+        "name": "FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger",
+        "interface": false,
+        "abstract": true,
+        "final": false,
+        "methods": [
+            {
+                "name": "getLogger",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 1,
+        "nbMethods": 1,
+        "nbMethodsPrivate": 1,
+        "nbMethodsPublic": 0,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 5,
+        "ccn": 5,
+        "ccnMethodMax": 5,
+        "externals": [
+            "Psr\\Log\\LoggerInterface",
+            "LogicException"
+        ],
+        "parents": [],
+        "implements": [],
+        "lcom": 1,
+        "length": 13,
+        "vocabulary": 7,
+        "volume": 36.5,
+        "difficulty": 4.67,
+        "effort": 170.31,
+        "level": 0.21,
+        "bugs": 0.01,
+        "time": 9,
+        "intelligentContent": 7.82,
+        "number_operators": 6,
+        "number_operands": 7,
+        "number_operators_unique": 4,
+        "number_operands_unique": 3,
+        "cloc": 8,
+        "loc": 19,
+        "lloc": 11,
+        "mi": 107.89,
+        "mIwoC": 65.67,
+        "commentWeight": 42.21,
+        "kanDefect": 0.22,
+        "relativeStructuralComplexity": 0,
+        "relativeDataComplexity": 1,
+        "relativeSystemComplexity": 1,
+        "totalStructuralComplexity": 0,
+        "totalDataComplexity": 1,
+        "totalSystemComplexity": 1,
+        "package": "FastForward\\DevTools\\Console\\Command\\Traits\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 2,
+        "instability": 1,
+        "numberOfUnitTests": 0,
+        "violations": {}
+    },
+    {
+        "name": "FastForward\\DevTools\\Console\\Command\\Traits\\EmitsGithubActionErrors",
+        "interface": false,
+        "abstract": true,
+        "final": false,
+        "methods": [
+            {
+                "name": "emitGithubActionError",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 1,
+        "nbMethods": 1,
+        "nbMethodsPrivate": 1,
+        "nbMethodsPublic": 0,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 1,
+        "ccn": 1,
+        "ccnMethodMax": 1,
+        "externals": [
+            "Composer\\Console\\GithubActionError"
+        ],
+        "parents": [],
+        "implements": [],
+        "lcom": 1,
+        "length": 7,
+        "vocabulary": 4,
+        "volume": 14,
+        "difficulty": 0,
+        "effort": 0,
+        "level": 1.14,
+        "bugs": 0,
+        "time": 0,
+        "intelligentContent": 16,
+        "number_operators": 0,
+        "number_operands": 7,
+        "number_operators_unique": 0,
+        "number_operands_unique": 4,
+        "cloc": 12,
+        "loc": 20,
+        "lloc": 8,
+        "mi": 118.74,
+        "mIwoC": 72.14,
+        "commentWeight": 46.6,
+        "kanDefect": 0.15,
+        "relativeStructuralComplexity": 4,
+        "relativeDataComplexity": 1,
+        "relativeSystemComplexity": 5,
+        "totalStructuralComplexity": 4,
+        "totalDataComplexity": 1,
+        "totalSystemComplexity": 5,
+        "package": "FastForward\\DevTools\\Console\\Command\\Traits\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 1,
+        "instability": 1,
+        "numberOfUnitTests": 0,
+        "violations": {}
+    },
+    {
         "name": "FastForward\\DevTools\\Console\\Command\\ReportsCommand",
         "interface": false,
         "abstract": false,
@@ -110,6 +316,7 @@ var classes = [
         "ccnMethodMax": 9,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "Psr\\Log\\LoggerInterface",
@@ -120,7 +327,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 144,
         "vocabulary": 49,
@@ -151,7 +360,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 7,
+        "efferentCoupling": 8,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -209,6 +418,7 @@ var classes = [
         "ccnMethodMax": 11,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\GitAttributes\\CandidateProviderInterface",
             "FastForward\\DevTools\\GitAttributes\\ExistenceCheckerInterface",
             "FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilterInterface",
@@ -228,38 +438,40 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
-        "length": 197,
-        "vocabulary": 63,
-        "volume": 1177.52,
-        "difficulty": 11.35,
-        "effort": 13359.55,
+        "length": 219,
+        "vocabulary": 69,
+        "volume": 1337.77,
+        "difficulty": 11.67,
+        "effort": 15614.59,
         "level": 0.09,
-        "bugs": 0.39,
-        "time": 742,
-        "intelligentContent": 103.79,
+        "bugs": 0.45,
+        "time": 867,
+        "intelligentContent": 114.61,
         "number_operators": 41,
-        "number_operands": 156,
+        "number_operands": 178,
         "number_operators_unique": 8,
-        "number_operands_unique": 55,
+        "number_operands_unique": 61,
         "cloc": 50,
         "loc": 123,
         "lloc": 73,
-        "mi": 77.84,
-        "mIwoC": 36.1,
+        "mi": 77.45,
+        "mIwoC": 35.71,
         "commentWeight": 41.74,
         "kanDefect": 0.64,
-        "relativeStructuralComplexity": 841,
-        "relativeDataComplexity": 0.37,
-        "relativeSystemComplexity": 841.37,
-        "totalStructuralComplexity": 4205,
-        "totalDataComplexity": 1.83,
-        "totalSystemComplexity": 4206.83,
+        "relativeStructuralComplexity": 961,
+        "relativeDataComplexity": 0.34,
+        "relativeSystemComplexity": 961.34,
+        "totalStructuralComplexity": 4805,
+        "totalDataComplexity": 1.72,
+        "totalSystemComplexity": 4806.72,
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 14,
+        "efferentCoupling": 15,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -317,6 +529,7 @@ var classes = [
         "ccnMethodMax": 21,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Resource\\FileDiffer",
@@ -333,7 +546,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 201,
         "vocabulary": 51,
@@ -364,7 +579,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 9,
+        "efferentCoupling": 10,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -408,6 +623,7 @@ var classes = [
         "ccnMethodMax": 2,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "Psr\\Log\\LoggerInterface",
@@ -417,7 +633,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 49,
         "vocabulary": 23,
@@ -448,7 +666,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 6,
+        "efferentCoupling": 7,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -492,6 +710,7 @@ var classes = [
         "ccnMethodMax": 2,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
             "Psr\\Log\\LoggerInterface",
@@ -501,7 +720,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 43,
         "vocabulary": 23,
@@ -532,7 +753,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 6,
+        "efferentCoupling": 7,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -590,6 +811,7 @@ var classes = [
         "ccnMethodMax": 7,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
@@ -606,27 +828,29 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
-        "length": 170,
+        "length": 171,
         "vocabulary": 62,
-        "volume": 1012.21,
-        "difficulty": 6.14,
-        "effort": 6215.35,
+        "volume": 1018.17,
+        "difficulty": 6.18,
+        "effort": 6296.56,
         "level": 0.16,
         "bugs": 0.34,
-        "time": 345,
-        "intelligentContent": 164.85,
+        "time": 350,
+        "intelligentContent": 164.64,
         "number_operators": 30,
-        "number_operands": 140,
+        "number_operands": 141,
         "number_operators_unique": 5,
         "number_operands_unique": 57,
         "cloc": 48,
-        "loc": 108,
-        "lloc": 60,
-        "mi": 81.89,
-        "mIwoC": 38.96,
-        "commentWeight": 42.94,
+        "loc": 107,
+        "lloc": 59,
+        "mi": 82.16,
+        "mIwoC": 39.1,
+        "commentWeight": 43.06,
         "kanDefect": 0.8,
         "relativeStructuralComplexity": 576,
         "relativeDataComplexity": 0.41,
@@ -637,7 +861,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 11,
+        "efferentCoupling": 12,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -681,6 +905,7 @@ var classes = [
         "ccnMethodMax": 9,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "Symfony\\Component\\Config\\FileLocatorInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
@@ -692,7 +917,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 107,
         "vocabulary": 42,
@@ -723,88 +950,9 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 8,
+        "efferentCoupling": 9,
         "instability": 1,
         "numberOfUnitTests": 1,
-        "violations": {}
-    },
-    {
-        "name": "FastForward\\DevTools\\Console\\Command\\LogsCommandResults",
-        "interface": false,
-        "abstract": true,
-        "final": false,
-        "methods": [
-            {
-                "name": "notice",
-                "role": null,
-                "public": false,
-                "private": true,
-                "_type": "Hal\\Metric\\FunctionMetric"
-            },
-            {
-                "name": "success",
-                "role": null,
-                "public": false,
-                "private": true,
-                "_type": "Hal\\Metric\\FunctionMetric"
-            },
-            {
-                "name": "failure",
-                "role": null,
-                "public": false,
-                "private": true,
-                "_type": "Hal\\Metric\\FunctionMetric"
-            }
-        ],
-        "nbMethodsIncludingGettersSetters": 3,
-        "nbMethods": 3,
-        "nbMethodsPrivate": 3,
-        "nbMethodsPublic": 0,
-        "nbMethodsGetter": 0,
-        "nbMethodsSetters": 0,
-        "wmc": 5,
-        "ccn": 3,
-        "ccnMethodMax": 3,
-        "externals": [
-            "Symfony\\Component\\Console\\Input\\InputInterface",
-            "Symfony\\Component\\Console\\Input\\InputInterface",
-            "Symfony\\Component\\Console\\Input\\InputInterface"
-        ],
-        "parents": [],
-        "implements": [],
-        "lcom": 1,
-        "length": 48,
-        "vocabulary": 11,
-        "volume": 166.05,
-        "difficulty": 12,
-        "effort": 1992.63,
-        "level": 0.08,
-        "bugs": 0.06,
-        "time": 111,
-        "intelligentContent": 13.84,
-        "number_operators": 6,
-        "number_operands": 42,
-        "number_operators_unique": 4,
-        "number_operands_unique": 7,
-        "cloc": 33,
-        "loc": 60,
-        "lloc": 27,
-        "mi": 98.44,
-        "mIwoC": 52.83,
-        "commentWeight": 45.62,
-        "kanDefect": 0.22,
-        "relativeStructuralComplexity": 25,
-        "relativeDataComplexity": 1,
-        "relativeSystemComplexity": 26,
-        "totalStructuralComplexity": 75,
-        "totalDataComplexity": 3,
-        "totalSystemComplexity": 78,
-        "package": "FastForward\\DevTools\\Console\\Command\\",
-        "pageRank": 0,
-        "afferentCoupling": 0,
-        "efferentCoupling": 1,
-        "instability": 1,
-        "numberOfUnitTests": 0,
         "violations": {}
     },
     {
@@ -853,6 +1001,7 @@ var classes = [
         "ccnMethodMax": 8,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "Psr\\Log\\LoggerInterface",
             "Symfony\\Component\\Console\\Input\\InputInterface",
             "Symfony\\Component\\Console\\Output\\OutputInterface",
@@ -863,7 +1012,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 88,
         "vocabulary": 34,
@@ -894,7 +1045,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 6,
+        "efferentCoupling": 7,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -938,6 +1089,7 @@ var classes = [
         "ccnMethodMax": 4,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "Psr\\Log\\LoggerInterface",
@@ -947,7 +1099,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 72,
         "vocabulary": 27,
@@ -978,7 +1132,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 6,
+        "efferentCoupling": 7,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1029,6 +1183,7 @@ var classes = [
         "ccnMethodMax": 7,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
@@ -1044,7 +1199,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 165,
         "vocabulary": 75,
@@ -1075,72 +1232,9 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 12,
+        "efferentCoupling": 13,
         "instability": 1,
         "numberOfUnitTests": 1,
-        "violations": {}
-    },
-    {
-        "name": "FastForward\\DevTools\\Console\\Command\\EmitsGithubActionErrors",
-        "interface": false,
-        "abstract": true,
-        "final": false,
-        "methods": [
-            {
-                "name": "emitGithubActionError",
-                "role": null,
-                "public": false,
-                "private": true,
-                "_type": "Hal\\Metric\\FunctionMetric"
-            }
-        ],
-        "nbMethodsIncludingGettersSetters": 1,
-        "nbMethods": 1,
-        "nbMethodsPrivate": 1,
-        "nbMethodsPublic": 0,
-        "nbMethodsGetter": 0,
-        "nbMethodsSetters": 0,
-        "wmc": 1,
-        "ccn": 1,
-        "ccnMethodMax": 1,
-        "externals": [
-            "Composer\\Console\\GithubActionError"
-        ],
-        "parents": [],
-        "implements": [],
-        "lcom": 1,
-        "length": 7,
-        "vocabulary": 4,
-        "volume": 14,
-        "difficulty": 0,
-        "effort": 0,
-        "level": 1.14,
-        "bugs": 0,
-        "time": 0,
-        "intelligentContent": 16,
-        "number_operators": 0,
-        "number_operands": 7,
-        "number_operators_unique": 0,
-        "number_operands_unique": 4,
-        "cloc": 12,
-        "loc": 20,
-        "lloc": 8,
-        "mi": 118.74,
-        "mIwoC": 72.14,
-        "commentWeight": 46.6,
-        "kanDefect": 0.15,
-        "relativeStructuralComplexity": 4,
-        "relativeDataComplexity": 1,
-        "relativeSystemComplexity": 5,
-        "totalStructuralComplexity": 4,
-        "totalDataComplexity": 1,
-        "totalSystemComplexity": 5,
-        "package": "FastForward\\DevTools\\Console\\Command\\",
-        "pageRank": 0,
-        "afferentCoupling": 0,
-        "efferentCoupling": 1,
-        "instability": 1,
-        "numberOfUnitTests": 0,
         "violations": {}
     },
     {
@@ -1238,6 +1332,7 @@ var classes = [
         "ccnMethodMax": 6,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "Symfony\\Component\\Config\\FileLocatorInterface",
@@ -1262,7 +1357,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 209,
         "vocabulary": 62,
@@ -1293,7 +1390,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 10,
+        "efferentCoupling": 11,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1337,6 +1434,7 @@ var classes = [
         "ccnMethodMax": 5,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "Psr\\Log\\LoggerInterface",
@@ -1347,7 +1445,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 102,
         "vocabulary": 46,
@@ -1378,7 +1478,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 7,
+        "efferentCoupling": 8,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1422,6 +1522,7 @@ var classes = [
         "ccnMethodMax": 3,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "Psr\\Clock\\ClockInterface",
@@ -1432,7 +1533,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 60,
         "vocabulary": 27,
@@ -1463,7 +1566,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 7,
+        "efferentCoupling": 8,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1514,6 +1617,7 @@ var classes = [
         "ccnMethodMax": 12,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\License\\GeneratorInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Resource\\FileDiffer",
@@ -1527,38 +1631,40 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
-        "length": 146,
-        "vocabulary": 43,
-        "volume": 792.23,
-        "difficulty": 9.57,
-        "effort": 7579.76,
+        "length": 172,
+        "vocabulary": 49,
+        "volume": 965.73,
+        "difficulty": 10.05,
+        "effort": 9702.22,
         "level": 0.1,
-        "bugs": 0.26,
-        "time": 421,
-        "intelligentContent": 82.8,
+        "bugs": 0.32,
+        "time": 539,
+        "intelligentContent": 96.13,
         "number_operators": 28,
-        "number_operands": 118,
+        "number_operands": 144,
         "number_operators_unique": 6,
-        "number_operands_unique": 37,
+        "number_operands_unique": 43,
         "cloc": 37,
         "loc": 92,
         "lloc": 55,
-        "mi": 81.72,
-        "mIwoC": 40.12,
+        "mi": 81.11,
+        "mIwoC": 39.52,
         "commentWeight": 41.59,
         "kanDefect": 0.64,
-        "relativeStructuralComplexity": 529,
-        "relativeDataComplexity": 0.39,
-        "relativeSystemComplexity": 529.39,
-        "totalStructuralComplexity": 2116,
-        "totalDataComplexity": 1.54,
-        "totalSystemComplexity": 2117.54,
+        "relativeStructuralComplexity": 576,
+        "relativeDataComplexity": 0.37,
+        "relativeSystemComplexity": 576.37,
+        "totalStructuralComplexity": 2304,
+        "totalDataComplexity": 1.48,
+        "totalSystemComplexity": 2305.48,
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 8,
+        "efferentCoupling": 9,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1609,6 +1715,7 @@ var classes = [
         "ccnMethodMax": 9,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\GitIgnore\\MergerInterface",
             "FastForward\\DevTools\\GitIgnore\\ReaderInterface",
             "FastForward\\DevTools\\GitIgnore\\WriterInterface",
@@ -1624,7 +1731,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 2,
         "length": 148,
         "vocabulary": 50,
@@ -1655,7 +1764,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 10,
+        "efferentCoupling": 11,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1699,6 +1808,7 @@ var classes = [
         "ccnMethodMax": 3,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "Psr\\Log\\LoggerInterface",
@@ -1710,7 +1820,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 71,
         "vocabulary": 28,
@@ -1741,7 +1853,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 7,
+        "efferentCoupling": 8,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1785,6 +1897,7 @@ var classes = [
         "ccnMethodMax": 5,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "Symfony\\Component\\Config\\FileLocatorInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
@@ -1796,7 +1909,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 77,
         "vocabulary": 36,
@@ -1827,7 +1942,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 8,
+        "efferentCoupling": 9,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1871,6 +1986,7 @@ var classes = [
         "ccnMethodMax": 4,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "Psr\\Log\\LoggerInterface",
@@ -1880,7 +1996,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 72,
         "vocabulary": 27,
@@ -1911,7 +2029,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 6,
+        "efferentCoupling": 7,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -1962,6 +2080,7 @@ var classes = [
         "ccnMethodMax": 4,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "Twig\\Environment",
@@ -1975,7 +2094,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 146,
         "vocabulary": 56,
@@ -2006,7 +2127,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 10,
+        "efferentCoupling": 11,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -2064,6 +2185,7 @@ var classes = [
         "ccnMethodMax": 13,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "Symfony\\Component\\Config\\FileLocatorInterface",
@@ -2081,7 +2203,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 171,
         "vocabulary": 58,
@@ -2112,7 +2236,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 12,
+        "efferentCoupling": 13,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -2184,6 +2308,7 @@ var classes = [
         "ccnMethodMax": 13,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Funding\\ComposerFundingCodec",
             "FastForward\\DevTools\\Funding\\FundingYamlCodec",
@@ -2207,38 +2332,40 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
-        "length": 353,
-        "vocabulary": 71,
-        "volume": 2170.86,
-        "difficulty": 13.02,
-        "effort": 28254.59,
-        "level": 0.08,
-        "bugs": 0.72,
-        "time": 1570,
-        "intelligentContent": 166.79,
+        "length": 418,
+        "vocabulary": 84,
+        "volume": 2671.99,
+        "difficulty": 13.35,
+        "effort": 35660.77,
+        "level": 0.07,
+        "bugs": 0.89,
+        "time": 1981,
+        "intelligentContent": 200.21,
         "number_operators": 71,
-        "number_operands": 282,
+        "number_operands": 347,
         "number_operators_unique": 6,
-        "number_operands_unique": 65,
+        "number_operands_unique": 78,
         "cloc": 72,
-        "loc": 190,
-        "lloc": 118,
-        "mi": 68.59,
-        "mIwoC": 27.81,
-        "commentWeight": 40.78,
+        "loc": 189,
+        "lloc": 117,
+        "mi": 68.11,
+        "mIwoC": 27.26,
+        "commentWeight": 40.85,
         "kanDefect": 1.41,
-        "relativeStructuralComplexity": 1444,
-        "relativeDataComplexity": 0.55,
-        "relativeSystemComplexity": 1444.55,
-        "totalStructuralComplexity": 10108,
-        "totalDataComplexity": 3.85,
-        "totalSystemComplexity": 10111.85,
+        "relativeStructuralComplexity": 1600,
+        "relativeDataComplexity": 0.52,
+        "relativeSystemComplexity": 1600.52,
+        "totalStructuralComplexity": 11200,
+        "totalDataComplexity": 3.66,
+        "totalSystemComplexity": 11203.66,
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 13,
+        "efferentCoupling": 14,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -2296,6 +2423,7 @@ var classes = [
         "ccnMethodMax": 19,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "Psr\\Log\\LoggerInterface",
@@ -2307,7 +2435,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 238,
         "vocabulary": 69,
@@ -2338,7 +2468,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 8,
+        "efferentCoupling": 9,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -2382,6 +2512,7 @@ var classes = [
         "ccnMethodMax": 2,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
             "Psr\\Log\\LoggerInterface",
@@ -2391,7 +2522,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 47,
         "vocabulary": 26,
@@ -2422,7 +2555,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 6,
+        "efferentCoupling": 7,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -2494,6 +2627,7 @@ var classes = [
         "ccnMethodMax": 12,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
             "FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
@@ -2514,7 +2648,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 311,
         "vocabulary": 102,
@@ -2536,16 +2672,16 @@ var classes = [
         "mIwoC": 29.88,
         "commentWeight": 41.39,
         "kanDefect": 1.22,
-        "relativeStructuralComplexity": 961,
-        "relativeDataComplexity": 0.45,
-        "relativeSystemComplexity": 961.45,
-        "totalStructuralComplexity": 6727,
-        "totalDataComplexity": 3.16,
-        "totalSystemComplexity": 6730.16,
+        "relativeStructuralComplexity": 1024,
+        "relativeDataComplexity": 0.44,
+        "relativeSystemComplexity": 1024.44,
+        "totalStructuralComplexity": 7168,
+        "totalDataComplexity": 3.06,
+        "totalSystemComplexity": 7171.06,
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 12,
+        "efferentCoupling": 13,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -2610,6 +2746,7 @@ var classes = [
         "ccnMethodMax": 20,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "Symfony\\Component\\Config\\FileLocatorInterface",
             "FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
@@ -2629,7 +2766,9 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
         "length": 260,
         "vocabulary": 55,
@@ -2660,7 +2799,7 @@ var classes = [
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 10,
+        "efferentCoupling": 11,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -2706,11 +2845,12 @@ var classes = [
         "nbMethodsPublic": 1,
         "nbMethodsGetter": 0,
         "nbMethodsSetters": 0,
-        "wmc": 24,
-        "ccn": 21,
-        "ccnMethodMax": 21,
+        "wmc": 25,
+        "ccn": 22,
+        "ccnMethodMax": 22,
         "externals": [
             "Composer\\Command\\BaseCommand",
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "Symfony\\Component\\Config\\FileLocatorInterface",
             "FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
@@ -2726,38 +2866,40 @@ var classes = [
         "parents": [
             "Composer\\Command\\BaseCommand"
         ],
-        "implements": [],
+        "implements": [
+            "FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface"
+        ],
         "lcom": 3,
-        "length": 193,
-        "vocabulary": 55,
-        "volume": 1115.8,
-        "difficulty": 9.67,
-        "effort": 10793.68,
-        "level": 0.1,
-        "bugs": 0.37,
-        "time": 600,
-        "intelligentContent": 115.35,
-        "number_operators": 35,
-        "number_operands": 158,
-        "number_operators_unique": 6,
-        "number_operands_unique": 49,
+        "length": 204,
+        "vocabulary": 58,
+        "volume": 1195.03,
+        "difficulty": 11.39,
+        "effort": 13613.95,
+        "level": 0.09,
+        "bugs": 0.4,
+        "time": 756,
+        "intelligentContent": 104.9,
+        "number_operators": 38,
+        "number_operands": 166,
+        "number_operators_unique": 7,
+        "number_operands_unique": 51,
         "cloc": 33,
-        "loc": 97,
-        "lloc": 64,
-        "mi": 75.71,
-        "mIwoC": 36.44,
-        "commentWeight": 39.28,
-        "kanDefect": 0.94,
-        "relativeStructuralComplexity": 900,
-        "relativeDataComplexity": 0.15,
-        "relativeSystemComplexity": 900.15,
-        "totalStructuralComplexity": 3600,
-        "totalDataComplexity": 0.58,
-        "totalSystemComplexity": 3600.58,
+        "loc": 101,
+        "lloc": 68,
+        "mi": 74.23,
+        "mIwoC": 35.52,
+        "commentWeight": 38.71,
+        "kanDefect": 1.01,
+        "relativeStructuralComplexity": 961,
+        "relativeDataComplexity": 0.17,
+        "relativeSystemComplexity": 961.17,
+        "totalStructuralComplexity": 3844,
+        "totalDataComplexity": 0.69,
+        "totalSystemComplexity": 3844.69,
         "package": "FastForward\\DevTools\\Console\\Command\\",
         "pageRank": 0,
         "afferentCoupling": 0,
-        "efferentCoupling": 10,
+        "efferentCoupling": 11,
         "instability": 1,
         "numberOfUnitTests": 1,
         "violations": {}
@@ -3411,32 +3553,32 @@ var classes = [
         ],
         "implements": [],
         "lcom": 1,
-        "length": 56,
-        "vocabulary": 26,
-        "volume": 263.22,
-        "difficulty": 5.85,
-        "effort": 1539.86,
-        "level": 0.17,
+        "length": 57,
+        "vocabulary": 27,
+        "volume": 271.03,
+        "difficulty": 5.71,
+        "effort": 1548.73,
+        "level": 0.18,
         "bugs": 0.09,
         "time": 86,
-        "intelligentContent": 45,
+        "intelligentContent": 47.43,
         "number_operators": 17,
-        "number_operands": 39,
+        "number_operands": 40,
         "number_operators_unique": 6,
-        "number_operands_unique": 20,
+        "number_operands_unique": 21,
         "cloc": 32,
         "loc": 63,
         "lloc": 31,
-        "mi": 94.37,
-        "mIwoC": 49.71,
+        "mi": 94.28,
+        "mIwoC": 49.62,
         "commentWeight": 44.65,
         "kanDefect": 0.59,
-        "relativeStructuralComplexity": 121,
-        "relativeDataComplexity": 0.21,
-        "relativeSystemComplexity": 121.21,
-        "totalStructuralComplexity": 242,
-        "totalDataComplexity": 0.42,
-        "totalSystemComplexity": 242.42,
+        "relativeStructuralComplexity": 144,
+        "relativeDataComplexity": 0.19,
+        "relativeSystemComplexity": 144.19,
+        "totalStructuralComplexity": 288,
+        "totalDataComplexity": 0.38,
+        "totalSystemComplexity": 288.38,
         "package": "FastForward\\DevTools\\Console\\CommandLoader\\",
         "pageRank": 0,
         "afferentCoupling": 0,
@@ -7902,7 +8044,7 @@ var classes = [
         "totalDataComplexity": 8.08,
         "totalSystemComplexity": 1304.08,
         "package": "FastForward\\DevTools\\Changelog\\Document\\",
-        "pageRank": 0.05,
+        "pageRank": 0.04,
         "afferentCoupling": 6,
         "efferentCoupling": 2,
         "instability": 0.25,
@@ -8024,7 +8166,7 @@ var classes = [
         "totalDataComplexity": 59,
         "totalSystemComplexity": 69,
         "package": "FastForward\\DevTools\\Changelog\\Document\\",
-        "pageRank": 0.12,
+        "pageRank": 0.11,
         "afferentCoupling": 6,
         "efferentCoupling": 1,
         "instability": 0.14,
