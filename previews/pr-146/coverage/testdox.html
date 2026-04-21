@@ -118,8 +118,6 @@
         <h2>Changelog Command (FastForward\DevTools\Tests\Console\Command\ChangelogCommand)</h2>
         <ul>
             <li class="success">Entry command will delegate to the manager</li>
-            <li class="success">Promote command will use the provided or current date</li>
-            <li class="success">Next version command will print the inferred version</li>
             <li class="success">Show command will print the rendered release notes</li>
         </ul>
         <h2>Changelog Document (FastForward\DevTools\Tests\Changelog\Document\ChangelogDocument)</h2>
@@ -152,6 +150,13 @@
             <li class="success">Render release notes will return the renderer output for the requested release</li>
             <li class="success">Render release notes will throw when the requested release does not exist</li>
         </ul>
+        <h2>Changelog Next Version Command (FastForward\DevTools\Tests\Console\Command\ChangelogNextVersionCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success with the inferred version</li>
+            <li class="success">Execute will pass the explicit current version to inference</li>
+            <li class="success">Execute will return success when json output is requested</li>
+            <li class="success">Execute will return failure when format is invalid</li>
+        </ul>
         <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
         <ul>
             <li class="success">Parse will extract release sections and entries</li>
@@ -160,6 +165,13 @@
             <li class="success">Parse will ignore unsupported lines and deduplicate entries within a section</li>
             <li class="success">Parse will treat empty category bodies as empty entry lists</li>
             <li class="success">Extract entries will return empty array when category heading is missing</li>
+        </ul>
+        <h2>Changelog Promote Command (FastForward\DevTools\Tests\Console\Command\ChangelogPromoteCommand)</h2>
+        <ul>
+            <li class="success">Execute will use the current date when one is not provided</li>
+            <li class="success">Execute will use the provided date when present</li>
+            <li class="success">Execute will return success when json output is requested</li>
+            <li class="success">Execute will return failure when format is invalid</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
@@ -231,8 +243,8 @@
         <h2>Command Responder (FastForward\DevTools\Tests\Console\Output\CommandResponder)</h2>
         <ul>
             <li class="success">From will create resolved responder using resolved format</li>
-            <li class="success">Success will render success result and return configured exit code</li>
-            <li class="success">Failure will render failure result and return configured exit code</li>
+            <li class="success">Success will render success result and return success exit code</li>
+            <li class="success">Failure will render failure result and return failure exit code</li>
         </ul>
         <h2>Command Result Renderer (FastForward\DevTools\Tests\Console\Output\CommandResultRenderer)</h2>
         <ul>

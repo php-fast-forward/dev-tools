@@ -2789,9 +2789,11 @@ composer changelog:check --against=origin/main
 composer changelog:check --format=json
 
 composer changelog:next-version
+composer changelog:next-version --format=json
 
 composer changelog:promote 1.3.0
 composer changelog:promote 1.3.0 --date=2026-04-19
+composer changelog:promote 1.3.0 --format=json
 
 composer changelog:show 1.3.0</code></pre>
 
@@ -2869,7 +2871,11 @@ structured machine-readable payload.</li>
 be supplied explicitly instead of inferred from the changelog;</li>
 
     <li class="dash"><code>--file=&lt;path&gt;</code>
- to inspect another changelog path.</li>
+ to inspect another changelog path;</li>
+
+    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+ to switch between normal terminal output and a
+structured machine-readable payload.</li>
 
 </ul>
 </dd>
@@ -2887,7 +2893,11 @@ be supplied explicitly instead of inferred from the changelog;</li>
  to control the published release date;</li>
 
     <li class="dash"><code>--file=&lt;path&gt;</code>
- to promote another changelog path.</li>
+ to promote another changelog path;</li>
+
+    <li class="dash"><code>--format=&lt;text|json&gt;</code>
+ to switch between normal terminal output and a
+structured machine-readable payload.</li>
 
 </ul>
 </dd>
@@ -2932,6 +2942,12 @@ or does not differ from the selected baseline ref;</li>
 , and <code>context</code>
  keys for automation consumers;</li>
 
+    <li class="dash"><code>changelog:next-version --format=json</code>
+ emits the inferred semantic version
+as the <code>message</code>
+ plus structured context describing the inspected changelog
+path and optional current version;</li>
+
     <li class="dash"><code>changelog:next-version</code>
  uses <code>Removed</code>
  or <code>Deprecated</code>
@@ -2940,6 +2956,12 @@ major bump, <code>Added</code>
  or <code>Changed</code>
  entries for a minor bump, and otherwise
 falls back to a patch bump;</li>
+
+    <li class="dash"><code>changelog:promote --format=json</code>
+ emits the promotion summary as the
+<code>message</code>
+ plus structured context describing the file, version, and
+release date written to the changelog;</li>
 
     <li class="dash"><code>changelog:promote</code>
  restores an empty <code>Unreleased</code>

@@ -1211,6 +1211,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogNextVersionCommand.html#property_changelogManager"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogNextVersionCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand",
             "name": "ChangelogPromoteCommand",
             "summary": "Promotes\u0020the\u0020Unreleased\u0020section\u0020into\u0020a\u0020published\u0020changelog\u0020version.",
@@ -1245,6 +1250,11 @@ Search.appendIndex(
             "name": "clock",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogPromoteCommand.html#property_clock"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogPromoteCommand.html#property_commandResponderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
             "name": "ChangelogShowCommand",
