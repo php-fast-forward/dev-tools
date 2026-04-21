@@ -50,8 +50,8 @@ use function is_numeric;
 )]
 final class TestsCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @var string identifies the local configuration file for PHPUnit processes
@@ -166,16 +166,9 @@ final class TestsCommand extends BaseCommand
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            $this->logger->error(
-                $invalidArgumentException->getMessage(),
-                [
-                    'input' => $input,
-                    'output' => $processOutput,
-                ],
-            );
-            $this->emitGithubActionError($invalidArgumentException->getMessage());
-
-            return self::FAILURE;
+            return $this->failure($invalidArgumentException->getMessage(), $input, [
+                'output' => $processOutput,
+            ],);
         }
 
         $processBuilder = $this->processBuilder
@@ -217,24 +210,18 @@ final class TestsCommand extends BaseCommand
 
         if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
             if (self::SUCCESS === $result) {
-                $this->logger->info(
+                return $this->success(
                     'PHPUnit tests completed successfully.',
+                    $input,
                     [
-                        'input' => $input,
                         'output' => $processOutput,
                     ],
                 );
-
-                return self::SUCCESS;
             }
 
-            $this->logger->error('PHPUnit tests failed.', [
-                'input' => $input,
+            return $this->failure('PHPUnit tests failed.', $input, [
                 'output' => $processOutput,
-            ],);
-            $this->emitGithubActionError('PHPUnit tests failed.');
-
-            return self::FAILURE;
+            ]);
         }
 
         [$validationResult, $message, $coverageContext] = $this->validateMinimumCoverage(
@@ -242,22 +229,17 @@ final class TestsCommand extends BaseCommand
             $minimumCoverage,
         );
 
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-            ...$coverageContext,
-        ];
-
         if (self::SUCCESS === $validationResult) {
-            $this->logger->info($message, $context);
-
-            return self::SUCCESS;
+            return $this->success($message, $input, [
+                'output' => $processOutput,
+                ...$coverageContext,
+            ]);
         }
 
-        $this->logger->error($message, $context);
-        $this->emitGithubActionError($message);
-
-        return self::FAILURE;
+        return $this->failure($message, $input, [
+            'output' => $processOutput,
+            ...$coverageContext,
+        ]);
     }
 
     /**

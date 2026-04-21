@@ -39,6 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class AgentsCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     private const string DIRECTORY_LABEL = '.agents/agents';
 
@@ -76,17 +77,15 @@ final class AgentsCommand extends BaseCommand
         $this->logger->info('Starting agents synchronization...');
 
         if (! $this->filesystem->exists($packageAgentsPath)) {
-            $this->logger->error(
+            return $this->failure(
                 'No packaged .agents/agents found at: {packaged_agents_path}',
+                $input,
                 [
-                    'input' => $input,
                     'packaged_agents_path' => $packageAgentsPath,
                     'agents_dir' => $agentsDir,
                     'directory_created' => false,
                 ],
             );
-
-            return self::FAILURE;
         }
 
         $directoryCreated = false;
@@ -102,29 +101,25 @@ final class AgentsCommand extends BaseCommand
         $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::DIRECTORY_LABEL);
 
         if ($result->failed()) {
-            $this->logger->error(
+            return $this->failure(
                 'Agents synchronization failed.',
+                $input,
                 [
-                    'input' => $input,
                     'packaged_agents_path' => $packageAgentsPath,
                     'agents_dir' => $agentsDir,
                     'directory_created' => $directoryCreated,
                 ],
             );
-
-            return self::FAILURE;
         }
 
-        $this->logger->info(
+        return $this->success(
             'Agents synchronization completed successfully.',
+            $input,
             [
-                'input' => $input,
                 'packaged_agents_path' => $packageAgentsPath,
                 'agents_dir' => $agentsDir,
                 'directory_created' => $directoryCreated,
             ],
         );
-
-        return self::SUCCESS;
     }
 }

@@ -22,10 +22,12 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogEntryCommand;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -36,6 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogEntryCommand::class)]
 #[UsesClass(ChangelogEntryType::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class ChangelogEntryCommandTest extends TestCase
 {
     use ProphecyTrait;

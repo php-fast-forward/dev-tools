@@ -43,6 +43,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ChangelogEntryCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @param FilesystemInterface $filesystem
@@ -114,10 +115,10 @@ final class ChangelogEntryCommand extends BaseCommand
 
         $this->changelogManager->addEntry($file, $type, $message, $version, \is_string($date) ? $date : null);
 
-        $this->logger->info(
+        return $this->success(
             'Added {type} changelog entry to [{release}] in {absolute_file}.',
+            $input,
             [
-                'input' => $input,
                 'absolute_file' => $file,
                 'type' => strtolower($type->value),
                 'release' => $version,
@@ -125,7 +126,5 @@ final class ChangelogEntryCommand extends BaseCommand
                 'message' => $message,
             ],
         );
-
-        return self::SUCCESS;
     }
 }

@@ -41,8 +41,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ReportsCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * Initializes the command with required dependencies.
@@ -158,20 +158,14 @@ final class ReportsCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-        ];
-
         if (self::SUCCESS === $result) {
-            $this->logger->info('Documentation reports generated successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('Documentation reports generated successfully.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        $this->logger->error('Documentation reports generation failed.', $context);
-        $this->emitGithubActionError('Documentation reports generation failed.');
-
-        return self::FAILURE;
+        return $this->failure('Documentation reports generation failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 }

@@ -40,6 +40,7 @@ use function rtrim;
 final class MetricsCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @var string the bundled PhpMetrics binary path relative to the consumer root
@@ -132,19 +133,14 @@ final class MetricsCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-        ];
-
         if (self::SUCCESS === $result) {
-            $this->logger->info('Code metrics analysis completed successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('Code metrics analysis completed successfully.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        $this->logger->error('Code metrics analysis failed.', $context);
-
-        return self::FAILURE;
+        return $this->failure('Code metrics analysis failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 }

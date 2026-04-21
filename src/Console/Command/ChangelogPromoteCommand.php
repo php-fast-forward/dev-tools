@@ -42,8 +42,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogPromoteCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @param FilesystemInterface $filesystem
@@ -99,31 +99,24 @@ final class ChangelogPromoteCommand extends BaseCommand
 
             $this->changelogManager->promote($file, $version, $date);
 
-            $this->logger->info(
+            return $this->success(
                 'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
+                $input,
                 [
-                    'input' => $input,
                     'absolute_file' => $file,
                     'version' => $version,
                     'date' => $date,
                 ],
             );
-
-            return self::SUCCESS;
         } catch (Throwable $throwable) {
-            $this->logger->error(
+            return $this->failure(
                 'Unable to promote the changelog release.',
+                $input,
                 [
-                    'input' => $input,
                     'exception_message' => $throwable->getMessage(),
                 ],
-            );
-            $this->emitGithubActionError(
-                'Unable to promote the changelog release.',
                 (string) $input->getOption('file'),
             );
-
-            return self::FAILURE;
         }
     }
 }

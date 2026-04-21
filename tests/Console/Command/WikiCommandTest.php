@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Console\Command\WikiCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
@@ -41,6 +42,7 @@ use Symfony\Component\Process\Process;
 
 #[CoversClass(WikiCommand::class)]
 #[UsesTrait(EmitsGithubActionErrors::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class WikiCommandTest extends TestCase
 {
     use ProphecyTrait;

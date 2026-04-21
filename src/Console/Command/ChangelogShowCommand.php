@@ -41,8 +41,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogShowCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @param FilesystemInterface $filesystem
@@ -92,30 +92,23 @@ final class ChangelogShowCommand extends BaseCommand
                 $version,
             );
 
-            $this->logger->info(
+            return $this->success(
                 $releaseNotes,
+                $input,
                 [
-                    'input' => $input,
                     'version' => $version,
                     'release_notes' => $releaseNotes,
                 ],
             );
-
-            return self::SUCCESS;
         } catch (Throwable $throwable) {
-            $this->logger->error(
+            return $this->failure(
                 'Unable to render changelog release notes.',
+                $input,
                 [
-                    'input' => $input,
                     'exception_message' => $throwable->getMessage(),
                 ],
-            );
-            $this->emitGithubActionError(
-                'Unable to render changelog release notes.',
                 (string) $input->getOption('file'),
             );
-
-            return self::FAILURE;
         }
     }
 }

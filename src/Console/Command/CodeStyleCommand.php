@@ -43,6 +43,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class CodeStyleCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @var string the default configuration file used for EasyCodingStandard
@@ -140,7 +141,7 @@ final class CodeStyleCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        $context = [
+        [
             'input' => $input,
             'fix' => $fix,
             'config' => self::CONFIG,
@@ -148,13 +149,17 @@ final class CodeStyleCommand extends BaseCommand
         ];
 
         if (self::SUCCESS === $result) {
-            $this->logger->info('Code style checks completed successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('Code style checks completed successfully.', $input, [
+                'fix' => $fix,
+                'config' => self::CONFIG,
+                'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            ]);
         }
 
-        $this->logger->error('Code style checks failed.', $context);
-
-        return self::FAILURE;
+        return $this->failure('Code style checks failed.', $input, [
+            'fix' => $fix,
+            'config' => self::CONFIG,
+            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+        ]);
     }
 }

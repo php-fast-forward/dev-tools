@@ -20,11 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\SyncCommand;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -37,6 +39,7 @@ use Symfony\Component\Process\Process;
 
 #[CoversClass(SyncCommand::class)]
 #[UsesClass(ProcessBuilder::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class SyncCommandTest extends TestCase
 {
     use ProphecyTrait;

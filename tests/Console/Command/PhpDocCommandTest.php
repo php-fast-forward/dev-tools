@@ -24,6 +24,7 @@ use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Composer\Json\Schema\Author;
 use FastForward\DevTools\Composer\Json\Schema\Support;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Console\Command\PhpDocCommand;
 use FastForward\DevTools\Console\Command\RefactorCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -32,6 +33,7 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -49,6 +51,7 @@ use Twig\Environment;
 #[CoversClass(PhpDocCommand::class)]
 #[UsesClass(Author::class)]
 #[UsesClass(Support::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class PhpDocCommandTest extends TestCase
 {
     use ProphecyTrait;

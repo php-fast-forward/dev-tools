@@ -48,8 +48,8 @@ use function is_numeric;
 )]
 final class DependenciesCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';
 
@@ -115,12 +115,7 @@ final class DependenciesCommand extends BaseCommand
         try {
             $maximumOutdated = $this->resolveMaximumOutdated($input);
         } catch (InvalidArgumentException $invalidArgumentException) {
-            $this->logger->error($invalidArgumentException->getMessage(), [
-                'input' => $input,
-            ]);
-            $this->emitGithubActionError($invalidArgumentException->getMessage());
-
-            return self::FAILURE;
+            return $this->failure($invalidArgumentException->getMessage(), $input);
         }
 
         $this->processQueue->add($this->getRaiseToInstalledCommand($input));
@@ -144,21 +139,16 @@ final class DependenciesCommand extends BaseCommand
         );
 
         $result = $this->processQueue->run($processOutput);
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-        ];
 
         if (self::SUCCESS === $result) {
-            $this->logger->info('Dependency analysis completed successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('Dependency analysis completed successfully.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        $this->logger->error('Dependency analysis failed.', $context);
-        $this->emitGithubActionError('Dependency analysis failed.');
-
-        return self::FAILURE;
+        return $this->failure('Dependency analysis failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 
     /**

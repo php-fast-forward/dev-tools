@@ -27,6 +27,7 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,6 +49,7 @@ use function Safe\getcwd;
 final class UpdateComposerJsonCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * Creates a new UpdateComposerJsonCommand instance.
@@ -114,12 +116,14 @@ final class UpdateComposerJsonCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if (! $this->filesystem->exists($file)) {
-            $this->logger->notice('Composer file {file} does not exist.', [
-                'input' => $input,
-                'file' => $file,
-            ],);
-
-            return self::SUCCESS;
+            return $this->success(
+                'Composer file {file} does not exist.',
+                $input,
+                [
+                    'file' => $file,
+                ],
+                LogLevel::NOTICE,
+            );
         }
 
         $currentContents = $this->filesystem->readFile($file);
@@ -147,23 +151,18 @@ final class UpdateComposerJsonCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated dev-tools composer.json configuration.', $file),
         );
 
-        $this->logger->notice($comparison->getSummary(), [
-            'input' => $input,
+        $this->notice($comparison->getSummary(), $input, [
             'file' => $file,
-        ],);
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->logger->notice(
-                    $consoleDiff,
-                    [
-                        'input' => $input,
-                        'file' => $file,
-                        'diff' => $comparison->getDiff(),
-                    ],
-                );
+                $this->notice($consoleDiff, $input, [
+                    'file' => $file,
+                    'diff' => $comparison->getDiff(),
+                ],);
             }
         }
 
@@ -180,24 +179,16 @@ final class UpdateComposerJsonCommand extends BaseCommand
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldUpdateComposerJson($input, $output, $file)) {
-            $this->logger->notice('Skipped updating {file}.', [
-                'input' => $input,
+            return $this->success('Skipped updating {file}.', $input, [
                 'file' => $file,
-            ],);
-
-            return self::SUCCESS;
+            ], LogLevel::NOTICE,);
         }
 
         $this->filesystem->dumpFile($file, $updatedContents);
-        $this->logger->info(
-            'Updated composer.json dev-tools configuration.',
-            [
-                'input' => $input,
-                'file' => $file,
-            ],
-        );
 
-        return self::SUCCESS;
+        return $this->success('Updated composer.json dev-tools configuration.', $input, [
+            'file' => $file,
+        ],);
     }
 
     /**

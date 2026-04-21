@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use Symfony\Component\Console\Output\BufferedOutput;
 use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -40,6 +41,7 @@ use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
 #[UsesTrait(EmitsGithubActionErrors::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class ReportsCommandTest extends TestCase
 {
     use ProphecyTrait;

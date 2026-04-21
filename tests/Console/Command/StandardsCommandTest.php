@@ -20,9 +20,12 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use Composer\Console\Application;
+use Composer\IO\IOInterface;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Console\Command\StandardsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -34,6 +37,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(StandardsCommand::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class StandardsCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -46,6 +50,8 @@ final class StandardsCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
+    private ObjectProphecy $io;
+
     private StandardsCommand $command;
 
     /**
@@ -57,6 +63,7 @@ final class StandardsCommandTest extends TestCase
         $this->application = $this->prophesize(Application::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->io = $this->prophesize(IOInterface::class);
 
         $this->input->getOption('fix')
             ->willReturn(false);
@@ -66,6 +73,8 @@ final class StandardsCommandTest extends TestCase
             ->willReturn(false);
         $this->application->getHelperSet()
             ->willReturn(new HelperSet());
+        $this->application->getIO()
+            ->willReturn($this->io->reveal());
 
         $this->command = new StandardsCommand($this->logger->reveal());
         $this->command->setApplication($this->application->reveal());

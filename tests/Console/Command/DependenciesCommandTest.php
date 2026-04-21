@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DependenciesCommand;
 use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -42,6 +43,7 @@ use Symfony\Component\Process\Process;
 #[CoversClass(DependenciesCommand::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesTrait(EmitsGithubActionErrors::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class DependenciesCommandTest extends TestCase
 {
     use ProphecyTrait;

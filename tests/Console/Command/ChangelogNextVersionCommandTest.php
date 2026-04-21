@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogNextVersionCommand;
 use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -37,6 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogNextVersionCommand::class)]
 #[UsesTrait(EmitsGithubActionErrors::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class ChangelogNextVersionCommandTest extends TestCase
 {
     use ProphecyTrait;

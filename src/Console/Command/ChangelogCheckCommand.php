@@ -39,8 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogCheckCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @param FilesystemInterface $filesystem
@@ -89,30 +89,22 @@ final class ChangelogCheckCommand extends BaseCommand
             ->hasPendingChanges($path, $against);
 
         if ($hasPendingChanges) {
-            $this->logger->info(
+            return $this->success(
                 'The changelog contains unreleased changes ready for review.',
+                $input,
                 [
-                    'input' => $input,
                     'has_pending_changes' => true,
                 ],
             );
-
-            return self::SUCCESS;
         }
 
-        $this->logger->error(
+        return $this->failure(
             'The changelog must add a meaningful entry to the Unreleased section.',
+            $input,
             [
-                'input' => $input,
                 'has_pending_changes' => false,
             ],
-        );
-
-        $this->emitGithubActionError(
-            'Changelog check failed: no pending unreleased changes found.',
             (string) $input->getOption('file'),
         );
-
-        return self::FAILURE;
     }
 }

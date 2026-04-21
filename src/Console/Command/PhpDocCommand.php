@@ -49,6 +49,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class PhpDocCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @var string determines the template filename for docheaders
@@ -187,20 +188,15 @@ final class PhpDocCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-        ];
-
         if (self::SUCCESS === $result) {
-            $this->logger->info('PHPDoc checks completed successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('PHPDoc checks completed successfully.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        $this->logger->error('PHPDoc checks failed.', $context);
-
-        return self::FAILURE;
+        return $this->failure('PHPDoc checks failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 
     /**

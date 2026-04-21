@@ -23,6 +23,7 @@ use DateTimeImmutable;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogPromoteCommand;
 use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -39,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogPromoteCommand::class)]
 #[UsesTrait(EmitsGithubActionErrors::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class ChangelogPromoteCommandTest extends TestCase
 {
     use ProphecyTrait;

@@ -42,6 +42,7 @@ use Symfony\Component\Filesystem\Path;
 final class SyncCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @param ProcessBuilderInterface $processBuilder
@@ -178,21 +179,18 @@ final class SyncCommand extends BaseCommand
         $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);
 
         $result = $this->processQueue->run($processOutput);
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-            'skipped_destructive_syncs' => $dryRun || $check || $interactive,
-        ];
 
         if (self::SUCCESS === $result) {
-            $this->logger->info('Dev-tools synchronization completed successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('Dev-tools synchronization completed successfully.', $input, [
+                'output' => $processOutput,
+                'skipped_destructive_syncs' => $dryRun || $check || $interactive,
+            ]);
         }
 
-        $this->logger->error('Dev-tools synchronization failed.', $context);
-
-        return self::FAILURE;
+        return $this->failure('Dev-tools synchronization failed.', $input, [
+            'output' => $processOutput,
+            'skipped_destructive_syncs' => $dryRun || $check || $interactive,
+        ]);
     }
 
     /**

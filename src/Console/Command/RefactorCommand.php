@@ -44,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class RefactorCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @var string the default Rector configuration file
@@ -133,19 +134,14 @@ final class RefactorCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-        ];
-
         if (self::SUCCESS === $result) {
-            $this->logger->info('Code refactoring checks completed successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('Code refactoring checks completed successfully.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        $this->logger->error('Code refactoring checks failed.', $context);
-
-        return self::FAILURE;
+        return $this->failure('Code refactoring checks failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 }

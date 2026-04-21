@@ -50,6 +50,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class SkillsCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     private const string DIRECTORY_LABEL = '.agents/skills';
 
@@ -108,17 +109,15 @@ final class SkillsCommand extends BaseCommand
         $this->logger->info('Starting skills synchronization...');
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
-            $this->logger->error(
+            return $this->failure(
                 'No packaged skills found at: {packaged_skills_path}',
+                $input,
                 [
-                    'input' => $input,
                     'packaged_skills_path' => $packageSkillsPath,
                     'skills_dir' => $skillsDir,
                     'directory_created' => false,
                 ],
             );
-
-            return self::FAILURE;
         }
 
         $directoryCreated = false;
@@ -134,29 +133,25 @@ final class SkillsCommand extends BaseCommand
         $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::DIRECTORY_LABEL);
 
         if ($result->failed()) {
-            $this->logger->error(
+            return $this->failure(
                 'Skills synchronization failed.',
+                $input,
                 [
-                    'input' => $input,
                     'packaged_skills_path' => $packageSkillsPath,
                     'skills_dir' => $skillsDir,
                     'directory_created' => $directoryCreated,
                 ],
             );
-
-            return self::FAILURE;
         }
 
-        $this->logger->info(
+        return $this->success(
             'Skills synchronization completed successfully.',
+            $input,
             [
-                'input' => $input,
                 'packaged_skills_path' => $packageSkillsPath,
                 'skills_dir' => $skillsDir,
                 'directory_created' => $directoryCreated,
             ],
         );
-
-        return self::SUCCESS;
     }
 }

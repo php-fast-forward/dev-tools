@@ -48,8 +48,8 @@ use function Safe\getcwd;
 )]
 final class WikiCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * Creates a new WikiCommand instance.
@@ -150,24 +150,21 @@ final class WikiCommand extends BaseCommand
         $this->processQueue->add($processBuilder->build('vendor/bin/phpdoc'));
 
         $result = $this->processQueue->run($processOutput);
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-        ];
 
         if (self::SUCCESS === $result) {
-            $this->logger->info('Wiki documentation generated successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('Wiki documentation generated successfully.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        $this->logger->error('Wiki documentation generation failed.', $context);
-        $this->emitGithubActionError(
+        return $this->failure(
             'Wiki documentation generation failed.',
+            $input,
+            [
+                'output' => $processOutput,
+            ],
             (string) $input->getOption('target'),
         );
-
-        return self::FAILURE;
     }
 
     /**
@@ -210,23 +207,16 @@ final class WikiCommand extends BaseCommand
         $result = $this->processQueue->run($output);
 
         if (self::SUCCESS === $result) {
-            $this->logger->info('Wiki submodule initialized successfully.', [
-                'input' => $input,
+            return $this->success('Wiki submodule initialized successfully.', $input, [
                 'wiki_submodule_path' => $wikiSubmodulePath,
                 'wiki_repository_url' => $wikiRepoUrl,
             ]);
-
-            return self::SUCCESS;
         }
 
-        $this->logger->error('Wiki submodule initialization failed.', [
-            'input' => $input,
+        return $this->failure('Wiki submodule initialization failed.', $input, [
             'wiki_submodule_path' => $wikiSubmodulePath,
             'wiki_repository_url' => $wikiRepoUrl,
-        ]);
-        $this->emitGithubActionError('Wiki submodule initialization failed.', $target);
-
-        return self::FAILURE;
+        ], $target);
     }
 
     /**

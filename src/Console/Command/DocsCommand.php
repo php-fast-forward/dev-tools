@@ -47,6 +47,7 @@ use function Safe\getcwd;
 final class DocsCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * Creates a new DocsCommand instance.
@@ -133,11 +134,7 @@ final class DocsCommand extends BaseCommand
         ]);
 
         if (! $this->filesystem->exists($source)) {
-            $this->logger->error('Source directory not found: {source}', [
-                'input' => $input,
-            ],);
-
-            return self::FAILURE;
+            return $this->failure('Source directory not found: {source}', $input);
         }
 
         $config = $this->createPhpDocumentorConfig(
@@ -158,20 +155,15 @@ final class DocsCommand extends BaseCommand
 
         $result = $this->processQueue->run($processOutput);
 
-        $context = [
-            'input' => $input,
-            'output' => $processOutput,
-        ];
-
         if (self::SUCCESS === $result) {
-            $this->logger->info('API documentation generated successfully.', $context);
-
-            return self::SUCCESS;
+            return $this->success('API documentation generated successfully.', $input, [
+                'output' => $processOutput,
+            ]);
         }
 
-        $this->logger->error('API documentation generation failed.', $context);
-
-        return self::FAILURE;
+        return $this->failure('API documentation generation failed.', $input, [
+            'output' => $processOutput,
+        ]);
     }
 
     /**

@@ -25,6 +25,7 @@ use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -43,6 +44,7 @@ use Symfony\Component\Console\Question\Question;
 final class CodeOwnersCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * Creates a new command instance.
@@ -114,15 +116,14 @@ final class CodeOwnersCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($targetPath)) {
-            $this->logger->notice(
+            return $this->success(
                 'Managed file {target_path} already exists. Skipping CODEOWNERS generation.',
+                $input,
                 [
-                    'input' => $input,
                     'target_path' => $targetPath,
                 ],
+                LogLevel::NOTICE,
             );
-
-            return self::SUCCESS;
         }
 
         $owners = $this->generator->inferOwners();
@@ -144,19 +145,18 @@ final class CodeOwnersCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated CODEOWNERS content.', $targetPath),
         );
 
-        $this->logger->notice($comparison->getSummary(), [
-            'input' => $input,
+        $this->notice($comparison->getSummary(), $input, [
             'target_path' => $targetPath,
-        ],);
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->logger->notice(
+                $this->notice(
                     $consoleDiff,
+                    $input,
                     [
-                        'input' => $input,
                         'target_path' => $targetPath,
                         'diff' => $comparison->getDiff(),
                     ],
@@ -181,15 +181,14 @@ final class CodeOwnersCommand extends BaseCommand
             $output,
             $targetPath
         )) {
-            $this->logger->notice(
+            return $this->success(
                 'Skipped updating {target_path}.',
+                $input,
                 [
-                    'input' => $input,
                     'target_path' => $targetPath,
                 ],
+                LogLevel::NOTICE,
             );
-
-            return self::SUCCESS;
         }
 
         if (! $this->filesystem->exists($targetDirectory)) {
@@ -197,15 +196,10 @@ final class CodeOwnersCommand extends BaseCommand
         }
 
         $this->filesystem->dumpFile($targetPath, $generatedContent);
-        $this->logger->info(
-            'Updated CODEOWNERS in {target_path}.',
-            [
-                'input' => $input,
-                'target_path' => $targetPath,
-            ],
-        );
 
-        return self::SUCCESS;
+        return $this->success('Updated CODEOWNERS in {target_path}.', $input, [
+            'target_path' => $targetPath,
+        ],);
     }
 
     /**

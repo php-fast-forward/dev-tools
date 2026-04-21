@@ -41,6 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class StandardsCommand extends BaseCommand
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @param LoggerInterface $logger
@@ -97,21 +98,17 @@ final class StandardsCommand extends BaseCommand
             );
         }
 
-        $context = [
-            'input' => $input,
-            'output' => $commandOutput,
-            'commands' => $commands,
-        ];
-
         if (\in_array(self::FAILURE, $results, true)) {
-            $this->logger->error('Code standards checks failed.', $context);
-
-            return self::FAILURE;
+            return $this->failure('Code standards checks failed.', $input, [
+                'output' => $commandOutput,
+                'commands' => $commands,
+            ]);
         }
 
-        $this->logger->info('Code standards checks completed successfully.', $context);
-
-        return self::SUCCESS;
+        return $this->success('Code standards checks completed successfully.', $input, [
+            'output' => $commandOutput,
+            'commands' => $commands,
+        ]);
     }
 
     /**

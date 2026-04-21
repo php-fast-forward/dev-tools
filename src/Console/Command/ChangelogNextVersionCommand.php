@@ -40,8 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogNextVersionCommand extends BaseCommand
 {
-    use EmitsGithubActionErrors;
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * @param FilesystemInterface $filesystem
@@ -88,30 +88,23 @@ final class ChangelogNextVersionCommand extends BaseCommand
             $currentVersion = $input->getOption('current-version');
             $nextVersion = $this->changelogManager->inferNextVersion($path, $currentVersion);
 
-            $this->logger->info(
+            return $this->success(
                 $nextVersion,
+                $input,
                 [
-                    'input' => $input,
                     'current_version' => $currentVersion,
                     'next_version' => $nextVersion,
                 ],
             );
-
-            return self::SUCCESS;
         } catch (Throwable $throwable) {
-            $this->logger->error(
+            return $this->failure(
                 'Unable to infer the next changelog version.',
+                $input,
                 [
-                    'input' => $input,
                     'exception_message' => $throwable->getMessage(),
                 ],
-            );
-            $this->emitGithubActionError(
-                'Unable to infer the next changelog version.',
                 (string) $input->getOption('file'),
             );
-
-            return self::FAILURE;
         }
     }
 }

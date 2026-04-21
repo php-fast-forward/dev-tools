@@ -23,12 +23,14 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Console\Command\CodeOwnersCommand;
+use FastForward\DevTools\Console\Command\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -42,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(CodeOwnersCommand::class)]
 #[UsesClass(FileDiff::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class CodeOwnersCommandTest extends TestCase
 {
     use ProphecyTrait;
