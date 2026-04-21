@@ -34,6 +34,7 @@ Usage
 
    composer changelog:check
    composer changelog:check --against=origin/main
+   composer changelog:check --format=json
 
    composer changelog:next-version
 
@@ -62,7 +63,9 @@ Options
 
    - ``--against=<git-ref>`` to compare the current changelog against a base
      branch or commit;
-   - ``--file=<path>`` to validate another changelog path.
+   - ``--file=<path>`` to validate another changelog path;
+   - ``--format=<text|json>`` to switch between normal terminal output and a
+     structured machine-readable payload.
 
 ``changelog:next-version``
    Supports:
@@ -91,6 +94,8 @@ Behavior
   when the selected file does not exist yet;
 - ``changelog:check`` returns a failing exit code when ``Unreleased`` is empty
   or does not differ from the selected baseline ref;
+- ``changelog:check --format=json`` emits a deterministic JSON payload with
+  ``status``, ``message``, and ``context`` keys for automation consumers;
 - ``changelog:next-version`` uses ``Removed`` or ``Deprecated`` entries for a
   major bump, ``Added`` or ``Changed`` entries for a minor bump, and otherwise
   falls back to a patch bump;

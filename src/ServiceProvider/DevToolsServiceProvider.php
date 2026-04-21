@@ -27,6 +27,10 @@ use FastForward\DevTools\Changelog\Parser\ChangelogParserInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Output\CommandResultRenderer;
+use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
+use FastForward\DevTools\Console\Output\OutputFormatResolver;
+use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
 use FastForward\DevTools\Git\GitClient;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Changelog\Renderer\MarkdownRenderer;
@@ -129,6 +133,8 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             // Console
             CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
             CommandProvider::class => get(DevToolsCommandProvider::class),
+            OutputFormatResolverInterface::class => get(OutputFormatResolver::class),
+            CommandResultRendererInterface::class => get(CommandResultRenderer::class),
 
             // Coverage
             CoverageSummaryLoaderInterface::class => get(CoverageSummaryLoader::class),

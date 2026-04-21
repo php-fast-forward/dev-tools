@@ -80,6 +80,7 @@ composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserv
 # Verify that the current branch added a meaningful Unreleased entry
 composer changelog:check
 composer changelog:check --against=origin/main
+composer changelog:check --format=json
 
 # Infer the next semantic version from Unreleased
 composer changelog:next-version
@@ -167,6 +168,11 @@ missing changelog file on first use, `changelog:check` enforces meaningful
 next semantic version from pending changes, `changelog:promote` publishes the
 current `Unreleased` section into a tagged version, and `changelog:show`
 renders one published section for GitHub release notes.
+
+The first structured-output rollout is available on `changelog:check` through
+`--format=json`, which returns a deterministic status/message/context payload
+for CI, bots, and AI-agent workflows while preserving the normal human-readable
+terminal output by default.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

@@ -21,7 +21,11 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
+use FastForward\DevTools\Console\Output\CommandResult;
+use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
+use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,10 +44,14 @@ final class ChangelogCheckCommand extends BaseCommand
     /**
      * @param FilesystemInterface $filesystem
      * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker
+     * @param OutputFormatResolverInterface $outputFormatResolver
+     * @param CommandResultRendererInterface $commandResultRenderer
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker,
+        private readonly OutputFormatResolverInterface $outputFormatResolver,
+        private readonly CommandResultRendererInterface $commandResultRenderer,
     ) {
         parent::__construct();
     }
@@ -64,6 +72,13 @@ final class ChangelogCheckCommand extends BaseCommand
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Path to the changelog file.',
                 default: 'CHANGELOG.md',
+            )
+            ->addOption(
+                name: 'format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: 'text',
+                suggestedValues: ['text', 'json'],
             );
     }
 
@@ -75,6 +90,14 @@ final class ChangelogCheckCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        try {
+            $format = $this->outputFormatResolver->resolve($input);
+        } catch (InvalidArgumentException $invalidArgumentException) {
+            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
+
+            return self::FAILURE;
+        }
+
         $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
         $against = $input->getOption('against');
 
@@ -84,12 +107,36 @@ final class ChangelogCheckCommand extends BaseCommand
         $file = (string) $input->getOption('file');
 
         if ($hasPendingChanges) {
-            $output->writeln(\sprintf('<info>%s contains unreleased changes ready for review.</info>', $file));
+            $this->commandResultRenderer->render(
+                $output,
+                CommandResult::success(
+                    \sprintf('%s contains unreleased changes ready for review.', $file),
+                    [
+                        'command' => 'changelog:check',
+                        'file' => $file,
+                        'against' => $against,
+                        'has_pending_changes' => true,
+                    ],
+                ),
+                $format,
+            );
 
             return self::SUCCESS;
         }
 
-        $output->writeln(\sprintf('<error>%s must add a meaningful entry to the Unreleased section.</error>', $file));
+        $this->commandResultRenderer->render(
+            $output,
+            CommandResult::failure(
+                \sprintf('%s must add a meaningful entry to the Unreleased section.', $file),
+                [
+                    'command' => 'changelog:check',
+                    'file' => $file,
+                    'against' => $against,
+                    'has_pending_changes' => false,
+                ],
+            ),
+            $format,
+        );
 
         return self::FAILURE;
     }

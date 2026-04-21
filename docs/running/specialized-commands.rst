@@ -14,6 +14,7 @@ workflow.
 
    composer changelog:entry --type=added "Add release automation workflow (#28)"
    composer changelog:check --against=origin/main
+   composer changelog:check --format=json
    composer changelog:next-version
    composer changelog:promote 1.3.0 --date=2026-04-19
    composer changelog:show 1.3.0
@@ -23,6 +24,8 @@ Important details:
 - ``changelog:entry`` creates the changelog file automatically when it does not
   exist yet;
 - ``changelog:check`` is the command used by pull-request validation;
+- ``changelog:check --format=json`` is the initial structured-output rollout
+  for automation, CI, and AI-agent consumers;
 - ``changelog:next-version`` and ``changelog:promote`` support the manual
   release-preparation workflow;
 - ``changelog:show`` renders the published release body used by GitHub Release
