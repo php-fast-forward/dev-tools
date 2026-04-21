@@ -141,7 +141,9 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
         ]);
 
         if (! $this->filesystem->exists($source)) {
-            return $this->failure('Source directory not found: {source}', $input);
+            return $this->failure('Source directory not found: {source}', $input, [
+                'source' => $source,
+            ]);
         }
 
         $config = $this->createPhpDocumentorConfig(

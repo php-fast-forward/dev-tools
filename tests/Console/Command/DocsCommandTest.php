@@ -151,7 +151,8 @@ final class DocsCommandTest extends TestCase
             ->shouldBeCalled();
         $this->logger->error(
             'Source directory not found: {source}',
-            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && '/repo/docs' === $context['source']),
         )->shouldBeCalled();
 
         self::assertSame(DocsCommand::FAILURE, $this->executeCommand());
