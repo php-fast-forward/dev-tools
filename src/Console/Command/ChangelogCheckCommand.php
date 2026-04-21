@@ -21,12 +21,9 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
-use FastForward\DevTools\Console\Output\CommandResult;
-use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
+use FastForward\DevTools\Console\Output\CommandResponderInterface;
 use FastForward\DevTools\Console\Output\OutputFormat;
-use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use InvalidArgumentException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -45,14 +42,12 @@ final class ChangelogCheckCommand extends BaseCommand
     /**
      * @param FilesystemInterface $filesystem
      * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker
-     * @param OutputFormatResolverInterface $outputFormatResolver
-     * @param CommandResultRendererInterface $commandResultRenderer
+     * @param CommandResponderInterface $commandResponder
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker,
-        private readonly OutputFormatResolverInterface $outputFormatResolver,
-        private readonly CommandResultRendererInterface $commandResultRenderer,
+        private readonly CommandResponderInterface $commandResponder,
     ) {
         parent::__construct();
     }
@@ -91,13 +86,7 @@ final class ChangelogCheckCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            $format = $this->outputFormatResolver->resolve($input);
-        } catch (InvalidArgumentException $invalidArgumentException) {
-            $output->writeln('<error>' . $invalidArgumentException->getMessage() . '</error>');
-
-            return self::FAILURE;
-        }
+        $responder = $this->commandResponder->from($input, $output);
 
         $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
         $against = $input->getOption('against');
@@ -108,37 +97,27 @@ final class ChangelogCheckCommand extends BaseCommand
         $file = (string) $input->getOption('file');
 
         if ($hasPendingChanges) {
-            $this->commandResultRenderer->render(
-                $output,
-                CommandResult::success(
-                    \sprintf('%s contains unreleased changes ready for review.', $file),
-                    [
-                        'command' => 'changelog:check',
-                        'file' => $file,
-                        'against' => $against,
-                        'has_pending_changes' => true,
-                    ],
-                ),
-                $format,
-            );
-
-            return self::SUCCESS;
-        }
-
-        $this->commandResultRenderer->render(
-            $output,
-            CommandResult::failure(
-                \sprintf('%s must add a meaningful entry to the Unreleased section.', $file),
+            return $responder->success(
+                \sprintf('%s contains unreleased changes ready for review.', $file),
                 [
                     'command' => 'changelog:check',
                     'file' => $file,
                     'against' => $against,
-                    'has_pending_changes' => false,
+                    'has_pending_changes' => true,
                 ],
-            ),
-            $format,
-        );
+                self::SUCCESS,
+            );
+        }
 
-        return self::FAILURE;
+        return $responder->failure(
+            \sprintf('%s must add a meaningful entry to the Unreleased section.', $file),
+            [
+                'command' => 'changelog:check',
+                'file' => $file,
+                'against' => $against,
+                'has_pending_changes' => false,
+            ],
+            self::FAILURE,
+        );
     }
 }
