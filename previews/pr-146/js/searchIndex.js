@@ -1946,6 +1946,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand",
             "name": "PhpDocCommand",
             "summary": "Provides\u0020operations\u0020to\u0020inspect,\u0020lint,\u0020and\u0020repair\u0020PHPDoc\u0020comments\u0020across\u0020the\u0020project.",
