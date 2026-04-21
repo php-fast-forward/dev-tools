@@ -19,7 +19,15 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Psr\Log\LoggerInterface;
+
 /**
- * Marks commands that provide an initialized logger for reusable logging helpers.
+ * Defines the logger contract expected by reusable command logging helpers.
  */
-interface LoggerAwareCommandInterface {}
+interface LoggerAwareCommandInterface
+{
+    /**
+     * Returns the logger used by the command.
+     */
+    public function getLogger(): LoggerInterface;
+}

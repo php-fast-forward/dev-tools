@@ -33,7 +33,7 @@ trait HasCommandLogger
      *
      * @throws LogicException when the consuming command does not expose a valid logger property
      */
-    protected function getLogger(): LoggerInterface
+    public function getLogger(): LoggerInterface
     {
         if (
             ! $this instanceof LoggerAwareCommandInterface
@@ -41,7 +41,7 @@ trait HasCommandLogger
             || ! $this->logger instanceof LoggerInterface
         ) {
             throw new LogicException(\sprintf(
-                'Commands using %s MUST implement %s and define an initialized $logger property with an instance of %s.',
+                'Commands using %s MUST implement %s and expose an initialized $logger property with an instance of %s.',
                 LogsCommandResults::class,
                 LoggerAwareCommandInterface::class,
                 LoggerInterface::class,
