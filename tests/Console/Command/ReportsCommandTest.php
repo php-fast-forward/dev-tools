@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use Symfony\Component\Console\Output\BufferedOutput;
-use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -40,7 +39,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
-#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ReportsCommandTest extends TestCase
 {

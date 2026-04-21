@@ -26,6 +26,7 @@ use FastForward\DevTools\Console\Logger\OutputFormatLogger;
 use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -43,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[UsesClass(CommandInputProcessor::class)]
 #[UsesClass(CommandOutputProcessor::class)]
 #[UsesClass(CompositeContextProcessor::class)]
+#[UsesClass(GithubActionOutput::class)]
 final class OutputFormatLoggerTest extends TestCase
 {
     use ProphecyTrait;
@@ -88,6 +90,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            new GithubActionOutput($this->output->reveal()),
         );
 
         $this->output->writeln(
@@ -123,6 +126,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            new GithubActionOutput($this->output->reveal()),
         );
 
         $this->output->writeln(Argument::type('string'))
@@ -151,6 +155,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            new GithubActionOutput($this->output->reveal()),
         );
 
         $this->output->writeln(
@@ -177,6 +182,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            new GithubActionOutput($this->output->reveal()),
         );
 
         $this->output->writeln(
@@ -205,6 +211,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            new GithubActionOutput($this->output->reveal()),
         );
 
         $this->output->writeln(

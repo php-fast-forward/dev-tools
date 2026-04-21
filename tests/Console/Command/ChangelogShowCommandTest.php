@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogShowCommand;
-use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -37,7 +36,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogShowCommand::class)]
-#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ChangelogShowCommandTest extends TestCase
 {
@@ -116,6 +114,8 @@ final class ChangelogShowCommandTest extends TestCase
             'Unable to render changelog release notes.',
             [
                 'input' => $this->input->reveal(),
+                'file' => 'CHANGELOG.md',
+                'line' => null,
                 'exception_message' => 'Release notes are unavailable.',
             ],
         )->shouldBeCalled();

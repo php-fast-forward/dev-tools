@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\WikiCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -41,7 +40,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(WikiCommand::class)]
-#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class WikiCommandTest extends TestCase
 {

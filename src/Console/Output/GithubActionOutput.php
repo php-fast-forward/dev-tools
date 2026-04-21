@@ -215,7 +215,7 @@ final class GithubActionOutput
         $message = $this->escapeData($message);
 
         if ([] === $properties) {
-            $this->output->write(\sprintf('::%s::%s', $command, $message));
+            $this->output->writeln(\sprintf('::%s::%s', $command, $message));
 
             return;
         }
@@ -228,7 +228,7 @@ final class GithubActionOutput
             $serializedProperties[] = \sprintf('%s=%s', $name, $value);
         }
 
-        $this->output->write(\sprintf('::%s %s::%s', $command, implode(',', $serializedProperties), $message));
+        $this->output->writeln(\sprintf('::%s %s::%s', $command, implode(',', $serializedProperties), $message));
     }
 
     /**

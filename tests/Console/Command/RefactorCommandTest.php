@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\RefactorCommand;
-use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -40,7 +39,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(RefactorCommand::class)]
-#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class RefactorCommandTest extends TestCase
 {

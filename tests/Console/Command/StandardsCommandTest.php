@@ -23,7 +23,6 @@ use Symfony\Component\Process\Process;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\StandardsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -38,7 +37,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(StandardsCommand::class)]
-#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class StandardsCommandTest extends TestCase
 {

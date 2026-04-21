@@ -114,6 +114,8 @@ final class AgentsCommandTest extends TestCase
             'No packaged .agents/agents found at: {packaged_agents_path}',
             [
                 'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
                 'packaged_agents_path' => $agentsPath,
                 'agents_dir' => $agentsPath,
                 'directory_created' => false,
@@ -182,6 +184,8 @@ final class AgentsCommandTest extends TestCase
             'Agents synchronization failed.',
             [
                 'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
                 'packaged_agents_path' => $agentsPath,
                 'agents_dir' => $agentsPath,
                 'directory_created' => false,

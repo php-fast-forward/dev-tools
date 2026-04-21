@@ -200,6 +200,8 @@ final class CopyResourceCommandTest extends TestCase
             'The --source and --target options are required.',
             [
                 'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
             ],
         )->shouldBeCalledOnce();
         $this->fileLocator->locate(Argument::cetera())->shouldNotBeCalled();

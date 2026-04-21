@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
-use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -40,7 +39,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(CodeStyleCommand::class)]
-#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class CodeStyleCommandTest extends TestCase
 {
@@ -147,6 +145,8 @@ final class CodeStyleCommandTest extends TestCase
             'Code style checks failed.',
             [
                 'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
                 'fix' => false,
                 'config' => CodeStyleCommand::CONFIG,
                 'process_output' => null,

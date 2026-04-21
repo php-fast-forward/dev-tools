@@ -23,6 +23,7 @@ use Stringable;
 use DateTimeInterface;
 use Ergebnis\AgentDetector\Detector;
 use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerTrait;
@@ -70,6 +71,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
      * @param ClockInterface $clock
      * @param Detector $agentDetector the detector used to infer whether the current runtime is an agent environment
      * @param ContextProcessorInterface $contextProcessor expands command input and output metadata
+     * @param GithubActionOutput $githubActionOutput emits GitHub Actions workflow commands when supported
      */
     public function __construct(
         private ArgvInput $input,
@@ -77,6 +79,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
         private ClockInterface $clock,
         private Detector $agentDetector,
         private ContextProcessorInterface $contextProcessor,
+        private GithubActionOutput $githubActionOutput,
     ) {}
 
     /**
@@ -100,7 +103,33 @@ final readonly class OutputFormatLogger implements LoggerInterface
             $output = $this->output->getErrorOutput();
         }
 
+        $this->emitGithubActionAnnotation((string) $level, (string) $message, $context);
         $output->writeln($formattedMessage);
+    }
+
+    /**
+     * Emits GitHub Actions annotations for supported error levels.
+     *
+     * @param string $level the normalized log level
+     * @param string $message the original message template
+     * @param array<string, mixed> $context the processed log context
+     *
+     * @return void
+     */
+    private function emitGithubActionAnnotation(string $level, string $message, array $context): void
+    {
+        if (! \in_array($level, self::ERROR_LEVELS, true)) {
+            return;
+        }
+
+        $file = isset($context['file']) && \is_string($context['file'])
+            ? $context['file']
+            : null;
+        $line = isset($context['line']) && \is_int($context['line'])
+            ? $context['line']
+            : null;
+
+        $this->githubActionOutput->error($this->interpolate($message, $context), $file, $line);
     }
 
     /**

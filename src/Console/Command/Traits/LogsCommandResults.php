@@ -29,7 +29,6 @@ use Symfony\Component\Console\Input\InputInterface;
 trait LogsCommandResults
 {
     use HasCommandLogger;
-    use HasGithubActionOutput;
 
     /**
      * Logs a notice-level command message.
@@ -77,7 +76,7 @@ trait LogsCommandResults
     }
 
     /**
-     * Logs a failed command result, emits a GitHub Actions error annotation, and returns a failure exit code.
+     * Logs a failed command result and returns a failure exit code.
      *
      * @param string $message the failure message
      * @param InputInterface $input the originating command input
@@ -97,13 +96,10 @@ trait LogsCommandResults
         $this->getLogger()
             ->error($message, [
                 'input' => $input,
+                'file' => $file,
+                'line' => $line,
                 ...$context,
             ]);
-
-        if ($this->supportsGithubActionOutput()) {
-            $this->getGithubActionOutput()
-                ->error($message, $file, $line);
-        }
 
         return Command::FAILURE;
     }

@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogNextVersionCommand;
-use FastForward\DevTools\Console\Command\Traits\HasGithubActionOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -37,7 +36,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogNextVersionCommand::class)]
-#[UsesTrait(HasGithubActionOutput::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ChangelogNextVersionCommandTest extends TestCase
 {
@@ -145,6 +143,8 @@ final class ChangelogNextVersionCommandTest extends TestCase
             'Unable to infer the next changelog version.',
             [
                 'input' => $this->input->reveal(),
+                'file' => 'CHANGELOG.md',
+                'line' => null,
                 'exception_message' => 'Unable to parse changelog.',
             ],
         )->shouldBeCalled();

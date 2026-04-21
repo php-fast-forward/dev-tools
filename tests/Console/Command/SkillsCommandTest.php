@@ -114,6 +114,8 @@ final class SkillsCommandTest extends TestCase
             'No packaged skills found at: {packaged_skills_path}',
             [
                 'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
                 'packaged_skills_path' => $skillsPath,
                 'skills_dir' => $skillsPath,
                 'directory_created' => false,
@@ -182,6 +184,8 @@ final class SkillsCommandTest extends TestCase
             'Skills synchronization failed.',
             [
                 'input' => $this->input->reveal(),
+                'file' => null,
+                'line' => null,
                 'packaged_skills_path' => $skillsPath,
                 'skills_dir' => $skillsPath,
                 'directory_created' => false,

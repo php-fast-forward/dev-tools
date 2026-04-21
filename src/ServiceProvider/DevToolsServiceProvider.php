@@ -140,7 +140,9 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             ConsoleOutputInterface::class => create(ConsoleOutput::class)
                 ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),
-            GithubActionOutput::class => create(GithubActionOutput::class)->constructor(create(ConsoleOutput::class)),
+            GithubActionOutput::class => create(GithubActionOutput::class)->constructor(
+                get(ConsoleOutputInterface::class)
+            ),
             ContextProcessorInterface::class => create(CompositeContextProcessor::class)->constructor([
                 get(CommandInputProcessor::class),
                 get(CommandOutputProcessor::class),
