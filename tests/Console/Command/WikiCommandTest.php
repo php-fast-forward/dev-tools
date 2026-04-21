@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
 use FastForward\DevTools\Console\Command\WikiCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
@@ -27,6 +28,7 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -38,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(WikiCommand::class)]
+#[UsesTrait(EmitsGithubActionErrors::class)]
 final class WikiCommandTest extends TestCase
 {
     use ProphecyTrait;

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -40,6 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogShowCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     /**
@@ -82,22 +84,38 @@ final class ChangelogShowCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $version = (string) $input->getArgument('version');
-        $file = (string) $input->getOption('file');
-        $releaseNotes = $this->changelogManager->renderReleaseNotes(
-            $this->filesystem->getAbsolutePath($file),
-            $version,
-        );
+        try {
+            $version = (string) $input->getArgument('version');
+            $file = (string) $input->getOption('file');
+            $releaseNotes = $this->changelogManager->renderReleaseNotes(
+                $this->filesystem->getAbsolutePath($file),
+                $version,
+            );
 
-        $this->logger->info(
-            $releaseNotes,
-            [
-                'input' => $input,
-                'version' => $version,
-                'release_notes' => $releaseNotes,
-            ],
-        );
+            $this->logger->info(
+                $releaseNotes,
+                [
+                    'input' => $input,
+                    'version' => $version,
+                    'release_notes' => $releaseNotes,
+                ],
+            );
 
-        return self::SUCCESS;
+            return self::SUCCESS;
+        } catch (Throwable $throwable) {
+            $this->logger->error(
+                'Unable to render changelog release notes.',
+                [
+                    'input' => $input,
+                    'exception_message' => $throwable->getMessage(),
+                ],
+            );
+            $this->emitGithubActionError(
+                'Unable to render changelog release notes.',
+                (string) $input->getOption('file'),
+            );
+
+            return self::FAILURE;
+        }
     }
 }

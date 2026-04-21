@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -39,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogNextVersionCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     /**
@@ -81,19 +83,35 @@ final class ChangelogNextVersionCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
-        $currentVersion = $input->getOption('current-version');
-        $nextVersion = $this->changelogManager->inferNextVersion($path, $currentVersion);
+        try {
+            $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
+            $currentVersion = $input->getOption('current-version');
+            $nextVersion = $this->changelogManager->inferNextVersion($path, $currentVersion);
 
-        $this->logger->info(
-            $nextVersion,
-            [
-                'input' => $input,
-                'current_version' => $currentVersion,
-                'next_version' => $nextVersion,
-            ],
-        );
+            $this->logger->info(
+                $nextVersion,
+                [
+                    'input' => $input,
+                    'current_version' => $currentVersion,
+                    'next_version' => $nextVersion,
+                ],
+            );
 
-        return self::SUCCESS;
+            return self::SUCCESS;
+        } catch (Throwable $throwable) {
+            $this->logger->error(
+                'Unable to infer the next changelog version.',
+                [
+                    'input' => $input,
+                    'exception_message' => $throwable->getMessage(),
+                ],
+            );
+            $this->emitGithubActionError(
+                'Unable to infer the next changelog version.',
+                (string) $input->getOption('file'),
+            );
+
+            return self::FAILURE;
+        }
     }
 }

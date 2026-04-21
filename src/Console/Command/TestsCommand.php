@@ -50,6 +50,7 @@ use function is_numeric;
 )]
 final class TestsCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     /**
@@ -172,6 +173,7 @@ final class TestsCommand extends BaseCommand
                     'output' => $processOutput,
                 ],
             );
+            $this->emitGithubActionError($invalidArgumentException->getMessage());
 
             return self::FAILURE;
         }
@@ -230,6 +232,7 @@ final class TestsCommand extends BaseCommand
                 'input' => $input,
                 'output' => $processOutput,
             ],);
+            $this->emitGithubActionError('PHPUnit tests failed.');
 
             return self::FAILURE;
         }
@@ -252,6 +255,7 @@ final class TestsCommand extends BaseCommand
         }
 
         $this->logger->error($message, $context);
+        $this->emitGithubActionError($message);
 
         return self::FAILURE;
     }

@@ -21,18 +21,22 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogShowCommand;
+use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogShowCommand::class)]
+#[UsesTrait(EmitsGithubActionErrors::class)]
 final class ChangelogShowCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -95,6 +99,25 @@ final class ChangelogShowCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(ChangelogShowCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureWhenReleaseNotesCannotBeRendered(): void
+    {
+        $this->changelogManager->renderReleaseNotes('/repo/CHANGELOG.md', '1.2.0')
+            ->willThrow(new RuntimeException('Release notes are unavailable.'));
+        $this->logger->error(
+            'Unable to render changelog release notes.',
+            [
+                'input' => $this->input->reveal(),
+                'exception_message' => 'Release notes are unavailable.',
+            ],
+        )->shouldBeCalled();
+
+        self::assertSame(ChangelogShowCommand::FAILURE, $this->invokeExecute());
     }
 
     /**

@@ -48,6 +48,7 @@ use function is_numeric;
 )]
 final class DependenciesCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';
@@ -117,6 +118,7 @@ final class DependenciesCommand extends BaseCommand
             $this->logger->error($invalidArgumentException->getMessage(), [
                 'input' => $input,
             ]);
+            $this->emitGithubActionError($invalidArgumentException->getMessage());
 
             return self::FAILURE;
         }
@@ -154,6 +156,7 @@ final class DependenciesCommand extends BaseCommand
         }
 
         $this->logger->error('Dependency analysis failed.', $context);
+        $this->emitGithubActionError('Dependency analysis failed.');
 
         return self::FAILURE;
     }

@@ -22,19 +22,23 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use DateTimeImmutable;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogPromoteCommand;
+use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogPromoteCommand::class)]
+#[UsesTrait(EmitsGithubActionErrors::class)]
 final class ChangelogPromoteCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -126,6 +130,25 @@ final class ChangelogPromoteCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(ChangelogPromoteCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureWhenPromotionFails(): void
+    {
+        $this->changelogManager->promote('/repo/CHANGELOG.md', '1.2.0', '2026-04-21')
+            ->willThrow(new RuntimeException('Unable to promote changelog.'));
+        $this->logger->error(
+            'Unable to promote the changelog release.',
+            [
+                'input' => $this->input->reveal(),
+                'exception_message' => 'Unable to promote changelog.',
+            ],
+        )->shouldBeCalled();
+
+        self::assertSame(ChangelogPromoteCommand::FAILURE, $this->invokeExecute());
     }
 
     /**

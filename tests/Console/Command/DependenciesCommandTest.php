@@ -20,11 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DependenciesCommand;
+use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -39,6 +41,7 @@ use Symfony\Component\Process\Process;
 
 #[CoversClass(DependenciesCommand::class)]
 #[UsesClass(ProcessBuilder::class)]
+#[UsesTrait(EmitsGithubActionErrors::class)]
 final class DependenciesCommandTest extends TestCase
 {
     use ProphecyTrait;

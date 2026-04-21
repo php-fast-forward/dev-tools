@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
@@ -29,6 +30,7 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -46,6 +48,7 @@ use function Safe\getcwd;
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(CoverageSummary::class)]
 #[UsesClass(ProcessBuilder::class)]
+#[UsesTrait(EmitsGithubActionErrors::class)]
 final class TestsCommandTest extends TestCase
 {
     use ProphecyTrait;

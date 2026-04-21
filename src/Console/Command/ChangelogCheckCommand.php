@@ -39,6 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogCheckCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     /**
@@ -105,6 +106,11 @@ final class ChangelogCheckCommand extends BaseCommand
                 'input' => $input,
                 'has_pending_changes' => false,
             ],
+        );
+
+        $this->emitGithubActionError(
+            'Changelog check failed: no pending unreleased changes found.',
+            (string) $input->getOption('file'),
         );
 
         return self::FAILURE;

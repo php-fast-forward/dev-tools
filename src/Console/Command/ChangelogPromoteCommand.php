@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -41,6 +42,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ChangelogPromoteCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     /**
@@ -90,22 +92,38 @@ final class ChangelogPromoteCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $file = $this->filesystem->getAbsolutePath((string) $input->getOption('file'));
-        $version = (string) $input->getArgument('version');
-        $date = (string) ($input->getOption('date') ?: $this->clock->now()->format('Y-m-d'));
+        try {
+            $file = $this->filesystem->getAbsolutePath((string) $input->getOption('file'));
+            $version = (string) $input->getArgument('version');
+            $date = (string) ($input->getOption('date') ?: $this->clock->now()->format('Y-m-d'));
 
-        $this->changelogManager->promote($file, $version, $date);
+            $this->changelogManager->promote($file, $version, $date);
 
-        $this->logger->info(
-            'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
-            [
-                'input' => $input,
-                'absolute_file' => $file,
-                'version' => $version,
-                'date' => $date,
-            ],
-        );
+            $this->logger->info(
+                'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
+                [
+                    'input' => $input,
+                    'absolute_file' => $file,
+                    'version' => $version,
+                    'date' => $date,
+                ],
+            );
 
-        return self::SUCCESS;
+            return self::SUCCESS;
+        } catch (Throwable $throwable) {
+            $this->logger->error(
+                'Unable to promote the changelog release.',
+                [
+                    'input' => $input,
+                    'exception_message' => $throwable->getMessage(),
+                ],
+            );
+            $this->emitGithubActionError(
+                'Unable to promote the changelog release.',
+                (string) $input->getOption('file'),
+            );
+
+            return self::FAILURE;
+        }
     }
 }

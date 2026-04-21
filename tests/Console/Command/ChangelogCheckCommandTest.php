@@ -21,10 +21,12 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\Command\ChangelogCheckCommand;
+use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -34,6 +36,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogCheckCommand::class)]
+#[UsesTrait(EmitsGithubActionErrors::class)]
 final class ChangelogCheckCommandTest extends TestCase
 {
     use ProphecyTrait;

@@ -48,6 +48,7 @@ use function Safe\getcwd;
 )]
 final class WikiCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     /**
@@ -161,6 +162,10 @@ final class WikiCommand extends BaseCommand
         }
 
         $this->logger->error('Wiki documentation generation failed.', $context);
+        $this->emitGithubActionError(
+            'Wiki documentation generation failed.',
+            (string) $input->getOption('target'),
+        );
 
         return self::FAILURE;
     }
@@ -219,6 +224,7 @@ final class WikiCommand extends BaseCommand
             'wiki_submodule_path' => $wikiSubmodulePath,
             'wiki_repository_url' => $wikiRepoUrl,
         ]);
+        $this->emitGithubActionError('Wiki submodule initialization failed.', $target);
 
         return self::FAILURE;
     }

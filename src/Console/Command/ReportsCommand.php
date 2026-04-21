@@ -41,6 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ReportsCommand extends BaseCommand
 {
+    use EmitsGithubActionErrors;
     use HasJsonOption;
 
     /**
@@ -169,6 +170,7 @@ final class ReportsCommand extends BaseCommand
         }
 
         $this->logger->error('Documentation reports generation failed.', $context);
+        $this->emitGithubActionError('Documentation reports generation failed.');
 
         return self::FAILURE;
     }

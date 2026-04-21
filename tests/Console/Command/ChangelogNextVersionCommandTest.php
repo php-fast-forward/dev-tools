@@ -21,18 +21,22 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogNextVersionCommand;
+use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
+use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(ChangelogNextVersionCommand::class)]
+#[UsesTrait(EmitsGithubActionErrors::class)]
 final class ChangelogNextVersionCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -123,6 +127,25 @@ final class ChangelogNextVersionCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(ChangelogNextVersionCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReturnFailureWhenVersionInferenceFails(): void
+    {
+        $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
+            ->willThrow(new RuntimeException('Unable to parse changelog.'));
+        $this->logger->error(
+            'Unable to infer the next changelog version.',
+            [
+                'input' => $this->input->reveal(),
+                'exception_message' => 'Unable to parse changelog.',
+            ],
+        )->shouldBeCalled();
+
+        self::assertSame(ChangelogNextVersionCommand::FAILURE, $this->invokeExecute());
     }
 
     /**
