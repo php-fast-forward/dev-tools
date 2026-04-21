@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogEntryCommand;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -99,7 +99,8 @@ final class ChangelogEntryCommandTest extends TestCase
             'Unreleased',
             null,
         )->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Added {type} changelog entry to [{release}] in {absolute_file}.',
             [
                 'input' => $this->input->reveal(),
@@ -135,7 +136,8 @@ final class ChangelogEntryCommandTest extends TestCase
             '1.2.0',
             '2026-04-21',
         )->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Added {type} changelog entry to [{release}] in {absolute_file}.',
             [
                 'input' => $this->input->reveal(),

@@ -17,7 +17,7 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Console\Command;
+namespace FastForward\DevTools\Console\Command\Traits;
 
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
@@ -29,6 +29,7 @@ use Symfony\Component\Console\Input\InputInterface;
 trait LogsCommandResults
 {
     use EmitsGithubActionErrors;
+    use HasCommandLogger;
 
     /**
      * Logs a notice-level command message.
@@ -41,10 +42,11 @@ trait LogsCommandResults
      */
     private function notice(string $message, InputInterface $input, array $context = []): void
     {
-        $this->logger->notice($message, [
-            'input' => $input,
-            ...$context,
-        ]);
+        $this->getLogger()
+            ->notice($message, [
+                'input' => $input,
+                ...$context,
+            ]);
     }
 
     /**
@@ -68,13 +70,8 @@ trait LogsCommandResults
             ...$context,
         ];
 
-        if (LogLevel::INFO === $logLevel) {
-            $this->logger->info($message, $context);
-        } elseif (LogLevel::NOTICE === $logLevel) {
-            $this->logger->notice($message, $context);
-        } else {
-            $this->logger->log($logLevel, $message, $context);
-        }
+        $this->getLogger()
+            ->log($logLevel, $message, $context);
 
         return Command::SUCCESS;
     }
@@ -97,10 +94,11 @@ trait LogsCommandResults
         ?string $file = null,
         ?int $line = null,
     ): int {
-        $this->logger->error($message, [
-            'input' => $input,
-            ...$context,
-        ]);
+        $this->getLogger()
+            ->error($message, [
+                'input' => $input,
+                ...$context,
+            ]);
 
         $this->emitGithubActionError($message, $file, $line);
 

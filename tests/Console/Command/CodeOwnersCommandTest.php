@@ -23,7 +23,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Console\Command\CodeOwnersCommand;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
@@ -120,6 +120,7 @@ final class CodeOwnersCommandTest extends TestCase
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
         $this->logger->info(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
@@ -209,7 +210,8 @@ final class CodeOwnersCommandTest extends TestCase
         $this->filesystem->exists($targetPath)
             ->willReturn(true);
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Managed file {target_path} already exists. Skipping CODEOWNERS generation.',
             [
                 'input' => $this->input->reveal(),
@@ -397,7 +399,8 @@ final class CodeOwnersCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped updating {target_path}.',
             [
                 'input' => $this->input->reveal(),

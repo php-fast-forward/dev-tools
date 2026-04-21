@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Console\Command\GitHooksCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
@@ -28,6 +29,7 @@ use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -48,6 +50,7 @@ use function Safe\rmdir;
 
 #[CoversClass(GitHooksCommand::class)]
 #[UsesClass(FileDiff::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class GitHooksCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -94,6 +97,7 @@ final class GitHooksCommandTest extends TestCase
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
         $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
@@ -172,6 +176,10 @@ final class GitHooksCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->filesystem->chmod('/app/.git/hooks/post-merge', 755, 0o755)
             ->shouldBeCalledOnce();
+        $this->logger->log('info', 'Installed {hook_name} hook.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+        $this->logger->log('info', 'Git hook synchronization completed successfully.', Argument::type('array'))
+            ->shouldBeCalledOnce();
 
         self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
     }
@@ -206,6 +214,8 @@ final class GitHooksCommandTest extends TestCase
                 'hook_path' => '/app/.git/hooks/post-merge',
             ],
         )
+            ->shouldBeCalledOnce();
+        $this->logger->log('info', 'Git hook synchronization completed successfully.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
@@ -264,6 +274,8 @@ final class GitHooksCommandTest extends TestCase
             ],
         )
             ->shouldBeCalledOnce();
+        $this->logger->error('One or more Git hooks require synchronization updates.', Argument::type('array'))
+            ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(GitHooksCommand::FAILURE, $this->executeCommand());
@@ -318,6 +330,8 @@ final class GitHooksCommandTest extends TestCase
                 'hook_path' => '/app/.git/hooks/post-merge',
             ],
         )
+            ->shouldBeCalledOnce();
+        $this->logger->log('info', 'Git hook synchronization completed successfully.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 

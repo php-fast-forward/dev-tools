@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use Twig\Environment;
@@ -44,7 +45,7 @@ use function Safe\getcwd;
     description: 'Generates API documentation.',
     help: 'This command generates API documentation using phpDocumentor.',
 )]
-final class DocsCommand extends BaseCommand
+final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -46,7 +47,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Checks and fixes PHPDocs.',
     help: 'This command checks and fixes PHPDocs in your PHP files.',
 )]
-final class PhpDocCommand extends BaseCommand
+final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

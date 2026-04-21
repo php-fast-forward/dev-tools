@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use Composer\Factory;
 use Composer\Json\JsonManipulator;
@@ -46,7 +47,7 @@ use function Safe\getcwd;
     description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
     help: 'This command adds or updates composer.json scripts and GrumPHP extra configuration required by dev-tools.'
 )]
-final class UpdateComposerJsonCommand extends BaseCommand
+final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

@@ -82,6 +82,9 @@ final class DevToolsCommandLoaderTest extends TestCase
             ->willReturn($this->finder->reveal())
             ->shouldBeCalled();
         $this->finder->in(Argument::type('string'))->willReturn($this->finder->reveal())->shouldBeCalled();
+        $this->finder->notPath('Traits')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
         $this->finder->name('*.php')
             ->willReturn($this->finder->reveal())
             ->shouldBeCalled();
@@ -114,6 +117,9 @@ final class DevToolsCommandLoaderTest extends TestCase
             ->willReturn($this->finder->reveal())
             ->shouldBeCalled();
         $this->finder->in(Argument::type('string'))->willReturn($this->finder->reveal())->shouldBeCalled();
+        $this->finder->notPath('Traits')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
         $this->finder->name('*.php')
             ->willReturn($this->finder->reveal())
             ->shouldBeCalled();
@@ -142,6 +148,9 @@ final class DevToolsCommandLoaderTest extends TestCase
             ->willReturn($this->finder->reveal())
             ->shouldBeCalled();
         $this->finder->in(Argument::type('string'))->willReturn($this->finder->reveal())->shouldBeCalled();
+        $this->finder->notPath('Traits')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
         $this->finder->name('*.php')
             ->willReturn($this->finder->reveal())
             ->shouldBeCalled();

@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\WikiCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
@@ -129,7 +129,8 @@ final class WikiCommandTest extends TestCase
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Wiki documentation generated successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
@@ -150,7 +151,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn('/repo/.github/wiki');
         $this->filesystem->exists('/repo/.github/wiki')
             ->willReturn(true);
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Wiki submodule already exists at {wiki_submodule_path}.',
             Argument::that(fn(array $context): bool => '/repo/.github/wiki' === $context['wiki_submodule_path']
                 && $this->input->reveal() === $context['input']),

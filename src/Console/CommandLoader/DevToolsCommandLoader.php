@@ -73,6 +73,7 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
             ->create()
             ->files()
             ->in(__DIR__ . '/../Command')
+            ->notPath('Traits')
             ->name('*.php');
 
         $namespace = substr(__NAMESPACE__, 0, strrpos(__NAMESPACE__, '\\')) . '\\Command\\';

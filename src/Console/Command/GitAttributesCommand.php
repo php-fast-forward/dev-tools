@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
@@ -51,9 +52,10 @@ use function Safe\getcwd;
     help: 'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. '
     . 'Only paths that exist in the repository are added, existing custom rules are preserved, and "extra.gitattributes.keep-in-export" paths stay in exported archives.'
 )]
-final class GitAttributesCommand extends BaseCommand
+final class GitAttributesCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     private const string FILENAME = '.gitattributes';
 
@@ -144,14 +146,13 @@ final class GitAttributesCommand extends BaseCommand
         $entries = [...$existingFolders, ...$existingFiles];
 
         if ([] === $entries) {
-            $this->logger->notice(
-                'No candidate paths found in repository. Skipping .gitattributes sync.',
-                [
-                    'input' => $input,
-                ],
-            );
+            $this->notice('No candidate paths found in repository. Skipping .gitattributes sync.', $input);
 
-            return self::SUCCESS;
+            return $this->success(
+                'No .gitattributes synchronization changes were required.',
+                $input,
+                logLevel: 'notice',
+            );
         }
 
         $gitattributesPath = $this->filesystem->getAbsolutePath(self::FILENAME);
@@ -190,15 +191,29 @@ final class GitAttributesCommand extends BaseCommand
         }
 
         if ($comparison->isUnchanged()) {
-            return self::SUCCESS;
+            return $this->success('.gitattributes already matches the generated export-ignore rules.', $input);
         }
 
         if ($check) {
-            return self::FAILURE;
+            return $this->failure(
+                '.gitattributes requires synchronization updates.',
+                $input,
+                [
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+                $gitattributesPath,
+            );
         }
 
         if ($dryRun) {
-            return self::SUCCESS;
+            return $this->success(
+                '.gitattributes synchronization preview completed.',
+                $input,
+                [
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+                'notice',
+            );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes(
@@ -206,29 +221,34 @@ final class GitAttributesCommand extends BaseCommand
             $output,
             $gitattributesPath
         )) {
-            $this->logger->notice(
+            $this->notice(
                 'Skipped updating {gitattributes_path}.',
+                $input,
                 [
-                    'input' => $input,
                     'gitattributes_path' => $gitattributesPath,
                 ],
             );
 
-            return self::SUCCESS;
+            return $this->success(
+                '.gitattributes synchronization was skipped.',
+                $input,
+                [
+                    'gitattributes_path' => $gitattributesPath,
+                ],
+                'notice',
+            );
         }
 
         $this->writer->write($gitattributesPath, $content);
 
-        $this->logger->info(
+        return $this->success(
             'Added {entries_count} export-ignore entries to .gitattributes.',
+            $input,
             [
-                'input' => $input,
                 'entries_count' => \count($entries),
                 'gitattributes_path' => $gitattributesPath,
             ],
         );
-
-        return self::SUCCESS;
     }
 
     /**

@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DependenciesCommand;
-use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -115,7 +115,8 @@ final class DependenciesCommandTest extends TestCase
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalledOnce();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Dependency analysis completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
@@ -158,7 +159,8 @@ final class DependenciesCommandTest extends TestCase
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalledOnce();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Dependency analysis completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),

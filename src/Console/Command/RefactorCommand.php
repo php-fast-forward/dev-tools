@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -41,7 +42,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     aliases: ['rector'],
     help: 'This command runs Rector to refactor your code.'
 )]
-final class RefactorCommand extends BaseCommand
+final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

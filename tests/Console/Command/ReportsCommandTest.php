@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use Symfony\Component\Console\Output\BufferedOutput;
-use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -115,7 +115,8 @@ final class ReportsCommandTest extends TestCase
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Documentation reports generated successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),

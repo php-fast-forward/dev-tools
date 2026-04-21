@@ -21,8 +21,8 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogShowCommand;
-use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -91,7 +91,8 @@ final class ChangelogShowCommandTest extends TestCase
         $this->changelogManager->renderReleaseNotes('/repo/CHANGELOG.md', '1.2.0')
             ->willReturn($releaseNotes)
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             $releaseNotes,
             [
                 'input' => $this->input->reveal(),

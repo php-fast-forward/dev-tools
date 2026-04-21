@@ -22,8 +22,8 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use DateTimeImmutable;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogPromoteCommand;
-use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -98,7 +98,8 @@ final class ChangelogPromoteCommandTest extends TestCase
     {
         $this->changelogManager->promote('/repo/CHANGELOG.md', '1.2.0', '2026-04-21')
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
             [
                 'input' => $this->input->reveal(),
@@ -121,7 +122,8 @@ final class ChangelogPromoteCommandTest extends TestCase
             ->willReturn('2026-04-20');
         $this->changelogManager->promote('/repo/CHANGELOG.md', '1.2.0', '2026-04-20')
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
             [
                 'input' => $this->input->reveal(),

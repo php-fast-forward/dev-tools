@@ -21,7 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use Composer\Console\Application;
 use Composer\IO\IOInterface;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\StandardsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -98,7 +98,8 @@ final class StandardsCommandTest extends TestCase
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Code standards checks completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface

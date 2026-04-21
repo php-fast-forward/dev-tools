@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use FastForward\DevTools\Console\Command\FundingCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Funding\ComposerFundingCodec;
 use FastForward\DevTools\Funding\FundingProfile;
@@ -33,6 +34,7 @@ use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -54,6 +56,7 @@ use function Safe\json_decode;
 #[UsesClass(FundingProfile::class)]
 #[UsesClass(FundingProfileMerger::class)]
 #[UsesClass(FundingYamlCodec::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class FundingCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -101,6 +104,7 @@ final class FundingCommandTest extends TestCase
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
         $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('composer-file')
@@ -361,6 +365,11 @@ final class FundingCommandTest extends TestCase
                 'funding_file' => '.github/FUNDING.yml',
             ],
         )->shouldBeCalledOnce();
+        $this->logger->log(
+            'notice',
+            'Funding synchronization was skipped because composer.json was not found.',
+            Argument::type('array'),
+        )->shouldBeCalledOnce();
         $this->filesystem->readFile(Argument::cetera())->shouldNotBeCalled();
         $this->fileDiffer->diffContents(Argument::cetera())->shouldNotBeCalled();
 
@@ -402,6 +411,8 @@ final class FundingCommandTest extends TestCase
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error('{composer_file} requires synchronized funding metadata updates.', Argument::type('array'))
+            ->shouldBeCalledOnce();
 
         self::assertSame(FundingCommand::FAILURE, $this->executeCommand());
     }
@@ -441,6 +452,11 @@ final class FundingCommandTest extends TestCase
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log(
+            'notice',
+            'Funding synchronization preview completed for {composer_file}.',
+            Argument::type('array'),
+        )->shouldBeCalledOnce();
 
         self::assertSame(FundingCommand::SUCCESS, $this->executeCommand());
     }
@@ -489,6 +505,12 @@ final class FundingCommandTest extends TestCase
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
         $this->logger->notice('Skipped updating {composer_file}.', Argument::type('array'))
             ->shouldBeCalledOnce();
+        $this->logger->log(
+            'notice',
+            'Funding synchronization was skipped for {composer_file}.',
+            Argument::type('array')
+        )
+            ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
 
@@ -534,8 +556,10 @@ final class FundingCommandTest extends TestCase
             'composer.json',
             Argument::that(static fn(string $contents): bool => str_contains($contents, '"funding"')),
         )->shouldBeCalledOnce();
-        $this->logger->info('Updated funding metadata in {composer_file}.', Argument::type('array'))
+        $this->logger->log('info', 'Updated funding metadata in {composer_file}.', Argument::type('array'))
             ->shouldNotBeCalled();
+        $this->logger->error('Composer normalization failed after updating {composer_file}.', Argument::type('array'))
+            ->shouldBeCalledOnce();
 
         self::assertSame(FundingCommand::FAILURE, $this->executeCommand());
     }
@@ -640,6 +664,11 @@ final class FundingCommandTest extends TestCase
                 'input' => $this->input->reveal(),
                 'funding_file' => '.github/FUNDING.yml',
             ],
+        )->shouldBeCalledOnce();
+        $this->logger->log(
+            'notice',
+            'Funding synchronization found no supported GitHub funding metadata to write.',
+            Argument::type('array'),
         )->shouldBeCalledOnce();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
 

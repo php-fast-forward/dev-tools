@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -40,7 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.',
     help: 'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.'
 )]
-final class CodeStyleCommand extends BaseCommand
+final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

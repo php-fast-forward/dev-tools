@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
@@ -43,7 +44,7 @@ use Symfony\Component\Filesystem\Path;
     description: 'Copies a file or directory resource into the current project.',
     help: 'This command copies a configured source file or every file in a source directory into the target path.'
 )]
-final class CopyResourceCommand extends BaseCommand
+final class CopyResourceCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use Composer\Console\Application;
 use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\SkillsCommand;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
@@ -145,7 +145,8 @@ final class SkillsCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->logger->info('Created .agents/skills directory.')
             ->shouldBeCalledOnce();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Skills synchronization completed successfully.',
             [
                 'input' => $this->input->reveal(),

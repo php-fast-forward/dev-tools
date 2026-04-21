@@ -24,7 +24,7 @@ use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Composer\Json\Schema\Author;
 use FastForward\DevTools\Composer\Json\Schema\Support;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\PhpDocCommand;
 use FastForward\DevTools\Console\Command\RefactorCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -170,7 +170,8 @@ final class PhpDocCommandTest extends TestCase
             ->shouldBeCalled();
         $this->logger->info('Created .docheader from repository template.')
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'PHPDoc checks completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),

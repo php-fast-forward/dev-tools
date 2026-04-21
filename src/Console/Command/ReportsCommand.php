@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use Composer\Console\Input\InputOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -39,7 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Generates the frontpage for Fast Forward documentation.',
     help: 'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.'
 )]
-final class ReportsCommand extends BaseCommand
+final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

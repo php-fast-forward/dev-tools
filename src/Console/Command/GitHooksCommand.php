@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -41,9 +42,10 @@ use Symfony\Component\Filesystem\Path;
     description: 'Installs Fast Forward Git hooks.',
     help: 'This command copies packaged Git hooks into the current repository.'
 )]
-final class GitHooksCommand extends BaseCommand
+final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * Creates a new GitHooksCommand instance.
@@ -134,10 +136,10 @@ final class GitHooksCommand extends BaseCommand
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
             if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($hookPath)) {
-                $this->logger->notice(
+                $this->notice(
                     'Skipped existing {hook_name} hook.',
+                    $input,
                     [
-                        'input' => $input,
                         'hook_name' => $file->getFilename(),
                         'hook_path' => $hookPath,
                     ],
@@ -189,10 +191,10 @@ final class GitHooksCommand extends BaseCommand
                 }
 
                 if ($interactive && $input->isInteractive() && ! $this->shouldReplaceHook($input, $output, $hookPath)) {
-                    $this->logger->notice(
+                    $this->notice(
                         'Skipped replacing {hook_path}.',
+                        $input,
                         [
-                            'input' => $input,
                             'hook_name' => $file->getFilename(),
                             'hook_path' => $hookPath,
                         ],
@@ -205,17 +207,34 @@ final class GitHooksCommand extends BaseCommand
             $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite || $interactive);
             $this->filesystem->chmod($hookPath, 755, 0o755);
 
-            $this->logger->info(
+            $this->success(
                 'Installed {hook_name} hook.',
+                $input,
                 [
-                    'input' => $input,
                     'hook_name' => $file->getFilename(),
                     'hook_path' => $hookPath,
                 ],
             );
         }
 
-        return $status;
+        if (self::FAILURE === $status) {
+            return $this->failure(
+                'One or more Git hooks require synchronization updates.',
+                $input,
+                [
+                    'target' => $targetPath,
+                ],
+                $targetPath,
+            );
+        }
+
+        return $this->success(
+            'Git hook synchronization completed successfully.',
+            $input,
+            [
+                'target' => $targetPath,
+            ],
+        );
     }
 
     /**

@@ -21,8 +21,8 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\Command\ChangelogCheckCommand;
-use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -92,7 +92,8 @@ final class ChangelogCheckCommandTest extends TestCase
     {
         $this->checker->hasPendingChanges('/repo/CHANGELOG.md', null)
             ->willReturn(true);
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'The changelog contains unreleased changes ready for review.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && true === $context['has_pending_changes']),

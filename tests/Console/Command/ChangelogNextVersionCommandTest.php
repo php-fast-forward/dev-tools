@@ -21,8 +21,8 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogNextVersionCommand;
-use FastForward\DevTools\Console\Command\EmitsGithubActionErrors;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\EmitsGithubActionErrors;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -97,7 +97,8 @@ final class ChangelogNextVersionCommandTest extends TestCase
     {
         $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', null)
             ->willReturn('1.3.0');
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             '1.3.0',
             [
                 'input' => $this->input->reveal(),
@@ -119,7 +120,8 @@ final class ChangelogNextVersionCommandTest extends TestCase
             ->willReturn('1.2.3');
         $this->changelogManager->inferNextVersion('/repo/CHANGELOG.md', '1.2.3')
             ->willReturn('2.0.0');
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             '2.0.0',
             [
                 'input' => $this->input->reveal(),

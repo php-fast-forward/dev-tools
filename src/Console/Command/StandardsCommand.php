@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use Psr\Log\LoggerInterface;
@@ -38,7 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Runs Fast Forward code standards checks.',
     help: 'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.'
 )]
-final class StandardsCommand extends BaseCommand
+final class StandardsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

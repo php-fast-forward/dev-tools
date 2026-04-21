@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -37,7 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Checks whether a changelog file contains meaningful unreleased entries.',
     help: 'This command validates the current Unreleased section and may compare it against a base git reference to enforce pull request changelog updates.'
 )]
-final class ChangelogCheckCommand extends BaseCommand
+final class ChangelogCheckCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

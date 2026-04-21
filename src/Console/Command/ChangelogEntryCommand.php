@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Document\ChangelogDocument;
 use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
@@ -40,7 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Adds a changelog entry to Unreleased or a specific version section.',
     help: 'This command appends one categorized changelog entry to the selected changelog file so it can be reused by local authoring flows and skills.'
 )]
-final class ChangelogEntryCommand extends BaseCommand
+final class ChangelogEntryCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

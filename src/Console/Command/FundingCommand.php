@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use Composer\Factory;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Funding\ComposerFundingCodec;
@@ -44,9 +45,10 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
     description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.',
     help: 'This command merges supported funding entries across composer.json and .github/FUNDING.yml while preserving unsupported providers.'
 )]
-final class FundingCommand extends BaseCommand
+final class FundingCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
+    use LogsCommandResults;
 
     /**
      * Creates a new FundingCommand instance.
@@ -129,16 +131,24 @@ final class FundingCommand extends BaseCommand
         ]);
 
         if (! $this->filesystem->exists($composerFile)) {
-            $this->logger->notice(
+            $this->notice(
                 'Composer file {composer_file} does not exist. Skipping funding synchronization.',
+                $input,
                 [
-                    'input' => $input,
                     'composer_file' => $composerFile,
                     'funding_file' => $fundingFile,
                 ],
             );
 
-            return self::SUCCESS;
+            return $this->success(
+                'Funding synchronization was skipped because composer.json was not found.',
+                $input,
+                [
+                    'composer_file' => $composerFile,
+                    'funding_file' => $fundingFile,
+                ],
+                'notice',
+            );
         }
 
         $composerContents = $this->filesystem->readFile($composerFile);
@@ -235,15 +245,35 @@ final class FundingCommand extends BaseCommand
         }
 
         if ($comparison->isUnchanged()) {
-            return self::SUCCESS;
+            return $this->success(
+                '{composer_file} already matches the synchronized funding metadata.',
+                $input,
+                [
+                    'composer_file' => $composerFile,
+                ],
+            );
         }
 
         if ($check) {
-            return self::FAILURE;
+            return $this->failure(
+                '{composer_file} requires synchronized funding metadata updates.',
+                $input,
+                [
+                    'composer_file' => $composerFile,
+                ],
+                $composerFile,
+            );
         }
 
         if ($dryRun) {
-            return self::SUCCESS;
+            return $this->success(
+                'Funding synchronization preview completed for {composer_file}.',
+                $input,
+                [
+                    'composer_file' => $composerFile,
+                ],
+                'notice',
+            );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile(
@@ -251,32 +281,40 @@ final class FundingCommand extends BaseCommand
             $output,
             $composerFile
         )) {
-            $this->logger->notice(
-                'Skipped updating {composer_file}.',
+            $this->notice('Skipped updating {composer_file}.', $input, [
+                'composer_file' => $composerFile,
+            ],);
+
+            return $this->success(
+                'Funding synchronization was skipped for {composer_file}.',
+                $input,
                 [
-                    'input' => $input,
                     'composer_file' => $composerFile,
                 ],
+                'notice',
             );
-
-            return self::SUCCESS;
         }
 
         $this->filesystem->dumpFile($composerFile, $updatedComposerContents);
 
         if (self::SUCCESS !== $this->normalizeComposerFile($composerFile, $output)) {
-            return self::FAILURE;
+            return $this->failure(
+                'Composer normalization failed after updating {composer_file}.',
+                $input,
+                [
+                    'composer_file' => $composerFile,
+                ],
+                $composerFile,
+            );
         }
 
-        $this->logger->info(
+        return $this->success(
             'Updated funding metadata in {composer_file}.',
+            $input,
             [
-                'input' => $input,
                 'composer_file' => $composerFile,
             ],
         );
-
-        return self::SUCCESS;
     }
 
     /**
@@ -304,19 +342,32 @@ final class FundingCommand extends BaseCommand
         OutputInterface $output,
     ): int {
         if (null === $updatedFundingContents && null === $currentFundingContents) {
-            $this->logger->notice(
+            $this->notice(
                 'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
+                $input,
                 [
-                    'input' => $input,
                     'funding_file' => $fundingFile,
                 ],
             );
 
-            return self::SUCCESS;
+            return $this->success(
+                'Funding synchronization found no supported GitHub funding metadata to write.',
+                $input,
+                [
+                    'funding_file' => $fundingFile,
+                ],
+                'notice',
+            );
         }
 
         if (null === $updatedFundingContents) {
-            return self::SUCCESS;
+            return $this->success(
+                'No GitHub funding file changes were required.',
+                $input,
+                [
+                    'funding_file' => $fundingFile,
+                ],
+            );
         }
 
         $comparison = $this->fileDiffer->diffContents(
@@ -353,41 +404,62 @@ final class FundingCommand extends BaseCommand
         }
 
         if ($comparison->isUnchanged()) {
-            return self::SUCCESS;
-        }
-
-        if ($check) {
-            return self::FAILURE;
-        }
-
-        if ($dryRun) {
-            return self::SUCCESS;
-        }
-
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($input, $output, $fundingFile)) {
-            $this->logger->notice(
-                'Skipped updating {funding_file}.',
+            return $this->success(
+                '{funding_file} already matches the synchronized funding metadata.',
+                $input,
                 [
-                    'input' => $input,
                     'funding_file' => $fundingFile,
                 ],
             );
+        }
 
-            return self::SUCCESS;
+        if ($check) {
+            return $this->failure(
+                '{funding_file} requires synchronized funding metadata updates.',
+                $input,
+                [
+                    'funding_file' => $fundingFile,
+                ],
+                $fundingFile,
+            );
+        }
+
+        if ($dryRun) {
+            return $this->success(
+                'Funding synchronization preview completed for {funding_file}.',
+                $input,
+                [
+                    'funding_file' => $fundingFile,
+                ],
+                'notice',
+            );
+        }
+
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($input, $output, $fundingFile)) {
+            $this->notice('Skipped updating {funding_file}.', $input, [
+                'funding_file' => $fundingFile,
+            ],);
+
+            return $this->success(
+                'Funding synchronization was skipped for {funding_file}.',
+                $input,
+                [
+                    'funding_file' => $fundingFile,
+                ],
+                'notice',
+            );
         }
 
         $this->filesystem->mkdir($this->filesystem->dirname($fundingFile));
         $this->filesystem->dumpFile($fundingFile, $updatedFundingContents);
 
-        $this->logger->info(
+        return $this->success(
             'Updated funding metadata in {funding_file}.',
+            $input,
             [
-                'input' => $input,
                 'funding_file' => $fundingFile,
             ],
         );
-
-        return self::SUCCESS;
     }
 
     /**

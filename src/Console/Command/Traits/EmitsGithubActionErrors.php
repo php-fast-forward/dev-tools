@@ -17,7 +17,7 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Console\Command;
+namespace FastForward\DevTools\Console\Command\Traits;
 
 use Composer\Console\GithubActionError;
 

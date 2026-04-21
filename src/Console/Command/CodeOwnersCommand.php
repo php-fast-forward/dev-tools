@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
@@ -41,7 +42,7 @@ use Symfony\Component\Console\Question\Question;
     description: 'Generates .github/CODEOWNERS from local project metadata.',
     help: 'This command infers CODEOWNERS entries from composer.json metadata, falls back to a commented template, and supports drift-aware preview and overwrite flows.'
 )]
-final class CodeOwnersCommand extends BaseCommand
+final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

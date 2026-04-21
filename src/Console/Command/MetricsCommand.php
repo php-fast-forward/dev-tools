@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -37,7 +38,7 @@ use function rtrim;
     description: 'Analyzes code metrics with PhpMetrics.',
     help: 'This command runs PhpMetrics to analyze the current working directory.',
 )]
-final class MetricsCommand extends BaseCommand
+final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

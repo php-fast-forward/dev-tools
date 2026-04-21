@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -46,7 +47,7 @@ use function is_numeric;
     aliases: ['deps'],
     help: 'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.'
 )]
-final class DependenciesCommand extends BaseCommand
+final class DependenciesCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

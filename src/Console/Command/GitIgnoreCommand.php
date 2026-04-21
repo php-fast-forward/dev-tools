@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\GitIgnore\MergerInterface;
@@ -48,7 +49,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
     description: 'Merges and synchronizes .gitignore files.',
     help: "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore."
 )]
-final class GitIgnoreCommand extends BaseCommand
+final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

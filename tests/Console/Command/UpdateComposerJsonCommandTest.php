@@ -85,6 +85,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->willReturn(null);
         $this->logger->info(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
             ->willReturn('question');
@@ -297,7 +298,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->filesystem->exists('/app/composer.json')
             ->willReturn(false);
         $this->filesystem->readFile(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Composer file {file} does not exist.',
             [
                 'input' => $this->input->reveal(),
@@ -442,7 +444,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped updating {file}.',
             [
                 'input' => $this->input->reveal(),

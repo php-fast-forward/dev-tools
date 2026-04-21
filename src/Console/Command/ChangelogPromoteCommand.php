@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
@@ -40,7 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Promotes Unreleased entries into a published changelog version.',
     help: 'This command moves the current Unreleased entries into a released version section, records the release date, and restores an empty Unreleased section.'
 )]
-final class ChangelogPromoteCommand extends BaseCommand
+final class ChangelogPromoteCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

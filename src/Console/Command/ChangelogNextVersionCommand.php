@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
@@ -38,7 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Infers the next semantic version from the Unreleased changelog section.',
     help: 'This command inspects Unreleased changelog categories and prints the next semantic version inferred from the current changelog state.'
 )]
-final class ChangelogNextVersionCommand extends BaseCommand
+final class ChangelogNextVersionCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

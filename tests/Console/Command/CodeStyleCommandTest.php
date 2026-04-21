@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\CodeStyleCommand;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -114,7 +114,8 @@ final class CodeStyleCommandTest extends TestCase
             ->shouldBeCalled();
         $this->logger->info('Running code style checks and fixes...')
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Code style checks completed successfully.',
             [
                 'input' => $this->input->reveal(),
@@ -169,7 +170,8 @@ final class CodeStyleCommandTest extends TestCase
             ->shouldBeCalled();
         $this->logger->info('Running code style checks and fixes...')
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Code style checks completed successfully.',
             Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
                 && \is_string($context['process_output'])),

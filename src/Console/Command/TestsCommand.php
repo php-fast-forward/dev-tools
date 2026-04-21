@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
@@ -48,7 +49,7 @@ use function is_numeric;
     description: 'Runs PHPUnit tests.',
     help: 'This command runs PHPUnit to execute your tests.'
 )]
-final class TestsCommand extends BaseCommand
+final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -159,9 +160,10 @@ final class TestsCommand extends BaseCommand
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
-        $this->logger->info('Running PHPUnit tests...', [
-            'input' => $input,
-        ]);
+        $this->getLogger()
+            ->info('Running PHPUnit tests...', [
+                'input' => $input,
+            ]);
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);

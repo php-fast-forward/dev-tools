@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -46,7 +47,7 @@ use function Safe\getcwd;
     help: 'This command generates API documentation in Markdown format using phpDocumentor. '
     . 'It accepts an optional `--target` option to specify the output directory and `--init` to initialize the wiki submodule.'
 )]
-final class WikiCommand extends BaseCommand
+final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -181,15 +182,14 @@ final class WikiCommand extends BaseCommand
         $wikiSubmodulePath = (string) $this->filesystem->getAbsolutePath($target);
 
         if ($this->filesystem->exists($wikiSubmodulePath)) {
-            $this->logger->info(
+            return $this->success(
                 'Wiki submodule already exists at {wiki_submodule_path}.',
+                $input,
                 [
                     'input' => $input,
                     'wiki_submodule_path' => $wikiSubmodulePath,
                 ],
             );
-
-            return self::SUCCESS;
         }
 
         $repositoryUrl = $this->getGitRepositoryUrl();

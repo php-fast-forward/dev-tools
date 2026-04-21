@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Throwable;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
@@ -39,7 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Prints the notes body for a released changelog version.',
     help: 'This command renders the body of one released changelog section so it can be reused for GitHub release notes.'
 )]
-final class ChangelogShowCommand extends BaseCommand
+final class ChangelogShowCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

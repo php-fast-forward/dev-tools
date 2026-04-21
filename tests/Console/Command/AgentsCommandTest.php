@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use Composer\Console\Application;
 use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\AgentsCommand;
-use FastForward\DevTools\Console\Command\LogsCommandResults;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
@@ -145,7 +145,8 @@ final class AgentsCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->logger->info('Created .agents/agents directory.')
             ->shouldBeCalledOnce();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Agents synchronization completed successfully.',
             [
                 'input' => $this->input->reveal(),

@@ -234,7 +234,8 @@ final class GitIgnoreCommandTest extends TestCase
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
-        $this->logger->info(
+        $this->logger->log(
+            'info',
             'Successfully merged .gitignore file.',
             [
                 'input' => $this->input->reveal(),
@@ -314,7 +315,8 @@ final class GitIgnoreCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped updating {target_path}.',
             [
                 'input' => $this->input->reveal(),

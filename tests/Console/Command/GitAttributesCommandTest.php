@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use Prophecy\Argument;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\GitAttributesCommand;
+use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceCheckerInterface;
@@ -34,6 +35,7 @@ use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
+use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -49,6 +51,7 @@ use function Safe\getcwd;
 
 #[CoversClass(GitAttributesCommand::class)]
 #[UsesClass(FileDiff::class)]
+#[UsesTrait(LogsCommandResults::class)]
 final class GitAttributesCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -141,6 +144,7 @@ final class GitAttributesCommandTest extends TestCase
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
         $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->questionHelper->getName()
@@ -247,7 +251,11 @@ final class GitAttributesCommandTest extends TestCase
             'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
             Argument::type('array'),
         )->shouldBeCalled();
-        $this->logger->info('Added {entries_count} export-ignore entries to .gitattributes.', Argument::type('array'))
+        $this->logger->log(
+            'info',
+            'Added {entries_count} export-ignore entries to .gitattributes.',
+            Argument::type('array')
+        )
             ->shouldBeCalled();
 
         self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
@@ -344,6 +352,12 @@ final class GitAttributesCommandTest extends TestCase
                 'input' => $this->input->reveal(),
             ],
         )->shouldBeCalled();
+        $this->logger->log(
+            'notice',
+            'No .gitattributes synchronization changes were required.',
+            Argument::type('array')
+        )
+            ->shouldBeCalledOnce();
 
         self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
     }
@@ -390,6 +404,8 @@ final class GitAttributesCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->logger->notice('@@ diff @@', Argument::type('array'))
             ->shouldBeCalledOnce();
+        $this->logger->error('.gitattributes requires synchronization updates.', Argument::type('array'))
+            ->shouldBeCalledOnce();
         $this->writer->write(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(GitAttributesCommand::FAILURE, $this->invokeExecute());
@@ -431,6 +447,8 @@ final class GitAttributesCommandTest extends TestCase
                 FileDiff::STATUS_CHANGED,
                 'Managed file needs update.',
             ))->shouldBeCalledOnce();
+        $this->logger->log('notice', '.gitattributes synchronization preview completed.', Argument::type('array'))
+            ->shouldBeCalledOnce();
         $this->writer->write(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(GitAttributesCommand::SUCCESS, $this->invokeExecute());
@@ -481,6 +499,8 @@ final class GitAttributesCommandTest extends TestCase
         )->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->notice('Skipped updating {gitattributes_path}.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+        $this->logger->log('notice', '.gitattributes synchronization was skipped.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->writer->write(Argument::cetera())->shouldNotBeCalled();
 

@@ -178,7 +178,7 @@ final class CopyResourceCommandTest extends TestCase
             '/app/.github/workflows/nested/example.yml',
             false,
         )->shouldBeCalledOnce();
-        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
+        $this->logger->log('info', 'Copied resource {target_path}.', Argument::type('array'))
             ->shouldBeCalled();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -226,7 +226,7 @@ final class CopyResourceCommandTest extends TestCase
             ->willReturn('/project/.editorconfig');
         $this->filesystem->exists('/project/.editorconfig')
             ->willReturn(true);
-        $this->logger->notice('Skipped existing resource {target_path}.', Argument::type('array'))
+        $this->logger->log('notice', 'Skipped existing resource {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->fileDiffer->diff(Argument::cetera())->shouldNotBeCalled();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
@@ -272,7 +272,7 @@ final class CopyResourceCommandTest extends TestCase
         )->shouldBeCalledOnce();
         $this->filesystem->copy('/package/.editorconfig', '/project/.editorconfig', true)
             ->shouldBeCalledOnce();
-        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
+        $this->logger->log('info', 'Copied resource {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -311,7 +311,7 @@ final class CopyResourceCommandTest extends TestCase
         )->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::any(), Argument::any(), Argument::any())
             ->shouldNotBeCalled();
-        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
+        $this->logger->log('info', 'Copied resource {target_path}.', Argument::type('array'))
             ->shouldNotBeCalled();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -350,7 +350,7 @@ final class CopyResourceCommandTest extends TestCase
         )->shouldBeCalledOnce();
         $this->filesystem->copy('/package/.editorconfig', '/project/.editorconfig', true)
             ->shouldBeCalledOnce();
-        $this->logger->info('Copied resource {target_path}.', Argument::type('array'))
+        $this->logger->log('info', 'Copied resource {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
 
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
@@ -450,7 +450,7 @@ final class CopyResourceCommandTest extends TestCase
             Argument::type(ConfirmationQuestion::class),
         )->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice('Skipped replacing {target_path}.', Argument::type('array'))
+        $this->logger->log('notice', 'Skipped replacing {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
