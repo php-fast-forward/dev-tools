@@ -2230,6 +2230,28 @@
             </ul>
         </div>
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-output.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Output
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2892,8 +2914,8 @@ DevTools command surface;</li>
 manual inspection in the terminal;</li>
 
     <li class="dash">when structured output is active, DevTools suppresses progress-heavy nested
-tool output where possible and forwards JSON, quiet, or no-progress flags to
-subprocesses that support them;</li>
+tool output where possible and forwards JSON, quiet, or progress preferences
+to subprocesses that support them;</li>
 
     <li class="dash"><code>changelog:check</code>
  is the command used by pull-request validation;</li>
@@ -2937,12 +2959,14 @@ composer tests -- --filter=EventTracerTest</code></pre>
     <li class="dash"><code>--coverage-summary</code>
  keeps coverage text output to PHPUnit&#039;s summary;</li>
 
-    <li class="dash"><code>--no-progress</code>
- disables PHPUnit progress output;</li>
+    <li class="dash">progress output is disabled by default;</li>
+
+    <li class="dash"><code>--progress</code>
+ re-enables PHPUnit progress output in text mode;</li>
 
     <li class="dash"><code>--json</code>
  and <code>--pretty-json</code>
- also suppress PHPUnit progress output
+ still suppress PHPUnit progress output
 automatically;</li>
 
     <li class="dash"><code>--no-cache</code>
@@ -3263,7 +3287,7 @@ bar.</li>
     <li class="dash">it calls <code>docs --target .dev-tools</code>
 ;</li>
 
-    <li class="dash">it calls <code>tests --coverage .dev-tools/coverage --no-progress --coverage-summary</code>
+    <li class="dash">it calls <code>tests --coverage .dev-tools/coverage --coverage-summary</code>
 ;</li>
 
     <li class="dash">it calls <code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>

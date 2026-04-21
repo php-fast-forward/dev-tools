@@ -220,11 +220,13 @@
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will return failure when process queue fails</li>
             <li class="success">Execute will capture buffered output when json is requested</li>
+            <li class="success">Execute will enable progress when requested</li>
         </ul>
         <h2>Command (FastForward\DevTools\Tests\Console\Command\Command)</h2>
         <ul>
             <li class="success">Execute will run php unit process with config file</li>
             <li class="success">Execute will disable php unit progress when json is requested</li>
+            <li class="success">Execute will enable php unit progress when requested</li>
             <li class="success">Execute with invalid min coverage will return failure</li>
             <li class="success">Execute with coverage below minimum will return failure</li>
             <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
@@ -588,6 +590,7 @@
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will return failure when process queue fails</li>
             <li class="success">Execute will run php metrics in quiet mode when json is requested</li>
+            <li class="success">Execute will not run php metrics in quiet mode when progress is requested</li>
         </ul>
         <h2>Output Format Logger (FastForward\DevTools\Tests\Console\Logger\OutputFormatLogger)</h2>
         <ul>
@@ -611,6 +614,7 @@
             <li class="success">Execute will create doc header and run php doc processes</li>
             <li class="success">Execute will handle dump file exception and continue running processes</li>
             <li class="success">Execute will request structured output and disable progress when json is requested</li>
+            <li class="success">Execute will enable progress when requested</li>
         </ul>
         <h2>Plugin (FastForward\DevTools\Tests\Composer\Plugin)</h2>
         <ul>
@@ -632,26 +636,17 @@
         </ul>
         <h2>Process Queue (FastForward\DevTools\Tests\Process\ProcessQueue)</h2>
         <ul>
-            <li class="success">Add with blocking process will add to queue</li>
-            <li class="success">Add with detached process will add to queue</li>
-            <li class="success">Add with ignore failure will add to queue</li>
             <li class="success">Run with empty queue returns success</li>
-            <li class="success">Run with successful process returns success</li>
-            <li class="success">Run with failing process returns failure</li>
-            <li class="success">Run with failing process and ignore failure returns success</li>
-            <li class="success">Run detached process starts without blocking</li>
+            <li class="success">Run with successful blocking process returns success</li>
+            <li class="success">Run with failing blocking process returns failure</li>
+            <li class="success">Run with ignored failing blocking process returns success</li>
             <li class="success">Run with null exit code returns failure</li>
-            <li class="success">Run multiple processes with one failure returns failure</li>
             <li class="success">Run blocking process exception returns failure</li>
+            <li class="success">Run detached process starts without blocking and waits at the end</li>
             <li class="success">Run detached process start failure returns failure</li>
             <li class="success">Run detached process start failure with ignore failure returns success</li>
-            <li class="success">Run will write process output to output interface</li>
-            <li class="success">Wait will block until detached processes finish</li>
-            <li class="success">Add will queue the process when pty support is configured</li>
-            <li class="success">Run will write error output to console error stream</li>
-            <li class="success">Run will flush remaining detached output when process finishes</li>
-            <li class="success">Wait will accept null output</li>
-            <li class="success">Private helpers will handle startup failures and stream buffers</li>
+            <li class="success">Run will write blocking process output to standard and error outputs</li>
+            <li class="success">Wait will flush finished detached output without waiting for every process</li>
         </ul>
         <h2>Reader (FastForward\DevTools\Tests\GitAttributes\Reader)</h2>
         <ul>
@@ -675,6 +670,7 @@
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will return failure when process queue fails</li>
             <li class="success">Execute will request json output and disable progress when json is requested</li>
+            <li class="success">Execute will enable progress when requested</li>
         </ul>
         <h2>Remove Empty Doc Block Rector (FastForward\DevTools\Tests\Rector\RemoveEmptyDocBlockRector)</h2>
         <ul>
@@ -693,6 +689,7 @@
         <ul>
             <li class="success">Execute will run reports and return success</li>
             <li class="success">Execute will capture buffered output when json is requested</li>
+            <li class="success">Execute will forward progress to nested commands when requested</li>
         </ul>
         <h2>Resolver (FastForward\DevTools\Tests\License\Resolver)</h2>
         <ul>

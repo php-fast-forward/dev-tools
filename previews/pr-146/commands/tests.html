@@ -2230,6 +2230,28 @@
             </ul>
         </div>
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-output.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Output
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2920,10 +2942,10 @@ vendor/bin/dev-tools tests [path] [options]</code></pre>
 </dt>
         
         <dd>Disable PHPUnit caching.</dd>
-                                <dt><code>--no-progress</code>
+                                <dt><code>--progress</code>
 </dt>
         
-        <dd>Disable PHPUnit progress output.</dd>
+        <dd>Enable PHPUnit progress output.</dd>
                                 <dt><code>--coverage, -c</code>
  (optional)</dt>
         
@@ -2995,9 +3017,9 @@ payload is not polluted by transient progress rendering.</dd>
             <pre><code class="language-bash">composer tests --no-cache</code></pre>
 
             
-    <p>Run without PHPUnit progress output:</p>
+    <p>Run with PHPUnit progress output enabled:</p>
 
-            <pre><code class="language-bash">composer tests --no-progress</code></pre>
+            <pre><code class="language-bash">composer tests --progress</code></pre>
 
     </section>
 
@@ -3047,11 +3069,13 @@ payload is not polluted by transient progress rendering.</dd>
 
 only when coverage text output is generated.</li>
 
+    <li class="dash">progress output is disabled by default.</li>
+
     <li class="dash"><code>--json</code>
  and <code>--pretty-json</code>
- implicitly add <code>--no-progress</code>
- so the
-structured payload stays clean.</li>
+ keep progress output disabled so the
+structured payload stays clean, even when <code>--progress</code>
+ is provided.</li>
 
     <li class="dash">The command fails if minimum coverage is not met (when <code>--min-coverage</code>
  is set).</li>

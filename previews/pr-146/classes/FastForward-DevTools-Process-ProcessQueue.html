@@ -2229,6 +2229,28 @@
             </ul>
         </div>
     </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-output.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Output
+        </a>
+
+            </div>
+
+    </li>
                         
             </ul>
         </div>
@@ -2931,7 +2953,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">49</span>
+    <span class="badge text-bg-light border">51</span>
 
     </aside>
         </div>
@@ -3026,6 +3048,22 @@ also be awaited explicitly via <code class="prettyprint">wait()</code>.</p>
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_commandLineProperty"
+        >
+            $commandLineProperty
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                        &nbsp;: <abbr title="\ReflectionProperty">ReflectionProperty</abbr>|null            </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
             href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_entries"
         >
             $entries
@@ -3037,7 +3075,23 @@ also be awaited explicitly via <code class="prettyprint">wait()</code>.</p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                        &nbsp;: array&lt;int, <abbr title="array{process: \Symfony\Component\Process\Process, ignoreFailure: bool, detached: bool}">Process, ignoreFailure: bool, detached: bool}</abbr>&gt;            </span>
+                        &nbsp;: array&lt;int, <abbr title="array{process: \Symfony\Component\Process\Process, ignoreFailure: bool, detached: bool, label: string}">Process, ignoreFailure: bool, detached: bool, label: string}</abbr>&gt;            </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_githubActionOutput"
+        >
+            $githubActionOutput
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                        &nbsp;: <a href="classes/FastForward-DevTools-Console-Output-GithubActionOutput.html"><abbr title="\FastForward\DevTools\Console\Output\GithubActionOutput">GithubActionOutput</abbr></a>            </span>
 </div>
                         </div>
                                             <div class="list-group-item">
@@ -3052,12 +3106,12 @@ also be awaited explicitly via <code class="prettyprint">wait()</code>.</p>
 
                     <p class="text-body-secondary mb-0 small mt-1">
                 Stores detached processes that have already been started and whose output
-may still need to be drained.
+SHALL be emitted only after blocking processes finish.
             </p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                        &nbsp;: array&lt;int, <abbr title="\Symfony\Component\Process\Process">Process</abbr>&gt;            </span>
+                        &nbsp;: array&lt;int, <abbr title="object{process: \Symfony\Component\Process\Process, label: string, standardOutput: string, errorOutput: string}">Process, label: string, standardOutput: string, errorOutput: string}</abbr>&gt;            </span>
 </div>
                         </div>
                                     </div>
@@ -3079,9 +3133,6 @@ may still need to be drained.
             __construct()
         </a>
 
-                    <p class="text-body-secondary mb-0 small mt-1">
-                Initializes the queue and secures child processes from early termination.
-            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3150,6 +3201,25 @@ may still need to be drained.
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_createBufferedOutputCallback"
+        >
+            createBufferedOutputCallback()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Creates a callback that buffers detached process output until flushing.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: callable(string, string): void    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
             href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_createOutputCallback"
         >
             createOutputCallback()
@@ -3169,18 +3239,75 @@ may still need to be drained.
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
-            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_drainDetachedProcessesOutput"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_flushDetachedProcessesOutput"
         >
-            drainDetachedProcessesOutput()
+            flushDetachedProcessesOutput()
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Drains buffered output from detached processes and removes finished ones.
+                Flushes all buffered detached process output in enqueue order.
             </p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                                &nbsp;: void    </span>
+                                &nbsp;: bool    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_formatProcessCommandLine"
+        >
+            formatProcessCommandLine()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Formats the configured process command line without shell escaping noise.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: string    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_getProcessCommandLine"
+        >
+            getProcessCommandLine()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Reads the raw configured Process command line.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: array&lt;int, string&gt;|string    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_resolveLabel"
+        >
+            resolveLabel()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Resolves the label that SHOULD be used when presenting queued process output.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: string    </span>
 </div>
                         </div>
                                             <div class="list-group-item">
@@ -3207,6 +3334,25 @@ may still need to be drained.
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_runLabeledBlockingProcess"
+        >
+            runLabeledBlockingProcess()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Runs a blocking process and wraps it in a GitHub Actions group when labeled.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: int    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
             href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_startDetachedProcess"
         >
             startDetachedProcess()
@@ -3219,6 +3365,25 @@ may still need to be drained.
 
     <span class="text-body-secondary small text-end">
                                 &nbsp;: int    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_writeDetachedOutput"
+        >
+            writeDetachedOutput()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Writes buffered detached output to the configured output.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
 </div>
                         </div>
                                     </div>
@@ -3252,6 +3417,81 @@ may still need to be drained.
     <section>
         <div class="d-grid gap-4">
                             <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="property_commandLineProperty">
+                <span class="text-primary">$commandLineProperty</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_commandLineProperty"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                                    <span class="badge text-bg-secondary">Static</span>
+                
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">53</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+            <span class="badge text-bg-light border text-dark">
+            private
+        </span>
+    
+            <span class="badge text-bg-secondary">static</span>
+    
+    <span class="text-info-emphasis">
+        <abbr title="\ReflectionProperty">ReflectionProperty</abbr>|null
+    </span>
+
+    <span class="text-primary fw-semibold">
+        $commandLineProperty
+    </span>
+
+            <span class="text-body-secondary">=</span>
+        <span class="text-success-emphasis">
+            null
+        </span>
+    </code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+        
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
             <h4 class="h5 mb-2" id="property_entries">
@@ -3288,7 +3528,7 @@ may still need to be drained.
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">56</span>
+    <span class="badge text-bg-light border">60</span>
 
     </aside>
         <div class="mb-4">
@@ -3305,7 +3545,7 @@ may still need to be drained.
     
     
     <span class="text-info-emphasis">
-        array&lt;int, <abbr title="array{process: \Symfony\Component\Process\Process, ignoreFailure: bool, detached: bool}">Process, ignoreFailure: bool, detached: bool}</abbr>&gt;
+        array&lt;int, <abbr title="array{process: \Symfony\Component\Process\Process, ignoreFailure: bool, detached: bool, label: string}">Process, ignoreFailure: bool, detached: bool, label: string}</abbr>&gt;
     </span>
 
     <span class="text-primary fw-semibold">
@@ -3316,6 +3556,76 @@ may still need to be drained.
         <span class="text-success-emphasis">
             []
         </span>
+    </code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+        
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="property_githubActionOutput">
+                <span class="text-primary">$githubActionOutput</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_githubActionOutput"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                                    <span class="badge text-bg-info">Read-only</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">74</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+            <span class="badge text-bg-light border text-dark">
+            private
+        </span>
+    
+    
+    <span class="text-info-emphasis">
+        <a href="classes/FastForward-DevTools-Console-Output-GithubActionOutput.html"><abbr title="\FastForward\DevTools\Console\Output\GithubActionOutput">GithubActionOutput</abbr></a>
+    </span>
+
+    <span class="text-primary fw-semibold">
+        $githubActionOutput
+    </span>
+
     </code>
     </div>
 
@@ -3364,12 +3674,12 @@ may still need to be drained.
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">64</span>
+    <span class="badge text-bg-light border">68</span>
 
     </aside>
         <div class="mb-4">
         <p class="lead text-body-secondary mb-0">Stores detached processes that have already been started and whose output
-may still need to be drained.</p>
+SHALL be emitted only after blocking processes finish.</p>
     </div>
 
     
@@ -3382,7 +3692,7 @@ may still need to be drained.</p>
     
     
     <span class="text-info-emphasis">
-        array&lt;int, <abbr title="\Symfony\Component\Process\Process">Process</abbr>&gt;
+        array&lt;int, <abbr title="object{process: \Symfony\Component\Process\Process, label: string, standardOutput: string, errorOutput: string}">Process, label: string, standardOutput: string, errorOutput: string}</abbr>&gt;
     </span>
 
     <span class="text-primary fw-semibold">
@@ -3465,13 +3775,10 @@ may still need to be drained.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">69</span>
+    <span class="badge text-bg-light border">73</span>
 
     </aside>
-        <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Initializes the queue and secures child processes from early termination.</p>
-    </div>
-
+    
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -3481,7 +3788,8 @@ may still need to be drained.</p>
     
     
     
-    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+    <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Console-Output-GithubActionOutput.html"><abbr title="\FastForward\DevTools\Console\Output\GithubActionOutput">GithubActionOutput</abbr></a>&nbsp;
+                </span><span class="text-primary">$githubActionOutput</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3490,7 +3798,35 @@ may still need to be drained.</p>
     
     
 
-    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$githubActionOutput</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <a href="classes/FastForward-DevTools-Console-Output-GithubActionOutput.html"><abbr title="\FastForward\DevTools\Console\Output\GithubActionOutput">GithubActionOutput</abbr></a>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
     
 
         
@@ -3532,7 +3868,7 @@ may still need to be drained.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">83</span>
+    <span class="badge text-bg-light border">85</span>
 
     </aside>
         <div class="mb-4">
@@ -3553,7 +3889,9 @@ may still need to be drained.</p>
                     bool&nbsp;
                 </span><span class="text-primary">$ignoreFailure</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">false</span><span class="text-body-secondary">]</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
                     bool&nbsp;
-                </span><span class="text-primary">$detached</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">false</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
+                </span><span class="text-primary">$detached</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">false</span><span class="text-body-secondary">]</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string|null&nbsp;
+                </span><span class="text-primary">$label</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3669,6 +4007,40 @@ may still need to be drained.</p>
                         </div>
                     </div>
                 </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$label</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string|null
+                            </span>
+
+                                                            <span class="text-body-secondary">=</span>
+                                <code class="text-success-emphasis mb-0">null</code>
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>an optional label that MAY be used to present the process output as a grouped block</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
                     </div>
     </section>
 
@@ -3713,7 +4085,7 @@ may still need to be drained.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">109</span>
+    <span class="badge text-bg-light border">116</span>
 
     </aside>
         <div class="mb-4">
@@ -3877,7 +4249,7 @@ their eventual runtime exit code to the returned result.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">157</span>
+    <span class="badge text-bg-light border">164</span>
 
     </aside>
         <div class="mb-4">
@@ -3894,7 +4266,7 @@ their eventual runtime exit code to the returned result.</p>
     
     
     <span class="text-primary fw-semibold">wait</span><span class="text-body-secondary">(</span><span><span class="text-body-secondary">[</span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>|null&nbsp;
-                </span><span class="text-primary">$output</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">new <abbr title="\Symfony\Component\Console\Output\NullOutput">NullOutput</abbr>()</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
+                </span><span class="text-primary">$output</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3922,7 +4294,7 @@ their eventual runtime exit code to the returned result.</p>
                             </span>
 
                                                             <span class="text-body-secondary">=</span>
-                                <code class="text-success-emphasis mb-0">new <abbr title="\Symfony\Component\Console\Output\NullOutput">NullOutput</abbr>()</code>
+                                <code class="text-success-emphasis mb-0">null</code>
                                                     </div>
 
                         <div>
@@ -3952,6 +4324,119 @@ their eventual runtime exit code to the returned result.</p>
         
     
     
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_createBufferedOutputCallback">
+                <span class="text-primary">createBufferedOutputCallback()</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_createBufferedOutputCallback"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">279</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Creates a callback that buffers detached process output until flushing.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">createBufferedOutputCallback</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="object{process: \Symfony\Component\Process\Process, label: string, standardOutput: string, errorOutput: string}">Process, label: string, standardOutput: string, errorOutput: string}</abbr>&nbsp;
+                </span><span class="text-primary">$entry</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">callable(string, string): void</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$entry</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="object{process: \Symfony\Component\Process\Process, label: string, standardOutput: string, errorOutput: string}">Process, label: string, standardOutput: string, errorOutput: string}</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            callable(string, string): void
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
+    </section>
+
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
@@ -3988,7 +4473,7 @@ their eventual runtime exit code to the returned result.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">224</span>
+    <span class="badge text-bg-light border">255</span>
 
     </aside>
         <div class="mb-4">
@@ -4098,10 +4583,10 @@ emits them.</p>
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="method_drainDetachedProcessesOutput">
-                <span class="text-primary">drainDetachedProcessesOutput()</span>
+            <h4 class="h5 mb-2" id="method_flushDetachedProcessesOutput">
+                <span class="text-primary">flushDetachedProcessesOutput()</span>
                 <a
-    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_drainDetachedProcessesOutput"
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_flushDetachedProcessesOutput"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -4131,11 +4616,11 @@ emits them.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">252</span>
+    <span class="badge text-bg-light border">299</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Drains buffered output from detached processes and removes finished ones.</p>
+        <p class="lead text-body-secondary mb-0">Flushes all buffered detached process output in enqueue order.</p>
     </div>
 
 
@@ -4147,10 +4632,8 @@ emits them.</p>
     
     
     
-    <span class="text-primary fw-semibold">drainDetachedProcessesOutput</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>&nbsp;
-                </span><span class="text-primary">$output</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
-                    bool&nbsp;
-                </span><span class="text-primary">$flushFinishedOnly</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">false</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
+    <span class="text-primary fw-semibold">flushDetachedProcessesOutput</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$output</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -4158,24 +4641,6 @@ emits them.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>When $flushFinishedOnly is false, the implementation SHALL poll detached
-processes and forward any output currently available. When true, it SHALL
-perform one final drain pass and remove any finished processes from the
-internal tracking list.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4216,19 +4681,128 @@ internal tracking list.</p>
                         </div>
                     </div>
                 </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>whether at least one detached process output has been flushed</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_formatProcessCommandLine">
+                <span class="text-primary">formatProcessCommandLine()</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_formatProcessCommandLine"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">379</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Formats the configured process command line without shell escaping noise.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">formatProcessCommandLine</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr>&nbsp;
+                </span><span class="text-primary">$process</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$flushFinishedOnly</code>
+                            <code class="text-primary fw-semibold mb-0">$process</code>
 
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                bool
+                                <abbr title="\Symfony\Component\Process\Process">Process</abbr>
                             </span>
 
-                                                            <span class="text-body-secondary">=</span>
-                                <code class="text-success-emphasis mb-0">false</code>
                                                     </div>
 
                         <div>
@@ -4241,7 +4815,7 @@ internal tracking list.</p>
                 </div>
 
                 <div>
-                    <p>indicates whether the method is running as the final drain pass</p>
+                    <p>the queued process instance</p>
 
                 </div>
             </div>
@@ -4257,7 +4831,346 @@ internal tracking list.</p>
 
         
     
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            string
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the human-readable command line</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_getProcessCommandLine">
+                <span class="text-primary">getProcessCommandLine()</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_getProcessCommandLine"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">397</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Reads the raw configured Process command line.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
     
+    
+    
+    
+    <span class="text-primary fw-semibold">getProcessCommandLine</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr>&nbsp;
+                </span><span class="text-primary">$process</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">array&lt;int, string&gt;|string</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$process</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Process\Process">Process</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the queued process instance</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            array&lt;int, string&gt;|string
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_resolveLabel">
+                <span class="text-primary">resolveLabel()</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_resolveLabel"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">363</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Resolves the label that SHOULD be used when presenting queued process output.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">resolveLabel</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr>&nbsp;
+                </span><span class="text-primary">$process</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string|null&nbsp;
+                </span><span class="text-primary">$label</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$process</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Process\Process">Process</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the queued process instance</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$label</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string|null
+                            </span>
+
+                                                            <span class="text-body-secondary">=</span>
+                                <code class="text-success-emphasis mb-0">null</code>
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the optional label provided by the caller</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            string
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the resolved presentation label</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
@@ -4294,7 +5207,7 @@ internal tracking list.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">202</span>
+    <span class="badge text-bg-light border">217</span>
 
     </aside>
         <div class="mb-4">
@@ -4438,6 +5351,216 @@ normalized to a non-zero exit code.</p>
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
+            <h4 class="h5 mb-2" id="method_runLabeledBlockingProcess">
+                <span class="text-primary">runLabeledBlockingProcess()</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_runLabeledBlockingProcess"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">237</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Runs a blocking process and wraps it in a GitHub Actions group when labeled.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">runLabeledBlockingProcess</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr>&nbsp;
+                </span><span class="text-primary">$process</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$output</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$label</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">int</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$process</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Process\Process">Process</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the process to execute</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$output</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the output that SHALL receive process output</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$label</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the label that SHALL be used to group command output</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            int
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the resulting process exit code</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
             <h4 class="h5 mb-2" id="method_startDetachedProcess">
                 <span class="text-primary">startDetachedProcess()</span>
                 <a
@@ -4471,7 +5594,7 @@ normalized to a non-zero exit code.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">181</span>
+    <span class="badge text-bg-light border">189</span>
 
     </aside>
         <div class="mb-4">
@@ -4488,8 +5611,9 @@ normalized to a non-zero exit code.</p>
     
     
     <span class="text-primary fw-semibold">startDetachedProcess</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr>&nbsp;
-                </span><span class="text-primary">$process</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>&nbsp;
-                </span><span class="text-primary">$output</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">int</span></code>
+                </span><span class="text-primary">$process</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string|null&nbsp;
+                </span><span class="text-primary">$label</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">int</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -4556,12 +5680,12 @@ sequence completes without throwing an exception.</p>
                             <div class="card border-0 bg-body-tertiary shadow-sm">
                     <div class="card-body p-3">
                         <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-                            <code class="text-primary fw-semibold mb-0">$output</code>
+                            <code class="text-primary fw-semibold mb-0">$label</code>
 
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                <abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>
+                                string|null
                             </span>
 
                                                     </div>
@@ -4576,7 +5700,7 @@ sequence completes without throwing an exception.</p>
                 </div>
 
                 <div>
-                    <p>the output that SHALL receive process output</p>
+                    <p>an optional label that MAY be used when presenting the buffered output</p>
 
                 </div>
             </div>
@@ -4618,6 +5742,191 @@ sequence completes without throwing an exception.</p>
                 <div>
                     <p>returns 0 when the process starts successfully, or a non-zero
 value when startup fails</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_writeDetachedOutput">
+                <span class="text-primary">writeDetachedOutput()</span>
+                <a
+    href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_writeDetachedOutput"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Process/ProcessQueue.php" class="text-decoration-none mb-0">
+        <a href="files/src-process-processqueue.html"><abbr title="src/Process/ProcessQueue.php">ProcessQueue.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">336</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Writes buffered detached output to the configured output.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">writeDetachedOutput</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$standardOutput</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$errorOutput</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$output</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$standardOutput</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$errorOutput</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$output</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the output that SHALL receive detached process output</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>always returns true to support grouped callback usage</p>
 
                 </div>
             </div>
@@ -4773,9 +6082,21 @@ value when startup fails</p>
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_commandLineProperty"
+                            >
+                                <span class="text-truncate">$commandLineProperty</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_entries"
                             >
                                 <span class="text-truncate">$entries</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#property_githubActionOutput"
+                            >
+                                <span class="text-truncate">$githubActionOutput</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
@@ -4819,15 +6140,39 @@ value when startup fails</p>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_createBufferedOutputCallback"
+                            >
+                                <span class="text-truncate">createBufferedOutputCallback()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_createOutputCallback"
                             >
                                 <span class="text-truncate">createOutputCallback()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
-                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_drainDetachedProcessesOutput"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_flushDetachedProcessesOutput"
                             >
-                                <span class="text-truncate">drainDetachedProcessesOutput()</span>
+                                <span class="text-truncate">flushDetachedProcessesOutput()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_formatProcessCommandLine"
+                            >
+                                <span class="text-truncate">formatProcessCommandLine()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_getProcessCommandLine"
+                            >
+                                <span class="text-truncate">getProcessCommandLine()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_resolveLabel"
+                            >
+                                <span class="text-truncate">resolveLabel()</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
@@ -4837,9 +6182,21 @@ value when startup fails</p>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_runLabeledBlockingProcess"
+                            >
+                                <span class="text-truncate">runLabeledBlockingProcess()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_startDetachedProcess"
                             >
                                 <span class="text-truncate">startDetachedProcess()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Process-ProcessQueue.html#method_writeDetachedOutput"
+                            >
+                                <span class="text-truncate">writeDetachedOutput()</span>
                                                             </a>
                                             </div>
                 </div>
