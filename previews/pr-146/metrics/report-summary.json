@@ -1,49 +1,49 @@
 {
     "LOC": {
-        "linesOfCode": 7590,
-        "logicalLinesOfCode": 3896,
-        "commentLinesOfCode": 3701,
-        "avgVolume": 485.87,
-        "avgCommentWeight": 43.82,
-        "avgIntelligentContent": 43.82,
-        "logicalLinesByClass": 45,
+        "linesOfCode": 7576,
+        "logicalLinesOfCode": 3919,
+        "commentLinesOfCode": 3664,
+        "avgVolume": 512.89,
+        "avgCommentWeight": 43.72,
+        "avgIntelligentContent": 43.72,
+        "logicalLinesByClass": 47,
         "logicalLinesByMethod": 11
     },
     "OOP": {
-        "classes": 87,
-        "interface": 32,
-        "methods": 354,
-        "methodsByClass": 4.07,
-        "lackCohesionOfMethods": 2.16
+        "classes": 84,
+        "interface": 28,
+        "methods": 349,
+        "methodsByClass": 4.15,
+        "lackCohesionOfMethods": 2.15
     },
     "Coupling": {
-        "avgAfferentCoupling": 0.59,
-        "avgEfferentCoupling": 4.93,
+        "avgAfferentCoupling": 0.55,
+        "avgEfferentCoupling": 4.77,
         "avgInstability": 0.85,
-        "inheritanceTreeDepth": 1.08
+        "inheritanceTreeDepth": 1.09
     },
     "Package": {
-        "packages": 31,
-        "acgClassesPerPackage": 3.84,
-        "avgDistance": 0.15,
-        "avgIncomingClassDependencies": 3.39,
-        "avgOutgoingClassDependencies": 5.42,
-        "avgIncomingPackageDependencies": 1.35,
-        "avgOutgoingPackageDependencies": 4.03
+        "packages": 32,
+        "acgClassesPerPackage": 3.5,
+        "avgDistance": 0.14,
+        "avgIncomingClassDependencies": 2.78,
+        "avgOutgoingClassDependencies": 5.22,
+        "avgIncomingPackageDependencies": 1.28,
+        "avgOutgoingPackageDependencies": 3.97
     },
     "Complexity": {
-        "avgCyclomaticComplexityByClass": 8.79,
-        "avgWeightedMethodCountByClass": 11.86,
-        "avgRelativeSystemComplexity": 198.44,
-        "avgDifficulty": 7.31
+        "avgCyclomaticComplexityByClass": 8.94,
+        "avgWeightedMethodCountByClass": 12.1,
+        "avgRelativeSystemComplexity": 180.27,
+        "avgDifficulty": 7.49
     },
     "Bugs": {
-        "avgBugsByClass": 0.16,
-        "avgDefectsByClass": 0.58
+        "avgBugsByClass": 0.17,
+        "avgDefectsByClass": 0.6
     },
     "Violations": {
         "critical": 0,
-        "error": 14,
+        "error": 13,
         "warning": 14,
         "information": 0
     }

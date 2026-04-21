@@ -77,11 +77,9 @@
         </ul>
         <h2>Agents Command (FastForward\DevTools\Tests\Console\Command\AgentsCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will fail when packaged agents directory does not exist</li>
             <li class="success">Execute will create agents directory when it does not exist</li>
             <li class="success">Execute will return failure when synchronizer fails</li>
-            <li class="success">Execute will suppress progress messages when json output is requested</li>
         </ul>
         <h2>Author (FastForward\DevTools\Tests\Composer\Json\Schema\Author)</h2>
         <ul>
@@ -113,8 +111,7 @@
         <ul>
             <li class="success">Execute will return success when unreleased entries exist</li>
             <li class="success">Execute will return failure when unreleased entries are missing</li>
-            <li class="success">Execute will render json output when requested</li>
-            <li class="success">Execute will return failure when format is invalid</li>
+            <li class="success">Execute will log failure context when against reference is provided</li>
         </ul>
         <h2>Changelog Document (FastForward\DevTools\Tests\Changelog\Document\ChangelogDocument)</h2>
         <ul>
@@ -128,10 +125,8 @@
         </ul>
         <h2>Changelog Entry Command (FastForward\DevTools\Tests\Console\Command\ChangelogEntryCommand)</h2>
         <ul>
-            <li class="success">Execute will delegate to the manager and return success</li>
-            <li class="success">Execute will include an explicit release date when provided</li>
-            <li class="success">Execute will return success when json output is requested</li>
-            <li class="success">Execute will return failure when format is invalid</li>
+            <li class="success">Execute will add an unreleased entry</li>
+            <li class="success">Execute will pass published release metadata</li>
         </ul>
         <h2>Changelog Entry Type (FastForward\DevTools\Tests\Changelog\Entry\ChangelogEntryType)</h2>
         <ul>
@@ -157,8 +152,6 @@
         <ul>
             <li class="success">Execute will return success with the inferred version</li>
             <li class="success">Execute will pass the explicit current version to inference</li>
-            <li class="success">Execute will return success when json output is requested</li>
-            <li class="success">Execute will return failure when format is invalid</li>
         </ul>
         <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
         <ul>
@@ -171,16 +164,12 @@
         </ul>
         <h2>Changelog Promote Command (FastForward\DevTools\Tests\Console\Command\ChangelogPromoteCommand)</h2>
         <ul>
-            <li class="success">Execute will use the current date when one is not provided</li>
-            <li class="success">Execute will use the provided date when present</li>
-            <li class="success">Execute will return success when json output is requested</li>
-            <li class="success">Execute will return failure when format is invalid</li>
+            <li class="success">Execute will use the current date by default</li>
+            <li class="success">Execute will prefer the explicit date</li>
         </ul>
         <h2>Changelog Show Command (FastForward\DevTools\Tests\Console\Command\ChangelogShowCommand)</h2>
         <ul>
-            <li class="success">Execute will write raw release notes in text mode</li>
-            <li class="success">Execute will render structured json payload in json mode</li>
-            <li class="success">Execute will return failure when format is invalid</li>
+            <li class="success">Execute will log release notes</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
@@ -225,43 +214,16 @@
         </ul>
         <h2>Code Style Command (FastForward\DevTools\Tests\Console\Command\CodeStyleCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
-            <li class="success">Command can be constructed with dependencies</li>
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will return failure when process queue fails</li>
-            <li class="success">Execute will run with fix option when fix is enabled</li>
-            <li class="success">Execute will capture process output when json output is requested</li>
+            <li class="success">Execute will capture buffered output when json is requested</li>
         </ul>
         <h2>Command (FastForward\DevTools\Tests\Console\Command\Command)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
-            <li class="success">Command will have expected output options</li>
             <li class="success">Execute will run php unit process with config file</li>
-            <li class="success">Execute with coverage will include coverage arguments</li>
-            <li class="success">Execute with no progress will forward no progress to php unit</li>
-            <li class="success">Execute with coverage summary will include coverage text summary argument</li>
-            <li class="success">Execute with coverage summary without coverage will not generate coverage text summary</li>
-            <li class="success">Execute with min coverage will generate coverage php and validate it</li>
-            <li class="success">Execute with coverage and min coverage will validate generated coverage report</li>
-            <li class="success">Execute with coverage below minimum will return failure</li>
-            <li class="success">Execute with filter will forward the filter to php unit</li>
             <li class="success">Execute with invalid min coverage will return failure</li>
-            <li class="success">Execute with out of range min coverage will return failure</li>
+            <li class="success">Execute with coverage below minimum will return failure</li>
             <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
-            <li class="success">Execute will return failure if process queue fails</li>
-            <li class="success">Execute will capture process output when json output is requested</li>
-        </ul>
-        <h2>Command Responder (FastForward\DevTools\Tests\Console\Output\CommandResponder)</h2>
-        <ul>
-            <li class="success">From will create resolved responder using resolved format</li>
-            <li class="success">Success will render success result and return success exit code</li>
-            <li class="success">Failure will render failure result and return failure exit code</li>
-        </ul>
-        <h2>Command Result Renderer (FastForward\DevTools\Tests\Console\Output\CommandResultRenderer)</h2>
-        <ul>
-            <li class="success">Render will write human readable success messages</li>
-            <li class="success">Render will write human readable failure messages</li>
-            <li class="success">Render will write json payload when json output is requested</li>
         </ul>
         <h2>Composer Dependency Analyser Config (FastForward\DevTools\Tests\Config\ComposerDependencyAnalyserConfig)</h2>
         <ul>
@@ -340,13 +302,8 @@
         </ul>
         <h2>Dependencies Command (FastForward\DevTools\Tests\Console\Command\DependenciesCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will return success when preview and analyzers succeed</li>
-            <li class="success">Execute will return failure when process queue fails</li>
-            <li class="success">Execute will queue upgrade workflow before analysis when upgrade is requested</li>
             <li class="success">Execute will fail when max outdated is not numeric</li>
-            <li class="success">Execute will fail when max outdated is lower than minus one</li>
-            <li class="success">Execute will dump package usages and show all matches when requested</li>
             <li class="success">Execute will ignore jack failures when max outdated is disabled</li>
         </ul>
         <h2>Dev Tools (FastForward\DevTools\Tests\Console\DevTools)</h2>
@@ -379,10 +336,8 @@
         </ul>
         <h2>Docs Command (FastForward\DevTools\Tests\Console\Command\DocsCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
-            <li class="success">Execute will fail if source directory not found</li>
-            <li class="success">Execute will generate php documentor config and run process</li>
-            <li class="success">Execute will capture php documentor output when json output is requested</li>
+            <li class="success">Execute will fail when source directory is missing</li>
+            <li class="success">Execute will return success when process queue succeeds</li>
         </ul>
         <h2>ECSConfig (FastForward\DevTools\Tests\Config\ECSConfig)</h2>
         <ul>
@@ -564,6 +519,12 @@
             <li class="success">Execute will return success in dry run mode when license would change</li>
             <li class="success">Execute will skip writing when interactive confirmation is declined</li>
         </ul>
+        <h2>Log Level Output Formatter (FastForward\DevTools\Tests\Console\Formatter\LogLevelOutputFormatter)</h2>
+        <ul>
+            <li class="success">Constructor will enable decorated output and register expected styles</li>
+            <li class="success">Format will apply the registered info style</li>
+            <li class="success">Format will apply the registered alert style</li>
+        </ul>
         <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
         <ul>
             <li class="success">Render will generate changelog with header and unreleased section</li>
@@ -606,19 +567,14 @@
         </ul>
         <h2>Metrics Command (FastForward\DevTools\Tests\Console\Command\MetricsCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
-            <li class="success">Command will have expected options</li>
-            <li class="success">Execute will run php metrics</li>
-            <li class="success">Execute will skip unset optional reports</li>
-            <li class="success">Execute will include junit report when requested</li>
-            <li class="success">Execute will capture php metrics output when json output is requested</li>
+            <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute will return failure when process queue fails</li>
         </ul>
-        <h2>Output Format Resolver (FastForward\DevTools\Tests\Console\Output\OutputFormatResolver)</h2>
+        <h2>Output Format Logger (FastForward\DevTools\Tests\Console\Logger\OutputFormatLogger)</h2>
         <ul>
-            <li class="success">Resolve will return text format by default</li>
-            <li class="success">Resolve will return json format when requested</li>
-            <li class="success">Resolve will return text format when option is empty</li>
-            <li class="success">Resolve will reject unsupported formats</li>
+            <li class="success">Log will write interpolated info messages to standard output</li>
+            <li class="success">Log will write error messages to error output</li>
+            <li class="success">Log will write structured json when json output is requested</li>
         </ul>
         <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>
         <ul>
@@ -631,10 +587,8 @@
         </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will create doc header and run php doc processes</li>
             <li class="success">Execute will handle dump file exception and continue running processes</li>
-            <li class="success">Execute will capture php doc output when json output is requested</li>
         </ul>
         <h2>Plugin (FastForward\DevTools\Tests\Composer\Plugin)</h2>
         <ul>
@@ -671,7 +625,7 @@
             <li class="success">Run detached process start failure with ignore failure returns success</li>
             <li class="success">Run will write process output to output interface</li>
             <li class="success">Wait will block until detached processes finish</li>
-            <li class="success">Add will ignore pty failures and still queue the process</li>
+            <li class="success">Add will queue the process when pty support is configured</li>
             <li class="success">Run will write error output to console error stream</li>
             <li class="success">Run will flush remaining detached output when process finishes</li>
             <li class="success">Wait will accept null output</li>
@@ -696,11 +650,8 @@
         </ul>
         <h2>Refactor Command (FastForward\DevTools\Tests\Console\Command\RefactorCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
-            <li class="success">Command will have expected options</li>
-            <li class="success">Execute will run rector process with dry run when fix is false</li>
-            <li class="success">Execute will run rector process without dry run when fix is true</li>
-            <li class="success">Execute will capture process output when json output is requested</li>
+            <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute will return failure when process queue fails</li>
         </ul>
         <h2>Remove Empty Doc Block Rector (FastForward\DevTools\Tests\Rector\RemoveEmptyDocBlockRector)</h2>
         <ul>
@@ -717,11 +668,8 @@
         </ul>
         <h2>Reports Command (FastForward\DevTools\Tests\Console\Command\ReportsCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
-            <li class="success">Command will have expected options</li>
-            <li class="success">Execute will run docs as detached and tests and metrics in sequence</li>
-            <li class="success">Execute will run metrics command when requested</li>
-            <li class="success">Execute will propagate json output format to sub commands</li>
+            <li class="success">Execute will run reports and return success</li>
+            <li class="success">Execute will capture buffered output when json is requested</li>
         </ul>
         <h2>Resolver (FastForward\DevTools\Tests\License\Resolver)</h2>
         <ul>
@@ -731,19 +679,14 @@
         </ul>
         <h2>Skills Command (FastForward\DevTools\Tests\Console\Command\SkillsCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will fail when packaged skills directory does not exist</li>
             <li class="success">Execute will create skills directory when it does not exist</li>
             <li class="success">Execute will return failure when synchronizer fails</li>
-            <li class="success">Execute will suppress progress messages when json output is requested</li>
         </ul>
         <h2>Standards Command (FastForward\DevTools\Tests\Console\Command\StandardsCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will run suite sequentially</li>
             <li class="success">Execute will return failure when any command fails</li>
-            <li class="success">Execute will not pass fix to reports command</li>
-            <li class="success">Execute will propagate json output format to sub commands</li>
         </ul>
         <h2>Support (FastForward\DevTools\Tests\Composer\Json\Schema\Support)</h2>
         <ul>
@@ -752,7 +695,6 @@
         </ul>
         <h2>Sync Command (FastForward\DevTools\Tests\Console\Command\SyncCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will queue dedicated synchronization commands</li>
             <li class="success">Execute will disable detached mode when checking drift</li>
             <li class="success">Execute will propagate json output format to sub commands</li>
@@ -796,14 +738,8 @@
         </ul>
         <h2>Wiki Command (FastForward\DevTools\Tests\Console\Command\WikiCommand)</h2>
         <ul>
-            <li class="success">Command will set expected name description and help</li>
-            <li class="success">Command will have expected options</li>
             <li class="success">Execute will return success when process queue succeeds</li>
-            <li class="success">Execute will return failure when process queue fails</li>
-            <li class="success">Execute will build process with correct arguments</li>
             <li class="success">Execute with init will skip existing wiki submodule</li>
-            <li class="success">Execute with init will add wiki submodule when target does not exist</li>
-            <li class="success">Execute will skip default package name when psr 4 autoload is empty</li>
         </ul>
         <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>
         <ul>

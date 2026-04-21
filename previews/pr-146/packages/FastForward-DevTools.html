@@ -2102,10 +2102,32 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-console-output.html"
+            href="namespaces/fastforward-devtools-console-formatter.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            Output
+            Formatter
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Logger
         </a>
 
             </div>
@@ -2839,30 +2861,6 @@ of a composer.json file.</p>
                                                             <p class="text-body-secondary mb-0 mt-1">Defines the contract for representing the &quot;support&quot; section of a composer.json file.</p>
                                                     </div>
                                             <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactoryInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactoryInterface.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponderFactoryInterface">CommandResponderFactoryInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Creates command responders bound to one execution context.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponderInterface">CommandResponderInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Responds to a command after its output format has already been resolved.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResultRendererInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResultRendererInterface.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResultRendererInterface">CommandResultRendererInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Renders normalized command results for the selected output format.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolverInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolverInterface.html"><abbr title="\FastForward\DevTools\Console\Output\OutputFormatResolverInterface">OutputFormatResolverInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Resolves the selected output format for a console command execution.</p>
-                                                    </div>
-                                            <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html" class="fw-semibold text-decoration-none">
                                 <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>
                             </a>
@@ -3258,34 +3256,16 @@ and integrates with a PSR-11 compatible container to lazily instantiate commands
                                                             <p class="text-body-secondary mb-0 mt-1">Wraps the fast-forward console tooling suite conceptually as an isolated application instance.</p>
                                                     </div>
                                             <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponder.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponder.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponder">CommandResponder</abbr></a>
+                            <a href="classes/FastForward-DevTools-Console-Formatter-LogLevelOutputFormatter.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Console-Formatter-LogLevelOutputFormatter.html"><abbr title="\FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter">LogLevelOutputFormatter</abbr></a>
                             </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Renders success and failure responses for one resolved command execution.</p>
+                                                            <p class="text-body-secondary mb-0 mt-1">Defines additional console styles for log level tags.</p>
                                                     </div>
                                             <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponderFactory">CommandResponderFactory</abbr></a>
+                            <a href="classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html"><abbr title="\FastForward\DevTools\Console\Logger\OutputFormatLogger">OutputFormatLogger</abbr></a>
                             </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Resolves a command responder bound to the current input and output context.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResult.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResult.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResult">CommandResult</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Carries the normalized output data for one console command execution.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResultRenderer.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResultRenderer.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResultRenderer">CommandResultRenderer</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Renders normalized command results for human and machine-readable consumers.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolver.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolver.html"><abbr title="\FastForward\DevTools\Console\Output\OutputFormatResolver">OutputFormatResolver</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Validates the requested output format from console input.</p>
+                                                            <p class="text-body-secondary mb-0 mt-1">Provides formatted console logging for command-line execution contexts.</p>
                                                     </div>
                                             <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Filesystem-Filesystem.html" class="fw-semibold text-decoration-none">
@@ -3531,12 +3511,6 @@ optional failure suppression.</p>
                                 <a href="classes/FastForward-DevTools-Changelog-Entry-ChangelogEntryType.html"><abbr title="\FastForward\DevTools\Changelog\Entry\ChangelogEntryType">ChangelogEntryType</abbr></a>
                             </a>
                                                             <p class="text-body-secondary mb-0 mt-1">Represents the supported Keep a Changelog entry categories.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-OutputFormat.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-OutputFormat.html"><abbr title="\FastForward\DevTools\Console\Output\OutputFormat">OutputFormat</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Enumerates the supported command output formats.</p>
                                                     </div>
                                     </div>
             </section>

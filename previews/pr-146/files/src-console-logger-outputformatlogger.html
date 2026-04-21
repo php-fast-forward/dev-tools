@@ -1639,14 +1639,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-namespaces-fastforward-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-namespaces-fastforward-html" class="collapse show">
+            <div id="sidebar-namespaces-fastforward-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -1672,14 +1672,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse show">
+            <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -2036,14 +2036,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-console-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-console-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-namespaces-fastforward-devtools-console-html" class="collapse show">
+            <div id="sidebar-namespaces-fastforward-devtools-console-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -2102,10 +2102,32 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-console-output.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
+            href="namespaces/fastforward-devtools-console-formatter.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            Output
+            Formatter
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-console-logger.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Logger
         </a>
 
             </div>
@@ -2737,47 +2759,247 @@
             </a>
         </li>
 
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward.html" class="text-decoration-none">
-                    FastForward
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools.html" class="text-decoration-none">
-                    DevTools
-                </a>
-            </li>
-                    <li class="breadcrumb-item">
-                <a href="namespaces/fastforward-devtools-console.html" class="text-decoration-none">
-                    Console
-                </a>
-            </li>
             </ol>
 </nav>
     <article class="phpdocumentor-element">
         <div class="mb-4">
-            <div class="d-flex align-items-center gap-3 mb-4">
-    <div class="bg-primary-subtle text-primary rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
-        <i class="fas fa-book-open"></i>
-    </div>
-    <div>
-        <h2 class="display-5 mb-0">Output</h2>
-        <div class="text-body-secondary">
-            Namespace
+            <div class="mb-5">
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="bg-primary-subtle text-primary rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+            <i class="fas fa-file-code"></i>
+        </div>
+        <div>
+            <h2 class="display-5 mb-1">OutputFormatLogger.php</h2>
+            <div class="text-body-secondary">File</div>
         </div>
     </div>
 </div>
+
         </div>
 
         <div class="d-grid gap-4">
-            
+            <section class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Fast Forward Development Tools for PHP projects.</p>
+    </div>
+
+                    
+                    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>This file is part of fast-forward/dev-tools project.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+                    
+    <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-tags text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0" id="tags">
+                Tags
+                <a
+    href="files/src-console-logger-outputformatlogger.html#tags"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                                                <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">author</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                            </div>
+
+                                                            <div>
+                                    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>Felipe Sayão Lobato Abreu <a href="mailto:github@mentordosnerds.com">github@mentordosnerds.com</a></p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+                                </div>
+                                                    </div>
+                    </div>
+                                                                <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">license</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                            </div>
+
+                                                            <div>
+                                    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>https://opensource.org/licenses/MIT MIT License</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+                                </div>
+                                                    </div>
+                    </div>
+                                                                <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://github.com/php-fast-forward/">https://github.com/php-fast-forward/</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://github.com/php-fast-forward/dev-tools">https://github.com/php-fast-forward/dev-tools</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://github.com/php-fast-forward/dev-tools/issues">https://github.com/php-fast-forward/dev-tools/issues</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://php-fast-forward.github.io/dev-tools/">https://php-fast-forward.github.io/dev-tools/</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    </div>
+    </section>
+
+                </div>
+            </section>
+
+            <section class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    
 <section class="mt-5">
     <div class="d-flex align-items-center gap-2 mb-4">
         <i class="fas fa-list-ul text-primary"></i>
         <h3 id="toc" class="h4 mb-0">
             Table of Contents
             <a
-    href="namespaces/fastforward-devtools-console-output.html#toc"
+    href="files/src-console-logger-outputformatlogger.html#toc"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -2790,38 +3012,6 @@
     <div class="d-grid gap-4">
         
         
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-plug text-primary"></i>
-                    <h4 id="toc-interfaces" class="h6 mb-0 fw-semibold">Interfaces</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactoryInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactoryInterface.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponderFactoryInterface">CommandResponderFactoryInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Creates command responders bound to one execution context.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponderInterface">CommandResponderInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Responds to a command after its output format has already been resolved.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResultRendererInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResultRendererInterface.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResultRendererInterface">CommandResultRendererInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Renders normalized command results for the selected output format.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolverInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolverInterface.html"><abbr title="\FastForward\DevTools\Console\Output\OutputFormatResolverInterface">OutputFormatResolverInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Resolves the selected output format for a console command execution.</p>
-                                                    </div>
-                                    </div>
-            </section>
         
                     <section class="card border-0 shadow-sm">
                 <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
@@ -2830,53 +3020,15 @@
                 </div>
                 <div class="list-group list-group-flush">
                                             <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponder.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponder.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponder">CommandResponder</abbr></a>
+                            <a href="classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html"><abbr title="\FastForward\DevTools\Console\Logger\OutputFormatLogger">OutputFormatLogger</abbr></a>
                             </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Renders success and failure responses for one resolved command execution.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResponderFactory">CommandResponderFactory</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Resolves a command responder bound to the current input and output context.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResult.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResult.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResult">CommandResult</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Carries the normalized output data for one console command execution.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-CommandResultRenderer.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-CommandResultRenderer.html"><abbr title="\FastForward\DevTools\Console\Output\CommandResultRenderer">CommandResultRenderer</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Renders normalized command results for human and machine-readable consumers.</p>
-                                                    </div>
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolver.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-OutputFormatResolver.html"><abbr title="\FastForward\DevTools\Console\Output\OutputFormatResolver">OutputFormatResolver</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Validates the requested output format from console input.</p>
+                                                            <p class="text-body-secondary mb-0 mt-1">Provides formatted console logging for command-line execution contexts.</p>
                                                     </div>
                                     </div>
             </section>
         
         
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-list text-success"></i>
-                    <h4 id="toc-enums" class="h6 mb-0 fw-semibold">Enums</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Output-OutputFormat.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Output-OutputFormat.html"><abbr title="\FastForward\DevTools\Console\Output\OutputFormat">OutputFormat</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Enumerates the supported command output formats.</p>
-                                                    </div>
-                                    </div>
-            </section>
         
         
         
@@ -2884,7 +3036,10 @@
         
             </div>
 </section>
+                </div>
+            </section>
 
+                        
             
                     </div>
 
@@ -2903,7 +3058,7 @@
                 <pre
                     class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
                     style="max-height: 70vh; overflow-y: auto;"
-                    data-src=""
+                    data-src="files/src/Console/Logger/OutputFormatLogger.php.txt"
                 ></pre>
             </div>
         </div>
@@ -3006,17 +3161,11 @@
         <div class="d-grid gap-4">
             <div>
                 <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
-                <div class="list-group">
-                                                                                    <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="namespaces/fastforward-devtools-console-output.html#toc-interfaces">
-                            Interfaces
-                        </a>
-                                                                <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="namespaces/fastforward-devtools-console-output.html#toc-classes">
+                <div class="list-group list-group-flush">
+                                                                                                        <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="files/src-console-logger-outputformatlogger.html#toc-classes">
                             Classes
                         </a>
-                                                                                    <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="namespaces/fastforward-devtools-console-output.html#toc-enums">
-                            Enums
-                        </a>
-                                                                            </div>
+                                                                                                                    </div>
             </div>
 
             
