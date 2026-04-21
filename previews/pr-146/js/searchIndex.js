@@ -1146,10 +1146,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ChangelogCheckCommand.html#property_unreleasedEntryChecker"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand\u003A\u003A\u0024commandResponder",
-            "name": "commandResponder",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCheckCommand.html#property_commandResponder"
+            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCheckCommand.html#property_commandResponderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand",
             "name": "ChangelogEntryCommand",
@@ -2358,7 +2358,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder",
             "name": "CommandResponder",
-            "summary": "Resolves\u0020a\u0020command\u0020responder\u0020bound\u0020to\u0020the\u0020current\u0020input\u0020and\u0020output\u0020context.",
+            "summary": "Renders\u0020success\u0020and\u0020failure\u0020responses\u0020for\u0020one\u0020resolved\u0020command\u0020execution.",
             "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A__construct\u0028\u0029",
@@ -2366,30 +2366,80 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#method___construct"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003Afrom\u0028\u0029",
-            "name": "from",
-            "summary": "Creates\u0020a\u0020resolved\u0020responder\u0020for\u0020one\u0020command\u0020execution.",
-            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#method_from"
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003Asuccess\u0028\u0029",
+            "name": "success",
+            "summary": "Renders\u0020a\u0020success\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#method_success"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A\u0024outputFormatResolver",
-            "name": "outputFormatResolver",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003Afailure\u0028\u0029",
+            "name": "failure",
+            "summary": "Renders\u0020a\u0020failure\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#method_failure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A\u0024output",
+            "name": "output",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#property_outputFormatResolver"
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#property_output"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A\u0024format",
+            "name": "format",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#property_format"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder\u003A\u003A\u0024commandResultRenderer",
             "name": "commandResultRenderer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Output-CommandResponder.html#property_commandResultRenderer"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface",
-            "name": "CommandResponderInterface",
-            "summary": "Resolves\u0020command\u0020output\u0020configuration\u0020and\u0020renders\u0020normalized\u0020responses.",
-            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html"
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderFactory",
+            "name": "CommandResponderFactory",
+            "summary": "Resolves\u0020a\u0020command\u0020responder\u0020bound\u0020to\u0020the\u0020current\u0020input\u0020and\u0020output\u0020context.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface\u003A\u003Afrom\u0028\u0029",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderFactory\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderFactory\u003A\u003Afrom\u0028\u0029",
             "name": "from",
             "summary": "Creates\u0020a\u0020resolved\u0020responder\u0020for\u0020one\u0020command\u0020execution.",
-            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html#method_from"
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html#method_from"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderFactory\u003A\u003A\u0024outputFormatResolver",
+            "name": "outputFormatResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html#property_outputFormatResolver"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderFactory\u003A\u003A\u0024commandResultRenderer",
+            "name": "commandResultRenderer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderFactory.html#property_commandResultRenderer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderFactoryInterface",
+            "name": "CommandResponderFactoryInterface",
+            "summary": "Creates\u0020command\u0020responders\u0020bound\u0020to\u0020one\u0020execution\u0020context.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderFactoryInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderFactoryInterface\u003A\u003Afrom\u0028\u0029",
+            "name": "from",
+            "summary": "Creates\u0020a\u0020resolved\u0020responder\u0020for\u0020one\u0020command\u0020execution.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderFactoryInterface.html#method_from"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface",
+            "name": "CommandResponderInterface",
+            "summary": "Responds\u0020to\u0020a\u0020command\u0020after\u0020its\u0020output\u0020format\u0020has\u0020already\u0020been\u0020resolved.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface\u003A\u003Asuccess\u0028\u0029",
+            "name": "success",
+            "summary": "Renders\u0020a\u0020success\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html#method_success"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface\u003A\u003Afailure\u0028\u0029",
+            "name": "failure",
+            "summary": "Renders\u0020a\u0020failure\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Output-CommandResponderInterface.html#method_failure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\CommandResult",
             "name": "CommandResult",
@@ -2500,56 +2550,6 @@ Search.appendIndex(
             "name": "resolve",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Output-OutputFormatResolverInterface.html#method_resolve"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder",
-            "name": "ResolvedCommandResponder",
-            "summary": "Renders\u0020success\u0020and\u0020failure\u0020responses\u0020for\u0020one\u0020resolved\u0020command\u0020execution.",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponder.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponder.html#method___construct"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder\u003A\u003Asuccess\u0028\u0029",
-            "name": "success",
-            "summary": "Renders\u0020a\u0020success\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponder.html#method_success"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder\u003A\u003Afailure\u0028\u0029",
-            "name": "failure",
-            "summary": "Renders\u0020a\u0020failure\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponder.html#method_failure"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder\u003A\u003A\u0024output",
-            "name": "output",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponder.html#property_output"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder\u003A\u003A\u0024format",
-            "name": "format",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponder.html#property_format"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder\u003A\u003A\u0024commandResultRenderer",
-            "name": "commandResultRenderer",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponder.html#property_commandResultRenderer"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponderInterface",
-            "name": "ResolvedCommandResponderInterface",
-            "summary": "Responds\u0020to\u0020a\u0020command\u0020after\u0020its\u0020output\u0020format\u0020has\u0020already\u0020been\u0020resolved.",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponderInterface.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponderInterface\u003A\u003Asuccess\u0028\u0029",
-            "name": "success",
-            "summary": "Renders\u0020a\u0020success\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponderInterface.html#method_success"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponderInterface\u003A\u003Afailure\u0028\u0029",
-            "name": "failure",
-            "summary": "Renders\u0020a\u0020failure\u0020response\u0020and\u0020returns\u0020the\u0020selected\u0020exit\u0020code.",
-            "url": "classes/FastForward-DevTools-Console-Output-ResolvedCommandResponderInterface.html#method_failure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
