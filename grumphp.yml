@@ -3,6 +3,10 @@ grumphp:
   ignore_unstaged_changes: false
   process_timeout: 120
 
+  environment:
+    variables:
+      COMPOSER_NO_INTERACTION: '1'
+
   ascii:
     succeeded: succeeded.txt
     failed: failed.txt
