@@ -124,6 +124,8 @@ Behavior
 - ``changelog:next-version --json`` emits the inferred semantic version
   as the ``message`` plus structured context describing the inspected changelog
   path and optional current version;
+- ``changelog:next-version`` prints only the inferred semantic version in text
+  mode so workflows can capture it safely in shell variables;
 - ``changelog:next-version`` uses ``Removed`` or ``Deprecated`` entries for a
   major bump, ``Added`` or ``Changed`` entries for a minor bump, and otherwise
   falls back to a patch bump;

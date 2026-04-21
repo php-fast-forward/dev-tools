@@ -93,6 +93,14 @@ final class ChangelogShowCommand extends BaseCommand implements LoggerAwareComma
                 $version,
             );
 
+            // This command feeds redirected release-notes files in changelog.yml,
+            // so plain-text mode MUST keep writing the rendered body directly.
+            if (! $this->isJsonOutput($input)) {
+                $output->write($releaseNotes);
+
+                return self::SUCCESS;
+            }
+
             return $this->success(
                 $releaseNotes,
                 $input,
