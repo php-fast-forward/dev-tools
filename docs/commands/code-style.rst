@@ -31,6 +31,9 @@ Options
 ``--fix, -f``
    Automatically fix code style issues. Without this option, ECS runs in dry-run mode.
 
+``--progress``
+   Enable progress output from ECS.
+
 ``--json``
    Emit a structured machine-readable payload instead of the normal terminal
    output.
@@ -73,6 +76,8 @@ Behavior
 - Always runs ``composer update --lock --quiet`` first.
 - Composer Normalize runs in ``--dry-run`` mode unless ``--fix`` is specified.
 - ECS uses local ``ecs.php`` when present, otherwise falls back to packaged default.
+- Progress output is disabled by default; use ``--progress`` to re-enable it in
+  text mode.
 - ``--json`` and ``--pretty-json`` forward JSON mode to ECS and suppress its
   progress bar so the structured payload stays machine-readable.
 - The command executes processes in sequence via ProcessQueue.

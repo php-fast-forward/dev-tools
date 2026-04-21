@@ -175,22 +175,26 @@ next semantic version from pending changes, `changelog:promote` publishes the
 current `Unreleased` section into a tagged version, and `changelog:show`
 renders one published section for GitHub release notes.
 
-The first structured-output rollouts are available on `changelog:entry`,
-`changelog:check`, `changelog:next-version`, `changelog:promote`, and
-`changelog:show` through `--json`, which returns a deterministic
-status/message/context payload for CI, bots, and AI-agent workflows while
-preserving the normal human-readable terminal output by default. Use
-`--pretty-json` when you want the same structured payload indented for manual
-inspection in a terminal. `--pretty-json` also implies JSON output, so there
-is no need to pass both flags together. For `changelog:show`, the default
-text mode still prints the raw release-notes body so release workflows can
-keep piping it directly into GitHub releases.
+Structured output is available across the DevTools command surface through
+`--json`, which returns deterministic `message` / `level` / `context` payloads
+for CI, bots, and AI-agent workflows while preserving the normal
+human-readable terminal output by default. Use `--pretty-json` when you want
+the same structured payload indented for manual inspection in a terminal.
+`--pretty-json` also implies JSON output, so there is no need to pass both
+flags together. In agent environments, DevTools can also switch to JSON
+automatically when the runtime is detected as agent-driven. For
+`changelog:show`, the default text mode still prints the raw release-notes
+body so release workflows can keep piping it directly into GitHub releases.
 
+Progress output is disabled by default on the commands that support transient
+rendering, and `--progress` re-enables it for human-readable terminal runs.
 When `--json` or `--pretty-json` is active on commands that orchestrate other
-tools, DevTools also suppresses progress bars and similar transient output.
-Where the underlying tool supports structured output, DevTools forwards JSON
-flags as well; otherwise it falls back to quieter subprocess modes so the
-captured payload stays machine-readable.
+tools, DevTools keeps progress suppressed, forwards JSON flags where the
+underlying tool supports structured output, and otherwise falls back to
+quieter subprocess modes so the captured payload stays machine-readable. In
+GitHub Actions, queued subprocess output is grouped into collapsible sections,
+and logged failures emit native workflow error annotations, including file and
+line metadata when commands provide it.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

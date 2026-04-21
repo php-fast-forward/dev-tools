@@ -35,6 +35,8 @@ Options
 
 This command supports:
 
+- ``--progress`` to re-enable progress output from the nested phases in text
+  mode;
 - ``--json`` to emit a structured machine-readable payload instead of the
   normal terminal output;
 - ``--pretty-json`` to emit the same structured payload with indentation for
@@ -59,5 +61,7 @@ Behavior
 - This is the default command when running ``composer dev-tools`` without args.
 - Each phase runs in sequence; if any phase fails, the command returns failure.
 - The ``--fix`` option is passed to all phases that support it.
+- Progress output is disabled by default across nested phases; use
+  ``--progress`` to re-enable it in text mode.
 - ``--json`` and ``--pretty-json`` are forwarded through every phase so the
   pipeline stays machine-readable end to end.

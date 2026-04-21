@@ -151,6 +151,20 @@ Recovery:
 When calling lower-level tools directly, use their non-interactive flags and
 provide required values through environment variables or workflow inputs.
 
+GitHub Actions Error Annotations
+--------------------------------
+
+Scope: reusable workflows and CI runs executed on GitHub Actions.
+
+Behavior:
+
+- command failures logged through DevTools are also emitted as native GitHub
+  Actions error annotations;
+- when a command includes ``file`` and ``line`` context, the annotation is tied
+  to that source location in the workflow UI;
+- orchestrated commands may also appear inside collapsible workflow groups to
+  separate nested subprocess logs.
+
 Coverage Threshold Failures
 ---------------------------
 
