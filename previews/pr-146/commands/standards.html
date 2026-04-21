@@ -2925,6 +2925,10 @@ composer dev-tools:fix</code></pre>
             
 
 <ul>
+    <li class="dash"><code>--progress</code>
+ to re-enable progress output from the nested phases in text
+mode;</li>
+
     <li class="dash"><code>--json</code>
  to emit a structured machine-readable payload instead of the
 normal terminal output;</li>
@@ -2974,6 +2978,10 @@ terminal inspection.</li>
 
     <li class="dash">The <code>--fix</code>
  option is passed to all phases that support it.</li>
+
+    <li class="dash">Progress output is disabled by default across nested phases; use
+<code>--progress</code>
+ to re-enable it in text mode.</li>
 
     <li class="dash"><code>--json</code>
  and <code>--pretty-json</code>

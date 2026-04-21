@@ -2933,6 +2933,13 @@ Default: <code>.dev-tools/coverage</code>
         <dd>The target directory for the generated metrics report.
 Default: <code>.dev-tools/metrics</code>
 .</dd>
+                                <dt><code>--progress</code>
+</dt>
+        
+        <dd>Enable progress output in nested <code>docs</code>
+, <code>tests</code>
+, and <code>metrics</code>
+ steps.</dd>
                                 <dt><code>--json</code>
 </dt>
         
@@ -3007,6 +3014,10 @@ output.</dd>
  so
 report builds keep PHPUnit output concise.</li>
 
+    <li class="dash">Progress output stays disabled by default across nested steps; use
+<code>--progress</code>
+ to re-enable it for human-readable runs.</li>
+
     <li class="dash">When <code>--json</code>
  or <code>--pretty-json</code>
  is active, it forwards JSON mode to the
@@ -3023,6 +3034,9 @@ progress output where those tools support it.</li>
  command as the final phase.</li>
 
     <li class="dash">This is the reporting stage used by GitHub Pages.</li>
+
+    <li class="dash">In GitHub Actions, the queued subprocess output is emitted inside collapsible
+workflow groups for easier log navigation.</li>
 
 </ul>
 

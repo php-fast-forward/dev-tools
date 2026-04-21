@@ -3141,6 +3141,33 @@ provide required values through environment variables or workflow inputs.</p>
 
     </section>
 
+            <section class="section " id="github-actions-error-annotations">
+            <h2>GitHub Actions Error Annotations</h2>
+
+            
+    <p>Scope: reusable workflows and CI runs executed on GitHub Actions.</p>
+
+            
+    <p>Behavior:</p>
+
+            
+
+<ul>
+    <li class="dash">command failures logged through DevTools are also emitted as native GitHub
+Actions error annotations;</li>
+
+    <li class="dash">when a command includes <code>file</code>
+ and <code>line</code>
+ context, the annotation is tied
+to that source location in the workflow UI;</li>
+
+    <li class="dash">orchestrated commands may also appear inside collapsible workflow groups to
+separate nested subprocess logs.</li>
+
+</ul>
+
+    </section>
+
             <section class="section " id="coverage-threshold-failures">
             <h2>Coverage Threshold Failures</h2>
 

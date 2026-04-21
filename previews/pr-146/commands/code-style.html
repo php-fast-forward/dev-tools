@@ -2918,6 +2918,10 @@ vendor/bin/dev-tools code-style [options]</code></pre>
 </dt>
         
         <dd>Automatically fix code style issues. Without this option, ECS runs in dry-run mode.</dd>
+                                <dt><code>--progress</code>
+</dt>
+        
+        <dd>Enable progress output from ECS.</dd>
                                 <dt><code>--json</code>
 </dt>
         
@@ -2986,6 +2990,10 @@ composer dev-tools:fix code-style</code></pre>
 
     <li class="dash">ECS uses local <code>ecs.php</code>
  when present, otherwise falls back to packaged default.</li>
+
+    <li class="dash">Progress output is disabled by default; use <code>--progress</code>
+ to re-enable it in
+text mode.</li>
 
     <li class="dash"><code>--json</code>
  and <code>--pretty-json</code>
