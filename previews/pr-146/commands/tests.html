@@ -2904,6 +2904,17 @@ Without a path, reports are saved to the cache directory.</dd>
  (required)</dt>
         
         <dd>Minimum line coverage percentage required for a successful run (0-100).</dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.
+This also suppresses PHPUnit progress output automatically so the JSON
+payload is not polluted by transient progress rendering.</dd>
             </dl>
 
     </section>
@@ -2998,6 +3009,12 @@ Without a path, reports are saved to the cache directory.</dd>
  forwards PHPUnit&#039;s <code>--only-summary-for-coverage-text</code>
 
 only when coverage text output is generated.</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ implicitly add <code>--no-progress</code>
+ so the
+structured payload stays clean.</li>
 
     <li class="dash">The command fails if minimum coverage is not met (when <code>--min-coverage</code>
  is set).</li>

@@ -2874,6 +2874,15 @@ vendor/bin/dev-tools phpdoc [options]</code></pre>
         
         <dd>Path to the cache directory for PHP-CS-Fixer. Default: <code>tmp/cache/php-cs-fixer</code>
 .</dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
             </dl>
 
     </section>
@@ -2937,6 +2946,11 @@ vendor/bin/dev-tools phpdoc [options]</code></pre>
 
     <li class="dash">The Rector phase explicitly runs <code>FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
 .</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ forward JSON mode to PHP-CS-Fixer and
+Rector while disabling their progress rendering.</li>
 
     <li class="dash">Uses <code>--dry-run</code>
  mode unless <code>--fix</code>

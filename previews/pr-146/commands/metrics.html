@@ -2882,6 +2882,15 @@ changing your current shell session first.</p>
 
 </ul>
 </dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
             </dl>
 
     </section>
@@ -2922,6 +2931,11 @@ changing your current shell session first.</p>
  from the
 selected <code>--target</code>
  directory;</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ keep DevTools itself structured while
+running PhpMetrics in a quieter mode to avoid polluting the captured payload;</li>
 
     <li class="dash">it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
 deprecation notices emitted by the dependency itself.</li>

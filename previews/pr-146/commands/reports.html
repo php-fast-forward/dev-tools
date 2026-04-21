@@ -2874,6 +2874,15 @@ Default: <code>.dev-tools/coverage</code>
         <dd>The target directory for the generated metrics report.
 Default: <code>.dev-tools/metrics</code>
 .</dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
             </dl>
 
     </section>
@@ -2939,6 +2948,15 @@ Default: <code>.dev-tools/metrics</code>
  and <code>--coverage-summary</code>
  so report builds
 keep PHPUnit output concise.</li>
+
+    <li class="dash">When <code>--json</code>
+ or <code>--pretty-json</code>
+ is active, it forwards JSON mode to the
+<code>docs</code>
+, <code>tests</code>
+, and <code>metrics</code>
+ subprocesses and suppresses transient
+progress output where those tools support it.</li>
 
     <li class="dash">Passes <code>--junit &lt;coverage&gt;/junit.xml</code>
  to the metrics step.</li>

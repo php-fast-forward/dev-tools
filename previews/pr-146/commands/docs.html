@@ -2873,6 +2873,15 @@ Default: <code>vendor/fast-forward/phpdoc-bootstrap-template</code>
         <dd>Path to the cache directory for phpDocumentor.
 Default: <code>tmp/cache/phpdoc</code>
 .</dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
             </dl>
 
     </section>
@@ -2938,6 +2947,11 @@ Default: <code>tmp/cache/phpdoc</code>
 
     <li class="dash">A temporary <code>phpdocumentor.xml</code>
  is created in the cache directory.</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ suppress phpDocumentor progress rendering so
+the structured payload stays readable.</li>
 
     <li class="dash">Markers: TODO, FIXME, BUG, HACK are included.</li>
 

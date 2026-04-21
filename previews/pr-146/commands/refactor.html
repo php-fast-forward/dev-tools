@@ -2851,6 +2851,15 @@ vendor/bin/dev-tools refactor [options]</code></pre>
         
         <dd>Path to the Rector configuration file. Default: <code>rector.php</code>
 .</dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
             </dl>
 
     </section>
@@ -2904,6 +2913,11 @@ vendor/bin/dev-tools refactor [options]</code></pre>
  is preferred when present.</li>
 
     <li class="dash">Packaged default includes Fast Forward custom Rector rules plus shared Rector sets.</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ forward JSON mode to Rector and suppress its
+progress bar.</li>
 
     <li class="dash">Uses <code>--dry-run</code>
  mode unless <code>--fix</code>

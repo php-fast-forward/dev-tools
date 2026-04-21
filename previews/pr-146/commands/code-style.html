@@ -2859,6 +2859,15 @@ vendor/bin/dev-tools code-style [options]</code></pre>
 </dt>
         
         <dd>Automatically fix code style issues. Without this option, ECS runs in dry-run mode.</dd>
+                                <dt><code>--json</code>
+</dt>
+        
+        <dd>Emit a structured machine-readable payload instead of the normal terminal
+output.</dd>
+                                <dt><code>--pretty-json</code>
+</dt>
+        
+        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
             </dl>
 
     </section>
@@ -2918,6 +2927,11 @@ composer dev-tools:fix code-style</code></pre>
 
     <li class="dash">ECS uses local <code>ecs.php</code>
  when present, otherwise falls back to packaged default.</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ forward JSON mode to ECS and suppress its
+progress bar so the structured payload stays machine-readable.</li>
 
     <li class="dash">The command executes processes in sequence via ProcessQueue.</li>
 

@@ -1606,6 +1606,16 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_logger"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\EmitsGithubActionErrors",
+            "name": "EmitsGithubActionErrors",
+            "summary": "Provides\u0020reusable\u0020GitHub\u0020Actions\u0020error\u0020annotations\u0020for\u0020Composer\u0020commands.",
+            "url": "classes/FastForward-DevTools-Console-Command-EmitsGithubActionErrors.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\EmitsGithubActionErrors\u003A\u003AemitGithubActionError\u0028\u0029",
+            "name": "emitGithubActionError",
+            "summary": "Emits\u0020a\u0020GitHub\u0020Actions\u0020error\u0020annotation\u0020when\u0020supported\u0020by\u0020the\u0020current\u0020environment.",
+            "url": "classes/FastForward-DevTools-Console-Command-EmitsGithubActionErrors.html#method_emitGithubActionError"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
             "name": "FundingCommand",
             "summary": "Synchronizes\u0020funding\u0020metadata\u0020between\u0020composer.json\u0020and\u0020.github\/FUNDING.yml.",
@@ -1940,6 +1950,26 @@ Search.appendIndex(
             "name": "logger",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults",
+            "name": "LogsCommandResults",
+            "summary": "Provides\u0020reusable\u0020success\u0020and\u0020failure\u0020helpers\u0020for\u0020command\u0020logging.",
+            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults\u003A\u003Anotice\u0028\u0029",
+            "name": "notice",
+            "summary": "Logs\u0020a\u0020notice\u002Dlevel\u0020command\u0020message.",
+            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html#method_notice"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults\u003A\u003Asuccess\u0028\u0029",
+            "name": "success",
+            "summary": "Logs\u0020a\u0020successful\u0020command\u0020result\u0020and\u0020returns\u0020a\u0020success\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html#method_success"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LogsCommandResults\u003A\u003Afailure\u0028\u0029",
+            "name": "failure",
+            "summary": "Logs\u0020a\u0020failed\u0020command\u0020result,\u0020emits\u0020a\u0020GitHub\u0020Actions\u0020error\u0020annotation,\u0020and\u0020returns\u0020a\u0020failure\u0020exit\u0020code.",
+            "url": "classes/FastForward-DevTools-Console-Command-LogsCommandResults.html#method_failure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
             "name": "MetricsCommand",
@@ -2508,13 +2538,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption",
             "name": "HasJsonOption",
-            "summary": "Provides\u0020the\u0020standard\u0020JSON\u0020output\u0020option\u0020used\u0020by\u0020DevTools\u0020commands.",
+            "summary": "Provides\u0020the\u0020standard\u0020JSON\u0020output\u0020options\u0020used\u0020by\u0020DevTools\u0020commands.",
             "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AaddJsonOption\u0028\u0029",
             "name": "addJsonOption",
-            "summary": "Adds\u0020the\u0020standard\u0020\u002D\u002Djson\u0020option\u0020to\u0020the\u0020current\u0020command.",
+            "summary": "Adds\u0020the\u0020standard\u0020JSON\u0020output\u0020options\u0020to\u0020the\u0020current\u0020command.",
             "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_addJsonOption"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AisJsonOutput\u0028\u0029",
+            "name": "isJsonOutput",
+            "summary": "Determines\u0020whether\u0020JSON\u0020output\u0020was\u0020requested.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isJsonOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AisPrettyJsonOutput\u0028\u0029",
+            "name": "isPrettyJsonOutput",
+            "summary": "Determines\u0020whether\u0020pretty\u0020JSON\u0020output\u0020was\u0020requested.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isPrettyJsonOutput"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
             "name": "OutputFormatLogger",
@@ -2541,6 +2581,11 @@ Search.appendIndex(
             "summary": "Determines\u0020whether\u0020JSON\u0020output\u0020has\u0020been\u0020requested.",
             "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_isJsonOutput"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003AisPrettyJsonOutput\u0028\u0029",
+            "name": "isPrettyJsonOutput",
+            "summary": "Determines\u0020whether\u0020pretty\u0020JSON\u0020output\u0020has\u0020been\u0020requested.",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#method_isPrettyJsonOutput"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003Ainterpolate\u0028\u0029",
             "name": "interpolate",
             "summary": "Interpolates\u0020context\u0020values\u0020into\u0020PSR\u002D3\u002Dstyle\u0020message\u0020placeholders.",
@@ -2566,6 +2611,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_clock"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024agentDetector",
+            "name": "agentDetector",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_agentDetector"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024contextProcessor",
             "name": "contextProcessor",
             "summary": "",
@@ -2590,6 +2640,31 @@ Search.appendIndex(
             "name": "inferCommandName",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_inferCommandName"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AextractProvidedArguments\u0028\u0029",
+            "name": "extractProvidedArguments",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_extractProvidedArguments"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AextractProvidedOptions\u0028\u0029",
+            "name": "extractProvidedOptions",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_extractProvidedOptions"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AresolveDefinition\u0028\u0029",
+            "name": "resolveDefinition",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_resolveDefinition"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AresolveArrayParameters\u0028\u0029",
+            "name": "resolveArrayParameters",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_resolveArrayParameters"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AoptionTokens\u0028\u0029",
+            "name": "optionTokens",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_optionTokens"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
             "name": "CommandOutputProcessor",

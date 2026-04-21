@@ -2857,6 +2857,27 @@ composer dev-tools:fix</code></pre>
 
     </section>
 
+            <section class="section " id="options">
+            <h2>Options</h2>
+
+            
+    <p>This command supports:</p>
+
+            
+
+<ul>
+    <li class="dash"><code>--json</code>
+ to emit a structured machine-readable payload instead of the
+normal terminal output;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ to emit the same structured payload with indentation for
+terminal inspection.</li>
+
+</ul>
+
+    </section>
+
             <section class="section " id="exit-codes">
             <h2>Exit Codes</h2>
 
@@ -2894,6 +2915,11 @@ composer dev-tools:fix</code></pre>
 
     <li class="dash">The <code>--fix</code>
  option is passed to all phases that support it.</li>
+
+    <li class="dash"><code>--json</code>
+ and <code>--pretty-json</code>
+ are forwarded through every phase so the
+pipeline stays machine-readable end to end.</li>
 
 </ul>
 

@@ -152,6 +152,7 @@
         <ul>
             <li class="success">Execute will return success with the inferred version</li>
             <li class="success">Execute will pass the explicit current version to inference</li>
+            <li class="success">Execute will return failure when version inference fails</li>
         </ul>
         <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
         <ul>
@@ -166,10 +167,12 @@
         <ul>
             <li class="success">Execute will use the current date by default</li>
             <li class="success">Execute will prefer the explicit date</li>
+            <li class="success">Execute will return failure when promotion fails</li>
         </ul>
         <h2>Changelog Show Command (FastForward\DevTools\Tests\Console\Command\ChangelogShowCommand)</h2>
         <ul>
             <li class="success">Execute will log release notes</li>
+            <li class="success">Execute will return failure when release notes cannot be rendered</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
@@ -221,6 +224,7 @@
         <h2>Command (FastForward\DevTools\Tests\Console\Command\Command)</h2>
         <ul>
             <li class="success">Execute will run php unit process with config file</li>
+            <li class="success">Execute will disable php unit progress when json is requested</li>
             <li class="success">Execute with invalid min coverage will return failure</li>
             <li class="success">Execute with coverage below minimum will return failure</li>
             <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
@@ -583,12 +587,15 @@
         <ul>
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will return failure when process queue fails</li>
+            <li class="success">Execute will run php metrics in quiet mode when json is requested</li>
         </ul>
         <h2>Output Format Logger (FastForward\DevTools\Tests\Console\Logger\OutputFormatLogger)</h2>
         <ul>
             <li class="success">Log will write interpolated info messages to standard output</li>
             <li class="success">Log will write error messages to error output</li>
             <li class="success">Log will write structured json when json output is requested</li>
+            <li class="success">Log will write pretty printed json when pretty json output is requested</li>
+            <li class="success">Log will write structured json when agent environment is detected</li>
         </ul>
         <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>
         <ul>
@@ -603,6 +610,7 @@
         <ul>
             <li class="success">Execute will create doc header and run php doc processes</li>
             <li class="success">Execute will handle dump file exception and continue running processes</li>
+            <li class="success">Execute will request structured output and disable progress when json is requested</li>
         </ul>
         <h2>Plugin (FastForward\DevTools\Tests\Composer\Plugin)</h2>
         <ul>
@@ -666,6 +674,7 @@
         <ul>
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will return failure when process queue fails</li>
+            <li class="success">Execute will request json output and disable progress when json is requested</li>
         </ul>
         <h2>Remove Empty Doc Block Rector (FastForward\DevTools\Tests\Rector\RemoveEmptyDocBlockRector)</h2>
         <ul>
