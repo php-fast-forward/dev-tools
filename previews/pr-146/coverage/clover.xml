@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776811911">
-  <project timestamp="1776811911" name="Clover Coverage">
+<coverage generated="1776812207">
+  <project timestamp="1776812207" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -1558,7 +1558,7 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/DocsCommand.php">
         <class name="FastForward\DevTools\Console\Command\DocsCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="10" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="82" coveredstatements="79" elements="86" coveredelements="82"/>
+          <metrics complexity="10" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="84" coveredstatements="81" elements="88" coveredelements="84"/>
         </class>
         <line num="63" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
         <line num="71" type="stmt" count="2"/>
@@ -1595,7 +1595,7 @@
         <line num="113" type="stmt" count="2"/>
         <line num="114" type="stmt" count="2"/>
         <line num="115" type="stmt" count="2"/>
-        <line num="129" type="method" name="execute" visibility="protected" complexity="6" crap="6.03" count="2"/>
+        <line num="129" type="method" name="execute" visibility="protected" complexity="6" crap="6.02" count="2"/>
         <line num="131" type="stmt" count="2"/>
         <line num="132" type="stmt" count="2"/>
         <line num="133" type="stmt" count="2"/>
@@ -1607,35 +1607,35 @@
         <line num="141" type="stmt" count="2"/>
         <line num="143" type="stmt" count="2"/>
         <line num="144" type="stmt" count="1"/>
-        <line num="147" type="stmt" count="1"/>
-        <line num="148" type="stmt" count="1"/>
+        <line num="145" type="stmt" count="1"/>
+        <line num="146" type="stmt" count="1"/>
         <line num="149" type="stmt" count="1"/>
         <line num="150" type="stmt" count="1"/>
         <line num="151" type="stmt" count="1"/>
         <line num="152" type="stmt" count="1"/>
+        <line num="153" type="stmt" count="1"/>
         <line num="154" type="stmt" count="1"/>
-        <line num="155" type="stmt" count="1"/>
         <line num="156" type="stmt" count="1"/>
         <line num="157" type="stmt" count="1"/>
+        <line num="158" type="stmt" count="1"/>
         <line num="159" type="stmt" count="1"/>
-        <line num="160" type="stmt" count="1"/>
-        <line num="163" type="stmt" count="1"/>
+        <line num="161" type="stmt" count="1"/>
+        <line num="162" type="stmt" count="1"/>
         <line num="165" type="stmt" count="1"/>
         <line num="167" type="stmt" count="1"/>
         <line num="169" type="stmt" count="1"/>
-        <line num="170" type="stmt" count="1"/>
         <line num="171" type="stmt" count="1"/>
         <line num="172" type="stmt" count="1"/>
-        <line num="175" type="stmt" count="0"/>
-        <line num="176" type="stmt" count="0"/>
+        <line num="173" type="stmt" count="1"/>
+        <line num="174" type="stmt" count="1"/>
         <line num="177" type="stmt" count="0"/>
-        <line num="190" type="method" name="createPhpDocumentorConfig" visibility="private" complexity="2" crap="2" count="1"/>
-        <line num="196" type="stmt" count="1"/>
-        <line num="197" type="stmt" count="1"/>
+        <line num="178" type="stmt" count="0"/>
+        <line num="179" type="stmt" count="0"/>
+        <line num="192" type="method" name="createPhpDocumentorConfig" visibility="private" complexity="2" crap="2" count="1"/>
         <line num="198" type="stmt" count="1"/>
         <line num="199" type="stmt" count="1"/>
+        <line num="200" type="stmt" count="1"/>
         <line num="201" type="stmt" count="1"/>
-        <line num="202" type="stmt" count="1"/>
         <line num="203" type="stmt" count="1"/>
         <line num="204" type="stmt" count="1"/>
         <line num="205" type="stmt" count="1"/>
@@ -1644,9 +1644,11 @@
         <line num="208" type="stmt" count="1"/>
         <line num="209" type="stmt" count="1"/>
         <line num="210" type="stmt" count="1"/>
+        <line num="211" type="stmt" count="1"/>
         <line num="212" type="stmt" count="1"/>
         <line num="214" type="stmt" count="1"/>
-        <metrics loc="217" ncloc="160" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="82" coveredstatements="79" elements="86" coveredelements="82"/>
+        <line num="216" type="stmt" count="1"/>
+        <metrics loc="219" ncloc="162" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="84" coveredstatements="81" elements="88" coveredelements="84"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/FundingCommand.php">
         <class name="FastForward\DevTools\Console\Command\FundingCommand" namespace="FastForward\DevTools\Console\Command">
@@ -5203,6 +5205,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="122" loc="16868" ncloc="10150" classes="90" methods="415" coveredmethods="347" conditionals="0" coveredconditionals="0" statements="4071" coveredstatements="3800" elements="4486" coveredelements="4147"/>
+    <metrics files="122" loc="16870" ncloc="10152" classes="90" methods="415" coveredmethods="347" conditionals="0" coveredconditionals="0" statements="4073" coveredstatements="3802" elements="4488" coveredelements="4149"/>
   </project>
 </coverage>
