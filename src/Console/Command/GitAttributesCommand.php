@@ -125,12 +125,9 @@ final class GitAttributesCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->logger->info(
-            'Synchronizing .gitattributes export-ignore rules...',
-            [
-                'command' => 'gitattributes',
-            ],
-        );
+        $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
+            'input' => $input,
+        ],);
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
@@ -150,7 +147,7 @@ final class GitAttributesCommand extends BaseCommand
             $this->logger->notice(
                 'No candidate paths found in repository. Skipping .gitattributes sync.',
                 [
-                    'command' => 'gitattributes',
+                    'input' => $input,
                 ],
             );
 
@@ -172,7 +169,7 @@ final class GitAttributesCommand extends BaseCommand
         $this->logger->notice(
             $comparison->getSummary(),
             [
-                'command' => 'gitattributes',
+                'input' => $input,
                 'gitattributes_path' => $gitattributesPath,
             ],
         );
@@ -184,7 +181,7 @@ final class GitAttributesCommand extends BaseCommand
                 $this->logger->notice(
                     $consoleDiff,
                     [
-                        'command' => 'gitattributes',
+                        'input' => $input,
                         'gitattributes_path' => $gitattributesPath,
                         'diff' => $comparison->getDiff(),
                     ],
@@ -212,7 +209,7 @@ final class GitAttributesCommand extends BaseCommand
             $this->logger->notice(
                 'Skipped updating {gitattributes_path}.',
                 [
-                    'command' => 'gitattributes',
+                    'input' => $input,
                     'gitattributes_path' => $gitattributesPath,
                 ],
             );
@@ -225,7 +222,7 @@ final class GitAttributesCommand extends BaseCommand
         $this->logger->info(
             'Added {entries_count} export-ignore entries to .gitattributes.',
             [
-                'command' => 'gitattributes',
+                'input' => $input,
                 'entries_count' => \count($entries),
                 'gitattributes_path' => $gitattributesPath,
             ],

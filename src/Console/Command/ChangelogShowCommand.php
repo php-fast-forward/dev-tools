@@ -92,8 +92,7 @@ final class ChangelogShowCommand extends BaseCommand
         $this->logger->info(
             $releaseNotes,
             [
-                'command' => 'changelog:show',
-                'file' => $file,
+                'input' => $input,
                 'version' => $version,
                 'release_notes' => $releaseNotes,
             ],

@@ -78,6 +78,8 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn(null);
         $this->input->getOption('json')
             ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()

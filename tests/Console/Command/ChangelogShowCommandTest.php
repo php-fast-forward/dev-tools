@@ -88,8 +88,7 @@ final class ChangelogShowCommandTest extends TestCase
         $this->logger->info(
             $releaseNotes,
             [
-                'command' => 'changelog:show',
-                'file' => 'CHANGELOG.md',
+                'input' => $this->input->reveal(),
                 'version' => '1.2.0',
                 'release_notes' => $releaseNotes,
             ],

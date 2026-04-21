@@ -79,7 +79,7 @@ final class AgentsCommand extends BaseCommand
             $this->logger->error(
                 'No packaged .agents/agents found at: {packaged_agents_path}',
                 [
-                    'command' => 'agents',
+                    'input' => $input,
                     'packaged_agents_path' => $packageAgentsPath,
                     'agents_dir' => $agentsDir,
                     'directory_created' => false,
@@ -105,7 +105,7 @@ final class AgentsCommand extends BaseCommand
             $this->logger->error(
                 'Agents synchronization failed.',
                 [
-                    'command' => 'agents',
+                    'input' => $input,
                     'packaged_agents_path' => $packageAgentsPath,
                     'agents_dir' => $agentsDir,
                     'directory_created' => $directoryCreated,
@@ -118,7 +118,7 @@ final class AgentsCommand extends BaseCommand
         $this->logger->info(
             'Agents synchronization completed successfully.',
             [
-                'command' => 'agents',
+                'input' => $input,
                 'packaged_agents_path' => $packageAgentsPath,
                 'agents_dir' => $agentsDir,
                 'directory_created' => $directoryCreated,

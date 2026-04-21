@@ -240,7 +240,7 @@ final class GitAttributesCommandTest extends TestCase
             ->shouldBeCalledOnce();
 
         $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
-            'command' => 'gitattributes',
+            'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
         $this->logger->notice(
@@ -335,13 +335,13 @@ final class GitAttributesCommandTest extends TestCase
             ->shouldNotBeCalled();
 
         $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
-            'command' => 'gitattributes',
+            'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
         $this->logger->notice(
             'No candidate paths found in repository. Skipping .gitattributes sync.',
             [
-                'command' => 'gitattributes',
+                'input' => $this->input->reveal(),
             ],
         )->shouldBeCalled();
 

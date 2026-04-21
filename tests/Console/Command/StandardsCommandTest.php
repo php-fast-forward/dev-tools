@@ -62,6 +62,8 @@ final class StandardsCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->application->getHelperSet()
             ->willReturn(new HelperSet());
 

@@ -117,7 +117,7 @@ final class CodeOwnersCommand extends BaseCommand
             $this->logger->notice(
                 'Managed file {target_path} already exists. Skipping CODEOWNERS generation.',
                 [
-                    'command' => 'codeowners',
+                    'input' => $input,
                     'target_path' => $targetPath,
                 ],
             );
@@ -144,13 +144,10 @@ final class CodeOwnersCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated CODEOWNERS content.', $targetPath),
         );
 
-        $this->logger->notice(
-            $comparison->getSummary(),
-            [
-                'command' => 'codeowners',
-                'target_path' => $targetPath,
-            ],
-        );
+        $this->logger->notice($comparison->getSummary(), [
+            'input' => $input,
+            'target_path' => $targetPath,
+        ],);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
@@ -159,7 +156,7 @@ final class CodeOwnersCommand extends BaseCommand
                 $this->logger->notice(
                     $consoleDiff,
                     [
-                        'command' => 'codeowners',
+                        'input' => $input,
                         'target_path' => $targetPath,
                         'diff' => $comparison->getDiff(),
                     ],
@@ -187,7 +184,7 @@ final class CodeOwnersCommand extends BaseCommand
             $this->logger->notice(
                 'Skipped updating {target_path}.',
                 [
-                    'command' => 'codeowners',
+                    'input' => $input,
                     'target_path' => $targetPath,
                 ],
             );
@@ -203,7 +200,7 @@ final class CodeOwnersCommand extends BaseCommand
         $this->logger->info(
             'Updated CODEOWNERS in {target_path}.',
             [
-                'command' => 'codeowners',
+                'input' => $input,
                 'target_path' => $targetPath,
             ],
         );

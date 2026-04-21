@@ -137,7 +137,7 @@ final class GitHooksCommand extends BaseCommand
                 $this->logger->notice(
                     'Skipped existing {hook_name} hook.',
                     [
-                        'command' => 'git-hooks',
+                        'input' => $input,
                         'hook_name' => $file->getFilename(),
                         'hook_path' => $hookPath,
                     ],
@@ -152,7 +152,7 @@ final class GitHooksCommand extends BaseCommand
                 $this->logger->notice(
                     $comparison->getSummary(),
                     [
-                        'command' => 'git-hooks',
+                        'input' => $input,
                         'hook_name' => $file->getFilename(),
                         'hook_path' => $hookPath,
                     ],
@@ -165,7 +165,7 @@ final class GitHooksCommand extends BaseCommand
                         $this->logger->notice(
                             $consoleDiff,
                             [
-                                'command' => 'git-hooks',
+                                'input' => $input,
                                 'hook_name' => $file->getFilename(),
                                 'hook_path' => $hookPath,
                                 'diff' => $comparison->getDiff(),
@@ -192,7 +192,7 @@ final class GitHooksCommand extends BaseCommand
                     $this->logger->notice(
                         'Skipped replacing {hook_path}.',
                         [
-                            'command' => 'git-hooks',
+                            'input' => $input,
                             'hook_name' => $file->getFilename(),
                             'hook_path' => $hookPath,
                         ],
@@ -208,7 +208,7 @@ final class GitHooksCommand extends BaseCommand
             $this->logger->info(
                 'Installed {hook_name} hook.',
                 [
-                    'command' => 'git-hooks',
+                    'input' => $input,
                     'hook_name' => $file->getFilename(),
                     'hook_path' => $hookPath,
                 ],

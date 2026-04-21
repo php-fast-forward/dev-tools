@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Logger;
 
 use stdClass;
 use DateTimeImmutable;
+use Ergebnis\AgentDetector\Detector;
 use FastForward\DevTools\Console\Logger\OutputFormatLogger;
 use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
@@ -53,10 +54,18 @@ final class OutputFormatLoggerTest extends TestCase
     private ObjectProphecy $clock;
 
     /**
+     * @var array<string, mixed>
+     */
+    private array $server;
+
+    /**
      * @return void
      */
     protected function setUp(): void
     {
+        $this->server = $_SERVER;
+        $_SERVER = [];
+
         $this->output = $this->prophesize(ConsoleOutputInterface::class);
         $this->errorOutput = $this->prophesize(OutputInterface::class);
         $this->clock = $this->prophesize(ClockInterface::class);
@@ -77,6 +86,7 @@ final class OutputFormatLoggerTest extends TestCase
             new ArgvInput(['dev-tools']),
             $this->output->reveal(),
             $this->clock->reveal(),
+            new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
         );
 
@@ -111,6 +121,7 @@ final class OutputFormatLoggerTest extends TestCase
             new ArgvInput(['dev-tools']),
             $this->output->reveal(),
             $this->clock->reveal(),
+            new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
         );
 
@@ -138,6 +149,7 @@ final class OutputFormatLoggerTest extends TestCase
             new ArgvInput(['dev-tools', '--json']),
             $this->output->reveal(),
             $this->clock->reveal(),
+            new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
         );
 
@@ -151,5 +163,66 @@ final class OutputFormatLoggerTest extends TestCase
             'status' => 'ready',
             'attempt' => 1,
         ]);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function logWillWritePrettyPrintedJsonWhenPrettyJsonOutputIsRequested(): void
+    {
+        $logger = new OutputFormatLogger(
+            new ArgvInput(['dev-tools', '--pretty-json']),
+            $this->output->reveal(),
+            $this->clock->reveal(),
+            new Detector(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+        );
+
+        $this->output->writeln(
+            "{\n    \"message\": \"Build {status}\",\n    \"level\": \"info\",\n    \"context\": {\n        \"status\": \"ready\",\n        \"attempt\": 1\n    },\n    \"timestamp\": \"2026-04-21T16:00:00+00:00\"\n}"
+        )->shouldBeCalledOnce();
+        $this->errorOutput->writeln(Argument::type('string'))
+            ->shouldNotBeCalled();
+
+        $logger->info('Build {status}', [
+            'status' => 'ready',
+            'attempt' => 1,
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function logWillWriteStructuredJsonWhenAgentEnvironmentIsDetected(): void
+    {
+        $_SERVER['CODEX_THREAD_ID'] = 'thread-123';
+
+        $logger = new OutputFormatLogger(
+            new ArgvInput(['dev-tools']),
+            $this->output->reveal(),
+            $this->clock->reveal(),
+            new Detector(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+        );
+
+        $this->output->writeln(
+            '{"message":"Agent {status}","level":"info","context":{"status":"ready"},"timestamp":"2026-04-21T16:00:00+00:00"}'
+        )->shouldBeCalledOnce();
+        $this->errorOutput->writeln(Argument::type('string'))
+            ->shouldNotBeCalled();
+
+        $logger->info('Agent {status}', [
+            'status' => 'ready',
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        $_SERVER = $this->server;
     }
 }

@@ -110,7 +110,7 @@ final class SkillsCommandTest extends TestCase
         $this->logger->error(
             'No packaged skills found at: {packaged_skills_path}',
             [
-                'command' => 'skills',
+                'input' => $this->input->reveal(),
                 'packaged_skills_path' => $skillsPath,
                 'skills_dir' => $skillsPath,
                 'directory_created' => false,
@@ -145,7 +145,7 @@ final class SkillsCommandTest extends TestCase
         $this->logger->info(
             'Skills synchronization completed successfully.',
             [
-                'command' => 'skills',
+                'input' => $this->input->reveal(),
                 'packaged_skills_path' => $skillsPath,
                 'skills_dir' => $skillsPath,
                 'directory_created' => true,
@@ -177,7 +177,7 @@ final class SkillsCommandTest extends TestCase
         $this->logger->error(
             'Skills synchronization failed.',
             [
-                'command' => 'skills',
+                'input' => $this->input->reveal(),
                 'packaged_skills_path' => $skillsPath,
                 'skills_dir' => $skillsPath,
                 'directory_created' => false,

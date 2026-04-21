@@ -179,14 +179,14 @@ final class LicenseCommandTest extends TestCase
         $this->logger->notice(
             'Managed file ' . $targetPath . ' will be created from generated LICENSE content.',
             [
-                'command' => 'license',
+                'input' => $this->input->reveal(),
                 'target_path' => $targetPath,
             ],
         )->shouldBeCalledOnce();
         $this->logger->info(
             '{file_name} file generated successfully at {target_path}.',
             [
-                'command' => 'license',
+                'input' => $this->input->reveal(),
                 'file_name' => 'LICENSE',
                 'target_path' => $targetPath,
             ],
@@ -227,7 +227,7 @@ final class LicenseCommandTest extends TestCase
         $this->logger->notice(
             'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
             [
-                'command' => 'license',
+                'input' => $this->input->reveal(),
                 'target_path' => $targetPath,
             ],
         )->shouldBeCalledOnce();
@@ -255,7 +255,7 @@ final class LicenseCommandTest extends TestCase
         $this->logger->notice(
             'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
             [
-                'command' => 'license',
+                'input' => $this->input->reveal(),
                 'target_path' => $targetPath,
             ],
         )->shouldBeCalledOnce();
@@ -374,7 +374,7 @@ final class LicenseCommandTest extends TestCase
         $this->logger->notice(
             'Skipped updating {target_path}.',
             [
-                'command' => 'license',
+                'input' => $this->input->reveal(),
                 'target_path' => $targetPath,
             ],
         )

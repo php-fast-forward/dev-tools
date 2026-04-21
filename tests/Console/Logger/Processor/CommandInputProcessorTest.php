@@ -62,7 +62,6 @@ final class CommandInputProcessorTest extends TestCase
         ], $context['arguments']);
         self::assertSame([
             'filter' => 'CodeStyle',
-            'coverage' => '.dev-tools/coverage',
         ], $context['options'],);
         self::assertArrayNotHasKey('input', $context);
     }

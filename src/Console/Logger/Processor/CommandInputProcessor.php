@@ -19,7 +19,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Logger\Processor;
 
+use ReflectionProperty;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\Input;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Expands command input instances into structured context entries.
@@ -55,7 +60,7 @@ final class CommandInputProcessor implements ContextProcessorInterface
     {
         unset($context[$key]);
 
-        $arguments = $input->getArguments();
+        $arguments = $this->extractProvidedArguments($input);
         $command = $this->inferCommandName($context, $input, $arguments);
 
         if (null !== $command && ! \array_key_exists('command', $context)) {
@@ -68,8 +73,7 @@ final class CommandInputProcessor implements ContextProcessorInterface
             $context['arguments'] = $arguments;
         }
 
-        /** @var array<string, mixed> $options */
-        $options = $input->getOptions();
+        $options = $this->extractProvidedOptions($input);
         if ([] !== $options && ! \array_key_exists('options', $context)) {
             $context['options'] = $options;
         }
@@ -97,5 +101,143 @@ final class CommandInputProcessor implements ContextProcessorInterface
         $command = $input->getFirstArgument();
 
         return \is_string($command) ? $command : null;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return array<string, mixed>
+     */
+    private function extractProvidedArguments(InputInterface $input): array
+    {
+        $arguments = [];
+        $arrayParameters = $this->resolveArrayParameters($input);
+
+        foreach ($input->getArguments() as $name => $value) {
+            if (null === $value) {
+                continue;
+            }
+
+            if (\is_array($value)) {
+                if ([] === $value) {
+                    continue;
+                }
+
+                $providedValues = array_values(array_filter(
+                    $value,
+                    fn(mixed $item): bool => \is_scalar($item) && $input->hasParameterOption((string) $item, true),
+                ));
+
+                if ([] !== $providedValues) {
+                    $arguments[$name] = $providedValues;
+                }
+
+                continue;
+            }
+
+            if (
+                (\is_array($arrayParameters) && \array_key_exists($name, $arrayParameters))
+                || (\is_scalar($value) && $input->hasParameterOption((string) $value, true))
+            ) {
+                $arguments[$name] = $value;
+            }
+        }
+
+        return $arguments;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return array<string, mixed>
+     */
+    private function extractProvidedOptions(InputInterface $input): array
+    {
+        $definition = $this->resolveDefinition($input);
+
+        if (! $definition instanceof InputDefinition) {
+            return [];
+        }
+
+        $options = [];
+
+        foreach ($definition->getOptions() as $option) {
+            $tokens = $this->optionTokens($option);
+
+            if (! $input->hasParameterOption($tokens, true)) {
+                continue;
+            }
+
+            $options[$option->getName()] = $input->getOption($option->getName());
+        }
+
+        return $options;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return InputDefinition|null
+     */
+    private function resolveDefinition(InputInterface $input): ?InputDefinition
+    {
+        if (! $input instanceof Input) {
+            return null;
+        }
+
+        static $property;
+
+        if (! $property instanceof ReflectionProperty) {
+            $property = new ReflectionProperty(Input::class, 'definition');
+        }
+
+        /** @var InputDefinition $definition */
+        $definition = $property->getValue($input);
+
+        return $definition;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return array<string|int, mixed>|null
+     */
+    private function resolveArrayParameters(InputInterface $input): ?array
+    {
+        if (! $input instanceof ArrayInput) {
+            return null;
+        }
+
+        static $property;
+
+        if (! $property instanceof ReflectionProperty) {
+            $property = new ReflectionProperty(ArrayInput::class, 'parameters');
+        }
+
+        /** @var array<string|int, mixed> $parameters */
+        $parameters = $property->getValue($input);
+
+        return $parameters;
+    }
+
+    /**
+     * @param InputOption $option
+     *
+     * @return list<string>
+     */
+    private function optionTokens(InputOption $option): array
+    {
+        $tokens = ['--' . $option->getName()];
+        $shortcut = $option->getShortcut();
+
+        if (null !== $shortcut && '' !== $shortcut) {
+            foreach (explode('|', $shortcut) as $alias) {
+                if ('' !== $alias) {
+                    $tokens[] = '-' . $alias;
+                }
+            }
+        }
+
+        return $tokens;
     }
 }

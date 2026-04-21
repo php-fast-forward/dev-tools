@@ -97,7 +97,7 @@ final class MetricsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = (bool) $input->getOption('json');
+        $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $target = rtrim((string) $input->getOption('target'), '/');

@@ -111,7 +111,7 @@ final class SkillsCommand extends BaseCommand
             $this->logger->error(
                 'No packaged skills found at: {packaged_skills_path}',
                 [
-                    'command' => 'skills',
+                    'input' => $input,
                     'packaged_skills_path' => $packageSkillsPath,
                     'skills_dir' => $skillsDir,
                     'directory_created' => false,
@@ -137,7 +137,7 @@ final class SkillsCommand extends BaseCommand
             $this->logger->error(
                 'Skills synchronization failed.',
                 [
-                    'command' => 'skills',
+                    'input' => $input,
                     'packaged_skills_path' => $packageSkillsPath,
                     'skills_dir' => $skillsDir,
                     'directory_created' => $directoryCreated,
@@ -150,7 +150,7 @@ final class SkillsCommand extends BaseCommand
         $this->logger->info(
             'Skills synchronization completed successfully.',
             [
-                'command' => 'skills',
+                'input' => $input,
                 'packaged_skills_path' => $packageSkillsPath,
                 'skills_dir' => $skillsDir,
                 'directory_created' => $directoryCreated,

@@ -99,8 +99,7 @@ final class ChangelogPromoteCommand extends BaseCommand
         $this->logger->info(
             'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
             [
-                'command' => 'changelog:promote',
-                'file' => (string) $input->getOption('file'),
+                'input' => $input,
                 'absolute_file' => $file,
                 'version' => $version,
                 'date' => $date,

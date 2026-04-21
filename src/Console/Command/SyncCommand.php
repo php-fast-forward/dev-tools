@@ -91,7 +91,8 @@ final class SyncCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = (bool) $input->getOption('json');
+        $jsonOutput = $this->isJsonOutput($input);
+        $prettyJsonOutput = $this->isPrettyJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $overwrite = (bool) $input->getOption('overwrite');
         $dryRun = (bool) $input->getOption('dry-run');
@@ -108,8 +109,8 @@ final class SyncCommand extends BaseCommand
             'input' => $input,
         ]);
 
-        $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments], false, $jsonOutput);
-        $this->queueDevToolsCommand(['funding', ...$modeArguments], false, $jsonOutput);
+        $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);
+        $this->queueDevToolsCommand(['funding', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
@@ -120,6 +121,7 @@ final class SyncCommand extends BaseCommand
             ],
             $allowDetached,
             $jsonOutput,
+            $prettyJsonOutput,
         );
         $this->queueDevToolsCommand(
             [
@@ -131,6 +133,7 @@ final class SyncCommand extends BaseCommand
             ],
             $allowDetached,
             $jsonOutput,
+            $prettyJsonOutput,
         );
         $this->queueDevToolsCommand(
             [
@@ -142,11 +145,13 @@ final class SyncCommand extends BaseCommand
             ],
             $allowDetached,
             $jsonOutput,
+            $prettyJsonOutput,
         );
         $this->queueDevToolsCommand(
             ['codeowners', $overwrite ? '--overwrite' : null, ...$modeArguments],
             $allowDetached,
             $jsonOutput,
+            $prettyJsonOutput,
         );
 
         if ($dryRun || $check || $interactive) {
@@ -157,15 +162,20 @@ final class SyncCommand extends BaseCommand
                 ],
             );
         } else {
-            $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput);
-            $this->queueDevToolsCommand(['skills'], true, $jsonOutput);
-            $this->queueDevToolsCommand(['agents'], true, $jsonOutput);
+            $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput, $prettyJsonOutput);
+            $this->queueDevToolsCommand(['skills'], true, $jsonOutput, $prettyJsonOutput);
+            $this->queueDevToolsCommand(['agents'], true, $jsonOutput, $prettyJsonOutput);
         }
 
-        $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached, $jsonOutput);
-        $this->queueDevToolsCommand(['gitattributes', ...$modeArguments], $allowDetached, $jsonOutput);
-        $this->queueDevToolsCommand(['license', ...$modeArguments], $allowDetached, $jsonOutput);
-        $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached, $jsonOutput);
+        $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);
+        $this->queueDevToolsCommand(
+            ['gitattributes', ...$modeArguments],
+            $allowDetached,
+            $jsonOutput,
+            $prettyJsonOutput
+        );
+        $this->queueDevToolsCommand(['license', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);
+        $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);
 
         $result = $this->processQueue->run($processOutput);
         $context = [
@@ -189,14 +199,23 @@ final class SyncCommand extends BaseCommand
      * @param list<string|null> $arguments
      * @param bool $detached
      * @param bool $jsonOutput
+     * @param bool $prettyJsonOutput
      */
-    private function queueDevToolsCommand(array $arguments, bool $detached = false, bool $jsonOutput = false): void
-    {
+    private function queueDevToolsCommand(
+        array $arguments,
+        bool $detached = false,
+        bool $jsonOutput = false,
+        bool $prettyJsonOutput = false,
+    ): void {
         $processBuilder = $this->processBuilder;
         $arguments = array_filter($arguments, static fn(?string $arg): bool => null !== $arg);
 
         if ($jsonOutput && ! \in_array('--json', $arguments, true)) {
             $arguments[] = '--json';
+        }
+
+        if ($prettyJsonOutput && ! \in_array('--pretty-json', $arguments, true)) {
+            $arguments[] = '--pretty-json';
         }
 
         foreach ($arguments as $argument) {

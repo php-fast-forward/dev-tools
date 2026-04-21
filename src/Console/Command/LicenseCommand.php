@@ -115,7 +115,7 @@ final class LicenseCommand extends BaseCommand
             $this->logger->notice(
                 'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
                 [
-                    'command' => 'license',
+                    'input' => $input,
                     'target_path' => $targetPath,
                 ],
             );
@@ -133,13 +133,10 @@ final class LicenseCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated LICENSE content.', $targetPath),
         );
 
-        $this->logger->notice(
-            $comparison->getSummary(),
-            [
-                'command' => 'license',
-                'target_path' => $targetPath,
-            ],
-        );
+        $this->logger->notice($comparison->getSummary(), [
+            'input' => $input,
+            'target_path' => $targetPath,
+        ],);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
@@ -148,7 +145,7 @@ final class LicenseCommand extends BaseCommand
                 $this->logger->notice(
                     $consoleDiff,
                     [
-                        'command' => 'license',
+                        'input' => $input,
                         'target_path' => $targetPath,
                         'diff' => $comparison->getDiff(),
                     ],
@@ -172,7 +169,7 @@ final class LicenseCommand extends BaseCommand
             $this->logger->notice(
                 'Skipped updating {target_path}.',
                 [
-                    'command' => 'license',
+                    'input' => $input,
                     'target_path' => $targetPath,
                 ],
             );
@@ -184,7 +181,7 @@ final class LicenseCommand extends BaseCommand
         $this->logger->info(
             '{file_name} file generated successfully at {target_path}.',
             [
-                'command' => 'license',
+                'input' => $input,
                 'file_name' => basename($targetPath),
                 'target_path' => $targetPath,
             ],

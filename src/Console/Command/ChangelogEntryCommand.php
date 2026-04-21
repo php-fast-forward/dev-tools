@@ -117,8 +117,7 @@ final class ChangelogEntryCommand extends BaseCommand
         $this->logger->info(
             'Added {type} changelog entry to [{release}] in {absolute_file}.',
             [
-                'command' => 'changelog:entry',
-                'file' => (string) $input->getOption('file'),
+                'input' => $input,
                 'absolute_file' => $file,
                 'type' => strtolower($type->value),
                 'release' => $version,

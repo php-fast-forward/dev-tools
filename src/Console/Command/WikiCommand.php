@@ -115,12 +115,12 @@ final class WikiCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = (bool) $input->getOption('json');
+        $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
 
         if ($input->getOption('init')) {
-            return $this->initializeWikiSubmodule($target, $processOutput);
+            return $this->initializeWikiSubmodule($input, $target, $processOutput);
         }
 
         if (! $jsonOutput) {
@@ -170,10 +170,11 @@ final class WikiCommand extends BaseCommand
      *
      * @param string $target the configured wiki target path
      * @param OutputInterface $output the output used for process feedback
+     * @param InputInterface $input
      *
      * @return int the command status code
      */
-    private function initializeWikiSubmodule(string $target, OutputInterface $output): int
+    private function initializeWikiSubmodule(InputInterface $input, string $target, OutputInterface $output): int
     {
         $wikiSubmodulePath = (string) $this->filesystem->getAbsolutePath($target);
 
@@ -181,7 +182,7 @@ final class WikiCommand extends BaseCommand
             $this->logger->info(
                 'Wiki submodule already exists at {wiki_submodule_path}.',
                 [
-                    'command' => $this->getName(),
+                    'input' => $input,
                     'wiki_submodule_path' => $wikiSubmodulePath,
                 ],
             );
@@ -205,7 +206,7 @@ final class WikiCommand extends BaseCommand
 
         if (self::SUCCESS === $result) {
             $this->logger->info('Wiki submodule initialized successfully.', [
-                'command' => $this->getName(),
+                'input' => $input,
                 'wiki_submodule_path' => $wikiSubmodulePath,
                 'wiki_repository_url' => $wikiRepoUrl,
             ]);
@@ -214,7 +215,7 @@ final class WikiCommand extends BaseCommand
         }
 
         $this->logger->error('Wiki submodule initialization failed.', [
-            'command' => $this->getName(),
+            'input' => $input,
             'wiki_submodule_path' => $wikiSubmodulePath,
             'wiki_repository_url' => $wikiRepoUrl,
         ]);

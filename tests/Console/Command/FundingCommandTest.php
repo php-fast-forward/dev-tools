@@ -350,13 +350,13 @@ final class FundingCommandTest extends TestCase
         $this->filesystem->exists('composer.json')
             ->willReturn(false);
         $this->logger->info('Synchronizing funding metadata...', [
-            'command' => 'funding',
+            'input' => $this->input->reveal(),
         ])
             ->shouldBeCalledOnce();
         $this->logger->notice(
             'Composer file {composer_file} does not exist. Skipping funding synchronization.',
             [
-                'command' => 'funding',
+                'input' => $this->input->reveal(),
                 'composer_file' => 'composer.json',
                 'funding_file' => '.github/FUNDING.yml',
             ],
@@ -637,7 +637,7 @@ final class FundingCommandTest extends TestCase
         $this->logger->notice(
             'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
             [
-                'command' => 'funding',
+                'input' => $this->input->reveal(),
                 'funding_file' => '.github/FUNDING.yml',
             ],
         )->shouldBeCalledOnce();

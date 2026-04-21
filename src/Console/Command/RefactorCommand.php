@@ -106,7 +106,7 @@ final class RefactorCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = (bool) $input->getOption('json');
+        $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
 

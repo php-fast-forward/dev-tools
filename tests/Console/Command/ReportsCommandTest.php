@@ -75,6 +75,8 @@ final class ReportsCommandTest extends TestCase
             ->willReturn('.dev-tools/metrics');
         $this->input->getOption('json')
             ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()
@@ -125,6 +127,8 @@ final class ReportsCommandTest extends TestCase
     {
         $this->input->getOption('json')
             ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(ReportsCommand::FAILURE)

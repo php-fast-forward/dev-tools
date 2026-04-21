@@ -231,13 +231,13 @@ final class GitIgnoreCommandTest extends TestCase
             ->shouldBeCalled();
 
         $this->logger->info('Merging .gitignore files...', [
-            'command' => 'gitignore',
+            'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
         $this->logger->info(
             'Successfully merged .gitignore file.',
             [
-                'command' => 'gitignore',
+                'input' => $this->input->reveal(),
                 'target_path' => self::TARGET_PATH,
             ],
         )
@@ -317,7 +317,7 @@ final class GitIgnoreCommandTest extends TestCase
         $this->logger->notice(
             'Skipped updating {target_path}.',
             [
-                'command' => 'gitignore',
+                'input' => $this->input->reveal(),
                 'target_path' => self::TARGET_PATH,
             ],
         )

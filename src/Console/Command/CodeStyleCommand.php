@@ -103,7 +103,7 @@ final class CodeStyleCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = (bool) $input->getOption('json');
+        $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
 
         $fix = (bool) $input->getOption('fix');
@@ -137,7 +137,7 @@ final class CodeStyleCommand extends BaseCommand
         $result = $this->processQueue->run($processOutput);
 
         $context = [
-            'command' => 'code-style',
+            'input' => $input,
             'fix' => $fix,
             'config' => self::CONFIG,
             'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,

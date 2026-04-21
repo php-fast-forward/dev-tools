@@ -94,8 +94,7 @@ final class ChangelogNextVersionCommandTest extends TestCase
         $this->logger->info(
             '1.3.0',
             [
-                'command' => 'changelog:next-version',
-                'file' => 'CHANGELOG.md',
+                'input' => $this->input->reveal(),
                 'current_version' => null,
                 'next_version' => '1.3.0',
             ],
@@ -117,8 +116,7 @@ final class ChangelogNextVersionCommandTest extends TestCase
         $this->logger->info(
             '2.0.0',
             [
-                'command' => 'changelog:next-version',
-                'file' => 'CHANGELOG.md',
+                'input' => $this->input->reveal(),
                 'current_version' => '1.2.3',
                 'next_version' => '2.0.0',
             ],

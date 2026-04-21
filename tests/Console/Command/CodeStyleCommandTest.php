@@ -74,6 +74,8 @@ final class CodeStyleCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output->getVerbosity()
             ->willReturn(OutputInterface::VERBOSITY_NORMAL);
         $this->output->isDecorated()
@@ -112,7 +114,7 @@ final class CodeStyleCommandTest extends TestCase
         $this->logger->info(
             'Code style checks completed successfully.',
             [
-                'command' => 'code-style',
+                'input' => $this->input->reveal(),
                 'fix' => false,
                 'config' => CodeStyleCommand::CONFIG,
                 'process_output' => null,
@@ -136,7 +138,7 @@ final class CodeStyleCommandTest extends TestCase
         $this->logger->error(
             'Code style checks failed.',
             [
-                'command' => 'code-style',
+                'input' => $this->input->reveal(),
                 'fix' => false,
                 'config' => CodeStyleCommand::CONFIG,
                 'process_output' => null,
@@ -154,6 +156,8 @@ final class CodeStyleCommandTest extends TestCase
     {
         $this->input->getOption('json')
             ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
@@ -161,7 +165,7 @@ final class CodeStyleCommandTest extends TestCase
             ->shouldBeCalled();
         $this->logger->info(
             'Code style checks completed successfully.',
-            Argument::that(static fn(array $context): bool => 'code-style' === $context['command']
+            Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
                 && \is_string($context['process_output'])),
         )->shouldBeCalled();
 

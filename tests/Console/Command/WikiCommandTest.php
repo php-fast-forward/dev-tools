@@ -91,6 +91,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()
@@ -145,8 +147,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn(true);
         $this->logger->info(
             'Wiki submodule already exists at {wiki_submodule_path}.',
-            Argument::that(static fn(array $context): bool => '/repo/.github/wiki' === $context['wiki_submodule_path']
-                && 'wiki' === $context['command']),
+            Argument::that(fn(array $context): bool => '/repo/.github/wiki' === $context['wiki_submodule_path']
+                && $this->input->reveal() === $context['input']),
         )->shouldBeCalled();
 
         self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());

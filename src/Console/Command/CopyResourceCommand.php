@@ -123,12 +123,9 @@ final class CopyResourceCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if ('' === $source || '' === $target) {
-            $this->logger->error(
-                'The --source and --target options are required.',
-                [
-                    'command' => 'copy-resource',
-                ],
-            );
+            $this->logger->error('The --source and --target options are required.', [
+                'input' => $input,
+            ],);
 
             return self::FAILURE;
         }
@@ -231,7 +228,7 @@ final class CopyResourceCommand extends BaseCommand
             $this->logger->notice(
                 'Skipped existing resource {target_path}.',
                 [
-                    'command' => 'copy-resource',
+                    'input' => $input,
                     'source_path' => $sourcePath,
                     'target_path' => $targetPath,
                 ],
@@ -246,7 +243,7 @@ final class CopyResourceCommand extends BaseCommand
             $this->logger->notice(
                 $comparison->getSummary(),
                 [
-                    'command' => 'copy-resource',
+                    'input' => $input,
                     'source_path' => $sourcePath,
                     'target_path' => $targetPath,
                 ],
@@ -259,7 +256,7 @@ final class CopyResourceCommand extends BaseCommand
                     $this->logger->notice(
                         $consoleDiff,
                         [
-                            'command' => 'copy-resource',
+                            'input' => $input,
                             'source_path' => $sourcePath,
                             'target_path' => $targetPath,
                             'diff' => $comparison->getDiff(),
@@ -288,7 +285,7 @@ final class CopyResourceCommand extends BaseCommand
                 $this->logger->notice(
                     'Skipped replacing {target_path}.',
                     [
-                        'command' => 'copy-resource',
+                        'input' => $input,
                         'source_path' => $sourcePath,
                         'target_path' => $targetPath,
                     ],
@@ -302,7 +299,7 @@ final class CopyResourceCommand extends BaseCommand
         $this->logger->info(
             'Copied resource {target_path}.',
             [
-                'command' => 'copy-resource',
+                'input' => $input,
                 'source_path' => $sourcePath,
                 'target_path' => $targetPath,
             ],

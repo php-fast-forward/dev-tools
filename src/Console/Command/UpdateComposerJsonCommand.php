@@ -114,13 +114,10 @@ final class UpdateComposerJsonCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         if (! $this->filesystem->exists($file)) {
-            $this->logger->notice(
-                'Composer file {file} does not exist.',
-                [
-                    'command' => 'update-composer-json',
-                    'file' => $file,
-                ],
-            );
+            $this->logger->notice('Composer file {file} does not exist.', [
+                'input' => $input,
+                'file' => $file,
+            ],);
 
             return self::SUCCESS;
         }
@@ -150,13 +147,10 @@ final class UpdateComposerJsonCommand extends BaseCommand
             \sprintf('Updating managed file %s from generated dev-tools composer.json configuration.', $file),
         );
 
-        $this->logger->notice(
-            $comparison->getSummary(),
-            [
-                'command' => 'update-composer-json',
-                'file' => $file,
-            ],
-        );
+        $this->logger->notice($comparison->getSummary(), [
+            'input' => $input,
+            'file' => $file,
+        ],);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
@@ -165,7 +159,7 @@ final class UpdateComposerJsonCommand extends BaseCommand
                 $this->logger->notice(
                     $consoleDiff,
                     [
-                        'command' => 'update-composer-json',
+                        'input' => $input,
                         'file' => $file,
                         'diff' => $comparison->getDiff(),
                     ],
@@ -186,13 +180,10 @@ final class UpdateComposerJsonCommand extends BaseCommand
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldUpdateComposerJson($input, $output, $file)) {
-            $this->logger->notice(
-                'Skipped updating {file}.',
-                [
-                    'command' => 'update-composer-json',
-                    'file' => $file,
-                ],
-            );
+            $this->logger->notice('Skipped updating {file}.', [
+                'input' => $input,
+                'file' => $file,
+            ],);
 
             return self::SUCCESS;
         }
@@ -201,7 +192,7 @@ final class UpdateComposerJsonCommand extends BaseCommand
         $this->logger->info(
             'Updated composer.json dev-tools configuration.',
             [
-                'command' => 'update-composer-json',
+                'input' => $input,
                 'file' => $file,
             ],
         );

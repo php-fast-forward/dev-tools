@@ -98,7 +98,8 @@ final class ReportsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = (bool) $input->getOption('json');
+        $jsonOutput = $this->isJsonOutput($input);
+        $prettyJsonOutput = $this->isPrettyJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
         $coveragePath = (string) $input->getOption('coverage');
@@ -115,6 +116,10 @@ final class ReportsCommand extends BaseCommand
             $docsBuilder = $docsBuilder->withArgument('--json');
         }
 
+        if ($prettyJsonOutput) {
+            $docsBuilder = $docsBuilder->withArgument('--pretty-json');
+        }
+
         $docs = $docsBuilder->build('composer dev-tools docs --');
 
         $coverageBuilder = $this->processBuilder
@@ -126,6 +131,10 @@ final class ReportsCommand extends BaseCommand
             $coverageBuilder = $coverageBuilder->withArgument('--json');
         }
 
+        if ($prettyJsonOutput) {
+            $coverageBuilder = $coverageBuilder->withArgument('--pretty-json');
+        }
+
         $coverage = $coverageBuilder->build('composer dev-tools tests --');
 
         $metricsBuilder = $this->processBuilder
@@ -134,6 +143,10 @@ final class ReportsCommand extends BaseCommand
 
         if ($jsonOutput) {
             $metricsBuilder = $metricsBuilder->withArgument('--json');
+        }
+
+        if ($prettyJsonOutput) {
+            $metricsBuilder = $metricsBuilder->withArgument('--pretty-json');
         }
 
         $metrics = $metricsBuilder->build('composer dev-tools metrics --');

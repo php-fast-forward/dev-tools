@@ -300,7 +300,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->logger->notice(
             'Composer file {file} does not exist.',
             [
-                'command' => 'update-composer-json',
+                'input' => $this->input->reveal(),
                 'file' => '/app/composer.json',
             ],
         )->shouldBeCalledOnce();
@@ -368,7 +368,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->logger->notice(
             '@@ diff @@',
             [
-                'command' => 'update-composer-json',
+                'input' => $this->input->reveal(),
                 'file' => '/app/composer.json',
                 'diff' => '@@ diff @@',
             ],
@@ -445,7 +445,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->logger->notice(
             'Skipped updating {file}.',
             [
-                'command' => 'update-composer-json',
+                'input' => $this->input->reveal(),
                 'file' => '/app/composer.json',
             ],
         )

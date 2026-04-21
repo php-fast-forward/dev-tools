@@ -128,7 +128,7 @@ final class GitIgnoreCommand extends BaseCommand
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->logger->info('Merging .gitignore files...', [
-            'command' => 'gitignore',
+            'input' => $input,
         ]);
 
         $sourcePath = $input->getOption('source');
@@ -152,7 +152,7 @@ final class GitIgnoreCommand extends BaseCommand
         $this->logger->notice(
             $comparison->getSummary(),
             [
-                'command' => 'gitignore',
+                'input' => $input,
                 'target_path' => $merged->path(),
             ],
         );
@@ -164,7 +164,7 @@ final class GitIgnoreCommand extends BaseCommand
                 $this->logger->notice(
                     $consoleDiff,
                     [
-                        'command' => 'gitignore',
+                        'input' => $input,
                         'target_path' => $merged->path(),
                         'diff' => $comparison->getDiff(),
                     ],
@@ -192,7 +192,7 @@ final class GitIgnoreCommand extends BaseCommand
             $this->logger->notice(
                 'Skipped updating {target_path}.',
                 [
-                    'command' => 'gitignore',
+                    'input' => $input,
                     'target_path' => $merged->path(),
                 ],
             );
@@ -205,7 +205,7 @@ final class GitIgnoreCommand extends BaseCommand
         $this->logger->info(
             'Successfully merged .gitignore file.',
             [
-                'command' => 'gitignore',
+                'input' => $input,
                 'target_path' => $merged->path(),
             ],
         );

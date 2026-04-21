@@ -201,7 +201,7 @@ final class GitHooksCommandTest extends TestCase
         $this->logger->notice(
             'Skipped existing {hook_name} hook.',
             [
-                'command' => 'git-hooks',
+                'input' => $this->input->reveal(),
                 'hook_name' => 'post-merge',
                 'hook_path' => '/app/.git/hooks/post-merge',
             ],
@@ -248,7 +248,7 @@ final class GitHooksCommandTest extends TestCase
         $this->logger->notice(
             'Changed summary',
             [
-                'command' => 'git-hooks',
+                'input' => $this->input->reveal(),
                 'hook_name' => 'post-merge',
                 'hook_path' => '/app/.git/hooks/post-merge',
             ],
@@ -257,7 +257,7 @@ final class GitHooksCommandTest extends TestCase
         $this->logger->notice(
             "@@ -1 +1 @@\n-old\n+new",
             [
-                'command' => 'git-hooks',
+                'input' => $this->input->reveal(),
                 'hook_name' => 'post-merge',
                 'hook_path' => '/app/.git/hooks/post-merge',
                 'diff' => "@@ -1 +1 @@\n-old\n+new",
@@ -313,7 +313,7 @@ final class GitHooksCommandTest extends TestCase
         $this->logger->notice(
             'Skipped replacing {hook_path}.',
             [
-                'command' => 'git-hooks',
+                'input' => $this->input->reveal(),
                 'hook_name' => 'post-merge',
                 'hook_path' => '/app/.git/hooks/post-merge',
             ],

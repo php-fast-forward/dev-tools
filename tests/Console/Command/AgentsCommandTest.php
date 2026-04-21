@@ -110,7 +110,7 @@ final class AgentsCommandTest extends TestCase
         $this->logger->error(
             'No packaged .agents/agents found at: {packaged_agents_path}',
             [
-                'command' => 'agents',
+                'input' => $this->input->reveal(),
                 'packaged_agents_path' => $agentsPath,
                 'agents_dir' => $agentsPath,
                 'directory_created' => false,
@@ -145,7 +145,7 @@ final class AgentsCommandTest extends TestCase
         $this->logger->info(
             'Agents synchronization completed successfully.',
             [
-                'command' => 'agents',
+                'input' => $this->input->reveal(),
                 'packaged_agents_path' => $agentsPath,
                 'agents_dir' => $agentsPath,
                 'directory_created' => true,
@@ -177,7 +177,7 @@ final class AgentsCommandTest extends TestCase
         $this->logger->error(
             'Agents synchronization failed.',
             [
-                'command' => 'agents',
+                'input' => $this->input->reveal(),
                 'packaged_agents_path' => $agentsPath,
                 'agents_dir' => $agentsPath,
                 'directory_created' => false,

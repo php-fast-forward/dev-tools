@@ -64,6 +64,8 @@ final class SyncCommandTest extends TestCase
         $this->input->getOption(Argument::type('string'))->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
 
         $this->command = new SyncCommand(
             new ProcessBuilder(),
@@ -136,6 +138,8 @@ final class SyncCommandTest extends TestCase
     {
         $this->input->getOption('json')
             ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->processQueue->add(Argument::type(Process::class), false, false)->shouldBeCalledTimes(2);
         $this->processQueue->add(
             Argument::that(static fn(Process $process): bool => str_contains($process->getCommandLine(), '--json')),

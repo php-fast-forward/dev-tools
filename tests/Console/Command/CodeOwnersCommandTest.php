@@ -209,7 +209,7 @@ final class CodeOwnersCommandTest extends TestCase
         $this->logger->notice(
             'Managed file {target_path} already exists. Skipping CODEOWNERS generation.',
             [
-                'command' => 'codeowners',
+                'input' => $this->input->reveal(),
                 'target_path' => $targetPath,
             ],
         )->shouldBeCalledOnce();
@@ -397,7 +397,7 @@ final class CodeOwnersCommandTest extends TestCase
         $this->logger->notice(
             'Skipped updating {target_path}.',
             [
-                'command' => 'codeowners',
+                'input' => $this->input->reveal(),
                 'target_path' => $targetPath,
             ],
         )->shouldBeCalledOnce();

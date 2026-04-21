@@ -125,14 +125,14 @@ final class FundingCommand extends BaseCommand
         $interactive = (bool) $input->getOption('interactive');
 
         $this->logger->info('Synchronizing funding metadata...', [
-            'command' => 'funding',
+            'input' => $input,
         ]);
 
         if (! $this->filesystem->exists($composerFile)) {
             $this->logger->notice(
                 'Composer file {composer_file} does not exist. Skipping funding synchronization.',
                 [
-                    'command' => 'funding',
+                    'input' => $input,
                     'composer_file' => $composerFile,
                     'funding_file' => $fundingFile,
                 ],
@@ -214,7 +214,7 @@ final class FundingCommand extends BaseCommand
         $this->logger->notice(
             $comparison->getSummary(),
             [
-                'command' => 'funding',
+                'input' => $input,
                 'composer_file' => $composerFile,
             ],
         );
@@ -226,7 +226,7 @@ final class FundingCommand extends BaseCommand
                 $this->logger->notice(
                     $consoleDiff,
                     [
-                        'command' => 'funding',
+                        'input' => $input,
                         'composer_file' => $composerFile,
                         'diff' => $comparison->getDiff(),
                     ],
@@ -254,7 +254,7 @@ final class FundingCommand extends BaseCommand
             $this->logger->notice(
                 'Skipped updating {composer_file}.',
                 [
-                    'command' => 'funding',
+                    'input' => $input,
                     'composer_file' => $composerFile,
                 ],
             );
@@ -271,7 +271,7 @@ final class FundingCommand extends BaseCommand
         $this->logger->info(
             'Updated funding metadata in {composer_file}.',
             [
-                'command' => 'funding',
+                'input' => $input,
                 'composer_file' => $composerFile,
             ],
         );
@@ -307,7 +307,7 @@ final class FundingCommand extends BaseCommand
             $this->logger->notice(
                 'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
                 [
-                    'command' => 'funding',
+                    'input' => $input,
                     'funding_file' => $fundingFile,
                 ],
             );
@@ -332,13 +332,10 @@ final class FundingCommand extends BaseCommand
                 : \sprintf('Updating managed file %s from generated funding metadata synchronization.', $fundingFile),
         );
 
-        $this->logger->notice(
-            $comparison->getSummary(),
-            [
-                'command' => 'funding',
-                'funding_file' => $fundingFile,
-            ],
-        );
+        $this->logger->notice($comparison->getSummary(), [
+            'input' => $input,
+            'funding_file' => $fundingFile,
+        ],);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
@@ -347,7 +344,7 @@ final class FundingCommand extends BaseCommand
                 $this->logger->notice(
                     $consoleDiff,
                     [
-                        'command' => 'funding',
+                        'input' => $input,
                         'funding_file' => $fundingFile,
                         'diff' => $comparison->getDiff(),
                     ],
@@ -371,7 +368,7 @@ final class FundingCommand extends BaseCommand
             $this->logger->notice(
                 'Skipped updating {funding_file}.',
                 [
-                    'command' => 'funding',
+                    'input' => $input,
                     'funding_file' => $fundingFile,
                 ],
             );
@@ -385,7 +382,7 @@ final class FundingCommand extends BaseCommand
         $this->logger->info(
             'Updated funding metadata in {funding_file}.',
             [
-                'command' => 'funding',
+                'input' => $input,
                 'funding_file' => $fundingFile,
             ],
         );

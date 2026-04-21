@@ -95,8 +95,7 @@ final class ChangelogPromoteCommandTest extends TestCase
         $this->logger->info(
             'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
             [
-                'command' => 'changelog:promote',
-                'file' => 'CHANGELOG.md',
+                'input' => $this->input->reveal(),
                 'absolute_file' => '/repo/CHANGELOG.md',
                 'version' => '1.2.0',
                 'date' => '2026-04-21',
@@ -119,8 +118,7 @@ final class ChangelogPromoteCommandTest extends TestCase
         $this->logger->info(
             'Promoted Unreleased changelog entries to [{version}] in {absolute_file}.',
             [
-                'command' => 'changelog:promote',
-                'file' => 'CHANGELOG.md',
+                'input' => $this->input->reveal(),
                 'absolute_file' => '/repo/CHANGELOG.md',
                 'version' => '1.2.0',
                 'date' => '2026-04-20',

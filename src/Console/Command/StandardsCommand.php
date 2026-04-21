@@ -73,11 +73,15 @@ final class StandardsCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = (bool) $input->getOption('json');
+        $jsonOutput = $this->isJsonOutput($input);
         $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
         $results = [];
         $commands = [];
         $formatArgument = $jsonOutput ? ' --json' : '';
+
+        if ($this->isPrettyJsonOutput($input)) {
+            $formatArgument .= ' --pretty-json';
+        }
 
         $this->logger->info('Running code standards checks...', [
             'input' => $input,

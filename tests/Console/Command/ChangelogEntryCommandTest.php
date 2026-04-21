@@ -99,8 +99,7 @@ final class ChangelogEntryCommandTest extends TestCase
         $this->logger->info(
             'Added {type} changelog entry to [{release}] in {absolute_file}.',
             [
-                'command' => 'changelog:entry',
-                'file' => 'CHANGELOG.md',
+                'input' => $this->input->reveal(),
                 'absolute_file' => '/repo/CHANGELOG.md',
                 'type' => 'added',
                 'release' => 'Unreleased',
@@ -136,8 +135,7 @@ final class ChangelogEntryCommandTest extends TestCase
         $this->logger->info(
             'Added {type} changelog entry to [{release}] in {absolute_file}.',
             [
-                'command' => 'changelog:entry',
-                'file' => 'CHANGELOG.md',
+                'input' => $this->input->reveal(),
                 'absolute_file' => '/repo/CHANGELOG.md',
                 'type' => 'fixed',
                 'release' => '1.2.0',

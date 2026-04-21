@@ -88,8 +88,7 @@ final class ChangelogNextVersionCommand extends BaseCommand
         $this->logger->info(
             $nextVersion,
             [
-                'command' => 'changelog:next-version',
-                'file' => (string) $input->getOption('file'),
+                'input' => $input,
                 'current_version' => $currentVersion,
                 'next_version' => $nextVersion,
             ],

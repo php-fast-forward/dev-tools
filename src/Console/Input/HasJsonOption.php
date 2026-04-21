@@ -19,24 +19,53 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Input;
 
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
 /**
- * Provides the standard JSON output option used by DevTools commands.
+ * Provides the standard JSON output options used by DevTools commands.
  */
 trait HasJsonOption
 {
     /**
-     * Adds the standard --json option to the current command.
+     * Adds the standard JSON output options to the current command.
      *
      * @return static
      */
     protected function addJsonOption(): static
     {
-        return $this->addOption(
-            name: 'json',
-            mode: InputOption::VALUE_NONE,
-            description: 'Emit structured JSON output.',
-        );
+        return $this
+            ->addOption(name: 'json', mode: InputOption::VALUE_NONE, description: 'Emit structured JSON output.')
+            ->addOption(
+                name: 'pretty-json',
+                mode: InputOption::VALUE_NONE,
+                description: 'Emit structured JSON output using indentation for readability.',
+            );
+    }
+
+    /**
+     * Determines whether JSON output was requested.
+     *
+     * The pretty-json flag SHALL imply JSON output.
+     *
+     * @param InputInterface $input
+     */
+    protected function isJsonOutput(InputInterface $input): bool
+    {
+        if ($this->isPrettyJsonOutput($input)) {
+            return true;
+        }
+
+        return (bool) $input->getOption('json');
+    }
+
+    /**
+     * Determines whether pretty JSON output was requested.
+     *
+     * @param InputInterface $input
+     */
+    protected function isPrettyJsonOutput(InputInterface $input): bool
+    {
+        return (bool) $input->getOption('pretty-json');
     }
 }

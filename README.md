@@ -76,24 +76,24 @@ composer --working-dir=packages/example metrics
 # Add one changelog entry to Unreleased or a published version
 composer changelog:entry "Add changelog automation for release workflows (#28)"
 composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
-composer changelog:entry --output-format=json "Add changelog automation for release workflows (#28)"
+composer changelog:entry --json "Add changelog automation for release workflows (#28)"
 
 # Verify that the current branch added a meaningful Unreleased entry
 composer changelog:check
 composer changelog:check --against=origin/main
-composer changelog:check --output-format=json
+composer changelog:check --json
 
 # Infer the next semantic version from Unreleased
 composer changelog:next-version
-composer changelog:next-version --output-format=json
+composer changelog:next-version --json
 
 # Promote Unreleased into a published version
 composer changelog:promote 1.3.0
-composer changelog:promote 1.3.0 --output-format=json
+composer changelog:promote 1.3.0 --json
 
 # Render one published section as release notes
 composer changelog:show 1.3.0
-composer changelog:show 1.3.0 --output-format=json
+composer changelog:show 1.3.0 --json
 
 # Check and fix code style using ECS and Composer Normalize
 composer code-style
@@ -175,11 +175,13 @@ renders one published section for GitHub release notes.
 
 The first structured-output rollouts are available on `changelog:entry`,
 `changelog:check`, `changelog:next-version`, `changelog:promote`, and
-`changelog:show` through `--output-format=json`, which returns a deterministic
+`changelog:show` through `--json`, which returns a deterministic
 status/message/context payload for CI, bots, and AI-agent workflows while
-preserving the normal human-readable terminal output by default. For
-`changelog:show`, the default text mode still prints the raw release-notes body
-so release workflows can keep piping it directly into GitHub releases.
+preserving the normal human-readable terminal output by default. Use
+`--pretty-json` when you want the same structured payload indented for manual
+inspection in a terminal. For `changelog:show`, the default text mode still
+prints the raw release-notes body so release workflows can keep piping it
+directly into GitHub releases.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

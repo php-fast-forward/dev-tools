@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Logger;
 
 use Stringable;
 use DateTimeInterface;
+use Ergebnis\AgentDetector\Detector;
 use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -36,8 +37,9 @@ use function Safe\json_encode;
  *
  * This logger writes messages to the Symfony console output streams and SHALL
  * route error-related log levels to stderr. Non-error log levels SHALL be
- * written to the standard output stream. When the "--json" option is present,
- * this logger MUST serialize the message payload as JSON.
+ * written to the standard output stream. When the "--json" or "--pretty-json"
+ * option is present, or when an AI agent is detected in the current
+ * environment, this logger MUST serialize the message payload as JSON.
  *
  * The implementation SHOULD be used in CLI environments where an ArgvInput and
  * a ConsoleOutputInterface are available. Callers MAY rely on placeholder
@@ -66,12 +68,14 @@ final readonly class OutputFormatLogger implements LoggerInterface
      * @param ArgvInput $input the CLI input instance used to inspect runtime options
      * @param ConsoleOutputInterface $output the console output instance used for writing log messages
      * @param ClockInterface $clock
+     * @param Detector $agentDetector the detector used to infer whether the current runtime is an agent environment
      * @param ContextProcessorInterface $contextProcessor expands command input and output metadata
      */
     public function __construct(
         private ArgvInput $input,
         private ConsoleOutputInterface $output,
         private ClockInterface $clock,
+        private Detector $agentDetector,
         private ContextProcessorInterface $contextProcessor,
     ) {}
 
@@ -119,15 +123,18 @@ final readonly class OutputFormatLogger implements LoggerInterface
             ->format(DateTimeInterface::RFC3339);
 
         if ($this->isJsonOutput()) {
-            return json_encode(
-                [
-                    'message' => $message,
-                    'level' => $level,
-                    'context' => $context,
-                    'timestamp' => $timestamp,
-                ],
-                \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES
-            );
+            $flags = \JSON_UNESCAPED_UNICODE | \JSON_UNESCAPED_SLASHES;
+
+            if ($this->isPrettyJsonOutput()) {
+                $flags |= \JSON_PRETTY_PRINT;
+            }
+
+            return json_encode([
+                'message' => $message,
+                'level' => $level,
+                'context' => $context,
+                'timestamp' => $timestamp,
+            ], $flags);
         }
 
         $message = $this->interpolate($message, $context);
@@ -138,14 +145,31 @@ final readonly class OutputFormatLogger implements LoggerInterface
     /**
      * Determines whether JSON output has been requested.
      *
-     * The "--json" option MAY be provided by the caller. When present, this
-     * method SHALL return true. Otherwise, it MUST return false.
+     * The "--json" and "--pretty-json" options MAY be provided by the caller.
+     * When either is present, this method SHALL return true. Otherwise,
+     * detected agent environments SHOULD default to JSON output as well.
      *
      * @return bool true when JSON output is enabled; otherwise, false
      */
     private function isJsonOutput(): bool
     {
-        return $this->input->hasParameterOption('--json', true);
+        if ($this->isPrettyJsonOutput()) {
+            return true;
+        }
+
+        if ($this->input->hasParameterOption('--json', true)) {
+            return true;
+        }
+
+        return $this->agentDetector->isAgentPresent($_SERVER);
+    }
+
+    /**
+     * Determines whether pretty JSON output has been requested.
+     */
+    private function isPrettyJsonOutput(): bool
+    {
+        return $this->input->hasParameterOption('--pretty-json', true);
     }
 
     /**
