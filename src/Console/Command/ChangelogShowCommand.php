@@ -75,7 +75,7 @@ final class ChangelogShowCommand extends BaseCommand
                 default: 'CHANGELOG.md',
             )
             ->addOption(
-                name: 'format',
+                name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
                 default: OutputFormat::defaultValue(),

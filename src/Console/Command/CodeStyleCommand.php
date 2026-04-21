@@ -20,10 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -55,11 +58,16 @@ final class CodeStyleCommand extends BaseCommand
      * @param FileLocatorInterface $fileLocator locates the configuration file required by EasyCodingStandard
      * @param ProcessBuilderInterface $processBuilder builds the process instances used to execute Composer and ECS commands
      * @param ProcessQueueInterface $processQueue queues and executes the generated processes in the required order
+     * @param CommandResponderFactoryInterface $commandResponderFactory creates
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responders
      */
     public function __construct(
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -80,6 +88,13 @@ final class CodeStyleCommand extends BaseCommand
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
                 description: 'Automatically fix code style issues.'
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -96,7 +111,15 @@ final class CodeStyleCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Running code style checks and fixes...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $textOutput = OutputFormat::TEXT === $responder->format();
+        $processOutput = $textOutput ? $output : new BufferedOutput();
+
+        $fix = (bool) $input->getOption('fix');
+
+        if ($textOutput) {
+            $output->writeln('<info>Running code style checks and fixes...</info>');
+        }
 
         $composerUpdate = $this->processBuilder
             ->withArgument('--lock')
@@ -105,14 +128,14 @@ final class CodeStyleCommand extends BaseCommand
 
         $composerNormalize = $this->processBuilder
             ->withArgument('--ansi')
-            ->withArgument($input->getOption('fix') ? '--quiet' : '--dry-run')
+            ->withArgument($fix ? '--quiet' : '--dry-run')
             ->build('composer normalize');
 
         $processBuilder = $this->processBuilder
             ->withArgument('--no-progress-bar')
             ->withArgument('--config', $this->fileLocator->locate(self::CONFIG));
 
-        if ($input->getOption('fix')) {
+        if ($fix) {
             $processBuilder = $processBuilder->withArgument('--fix');
         }
 
@@ -122,6 +145,26 @@ final class CodeStyleCommand extends BaseCommand
         $this->processQueue->add($composerNormalize);
         $this->processQueue->add($ecs);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        return self::SUCCESS === $result
+            ? $responder->success(
+                'Code style checks completed successfully.',
+                [
+                    'command' => 'code-style',
+                    'fix' => $fix,
+                    'config' => self::CONFIG,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            )
+            : $responder->failure(
+                'Code style checks failed.',
+                [
+                    'command' => 'code-style',
+                    'fix' => $fix,
+                    'config' => self::CONFIG,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            );
     }
 }

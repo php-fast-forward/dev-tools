@@ -152,12 +152,12 @@ final class ChangelogShowCommandTest extends TestCase
     public function executeWillReturnFailureWhenFormatIsInvalid(): void
     {
         $this->outputFormatResolver->resolve($this->input->reveal())
-            ->willThrow(new InvalidArgumentException('The --format option MUST be one of: text, json.'));
+            ->willThrow(new InvalidArgumentException('The --output-format option MUST be one of: text, json.'));
         $this->changelogManager->renderReleaseNotes(Argument::cetera())
             ->shouldNotBeCalled();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The --format option MUST be one of: text, json.');
+        $this->expectExceptionMessage('The --output-format option MUST be one of: text, json.');
 
         $this->invokeExecute();
     }

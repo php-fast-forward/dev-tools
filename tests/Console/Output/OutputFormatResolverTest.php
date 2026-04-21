@@ -41,7 +41,7 @@ final class OutputFormatResolverTest extends TestCase
     public function resolveWillReturnTextFormatByDefault(): void
     {
         $input = $this->prophesize(InputInterface::class);
-        $input->getOption('format')
+        $input->getOption('output-format')
             ->willReturn('text');
 
         $resolver = new OutputFormatResolver();
@@ -56,7 +56,7 @@ final class OutputFormatResolverTest extends TestCase
     public function resolveWillReturnJsonFormatWhenRequested(): void
     {
         $input = $this->prophesize(InputInterface::class);
-        $input->getOption('format')
+        $input->getOption('output-format')
             ->willReturn('json');
 
         $resolver = new OutputFormatResolver();
@@ -71,7 +71,7 @@ final class OutputFormatResolverTest extends TestCase
     public function resolveWillReturnTextFormatWhenOptionIsEmpty(): void
     {
         $input = $this->prophesize(InputInterface::class);
-        $input->getOption('format')
+        $input->getOption('output-format')
             ->willReturn('');
 
         $resolver = new OutputFormatResolver();
@@ -86,13 +86,13 @@ final class OutputFormatResolverTest extends TestCase
     public function resolveWillRejectUnsupportedFormats(): void
     {
         $input = $this->prophesize(InputInterface::class);
-        $input->getOption('format')
+        $input->getOption('output-format')
             ->willReturn('xml');
 
         $resolver = new OutputFormatResolver();
 
         $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('The --format option MUST be one of: text, json.');
+        $this->expectExceptionMessage('The --output-format option MUST be one of: text, json.');
 
         $resolver->resolve($input->reveal());
     }

@@ -13,25 +13,25 @@ workflow.
 .. code-block:: bash
 
    composer changelog:entry --type=added "Add release automation workflow (#28)"
-   composer changelog:entry --format=json "Add release automation workflow (#28)"
+   composer changelog:entry --output-format=json "Add release automation workflow (#28)"
    composer changelog:check --against=origin/main
-   composer changelog:check --format=json
+   composer changelog:check --output-format=json
    composer changelog:next-version
-   composer changelog:next-version --format=json
+   composer changelog:next-version --output-format=json
    composer changelog:promote 1.3.0 --date=2026-04-19
-   composer changelog:promote 1.3.0 --format=json
+   composer changelog:promote 1.3.0 --output-format=json
    composer changelog:show 1.3.0
-   composer changelog:show 1.3.0 --format=json
+   composer changelog:show 1.3.0 --output-format=json
 
 Important details:
 
 - ``changelog:entry`` creates the changelog file automatically when it does not
   exist yet;
-- ``changelog:entry --format=json`` and
-  ``changelog:check --format=json`` and
-  ``changelog:next-version --format=json`` and
-  ``changelog:promote --format=json`` and
-  ``changelog:show --format=json`` are the initial structured-output rollouts
+- ``changelog:entry --output-format=json`` and
+  ``changelog:check --output-format=json`` and
+  ``changelog:next-version --output-format=json`` and
+  ``changelog:promote --output-format=json`` and
+  ``changelog:show --output-format=json`` are the initial structured-output rollouts
   for automation, CI, and AI-agent consumers;
 - ``changelog:check`` is the command used by pull-request validation;
 - ``changelog:next-version`` and ``changelog:promote`` support the manual

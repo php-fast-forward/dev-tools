@@ -34,7 +34,7 @@ final class OutputFormatResolver implements OutputFormatResolverInterface
      */
     public function resolve(InputInterface $input): OutputFormat
     {
-        $format = $input->getOption('format');
+        $format = $input->getOption('output-format');
 
         if (! \is_string($format) || '' === $format) {
             return OutputFormat::TEXT;
@@ -46,6 +46,6 @@ final class OutputFormatResolver implements OutputFormatResolverInterface
             return $resolvedFormat;
         }
 
-        throw new InvalidArgumentException('The --format option MUST be one of: text, json.');
+        throw new InvalidArgumentException('The --output-format option MUST be one of: text, json.');
     }
 }

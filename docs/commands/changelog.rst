@@ -31,21 +31,21 @@ Usage
 
    composer changelog:entry "Add changelog automation for release workflows (#28)"
    composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
-   composer changelog:entry --format=json "Add changelog automation for release workflows (#28)"
+   composer changelog:entry --output-format=json "Add changelog automation for release workflows (#28)"
 
    composer changelog:check
    composer changelog:check --against=origin/main
-   composer changelog:check --format=json
+   composer changelog:check --output-format=json
 
    composer changelog:next-version
-   composer changelog:next-version --format=json
+   composer changelog:next-version --output-format=json
 
    composer changelog:promote 1.3.0
    composer changelog:promote 1.3.0 --date=2026-04-19
-   composer changelog:promote 1.3.0 --format=json
+   composer changelog:promote 1.3.0 --output-format=json
 
    composer changelog:show 1.3.0
-   composer changelog:show 1.3.0 --format=json
+   composer changelog:show 1.3.0 --output-format=json
 
 Options
 -------
@@ -61,7 +61,7 @@ Options
      date immediately;
    - ``--file=<path>`` to work with a changelog file other than
      ``CHANGELOG.md``;
-   - ``--format=<text|json>`` to switch between normal terminal output and a
+   - ``--output-format=<text|json>`` to switch between normal terminal output and a
      structured machine-readable payload.
 
 ``changelog:check``
@@ -70,7 +70,7 @@ Options
    - ``--against=<git-ref>`` to compare the current changelog against a base
      branch or commit;
    - ``--file=<path>`` to validate another changelog path;
-   - ``--format=<text|json>`` to switch between normal terminal output and a
+   - ``--output-format=<text|json>`` to switch between normal terminal output and a
      structured machine-readable payload.
 
 ``changelog:next-version``
@@ -79,7 +79,7 @@ Options
    - ``--current-version=<semver>`` when the current published version should
      be supplied explicitly instead of inferred from the changelog;
    - ``--file=<path>`` to inspect another changelog path;
-   - ``--format=<text|json>`` to switch between normal terminal output and a
+   - ``--output-format=<text|json>`` to switch between normal terminal output and a
      structured machine-readable payload.
 
 ``changelog:promote``
@@ -88,7 +88,7 @@ Options
    - the required version argument;
    - ``--date=<YYYY-MM-DD>`` to control the published release date;
    - ``--file=<path>`` to promote another changelog path;
-   - ``--format=<text|json>`` to switch between normal terminal output and a
+   - ``--output-format=<text|json>`` to switch between normal terminal output and a
      structured machine-readable payload.
 
 ``changelog:show``
@@ -96,7 +96,7 @@ Options
 
    - the required version argument;
    - ``--file=<path>`` to render another changelog path;
-   - ``--format=<text|json>`` to switch between raw release-note text and a
+   - ``--output-format=<text|json>`` to switch between raw release-note text and a
      structured machine-readable payload.
 
 Behavior
@@ -106,25 +106,25 @@ Behavior
   when the selected file does not exist yet;
 - ``changelog:check`` returns a failing exit code when ``Unreleased`` is empty
   or does not differ from the selected baseline ref;
-- ``changelog:entry --format=json`` emits the authoring summary as the
+- ``changelog:entry --output-format=json`` emits the authoring summary as the
   ``message`` plus structured context describing the file, category, release,
   optional date, and entry text;
-- ``changelog:check --format=json`` emits a deterministic JSON payload with
+- ``changelog:check --output-format=json`` emits a deterministic JSON payload with
   ``status``, ``message``, and ``context`` keys for automation consumers;
-- ``changelog:next-version --format=json`` emits the inferred semantic version
+- ``changelog:next-version --output-format=json`` emits the inferred semantic version
   as the ``message`` plus structured context describing the inspected changelog
   path and optional current version;
 - ``changelog:next-version`` uses ``Removed`` or ``Deprecated`` entries for a
   major bump, ``Added`` or ``Changed`` entries for a minor bump, and otherwise
   falls back to a patch bump;
-- ``changelog:promote --format=json`` emits the promotion summary as the
+- ``changelog:promote --output-format=json`` emits the promotion summary as the
   ``message`` plus structured context describing the file, version, and
   release date written to the changelog;
 - ``changelog:promote`` restores an empty ``Unreleased`` section after
   publishing the requested version;
 - ``changelog:show`` prints only the release body in text mode so workflows can
   feed it directly into GitHub release notes;
-- ``changelog:show --format=json`` emits the rendered release-notes body as the
+- ``changelog:show --output-format=json`` emits the rendered release-notes body as the
   ``message`` plus structured context describing the file, version, and
   release notes content.
 

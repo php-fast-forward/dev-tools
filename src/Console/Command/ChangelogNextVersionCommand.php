@@ -70,7 +70,7 @@ final class ChangelogNextVersionCommand extends BaseCommand
                 description: 'Explicit current version to use as the bump base.',
             )
             ->addOption(
-                name: 'format',
+                name: 'output-format',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Output format for the command result. Supported values: text, json.',
                 default: OutputFormat::defaultValue(),
