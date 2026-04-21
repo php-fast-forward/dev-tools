@@ -21,11 +21,11 @@ namespace FastForward\DevTools\Tests\Console\Output;
 
 use Prophecy\Argument;
 use FastForward\DevTools\Console\Output\CommandResponder;
+use FastForward\DevTools\Console\Output\CommandResponderFactory;
 use FastForward\DevTools\Console\Output\CommandResult;
 use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
 use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
-use FastForward\DevTools\Console\Output\ResolvedCommandResponder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -33,9 +33,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[CoversClass(CommandResponder::class)]
 #[CoversClass(CommandResult::class)]
-#[CoversClass(ResolvedCommandResponder::class)]
+#[CoversClass(CommandResponder::class)]
+#[CoversClass(CommandResponderFactory::class)]
 final class CommandResponderTest extends TestCase
 {
     use ProphecyTrait;
@@ -55,9 +55,9 @@ final class CommandResponderTest extends TestCase
             ->willReturn(OutputFormat::JSON)
             ->shouldBeCalled();
 
-        $responder = new CommandResponder($outputFormatResolver->reveal(), $commandResultRenderer->reveal());
+        $responder = new CommandResponderFactory($outputFormatResolver->reveal(), $commandResultRenderer->reveal());
 
-        self::assertInstanceOf(ResolvedCommandResponder::class, $responder->from($input->reveal(), $output->reveal()));
+        self::assertInstanceOf(CommandResponder::class, $responder->from($input->reveal(), $output->reveal()));
     }
 
     /**
@@ -76,7 +76,7 @@ final class CommandResponderTest extends TestCase
             OutputFormat::TEXT,
         )->shouldBeCalled();
 
-        $responder = new ResolvedCommandResponder(
+        $responder = new CommandResponder(
             $output->reveal(),
             OutputFormat::TEXT,
             $commandResultRenderer->reveal(),
@@ -101,7 +101,7 @@ final class CommandResponderTest extends TestCase
             OutputFormat::JSON,
         )->shouldBeCalled();
 
-        $responder = new ResolvedCommandResponder(
+        $responder = new CommandResponder(
             $output->reveal(),
             OutputFormat::JSON,
             $commandResultRenderer->reveal(),

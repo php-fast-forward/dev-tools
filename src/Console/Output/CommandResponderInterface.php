@@ -19,21 +19,30 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Output;
 
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-
 /**
- * Resolves command output configuration and renders normalized responses.
+ * Responds to a command after its output format has already been resolved.
  */
 interface CommandResponderInterface
 {
     /**
-     * Creates a resolved responder for one command execution.
+     * Renders a success response and returns the selected exit code.
      *
-     * @param InputInterface $input the active command input
-     * @param OutputInterface $output the active command output
+     * @param string $message the human-readable summary
+     * @param array<string, mixed> $context structured response context
+     * @param int $exitCode the exit code to return
      *
-     * @return ResolvedCommandResponderInterface the responder bound to the resolved format and output
+     * @return int the selected exit code
      */
-    public function from(InputInterface $input, OutputInterface $output): ResolvedCommandResponderInterface;
+    public function success(string $message, array $context = [], int $exitCode = 0): int;
+
+    /**
+     * Renders a failure response and returns the selected exit code.
+     *
+     * @param string $message the human-readable summary
+     * @param array<string, mixed> $context structured response context
+     * @param int $exitCode the exit code to return
+     *
+     * @return int the selected exit code
+     */
+    public function failure(string $message, array $context = [], int $exitCode = 1): int;
 }

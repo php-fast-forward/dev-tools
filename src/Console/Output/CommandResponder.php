@@ -19,35 +19,57 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Output;
 
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Resolves a command responder bound to the current input and output context.
+ * Renders success and failure responses for one resolved command execution.
  */
 final readonly class CommandResponder implements CommandResponderInterface
 {
     /**
-     * @param OutputFormatResolverInterface $outputFormatResolver resolves the output format from console input
+     * @param OutputInterface $output the active command output
+     * @param OutputFormat $format the resolved output format
      * @param CommandResultRendererInterface $commandResultRenderer renders normalized command results
      */
     public function __construct(
-        private OutputFormatResolverInterface $outputFormatResolver,
+        private OutputInterface $output,
+        private OutputFormat $format,
         private CommandResultRendererInterface $commandResultRenderer,
     ) {}
 
     /**
-     * @param InputInterface $input the active command input
-     * @param OutputInterface $output the active command output
+     * @param string $message the human-readable summary
+     * @param array<string, mixed> $context structured response context
+     * @param int $exitCode the exit code to return
      *
-     * @return ResolvedCommandResponderInterface the responder bound to the resolved format and output
+     * @return int the selected exit code
      */
-    public function from(InputInterface $input, OutputInterface $output): ResolvedCommandResponderInterface
+    public function success(string $message, array $context = [], int $exitCode = 0): int
     {
-        return new ResolvedCommandResponder(
-            $output,
-            $this->outputFormatResolver->resolve($input),
-            $this->commandResultRenderer,
+        $this->commandResultRenderer->render(
+            $this->output,
+            CommandResult::success($message, $context),
+            $this->format,
         );
+
+        return $exitCode;
+    }
+
+    /**
+     * @param string $message the human-readable summary
+     * @param array<string, mixed> $context structured response context
+     * @param int $exitCode the exit code to return
+     *
+     * @return int the selected exit code
+     */
+    public function failure(string $message, array $context = [], int $exitCode = 1): int
+    {
+        $this->commandResultRenderer->render(
+            $this->output,
+            CommandResult::failure($message, $context),
+            $this->format,
+        );
+
+        return $exitCode;
     }
 }

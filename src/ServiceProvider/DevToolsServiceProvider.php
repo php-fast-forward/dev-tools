@@ -27,8 +27,9 @@ use FastForward\DevTools\Changelog\Parser\ChangelogParserInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Console\Output\CommandResponder;
 use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Console\Output\CommandResponderFactory;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
 use FastForward\DevTools\Console\Output\CommandResultRenderer;
 use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
 use FastForward\DevTools\Console\Output\OutputFormatResolver;
@@ -135,7 +136,7 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             // Console
             CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
             CommandProvider::class => get(DevToolsCommandProvider::class),
-            CommandResponderInterface::class => get(CommandResponder::class),
+            CommandResponderFactoryInterface::class => get(CommandResponderFactory::class),
             OutputFormatResolverInterface::class => get(OutputFormatResolver::class),
             CommandResultRendererInterface::class => get(CommandResultRenderer::class),
 

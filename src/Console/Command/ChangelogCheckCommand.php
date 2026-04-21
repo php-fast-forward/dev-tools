@@ -21,7 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
-use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
 use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -42,12 +42,12 @@ final class ChangelogCheckCommand extends BaseCommand
     /**
      * @param FilesystemInterface $filesystem
      * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker
-     * @param CommandResponderInterface $commandResponder
+     * @param CommandResponderFactoryInterface $commandResponderFactory
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker,
-        private readonly CommandResponderInterface $commandResponder,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -86,7 +86,7 @@ final class ChangelogCheckCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $responder = $this->commandResponder->from($input, $output);
+        $responder = $this->commandResponderFactory->from($input, $output);
 
         $path = $this->filesystem->getAbsolutePath($input->getOption('file'));
         $against = $input->getOption('against');
