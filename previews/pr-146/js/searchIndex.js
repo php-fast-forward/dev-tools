@@ -2016,6 +2016,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-PhpDocCommand.html#property_clock"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-PhpDocCommand.html#property_commandResponderFactory"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\RefactorCommand",
             "name": "RefactorCommand",
             "summary": "Provides\u0020functionality\u0020to\u0020execute\u0020automated\u0020code\u0020refactoring\u0020using\u0020Rector.",
