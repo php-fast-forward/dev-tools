@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-21 02:32:14        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-21 02:44:54        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -431,12 +431,10 @@
             "\\Composer\\Command\\BaseCommand",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
-            "\\FastForward\\DevTools\\Console\\Output\\OutputFormatResolverInterface",
-            "\\FastForward\\DevTools\\Console\\Output\\CommandResultRendererInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface",
             "\\FastForward\\DevTools\\Console\\Output\\OutputFormat",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\FastForward\\DevTools\\Console\\Output\\CommandResult"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
         ]
     },
     {
@@ -445,22 +443,12 @@
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Output\\OutputFormatResolverInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Output\\CommandResultRendererInterface",
+        "name": "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface",
         "size": 3000,
         "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Console\\Output\\OutputFormat",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Output\\CommandResult",
         "size": 3000,
         "relations": []
     },
@@ -864,6 +852,50 @@
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Filesystem\\Path",
             "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Output\\CommandResult",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Output\\CommandResponder",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Console\\Output\\CommandResponderInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\OutputFormatResolverInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\CommandResultRendererInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponderInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Output\\OutputFormatResolverInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Output\\CommandResultRendererInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponder",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Console\\Output\\ResolvedCommandResponderInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\OutputFormat",
+            "\\FastForward\\DevTools\\Console\\Output\\CommandResultRendererInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\CommandResult"
         ]
     },
     {

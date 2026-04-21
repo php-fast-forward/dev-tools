@@ -1,45 +1,45 @@
 {
     "LOC": {
-        "linesOfCode": 7344,
-        "logicalLinesOfCode": 3756,
-        "commentLinesOfCode": 3595,
-        "avgVolume": 440.95,
-        "avgCommentWeight": 43.86,
-        "avgIntelligentContent": 43.86,
-        "logicalLinesByClass": 44,
+        "linesOfCode": 7400,
+        "logicalLinesOfCode": 3778,
+        "commentLinesOfCode": 3629,
+        "avgVolume": 431.11,
+        "avgCommentWeight": 43.92,
+        "avgIntelligentContent": 43.92,
+        "logicalLinesByClass": 43,
         "logicalLinesByMethod": 11
     },
     "OOP": {
-        "classes": 85,
-        "interface": 30,
-        "methods": 345,
-        "methodsByClass": 4.06,
+        "classes": 87,
+        "interface": 32,
+        "methods": 350,
+        "methodsByClass": 4.02,
         "lackCohesionOfMethods": 2.13
     },
     "Coupling": {
-        "avgAfferentCoupling": 0.58,
-        "avgEfferentCoupling": 4.45,
-        "avgInstability": 0.84,
+        "avgAfferentCoupling": 0.57,
+        "avgEfferentCoupling": 4.46,
+        "avgInstability": 0.85,
         "inheritanceTreeDepth": 1.08
     },
     "Package": {
         "packages": 31,
-        "acgClassesPerPackage": 3.71,
+        "acgClassesPerPackage": 3.84,
         "avgDistance": 0.15,
         "avgIncomingClassDependencies": 2.9,
-        "avgOutgoingClassDependencies": 5.35,
+        "avgOutgoingClassDependencies": 5.29,
         "avgIncomingPackageDependencies": 1.35,
         "avgOutgoingPackageDependencies": 4.03
     },
     "Complexity": {
-        "avgCyclomaticComplexityByClass": 8.24,
-        "avgWeightedMethodCountByClass": 11.29,
-        "avgRelativeSystemComplexity": 163.85,
-        "avgDifficulty": 7.15
+        "avgCyclomaticComplexityByClass": 8.06,
+        "avgWeightedMethodCountByClass": 11.08,
+        "avgRelativeSystemComplexity": 159.37,
+        "avgDifficulty": 6.98
     },
     "Bugs": {
-        "avgBugsByClass": 0.15,
-        "avgDefectsByClass": 0.57
+        "avgBugsByClass": 0.14,
+        "avgDefectsByClass": 0.56
     },
     "Violations": {
         "critical": 0,
