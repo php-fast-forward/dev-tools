@@ -25,6 +25,9 @@ use FastForward\DevTools\Composer\Json\Schema\Author;
 use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Console\Command\PhpDocCommand;
 use FastForward\DevTools\Console\Command\RefactorCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -45,6 +48,7 @@ use Symfony\Component\Process\Process;
 use Twig\Environment;
 
 #[CoversClass(PhpDocCommand::class)]
+#[CoversClass(OutputFormat::class)]
 #[UsesClass(Author::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesClass(Support::class)]
@@ -92,6 +96,16 @@ final class PhpDocCommandTest extends TestCase
      */
     private ObjectProphecy $output;
 
+    /**
+     * @var ObjectProphecy<CommandResponderFactoryInterface>
+     */
+    private ObjectProphecy $commandResponderFactory;
+
+    /**
+     * @var ObjectProphecy<CommandResponderInterface>
+     */
+    private ObjectProphecy $commandResponder;
+
     private PhpDocCommand $command;
 
     /**
@@ -107,6 +121,8 @@ final class PhpDocCommandTest extends TestCase
         $this->clock = $this->prophesize(ClockInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
+        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
+        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
 
         $this->command = new PhpDocCommand(
             new ProcessBuilder(),
@@ -116,6 +132,7 @@ final class PhpDocCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->renderer->reveal(),
             $this->clock->reveal(),
+            $this->commandResponderFactory->reveal(),
         );
 
         $this->input->getOption('fix')
@@ -128,6 +145,10 @@ final class PhpDocCommandTest extends TestCase
             ->willReturn('/app/rector.php');
         $this->filesystem->getAbsolutePath(PhpDocCommand::CACHE_FILE, 'tmp/cache/php-cs-fixer')
             ->willReturn('/app/tmp/cache/php-cs-fixer/.php-cs-fixer.cache');
+        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
+            ->willReturn($this->commandResponder->reveal());
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::TEXT);
     }
 
     /**
@@ -160,6 +181,16 @@ final class PhpDocCommandTest extends TestCase
             ->shouldBeCalled();
         $this->output->writeln('<info>Created .docheader from repository template.</info>')
             ->shouldBeCalled();
+        $this->commandResponder->success(
+            'PHPDoc checks completed successfully.',
+            [
+                'command' => 'phpdoc',
+                'fix' => false,
+                'cache_dir' => 'tmp/cache/php-cs-fixer',
+                'config' => PhpDocCommand::CONFIG,
+                'process_output' => null,
+            ],
+        )->willReturn(PhpDocCommand::SUCCESS)->shouldBeCalledOnce();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }
@@ -185,6 +216,47 @@ final class PhpDocCommandTest extends TestCase
             '<comment>Skipping .docheader creation because the destination file could not be written.</comment>'
         )
             ->shouldBeCalled();
+        $this->commandResponder->success(
+            'PHPDoc checks completed successfully.',
+            [
+                'command' => 'phpdoc',
+                'fix' => false,
+                'cache_dir' => 'tmp/cache/php-cs-fixer',
+                'config' => PhpDocCommand::CONFIG,
+                'process_output' => null,
+            ],
+        )->willReturn(PhpDocCommand::SUCCESS)->shouldBeCalledOnce();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillCapturePhpDocOutputWhenJsonOutputIsRequested(): void
+    {
+        $this->willRenderDocHeader();
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::JSON);
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'Content')
+            ->shouldBeCalledOnce();
+        $this->output->writeln(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->add(Argument::type(Process::class))
+            ->shouldBeCalledTimes(2);
+        $this->processQueue->run(Argument::type('object'))
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'PHPDoc checks completed successfully.',
+            Argument::that(static fn(array $context): bool => 'phpdoc' === $context['command']
+                && false === $context['fix']
+                && 'tmp/cache/php-cs-fixer' === $context['cache_dir']
+                && PhpDocCommand::CONFIG === $context['config']
+                && \is_string($context['process_output'])
+                && str_contains($context['process_output'], 'Created .docheader from repository template.')),
+        )->willReturn(PhpDocCommand::SUCCESS)->shouldBeCalledOnce();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }

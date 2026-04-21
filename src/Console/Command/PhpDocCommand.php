@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -32,6 +34,7 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -71,6 +74,11 @@ final class PhpDocCommand extends BaseCommand
      * @param ComposerJsonInterface $composer
      * @param Environment $renderer
      * @param ClockInterface $clock
+     * @param CommandResponderFactoryInterface $commandResponderFactory the
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responder
+     *                                                                  factory
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -80,6 +88,7 @@ final class PhpDocCommand extends BaseCommand
         private readonly FilesystemInterface $filesystem,
         private readonly Environment $renderer,
         private readonly ClockInterface $clock,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -111,6 +120,13 @@ final class PhpDocCommand extends BaseCommand
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the cache directory for PHP-CS-Fixer.',
                 default: 'tmp/cache/php-cs-fixer',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -127,9 +143,16 @@ final class PhpDocCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Checking and fixing PHPDocs...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $textOutput = OutputFormat::TEXT === $responder->format();
+        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $fix = (bool) $input->getOption('fix');
 
-        $this->ensureDocHeaderExists($output);
+        if ($textOutput) {
+            $output->writeln('<info>Checking and fixing PHPDocs...</info>');
+        }
+
+        $this->ensureDocHeaderExists($processOutput);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -140,7 +163,7 @@ final class PhpDocCommand extends BaseCommand
                 $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
             );
 
-        if (! $input->getOption('fix')) {
+        if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
@@ -151,7 +174,7 @@ final class PhpDocCommand extends BaseCommand
             ->withArgument('--autoload-file', 'vendor/autoload.php')
             ->withArgument('--only', AddMissingMethodPhpDocRector::class);
 
-        if (! $input->getOption('fix')) {
+        if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
@@ -160,7 +183,29 @@ final class PhpDocCommand extends BaseCommand
         $this->processQueue->add($phpCsFixer);
         $this->processQueue->add($rector);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        return self::SUCCESS === $result
+            ? $responder->success(
+                'PHPDoc checks completed successfully.',
+                [
+                    'command' => 'phpdoc',
+                    'fix' => $fix,
+                    'cache_dir' => $input->getOption('cache-dir'),
+                    'config' => self::CONFIG,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            )
+            : $responder->failure(
+                'PHPDoc checks failed.',
+                [
+                    'command' => 'phpdoc',
+                    'fix' => $fix,
+                    'cache_dir' => $input->getOption('cache-dir'),
+                    'config' => self::CONFIG,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            );
     }
 
     /**
