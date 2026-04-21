@@ -20,6 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\ReportsCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\CommandResponderInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -34,6 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
+#[CoversClass(OutputFormat::class)]
 final class ReportsCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -73,6 +77,16 @@ final class ReportsCommandTest extends TestCase
      */
     private ObjectProphecy $metricsProcess;
 
+    /**
+     * @var ObjectProphecy<CommandResponderFactoryInterface>
+     */
+    private ObjectProphecy $commandResponderFactory;
+
+    /**
+     * @var ObjectProphecy<CommandResponderInterface>
+     */
+    private ObjectProphecy $commandResponder;
+
     private ReportsCommand $command;
 
     /**
@@ -87,6 +101,8 @@ final class ReportsCommandTest extends TestCase
         $this->docsProcess = $this->prophesize(Process::class);
         $this->testsProcess = $this->prophesize(Process::class);
         $this->metricsProcess = $this->prophesize(Process::class);
+        $this->commandResponderFactory = $this->prophesize(CommandResponderFactoryInterface::class);
+        $this->commandResponder = $this->prophesize(CommandResponderInterface::class);
 
         $this->input->getOption('target')
             ->willReturn('.dev-tools');
@@ -106,10 +122,15 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->build('composer dev-tools metrics --')
             ->willReturn($this->metricsProcess->reveal());
 
-        $this->processQueue->run($this->output->reveal())
-            ->willReturn(ReportsCommand::SUCCESS);
-
-        $this->command = new ReportsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
+        $this->command = new ReportsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->commandResponderFactory->reveal(),
+        );
+        $this->commandResponderFactory->from($this->input->reveal(), $this->output->reveal())
+            ->willReturn($this->commandResponder->reveal());
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::TEXT);
     }
 
     /**
@@ -137,6 +158,7 @@ final class ReportsCommandTest extends TestCase
         self::assertTrue($definition->hasOption('target'));
         self::assertTrue($definition->hasOption('coverage'));
         self::assertTrue($definition->hasOption('metrics'));
+        self::assertTrue($definition->hasOption('output-format'));
     }
 
     /**
@@ -146,6 +168,9 @@ final class ReportsCommandTest extends TestCase
     public function executeWillRunDocsAsDetachedAndTestsAndMetricsInSequence(): void
     {
         $this->output->writeln('<info>Generating frontpage for Fast Forward documentation...</info>')
+            ->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
             ->shouldBeCalledOnce();
 
         $this->processBuilder->withArgument('--ansi')
@@ -183,6 +208,16 @@ final class ReportsCommandTest extends TestCase
 
         $this->processQueue->add($this->metricsProcess->reveal())
             ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Documentation reports generated successfully.',
+            [
+                'command' => 'reports',
+                'target' => '.dev-tools',
+                'coverage' => '.dev-tools/coverage',
+                'metrics' => '.dev-tools/metrics',
+                'process_output' => null,
+            ],
+        )->willReturn(ReportsCommand::SUCCESS)->shouldBeCalledOnce();
 
         $result = $this->executeCommand();
 
@@ -204,6 +239,9 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->withArgument('--junit', '.dev-tools/coverage/junit.xml')
             ->shouldBeCalledOnce()
             ->willReturn($this->processBuilder->reveal());
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
 
         $this->processQueue->add($this->docsProcess->reveal(), false, true)
             ->shouldBeCalledOnce();
@@ -211,6 +249,50 @@ final class ReportsCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->metricsProcess->reveal())
             ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Documentation reports generated successfully.',
+            [
+                'command' => 'reports',
+                'target' => '.dev-tools',
+                'coverage' => '.dev-tools/coverage',
+                'metrics' => 'tmp/metrics',
+                'process_output' => null,
+            ],
+        )->willReturn(ReportsCommand::SUCCESS)->shouldBeCalledOnce();
+
+        self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillPropagateJsonOutputFormatToSubCommands(): void
+    {
+        $this->commandResponder->format()
+            ->willReturn(OutputFormat::JSON);
+        $this->output->writeln(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processBuilder->withArgument('--output-format', 'json')
+            ->shouldBeCalledTimes(3)
+            ->willReturn($this->processBuilder->reveal());
+        $this->processQueue->add($this->docsProcess->reveal(), false, true)
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->testsProcess->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add($this->metricsProcess->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->run(Argument::type('object'))
+            ->willReturn(ReportsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->commandResponder->success(
+            'Documentation reports generated successfully.',
+            Argument::that(static fn(array $context): bool => 'reports' === $context['command']
+                && '.dev-tools' === $context['target']
+                && '.dev-tools/coverage' === $context['coverage']
+                && '.dev-tools/metrics' === $context['metrics']
+                && \is_string($context['process_output'])),
+        )->willReturn(ReportsCommand::SUCCESS)->shouldBeCalledOnce();
 
         self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
     }
