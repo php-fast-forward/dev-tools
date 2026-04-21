@@ -2952,18 +2952,35 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">28</span>
+    <span class="badge text-bg-light border">32</span>
 
     </aside>
         </div>
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Emits GitHub Actions workflow commands when the current environment supports them.</p>
+        <p class="lead text-body-secondary mb-0">Emits GitHub Actions workflow commands through the console output stream.</p>
     </div>
 
 
 
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>The helper becomes a no-op outside GitHub Actions, which lets callers route
+annotations and log groups through a single API without branching on the
+environment first.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
 
 
 
@@ -3087,7 +3104,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Emits a debug log line.
+                Emits a debug workflow command.
             </p>
             </div>
 
@@ -3125,7 +3142,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Emits an error annotation.
+                Emits an error annotation for the current workflow step.
             </p>
             </div>
 
@@ -3163,7 +3180,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Emits a notice annotation.
+                Emits a notice annotation for the current workflow step.
             </p>
             </div>
 
@@ -3182,7 +3199,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Starts a collapsible log group.
+                Starts a collapsible GitHub Actions log group.
             </p>
             </div>
 
@@ -3201,7 +3218,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Emits a warning annotation.
+                Emits a warning annotation for the current workflow step.
             </p>
             </div>
 
@@ -3219,6 +3236,9 @@
             emit()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Emits a raw workflow command after escaping its properties and payload.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3235,6 +3255,9 @@
             escapeData()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Escapes workflow-command payload data according to GitHub Actions rules.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3251,6 +3274,9 @@
             escapeProperty()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Escapes workflow-command property values according to GitHub Actions rules.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3267,6 +3293,9 @@
             supportsWorkflowCommands()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Determines whether workflow commands should be emitted for the current process.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3340,7 +3369,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">30</span>
+    <span class="badge text-bg-light border">34</span>
 
     </aside>
     
@@ -3414,7 +3443,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">36</span>
+    <span class="badge text-bg-light border">40</span>
 
     </aside>
     
@@ -3507,7 +3536,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">35</span>
+    <span class="badge text-bg-light border">39</span>
 
     </aside>
     
@@ -3613,7 +3642,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">42</span>
+    <span class="badge text-bg-light border">46</span>
 
     </aside>
         <div class="mb-4">
@@ -3680,11 +3709,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">143</span>
+    <span class="badge text-bg-light border">147</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Emits a debug log line.</p>
+        <p class="lead text-body-secondary mb-0">Emits a debug workflow command.</p>
     </div>
 
 
@@ -3790,7 +3819,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">170</span>
+    <span class="badge text-bg-light border">174</span>
 
     </aside>
         <div class="mb-4">
@@ -3857,11 +3886,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">59</span>
+    <span class="badge text-bg-light border">63</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Emits an error annotation.</p>
+        <p class="lead text-body-secondary mb-0">Emits an error annotation for the current workflow step.</p>
     </div>
 
 
@@ -4075,7 +4104,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">190</span>
+    <span class="badge text-bg-light border">194</span>
 
     </aside>
         <div class="mb-4">
@@ -4272,11 +4301,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">117</span>
+    <span class="badge text-bg-light border">121</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Emits a notice annotation.</p>
+        <p class="lead text-body-secondary mb-0">Emits a notice annotation for the current workflow step.</p>
     </div>
 
 
@@ -4490,11 +4519,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">155</span>
+    <span class="badge text-bg-light border">159</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Starts a collapsible log group.</p>
+        <p class="lead text-body-secondary mb-0">Starts a collapsible GitHub Actions log group.</p>
     </div>
 
 
@@ -4600,11 +4629,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">88</span>
+    <span class="badge text-bg-light border">92</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Emits a warning annotation.</p>
+        <p class="lead text-body-secondary mb-0">Emits a warning annotation for the current workflow step.</p>
     </div>
 
 
@@ -4818,10 +4847,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">208</span>
+    <span class="badge text-bg-light border">212</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Emits a raw workflow command after escaping its properties and payload.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4997,10 +5029,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">248</span>
+    <span class="badge text-bg-light border">257</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Escapes workflow-command payload data according to GitHub Actions rules.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -5108,10 +5143,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">261</span>
+    <span class="badge text-bg-light border">270</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Escapes workflow-command property values according to GitHub Actions rules.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -5219,10 +5257,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">237</span>
+    <span class="badge text-bg-light border">246</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Determines whether workflow commands should be emitted for the current process.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -5240,6 +5281,22 @@
 
     
     
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>The helper suppresses workflow commands during the PHPUnit suite even
+when the tests themselves run inside GitHub Actions.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
 
     
     

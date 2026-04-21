@@ -2973,14 +2973,14 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">43</span>
+    <span class="badge text-bg-light border">47</span>
 
     </aside>
         </div>
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Handles the generation of API documentation for the project.</p>
+        <p class="lead text-body-secondary mb-0">Generates the package API documentation through phpDocumentor.</p>
     </div>
 
 
@@ -2994,7 +2994,10 @@
                     </div>
 
                     <div>
-                        <p>This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.</p>
+                        <p>The command prepares a temporary phpDocumentor configuration from the
+current package metadata, then delegates execution to the shared process
+queue so logging and grouped output stay consistent with the rest of the
+command surface.</p>
 
                     </div>
                 </div>
@@ -3077,7 +3080,7 @@
                             <a href="classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html" class="fw-semibold text-decoration-none">
                                 <a href="classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html"><abbr title="\FastForward\DevTools\Console\Command\LoggerAwareCommandInterface">LoggerAwareCommandInterface</abbr></a>
                             </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Defines the logger contract expected by reusable command logging helpers.</p>
+                                                            <p class="text-body-secondary mb-0 mt-1">Defines the logger contract consumed by reusable command result helpers.</p>
                                                     </div>
                                     </div>
             </section>
@@ -3247,7 +3250,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Configures the command instance.
+                Configures the command options used to generate API documentation.
             </p>
             </div>
 
@@ -3266,7 +3269,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Executes the generation of the documentation files.
+                Generates the HTML API documentation for the configured source tree.
             </p>
             </div>
 
@@ -3342,7 +3345,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Logs a failed command result and returns a failure exit code.
+                Logs a failed command result and returns the failure exit code.
             </p>
             </div>
 
@@ -3361,7 +3364,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Logs a notice-level command message.
+                Logs an informational command message at notice level.
             </p>
             </div>
 
@@ -3380,7 +3383,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Logs a successful command result and returns a success exit code.
+                Logs a successful command result and returns the success exit code.
             </p>
             </div>
 
@@ -3456,7 +3459,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">68</span>
+    <span class="badge text-bg-light border">72</span>
 
     </aside>
     
@@ -3526,7 +3529,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">67</span>
+    <span class="badge text-bg-light border">71</span>
 
     </aside>
     
@@ -3596,7 +3599,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">69</span>
+    <span class="badge text-bg-light border">73</span>
 
     </aside>
     
@@ -3666,7 +3669,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">64</span>
+    <span class="badge text-bg-light border">68</span>
 
     </aside>
     
@@ -3736,7 +3739,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">65</span>
+    <span class="badge text-bg-light border">69</span>
 
     </aside>
     
@@ -3806,7 +3809,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">66</span>
+    <span class="badge text-bg-light border">70</span>
 
     </aside>
     
@@ -3899,7 +3902,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">63</span>
+    <span class="badge text-bg-light border">67</span>
 
     </aside>
         <div class="mb-4">
@@ -4244,11 +4247,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">82</span>
+    <span class="badge text-bg-light border">81</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Configures the command instance.</p>
+        <p class="lead text-body-secondary mb-0">Configures the command options used to generate API documentation.</p>
     </div>
 
 
@@ -4268,22 +4271,6 @@
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>The method MUST set up the name and description. It MAY accept an optional <code class="prettyprint">--target</code> option
-pointing to an alternative configuration target path.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
     
     
@@ -4327,11 +4314,11 @@ pointing to an alternative configuration target path.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">129</span>
+    <span class="badge text-bg-light border">125</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Executes the generation of the documentation files.</p>
+        <p class="lead text-body-secondary mb-0">Generates the HTML API documentation for the configured source tree.</p>
     </div>
 
 
@@ -4353,22 +4340,6 @@ pointing to an alternative configuration target path.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>This method MUST compile arguments based on PSR-4 namespaces to feed into phpDocumentor.
-It SHOULD provide feedback on generation progress, and SHALL return <code class="prettyprint">self::SUCCESS</code> on success.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4760,7 +4731,7 @@ It SHOULD provide feedback on generation progress, and SHALL return <code class=
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">192</span>
+    <span class="badge text-bg-light border">188</span>
 
     </aside>
         <div class="mb-4">
@@ -5006,11 +4977,11 @@ It SHOULD provide feedback on generation progress, and SHALL return <code class=
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">89</span>
+    <span class="badge text-bg-light border">93</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Logs a failed command result and returns a failure exit code.</p>
+        <p class="lead text-body-secondary mb-0">Logs a failed command result and returns the failure exit code.</p>
     </div>
 
 
@@ -5274,11 +5245,11 @@ It SHOULD provide feedback on generation progress, and SHALL return <code class=
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">42</span>
+    <span class="badge text-bg-light border">46</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Logs a notice-level command message.</p>
+        <p class="lead text-body-secondary mb-0">Logs an informational command message at notice level.</p>
     </div>
 
 
@@ -5453,11 +5424,11 @@ It SHOULD provide feedback on generation progress, and SHALL return <code class=
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">61</span>
+    <span class="badge text-bg-light border">65</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Logs a successful command result and returns a success exit code.</p>
+        <p class="lead text-body-secondary mb-0">Logs a successful command result and returns the success exit code.</p>
     </div>
 
 

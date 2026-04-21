@@ -2968,14 +2968,14 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">50</span>
+    <span class="badge text-bg-light border">44</span>
 
     </aside>
         </div>
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Provides formatted console logging for command-line execution contexts.</p>
+        <p class="lead text-body-secondary mb-0">Formats PSR-3 log messages for the DevTools console runtime.</p>
     </div>
 
 
@@ -2989,15 +2989,10 @@
                     </div>
 
                     <div>
-                        <p>This logger writes messages to the Symfony console output streams and SHALL
-route error-related log levels to stderr. Non-error log levels SHALL be
-written to the standard output stream. When the &quot;--json&quot; or &quot;--pretty-json&quot;
-option is present, or when an AI agent is detected in the current
-environment, this logger MUST serialize the message payload as JSON.</p>
-<p>The implementation SHOULD be used in CLI environments where an ArgvInput and
-a ConsoleOutputInterface are available. Callers MAY rely on placeholder
-interpolation behavior compatible with PSR-3 expectations for scalar values,
-stringable values, dates, arrays, and objects.</p>
+                        <p>The logger routes error-related levels to stderr, expands command context
+through the configured processor, and can switch between tagged text output
+and structured JSON output depending on CLI flags or detected agent
+execution.</p>
 
                     </div>
                 </div>
@@ -3290,7 +3285,7 @@ stringable values, dates, arrays, and objects.</p>
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Determines whether JSON output has been requested.
+                Determines whether structured JSON output has been requested.
             </p>
             </div>
 
@@ -3309,7 +3304,7 @@ stringable values, dates, arrays, and objects.</p>
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Determines whether pretty JSON output has been requested.
+                Determines whether pretty-printed JSON output has been requested.
             </p>
             </div>
 
@@ -3384,7 +3379,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">59</span>
+    <span class="badge text-bg-light border">53</span>
 
     </aside>
         <div class="mb-4">
@@ -3485,7 +3480,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">80</span>
+    <span class="badge text-bg-light border">69</span>
 
     </aside>
     
@@ -3554,7 +3549,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">79</span>
+    <span class="badge text-bg-light border">68</span>
 
     </aside>
     
@@ -3623,7 +3618,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">81</span>
+    <span class="badge text-bg-light border">70</span>
 
     </aside>
     
@@ -3692,7 +3687,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">82</span>
+    <span class="badge text-bg-light border">71</span>
 
     </aside>
     
@@ -3761,7 +3756,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">77</span>
+    <span class="badge text-bg-light border">66</span>
 
     </aside>
     
@@ -3830,7 +3825,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">78</span>
+    <span class="badge text-bg-light border">67</span>
 
     </aside>
     
@@ -3923,7 +3918,7 @@ stringable values, dates, arrays, and objects.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">76</span>
+    <span class="badge text-bg-light border">65</span>
 
     </aside>
         <div class="mb-4">
@@ -3953,24 +3948,6 @@ stringable values, dates, arrays, and objects.</p>
 
     
     
-    <section class="mt-2">
-                    <div class="card border-0 bg-body-tertiary shadow-sm">
-                <div class="card-body p-3">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <i class="fas fa-align-left text-primary"></i>
-                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
-                    </div>
-
-                    <div>
-                        <p>The provided input SHALL be inspected to determine whether JSON output
-has been requested. The provided output SHALL be used as the primary
-destination for normal log messages, while its error stream SHALL be
-used for error-level messages.</p>
-
-                    </div>
-                </div>
-            </div>
-            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4058,6 +4035,19 @@ used for error-level messages.</p>
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>provides timestamps for rendered log entries</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -4085,7 +4075,7 @@ used for error-level messages.</p>
                 </div>
 
                 <div>
-                    <p>the detector used to infer whether the current runtime is an agent environment</p>
+                    <p>detects agent-oriented execution environments</p>
 
                 </div>
             </div>
@@ -4149,7 +4139,7 @@ used for error-level messages.</p>
                 </div>
 
                 <div>
-                    <p>emits GitHub Actions workflow commands when supported</p>
+                    <p>emits GitHub Actions annotations when supported</p>
 
                 </div>
             </div>
@@ -4202,7 +4192,7 @@ used for error-level messages.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">96</span>
+    <span class="badge text-bg-light border">85</span>
 
     </aside>
         <div class="mb-4">
@@ -4399,7 +4389,7 @@ All other levels SHALL be directed to the standard output stream.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">119</span>
+    <span class="badge text-bg-light border">108</span>
 
     </aside>
         <div class="mb-4">
@@ -4577,7 +4567,7 @@ All other levels SHALL be directed to the standard output stream.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">149</span>
+    <span class="badge text-bg-light border">138</span>
 
     </aside>
         <div class="mb-4">
@@ -4807,7 +4797,7 @@ the log level as both the style name and visual prefix.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">221</span>
+    <span class="badge text-bg-light border">210</span>
 
     </aside>
         <div class="mb-4">
@@ -5056,11 +5046,11 @@ representations.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">183</span>
+    <span class="badge text-bg-light border">172</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Determines whether JSON output has been requested.</p>
+        <p class="lead text-body-secondary mb-0">Determines whether structured JSON output has been requested.</p>
     </div>
 
 
@@ -5174,11 +5164,11 @@ detected agent environments SHOULD default to JSON output as well.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">199</span>
+    <span class="badge text-bg-light border">188</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Determines whether pretty JSON output has been requested.</p>
+        <p class="lead text-body-secondary mb-0">Determines whether pretty-printed JSON output has been requested.</p>
     </div>
 
 

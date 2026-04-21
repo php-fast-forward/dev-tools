@@ -2932,18 +2932,35 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">29</span>
+    <span class="badge text-bg-light border">33</span>
 
     </aside>
         </div>
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Resolves and validates the logger required by command logging helpers.</p>
+        <p class="lead text-body-secondary mb-0">Resolves the logger expected by command result helper traits.</p>
     </div>
 
 
 
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>The consuming command is expected to expose an initialized <code class="prettyprint">$logger</code>
+property so reusable traits can log without coupling themselves to a
+specific constructor signature.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
 
 
 
@@ -2992,7 +3009,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Resolves the logger required by the consuming command.
+                Returns the logger configured on the consuming command.
             </p>
             </div>
 
@@ -3057,11 +3074,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">36</span>
+    <span class="badge text-bg-light border">40</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Resolves the logger required by the consuming command.</p>
+        <p class="lead text-body-secondary mb-0">Returns the logger configured on the consuming command.</p>
     </div>
 
 

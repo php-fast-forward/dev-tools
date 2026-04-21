@@ -2953,7 +2953,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">51</span>
+    <span class="badge text-bg-light border">50</span>
 
     </aside>
         </div>
@@ -2984,10 +2984,9 @@ their eventual runtime exit status cannot be incorporated into the final queue
 result. However, a detached process that cannot be started at all is treated
 as a startup failure and MAY affect the final status code unless its failure
 is explicitly configured to be ignored.</p>
-<p>To ensure detached processes finish gracefully without being killed when the
-main PHP script ends, the queue automatically registers a shutdown handler
-during instantiation that implicitly awaits all detached processes. They can
-also be awaited explicitly via <code class="prettyprint">wait()</code>.</p>
+<p>Buffered detached output is flushed only after the blocking portion of the
+queue has finished, which keeps later process output from interleaving with
+currently running blocking commands.</p>
 
                     </div>
                 </div>
@@ -3188,7 +3187,7 @@ SHALL be emitted only after blocking processes finish.
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Waits for all detached processes to finish execution.
+                Waits for detached processes to finish and flushes completed buffered output.
             </p>
             </div>
 
@@ -3245,7 +3244,7 @@ SHALL be emitted only after blocking processes finish.
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Flushes all buffered detached process output in enqueue order.
+                Flushes completed detached process output in enqueue order.
             </p>
             </div>
 
@@ -3302,7 +3301,7 @@ SHALL be emitted only after blocking processes finish.
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Resolves the label that SHOULD be used when presenting queued process output.
+                Resolves the label used when presenting queued process output.
             </p>
             </div>
 
@@ -3340,7 +3339,7 @@ SHALL be emitted only after blocking processes finish.
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Runs a blocking process and wraps it in a GitHub Actions group when labeled.
+                Runs a blocking process inside a grouped GitHub Actions log section.
             </p>
             </div>
 
@@ -3454,7 +3453,7 @@ SHALL be emitted only after blocking processes finish.
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">53</span>
+    <span class="badge text-bg-light border">52</span>
 
     </aside>
     
@@ -3528,7 +3527,7 @@ SHALL be emitted only after blocking processes finish.
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">60</span>
+    <span class="badge text-bg-light border">59</span>
 
     </aside>
         <div class="mb-4">
@@ -3605,7 +3604,7 @@ SHALL be emitted only after blocking processes finish.
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">74</span>
+    <span class="badge text-bg-light border">73</span>
 
     </aside>
     
@@ -3674,7 +3673,7 @@ SHALL be emitted only after blocking processes finish.
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">68</span>
+    <span class="badge text-bg-light border">67</span>
 
     </aside>
         <div class="mb-4">
@@ -3775,7 +3774,7 @@ SHALL be emitted only after blocking processes finish.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">73</span>
+    <span class="badge text-bg-light border">72</span>
 
     </aside>
     
@@ -3820,6 +3819,19 @@ SHALL be emitted only after blocking processes finish.</p>
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>wraps grouped queue output in GitHub Actions logs when supported</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -3868,7 +3880,7 @@ SHALL be emitted only after blocking processes finish.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">85</span>
+    <span class="badge text-bg-light border">84</span>
 
     </aside>
         <div class="mb-4">
@@ -4085,7 +4097,7 @@ SHALL be emitted only after blocking processes finish.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">116</span>
+    <span class="badge text-bg-light border">115</span>
 
     </aside>
         <div class="mb-4">
@@ -4249,11 +4261,11 @@ their eventual runtime exit code to the returned result.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">164</span>
+    <span class="badge text-bg-light border">163</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Waits for all detached processes to finish execution.</p>
+        <p class="lead text-body-secondary mb-0">Waits for detached processes to finish and flushes completed buffered output.</p>
     </div>
 
 
@@ -4360,7 +4372,7 @@ their eventual runtime exit code to the returned result.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">279</span>
+    <span class="badge text-bg-light border">278</span>
 
     </aside>
         <div class="mb-4">
@@ -4473,7 +4485,7 @@ their eventual runtime exit code to the returned result.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">255</span>
+    <span class="badge text-bg-light border">254</span>
 
     </aside>
         <div class="mb-4">
@@ -4616,11 +4628,11 @@ emits them.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">299</span>
+    <span class="badge text-bg-light border">298</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Flushes all buffered detached process output in enqueue order.</p>
+        <p class="lead text-body-secondary mb-0">Flushes completed detached process output in enqueue order.</p>
     </div>
 
 
@@ -4759,7 +4771,7 @@ emits them.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">379</span>
+    <span class="badge text-bg-light border">378</span>
 
     </aside>
         <div class="mb-4">
@@ -4902,7 +4914,7 @@ emits them.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">397</span>
+    <span class="badge text-bg-light border">400</span>
 
     </aside>
         <div class="mb-4">
@@ -4927,6 +4939,23 @@ emits them.</p>
 
     
     
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>Symfony keeps the configured command line in a private property, so the
+queue reads it reflectively to build a cleaner default label than the
+shell-escaped output returned by <code class="prettyprint">Process::getCommandLine()</code>.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -5028,11 +5057,11 @@ emits them.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">363</span>
+    <span class="badge text-bg-light border">362</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Resolves the label that SHOULD be used when presenting queued process output.</p>
+        <p class="lead text-body-secondary mb-0">Resolves the label used when presenting queued process output.</p>
     </div>
 
 
@@ -5207,7 +5236,7 @@ emits them.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">217</span>
+    <span class="badge text-bg-light border">216</span>
 
     </aside>
         <div class="mb-4">
@@ -5384,11 +5413,11 @@ normalized to a non-zero exit code.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">237</span>
+    <span class="badge text-bg-light border">236</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Runs a blocking process and wraps it in a GitHub Actions group when labeled.</p>
+        <p class="lead text-body-secondary mb-0">Runs a blocking process inside a grouped GitHub Actions log section.</p>
     </div>
 
 
@@ -5594,7 +5623,7 @@ normalized to a non-zero exit code.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">189</span>
+    <span class="badge text-bg-light border">188</span>
 
     </aside>
         <div class="mb-4">
@@ -5612,7 +5641,7 @@ normalized to a non-zero exit code.</p>
     
     <span class="text-primary fw-semibold">startDetachedProcess</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Process\Process">Process</abbr>&nbsp;
                 </span><span class="text-primary">$process</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
-                    string|null&nbsp;
+                    string&nbsp;
                 </span><span class="text-primary">$label</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">int</span></code>
     </div>
 
@@ -5685,7 +5714,7 @@ sequence completes without throwing an exception.</p>
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                string|null
+                                string
                             </span>
 
                                                     </div>
@@ -5700,7 +5729,7 @@ sequence completes without throwing an exception.</p>
                 </div>
 
                 <div>
-                    <p>an optional label that MAY be used when presenting the buffered output</p>
+                    <p>the label used when presenting the buffered output</p>
 
                 </div>
             </div>
@@ -5788,7 +5817,7 @@ value when startup fails</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">336</span>
+    <span class="badge text-bg-light border">335</span>
 
     </aside>
         <div class="mb-4">
