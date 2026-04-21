@@ -20,11 +20,14 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Output\CommandResponderFactoryInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Path;
 
@@ -43,10 +46,16 @@ final class SyncCommand extends BaseCommand
      *
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble dev-tools processes
      * @param ProcessQueueInterface $processQueue the queue used to execute synchronization commands
+     * @param CommandResponderFactoryInterface $commandResponderFactory the
+     *                                                                  structured
+     *                                                                  command
+     *                                                                  responder
+     *                                                                  factory
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly CommandResponderFactoryInterface $commandResponderFactory,
     ) {
         parent::__construct();
     }
@@ -77,6 +86,13 @@ final class SyncCommand extends BaseCommand
                 name: 'interactive',
                 mode: InputOption::VALUE_NONE,
                 description: 'Prompt before applying managed-file replacements.',
+            )
+            ->addOption(
+                name: 'output-format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -90,11 +106,16 @@ final class SyncCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->writeln('<info>Starting dev-tools synchronization...</info>');
+        $responder = $this->commandResponderFactory->from($input, $output);
+        $format = $responder->format();
+        $textOutput = OutputFormat::TEXT === $format;
+        $processOutput = $textOutput ? $output : new BufferedOutput();
+        $overwrite = (bool) $input->getOption('overwrite');
 
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
+        $jsonOutput = OutputFormat::JSON === $format;
         $modeArguments = [
             $dryRun ? '--dry-run' : null,
             $check ? '--check' : null,
@@ -102,58 +123,94 @@ final class SyncCommand extends BaseCommand
         ];
         $allowDetached = ! $dryRun && ! $check && ! $interactive;
 
-        $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments]);
-        $this->queueDevToolsCommand(['funding', ...$modeArguments]);
+        if ($textOutput) {
+            $output->writeln('<info>Starting dev-tools synchronization...</info>');
+        }
+
+        $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments], false, $jsonOutput);
+        $this->queueDevToolsCommand(['funding', ...$modeArguments], false, $jsonOutput);
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
                 '--source=resources/github-actions',
                 '--target=.github/workflows',
-                $input->getOption('overwrite') ? '--overwrite' : null,
+                $overwrite ? '--overwrite' : null,
                 ...$modeArguments,
             ],
-            $allowDetached
+            $allowDetached,
+            $jsonOutput,
         );
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
                 '--source=.editorconfig',
                 '--target=.editorconfig',
-                $input->getOption('overwrite') ? '--overwrite' : null,
+                $overwrite ? '--overwrite' : null,
                 ...$modeArguments,
             ],
-            $allowDetached
+            $allowDetached,
+            $jsonOutput,
         );
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
                 '--source=resources/dependabot.yml',
                 '--target=.github/dependabot.yml',
-                $input->getOption('overwrite') ? '--overwrite' : null,
+                $overwrite ? '--overwrite' : null,
                 ...$modeArguments,
             ],
-            $allowDetached
+            $allowDetached,
+            $jsonOutput,
         );
         $this->queueDevToolsCommand(
-            ['codeowners', $input->getOption('overwrite') ? '--overwrite' : null, ...$modeArguments],
-            $allowDetached
+            ['codeowners', $overwrite ? '--overwrite' : null, ...$modeArguments],
+            $allowDetached,
+            $jsonOutput,
         );
         if ($dryRun || $check || $interactive) {
-            $output->writeln(
-                '<comment>Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.</comment>'
-            );
+            if ($textOutput) {
+                $output->writeln(
+                    '<comment>Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.</comment>'
+                );
+            }
         } else {
-            $this->queueDevToolsCommand(['wiki', '--init'], true);
-            $this->queueDevToolsCommand(['skills'], true);
-            $this->queueDevToolsCommand(['agents'], true);
+            $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput);
+            $this->queueDevToolsCommand(['skills'], true, $jsonOutput);
+            $this->queueDevToolsCommand(['agents'], true, $jsonOutput);
         }
 
-        $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached);
-        $this->queueDevToolsCommand(['gitattributes', ...$modeArguments], $allowDetached);
-        $this->queueDevToolsCommand(['license', ...$modeArguments], $allowDetached);
-        $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached);
+        $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached, $jsonOutput);
+        $this->queueDevToolsCommand(['gitattributes', ...$modeArguments], $allowDetached, $jsonOutput);
+        $this->queueDevToolsCommand(['license', ...$modeArguments], $allowDetached, $jsonOutput);
+        $this->queueDevToolsCommand(['git-hooks', ...$modeArguments], $allowDetached, $jsonOutput);
 
-        return $this->processQueue->run($output);
+        $result = $this->processQueue->run($processOutput);
+
+        return self::SUCCESS === $result
+            ? $responder->success(
+                'Dev-tools synchronization completed successfully.',
+                [
+                    'command' => 'dev-tools:sync',
+                    'overwrite' => $overwrite,
+                    'dry_run' => $dryRun,
+                    'check' => $check,
+                    'interactive' => $interactive,
+                    'skipped_destructive_syncs' => $dryRun || $check || $interactive,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            )
+            : $responder->failure(
+                'Dev-tools synchronization failed.',
+                [
+                    'command' => 'dev-tools:sync',
+                    'overwrite' => $overwrite,
+                    'dry_run' => $dryRun,
+                    'check' => $check,
+                    'interactive' => $interactive,
+                    'skipped_destructive_syncs' => $dryRun || $check || $interactive,
+                    'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                ],
+            );
     }
 
     /**
@@ -161,11 +218,16 @@ final class SyncCommand extends BaseCommand
      *
      * @param list<string|null> $arguments the dev-tools command arguments
      * @param bool $detached whether the command MAY run detached from subsequent queue entries
+     * @param bool $jsonOutput whether structured JSON output SHOULD be propagated to the child command
      */
-    private function queueDevToolsCommand(array $arguments, bool $detached = false): void
+    private function queueDevToolsCommand(array $arguments, bool $detached = false, bool $jsonOutput = false): void
     {
         $processBuilder = $this->processBuilder;
         $arguments = array_filter($arguments, static fn(?string $arg): bool => null !== $arg);
+
+        if ($jsonOutput && ! \in_array('--output-format=json', $arguments, true)) {
+            $arguments[] = '--output-format=json';
+        }
 
         foreach ($arguments as $argument) {
             $processBuilder = $processBuilder->withArgument($argument);
