@@ -2261,6 +2261,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_validateMinimumCoverage"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AcommandContext\u0028\u0029",
+            "name": "commandContext",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_commandContext"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003ACONFIG",
             "name": "CONFIG",
             "summary": "",
@@ -2295,6 +2300,11 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024commandResponderFactory",
+            "name": "commandResponderFactory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_commandResponderFactory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
             "name": "UpdateComposerJsonCommand",
