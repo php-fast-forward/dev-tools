@@ -1098,7 +1098,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configures\u0020output\u002Dformat\u0020options\u0020for\u0020the\u0020synchronization\u0020command.",
+            "summary": "Configures\u0020JSON\u0020output\u0020options\u0020for\u0020the\u0020synchronization\u0020command.",
             "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method_configure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003Aexecute\u0028\u0029",
@@ -2158,7 +2158,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
-            "summary": "Configures\u0020the\u0020supported\u0020output\u002Dformat\u0020options.",
+            "summary": "Configures\u0020the\u0020supported\u0020JSON\u0020output\u0020option.",
             "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#method_configure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003Aexecute\u0028\u0029",
@@ -2505,6 +2505,16 @@ Search.appendIndex(
             "name": "__construct",
             "summary": "Initializes\u0020the\u0020formatter\u0020with\u0020predefined\u0020styles\u0020for\u0020log\u0020levels.",
             "url": "classes/FastForward-DevTools-Console-Formatter-LogLevelOutputFormatter.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption",
+            "name": "HasJsonOption",
+            "summary": "Provides\u0020the\u0020standard\u0020JSON\u0020output\u0020option\u0020used\u0020by\u0020DevTools\u0020commands.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AaddJsonOption\u0028\u0029",
+            "name": "addJsonOption",
+            "summary": "Adds\u0020the\u0020standard\u0020\u002D\u002Djson\u0020option\u0020to\u0020the\u0020current\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_addJsonOption"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
             "name": "OutputFormatLogger",
@@ -4275,6 +4285,11 @@ Search.appendIndex(
             "name": "Formatter",
             "summary": "",
             "url": "namespaces/fastforward-devtools-console-formatter.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input",
+            "name": "Input",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-input.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger",
             "name": "Logger",

@@ -2124,6 +2124,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-console-input.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Input
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-console-logger.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2910,8 +2932,8 @@
                     <div>
                         <p>This logger writes messages to the Symfony console output streams and SHALL
 route error-related log levels to stderr. Non-error log levels SHALL be
-written to the standard output stream. When the &quot;--output-format=json&quot;
-option is present, this logger MUST serialize the message payload as JSON.</p>
+written to the standard output stream. When the &quot;--json&quot; option is present,
+this logger MUST serialize the message payload as JSON.</p>
 <p>The implementation SHOULD be used in CLI environments where an ArgvInput and
 a ConsoleOutputInterface are available. Callers MAY rely on placeholder
 interpolation behavior compatible with PSR-3 expectations for scalar values,
@@ -4273,7 +4295,7 @@ the log level as both the style name and visual prefix.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">173</span>
+    <span class="badge text-bg-light border">168</span>
 
     </aside>
         <div class="mb-4">
@@ -4522,7 +4544,7 @@ representations.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">147</span>
+    <span class="badge text-bg-light border">146</span>
 
     </aside>
         <div class="mb-4">
@@ -4555,9 +4577,8 @@ representations.</p>
                     </div>
 
                     <div>
-                        <p>The &quot;--output-format&quot; option MAY be provided by the caller. When its
-value is exactly &quot;json&quot;, this method SHALL return true. Any other value,
-or the absence of the option, MUST result in false.</p>
+                        <p>The &quot;--json&quot; option MAY be provided by the caller. When present, this
+method SHALL return true. Otherwise, it MUST return false.</p>
 
                     </div>
                 </div>
