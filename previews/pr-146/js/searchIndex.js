@@ -2301,11 +2301,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_validateMinimumCoverage"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AcommandContext\u0028\u0029",
-            "name": "commandContext",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_commandContext"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003ACONFIG",
             "name": "CONFIG",
             "summary": "",
@@ -2560,6 +2555,76 @@ Search.appendIndex(
             "name": "clock",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_clock"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger\u003A\u003A\u0024contextProcessor",
+            "name": "contextProcessor",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-OutputFormatLogger.html#property_contextProcessor"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor",
+            "name": "CommandInputProcessor",
+            "summary": "Expands\u0020command\u0020input\u0020instances\u0020into\u0020structured\u0020context\u0020entries.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_process"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AprocessInputContext\u0028\u0029",
+            "name": "processInputContext",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_processInputContext"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor\u003A\u003AinferCommandName\u0028\u0029",
+            "name": "inferCommandName",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandInputProcessor.html#method_inferCommandName"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
+            "name": "CommandOutputProcessor",
+            "summary": "Converts\u0020buffered\u0020command\u0020output\u0020objects\u0020into\u0020serializable\u0020context\u0020entries.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_process"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AextractBufferedOutput\u0028\u0029",
+            "name": "extractBufferedOutput",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_extractBufferedOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
+            "name": "CompositeContextProcessor",
+            "summary": "Applies\u0020multiple\u0020context\u0020processors\u0020in\u0020sequence.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html#method_process"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor\u003A\u003A\u0024processors",
+            "name": "processors",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CompositeContextProcessor.html#property_processors"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
+            "name": "ContextProcessorInterface",
+            "summary": "Defines\u0020a\u0020processor\u0020that\u0020transforms\u0020log\u0020context\u0020payloads.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-ContextProcessorInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface\u003A\u003Aprocess\u0028\u0029",
+            "name": "process",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-ContextProcessorInterface.html#method_process"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
@@ -4215,6 +4280,11 @@ Search.appendIndex(
             "name": "Logger",
             "summary": "",
             "url": "namespaces/fastforward-devtools-console-logger.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor",
+            "name": "Processor",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-console-logger-processor.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem",
             "name": "Filesystem",

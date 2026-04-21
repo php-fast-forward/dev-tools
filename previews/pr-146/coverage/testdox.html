@@ -225,6 +225,16 @@
             <li class="success">Execute with coverage below minimum will return failure</li>
             <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
         </ul>
+        <h2>Command Input Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CommandInputProcessor)</h2>
+        <ul>
+            <li class="success">Process will extract provided arguments and options</li>
+            <li class="success">Process will preserve existing command value</li>
+        </ul>
+        <h2>Command Output Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CommandOutputProcessor)</h2>
+        <ul>
+            <li class="success">Process will replace buffered output with its contents</li>
+            <li class="success">Process will extract buffered error output from console output</li>
+        </ul>
         <h2>Composer Dependency Analyser Config (FastForward\DevTools\Tests\Config\ComposerDependencyAnalyserConfig)</h2>
         <ul>
             <li class="success">Configure will return configuration</li>
@@ -274,6 +284,10 @@
             <li class="success">Get minimum stability and config will return normalized values</li>
             <li class="success">Get minimum stability and config will return defaults for invalid sections</li>
             <li class="success">Get bin will return scalar string when declared as single binary</li>
+        </ul>
+        <h2>Composite Context Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CompositeContextProcessor)</h2>
+        <ul>
+            <li class="success">Process will apply processors sequentially</li>
         </ul>
         <h2>Copy Resource Command (FastForward\DevTools\Tests\Console\Command\CopyResourceCommand)</h2>
         <ul>
