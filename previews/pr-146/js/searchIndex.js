@@ -1351,6 +1351,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_fileDiffer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand",
             "name": "CodeStyleCommand",
             "summary": "Represents\u0020the\u0020command\u0020responsible\u0020for\u0020checking\u0020and\u0020fixing\u0020code\u0020style\u0020issues.",
@@ -1450,6 +1455,11 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
             "name": "DependenciesCommand",
@@ -1671,6 +1681,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
             "name": "GitAttributesCommand",
             "summary": "Provides\u0020functionality\u0020to\u0020manage\u0020.gitattributes\u0020export\u002Dignore\u0020rules.",
@@ -1766,6 +1781,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_fileDiffer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
             "name": "GitHooksCommand",
             "summary": "Installs\u0020packaged\u0020Git\u0020hooks\u0020for\u0020the\u0020consumer\u0020repository.",
@@ -1810,6 +1830,11 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
             "name": "GitIgnoreCommand",
@@ -1866,6 +1891,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_fileDiffer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand",
             "name": "LicenseCommand",
             "summary": "Generates\u0020and\u0020copies\u0020LICENSE\u0020files\u0020to\u0020projects.",
@@ -1905,6 +1935,11 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
             "name": "MetricsCommand",
@@ -2360,6 +2395,11 @@ Search.appendIndex(
             "name": "fileDiffer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_fileDiffer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_logger"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand",
             "name": "WikiCommand",
