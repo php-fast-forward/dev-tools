@@ -93,6 +93,7 @@ composer changelog:promote 1.3.0 --format=json
 
 # Render one published section as release notes
 composer changelog:show 1.3.0
+composer changelog:show 1.3.0 --format=json
 
 # Check and fix code style using ECS and Composer Normalize
 composer code-style
@@ -173,10 +174,12 @@ current `Unreleased` section into a tagged version, and `changelog:show`
 renders one published section for GitHub release notes.
 
 The first structured-output rollouts are available on `changelog:entry`,
-`changelog:check`, `changelog:next-version`, and `changelog:promote` through
-`--format=json`, which returns a deterministic status/message/context payload
-for CI, bots, and AI-agent workflows while preserving the normal
-human-readable terminal output by default.
+`changelog:check`, `changelog:next-version`, `changelog:promote`, and
+`changelog:show` through `--format=json`, which returns a deterministic
+status/message/context payload for CI, bots, and AI-agent workflows while
+preserving the normal human-readable terminal output by default. For
+`changelog:show`, the default text mode still prints the raw release-notes body
+so release workflows can keep piping it directly into GitHub releases.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

@@ -21,6 +21,7 @@ workflow.
    composer changelog:promote 1.3.0 --date=2026-04-19
    composer changelog:promote 1.3.0 --format=json
    composer changelog:show 1.3.0
+   composer changelog:show 1.3.0 --format=json
 
 Important details:
 
@@ -29,13 +30,14 @@ Important details:
 - ``changelog:entry --format=json`` and
   ``changelog:check --format=json`` and
   ``changelog:next-version --format=json`` and
-  ``changelog:promote --format=json`` are the initial structured-output
-  rollouts for automation, CI, and AI-agent consumers;
+  ``changelog:promote --format=json`` and
+  ``changelog:show --format=json`` are the initial structured-output rollouts
+  for automation, CI, and AI-agent consumers;
 - ``changelog:check`` is the command used by pull-request validation;
 - ``changelog:next-version`` and ``changelog:promote`` support the manual
   release-preparation workflow;
-- ``changelog:show`` renders the published release body used by GitHub Release
-  publication.
+- ``changelog:show`` keeps its text-mode output as the raw published release
+  body used by GitHub Release publication.
 
 ``tests``
 ---------

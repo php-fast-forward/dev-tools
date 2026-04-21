@@ -45,6 +45,7 @@ Usage
    composer changelog:promote 1.3.0 --format=json
 
    composer changelog:show 1.3.0
+   composer changelog:show 1.3.0 --format=json
 
 Options
 -------
@@ -94,7 +95,9 @@ Options
    Supports:
 
    - the required version argument;
-   - ``--file=<path>`` to render another changelog path.
+   - ``--file=<path>`` to render another changelog path;
+   - ``--format=<text|json>`` to switch between raw release-note text and a
+     structured machine-readable payload.
 
 Behavior
 --------
@@ -119,8 +122,11 @@ Behavior
   release date written to the changelog;
 - ``changelog:promote`` restores an empty ``Unreleased`` section after
   publishing the requested version;
-- ``changelog:show`` prints only the release body so workflows can feed it
-  directly into GitHub release notes.
+- ``changelog:show`` prints only the release body in text mode so workflows can
+  feed it directly into GitHub release notes;
+- ``changelog:show --format=json`` emits the rendered release-notes body as the
+  ``message`` plus structured context describing the file, version, and
+  release notes content.
 
 Workflow Integration
 --------------------

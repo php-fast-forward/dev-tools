@@ -21,6 +21,10 @@ namespace FastForward\DevTools\Console\Command;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
+use FastForward\DevTools\Console\Output\CommandResult;
+use FastForward\DevTools\Console\Output\CommandResultRendererInterface;
+use FastForward\DevTools\Console\Output\OutputFormat;
+use FastForward\DevTools\Console\Output\OutputFormatResolverInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputArgument;
@@ -41,10 +45,14 @@ final class ChangelogShowCommand extends BaseCommand
     /**
      * @param FilesystemInterface $filesystem
      * @param ChangelogManagerInterface $changelogManager
+     * @param OutputFormatResolverInterface $outputFormatResolver
+     * @param CommandResultRendererInterface $commandResultRenderer
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly ChangelogManagerInterface $changelogManager,
+        private readonly OutputFormatResolverInterface $outputFormatResolver,
+        private readonly CommandResultRendererInterface $commandResultRenderer,
     ) {
         parent::__construct();
     }
@@ -65,6 +73,13 @@ final class ChangelogShowCommand extends BaseCommand
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Path to the changelog file.',
                 default: 'CHANGELOG.md',
+            )
+            ->addOption(
+                name: 'format',
+                mode: InputOption::VALUE_REQUIRED,
+                description: 'Output format for the command result. Supported values: text, json.',
+                default: OutputFormat::defaultValue(),
+                suggestedValues: OutputFormat::supportedValues(),
             );
     }
 
@@ -76,10 +91,33 @@ final class ChangelogShowCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $output->write($this->changelogManager->renderReleaseNotes(
-            $this->filesystem->getAbsolutePath((string) $input->getOption('file')),
-            (string) $input->getArgument('version'),
-        ));
+        $format = $this->outputFormatResolver->resolve($input);
+        $version = (string) $input->getArgument('version');
+        $file = (string) $input->getOption('file');
+        $releaseNotes = $this->changelogManager->renderReleaseNotes(
+            $this->filesystem->getAbsolutePath($file),
+            $version,
+        );
+
+        if (OutputFormat::TEXT === $format) {
+            $output->write($releaseNotes);
+
+            return self::SUCCESS;
+        }
+
+        $this->commandResultRenderer->render(
+            $output,
+            CommandResult::success(
+                $releaseNotes,
+                [
+                    'command' => 'changelog:show',
+                    'file' => $file,
+                    'version' => $version,
+                    'release_notes' => $releaseNotes,
+                ],
+            ),
+            $format,
+        );
 
         return self::SUCCESS;
     }
