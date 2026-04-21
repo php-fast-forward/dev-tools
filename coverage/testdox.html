@@ -150,8 +150,9 @@
         </ul>
         <h2>Changelog Next Version Command (FastForward\DevTools\Tests\Console\Command\ChangelogNextVersionCommand)</h2>
         <ul>
-            <li class="success">Execute will return success with the inferred version</li>
-            <li class="success">Execute will pass the explicit current version to inference</li>
+            <li class="success">Execute will write the inferred version to output in plain text mode</li>
+            <li class="success">Execute will log the inferred version when json output is requested</li>
+            <li class="success">Execute will pass the explicit current version to inference in plain text mode</li>
             <li class="success">Execute will return failure when version inference fails</li>
         </ul>
         <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
@@ -171,7 +172,8 @@
         </ul>
         <h2>Changelog Show Command (FastForward\DevTools\Tests\Console\Command\ChangelogShowCommand)</h2>
         <ul>
-            <li class="success">Execute will log release notes</li>
+            <li class="success">Execute will write release notes to output in plain text mode</li>
+            <li class="success">Execute will log release notes when json output is requested</li>
             <li class="success">Execute will return failure when release notes cannot be rendered</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
