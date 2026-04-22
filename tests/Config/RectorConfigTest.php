@@ -113,7 +113,7 @@ final class RectorConfigTest extends TestCase
             SimpleParameterProvider::provideArrayParameter(Option::SKIP),
         );
         self::assertSame(
-            getcwd() . '/' . ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR),
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, getcwd()),
             SimpleParameterProvider::provideStringParameter(Option::CACHE_DIR)
         );
         self::assertSame(['php'], SimpleParameterProvider::provideArrayParameter(Option::FILE_EXTENSIONS));
