@@ -189,6 +189,8 @@ jobs:
             contents: write
 
         steps:
+            - uses: actions/checkout@v6
+
             - name: Checkout gh-pages
               uses: actions/checkout@v6
               with:
@@ -214,6 +216,8 @@ jobs:
             pull-requests: read
 
         steps:
+            - uses: actions/checkout@v6
+
             - name: Checkout gh-pages
               uses: actions/checkout@v6
               with:
