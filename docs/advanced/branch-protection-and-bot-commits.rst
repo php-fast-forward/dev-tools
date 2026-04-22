@@ -117,10 +117,21 @@ stale preview branches. Jobs that inspect pull request state keep
 
 The label synchronization workflow declares ``issues: read`` to copy labels from
 the linked issue and ``pull-requests: write`` to apply those labels to the pull
-request. The auto-assign workflow keeps ``issues: write`` and
-``pull-requests: write`` because assignment is a write operation on both event
-types, and it also declares ``repository-projects: write`` so linked-issue
-project metadata can be mirrored onto pull requests.
+request. The project-board automation workflow keeps ``issues: write`` and
+``pull-requests: write`` because assignment and board-state changes are write
+operations on both event types, and it also declares
+``repository-projects: write`` so linked issues and pull requests can be added
+to the configured GitHub Project and moved through the delivery pipeline.
+
+To enable reusable project automation in consumer repositories, pass
+``project`` through the thin ``workflow_call`` wrapper or configure the
+repository variable ``PROJECT`` so the workflow can resolve the target GitHub
+Project without hardcoding repository-specific board identifiers into the
+packaged workflow itself. The workflow derives the owner from
+``github.repository_owner`` and uses the built-in workflow token for the actual
+project mutations. Inside ``php-fast-forward`` repositories, the reusable
+workflow MAY fall back to the first organization Project V2 when no explicit
+project number is provided.
 
 Resolving ``.github/wiki`` Pointer Conflicts
 --------------------------------------------

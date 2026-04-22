@@ -43,6 +43,9 @@ concurrency:
     group: ${{ github.event_name == 'pull_request' && format('tests-pr-{0}', github.event.pull_request.number) || format('tests-{0}', github.ref) }}
     cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
+env:
+    FORCE_COLOR: '1'
+
 jobs:
     resolve_php:
         name: Resolve PHP Version
@@ -57,7 +60,7 @@ jobs:
 
             - name: Resolve workflow PHP version
               id: resolve
-              uses: php-fast-forward/dev-tools/resources/resolve-php-version@main
+              uses: ./.github/actions/php/resolve-version
 
     tests:
         needs: resolve_php
@@ -67,35 +70,17 @@ jobs:
             matrix: ${{ fromJson(needs.resolve_php.outputs.test-matrix) }}
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
-            FORCE_COLOR: '1'
         steps:
             - uses: actions/checkout@v6
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - name: Setup PHP and install dependencies
+              uses: ./.github/actions/php/setup-composer
               with:
                 php-version: ${{ matrix.php-version }}
                 extensions: pcov, pcntl
                 coverage: pcov
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v5
-              with:
-                path: /tmp/composer-cache
-                key: ${{ runner.os }}-composer-${{ matrix.php-version }}-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-${{ matrix.php-version }}-
-                  ${{ runner.os }}-composer-
-
-            - name: Mark workspace as safe for git
-              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-            - name: Install dependencies
-              env:
-                COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                COMPOSER_CACHE_DIR: /tmp/composer-cache
-                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+                root-version: ${{ env.TESTS_ROOT_VERSION }}
+                install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Composer Audit
               env:
@@ -119,33 +104,15 @@ jobs:
         runs-on: ubuntu-latest
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
-            FORCE_COLOR: '1'
         steps:
             - uses: actions/checkout@v6
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - name: Setup PHP and install dependencies
+              uses: ./.github/actions/php/setup-composer
               with:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v5
-              with:
-                path: /tmp/composer-cache
-                key: ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-
-                  ${{ runner.os }}-composer-
-
-            - name: Mark workspace as safe for git
-              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-            - name: Install dependencies
-              env:
-                COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                COMPOSER_CACHE_DIR: /tmp/composer-cache
-                COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+                root-version: ${{ env.TESTS_ROOT_VERSION }}
+                install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Run dependency health check
               env:

@@ -1,0 +1,12 @@
+name: Cleanup Orphaned Wiki Previews
+description: Delete wiki preview branches for pull requests that are no longer open.
+
+runs:
+  using: composite
+  steps:
+    - name: Cleanup orphaned previews
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      working-directory: .github/wiki
+      run: ${{ github.action_path }}/run.sh

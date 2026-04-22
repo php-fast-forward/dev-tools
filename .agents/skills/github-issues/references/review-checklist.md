@@ -27,8 +27,6 @@ Use this checklist before finalizing issue content or mutating GitHub.
   values, and issue relationships come only from metadata that already exists.
 - Any project field that was left empty despite being inferable has a clear
   reason, not an accidental omission.
-- `Iteration` was populated when the selected project supports it and the issue
-  context supports a safe choice.
 - Backfill writes touched only fields that were previously unset, unless the
   user explicitly asked for metadata correction.
 - Project or milestone fields were left empty only for a clear reason, not by omission.

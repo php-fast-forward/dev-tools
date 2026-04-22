@@ -37,7 +37,6 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - When project metadata matters and GitHub CLI lacks project scope, try `gh auth refresh -h github.com -s read:project -s project` and tell the user they MAY need to complete the browser-and-code flow.
 - When no suitable repository or organization project exists, you MAY suggest copying the Fast Forward template project at `https://github.com/orgs/php-fast-forward/projects/2`.
 - When a project exposes any field whose value can be inferred with a high degree of confidence, prefer filling it instead of leaving it blank by default.
-- When a project supports `Iteration`, prefer the current active iteration for new issues entering the current cycle, and support conservative backfill for older closed issues that are still missing iteration data.
 - Support backfill runs for older issues with missing metadata, but only fill fields that are currently unset unless the user explicitly asks for correction.
 - When a new issue appears materially related to another open issue, add that relationship instead of leaving the issues disconnected.
 - Treat command or controller layers as orchestration only when drafting implementation issues.

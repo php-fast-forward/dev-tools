@@ -22,9 +22,6 @@ issues for the current repository.
   relationships when they can be inferred safely.
 - Fill any existing project field that can be inferred with high confidence
   from the issue scope, repository workflow, or linked pull-request history.
-- Fill project iteration data when the project supports it, using the active
-  iteration for new issues and conservative inference for backfill on already
-  closed issues that still have missing metadata.
 - When project metadata matters but GitHub CLI lacks project scope, trigger the
   refresh flow and tell the user they MAY need to finish the browser-and-code
   verification step before project access becomes available.
