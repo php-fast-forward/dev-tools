@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Stabilize logger and process-queue test expectations in CI by making GitHub Actions output detection deterministic during the PHPUnit suite (#33)
 - Restore raw text output for `changelog:next-version` and `changelog:show` so changelog release workflows can keep capturing versions and redirecting release notes safely (#149)
+- Keep the packaged pull-request label-sync action from failing when a PR does not reference any linked issue (#157)
 
 ## [1.16.0] - 2026-04-20
 

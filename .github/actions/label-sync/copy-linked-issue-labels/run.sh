@@ -6,10 +6,8 @@ body="$(jq -r '.pull_request.body // ""' "${GITHUB_EVENT_PATH}")"
 pull_request_number="$(jq -r '.pull_request.number // ""' "${GITHUB_EVENT_PATH}")"
 issue_number="$(
     printf '%s %s\n' "${title}" "${body}" \
-        | grep -oiE '(closes|fixes|resolves|addresses)\s+#[[:digit:]]+' \
-        | grep -oE '#[[:digit:]]+' \
-        | head -1 \
-        | tr -d '#'
+        | sed -nE 's/.*(closes|fixes|resolves|addresses)[[:space:]]+#([[:digit:]]+).*/\2/Ip' \
+        | head -1
 )"
 
 if [ -z "${issue_number}" ]; then
