@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.17.0] - 2026-04-22
+
 ### Added
 
 - Add structured command output across the DevTools command surface with `--json` and `--pretty-json`, including pretty-printed JSON and agent-aware JSON defaults (#33)
@@ -258,7 +260,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.16.0...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.0...HEAD
+[1.17.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.15.0...v1.16.0
 [1.15.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.14.0...v1.15.0
 [1.14.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.13.0...v1.14.0
