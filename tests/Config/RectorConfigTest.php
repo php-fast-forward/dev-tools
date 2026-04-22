@@ -26,7 +26,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use FastForward\DevTools\Path\ManagedWorkspace;
-use FastForward\DevTools\Path\ProjectPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use ReflectionProperty;
 use FastForward\DevTools\Config\RectorConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -41,7 +41,7 @@ use function Safe\getcwd;
 
 #[CoversClass(RectorConfig::class)]
 #[UsesClass(ManagedWorkspace::class)]
-#[UsesClass(ProjectPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 final class RectorConfigTest extends TestCase
 {
     /**
@@ -106,7 +106,7 @@ final class RectorConfigTest extends TestCase
         self::assertSame([getcwd()], SimpleParameterProvider::provideArrayParameter(Option::PATHS));
         self::assertSame(
             [
-                ...ProjectPathResolver::getToolingExcludedDirectories(getcwd()),
+                ...WorkingProjectPathResolver::getToolingExcludedDirectories(getcwd()),
                 RemoveUselessReturnTagRector::class,
                 RemoveUselessParamTagRector::class,
             ],

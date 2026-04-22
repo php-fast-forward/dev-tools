@@ -20,15 +20,15 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Path;
 
 use FastForward\DevTools\Path\ManagedWorkspace;
-use FastForward\DevTools\Path\ProjectPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(ProjectPathResolver::class)]
+#[CoversClass(WorkingProjectPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
-final class ProjectPathResolverTest extends TestCase
+final class WorkingProjectPathResolverTest extends TestCase
 {
     /**
      * @return void
@@ -36,13 +36,13 @@ final class ProjectPathResolverTest extends TestCase
     #[Test]
     public function itWillExposeCanonicalRepositoryRootPaths(): void
     {
-        self::assertSame('resources', ProjectPathResolver::getResourcesDirectory());
-        self::assertSame('vendor', ProjectPathResolver::getVendorDirectory());
-        self::assertSame('tmp/resources/phpdoc', ProjectPathResolver::getResourcesDirectory('phpdoc', 'tmp'));
-        self::assertSame('repo/vendor/bin', ProjectPathResolver::getVendorDirectory('bin', 'repo'));
+        self::assertSame('resources', WorkingProjectPathResolver::getResourcesDirectory());
+        self::assertSame('vendor', WorkingProjectPathResolver::getVendorDirectory());
+        self::assertSame('tmp/resources/phpdoc', WorkingProjectPathResolver::getResourcesDirectory('phpdoc', 'tmp'));
+        self::assertSame('repo/vendor/bin', WorkingProjectPathResolver::getVendorDirectory('bin', 'repo'));
         self::assertSame(
             ['repo/.dev-tools', 'repo/resources', 'repo/vendor'],
-            ProjectPathResolver::getToolingExcludedDirectories('repo')
+            WorkingProjectPathResolver::getToolingExcludedDirectories('repo')
         );
     }
 
@@ -52,7 +52,7 @@ final class ProjectPathResolverTest extends TestCase
     #[Test]
     public function itWillNormalizePathSeparatorsWhenJoiningRepositoryRootPaths(): void
     {
-        self::assertSame('tmp/resources/phpdoc', ProjectPathResolver::getResourcesDirectory('/phpdoc', 'tmp/'));
-        self::assertSame('tmp/vendor/bin', ProjectPathResolver::getVendorDirectory('/bin', 'tmp/'));
+        self::assertSame('tmp/resources/phpdoc', WorkingProjectPathResolver::getResourcesDirectory('/phpdoc', 'tmp/'));
+        self::assertSame('tmp/vendor/bin', WorkingProjectPathResolver::getVendorDirectory('/bin', 'tmp/'));
     }
 }

@@ -24,7 +24,7 @@ use Ergebnis\Rector\Rules\Faker\GeneratorPropertyFetchToMethodCallRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
 use FastForward\DevTools\Path\ManagedWorkspace;
-use FastForward\DevTools\Path\ProjectPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use Rector\Config\RectorConfig as RectorConfigInterface;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
@@ -92,7 +92,7 @@ final class RectorConfig
     {
         return static function (RectorConfigInterface $rectorConfig) use ($customize): void {
             $workingDirectory = getcwd();
-            $skipPaths = ProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
+            $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
             $skipRules = self::DEFAULT_SKIPPED_RULES;
 
             $rectorConfig->sets(self::DEFAULT_SETS);

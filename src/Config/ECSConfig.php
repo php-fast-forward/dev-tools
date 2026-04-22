@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Config;
 
-use FastForward\DevTools\Path\ProjectPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
@@ -127,7 +127,7 @@ final class ECSConfig
         ECSConfigBuilder $config,
         string $workingDirectory
     ): ECSConfigBuilder {
-        $skipPaths = ProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
+        $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
 
         return $config
             ->withPaths([$workingDirectory])

@@ -24,7 +24,7 @@ use Symfony\Component\Filesystem\Path;
 /**
  * Provides canonical repository-root paths that are not part of the managed workspace.
  */
-final class ProjectPathResolver
+final class WorkingProjectPathResolver
 {
     /**
      * @var string the repository resources directory segment
