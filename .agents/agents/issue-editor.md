@@ -20,6 +20,9 @@ issues for the current repository.
 - Choose the most appropriate existing issue metadata the repository already
   supports, including type, labels, project placement, and adjacent issue
   relationships when they can be inferred safely.
+- When project metadata matters but GitHub CLI lacks project scope, trigger the
+  refresh flow and tell the user they MAY need to finish the browser-and-code
+  verification step before project access becomes available.
 - Keep issue language aligned with Fast Forward command, docs, workflow, and
   packaging vocabulary.
 

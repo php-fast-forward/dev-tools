@@ -82,8 +82,26 @@ gh api graphql \
   -f query='{ organization(login: "ORG") { projectsV2(first: 20) { nodes { id title number closed } } } }'
 ```
 
-If project access is unavailable or no existing project clearly fits, omit the
-project assignment instead of guessing.
+If project access is unavailable, first try to refresh GitHub CLI scopes:
+
+```bash
+gh auth refresh -h github.com -s read:project -s project
+```
+
+Warn the user that this command MAY open a browser and ask them to type a
+verification code before project access is granted.
+
+If no existing repository or organization project clearly fits, omit the
+project assignment instead of guessing. When the repository and organization do
+not appear to have any usable project at all, you MAY suggest copying the Fast
+Forward template project as a starting point:
+
+```text
+https://github.com/orgs/php-fast-forward/projects/2
+```
+
+Treat that suggestion as optional guidance for the user, not as a project you
+create automatically.
 
 ## Project Fields
 

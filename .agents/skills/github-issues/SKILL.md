@@ -34,6 +34,8 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - Reuse only issue types, labels, milestones, projects, and project field options that already exist in the target repository or organization.
 - Prefer filling the maximum useful metadata that can be inferred safely from the issue scope and the available GitHub configuration.
 - Do not force weak labels, milestones, project assignments, or project field values when the fit is unclear.
+- When project metadata matters and GitHub CLI lacks project scope, try `gh auth refresh -h github.com -s read:project -s project` and tell the user they MAY need to complete the browser-and-code flow.
+- When no suitable repository or organization project exists, you MAY suggest copying the Fast Forward template project at `https://github.com/orgs/php-fast-forward/projects/2`.
 - When a new issue appears materially related to another open issue, add that relationship instead of leaving the issues disconnected.
 - Treat command or controller layers as orchestration only when drafting implementation issues.
 - Prefer dedicated classes for input resolution, domain logic, processing, and output rendering when the change is non-trivial.

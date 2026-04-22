@@ -22,6 +22,16 @@ If the request may require project assignment or project-field updates, also
 confirm the active token can read and write project metadata. A token that can
 mutate issues may still be missing `read:project` or `project` scope.
 
+When project scope is missing but project placement or project-field updates
+matter to the request, try to refresh authentication before giving up:
+
+```bash
+gh auth refresh -h github.com -s read:project -s project
+```
+
+Tell the user that GitHub CLI MAY open a browser and ask them to enter a
+verification code before the refreshed token is granted project access.
+
 ## Existing Issue Resolution
 
 For updates or comments:
