@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776880568">
-  <project timestamp="1776880568" name="Clover Coverage">
+<coverage generated="1776881634">
+  <project timestamp="1776881634" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -4586,8 +4586,8 @@
         <line num="106" type="stmt" count="2"/>
         <metrics loc="109" ncloc="48" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
       </file>
-      <file name="/home/runner/work/dev-tools/dev-tools/src/Path/ProjectPathResolver.php">
-        <class name="FastForward\DevTools\Path\ProjectPathResolver" namespace="FastForward\DevTools\Path">
+      <file name="/home/runner/work/dev-tools/dev-tools/src/Path/WorkingProjectPathResolver.php">
+        <class name="FastForward\DevTools\Path\WorkingProjectPathResolver" namespace="FastForward\DevTools\Path">
           <metrics complexity="8" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="13" elements="17" coveredelements="17"/>
         </class>
         <line num="45" type="method" name="getResourcesDirectory" visibility="public" complexity="1" crap="1" count="2"/>

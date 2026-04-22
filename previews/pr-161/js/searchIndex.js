@@ -3801,40 +3801,40 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_CACHE_ROOT"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver",
-            "name": "ProjectPathResolver",
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
+            "name": "WorkingProjectPathResolver",
             "summary": "Provides\u0020canonical\u0020repository\u002Droot\u0020paths\u0020that\u0020are\u0020not\u0020part\u0020of\u0020the\u0020managed\u0020workspace.",
-            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html"
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AgetResourcesDirectory\u0028\u0029",
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetResourcesDirectory\u0028\u0029",
             "name": "getResourcesDirectory",
             "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020resources\u0020path.",
-            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_getResourcesDirectory"
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getResourcesDirectory"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AgetVendorDirectory\u0028\u0029",
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetVendorDirectory\u0028\u0029",
             "name": "getVendorDirectory",
             "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020vendor\u0020path.",
-            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_getVendorDirectory"
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getVendorDirectory"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AgetToolingExcludedDirectories\u0028\u0029",
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetToolingExcludedDirectories\u0028\u0029",
             "name": "getToolingExcludedDirectories",
             "summary": "Returns\u0020the\u0020project\u0020directories\u0020that\u0020static\u002Danalysis\u0020and\u0020coding\u002Dstyle\u0020tooling\u0020SHOULD\u0020skip.",
-            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_getToolingExcludedDirectories"
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingExcludedDirectories"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AjoinProjectPath\u0028\u0029",
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AjoinProjectPath\u0028\u0029",
             "name": "joinProjectPath",
             "summary": "Joins\u0020an\u0020optional\u0020relative\u0020path\u0020under\u0020a\u0020project\u002Droot\u0020segment.",
-            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_joinProjectPath"
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_joinProjectPath"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003ARESOURCES",
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003ARESOURCES",
             "name": "RESOURCES",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#constant_RESOURCES"
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#constant_RESOURCES"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AVENDOR",
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AVENDOR",
             "name": "VENDOR",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#constant_VENDOR"
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#constant_VENDOR"
         },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
             "name": "CoverageSummary",
