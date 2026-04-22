@@ -24,7 +24,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use FastForward\DevTools\Workspace\ManagedWorkspace;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -88,7 +88,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Target directory for the generated metrics reports.',
-                default: ManagedWorkspace::METRICS,
+                default: ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS),
             )
             ->addOption(
                 name: 'junit',

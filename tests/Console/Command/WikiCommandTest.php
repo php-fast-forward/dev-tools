@@ -26,7 +26,7 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use FastForward\DevTools\Workspace\ManagedWorkspace;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -92,7 +92,7 @@ final class WikiCommandTest extends TestCase
         $this->input->getOption('target')
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
-            ->willReturn(ManagedWorkspace::phpDocumentorCache());
+            ->willReturn(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC));
         $this->input->getOption('init')
             ->willReturn(false);
         $this->input->getOption('json')

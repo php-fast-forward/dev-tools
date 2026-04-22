@@ -25,7 +25,7 @@ use FastForward\DevTools\Console\Command\DocsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use FastForward\DevTools\Workspace\ManagedWorkspace;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -87,9 +87,9 @@ final class DocsCommandTest extends TestCase
         $this->input->getOption('source')
             ->willReturn('docs');
         $this->input->getOption('target')
-            ->willReturn(ManagedWorkspace::ROOT);
+            ->willReturn(ManagedWorkspace::getOutputDirectory());
         $this->input->getOption('cache-dir')
-            ->willReturn(ManagedWorkspace::phpDocumentorCache());
+            ->willReturn(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC));
         $this->input->getOption('template')
             ->willReturn('vendor/fast-forward/phpdoc-bootstrap-template');
         $this->input->getOption('progress')
@@ -106,9 +106,9 @@ final class DocsCommandTest extends TestCase
             ->willReturn(new OutputFormatter());
         $this->filesystem->getAbsolutePath('docs')
             ->willReturn('/repo/docs');
-        $this->filesystem->getAbsolutePath(ManagedWorkspace::ROOT)
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::getOutputDirectory())
             ->willReturn('/repo/.dev-tools');
-        $this->filesystem->getAbsolutePath(ManagedWorkspace::phpDocumentorCache())
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC))
             ->willReturn('/repo/.dev-tools/cache/phpdoc');
         $this->filesystem->getAbsolutePath('phpdocumentor.xml', '/repo/.dev-tools/cache/phpdoc')
             ->willReturn('/repo/.dev-tools/cache/phpdoc/phpdocumentor.xml');

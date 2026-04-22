@@ -52,7 +52,7 @@ final class ComposerDependencyAnalyserConfig
      *
      * @var array<int, string>
      */
-    private const array PACKAGED_UNUSED_DEPENDENCIES = [
+    public const array DEFAULT_PACKAGED_UNUSED_DEPENDENCIES = [
         'ergebnis/composer-normalize',
         'fakerphp/faker',
         'fast-forward/phpdoc-bootstrap-template',
@@ -75,7 +75,7 @@ final class ComposerDependencyAnalyserConfig
      *
      * @var array<int, string>
      */
-    private const array PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES = [
+    public const array DEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES = [
         'phpspec/prophecy',
         'phpspec/prophecy-phpunit',
         'symfony/var-exporter',
@@ -93,7 +93,7 @@ final class ComposerDependencyAnalyserConfig
         $configuration = new Configuration();
 
         if (self::isDevToolsRepository(__DIR__)) {
-            self::configurePackagedRepositoryIgnores($configuration);
+            self::applyPackagedRepositoryIgnores($configuration);
         }
 
         if (null !== $customize) {
@@ -110,14 +110,19 @@ final class ComposerDependencyAnalyserConfig
      *
      * @return void
      */
-    private static function configurePackagedRepositoryIgnores(Configuration $configuration): void
+    public static function applyPackagedRepositoryIgnores(Configuration $configuration): Configuration
     {
         $configuration->ignoreErrorsOnExtension('ext-pcntl', [ErrorType::SHADOW_DEPENDENCY]);
-        $configuration->ignoreErrorsOnPackages(self::PACKAGED_UNUSED_DEPENDENCIES, [ErrorType::UNUSED_DEPENDENCY]);
         $configuration->ignoreErrorsOnPackages(
-            self::PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES,
+            self::DEFAULT_PACKAGED_UNUSED_DEPENDENCIES,
+            [ErrorType::UNUSED_DEPENDENCY]
+        );
+        $configuration->ignoreErrorsOnPackages(
+            self::DEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES,
             [ErrorType::PROD_DEPENDENCY_ONLY_IN_DEV],
         );
+
+        return $configuration;
     }
 
     /**

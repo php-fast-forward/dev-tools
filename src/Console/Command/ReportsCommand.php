@@ -25,7 +25,7 @@ use Composer\Console\Input\InputOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use FastForward\DevTools\Workspace\ManagedWorkspace;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -76,20 +76,20 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
                 name: 'target',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The target directory for the generated reports.',
-                default: ManagedWorkspace::ROOT,
+                default: ManagedWorkspace::getOutputDirectory(),
             )
             ->addOption(
                 name: 'coverage',
                 shortcut: 'c',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'The target directory for the generated test coverage report.',
-                default: ManagedWorkspace::COVERAGE,
+                default: ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE),
             )
             ->addOption(
                 name: 'metrics',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Generate code metrics and optionally choose the HTML output directory.',
-                default: ManagedWorkspace::METRICS,
+                default: ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS),
             );
     }
 

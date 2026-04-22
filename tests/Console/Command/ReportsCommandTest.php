@@ -24,7 +24,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use FastForward\DevTools\Workspace\ManagedWorkspace;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -74,11 +74,11 @@ final class ReportsCommandTest extends TestCase
         $this->process = $this->prophesize(Process::class);
 
         $this->input->getOption('target')
-            ->willReturn(ManagedWorkspace::ROOT);
+            ->willReturn(ManagedWorkspace::getOutputDirectory());
         $this->input->getOption('coverage')
-            ->willReturn(ManagedWorkspace::COVERAGE);
+            ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE));
         $this->input->getOption('metrics')
-            ->willReturn(ManagedWorkspace::METRICS);
+            ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS));
         $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')

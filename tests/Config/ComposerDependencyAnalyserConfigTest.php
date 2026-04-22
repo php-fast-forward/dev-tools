@@ -75,6 +75,36 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
      * @return void
      */
     #[Test]
+    public function itWillExposeReusablePackagedDependencyDefaults(): void
+    {
+        self::assertContains(
+            'rector/jack',
+            ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_UNUSED_DEPENDENCIES,
+        );
+        self::assertContains(
+            'phpspec/prophecy',
+            ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES,
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function applyPackagedRepositoryIgnoresWillReturnTheSameConfigurationInstance(): void
+    {
+        $configuration = new Configuration();
+
+        self::assertSame(
+            $configuration,
+            ComposerDependencyAnalyserConfig::applyPackagedRepositoryIgnores($configuration)
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function isInstalledAsDependencyWillDetectVendorPackagePaths(): void
     {
         self::assertFalse($this->invokeDetector('isInstalledAsDependency', '/workspaces/dev-tools/src/Config'));

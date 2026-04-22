@@ -27,7 +27,7 @@ use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use FastForward\DevTools\Workspace\ManagedWorkspace;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -104,9 +104,9 @@ final class TestsCommandTest extends TestCase
         $this->fileLocator->locate(TestsCommand::CONFIG)->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
         $this->filesystem->getAbsolutePath('./vendor/autoload.php')
             ->willReturn(getcwd() . '/vendor/autoload.php');
-        $this->filesystem->getAbsolutePath(ManagedWorkspace::phpUnitCache())
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT))
             ->willReturn(getcwd() . '/.dev-tools/cache/phpunit');
-        $this->filesystem->getAbsolutePath(ManagedWorkspace::COVERAGE)
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE))
             ->willReturn(getcwd() . '/.dev-tools/coverage');
         $this->filesystem->getAbsolutePath('src/')
             ->willReturn(getcwd() . '/src');
