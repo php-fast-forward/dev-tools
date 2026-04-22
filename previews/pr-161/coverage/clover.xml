@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776881634">
-  <project timestamp="1776881634" name="Clover Coverage">
+<coverage generated="1776882418">
+  <project timestamp="1776882418" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -748,7 +748,7 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Config/ECSConfig.php">
         <class name="FastForward\DevTools\Config\ECSConfig" namespace="FastForward\DevTools\Config">
-          <metrics complexity="5" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="17" elements="21" coveredelements="19"/>
+          <metrics complexity="5" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="28" elements="32" coveredelements="30"/>
         </class>
         <line num="105" type="method" name="configure" visibility="public" complexity="2" crap="2.01" count="1"/>
         <line num="107" type="stmt" count="1"/>
@@ -768,10 +768,21 @@
         <line num="145" type="stmt" count="1"/>
         <line num="146" type="stmt" count="1"/>
         <line num="147" type="stmt" count="1"/>
+        <line num="148" type="stmt" count="1"/>
         <line num="149" type="stmt" count="1"/>
         <line num="150" type="stmt" count="1"/>
+        <line num="151" type="stmt" count="1"/>
+        <line num="152" type="stmt" count="1"/>
         <line num="153" type="stmt" count="1"/>
-        <metrics loc="156" ncloc="100" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="17" elements="21" coveredelements="19"/>
+        <line num="154" type="stmt" count="1"/>
+        <line num="155" type="stmt" count="1"/>
+        <line num="156" type="stmt" count="1"/>
+        <line num="157" type="stmt" count="1"/>
+        <line num="158" type="stmt" count="1"/>
+        <line num="160" type="stmt" count="1"/>
+        <line num="161" type="stmt" count="1"/>
+        <line num="164" type="stmt" count="1"/>
+        <metrics loc="167" ncloc="111" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="28" elements="32" coveredelements="30"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Config/RectorConfig.php">
         <class name="FastForward\DevTools\Config\RectorConfig" namespace="FastForward\DevTools\Config">
@@ -5239,6 +5250,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="124" loc="17217" ncloc="10335" classes="92" methods="424" coveredmethods="354" conditionals="0" coveredconditionals="0" statements="4084" coveredstatements="3810" elements="4508" coveredelements="4164"/>
+    <metrics files="124" loc="17228" ncloc="10346" classes="92" methods="424" coveredmethods="354" conditionals="0" coveredconditionals="0" statements="4095" coveredstatements="3821" elements="4519" coveredelements="4175"/>
   </project>
 </coverage>
