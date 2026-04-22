@@ -1,31 +1,17 @@
 name: Update Wiki
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: '17 3 * * *'
   pull_request:
     types: [opened, synchronize, reopened]
-  pull_request_target:
-    types: [closed]
 
 concurrency:
-  group: update-wiki-${{ github.event.pull_request.number || github.ref }}
+  group: update-wiki-preview-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   preview:
-    if: github.event_name == 'pull_request'
     permissions:
       contents: write
       pull-requests: read
     uses: ./.github/workflows/wiki-preview.yml
-    secrets: inherit
-
-  maintenance:
-    if: github.event_name != 'pull_request'
-    permissions:
-      contents: write
-      pull-requests: read
-    uses: ./.github/workflows/wiki-maintenance.yml
     secrets: inherit
