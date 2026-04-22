@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Adopt `--progress` as the positive opt-in for transient progress rendering while keeping supported commands quiet by default (#33)
 - Teach packaged issue-authoring skills and prompts to reuse existing GitHub issue metadata, infer project field values, preserve relationships with open issues, and mirror linked issue project metadata onto pull requests (#152)
 - Automate the configured GitHub Project board across issue intake, PR review, merge, release preparation, and changelog-driven release publication using repository-level Project variables (#152)
+- Reorganize packaged GitHub Actions documentation to reflect the local `.github/actions` groups for `php`, `project-board`, `github-pages`, `wiki`, and `changelog`, plus the split between wiki preview and wiki maintenance workflows (#152)
 
 ### Fixed
 

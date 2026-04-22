@@ -17,5 +17,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: read
+    # Pull-request wiki previews live here. Publication and preview cleanup are
+    # handled by the separate wiki-maintenance wrapper.
     uses: php-fast-forward/dev-tools/.github/workflows/wiki-preview.yml@main
     secrets: inherit

@@ -43,7 +43,7 @@ composer dev-tools docs          # Generate HTML API documentation
 composer dev-tools wiki          # Generate Markdown documentation for wiki
 composer dev-tools reports       # Generate docs frontpage and reports
 composer dev-tools agents        # Sync packaged project agents into .agents/agents
-composer dev-tools:sync          # Sync scripts, GitHub Actions, .editorconfig, wiki
+composer dev-tools:sync          # Sync managed repository assets and packaged agent surfaces
 ```
 
 **Notable Specialized Commands:**
@@ -58,6 +58,7 @@ composer dev-tools:sync          # Sync scripts, GitHub Actions, .editorconfig, 
 - `composer metrics`: Generate PhpMetrics reports and related artifacts
 - `composer update-composer-json`: Normalize managed `composer.json` settings
 - `composer changelog:entry|check|next-version|promote|show`: Manage changelog-driven release workflows
+- `composer dev-tools:sync --dry-run|--check|--interactive`: Preview managed-file drift while intentionally skipping wiki, skills, and agents
 
 ## Testing Instructions
 
@@ -69,7 +70,7 @@ composer dev-tools tests
 composer dev-tools tests -- --filter=CodeStyle
 
 # Run with coverage report
-composer dev-tools tests -- --coverage=public/coverage
+composer dev-tools tests -- --coverage=.dev-tools/coverage
 ```
 
 **Test Configuration:**
@@ -132,9 +133,12 @@ to Packagist, while consumer repositories adopt workflows, packaged skills, and
 other managed assets through `composer dev-tools:sync`.
 
 Release and publishing behavior is driven primarily through
-`.github/workflows/changelog.yml`, `reports.yml`, and `wiki.yml`, with packaged
-skills living under `.agents/skills/` and mirrored project-agent prompts under
-`.agents/agents/`.
+`.github/workflows/tests.yml`, `changelog.yml`, `reports.yml`, `wiki.yml`,
+`wiki-preview.yml`, `wiki-maintenance.yml`, `auto-assign.yml`, and
+`label-sync.yml`, with reusable local workflow building blocks grouped under
+`.github/actions/` and packaged consumer workflow wrappers living under
+`resources/github-actions/`. Packaged skills live under `.agents/skills/`
+alongside mirrored project-agent prompts under `.agents/agents/`.
 
 **Package Details:**
 
@@ -167,7 +171,9 @@ composer dev-tools
 - `README.md`: high-level command surface, architecture overview, and consumer-facing context
 - `docs/commands/`: command-specific behavior and option details
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
-- `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `wiki.yml`, and `changelog.yml`
+- `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `wiki.yml`, `wiki-preview.yml`, `wiki-maintenance.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
+- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `wiki`, `changelog`, and `label-sync`
+- `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
 - `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
 - `.agents/skills/`: packaged procedural skills shipped to consumer repositories
@@ -179,9 +185,10 @@ composer dev-tools
 - **GrumPHP**: Automatically runs on pre-commit (configured in `grumphp.yml`)
 - **Rector**: Custom rules in `src/Rector/` for automated refactoring
 - **Documentation**: Sphinx-based docs in `docs/` directory
-- **Wiki**: GitHub wiki synced via `dev-tools wiki` and `dev-tools:sync`
-- **GitHub Actions**: Workflows in `.github/workflows/` (synced via `dev-tools:sync`)
+- **Wiki**: Pull-request preview publication starts in `.github/workflows/wiki.yml`, while merged publication and preview cleanup run through `.github/workflows/wiki-maintenance.yml`
+- **GitHub Actions**: Reusable workflows live in `.github/workflows/`, local workflow actions live in `.github/actions/`, and consumer wrappers are synchronized from `resources/github-actions/`
 - **Dependency Health CI**: `.github/workflows/tests.yml` always runs the dependency-health job, and its default `max-outdated` input is `-1` so outdated packages are reported without failing CI on count alone
+- **Sync Preview Modes**: `dev-tools:sync --dry-run`, `--check`, and `--interactive` intentionally skip wiki, skills, and agents because those flows do not yet expose non-destructive verification
 - **Project Agents**: Packaged role prompts synchronized via `composer agents` and `dev-tools:sync`
 
 ## Skills Usage
@@ -208,6 +215,6 @@ remains the procedural source of truth.
 - Delegate to `php-style-curator` for PHPDoc cleanup, file-header normalization, and repository style conformance.
 - Delegate to `readme-maintainer` when public commands, installation, usage, links, or badges change.
 - Delegate to `docs-writer` when `docs/` must be created or updated.
-- Delegate to `consumer-sync-auditor` when packaged skills, packaged agents, sync assets, wiki, workflows, or consumer bootstrap behavior change.
+- Delegate to `consumer-sync-auditor` when packaged skills, packaged agents, sync assets, wiki, workflow wrappers, local GitHub actions, or consumer bootstrap behavior change.
 - Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
 - Delegate to `changelog-maintainer` when a task needs changelog authoring, changelog validation for PRs, release promotion, or release-note export.
