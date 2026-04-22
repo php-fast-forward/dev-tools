@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep the packaged pull-request label-sync action from failing when a PR does not reference any linked issue (#157)
+
 ## [1.17.0] - 2026-04-22
 
 ### Added
