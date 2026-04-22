@@ -143,8 +143,19 @@ final class ECSConfig
     {
         $config
             ->withRootFiles()
-            ->withPhpCsFixerSets(...self::DEFAULT_PHP_CS_FIXER_SETS)
-            ->withPreparedSets(...self::DEFAULT_PREPARED_SETS);
+            ->withPhpCsFixerSets(
+                symfony: self::DEFAULT_PHP_CS_FIXER_SETS['symfony'],
+                symfonyRisky: self::DEFAULT_PHP_CS_FIXER_SETS['symfonyRisky'],
+                auto: self::DEFAULT_PHP_CS_FIXER_SETS['auto'],
+                autoRisky: self::DEFAULT_PHP_CS_FIXER_SETS['autoRisky'],
+            )
+            ->withPreparedSets(
+                psr12: self::DEFAULT_PREPARED_SETS['psr12'],
+                common: self::DEFAULT_PREPARED_SETS['common'],
+                symplify: self::DEFAULT_PREPARED_SETS['symplify'],
+                strict: self::DEFAULT_PREPARED_SETS['strict'],
+                cleanCode: self::DEFAULT_PREPARED_SETS['cleanCode'],
+            );
 
         foreach (self::DEFAULT_CONFIGURED_RULES as $rule => $configuration) {
             $config->withConfiguredRule($rule, $configuration);
