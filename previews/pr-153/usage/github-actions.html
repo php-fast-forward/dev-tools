@@ -3129,8 +3129,31 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
             
 
 <ul>
-    <li><strong>Auto Assign</strong>
-: Automatically assigns reviewers to PRs.</li>
+    <li><strong>Project Board Automation</strong>
+:
+<em>   Supports both direct repository use and ``workflow_call`` wrappers in consumer repositories.
+</em>
+   Uses <code>github.repository_owner</code>
+ to determine the owning organization or user.
+<em>   For ``php-fast-forward`` repositories, defaults to the first organization Project V2 when no explicit project number is provided.
+</em>
+   Consumer repositories SHOULD pass <code>project</code>
+ in the wrapper workflow, or set <code>PROJECT</code>
+ as a repository variable when they want the reusable workflow to target a specific board.
+<em>   Adds new issues to the project and moves them into ``Backlog``.
+</em>
+   Adds linked pull requests to the same project, mirrors milestone plus inferable project metadata, and keeps draft PRs in <code>In progress</code>
+ until they are explicitly ready for review.
+<em>   Promotes approved pull requests into ``Ready to Merge``.
+</em>
+   Moves merged pull requests and linked issues into <code>Merged</code>
+.
+<em>   Moves all currently ``Merged`` work into ``Release Prepared`` when ``changelog.yml`` opens or updates a release-preparation pull request.
+</em>
+   Promotes all <code>Release Prepared</code>
+ work into <code>Released</code>
+ when the release-preparation pull request is merged and the GitHub release is published.
+*   Uses the built-in workflow token for project updates.</li>
 
     <li><strong>Label Sync</strong>
 : Synchronizes repository labels with ecosystem standards.</li>
