@@ -18,6 +18,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  wiki:
-    uses: php-fast-forward/dev-tools/.github/workflows/wiki.yml@main
+  preview:
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: write
+      pull-requests: read
+    uses: php-fast-forward/dev-tools/.github/workflows/wiki-preview.yml@main
+    secrets: inherit
+
+  maintenance:
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: write
+      pull-requests: read
+    uses: php-fast-forward/dev-tools/.github/workflows/wiki-maintenance.yml@main
     secrets: inherit
