@@ -247,6 +247,8 @@
         <ul>
             <li class="success">Configure will return configuration</li>
             <li class="success">Configure will apply repository ignores and invoke customization callback</li>
+            <li class="success">It will expose reusable packaged dependency defaults</li>
+            <li class="success">Apply packaged repository ignores will return the same configuration instance</li>
             <li class="success">Is installed as dependency will detect vendor package paths</li>
             <li class="success">Is dev tools repository will detect repository paths</li>
         </ul>
@@ -364,6 +366,8 @@
         <h2>ECSConfig (FastForward\DevTools\Tests\Config\ECSConfig)</h2>
         <ul>
             <li class="success">Configure will return e c s config builder</li>
+            <li class="success">It will expose reusable default skipped rules</li>
+            <li class="success">Apply default paths and skips will keep working with a builder</li>
         </ul>
         <h2>Event Tracer (FastForward\DevTools\Tests\PhpUnit\Event\EventTracer)</h2>
         <ul>
@@ -547,9 +551,10 @@
             <li class="success">Format will apply the registered info style</li>
             <li class="success">Format will apply the registered alert style</li>
         </ul>
-        <h2>Managed Workspace (FastForward\DevTools\Tests\Workspace\ManagedWorkspace)</h2>
+        <h2>Managed Workspace (FastForward\DevTools\Tests\Path\ManagedWorkspace)</h2>
         <ul>
             <li class="success">It will expose canonical repository managed paths</li>
+            <li class="success">It will normalize path separators when joining managed paths</li>
         </ul>
         <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
         <ul>
@@ -654,6 +659,11 @@
             <li class="success">Run will write blocking process output to standard and error outputs</li>
             <li class="success">Wait will flush finished detached output without waiting for every process</li>
         </ul>
+        <h2>Project Path Resolver (FastForward\DevTools\Tests\Path\ProjectPathResolver)</h2>
+        <ul>
+            <li class="success">It will expose canonical repository root paths</li>
+            <li class="success">It will normalize path separators when joining repository root paths</li>
+        </ul>
         <h2>Reader (FastForward\DevTools\Tests\GitAttributes\Reader)</h2>
         <ul>
             <li class="success">Read with non existent file will return empty string</li>
@@ -670,6 +680,8 @@
             <li class="success">Configure will return callable</li>
             <li class="success">Configure with custom callback will return callable</li>
             <li class="success">Configure will apply the default rector configuration and customization callback</li>
+            <li class="success">It will expose reusable default sets and rules</li>
+            <li class="success">Apply safe migration set will be callable without the safe package installed</li>
         </ul>
         <h2>Refactor Command (FastForward\DevTools\Tests\Console\Command\RefactorCommand)</h2>
         <ul>

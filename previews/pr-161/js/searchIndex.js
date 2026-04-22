@@ -1036,10 +1036,10 @@ Search.appendIndex(
             "summary": "Creates\u0020the\u0020default\u0020Composer\u0020Dependency\u0020Analyser\u0020configuration.",
             "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AconfigurePackagedRepositoryIgnores\u0028\u0029",
-            "name": "configurePackagedRepositoryIgnores",
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AapplyPackagedRepositoryIgnores\u0028\u0029",
+            "name": "applyPackagedRepositoryIgnores",
             "summary": "Applies\u0020the\u0020ignores\u0020required\u0020only\u0020by\u0020the\u0020packaged\u0020DevTools\u0020repository.",
-            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configurePackagedRepositoryIgnores"
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyPackagedRepositoryIgnores"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AisDevToolsRepository\u0028\u0029",
             "name": "isDevToolsRepository",
@@ -1056,15 +1056,15 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_VENDOR_PACKAGE_PATH"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGED_UNUSED_DEPENDENCIES",
-            "name": "PACKAGED_UNUSED_DEPENDENCIES",
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003ADEFAULT_PACKAGED_UNUSED_DEPENDENCIES",
+            "name": "DEFAULT_PACKAGED_UNUSED_DEPENDENCIES",
             "summary": "Dependencies\u0020that\u0020are\u0020only\u0020required\u0020by\u0020the\u0020packaged\u0020DevTools\u0020distribution\u0020itself.",
-            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_UNUSED_DEPENDENCIES"
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_DEFAULT_PACKAGED_UNUSED_DEPENDENCIES"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003APACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
-            "name": "PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003ADEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
+            "name": "DEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES",
             "summary": "Production\u0020dependencies\u0020intentionally\u0020kept\u0020in\u0020require\u0020for\u0020the\u0020packaged\u0020toolchain.",
-            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES"
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_DEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig",
             "name": "ECSConfig",
@@ -1076,6 +1076,36 @@ Search.appendIndex(
             "summary": "Creates\u0020the\u0020default\u0020ECS\u0020configuration.",
             "url": "classes/FastForward-DevTools-Config-ECSConfig.html#method_configure"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003AapplyDefaultPathsAndSkips\u0028\u0029",
+            "name": "applyDefaultPathsAndSkips",
+            "summary": "Applies\u0020the\u0020default\u0020repository\u0020paths\u0020and\u0020skipped\u0020rules\u0020to\u0020an\u0020ECS\u0020builder.",
+            "url": "classes/FastForward-DevTools-Config-ECSConfig.html#method_applyDefaultPathsAndSkips"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003AapplyDefaultRulesAndSets\u0028\u0029",
+            "name": "applyDefaultRulesAndSets",
+            "summary": "Applies\u0020the\u0020default\u0020ECS\u0020sets,\u0020root\u0020files,\u0020and\u0020configured\u0020rules\u0020to\u0020an\u0020ECS\u0020builder.",
+            "url": "classes/FastForward-DevTools-Config-ECSConfig.html#method_applyDefaultRulesAndSets"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003ADEFAULT_PHP_CS_FIXER_SETS",
+            "name": "DEFAULT_PHP_CS_FIXER_SETS",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-ECSConfig.html#constant_DEFAULT_PHP_CS_FIXER_SETS"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003ADEFAULT_PREPARED_SETS",
+            "name": "DEFAULT_PREPARED_SETS",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-ECSConfig.html#constant_DEFAULT_PREPARED_SETS"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003ADEFAULT_SKIPPED_RULES",
+            "name": "DEFAULT_SKIPPED_RULES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-ECSConfig.html#constant_DEFAULT_SKIPPED_RULES"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003ADEFAULT_CONFIGURED_RULES",
+            "name": "DEFAULT_CONFIGURED_RULES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-ECSConfig.html#constant_DEFAULT_CONFIGURED_RULES"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\RectorConfig",
             "name": "RectorConfig",
             "summary": "Provides\u0020the\u0020default\u0020Rector\u0020configuration.",
@@ -1085,6 +1115,26 @@ Search.appendIndex(
             "name": "configure",
             "summary": "Creates\u0020the\u0020default\u0020Rector\u0020configuration.",
             "url": "classes/FastForward-DevTools-Config-RectorConfig.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\RectorConfig\u003A\u003AapplySafeMigrationSet\u0028\u0029",
+            "name": "applySafeMigrationSet",
+            "summary": "Applies\u0020the\u0020optional\u0020Safe\u0020migration\u0020callback\u0020when\u0020the\u0020package\u0020is\u0020installed.",
+            "url": "classes/FastForward-DevTools-Config-RectorConfig.html#method_applySafeMigrationSet"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\RectorConfig\u003A\u003ADEFAULT_SETS",
+            "name": "DEFAULT_SETS",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-RectorConfig.html#constant_DEFAULT_SETS"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\RectorConfig\u003A\u003ADEFAULT_RULES",
+            "name": "DEFAULT_RULES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-RectorConfig.html#constant_DEFAULT_RULES"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\RectorConfig\u003A\u003ADEFAULT_SKIPPED_RULES",
+            "name": "DEFAULT_SKIPPED_RULES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-RectorConfig.html#constant_DEFAULT_SKIPPED_RULES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand",
             "name": "AgentsCommand",
@@ -3696,6 +3746,96 @@ Search.appendIndex(
             "summary": "Resolves\u0020a\u0020license\u0020identifier\u0020to\u0020its\u0020template\u0020filename.",
             "url": "classes/FastForward-DevTools-License-ResolverInterface.html#method_resolve"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "name": "ManagedWorkspace",
+            "summary": "Provides\u0020canonical\u0020repository\u002Dlocal\u0020paths\u0020for\u0020generated\u0020DevTools\u0020artifacts.",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003AgetOutputDirectory\u0028\u0029",
+            "name": "getOutputDirectory",
+            "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020managed\u0020output\u0020directory.",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#method_getOutputDirectory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003AgetCacheDirectory\u0028\u0029",
+            "name": "getCacheDirectory",
+            "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020managed\u0020cache\u0020directory.",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#method_getCacheDirectory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003ACOVERAGE",
+            "name": "COVERAGE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_COVERAGE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003AMETRICS",
+            "name": "METRICS",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_METRICS"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003APHPDOC",
+            "name": "PHPDOC",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_PHPDOC"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003APHPUNIT",
+            "name": "PHPUNIT",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_PHPUNIT"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003ARECTOR",
+            "name": "RECTOR",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_RECTOR"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003APHP_CS_FIXER",
+            "name": "PHP_CS_FIXER",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_PHP_CS_FIXER"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003AWORKSPACE_ROOT",
+            "name": "WORKSPACE_ROOT",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_WORKSPACE_ROOT"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003ACACHE_ROOT",
+            "name": "CACHE_ROOT",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_CACHE_ROOT"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver",
+            "name": "ProjectPathResolver",
+            "summary": "Provides\u0020canonical\u0020repository\u002Droot\u0020paths\u0020that\u0020are\u0020not\u0020part\u0020of\u0020the\u0020managed\u0020workspace.",
+            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AgetResourcesDirectory\u0028\u0029",
+            "name": "getResourcesDirectory",
+            "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020resources\u0020path.",
+            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_getResourcesDirectory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AgetVendorDirectory\u0028\u0029",
+            "name": "getVendorDirectory",
+            "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020vendor\u0020path.",
+            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_getVendorDirectory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AgetToolingExcludedDirectories\u0028\u0029",
+            "name": "getToolingExcludedDirectories",
+            "summary": "Returns\u0020the\u0020project\u0020directories\u0020that\u0020static\u002Danalysis\u0020and\u0020coding\u002Dstyle\u0020tooling\u0020SHOULD\u0020skip.",
+            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_getToolingExcludedDirectories"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AjoinProjectPath\u0028\u0029",
+            "name": "joinProjectPath",
+            "summary": "Joins\u0020an\u0020optional\u0020relative\u0020path\u0020under\u0020a\u0020project\u002Droot\u0020segment.",
+            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#method_joinProjectPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003ARESOURCES",
+            "name": "RESOURCES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#constant_RESOURCES"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ProjectPathResolver\u003A\u003AVENDOR",
+            "name": "VENDOR",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ProjectPathResolver.html#constant_VENDOR"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
             "name": "CoverageSummary",
             "summary": "Represents\u0020the\u0020line\u0020coverage\u0020summary\u0020extracted\u0020from\u0020a\u0020PHPUnit\u0020\u0060coverage\u002Dphp\u0060\u0020report.",
@@ -4411,56 +4551,6 @@ Search.appendIndex(
             "summary": "Stores\u0020the\u0020entry\u0020names\u0020for\u0020broken\u0020links\u0020removed\u0020during\u0020repair.",
             "url": "classes/FastForward-DevTools-Sync-SynchronizeResult.html#property_removedBrokenLinks"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace",
-            "name": "ManagedWorkspace",
-            "summary": "Provides\u0020canonical\u0020repository\u002Dlocal\u0020paths\u0020for\u0020generated\u0020DevTools\u0020artifacts.",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003AphpDocumentorCache\u0028\u0029",
-            "name": "phpDocumentorCache",
-            "summary": "Returns\u0020the\u0020default\u0020phpDocumentor\u0020cache\u0020directory.",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#method_phpDocumentorCache"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003AphpUnitCache\u0028\u0029",
-            "name": "phpUnitCache",
-            "summary": "Returns\u0020the\u0020default\u0020PHPUnit\u0020cache\u0020directory.",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#method_phpUnitCache"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003ArectorCache\u0028\u0029",
-            "name": "rectorCache",
-            "summary": "Returns\u0020the\u0020default\u0020Rector\u0020cache\u0020directory.",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#method_rectorCache"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003AphpCsFixerCache\u0028\u0029",
-            "name": "phpCsFixerCache",
-            "summary": "Returns\u0020the\u0020default\u0020PHP\u002DCS\u002DFixer\u0020cache\u0020directory.",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#method_phpCsFixerCache"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003AROOT",
-            "name": "ROOT",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#constant_ROOT"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003ACACHE",
-            "name": "CACHE",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#constant_CACHE"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003ACOVERAGE",
-            "name": "COVERAGE",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#constant_COVERAGE"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003AMETRICS",
-            "name": "METRICS",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#constant_METRICS"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace\\ManagedWorkspace\u003A\u003ARELEASE_NOTES",
-            "name": "RELEASE_NOTES",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Workspace-ManagedWorkspace.html#constant_RELEASE_NOTES"
-        },                {
             "fqsen": "\\",
             "name": "\\",
             "summary": "",
@@ -4616,6 +4706,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-license.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path",
+            "name": "Path",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-path.html"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage",
             "name": "Coverage",
             "summary": "",
@@ -4680,10 +4775,5 @@ Search.appendIndex(
             "name": "Sync",
             "summary": "",
             "url": "namespaces/fastforward-devtools-sync.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Workspace",
-            "name": "Workspace",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools-workspace.html"
         }            ]
 );
