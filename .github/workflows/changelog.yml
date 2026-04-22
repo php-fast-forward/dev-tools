@@ -8,6 +8,11 @@ on:
                 required: false
                 type: string
                 default: CHANGELOG.md
+            project:
+                description: Optional GitHub Project V2 number for consumer repositories. When omitted, php-fast-forward repositories default to the first organization project.
+                required: false
+                type: string
+                default: ''
             version:
                 description: Optional version to promote during manual release preparation.
                 required: false
@@ -25,6 +30,11 @@ on:
                 required: false
                 type: string
                 default: CHANGELOG.md
+            project:
+                description: Optional GitHub Project V2 number for consumer repositories. Leave empty to use the configured repository variable or the php-fast-forward default.
+                required: false
+                type: string
+                default: ''
             version:
                 description: Optional version to promote. Leave empty to infer from Unreleased.
                 required: false
@@ -43,10 +53,14 @@ on:
 permissions:
     contents: write
     pull-requests: write
+    repository-projects: write
 
 concurrency:
     group: ${{ github.event.pull_request.number && format('changelog-pr-{0}', github.event.pull_request.number) || format('changelog-{0}', github.ref) }}
     cancel-in-progress: ${{ github.event.pull_request.merged != true }}
+
+env:
+    FORCE_COLOR: '1'
 
 jobs:
     resolve_php:
@@ -60,7 +74,7 @@ jobs:
 
             - name: Resolve workflow PHP version
               id: resolve
-              uses: php-fast-forward/dev-tools/resources/resolve-php-version@main
+              uses: ./.github/actions/php/resolve-version
 
     validate_pull_request:
         name: Validate PR Changelog
@@ -70,41 +84,23 @@ jobs:
         env:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
             CHANGELOG_ROOT_VERSION: ${{ github.event.pull_request.head.ref && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
-            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
               with:
                   fetch-depth: 0
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - name: Setup PHP and install dependencies
+              uses: ./.github/actions/php/setup-composer
               with:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v5
-              with:
-                  path: /tmp/composer-cache
-                  key: ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-
-                      ${{ runner.os }}-composer-
-
-            - name: Mark workspace as safe for git
-              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                  root-version: ${{ env.CHANGELOG_ROOT_VERSION }}
+                  install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Fetch base branch reference
               env:
                   BASE_REF: ${{ github.event.pull_request.base.ref }}
               run: git fetch --no-tags --depth=1 origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
-
-            - name: Install dependencies
-              env:
-                  COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                  COMPOSER_CACHE_DIR: /tmp/composer-cache
-                  COMPOSER_ROOT_VERSION: ${{ env.CHANGELOG_ROOT_VERSION }}
-              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Verify changelog update
               env:
@@ -120,7 +116,6 @@ jobs:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
             RELEASE_BRANCH_PREFIX: ${{ inputs.release-branch-prefix || 'release/v' }}
             CHANGELOG_ROOT_VERSION: ${{ format('dev-{0}', github.event.repository.default_branch) }}
-            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
@@ -129,45 +124,19 @@ jobs:
                   ref: ${{ github.event.repository.default_branch }}
                   fetch-depth: 0
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - name: Setup PHP and install dependencies
+              uses: ./.github/actions/php/setup-composer
               with:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v5
-              with:
-                  path: /tmp/composer-cache
-                  key: ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-
-                      ${{ runner.os }}-composer-
-
-            - name: Mark workspace as safe for git
-              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-            - name: Install dependencies
-              env:
-                  COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                  COMPOSER_CACHE_DIR: /tmp/composer-cache
-                  COMPOSER_ROOT_VERSION: ${{ env.CHANGELOG_ROOT_VERSION }}
-              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+                  root-version: ${{ env.CHANGELOG_ROOT_VERSION }}
+                  install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Resolve release version
               id: version
-              env:
-                  INPUT_VERSION: ${{ inputs.version || '' }}
-              run: |
-                  if [ -n "${INPUT_VERSION}" ]; then
-                    version="${INPUT_VERSION}"
-                    source="input"
-                  else
-                    version="$(composer dev-tools changelog:next-version -- --file="${CHANGELOG_FILE}")"
-                    source="inferred"
-                  fi
-
-                  echo "value=${version}" >> "$GITHUB_OUTPUT"
-                  echo "source=${source}" >> "$GITHUB_OUTPUT"
+              uses: ./.github/actions/changelog/resolve-version
+              with:
+                  changelog-file: ${{ env.CHANGELOG_FILE }}
+                  version: ${{ inputs.version || '' }}
 
             - name: Promote changelog release
               env:
@@ -177,11 +146,10 @@ jobs:
                   composer dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
 
             - name: Render release notes preview
-              env:
-                  RELEASE_VERSION: ${{ steps.version.outputs.value }}
-              run: |
-                  mkdir -p .dev-tools
-                  composer dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
+              uses: ./.github/actions/changelog/render-release-notes
+              with:
+                  changelog-file: ${{ env.CHANGELOG_FILE }}
+                  version: ${{ steps.version.outputs.value }}
 
             - name: Create release preparation pull request
               id: create_pr
@@ -205,6 +173,14 @@ jobs:
 
                       - source: `${{ steps.version.outputs.source }}`
 
+            - uses: actions/checkout@v6
+
+            - uses: ./.github/actions/project-board/transition-status
+              with:
+                  project: ${{ inputs.project || vars.PROJECT || '' }}
+                  from-status: Merged
+                  to-status: Release Prepared
+
             - name: Summarize prepared release
               run: |
                   echo "Prepared release version: ${{ steps.version.outputs.value }}"
@@ -220,7 +196,6 @@ jobs:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
             RELEASE_BRANCH_PREFIX: ${{ inputs.release-branch-prefix || 'release/v' }}
             CHANGELOG_ROOT_VERSION: ${{ format('dev-{0}', github.event.repository.default_branch) }}
-            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
@@ -229,67 +204,37 @@ jobs:
                   ref: ${{ github.event.pull_request.base.ref }}
                   fetch-depth: 0
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - name: Setup PHP and install dependencies
+              uses: ./.github/actions/php/setup-composer
               with:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v5
-              with:
-                  path: /tmp/composer-cache
-                  key: ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-${{ hashFiles('**/composer.lock') }}
-                  restore-keys: |
-                      ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-
-                      ${{ runner.os }}-composer-
-
-            - name: Mark workspace as safe for git
-              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-
-            - name: Install dependencies
-              env:
-                  COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                  COMPOSER_CACHE_DIR: /tmp/composer-cache
-                  COMPOSER_ROOT_VERSION: ${{ env.CHANGELOG_ROOT_VERSION }}
-              run: composer install --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+                  root-version: ${{ env.CHANGELOG_ROOT_VERSION }}
+                  install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Resolve merged release version
               id: version
-              env:
-                  HEAD_REF: ${{ github.event.pull_request.head.ref }}
-              run: |
-                  version="${HEAD_REF#${RELEASE_BRANCH_PREFIX}}"
-
-                  if [ -z "${version}" ] || [ "${version}" = "${HEAD_REF}" ]; then
-                    echo "Failed to derive the release version from ${HEAD_REF}." >&2
-                    exit 1
-                  fi
-
-                  echo "value=${version}" >> "$GITHUB_OUTPUT"
+              uses: ./.github/actions/changelog/resolve-merged-version
+              with:
+                  head-ref: ${{ github.event.pull_request.head.ref }}
+                  release-branch-prefix: ${{ env.RELEASE_BRANCH_PREFIX }}
 
             - name: Render release notes
-              env:
-                  RELEASE_VERSION: ${{ steps.version.outputs.value }}
-              run: |
-                  mkdir -p .dev-tools
-                  composer dev-tools changelog:show -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" > .dev-tools/release-notes.md
+              uses: ./.github/actions/changelog/render-release-notes
+              with:
+                  changelog-file: ${{ env.CHANGELOG_FILE }}
+                  version: ${{ steps.version.outputs.value }}
 
             - name: Publish GitHub release
-              env:
-                  GH_TOKEN: ${{ github.token }}
-                  RELEASE_VERSION: ${{ steps.version.outputs.value }}
-                  RELEASE_TAG: v${{ steps.version.outputs.value }}
-                  RELEASE_TARGET: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
-              run: |
-                  if gh release view "${RELEASE_TAG}" --repo "${GITHUB_REPOSITORY}" >/dev/null 2>&1; then
-                    gh release edit "${RELEASE_TAG}" \
-                      --repo "${GITHUB_REPOSITORY}" \
-                      --title "${RELEASE_TAG}" \
-                      --notes-file .dev-tools/release-notes.md
-                  else
-                    gh release create "${RELEASE_TAG}" \
-                      --repo "${GITHUB_REPOSITORY}" \
-                      --target "${RELEASE_TARGET}" \
-                      --title "${RELEASE_TAG}" \
-                      --notes-file .dev-tools/release-notes.md
-                  fi
+              uses: ./.github/actions/changelog/publish-release
+              with:
+                  version: ${{ steps.version.outputs.value }}
+                  target: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
+
+            - uses: actions/checkout@v6
+
+            - uses: ./.github/actions/project-board/transition-status
+              with:
+                  project: ${{ inputs.project || vars.PROJECT || '' }}
+                  from-status: Release Prepared
+                  to-status: Released
+                  include-current-pull-request: 'true'

@@ -25,7 +25,8 @@ What the Command Changes
      - Sets ``extra.grumphp.config-default-path``.
      - Updated in place.
    * - ``.github/workflows/*.yml``
-     - Copies stub workflows from ``resources/github-actions``.
+     - Copies thin wrapper workflows from ``resources/github-actions`` that
+       delegate to reusable workflows in ``php-fast-forward/dev-tools``.
      - Only when missing by default; replaceable with ``--overwrite``.
    * - ``.editorconfig``
      - Copies the packaged file from the repository root.
@@ -67,6 +68,27 @@ What It Needs
 - permission to create local ``.github/`` files;
 - permission to create local ``.agents/skills`` and ``.agents/agents``
   entries.
+
+Workflow Wrapper Notes
+----------------------
+
+The synchronized workflow files in consumer repositories are wrappers, not the
+full implementation. The actual reusable workflows live in the upstream
+``php-fast-forward/dev-tools`` repository and internally compose local actions
+from ``.github/actions/`` there.
+
+That matters most for these cases:
+
+*   ``.github/workflows/wiki.yml`` now handles only pull-request wiki previews.
+*   ``.github/workflows/wiki-maintenance.yml`` handles publication to the wiki
+    ``master`` branch after merge, closed-preview deletion, and scheduled
+    cleanup.
+*   ``.github/workflows/auto-assign.yml`` and
+    ``.github/workflows/changelog.yml`` accept a ``project`` input in the
+    wrapper and also support the ``PROJECT`` repository variable.
+*   The effective project-board contract is ``project`` first, then
+    ``PROJECT``, then any reusable-workflow default that applies to
+    ``php-fast-forward`` repositories.
 
 .. important::
 

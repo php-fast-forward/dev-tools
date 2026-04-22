@@ -1,6 +1,18 @@
 # Metadata Guidance
 
-Use this reference when the issue needs labels, types, assignees, or milestones.
+Use this reference when the issue needs labels, types, assignees, milestones,
+project assignment, project field values, or issue relationships.
+
+## General Rule
+
+- Reuse only metadata that already exists in the target repository or
+  organization.
+- Prefer the maximum useful metadata that can be inferred safely from scope and
+  repository context.
+- Leave a field unset when the fit is weak, ambiguous, or unsupported by the
+  available token.
+- Never create new labels, issue types, projects, project field options, or
+  milestones as part of normal issue drafting or publication.
 
 ## Issue Types
 
@@ -20,6 +32,9 @@ gh api graphql \
   --jq '.data.organization.issueTypes.nodes[].name'
 ```
 
+Select the closest existing type for the issue scope. Do not downgrade to a
+label-only strategy when a fitting issue type exists.
+
 ## Labels
 
 Use labels for secondary categorization, not as a replacement for issue type when a type exists.
@@ -31,10 +46,101 @@ Examples that may still be useful:
 - `help wanted`
 - `question`
 
+Choose labels only from the existing repository label set. Add them when they
+materially improve categorization, not as a reflex.
+
+Discovery example:
+
+```bash
+gh label list --repo {owner}/{repo} --limit 200
+```
+
 ## Milestones and Assignees
 
 - Set a milestone only when the repository is actively using milestone-based planning.
 - Assign users only when the request or repository workflow clearly calls for it.
+
+Milestone discovery example:
+
+```bash
+gh api repos/{owner}/{repo}/milestones
+```
+
+If there are no milestones, or none clearly fit the scope, leave the issue
+without one.
+
+## Projects
+
+When the repository or organization uses Projects, prefer adding the issue to
+the most appropriate existing project instead of leaving project assignment
+empty by default.
+
+Project discovery example:
+
+```bash
+gh api graphql \
+  -f query='{ organization(login: "ORG") { projectsV2(first: 20) { nodes { id title number closed } } } }'
+```
+
+If project access is unavailable, first try to refresh GitHub CLI scopes:
+
+```bash
+gh auth refresh -h github.com -s read:project -s project
+```
+
+Warn the user that this command MAY open a browser and ask them to type a
+verification code before project access is granted.
+
+If no existing repository or organization project clearly fits, omit the
+project assignment instead of guessing. When the repository and organization do
+not appear to have any usable project at all, you MAY suggest copying the Fast
+Forward template project as a starting point:
+
+```text
+https://github.com/orgs/php-fast-forward/projects/2
+```
+
+Treat that suggestion as optional guidance for the user, not as a project you
+create automatically.
+
+## Project Fields
+
+When a selected project exposes fields whose values can be inferred with a high
+degree of confidence, attempt to populate them instead of leaving them blank by
+default. Common examples include `Status`, `Priority`, and `Size`, but the same
+rule applies to any existing project field that has a clear fit for the issue.
+
+Common guidance:
+
+- `Status`: pick the nearest lifecycle state, often `Backlog` or `Ready` for a
+  newly created issue.
+- `Priority`: prefer the lowest confident priority instead of inflating urgency.
+- `Size`: choose a rough estimate only when the issue scope supports it.
+- Other fields: populate them only when the issue scope, repository context, or
+  linked pull-request history makes the right value genuinely clear.
+
+Backfill guidance:
+
+- Support backfill for older issues that are missing project metadata.
+- Only backfill fields that are currently unset or obviously incomplete.
+- Do not overwrite existing project-field values during a backfill pass unless
+  the user explicitly asks for correction.
+
+Do not invent new field options, and do not force a value when no safe choice
+is evident.
+
+## Related Issues
+
+When a newly drafted issue appears materially related to an existing open issue,
+record that relationship instead of leaving the issues disconnected.
+
+Examples of useful relationships:
+
+- dependency or blocker
+- follow-up or split from a larger tracked task
+- scope overlap that reviewers should see together
+
+Avoid speculative or noisy links when the relationship is weak.
 
 ## Title Guidance
 

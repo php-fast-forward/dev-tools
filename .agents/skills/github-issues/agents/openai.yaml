@@ -1,4 +1,4 @@
 interface:
   display_name: "Fast Forward GitHub Issues"
-  short_description: "Draft and manage Fast Forward GitHub issues"
-  default_prompt: "Use $github-issues to draft, create, or update this Fast Forward GitHub issue."
+  short_description: "Draft and manage Fast Forward GitHub issues with existing repository metadata"
+  default_prompt: "Use $github-issues to draft, create, or update this Fast Forward GitHub issue and apply the most appropriate existing repository metadata."

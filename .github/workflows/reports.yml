@@ -29,6 +29,9 @@ concurrency:
     group: ${{ github.event_name == 'pull_request' && format('reports-preview-pr-{0}', github.event.pull_request.number) || 'reports-pages' }}
     cancel-in-progress: ${{ github.event_name == 'pull_request' && github.event.action != 'closed' }}
 
+env:
+    FORCE_COLOR: '1'
+
 jobs:
     resolve_php:
         name: Resolve PHP Version
@@ -42,7 +45,7 @@ jobs:
 
             - name: Resolve workflow PHP version
               id: resolve
-              uses: php-fast-forward/dev-tools/resources/resolve-php-version@main
+              uses: ./.github/actions/php/resolve-version
 
     reports:
         needs: resolve_php
@@ -53,54 +56,35 @@ jobs:
             contents: write
 
         env:
-            PAGES_ARTIFACT_NAME: ${{ github.event_name == 'pull_request' && format('github-pages-pr-{0}', github.event.pull_request.number) || 'github-pages' }}
+            REPORTS_TARGET: .dev-tools
             REPORTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
-            FORCE_COLOR: '1'
 
         steps:
             - uses: actions/checkout@v6
               with:
                 fetch-depth: 0
 
-            - name: Setup PHP
-              uses: shivammathur/setup-php@v2
+            - name: Setup PHP and install dependencies
+              uses: ./.github/actions/php/setup-composer
               with:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
                 extensions: pcov, pcntl
                 coverage: pcov
-
-            - name: Cache Composer dependencies
-              uses: actions/cache@v5
-              with:
-                path: /tmp/composer-cache
-                key: ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-${{ hashFiles('**/composer.lock') }}
-                restore-keys: |
-                  ${{ runner.os }}-composer-${{ needs.resolve_php.outputs.php-version }}-
-                  ${{ runner.os }}-composer-
-
-            - name: Install dependencies
-              env:
-                COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-                COMPOSER_CACHE_DIR: /tmp/composer-cache
-                COMPOSER_ROOT_VERSION: ${{ env.REPORTS_ROOT_VERSION }}
-              run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
-
-            - name: Mark workspace as safe for git
-              run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
+                root-version: ${{ env.REPORTS_ROOT_VERSION }}
 
             - name: Generate reports
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.REPORTS_ROOT_VERSION }}
-              run: composer dev-tools reports -- --target=tmp/reports --coverage=tmp/reports/coverage --metrics=tmp/reports/metrics
+              run: composer dev-tools reports -- --target="${REPORTS_TARGET}" --coverage="${REPORTS_TARGET}/coverage" --metrics="${REPORTS_TARGET}/metrics"
 
             - name: Fix permissions
               run: |
-                chmod -c -R +rX "tmp/reports/" | while read line; do
+                chmod -c -R +rX "${REPORTS_TARGET}/" | while read line; do
                     echo "::warning title=Invalid file permissions automatically fixed::$line"
                 done
 
             - name: Add .nojekyll
-              run: touch tmp/reports/.nojekyll
+              run: touch "${REPORTS_TARGET}/.nojekyll"
 
             - name: Restore previews from gh-pages
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -112,11 +96,10 @@ jobs:
 
             - name: Copy existing previews into publish directory
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-              run: |
-                if [ -d "gh-pages-current/previews" ]; then
-                    mkdir -p tmp/reports/previews
-                    cp -R gh-pages-current/previews/. tmp/reports/previews/
-                fi
+              uses: ./.github/actions/github-pages/restore-previews
+              with:
+                source: gh-pages-current
+                target: ${{ env.REPORTS_TARGET }}
 
             - name: Deploy main reports
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -124,7 +107,7 @@ jobs:
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_branch: gh-pages
-                publish_dir: ./tmp/reports/
+                publish_dir: ./${{ env.REPORTS_TARGET }}/
                 destination_dir: .
                 keep_files: false
                 force_orphan: false
@@ -135,7 +118,7 @@ jobs:
               with:
                 github_token: ${{ secrets.GITHUB_TOKEN }}
                 publish_branch: gh-pages
-                publish_dir: ./tmp/reports/
+                publish_dir: ./${{ env.REPORTS_TARGET }}/
                 destination_dir: previews/pr-${{ github.event.pull_request.number }}
                 keep_files: false
                 force_orphan: false
@@ -147,45 +130,16 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Health check deployed reports
-              env:
-                BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
-              run: |
-                check_url() {
-                    url="$1"
-                    label="$2"
-                    attempts=6
-                    delay=5
+            - uses: actions/checkout@v6
 
-                    for attempt in $(seq 1 "${attempts}"); do
-                        echo "Checking ${label}: ${url} (attempt ${attempt}/${attempts})"
-
-                        http_status="$(curl --silent --show-error --output /dev/null --location --write-out '%{http_code}' "${url}" 2>/tmp/curl-error.log || true)"
-
-                        if [ "${http_status}" -ge 200 ] && [ "${http_status}" -lt 400 ]; then
-                            echo "${label} is reachable (${http_status})."
-                            return 0
-                        fi
-
-                        curl_error="$(cat /tmp/curl-error.log)"
-
-                        if [ -n "${curl_error}" ]; then
-                            echo "Attempt ${attempt} failed for ${label}: ${url} (curl error: ${curl_error})"
-                        else
-                            echo "Attempt ${attempt} failed for ${label}: ${url} (HTTP ${http_status})"
-                        fi
-
-                        if [ "${attempt}" -lt "${attempts}" ]; then
-                            sleep "${delay}"
-                        fi
-                    done
-
-                    echo "::error title=Reports health check failed::${label} is not reachable at ${url}. Last HTTP status: ${http_status}${curl_error:+; curl error: ${curl_error}}"
-                    return 1
-                }
-
-                check_url "${BASE_URL}/" "Reports index"
-                check_url "${BASE_URL}/coverage/" "Coverage report"
+            - uses: ./.github/actions/github-pages/verify-deployment
+              with:
+                base-url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
+                title: Reports health check failed
+                checks: |
+                  /|Reports index
+                  /coverage/|Coverage report
+                  /metrics/|Metrics report
 
     verify_preview_reports:
         if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -194,45 +148,16 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
-            - name: Health check deployed preview
-              env:
-                BASE_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}
-              run: |
-                check_url() {
-                    url="$1"
-                    label="$2"
-                    attempts=6
-                    delay=5
+            - uses: actions/checkout@v6
 
-                    for attempt in $(seq 1 "${attempts}"); do
-                        echo "Checking ${label}: ${url} (attempt ${attempt}/${attempts})"
-
-                        http_status="$(curl --silent --show-error --output /dev/null --location --write-out '%{http_code}' "${url}" 2>/tmp/curl-error.log || true)"
-
-                        if [ "${http_status}" -ge 200 ] && [ "${http_status}" -lt 400 ]; then
-                            echo "${label} is reachable (${http_status})."
-                            return 0
-                        fi
-
-                        curl_error="$(cat /tmp/curl-error.log)"
-
-                        if [ -n "${curl_error}" ]; then
-                            echo "Attempt ${attempt} failed for ${label}: ${url} (curl error: ${curl_error})"
-                        else
-                            echo "Attempt ${attempt} failed for ${label}: ${url} (HTTP ${http_status})"
-                        fi
-
-                        if [ "${attempt}" -lt "${attempts}" ]; then
-                            sleep "${delay}"
-                        fi
-                    done
-
-                    echo "::error title=Preview health check failed::${label} is not reachable at ${url}. Last HTTP status: ${http_status}${curl_error:+; curl error: ${curl_error}}"
-                    return 1
-                }
-
-                check_url "${BASE_URL}/" "Preview reports index"
-                check_url "${BASE_URL}/coverage/" "Preview coverage report"
+            - uses: ./.github/actions/github-pages/verify-deployment
+              with:
+                base-url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}
+                title: Preview health check failed
+                checks: |
+                  /|Preview reports index
+                  /coverage/|Preview coverage report
+                  /metrics/|Preview metrics report
 
     comment_preview:
         if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -270,15 +195,10 @@ jobs:
                 ref: gh-pages
                 path: gh-pages
 
-            - name: Remove preview directory
-              run: |
-                rm -rf "gh-pages/previews/pr-${{ github.event.pull_request.number }}"
-                cd gh-pages
-                touch .nojekyll
-                git config user.name "github-actions[bot]"
-                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                git add -A
-                git diff --cached --quiet || git commit -m "chore: remove preview for PR #${{ github.event.pull_request.number }}"
+            - uses: ./.github/actions/github-pages/remove-preview
+              with:
+                path: gh-pages
+                pull-request-number: ${{ github.event.pull_request.number }}
 
             - name: Push changes
               run: |
@@ -300,57 +220,9 @@ jobs:
                 ref: gh-pages
                 path: gh-pages
 
-            - name: Remove previews for closed pull requests
-              env:
-                GH_TOKEN: ${{ github.token }}
-              run: |
-                cd gh-pages
-
-                deleted=0
-                skipped=0
-                unresolved=0
-
-                if [ ! -d previews ]; then
-                    echo "No previews directory exists. Nothing to clean."
-                    exit 0
-                fi
-
-                while read -r preview_dir; do
-                    branch="${preview_dir#previews/}"
-                    pull_request_number="${branch#pr-}"
-
-                    if ! [[ "${pull_request_number}" =~ ^[0-9]+$ ]]; then
-                        echo "Skipping preview directory ${preview_dir}: name does not match pr-<number>."
-                        skipped=$((skipped + 1))
-                        continue
-                    fi
-
-                    state="$(gh pr view "${pull_request_number}" --repo "${GITHUB_REPOSITORY}" --json state --jq '.state' 2>/dev/null || echo UNKNOWN)"
-
-                    case "${state}" in
-                        CLOSED|MERGED)
-                            echo "Deleting preview directory ${preview_dir} for ${state} pull request #${pull_request_number}."
-                            rm -rf "${preview_dir}"
-                            deleted=$((deleted + 1))
-                            ;;
-                        OPEN)
-                            echo "Keeping preview directory ${preview_dir} for open pull request #${pull_request_number}."
-                            skipped=$((skipped + 1))
-                            ;;
-                        *)
-                            echo "Could not resolve pull request #${pull_request_number} for preview directory ${preview_dir}. Keeping it."
-                            unresolved=$((unresolved + 1))
-                            ;;
-                    esac
-                done < <(find previews -mindepth 1 -maxdepth 1 -type d -name 'pr-*' | sort)
-
-                echo "Preview cleanup summary: deleted=${deleted}, skipped=${skipped}, unresolved=${unresolved}."
-
-                touch .nojekyll
-                git config user.name "github-actions[bot]"
-                git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-                git add -A
-                git diff --cached --quiet || git commit -m "chore: remove orphaned pull request previews"
+            - uses: ./.github/actions/github-pages/cleanup-orphaned-previews
+              with:
+                path: gh-pages
 
             - name: Push changes
               run: |

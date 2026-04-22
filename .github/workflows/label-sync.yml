@@ -25,30 +25,5 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Extract issue number from PR
-        id: extract-issue
-        env:
-          BODY: ${{ github.event.pull_request.body }}
-          TITLE: ${{ github.event.pull_request.title }}
-        run: |
-          ISSUE=$(echo "$TITLE $BODY" | \
-            grep -oiE '(closes|fixes|resolves|addresses)\s+#[[:digit:]]+' | \
-            grep -oE '#[[:digit:]]+' | head -1 | tr -d '#')
-
-          if [ -n "$ISSUE" ]; then
-            echo "issue_number=$ISSUE" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Copy labels from issue to PR
-        if: steps.extract-issue.outputs.issue_number != ''
-        run: |
-          LABELS=$(gh issue view "$ISSUE_NUM" --repo "$REPO" --json labels --jq '.labels[].name')
-
-          for label in $LABELS; do
-            gh pr edit "$PR_NUM" --repo "$REPO" --add-label "$label" 2>/dev/null || true
-          done
-        env:
-          ISSUE_NUM: ${{ steps.extract-issue.outputs.issue_number }}
-          PR_NUM: ${{ github.event.pull_request.number }}
-          REPO: ${{ github.repository }}
-          GH_TOKEN: ${{ github.token }}
+        uses: ./.github/actions/label-sync/copy-linked-issue-labels

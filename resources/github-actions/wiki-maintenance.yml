@@ -1,0 +1,26 @@
+name: "Fast Forward Wiki Maintenance"
+
+on:
+  pull_request_target:
+    types: [closed]
+  schedule:
+    - cron: '17 3 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: read
+
+concurrency:
+  group: fast-forward-wiki-maintenance-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  maintenance:
+    permissions:
+      contents: write
+      pull-requests: read
+    # This wrapper handles merged publication to the wiki master branch plus
+    # preview-branch cleanup. Pull-request preview generation lives in wiki.yml.
+    uses: php-fast-forward/dev-tools/.github/workflows/wiki-maintenance.yml@main
+    secrets: inherit

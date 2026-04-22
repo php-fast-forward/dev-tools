@@ -17,6 +17,14 @@ issues for the current repository.
 - Draft clear issue titles and English issue bodies.
 - Refine problem statements, scope, non-goals, and acceptance criteria.
 - Maintain issue lifecycle actions such as comments, updates, and closure notes.
+- Choose the most appropriate existing issue metadata the repository already
+  supports, including type, labels, project placement, and adjacent issue
+  relationships when they can be inferred safely.
+- Fill any existing project field that can be inferred with high confidence
+  from the issue scope, repository workflow, or linked pull-request history.
+- When project metadata matters but GitHub CLI lacks project scope, trigger the
+  refresh flow and tell the user they MAY need to finish the browser-and-code
+  verification step before project access becomes available.
 - Keep issue language aligned with Fast Forward command, docs, workflow, and
   packaging vocabulary.
 

@@ -1,6 +1,6 @@
 ---
 name: github-issues
-description: Draft, create, update, comment on, and close GitHub issues for Fast Forward repositories. Use when an agent needs to turn a brief feature, bug, or task prompt into a production-ready issue, refine existing issue content, publish or update an issue on GitHub, manage labels or milestones, add issue comments, or close tracked work without leaving the local workflow.
+description: Draft, create, update, comment on, and close GitHub issues for Fast Forward repositories. Use when an agent needs to turn a brief feature, bug, or task prompt into a production-ready issue, refine existing issue content, publish or update it on GitHub, manage existing metadata such as labels, types, milestones, projects, and project fields, add issue comments, or close tracked work without leaving the local workflow.
 ---
 
 # Fast Forward GitHub Issues
@@ -24,12 +24,21 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - Include CLI examples, flags, paths, generated artifacts, or error cases when the change touches commands, automation, or reports.
 - Add explicit non-goals when the prompt could expand into multiple initiatives.
 - Ask follow-up questions only when a missing fact would materially change the issue type, acceptance criteria, or target issue. Otherwise make the smallest safe assumption and state it briefly.
+- When publishing or updating an issue, explicitly state which metadata was applied or intentionally omitted: issue type, labels, milestone, project assignment, project field values, and related open issues.
 
 ## Fast Forward Defaults
 
 - Prefer the current repository checkout when the user asks about "this repo" or "this project".
 - Use `gh api` for GitHub write operations.
 - Prefer issue types over labels for primary categorization when the organization supports them.
+- Reuse only issue types, labels, milestones, projects, and project field options that already exist in the target repository or organization.
+- Prefer filling the maximum useful metadata that can be inferred safely from the issue scope and the available GitHub configuration.
+- Do not force weak labels, milestones, project assignments, or project field values when the fit is unclear.
+- When project metadata matters and GitHub CLI lacks project scope, try `gh auth refresh -h github.com -s read:project -s project` and tell the user they MAY need to complete the browser-and-code flow.
+- When no suitable repository or organization project exists, you MAY suggest copying the Fast Forward template project at `https://github.com/orgs/php-fast-forward/projects/2`.
+- When a project exposes any field whose value can be inferred with a high degree of confidence, prefer filling it instead of leaving it blank by default.
+- Support backfill runs for older issues with missing metadata, but only fill fields that are currently unset unless the user explicitly asks for correction.
+- When a new issue appears materially related to another open issue, add that relationship instead of leaving the issues disconnected.
 - Treat command or controller layers as orchestration only when drafting implementation issues.
 - Prefer dedicated classes for input resolution, domain logic, processing, and output rendering when the change is non-trivial.
 - Call out test, README, docs, wiki, sync, or generated report updates when the change clearly affects them.
@@ -45,7 +54,7 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 | Start from a reusable issue body structure | [references/templates.md](references/templates.md) |
 | Paste the correct acceptance-criteria block | [references/architectural-criteria.md](references/architectural-criteria.md) |
 | Create, update, comment on, or close an issue | [references/operations.md](references/operations.md) |
-| Choose issue types, labels, assignees, and milestones | [references/metadata.md](references/metadata.md) |
+| Choose issue types, labels, assignees, milestones, projects, and related issue metadata | [references/metadata.md](references/metadata.md) |
 | Perform the final quality and mutation-safety pass | [references/review-checklist.md](references/review-checklist.md) |
 
 ## Anti-patterns
@@ -57,3 +66,4 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - Do not ask exploratory questions when repository conventions already provide a safe default.
 - Do not publish a placeholder issue body or mutate GitHub without restating the target issue first.
 - Do not split drafting and publication into separate local skills when this workflow already covers both.
+- Do not invent labels, issue types, milestones, projects, project field values, or issue links that are not already supported by the target repository context.

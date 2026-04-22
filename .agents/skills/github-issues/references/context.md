@@ -18,6 +18,20 @@ Useful check:
 gh auth status
 ```
 
+If the request may require project assignment or project-field updates, also
+confirm the active token can read and write project metadata. A token that can
+mutate issues may still be missing `read:project` or `project` scope.
+
+When project scope is missing but project placement or project-field updates
+matter to the request, try to refresh authentication before giving up:
+
+```bash
+gh auth refresh -h github.com -s read:project -s project
+```
+
+Tell the user that GitHub CLI MAY open a browser and ask them to enter a
+verification code before the refreshed token is granted project access.
+
 ## Existing Issue Resolution
 
 For updates or comments:
@@ -29,6 +43,7 @@ For creates:
 
 - check whether an obvious duplicate already exists when the prompt strongly suggests current tracked work
 - if the repository already has a canonical issue for the request, update or comment on it instead of creating another one
+- inspect open issues when the request appears adjacent to current tracked work so related issues can be linked intentionally
 
 ## Output Requirement
 

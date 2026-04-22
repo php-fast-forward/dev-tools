@@ -3,21 +3,21 @@ name: "Fast Forward Wiki Update"
 on:
   pull_request:
     types: [opened, synchronize, reopened]
-  pull_request_target:
-    types: [closed]
-  schedule:
-    - cron: '17 3 * * *'
-  workflow_dispatch:
 
 permissions:
   contents: write
   pull-requests: read
 
 concurrency:
-  group: fast-forward-wiki-${{ github.event.pull_request.number || github.ref }}
+  group: fast-forward-wiki-preview-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  wiki:
-    uses: php-fast-forward/dev-tools/.github/workflows/wiki.yml@main
+  preview:
+    permissions:
+      contents: write
+      pull-requests: read
+    # Pull-request wiki previews live here. Publication and preview cleanup are
+    # handled by the separate wiki-maintenance wrapper.
+    uses: php-fast-forward/dev-tools/.github/workflows/wiki-preview.yml@main
     secrets: inherit

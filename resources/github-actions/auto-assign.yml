@@ -10,5 +10,13 @@ jobs:
   auto-assign:
     permissions:
       issues: write
+      repository-projects: write
       pull-requests: write
     uses: php-fast-forward/dev-tools/.github/workflows/auto-assign.yml@main
+    with:
+      # project: 1
+      #
+      # Consumer repositories SHOULD set this to the target GitHub Project V2
+      # number. Repositories inside php-fast-forward MAY omit it and let the
+      # reusable workflow default to the first organization project.
+      project: ${{ vars.PROJECT || '' }}
