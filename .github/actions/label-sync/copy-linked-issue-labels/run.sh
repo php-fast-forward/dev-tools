@@ -4,11 +4,13 @@ set -euo pipefail
 title="$(jq -r '.pull_request.title // ""' "${GITHUB_EVENT_PATH}")"
 body="$(jq -r '.pull_request.body // ""' "${GITHUB_EVENT_PATH}")"
 pull_request_number="$(jq -r '.pull_request.number // ""' "${GITHUB_EVENT_PATH}")"
-issue_number="$(
-    printf '%s %s\n' "${title}" "${body}" \
-        | sed -nE 's/.*(closes|fixes|resolves|addresses)[[:space:]]+#([[:digit:]]+).*/\2/Ip' \
-        | head -1
-)"
+issue_number=''
+
+linked_issue_pattern='(closes|fixes|resolves|addresses)[[:space:]]+#([[:digit:]]+)'
+
+if [[ "${title} ${body}" =~ ${linked_issue_pattern} ]]; then
+    issue_number="${BASH_REMATCH[2]}"
+fi
 
 if [ -z "${issue_number}" ]; then
     echo "No linked issue was found in the pull request title or body."
