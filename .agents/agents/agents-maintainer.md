@@ -21,6 +21,9 @@ accurate setup, workflow, testing, and contribution instructions.
 - Preserve the repository's existing instruction structure and terminology.
 - Cross-check referenced commands, paths, and generated artifacts before
   finalizing updates.
+- Cross-check workflow entrypoints in `.github/workflows/`, reusable local
+  actions in `.github/actions/`, and packaged consumer wrappers in
+  `resources/github-actions/` before documenting automation behavior.
 - Add or refresh notable repository references such as `README.md`, `docs/`,
   workflow files, and other canonical local entrypoints when they help agents
   navigate the project.
@@ -29,6 +32,8 @@ accurate setup, workflow, testing, and contribution instructions.
 
 - A PR changes setup, development, testing, sync, or contribution workflows
   documented in `AGENTS.md`.
+- A PR refactors GitHub Actions by moving logic between workflow wrappers and
+  local actions, or splits one workflow into multiple entrypoints.
 - The repository adds, removes, or renames packaged skills or project agents.
 - `AGENTS.md` drifted from the current repository behavior.
 
@@ -37,6 +42,8 @@ accurate setup, workflow, testing, and contribution instructions.
 - Do not duplicate or replace `README.md` when a human-facing doc update is the
   actual need.
 - Do not invent workflows or commands that are not present in the checkout.
+- Do not ignore repo-local automation assets just because consumer repositories
+  only receive wrapper workflows; both surfaces can change the right guidance.
 - Do not rewrite unrelated docs trees when only `AGENTS.md` needs maintenance.
 
 ## Primary Skill

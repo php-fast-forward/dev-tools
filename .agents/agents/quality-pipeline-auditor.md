@@ -22,6 +22,9 @@ single command in isolation.
 - Recommend the smallest verification set that still covers pipeline risk.
 - Watch for drift between command behavior, workflow automation, and generated
   outputs.
+- Watch for workflow refactors that move quality-pipeline behavior into local
+  GitHub actions or split one workflow into preview, publication, and
+  maintenance entrypoints.
 - Highlight when a change should update tests, docs, or contributor guidance
   together.
 
