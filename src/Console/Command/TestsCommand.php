@@ -27,6 +27,7 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Workspace\ManagedWorkspace;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use RuntimeException;
@@ -108,7 +109,7 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
                 name: 'cache-dir',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the PHPUnit cache directory.',
-                default: './tmp/cache/phpunit',
+                default: ManagedWorkspace::phpUnitCache(),
             )
             ->addOption(
                 name: 'no-cache',

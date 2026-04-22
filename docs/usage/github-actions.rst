@@ -65,6 +65,7 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
 *   **Main Branch**: Runs all checks and deploys the final reports to the root of the ``gh-pages`` branch.
     *   Runs a post-deploy health check against the published reports index and coverage URLs with retry/backoff to account for Pages propagation.
     *   Resolves the workflow PHP version from ``composer.lock`` or ``composer.json`` before installing dependencies.
+    *   Removes ``.dev-tools/cache`` from the publish directory before deployment so repository-local tool caches never leak into GitHub Pages output.
 *   **Pull Requests**:
     *   Generates a **Preview** of the documentation, coverage, and metrics.
     *   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.

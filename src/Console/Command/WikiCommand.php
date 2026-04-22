@@ -27,6 +27,7 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Workspace\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -95,7 +96,7 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
                 name: 'cache-dir',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the cache directory for phpDocumentor.',
-                default: 'tmp/cache/phpdoc'
+                default: ManagedWorkspace::phpDocumentorCache()
             )
             ->addOption(
                 name: 'init',

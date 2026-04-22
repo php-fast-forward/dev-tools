@@ -19,32 +19,35 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Rector;
 
-use ReflectionClass;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeAnalyzer\CallAnalyzer;
-use Rector\Rector\AbstractRector;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\UnionType;
-use PhpParser\Node\IntersectionType;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use PhpParser\Comment\Doc;
+use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\New_;
+use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
+use PhpParser\Node\IntersectionType;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
+use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Expr\Throw_;
+use PhpParser\Node\Stmt\Expression;
+use PhpParser\Node\UnionType;
+use ReflectionClass;
+use Rector\NodeAnalyzer\CallAnalyzer;
+use Rector\NodeNameResolver\NodeNameResolver;
+use Rector\Rector\AbstractRector;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 
 #[CoversClass(AddMissingMethodPhpDocRector::class)]
+#[UsesClass(GithubActionOutput::class)]
 final class AddMissingMethodPhpDocRectorTest extends TestCase
 {
     use ProphecyTrait;

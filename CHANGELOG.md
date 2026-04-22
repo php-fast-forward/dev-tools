@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Consolidate repository-local DevTools caches under `.dev-tools/cache`, keep published reports free of cache directories, and audit managed artifact path defaults across commands, workflows, and documentation (#151)
+
 ## [1.17.1] - 2026-04-22
 
 ### Fixed

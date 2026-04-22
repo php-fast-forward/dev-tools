@@ -23,6 +23,7 @@ use Composer\InstalledVersions;
 use Ergebnis\Rector\Rules\Faker\GeneratorPropertyFetchToMethodCallRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
+use FastForward\DevTools\Workspace\ManagedWorkspace;
 use Rector\Config\RectorConfig as RectorConfigInterface;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
@@ -79,7 +80,7 @@ final class RectorConfig
                 RemoveUselessReturnTagRector::class,
                 RemoveUselessParamTagRector::class,
             ]);
-            $rectorConfig->cacheDirectory($cwd . '/tmp/cache/rector');
+            $rectorConfig->cacheDirectory($cwd . '/' . ManagedWorkspace::rectorCache());
             $rectorConfig->importNames();
             $rectorConfig->removeUnusedImports();
             $rectorConfig->fileExtensions(['php']);

@@ -12,7 +12,7 @@ When you run ``tests``, DevTools:
 - resolves ``phpunit.xml`` from the consumer root first and falls back to the
   packaged default;
 - uses ``vendor/autoload.php`` as the default bootstrap file;
-- stores cache data in ``tmp/cache/phpunit`` unless ``--no-cache`` is used;
+- stores cache data in ``.dev-tools/cache/phpunit`` unless ``--no-cache`` is used;
 - can generate HTML coverage, Testdox, Clover, and raw PHP coverage output
   when ``--coverage`` is provided.
 

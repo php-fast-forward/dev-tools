@@ -27,6 +27,7 @@ use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Workspace\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -48,6 +49,7 @@ use function Safe\getcwd;
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(CoverageSummary::class)]
 #[UsesClass(ProcessBuilder::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class TestsCommandTest extends TestCase
 {
@@ -102,9 +104,9 @@ final class TestsCommandTest extends TestCase
         $this->fileLocator->locate(TestsCommand::CONFIG)->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
         $this->filesystem->getAbsolutePath('./vendor/autoload.php')
             ->willReturn(getcwd() . '/vendor/autoload.php');
-        $this->filesystem->getAbsolutePath('./tmp/cache/phpunit')
-            ->willReturn(getcwd() . '/tmp/cache/phpunit');
-        $this->filesystem->getAbsolutePath('.dev-tools/coverage')
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::phpUnitCache())
+            ->willReturn(getcwd() . '/.dev-tools/cache/phpunit');
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::COVERAGE)
             ->willReturn(getcwd() . '/.dev-tools/coverage');
         $this->filesystem->getAbsolutePath('src/')
             ->willReturn(getcwd() . '/src');
@@ -223,7 +225,7 @@ final class TestsCommandTest extends TestCase
     #[Test]
     public function executeWithCoverageBelowMinimumWillReturnFailure(): void
     {
-        $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
+        $coverageReportPath = getcwd() . '/.dev-tools/cache/phpunit/coverage.php';
 
         $this->input->getOption('min-coverage')
             ->willReturn('80');
@@ -254,7 +256,7 @@ final class TestsCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenCoverageSummaryCannotBeLoaded(): void
     {
-        $coverageReportPath = getcwd() . '/tmp/cache/phpunit/coverage.php';
+        $coverageReportPath = getcwd() . '/.dev-tools/cache/phpunit/coverage.php';
 
         $this->input->getOption('min-coverage')
             ->willReturn('80');

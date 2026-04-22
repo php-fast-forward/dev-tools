@@ -26,8 +26,10 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Workspace\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -40,6 +42,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(WikiCommand::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class WikiCommandTest extends TestCase
 {
@@ -89,7 +92,7 @@ final class WikiCommandTest extends TestCase
         $this->input->getOption('target')
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
-            ->willReturn('tmp/cache/phpdoc');
+            ->willReturn(ManagedWorkspace::phpDocumentorCache());
         $this->input->getOption('init')
             ->willReturn(false);
         $this->input->getOption('json')

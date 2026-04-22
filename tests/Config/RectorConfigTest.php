@@ -22,10 +22,12 @@ namespace FastForward\DevTools\Tests\Config;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
+use FastForward\DevTools\Workspace\ManagedWorkspace;
 use ReflectionProperty;
 use FastForward\DevTools\Config\RectorConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -34,6 +36,7 @@ use Rector\Config\RectorConfig as RectorConfigInterface;
 use function Safe\getcwd;
 
 #[CoversClass(RectorConfig::class)]
+#[UsesClass(ManagedWorkspace::class)]
 final class RectorConfigTest extends TestCase
 {
     /**
@@ -108,7 +111,7 @@ final class RectorConfigTest extends TestCase
             SimpleParameterProvider::provideArrayParameter(Option::SKIP),
         );
         self::assertSame(
-            getcwd() . '/tmp/cache/rector',
+            getcwd() . '/' . ManagedWorkspace::rectorCache(),
             SimpleParameterProvider::provideStringParameter(Option::CACHE_DIR)
         );
         self::assertSame(['php'], SimpleParameterProvider::provideArrayParameter(Option::FILE_EXTENSIONS));

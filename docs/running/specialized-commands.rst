@@ -59,7 +59,7 @@ Important details:
 - ``--progress`` re-enables PHPUnit progress output in text mode;
 - ``--json`` and ``--pretty-json`` still suppress PHPUnit progress output
   automatically;
-- ``--no-cache`` disables ``tmp/cache/phpunit``;
+- ``--no-cache`` disables ``.dev-tools/cache/phpunit``;
 - the packaged configuration registers the DevTools PHPUnit extension.
 
 ``dependencies``
