@@ -25,6 +25,10 @@ Use this checklist before finalizing issue content or mutating GitHub.
 - Metadata changes are explicit and necessary.
 - Applied labels, issue type, milestone, project assignment, project field
   values, and issue relationships come only from metadata that already exists.
+- `Iteration` was populated when the selected project supports it and the issue
+  context supports a safe choice.
+- Backfill writes touched only fields that were previously unset, unless the
+  user explicitly asked for metadata correction.
 - Project or milestone fields were left empty only for a clear reason, not by omission.
 - A duplicate issue is not being created accidentally.
 - The final response will include the issue number and URL.

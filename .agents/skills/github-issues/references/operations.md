@@ -58,6 +58,22 @@ gh api graphql \
   -f option='OPTION_ID'
 ```
 
+For iteration fields:
+
+```bash
+gh api graphql \
+  -f query='mutation($project:ID!, $item:ID!, $field:ID!, $iteration:ID!) { updateProjectV2ItemFieldValue(input: {projectId: $project, itemId: $item, fieldId: $field, value: {iterationId: $iteration}}) { projectV2Item { id } } }' \
+  -f project='PROJECT_ID' \
+  -f item='ITEM_ID' \
+  -f field='FIELD_ID' \
+  -f iteration='ITERATION_ID'
+```
+
+Use the active iteration for a newly created issue when that matches the
+current planning cycle. For backfill on closed issues, inspect the closing pull
+request or closing timestamp first and only assign an iteration when the
+project already exposes a credible matching cycle.
+
 ## Add a Related-Issue Link
 
 When the repository supports issue relationships, prefer the official GitHub
@@ -90,3 +106,5 @@ gh api repos/{owner}/{repo}/issues/{number} \
 - Use comments for incremental updates that should preserve the issue description.
 - For new issues, prefer applying metadata immediately after creation so the
   issue lands in GitHub with a complete and reviewable state.
+- For backfill passes, update only missing metadata by default and avoid
+  rewriting fields that already carry intentional values.

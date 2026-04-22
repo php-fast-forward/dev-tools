@@ -24,7 +24,7 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - Include CLI examples, flags, paths, generated artifacts, or error cases when the change touches commands, automation, or reports.
 - Add explicit non-goals when the prompt could expand into multiple initiatives.
 - Ask follow-up questions only when a missing fact would materially change the issue type, acceptance criteria, or target issue. Otherwise make the smallest safe assumption and state it briefly.
-- When publishing or updating an issue, explicitly state which metadata was applied or intentionally omitted: issue type, labels, milestone, project assignment, project field values, and related open issues.
+- When publishing or updating an issue, explicitly state which metadata was applied or intentionally omitted: issue type, labels, milestone, project assignment, project field values, iteration, and related open issues.
 
 ## Fast Forward Defaults
 
@@ -36,6 +36,8 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - Do not force weak labels, milestones, project assignments, or project field values when the fit is unclear.
 - When project metadata matters and GitHub CLI lacks project scope, try `gh auth refresh -h github.com -s read:project -s project` and tell the user they MAY need to complete the browser-and-code flow.
 - When no suitable repository or organization project exists, you MAY suggest copying the Fast Forward template project at `https://github.com/orgs/php-fast-forward/projects/2`.
+- When a project supports `Iteration`, prefer the current active iteration for new issues entering the current cycle, and support conservative backfill for older closed issues that are still missing iteration data.
+- Support backfill runs for older issues with missing metadata, but only fill fields that are currently unset unless the user explicitly asks for correction.
 - When a new issue appears materially related to another open issue, add that relationship instead of leaving the issues disconnected.
 - Treat command or controller layers as orchestration only when drafting implementation issues.
 - Prefer dedicated classes for input resolution, domain logic, processing, and output rendering when the change is non-trivial.

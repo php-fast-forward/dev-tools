@@ -20,6 +20,9 @@ issues for the current repository.
 - Choose the most appropriate existing issue metadata the repository already
   supports, including type, labels, project placement, and adjacent issue
   relationships when they can be inferred safely.
+- Fill project iteration data when the project supports it, using the active
+  iteration for new issues and conservative inference for backfill on already
+  closed issues that still have missing metadata.
 - When project metadata matters but GitHub CLI lacks project scope, trigger the
   refresh flow and tell the user they MAY need to finish the browser-and-code
   verification step before project access becomes available.
