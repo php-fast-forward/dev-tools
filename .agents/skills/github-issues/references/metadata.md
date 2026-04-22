@@ -105,9 +105,11 @@ create automatically.
 
 ## Project Fields
 
-When a selected project exposes useful fields such as `Status`, `Priority`,
-`Size`, or `Iteration`, attempt to populate them with the most appropriate
-existing option or cycle.
+When a selected project exposes fields whose values can be inferred with a high
+degree of confidence, attempt to populate them instead of leaving them blank by
+default. Common examples include `Status`, `Priority`, `Size`, and
+`Iteration`, but the same rule applies to any existing project field that has a
+clear fit for the issue.
 
 Common guidance:
 
@@ -119,13 +121,15 @@ Common guidance:
   when the issue is intended to enter the current cycle. For backfill on older
   issues that are already closed, try to infer the most appropriate completed
   iteration from the closing pull request timeline before leaving it empty.
+- Other fields: populate them only when the issue scope, repository context, or
+  linked pull-request history makes the right value genuinely clear.
 
 Backfill guidance:
 
 - Support backfill for older issues that are missing project metadata.
 - Only backfill fields that are currently unset or obviously incomplete.
-- Do not overwrite existing `Status`, `Priority`, `Size`, or `Iteration` values
-  during a backfill pass unless the user explicitly asks for correction.
+- Do not overwrite existing project-field values during a backfill pass unless
+  the user explicitly asks for correction.
 - When inferring `Iteration` from a closing pull request, prefer a conservative
   heuristic tied to the PR merge date or the issue closing date and reuse only
   iterations that already exist on the target project.

@@ -47,7 +47,8 @@ gh api graphql \
 
 ## Set an Existing Project Field Value
 
-For single-select fields such as `Status`, `Priority`, or `Size`:
+For single-select fields such as `Status`, `Priority`, `Size`, or any other
+existing single-select field with a safe inferred value:
 
 ```bash
 gh api graphql \
@@ -73,6 +74,10 @@ Use the active iteration for a newly created issue when that matches the
 current planning cycle. For backfill on closed issues, inspect the closing pull
 request or closing timestamp first and only assign an iteration when the
 project already exposes a credible matching cycle.
+
+The same principle applies to any other supported project field type: only
+write values that can be inferred confidently from the issue scope, repository
+workflow, or linked pull-request history.
 
 ## Add a Related-Issue Link
 
