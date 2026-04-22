@@ -21,6 +21,9 @@ Add metadata flags only when needed:
 -f milestone=1
 ```
 
+After creation, apply project assignment, project field values, or issue links
+through follow-up mutations when the repository context supports them.
+
 ## Update Issue
 
 ```bash
@@ -32,6 +35,35 @@ gh api repos/{owner}/{repo}/issues/{number} \
 ```
 
 Only include the fields that should change.
+
+## Add Issue to an Existing Project
+
+```bash
+gh api graphql \
+  -f query='mutation($project:ID!, $content:ID!) { addProjectV2ItemById(input: {projectId: $project, contentId: $content}) { item { id } } }' \
+  -f project='PROJECT_ID' \
+  -f content='ISSUE_NODE_ID'
+```
+
+## Set an Existing Project Field Value
+
+For single-select fields such as `Status`, `Priority`, or `Size`:
+
+```bash
+gh api graphql \
+  -f query='mutation($project:ID!, $item:ID!, $field:ID!, $option:String!) { updateProjectV2ItemFieldValue(input: {projectId: $project, itemId: $item, fieldId: $field, value: {singleSelectOptionId: $option}}) { projectV2Item { id } } }' \
+  -f project='PROJECT_ID' \
+  -f item='ITEM_ID' \
+  -f field='FIELD_ID' \
+  -f option='OPTION_ID'
+```
+
+## Add a Related-Issue Link
+
+When the repository supports issue relationships, prefer the official GitHub
+relationship mutation or connector path available in the environment. If that
+surface is unavailable, explicitly mention the related issue in the body or an
+issue comment rather than silently dropping the relationship.
 
 ## Add Comment
 
@@ -56,3 +88,5 @@ gh api repos/{owner}/{repo}/issues/{number} \
 - Restate the target issue before mutating it.
 - Prefer full body replacement only when the body is being intentionally rewritten.
 - Use comments for incremental updates that should preserve the issue description.
+- For new issues, prefer applying metadata immediately after creation so the
+  issue lands in GitHub with a complete and reviewable state.

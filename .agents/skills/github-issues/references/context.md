@@ -18,6 +18,10 @@ Useful check:
 gh auth status
 ```
 
+If the request may require project assignment or project-field updates, also
+confirm the active token can read and write project metadata. A token that can
+mutate issues may still be missing `read:project` or `project` scope.
+
 ## Existing Issue Resolution
 
 For updates or comments:
@@ -29,6 +33,7 @@ For creates:
 
 - check whether an obvious duplicate already exists when the prompt strongly suggests current tracked work
 - if the repository already has a canonical issue for the request, update or comment on it instead of creating another one
+- inspect open issues when the request appears adjacent to current tracked work so related issues can be linked intentionally
 
 ## Output Requirement
 

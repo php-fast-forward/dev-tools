@@ -12,6 +12,7 @@ Use this checklist before finalizing issue content or mutating GitHub.
 - Repository-specific terms, commands, directories, or artifacts are named precisely.
 - Non-goals are present when the request could easily expand in scope.
 - Tests, docs, README, wiki, sync, or reports are called out when the change obviously affects them.
+- The chosen metadata strategy is explicit about what should be applied versus omitted.
 - Assumptions are minimal and explicitly stated when inference was necessary.
 - The final output contains no meta commentary about prompting or the drafting process.
 
@@ -22,6 +23,9 @@ Use this checklist before finalizing issue content or mutating GitHub.
 - The target issue number is correct for updates, comments, or closure.
 - The title and body are final or intentionally partial.
 - Metadata changes are explicit and necessary.
+- Applied labels, issue type, milestone, project assignment, project field
+  values, and issue relationships come only from metadata that already exists.
+- Project or milestone fields were left empty only for a clear reason, not by omission.
 - A duplicate issue is not being created accidentally.
 - The final response will include the issue number and URL.
 

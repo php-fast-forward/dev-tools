@@ -1,6 +1,18 @@
 # Metadata Guidance
 
-Use this reference when the issue needs labels, types, assignees, or milestones.
+Use this reference when the issue needs labels, types, assignees, milestones,
+project assignment, project field values, or issue relationships.
+
+## General Rule
+
+- Reuse only metadata that already exists in the target repository or
+  organization.
+- Prefer the maximum useful metadata that can be inferred safely from scope and
+  repository context.
+- Leave a field unset when the fit is weak, ambiguous, or unsupported by the
+  available token.
+- Never create new labels, issue types, projects, project field options, or
+  milestones as part of normal issue drafting or publication.
 
 ## Issue Types
 
@@ -20,6 +32,9 @@ gh api graphql \
   --jq '.data.organization.issueTypes.nodes[].name'
 ```
 
+Select the closest existing type for the issue scope. Do not downgrade to a
+label-only strategy when a fitting issue type exists.
+
 ## Labels
 
 Use labels for secondary categorization, not as a replacement for issue type when a type exists.
@@ -31,10 +46,72 @@ Examples that may still be useful:
 - `help wanted`
 - `question`
 
+Choose labels only from the existing repository label set. Add them when they
+materially improve categorization, not as a reflex.
+
+Discovery example:
+
+```bash
+gh label list --repo {owner}/{repo} --limit 200
+```
+
 ## Milestones and Assignees
 
 - Set a milestone only when the repository is actively using milestone-based planning.
 - Assign users only when the request or repository workflow clearly calls for it.
+
+Milestone discovery example:
+
+```bash
+gh api repos/{owner}/{repo}/milestones
+```
+
+If there are no milestones, or none clearly fit the scope, leave the issue
+without one.
+
+## Projects
+
+When the repository or organization uses Projects, prefer adding the issue to
+the most appropriate existing project instead of leaving project assignment
+empty by default.
+
+Project discovery example:
+
+```bash
+gh api graphql \
+  -f query='{ organization(login: "ORG") { projectsV2(first: 20) { nodes { id title number closed } } } }'
+```
+
+If project access is unavailable or no existing project clearly fits, omit the
+project assignment instead of guessing.
+
+## Project Fields
+
+When a selected project exposes useful fields such as `Status`, `Priority`, or
+`Size`, attempt to populate them with the most appropriate existing option.
+
+Common guidance:
+
+- `Status`: pick the nearest lifecycle state, often `Backlog` or `Ready` for a
+  newly created issue.
+- `Priority`: prefer the lowest confident priority instead of inflating urgency.
+- `Size`: choose a rough estimate only when the issue scope supports it.
+
+Do not invent new field options, and do not force a value when no safe choice
+is evident.
+
+## Related Issues
+
+When a newly drafted issue appears materially related to an existing open issue,
+record that relationship instead of leaving the issues disconnected.
+
+Examples of useful relationships:
+
+- dependency or blocker
+- follow-up or split from a larger tracked task
+- scope overlap that reviewers should see together
+
+Avoid speculative or noisy links when the relationship is weak.
 
 ## Title Guidance
 

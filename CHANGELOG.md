@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Propagate structured output flags through nested DevTools subprocesses, simplify logger context extraction, and keep machine-readable runs quieter by default (#33)
 - Adopt `--progress` as the positive opt-in for transient progress rendering while keeping supported commands quiet by default (#33)
+- Teach packaged issue-authoring skills and prompts to reuse existing GitHub issue metadata, infer project field values, and preserve relationships with open issues instead of inventing new labels or workflow metadata (#152)
 
 ### Fixed
 
