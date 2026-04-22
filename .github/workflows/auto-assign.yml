@@ -1,4 +1,4 @@
-name: Auto assign PR author
+name: Auto assign and sync PR metadata
 
 on:
   issues:
@@ -10,6 +10,7 @@ on:
 permissions:
   issues: write
   pull-requests: write
+  repository-projects: write
 
 jobs:
   assign-author:
@@ -19,3 +20,194 @@ jobs:
         uses: toshimaru/auto-author-assign@v3.0.1
         with:
           repo-token: ${{ github.token }}
+
+  sync-pr-metadata:
+    if: github.event_name == 'pull_request_target'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Sync linked issue metadata to pull request
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const pullRequest = context.payload.pull_request;
+            const text = `${pullRequest.title}\n${pullRequest.body ?? ''}`;
+            const match = text.match(/(?:closes|fixes|resolves|addresses)\s+#(\d+)/i);
+
+            if (!match) {
+              core.info('No linked issue reference found in the pull request title or body.');
+              return;
+            }
+
+            const issueNumber = Number(match[1]);
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const pullRequestNumber = pullRequest.number;
+
+            const metadata = await github.graphql(
+              `query($owner: String!, $repo: String!, $issueNumber: Int!, $pullRequestNumber: Int!) {
+                repository(owner: $owner, name: $repo) {
+                  issue(number: $issueNumber) {
+                    milestone {
+                      number
+                      title
+                    }
+                    projectItems(first: 20) {
+                      nodes {
+                        id
+                        project {
+                          ... on ProjectV2 {
+                            id
+                            title
+                          }
+                        }
+                        fieldValues(first: 20) {
+                          nodes {
+                            __typename
+                            ... on ProjectV2ItemFieldSingleSelectValue {
+                              optionId
+                              name
+                              field {
+                                ... on ProjectV2SingleSelectField {
+                                  id
+                                  name
+                                  options {
+                                    id
+                                    name
+                                  }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                  pullRequest(number: $pullRequestNumber) {
+                    id
+                    projectItems(first: 20) {
+                      nodes {
+                        id
+                        project {
+                          ... on ProjectV2 {
+                            id
+                            title
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }`,
+              {
+                owner,
+                repo,
+                issueNumber,
+                pullRequestNumber,
+              },
+            );
+
+            const issue = metadata.repository.issue;
+            const projectItems = issue?.projectItems?.nodes ?? [];
+
+            if (!issue) {
+              core.info(`Linked issue #${issueNumber} was not found.`);
+              return;
+            }
+
+            if (issue.milestone) {
+              core.info(`Applying milestone "${issue.milestone.title}" to PR #${pullRequestNumber}.`);
+              await github.request('PATCH /repos/{owner}/{repo}/issues/{issue_number}', {
+                owner,
+                repo,
+                issue_number: pullRequestNumber,
+                milestone: issue.milestone.number,
+              });
+            } else {
+              core.info(`Linked issue #${issueNumber} has no milestone to copy.`);
+            }
+
+            if (0 === projectItems.length) {
+              core.info(`Linked issue #${issueNumber} is not assigned to any project.`);
+              return;
+            }
+
+            const pullRequestProjectItems = metadata.repository.pullRequest.projectItems.nodes;
+
+            for (const issueProjectItem of projectItems) {
+              const project = issueProjectItem.project;
+
+              if (!project) {
+                continue;
+              }
+
+              let pullRequestProjectItem = pullRequestProjectItems.find((item) => item.project?.id === project.id) ?? null;
+
+              if (!pullRequestProjectItem) {
+                core.info(`Adding PR #${pullRequestNumber} to project "${project.title}".`);
+
+                const addedProjectItem = await github.graphql(
+                  `mutation($projectId: ID!, $contentId: ID!) {
+                    addProjectV2ItemById(input: {projectId: $projectId, contentId: $contentId}) {
+                      item {
+                        id
+                      }
+                    }
+                  }`,
+                  {
+                    projectId: project.id,
+                    contentId: metadata.repository.pullRequest.id,
+                  },
+                );
+
+                pullRequestProjectItem = addedProjectItem.addProjectV2ItemById.item;
+              }
+
+              const singleSelectValues = issueProjectItem.fieldValues.nodes
+                .filter((fieldValue) => fieldValue.__typename === 'ProjectV2ItemFieldSingleSelectValue');
+              const statusValue = singleSelectValues.find((fieldValue) => fieldValue.field?.name === 'Status') ?? null;
+              const priorityValue = singleSelectValues.find((fieldValue) => fieldValue.field?.name === 'Priority') ?? null;
+              const sizeValue = singleSelectValues.find((fieldValue) => fieldValue.field?.name === 'Size') ?? null;
+
+              const setSingleSelectField = async (field, optionId) => {
+                if (!field?.id || !optionId) {
+                  return;
+                }
+
+                await github.graphql(
+                  `mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+                    updateProjectV2ItemFieldValue(
+                      input: {
+                        projectId: $projectId,
+                        itemId: $itemId,
+                        fieldId: $fieldId,
+                        value: {singleSelectOptionId: $optionId}
+                      }
+                    ) {
+                      projectV2Item {
+                        id
+                      }
+                    }
+                  }`,
+                  {
+                    projectId: project.id,
+                    itemId: pullRequestProjectItem.id,
+                    fieldId: field.id,
+                    optionId,
+                  },
+                );
+              };
+
+              if (statusValue?.field?.options) {
+                const inReviewOption = statusValue.field.options.find(
+                  (option) => option.name.toLowerCase() === 'in review',
+                );
+
+                await setSingleSelectField(
+                  statusValue.field,
+                  inReviewOption?.id ?? statusValue.optionId,
+                );
+              }
+
+              await setSingleSelectField(priorityValue?.field, priorityValue?.optionId);
+              await setSingleSelectField(sizeValue?.field, sizeValue?.optionId);
+            }

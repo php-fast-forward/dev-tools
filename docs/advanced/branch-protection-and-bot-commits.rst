@@ -119,7 +119,8 @@ The label synchronization workflow declares ``issues: read`` to copy labels from
 the linked issue and ``pull-requests: write`` to apply those labels to the pull
 request. The auto-assign workflow keeps ``issues: write`` and
 ``pull-requests: write`` because assignment is a write operation on both event
-types.
+types, and it also declares ``repository-projects: write`` so linked-issue
+project metadata can be mirrored onto pull requests.
 
 Resolving ``.github/wiki`` Pointer Conflicts
 --------------------------------------------
