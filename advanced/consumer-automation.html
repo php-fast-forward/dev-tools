@@ -2890,6 +2890,15 @@ libraries.</li>
             <section class="section " id="reusable-workflows-versus-consumer-stubs">
             <h2>Reusable Workflows Versus Consumer Stubs</h2>
 
+            
+    <p>This repository now separates reusable workflow entrypoints from the local
+composite and script actions that implement them. Consumer repositories still
+receive thin wrappers from <code>resources/github-actions/*.yml</code>
+, but the reusable
+implementation in this repository is increasingly composed from local actions in
+<code>.github/actions/</code>
+.</p>
+
             <table>
                 <thead>
             <tr>
@@ -2901,7 +2910,7 @@ libraries.</li>
     <tr>
             <td><code>.github/workflows/*.yml</code>
 </td>
-            <td>Reusable workflows implemented in this repository.</td>
+            <td>Reusable workflows and entry workflows implemented in this repository.</td>
     </tr>
     <tr>
             <td><code>resources/github-actions/*.yml</code>
@@ -2909,6 +2918,40 @@ libraries.</li>
             <td>Small consumer stubs that call the reusable workflows through
 <code>workflow_call</code>
 .</td>
+    </tr>
+    <tr>
+            <td><code>.github/actions/php/*</code>
+</td>
+            <td>Shared PHP helpers such as workflow PHP-version resolution and Composer
+setup.</td>
+    </tr>
+    <tr>
+            <td><code>.github/actions/changelog/*</code>
+</td>
+            <td>Changelog-specific building blocks for release version resolution,
+release-notes rendering, and GitHub release publication.</td>
+    </tr>
+    <tr>
+            <td><code>.github/actions/github-pages/*</code>
+</td>
+            <td>Shared GitHub Pages helpers for restoring previews, removing closed pull
+request previews, cleaning orphaned previews, and verifying published
+URLs.</td>
+    </tr>
+    <tr>
+            <td><code>.github/actions/project-board/*</code>
+</td>
+            <td>Reusable project-automation actions for resolving the target board,
+inferring review status, syncing linked metadata, and transitioning
+items through repository delivery states.</td>
+    </tr>
+    <tr>
+            <td><code>.github/actions/wiki/*</code>
+</td>
+            <td>Wiki-specific helpers for preparing preview branches, promoting preview
+content to <code>master</code>
+, validating publication, and cleaning stale
+preview branches.</td>
     </tr>
     <tr>
             <td><code>.github/dependabot.yml</code>
@@ -2955,6 +2998,10 @@ in consumer repositories.</td>
  runs <code>composer dev-tools reports</code>
 .</li>
 
+    <li class="dash">The workflow delegates repeated GitHub Pages tasks to
+<code>.github/actions/github-pages/*</code>
+ instead of keeping that shell logic inline.</li>
+
     <li class="dash">Pull requests publish previews under <code>previews/pr-&lt;number&gt;/</code>
 .</li>
 
@@ -2970,22 +3017,72 @@ of the Pages branch.</li>
             <h2>How Wiki Publishing Works</h2>
 
             
+    <p>Wiki automation now has two distinct entry workflows:</p>
+
+            
 
 <ul>
     <li class="dash"><code>.github/workflows/wiki.yml</code>
- runs
-<code>composer dev-tools wiki -- --target=.github/wiki</code>
+ handles pull-request preview generation by
+calling <code>.github/workflows/wiki-preview.yml</code>
 .</li>
 
-    <li class="dash">Pull requests publish generated wiki content to branches such as
-<code>pr-123</code>
+    <li class="dash"><code>.github/workflows/wiki-maintenance-entry.yml</code>
+ handles post-merge
+publication, closed-pull-request cleanup, and scheduled orphan cleanup by
+calling <code>.github/workflows/wiki-maintenance.yml</code>
 .</li>
 
-    <li class="dash">The parent repository then commits the updated submodule pointer to the pull
-request branch.</li>
+</ul>
 
-    <li class="dash">After merge, the preview content is promoted to the wiki <code>master</code>
- branch.</li>
+            
+    <p>Within those reusable workflows, the lower-level branch preparation, publish
+validation, and cleanup steps live under <code>.github/actions/wiki/*</code>
+.</p>
+
+            
+    <p>In practice:</p>
+
+            
+
+<ul>
+    <li class="dash">pull requests publish generated wiki content to branches such as <code>pr-123</code>
+;</li>
+
+    <li class="dash">the parent repository then commits the updated submodule pointer to the pull
+request branch;</li>
+
+    <li class="dash">after merge, the maintenance workflow promotes the preview content to the
+wiki <code>master</code>
+ branch;</li>
+
+    <li class="dash">closed pull requests and the scheduled maintenance lane remove stale preview
+branches.</li>
+
+</ul>
+
+    </section>
+
+            <section class="section " id="how-changelog-and-project-automation-fit-in">
+            <h2>How Changelog and Project Automation Fit In</h2>
+
+            
+
+<ul>
+    <li class="dash"><code>.github/workflows/changelog.yml</code>
+ now composes its release flow from
+<code>.github/actions/changelog/*</code>
+ and <code>.github/actions/project-board/*</code>
+.</li>
+
+    <li class="dash">The changelog workflow validates pull-request changelog entries, prepares
+release branches, publishes GitHub releases from merged release branches, and
+can transition the configured GitHub Project item state alongside those
+lifecycle events.</li>
+
+    <li class="dash">Project-board automation is no longer just an inline workflow concern; it is
+a reusable local action group shared by issue, pull-request, review, and
+release automation.</li>
 
 </ul>
 

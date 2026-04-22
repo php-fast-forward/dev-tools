@@ -2892,6 +2892,26 @@ updates.</p>
 
 </ul>
 
+            
+    <p>For wiki automation, those lanes are now split across separate reusable
+workflows:</p>
+
+            
+
+<ul>
+    <li class="dash"><code>.github/workflows/wiki-preview.yml</code>
+ handles preview generation for pull
+requests and is triggered through <code>.github/workflows/wiki.yml</code>
+;</li>
+
+    <li class="dash"><code>.github/workflows/wiki-maintenance.yml</code>
+ handles post-merge promotion,
+closed-pull-request cleanup, and scheduled orphan cleanup and is triggered
+through <code>.github/workflows/wiki-maintenance-entry.yml</code>
+.</li>
+
+</ul>
+
             <section class="section " id="wiki-preview-lifecycle">
             <h2>Wiki Preview Lifecycle</h2>
 
@@ -2930,25 +2950,25 @@ reject direct commits.</p>
 
             
     <p>After the pull request is merged into <code>main</code>
-, the publish job copies the
-content from the wiki preview branch, such as <code>pr-123</code>
+, the maintenance workflow copies
+the content from the wiki preview branch, such as <code>pr-123</code>
 , to the wiki
 <code>master</code>
  branch. That makes the reviewed wiki content live only after the
-source code merge is complete. The workflow validates that remote <code>master</code>
-
-points to the expected preview commit before it deletes the <code>pr-123</code>
- branch
-because the preview branch is the last rollback source for that generated
-content.</p>
+source code merge is complete. The maintenance lane validates that remote
+<code>master</code>
+ points to the expected preview commit before it deletes the
+<code>pr-123</code>
+ branch because the preview branch is the last rollback source for
+that generated content.</p>
 
             
-    <p>If the pull request is closed without merge, the workflow deletes the matching
-wiki preview branch without promoting it to <code>master</code>
-. A scheduled cleanup also
-scans existing <code>pr-&lt;number&gt;</code>
- wiki branches and removes branches whose pull
-requests are already closed.</p>
+    <p>If the pull request is closed without merge, the maintenance workflow deletes
+the matching wiki preview branch without promoting it to <code>master</code>
+. A
+scheduled cleanup lane also scans existing <code>pr-&lt;number&gt;</code>
+ wiki branches and
+removes branches whose pull requests are already closed.</p>
 
     </section>
 
@@ -3066,25 +3086,55 @@ distinguish open pull requests from closed or merged ones before deleting
 
             
     <p><code>wiki.yml</code>
- keeps <code>contents: write</code>
- on preview, publish, and cleanup jobs
-because the workflow pushes wiki branches, updates the parent repository
-submodule pointer, promotes preview content to wiki <code>master</code>
-, and deletes
-stale preview branches. Jobs that inspect pull request state keep
+ is now preview-only, so its called workflow keeps
+<code>contents: write</code>
+ for wiki preview commits and parent-repository submodule
+pointer updates, while retaining <code>pull-requests: read</code>
+ to inspect pull
+request metadata safely.</p>
+
+            
+    <p><code>wiki-maintenance-entry.yml</code>
+ and <code>wiki-maintenance.yml</code>
+ keep
+<code>contents: write</code>
+ for wiki publication and cleanup tasks, and
 <code>pull-requests: read</code>
-.</p>
+ on jobs that need to distinguish merged, closed, and
+open pull requests before publishing or deleting preview branches.</p>
 
             
     <p>The label synchronization workflow declares <code>issues: read</code>
  to copy labels from
 the linked issue and <code>pull-requests: write</code>
  to apply those labels to the pull
-request. The auto-assign workflow keeps <code>issues: write</code>
+request. The project-board automation workflow keeps <code>issues: write</code>
  and
 <code>pull-requests: write</code>
- because assignment is a write operation on both event
-types.</p>
+ because assignment and board-state changes are write
+operations on both event types, and it also declares
+<code>repository-projects: write</code>
+ so linked issues and pull requests can be added
+to the configured GitHub Project and moved through the delivery pipeline.</p>
+
+            
+    <p>To enable reusable project automation in consumer repositories, pass
+<code>project</code>
+ through the thin <code>workflow_call</code>
+ wrapper or configure the
+repository variable <code>PROJECT</code>
+ so the workflow can resolve the target GitHub
+Project without hardcoding repository-specific board identifiers into the
+packaged workflow itself. The workflow derives the owner from
+<code>github.repository_owner</code>
+ and uses the built-in workflow token for the actual
+project mutations. Inside <code>php-fast-forward</code>
+ repositories, the reusable
+workflow MAY fall back to the first organization Project V2 when no explicit
+project number is provided. The reusable project-board helpers now live under
+<code>.github/actions/project-board/*</code>
+, which keeps project-state transitions
+shared across issue, pull-request, review, changelog, and release workflows.</p>
 
     </section>
 
@@ -3134,6 +3184,9 @@ regenerate the wiki locally before updating the pointer.</p>
 
     <li class="dash">Let the post-merge wiki job publish to <code>master</code>
 .</li>
+
+    <li class="dash">Treat wiki preview and wiki maintenance as separate automation concerns when
+debugging workflow failures.</li>
 
     <li class="dash">Let closed pull requests and scheduled cleanup remove wiki preview branches.</li>
 

@@ -2912,7 +2912,9 @@ For a first-time adoption path, see
     <tr>
             <td><code>.github/workflows/*.yml</code>
 </td>
-            <td>Copies stub workflows from <code>resources/github-actions</code>
+            <td>Copies thin wrapper workflows from <code>resources/github-actions</code>
+ that
+delegate to reusable workflows in <code>php-fast-forward/dev-tools</code>
 .</td>
             <td>Only when missing by default; replaceable with <code>--overwrite</code>
 .</td>
@@ -3006,6 +3008,51 @@ needs fresh links.</li>
  and <code>.agents/agents</code>
 
 entries.</li>
+
+</ul>
+
+    </section>
+
+            <section class="section " id="workflow-wrapper-notes">
+            <h2>Workflow Wrapper Notes</h2>
+
+            
+    <p>The synchronized workflow files in consumer repositories are wrappers, not the
+full implementation. The actual reusable workflows live in the upstream
+<code>php-fast-forward/dev-tools</code>
+ repository and internally compose local actions
+from <code>.github/actions/</code>
+ there.</p>
+
+            
+    <p>That matters most for these cases:</p>
+
+            
+
+<ul>
+    <li><code>.github/workflows/wiki.yml</code>
+ now handles only pull-request wiki previews.</li>
+
+    <li><code>.github/workflows/wiki-maintenance.yml</code>
+ handles publication to the wiki
+<code>master</code>
+ branch after merge, closed-preview deletion, and scheduled
+cleanup.</li>
+
+    <li><code>.github/workflows/auto-assign.yml</code>
+ and
+<code>.github/workflows/changelog.yml</code>
+ accept a <code>project</code>
+ input in the
+wrapper and also support the <code>PROJECT</code>
+ repository variable.</li>
+
+    <li>The effective project-board contract is <code>project</code>
+ first, then
+<code>PROJECT</code>
+, then any reusable-workflow default that applies to
+<code>php-fast-forward</code>
+ repositories.</li>
 
 </ul>
 
