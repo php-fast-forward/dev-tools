@@ -8,6 +8,10 @@ Before creating a new PR, check whether the current branch already has an open P
 
 - If a PR already exists, update it instead of creating a duplicate.
 - If no PR exists, create one against `main` or the repository's integration branch.
+- If an earlier PR for the same issue or historical branch already exists but
+  is closed, do not assume that branch should be reused. When the old branch
+  was deleted or the previous PR represents finished work, open a follow-up
+  bug issue and publish a fresh branch and PR.
 
 ## Template Rule
 

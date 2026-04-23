@@ -34,3 +34,5 @@ Before starting implementation, confirm:
 - the base branch exists locally and can be updated
 - the issue is specific enough to implement
 - authentication for the required GitHub operations is available if a PR will be opened
+- any earlier PR tied to the intended branch or issue is still open before
+  treating that branch as reusable
