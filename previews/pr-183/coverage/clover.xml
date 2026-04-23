@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1776982351">
-  <project timestamp="1776982351" name="Clover Coverage">
+<coverage generated="1776987439">
+  <project timestamp="1776987439" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -33,6 +33,20 @@
     <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryCheckerInterface.php">
       <metrics loc="44" ncloc="12" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
+    <package name="FastForward\DevTools\Changelog">
+      <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/DependabotChangelogEntryMessageResolver.php">
+        <class name="FastForward\DevTools\Changelog\DependabotChangelogEntryMessageResolver" namespace="FastForward\DevTools\Changelog">
+          <metrics complexity="2" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="6" coveredelements="6"/>
+        </class>
+        <line num="33" type="method" name="resolve" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="35" type="stmt" count="3"/>
+        <line num="36" type="stmt" count="3"/>
+        <line num="38" type="stmt" count="3"/>
+        <line num="39" type="stmt" count="1"/>
+        <line num="42" type="stmt" count="2"/>
+        <metrics loc="45" ncloc="22" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="6" coveredelements="6"/>
+      </file>
+    </package>
     <package name="FastForward\DevTools\Changelog\Document">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Document/ChangelogDocument.php">
         <class name="FastForward\DevTools\Changelog\Document\ChangelogDocument" namespace="FastForward\DevTools\Changelog\Document">
@@ -5329,6 +5343,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="126" loc="17451" ncloc="10515" classes="94" methods="431" coveredmethods="355" conditionals="0" coveredconditionals="0" statements="4155" coveredstatements="3870" elements="4586" coveredelements="4225"/>
+    <metrics files="127" loc="17496" ncloc="10537" classes="95" methods="432" coveredmethods="356" conditionals="0" coveredconditionals="0" statements="4160" coveredstatements="3875" elements="4592" coveredelements="4231"/>
   </project>
 </coverage>
