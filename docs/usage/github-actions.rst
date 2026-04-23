@@ -161,6 +161,9 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Uses ``fetch-depth: 0`` so the base branch reference can be compared
         safely.
     *   Fetches the base branch changelog reference.
+    *   For same-repository Dependabot pull requests, creates and pushes a
+        minimal ``Unreleased`` changelog entry derived from the pull request
+        title when the branch has not added one yet.
     *   Runs ``composer dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
     *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
     *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.

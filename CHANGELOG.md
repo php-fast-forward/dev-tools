@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)
+
 ## [1.20.0] - 2026-04-23
 
 ### Changed
