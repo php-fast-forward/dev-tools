@@ -249,8 +249,6 @@
             <li class="success">Configure will apply repository ignores and invoke customization callback</li>
             <li class="success">It will expose reusable packaged dependency defaults</li>
             <li class="success">Apply packaged repository ignores will return the same configuration instance</li>
-            <li class="success">Is installed as dependency will detect vendor package paths</li>
-            <li class="success">Is dev tools repository will detect repository paths</li>
         </ul>
         <h2>Composer Funding Codec (FastForward\DevTools\Tests\Funding\ComposerFundingCodec)</h2>
         <ul>
@@ -351,6 +349,12 @@
         <ul>
             <li class="success">It can be constructed with custom tracer and subscriber</li>
             <li class="success">It can be constructed with defaults</li>
+        </ul>
+        <h2>Dev Tools Path Resolver (FastForward\DevTools\Tests\Path\DevToolsPathResolver)</h2>
+        <ul>
+            <li class="success">It will expose canonical package paths</li>
+            <li class="success">It will reject absolute package paths</li>
+            <li class="success">It will detect whether dev tools runs from vendor or repository checkout</li>
         </ul>
         <h2>Dev Tools Service Provider (FastForward\DevTools\Tests\ServiceProvider\DevToolsServiceProvider)</h2>
         <ul>
@@ -777,7 +781,8 @@
         <h2>Working Project Path Resolver (FastForward\DevTools\Tests\Path\WorkingProjectPathResolver)</h2>
         <ul>
             <li class="success">It will expose canonical repository root paths</li>
-            <li class="success">It will normalize path separators when joining repository root paths</li>
+            <li class="success">It will normalize path separators when joining project paths</li>
+            <li class="success">It will expose the current working project directory or paths under it</li>
         </ul>
         <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>
         <ul>

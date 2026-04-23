@@ -1041,21 +1041,6 @@ Search.appendIndex(
             "summary": "Applies\u0020the\u0020ignores\u0020required\u0020only\u0020by\u0020the\u0020packaged\u0020DevTools\u0020repository.",
             "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyPackagedRepositoryIgnores"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AisDevToolsRepository\u0028\u0029",
-            "name": "isDevToolsRepository",
-            "summary": "Detects\u0020whether\u0020the\u0020analyser\u0020is\u0020running\u0020inside\u0020the\u0020DevTools\u0020repository\u0020itself.",
-            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isDevToolsRepository"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AisInstalledAsDependency\u0028\u0029",
-            "name": "isInstalledAsDependency",
-            "summary": "Detects\u0020whether\u0020the\u0020packaged\u0020config\u0020is\u0020being\u0020loaded\u0020from\u0020a\u0020consumer\u0020vendor\u0020directory.",
-            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_isInstalledAsDependency"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AVENDOR_PACKAGE_PATH",
-            "name": "VENDOR_PACKAGE_PATH",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_VENDOR_PACKAGE_PATH"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003ADEFAULT_PACKAGED_UNUSED_DEPENDENCIES",
             "name": "DEFAULT_PACKAGED_UNUSED_DEPENDENCIES",
             "summary": "Dependencies\u0020that\u0020are\u0020only\u0020required\u0020by\u0020the\u0020packaged\u0020DevTools\u0020distribution\u0020itself.",
@@ -1156,10 +1141,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#method_execute"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003ADIRECTORY_LABEL",
-            "name": "DIRECTORY_LABEL",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003AAGENTS_DIRECTORY",
+            "name": "AGENTS_DIRECTORY",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#constant_DIRECTORY_LABEL"
+            "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#constant_AGENTS_DIRECTORY"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand\u003A\u003A\u0024synchronizer",
             "name": "synchronizer",
@@ -2226,10 +2211,10 @@ Search.appendIndex(
             "summary": "Executes\u0020the\u0020skills\u0020synchronization\u0020workflow.",
             "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#method_execute"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003ADIRECTORY_LABEL",
-            "name": "DIRECTORY_LABEL",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003ASKILLS_DIRECTORY",
+            "name": "SKILLS_DIRECTORY",
             "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#constant_DIRECTORY_LABEL"
+            "url": "classes/FastForward-DevTools-Console-Command-SkillsCommand.html#constant_SKILLS_DIRECTORY"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand\u003A\u003A\u0024synchronizer",
             "name": "synchronizer",
@@ -2305,11 +2290,6 @@ Search.appendIndex(
             "name": "queueDevToolsCommand",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#method_queueDevToolsCommand"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003AdevToolsBinary\u0028\u0029",
-            "name": "devToolsBinary",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-SyncCommand.html#method_devToolsBinary"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
@@ -3746,6 +3726,51 @@ Search.appendIndex(
             "summary": "Resolves\u0020a\u0020license\u0020identifier\u0020to\u0020its\u0020template\u0020filename.",
             "url": "classes/FastForward-DevTools-License-ResolverInterface.html#method_resolve"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
+            "name": "DevToolsPathResolver",
+            "summary": "Resolves\u0020canonical\u0020paths\u0020for\u0020the\u0020DevTools\u0020package\u0020itself.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetPackagePath\u0028\u0029",
+            "name": "getPackagePath",
+            "summary": "Returns\u0020the\u0020DevTools\u0020package\u0020directory\u0020or\u0020a\u0020path\u0020under\u0020it.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getPackagePath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetBinaryPath\u0028\u0029",
+            "name": "getBinaryPath",
+            "summary": "Returns\u0020the\u0020packaged\u0020DevTools\u0020binary\u0020path.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getBinaryPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetResourcesPath\u0028\u0029",
+            "name": "getResourcesPath",
+            "summary": "Returns\u0020the\u0020packaged\u0020resources\u0020directory\u0020or\u0020a\u0020path\u0020under\u0020it.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getResourcesPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AisInstalledAsDependency\u0028\u0029",
+            "name": "isInstalledAsDependency",
+            "summary": "Detects\u0020whether\u0020the\u0020provided\u0020path\u0020belongs\u0020to\u0020an\u0020installed\u0020vendor\u0020copy\u0020of\u0020DevTools.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_isInstalledAsDependency"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AisRepositoryCheckout\u0028\u0029",
+            "name": "isRepositoryCheckout",
+            "summary": "Detects\u0020whether\u0020the\u0020provided\u0020path\u0020belongs\u0020to\u0020the\u0020DevTools\u0020repository\u0020checkout\u0020itself.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_isRepositoryCheckout"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003ABINARY",
+            "name": "BINARY",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#constant_BINARY"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003ARESOURCES",
+            "name": "RESOURCES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#constant_RESOURCES"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AVENDOR_PACKAGE_PATH",
+            "name": "VENDOR_PACKAGE_PATH",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#constant_VENDOR_PACKAGE_PATH"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "name": "ManagedWorkspace",
             "summary": "Provides\u0020canonical\u0020repository\u002Dlocal\u0020paths\u0020for\u0020generated\u0020DevTools\u0020artifacts.",
@@ -3806,35 +3831,15 @@ Search.appendIndex(
             "summary": "Provides\u0020canonical\u0020repository\u002Droot\u0020paths\u0020that\u0020are\u0020not\u0020part\u0020of\u0020the\u0020managed\u0020workspace.",
             "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetResourcesDirectory\u0028\u0029",
-            "name": "getResourcesDirectory",
-            "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020resources\u0020path.",
-            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getResourcesDirectory"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetVendorDirectory\u0028\u0029",
-            "name": "getVendorDirectory",
-            "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020vendor\u0020path.",
-            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getVendorDirectory"
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetProjectPath\u0028\u0029",
+            "name": "getProjectPath",
+            "summary": "Returns\u0020the\u0020current\u0020working\u0020project\u0020directory\u0020or\u0020a\u0020path\u0020under\u0020it.",
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getProjectPath"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetToolingExcludedDirectories\u0028\u0029",
             "name": "getToolingExcludedDirectories",
             "summary": "Returns\u0020the\u0020project\u0020directories\u0020that\u0020static\u002Danalysis\u0020and\u0020coding\u002Dstyle\u0020tooling\u0020SHOULD\u0020skip.",
             "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingExcludedDirectories"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AjoinProjectPath\u0028\u0029",
-            "name": "joinProjectPath",
-            "summary": "Joins\u0020an\u0020optional\u0020relative\u0020path\u0020under\u0020a\u0020project\u002Droot\u0020segment.",
-            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_joinProjectPath"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003ARESOURCES",
-            "name": "RESOURCES",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#constant_RESOURCES"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AVENDOR",
-            "name": "VENDOR",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#constant_VENDOR"
         },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
             "name": "CoverageSummary",
