@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\PhpUnit\Event\TestSuite;
 
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\PhpUnit\Event\EventTracer;
 use Joli\JoliNotif\DefaultNotifier;
 use Joli\JoliNotif\Notification;
@@ -95,7 +96,7 @@ final readonly class JoliNotifExecutionFinishedSubscriber implements ExecutionFi
         $notification = (new Notification())
             ->setTitle($this->getTitle())
             ->setBody($this->getBody() . $this->getTelemetryBody($event))
-            ->setIcon(\dirname(__DIR__, 4) . '/resources/phpunit.avif');
+            ->setIcon(DevToolsPathResolver::getResourcesPath('phpunit.avif'));
 
         $pid = \function_exists('pcntl_fork') ? pcntl_fork() : -1;
 

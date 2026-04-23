@@ -19,13 +19,18 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\ServiceProvider;
 
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Interop\Container\ServiceProviderInterface;
 
 #[CoversClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 final class DevToolsServiceProviderTest extends TestCase
 {
     private DevToolsServiceProvider $provider;

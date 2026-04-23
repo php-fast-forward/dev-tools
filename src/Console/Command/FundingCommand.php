@@ -35,7 +35,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Synchronizes funding metadata between composer.json and .github/FUNDING.yml.
@@ -276,11 +275,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
             );
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile(
-            $input,
-            $output,
-            $composerFile
-        )) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($composerFile)) {
             $this->notice('Skipped updating {composer_file}.', $input, [
                 'composer_file' => $composerFile,
             ]);
@@ -435,7 +430,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
             );
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($input, $output, $fundingFile)) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($fundingFile)) {
             $this->notice('Skipped updating {funding_file}.', $input, [
                 'funding_file' => $fundingFile,
             ]);
@@ -465,18 +460,14 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
     /**
      * Prompts whether a managed file should be written.
      *
-     * @param InputInterface $input
-     * @param OutputInterface $output
      * @param string $targetFile
      *
      * @return bool true when the write SHOULD proceed
      */
-    private function shouldWriteManagedFile(InputInterface $input, OutputInterface $output, string $targetFile): bool
+    private function shouldWriteManagedFile(string $targetFile): bool
     {
-        $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetFile), false);
-
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $targetFile), false);
     }
 
     /**

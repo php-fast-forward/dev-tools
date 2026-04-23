@@ -22,6 +22,8 @@ namespace FastForward\DevTools\Tests\Console;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Console\DevTools;
 use FastForward\DevTools\Filesystem\FinderFactory;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -40,9 +42,11 @@ use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
 #[CoversClass(DevTools::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(DevToolsCommandLoader::class)]
 #[UsesClass(FinderFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 final class DevToolsTest extends TestCase
 {
     use ProphecyTrait;

@@ -31,8 +31,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Question\Question;
 
 /**
  * Generates and synchronizes CODEOWNERS files from local project metadata.
@@ -130,7 +128,7 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
         $owners = $this->generator->inferOwners();
 
         if ([] === $owners && $interactive && $input->isInteractive()) {
-            $owners = $this->promptForOwners($input, $output);
+            $owners = $this->promptForOwners();
         }
 
         $generatedContent = $this->generator->generate($owners);
@@ -178,8 +176,6 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
         }
 
         if (null !== $existingContent && $interactive && $input->isInteractive() && ! $this->shouldWriteCodeOwners(
-            $input,
-            $output,
             $targetPath
         )) {
             return $this->success(
@@ -206,20 +202,15 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
     /**
      * Prompts for CODEOWNERS entries when metadata inference is insufficient.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
-     *
      * @return list<string>
      */
-    private function promptForOwners(InputInterface $input, OutputInterface $output): array
+    private function promptForOwners(): array
     {
-        $question = new Question(
-            'No CODEOWNERS entries could be inferred from composer.json. Enter space-separated owners for "*" or leave blank to use a commented placeholder: ',
-            '',
-        );
-
-        $answer = (string) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        $answer = (string) $this->getIO()
+            ->ask(
+                'No CODEOWNERS entries could be inferred from composer.json. Enter space-separated owners for "*" or leave blank to use a commented placeholder: ',
+                '',
+            );
 
         return $this->generator->normalizeOwners($answer);
     }
@@ -227,17 +218,13 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
     /**
      * Prompts whether the generated CODEOWNERS file should be written.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
      * @param string $targetPath the target file path
      *
      * @return bool true when the write SHOULD proceed
      */
-    private function shouldWriteCodeOwners(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    private function shouldWriteCodeOwners(string $targetPath): bool
     {
-        $question = new ConfirmationQuestion(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
-
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
     }
 }

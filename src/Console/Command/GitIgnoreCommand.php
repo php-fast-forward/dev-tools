@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -33,7 +34,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Provides functionality to merge and synchronize .gitignore files.
@@ -94,7 +94,7 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
                 shortcut: 's',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the source .gitignore file (canonical)',
-                default: $this->fileLocator->locate(self::FILENAME, \dirname(__DIR__, 3)),
+                default: DevToolsPathResolver::getPackagePath(self::FILENAME),
             )
             ->addOption(
                 name: 'target',
@@ -183,11 +183,7 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
             return self::SUCCESS;
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitIgnore(
-            $input,
-            $output,
-            $merged->path()
-        )) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitIgnore($merged->path())) {
             return $this->success(
                 'Skipped updating {target_path}.',
                 $input,
@@ -212,17 +208,13 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
     /**
      * Prompts whether .gitignore should be updated.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
      * @param string $targetPath the target path that would be updated
      *
      * @return bool true when the update SHOULD proceed
      */
-    private function shouldWriteGitIgnore(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    private function shouldWriteGitIgnore(string $targetPath): bool
     {
-        $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
-
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
     }
 }

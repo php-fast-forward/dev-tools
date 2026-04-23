@@ -26,6 +26,8 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
+use function Safe\getcwd;
+
 #[CoversClass(WorkingProjectPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
 final class WorkingProjectPathResolverTest extends TestCase
@@ -36,10 +38,6 @@ final class WorkingProjectPathResolverTest extends TestCase
     #[Test]
     public function itWillExposeCanonicalRepositoryRootPaths(): void
     {
-        self::assertSame('resources', WorkingProjectPathResolver::getResourcesDirectory());
-        self::assertSame('vendor', WorkingProjectPathResolver::getVendorDirectory());
-        self::assertSame('tmp/resources/phpdoc', WorkingProjectPathResolver::getResourcesDirectory('phpdoc', 'tmp'));
-        self::assertSame('repo/vendor/bin', WorkingProjectPathResolver::getVendorDirectory('bin', 'repo'));
         self::assertSame(
             ['repo/.dev-tools', 'repo/resources', 'repo/vendor'],
             WorkingProjectPathResolver::getToolingExcludedDirectories('repo')
@@ -50,9 +48,25 @@ final class WorkingProjectPathResolverTest extends TestCase
      * @return void
      */
     #[Test]
-    public function itWillNormalizePathSeparatorsWhenJoiningRepositoryRootPaths(): void
+    public function itWillNormalizePathSeparatorsWhenJoiningProjectPaths(): void
     {
-        self::assertSame('tmp/resources/phpdoc', WorkingProjectPathResolver::getResourcesDirectory('/phpdoc', 'tmp/'));
-        self::assertSame('tmp/vendor/bin', WorkingProjectPathResolver::getVendorDirectory('/bin', 'tmp/'));
+        self::assertSame(
+            ['tmp/.dev-tools', 'tmp/resources', 'tmp/vendor'],
+            WorkingProjectPathResolver::getToolingExcludedDirectories('tmp/')
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillExposeTheCurrentWorkingProjectDirectoryOrPathsUnderIt(): void
+    {
+        self::assertSame(getcwd(), WorkingProjectPathResolver::getProjectPath());
+        self::assertSame(getcwd() . '/resources', WorkingProjectPathResolver::getProjectPath('resources'));
+        self::assertSame(
+            '/tmp/project/resources',
+            WorkingProjectPathResolver::getProjectPath('/tmp/project/resources')
+        );
     }
 }

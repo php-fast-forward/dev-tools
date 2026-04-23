@@ -24,6 +24,7 @@ use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\AgentsCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -43,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 #[CoversClass(AgentsCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(PackagedDirectorySynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
 #[UsesTrait(LogsCommandResults::class)]
@@ -83,8 +85,6 @@ final class AgentsCommandTest extends TestCase
             ->willReturn(new HelperSet());
         $this->application->getIO()
             ->willReturn($this->io->reveal());
-        $this->filesystem->getAbsolutePath('.agents/agents', \dirname(__DIR__, 3))
-            ->willReturn(getcwd() . '/.agents/agents');
         $this->filesystem->getAbsolutePath('.agents/agents')
             ->willReturn(getcwd() . '/.agents/agents');
 

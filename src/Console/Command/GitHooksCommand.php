@@ -31,7 +31,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -190,7 +189,7 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
                     continue;
                 }
 
-                if ($interactive && $input->isInteractive() && ! $this->shouldReplaceHook($input, $output, $hookPath)) {
+                if ($interactive && $input->isInteractive() && ! $this->shouldReplaceHook($hookPath)) {
                     $this->notice(
                         'Skipped replacing {hook_path}.',
                         $input,
@@ -240,17 +239,13 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
     /**
      * Prompts whether a drifted hook should be replaced.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
      * @param string $hookPath the hook path that would be replaced
      *
      * @return bool true when the replacement SHOULD proceed
      */
-    private function shouldReplaceHook(InputInterface $input, OutputInterface $output, string $hookPath): bool
+    private function shouldReplaceHook(string $hookPath): bool
     {
-        $question = new ConfirmationQuestion(\sprintf('Replace drifted Git hook %s? [y/N] ', $hookPath), false);
-
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Replace drifted Git hook %s? [y/N] ', $hookPath), false);
     }
 }

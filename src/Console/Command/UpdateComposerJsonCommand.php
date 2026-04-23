@@ -26,6 +26,7 @@ use Composer\Json\JsonManipulator;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -34,7 +35,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Path;
 
 use function Safe\getcwd;
@@ -129,7 +129,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
 
         $currentContents = $this->filesystem->readFile($file);
         $manipulator = new JsonManipulator($currentContents);
-        $grumphpConfig = $this->fileLocator->locate('grumphp.yml', \dirname(__DIR__, 3));
+        $grumphpConfig = DevToolsPathResolver::getPackagePath('grumphp.yml');
 
         foreach ($this->scripts() as $name => $command) {
             $manipulator->addSubNode('scripts', $name, $command);
@@ -179,7 +179,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
             return self::SUCCESS;
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldUpdateComposerJson($input, $output, $file)) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldUpdateComposerJson($file)) {
             return $this->success('Skipped updating {file}.', $input, [
                 'file' => $file,
             ], LogLevel::NOTICE,);
@@ -195,18 +195,14 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
     /**
      * Prompts whether composer.json should be updated.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
      * @param string $file the composer.json path that would be updated
      *
      * @return bool true when the update SHOULD proceed
      */
-    private function shouldUpdateComposerJson(InputInterface $input, OutputInterface $output, string $file): bool
+    private function shouldUpdateComposerJson(string $file): bool
     {
-        $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $file), false);
-
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $file), false);
     }
 
     /**

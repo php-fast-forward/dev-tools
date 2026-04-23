@@ -29,11 +29,9 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -276,11 +274,7 @@ final class CopyResourceCommand extends BaseCommand implements LoggerAwareComman
                 return self::SUCCESS;
             }
 
-            if ($interactive && $input->isInteractive() && ! $this->shouldReplaceResource(
-                $input,
-                $output,
-                $targetPath
-            )) {
+            if ($interactive && $input->isInteractive() && ! $this->shouldReplaceResource($targetPath)) {
                 return $this->success(
                     'Skipped replacing {target_path}.',
                     $input,
@@ -308,18 +302,13 @@ final class CopyResourceCommand extends BaseCommand implements LoggerAwareComman
     /**
      * Prompts whether a drifted resource should be replaced.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
      * @param string $targetPath the resource path that would be replaced
      *
      * @return bool true when the replacement SHOULD proceed
      */
-    private function shouldReplaceResource(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    private function shouldReplaceResource(string $targetPath): bool
     {
-        /** @var QuestionHelper $helper */
-        $helper = $this->getHelper('question');
-        $question = new ConfirmationQuestion(\sprintf('Replace drifted resource %s? [y/N] ', $targetPath), false);
-
-        return (bool) $helper->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Replace drifted resource %s? [y/N] ', $targetPath), false);
     }
 }

@@ -21,74 +21,40 @@ namespace FastForward\DevTools\Path;
 
 use Symfony\Component\Filesystem\Path;
 
+use function Safe\getcwd;
+
 /**
  * Provides canonical repository-root paths that are not part of the managed workspace.
  */
 final class WorkingProjectPathResolver
 {
     /**
-     * @var string the repository resources directory segment
-     */
-    public const string RESOURCES = 'resources';
-
-    /**
-     * @var string the vendor directory segment
-     */
-    public const string VENDOR = 'vendor';
-
-    /**
-     * Returns a repository-local resources path.
+     * Returns the current working project directory or a path under it.
      *
-     * @param ?string $path the optional relative segment to append under the resources directory
-     * @param ?string $baseDir the optional repository root that SHOULD prefix the resources directory
+     * @param string $path the optional relative segment to append under the project directory
      */
-    public static function getResourcesDirectory(?string $path = null, ?string $baseDir = null): string
+    public static function getProjectPath(string $path = ''): string
     {
-        return self::joinProjectPath(self::RESOURCES, $path, $baseDir);
-    }
+        if ('' !== $path && Path::isAbsolute($path)) {
+            return $path;
+        }
 
-    /**
-     * Returns a repository-local vendor path.
-     *
-     * @param ?string $path the optional relative segment to append under the vendor directory
-     * @param ?string $baseDir the optional repository root that SHOULD prefix the vendor directory
-     */
-    public static function getVendorDirectory(?string $path = null, ?string $baseDir = null): string
-    {
-        return self::joinProjectPath(self::VENDOR, $path, $baseDir);
+        return Path::join(getcwd(), $path);
     }
 
     /**
      * Returns the project directories that static-analysis and coding-style tooling SHOULD skip.
      *
-     * @param ?string $baseDir the optional repository base directory used to materialize absolute paths
+     * @param string $baseDir the optional repository base directory used to materialize absolute paths
      *
      * @return list<string>
      */
-    public static function getToolingExcludedDirectories(?string $baseDir = null): array
+    public static function getToolingExcludedDirectories(string $baseDir = ''): array
     {
         return [
             ManagedWorkspace::getOutputDirectory(baseDir: $baseDir),
-            self::getResourcesDirectory(baseDir: $baseDir),
-            self::getVendorDirectory(baseDir: $baseDir),
+            Path::join($baseDir, 'resources'),
+            Path::join($baseDir, 'vendor'),
         ];
-    }
-
-    /**
-     * Joins an optional relative path under a project-root segment.
-     *
-     * @param string $rootSegment the root segment to resolve under the project base directory
-     * @param ?string $path the optional relative path to append under the root segment
-     * @param ?string $baseDir the optional repository base directory
-     */
-    private static function joinProjectPath(string $rootSegment, ?string $path = null, ?string $baseDir = null): string
-    {
-        $root = null === $baseDir || '' === $baseDir
-            ? $rootSegment
-            : Path::join($baseDir, $rootSegment);
-
-        return null === $path || '' === $path
-            ? $root
-            : Path::join($root, $path);
     }
 }

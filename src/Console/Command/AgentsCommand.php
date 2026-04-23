@@ -23,6 +23,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -42,7 +43,7 @@ final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInter
     use HasJsonOption;
     use LogsCommandResults;
 
-    private const string DIRECTORY_LABEL = '.agents/agents';
+    private const string AGENTS_DIRECTORY = '.agents/agents';
 
     /**
      * @param PackagedDirectorySynchronizer $synchronizer
@@ -73,8 +74,8 @@ final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInter
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $packageAgentsPath = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL, \dirname(__DIR__, 3));
-        $agentsDir = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL);
+        $packageAgentsPath = DevToolsPathResolver::getPackagePath(self::AGENTS_DIRECTORY);
+        $agentsDir = $this->filesystem->getAbsolutePath(self::AGENTS_DIRECTORY);
         $this->logger->info('Starting agents synchronization...');
 
         if (! $this->filesystem->exists($packageAgentsPath)) {
@@ -99,7 +100,7 @@ final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInter
 
         $this->synchronizer->setLogger($this->getIO());
 
-        $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::DIRECTORY_LABEL);
+        $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::AGENTS_DIRECTORY);
 
         if ($result->failed()) {
             return $this->failure(

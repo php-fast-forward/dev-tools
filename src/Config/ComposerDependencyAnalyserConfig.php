@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Config;
 
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
 use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
@@ -40,9 +41,6 @@ use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
  */
 final class ComposerDependencyAnalyserConfig
 {
-    private const string VENDOR_PACKAGE_PATH = \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR
-        . 'fast-forward' . \DIRECTORY_SEPARATOR . 'dev-tools';
-
     /**
      * Dependencies that are only required by the packaged DevTools distribution itself.
      *
@@ -92,7 +90,7 @@ final class ComposerDependencyAnalyserConfig
     {
         $configuration = new Configuration();
 
-        if (self::isDevToolsRepository(__DIR__)) {
+        if (DevToolsPathResolver::isRepositoryCheckout()) {
             self::applyPackagedRepositoryIgnores($configuration);
         }
 
@@ -123,29 +121,5 @@ final class ComposerDependencyAnalyserConfig
         );
 
         return $configuration;
-    }
-
-    /**
-     * Detects whether the analyser is running inside the DevTools repository itself.
-     *
-     * @param string $configDirectory the directory where the config class is loaded from
-     *
-     * @return bool true when the config is loaded from the repository checkout itself
-     */
-    private static function isDevToolsRepository(string $configDirectory): bool
-    {
-        return ! self::isInstalledAsDependency($configDirectory);
-    }
-
-    /**
-     * Detects whether the packaged config is being loaded from a consumer vendor directory.
-     *
-     * @param string $configDirectory the directory where the config class is loaded from
-     *
-     * @return bool true when DevTools is being used from vendor/fast-forward/dev-tools
-     */
-    private static function isInstalledAsDependency(string $configDirectory): bool
-    {
-        return str_contains($configDirectory, self::VENDOR_PACKAGE_PATH);
     }
 }

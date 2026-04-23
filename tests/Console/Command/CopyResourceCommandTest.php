@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\CopyResourceCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -34,11 +35,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Finder\Finder;
 
 use function Safe\mkdir;
@@ -66,7 +64,7 @@ final class CopyResourceCommandTest extends TestCase
 
     private ObjectProphecy $logger;
 
-    private ObjectProphecy $questionHelper;
+    private ObjectProphecy $io;
 
     private CopyResourceCommand $command;
 
@@ -88,7 +86,7 @@ final class CopyResourceCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->questionHelper = $this->prophesize(QuestionHelper::class);
+        $this->io = $this->prophesize(IOInterface::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
@@ -105,11 +103,6 @@ final class CopyResourceCommandTest extends TestCase
         $this->logger->info(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
-        $this->questionHelper->getName()
-            ->willReturn('question');
-        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
-            ->shouldBeCalled();
-
         $this->command = new CopyResourceCommand(
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
@@ -117,9 +110,7 @@ final class CopyResourceCommandTest extends TestCase
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
         );
-        $this->command->setHelperSet(new HelperSet([
-            'question' => $this->questionHelper->reveal(),
-        ]));
+        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -446,11 +437,8 @@ final class CopyResourceCommandTest extends TestCase
         $this->fileDiffer->diff('/package/.editorconfig', '/project/.editorconfig')
             ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', "@@ -1 +1 @@\n-old\n+new"))
             ->shouldBeCalledOnce();
-        $this->questionHelper->ask(
-            $this->input->reveal(),
-            $this->output->reveal(),
-            Argument::type(ConfirmationQuestion::class),
-        )->willReturn(false)
+        $this->io->askConfirmation('Replace drifted resource /project/.editorconfig? [y/N] ', false)
+            ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->log('notice', 'Skipped replacing {target_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();

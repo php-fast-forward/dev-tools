@@ -23,6 +23,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -53,7 +54,7 @@ final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInter
     use HasJsonOption;
     use LogsCommandResults;
 
-    private const string DIRECTORY_LABEL = '.agents/skills';
+    private const string SKILLS_DIRECTORY = '.agents/skills';
 
     /**
      * Initializes the command with an optional skills synchronizer instance.
@@ -105,8 +106,8 @@ final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInter
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $packageSkillsPath = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL, \dirname(__DIR__, 3));
-        $skillsDir = $this->filesystem->getAbsolutePath(self::DIRECTORY_LABEL);
+        $packageSkillsPath = DevToolsPathResolver::getPackagePath(self::SKILLS_DIRECTORY);
+        $skillsDir = $this->filesystem->getAbsolutePath(self::SKILLS_DIRECTORY);
         $this->logger->info('Starting skills synchronization...');
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
@@ -131,7 +132,7 @@ final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInter
 
         $this->synchronizer->setLogger($this->getIO());
 
-        $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::DIRECTORY_LABEL);
+        $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::SKILLS_DIRECTORY);
 
         if ($result->failed()) {
             return $this->failure(

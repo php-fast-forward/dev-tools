@@ -73,16 +73,16 @@ final class ManagedWorkspace
      * workspace, while $baseDir MAY provide the repository root used to
      * materialize the same `.dev-tools` structure under a different base path.
      *
-     * @param ?string $path the optional relative segment to append under the managed output root
-     * @param ?string $baseDir the optional repository root used to resolve the managed workspace path
+     * @param string $path the optional relative segment to append under the managed output root
+     * @param string $baseDir the optional repository root used to resolve the managed workspace path
      */
-    public static function getOutputDirectory(?string $path = null, ?string $baseDir = null): string
+    public static function getOutputDirectory(string $path = '', string $baseDir = ''): string
     {
-        $baseDir = null === $baseDir || '' === $baseDir
+        $baseDir = '' === $baseDir
             ? self::WORKSPACE_ROOT
             : Path::join($baseDir, self::WORKSPACE_ROOT);
 
-        return null === $path || '' === $path
+        return '' === $path
             ? $baseDir
             : Path::join($baseDir, $path);
     }
@@ -94,14 +94,14 @@ final class ManagedWorkspace
      * resolve the managed workspace root before the `cache` directory is
      * appended.
      *
-     * @param ?string $path the optional relative cache segment to append under the managed cache root
-     * @param ?string $baseDir the optional repository root used to resolve the managed cache path
+     * @param string $path the optional relative cache segment to append under the managed cache root
+     * @param string $baseDir the optional repository root used to resolve the managed cache path
      */
-    public static function getCacheDirectory(?string $path = null, ?string $baseDir = null): string
+    public static function getCacheDirectory(string $path = '', string $baseDir = ''): string
     {
         $baseDir = self::getOutputDirectory(self::CACHE_ROOT, $baseDir);
 
-        return null === $path || '' === $path
+        return '' === $path
             ? $baseDir
             : Path::join($baseDir, $path);
     }

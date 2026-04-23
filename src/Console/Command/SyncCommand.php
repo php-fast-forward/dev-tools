@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -30,7 +31,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Path;
 
 /**
  * Orchestrates dev-tools synchronization commands for the consumer repository.
@@ -221,14 +221,8 @@ final class SyncCommand extends BaseCommand implements LoggerAwareCommandInterfa
             $processBuilder = $processBuilder->withArgument($argument);
         }
 
-        $this->processQueue->add($processBuilder->build($this->devToolsBinary()), detached: $detached);
-    }
+        $process = $processBuilder->build(DevToolsPathResolver::getBinaryPath());
 
-    /**
-     * @return string
-     */
-    private function devToolsBinary(): string
-    {
-        return Path::makeAbsolute('bin/dev-tools', \dirname(__DIR__, 3));
+        $this->processQueue->add($process, detached: $detached);
     }
 }

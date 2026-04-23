@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use Prophecy\Argument;
+use Composer\IO\IOInterface;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\GitAttributesCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
@@ -41,11 +42,8 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use function Safe\getcwd;
 
@@ -116,7 +114,7 @@ final class GitAttributesCommandTest extends TestCase
      */
     private ObjectProphecy $logger;
 
-    private ObjectProphecy $questionHelper;
+    private ObjectProphecy $io;
 
     private GitAttributesCommand $command;
 
@@ -137,7 +135,7 @@ final class GitAttributesCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->questionHelper = $this->prophesize(QuestionHelper::class);
+        $this->io = $this->prophesize(IOInterface::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
@@ -147,10 +145,6 @@ final class GitAttributesCommandTest extends TestCase
         $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
-        $this->questionHelper->getName()
-            ->willReturn('question');
-        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
-            ->shouldBeCalled();
         $this->input->getOption('dry-run')
             ->willReturn(false);
         $this->input->getOption('check')
@@ -175,9 +169,7 @@ final class GitAttributesCommandTest extends TestCase
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
         );
-        $this->command->setHelperSet(new HelperSet([
-            'question' => $this->questionHelper->reveal(),
-        ]));
+        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -492,11 +484,8 @@ final class GitAttributesCommandTest extends TestCase
                 FileDiff::STATUS_CHANGED,
                 'Managed file needs update.',
             ))->shouldBeCalledOnce();
-        $this->questionHelper->ask(
-            $this->input->reveal(),
-            $this->output->reveal(),
-            Argument::type(ConfirmationQuestion::class),
-        )->willReturn(false)
+        $this->io->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $gitattributesPath), false)
+            ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->notice('Skipped updating {gitattributes_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
