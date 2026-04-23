@@ -32,6 +32,10 @@ Most day-to-day work falls into one of the flows below.
    * - Refresh packaged project agents only
      - ``composer agents``
      - Creates or repairs symlinks in ``.agents/agents``.
+   * - Trigger a rigorous review pass for a ready pull request
+     - Mark the pull request ready for review or run ``review.yml`` manually
+     - Posts a deterministic review brief that points maintainers to the
+       ``review-guardian`` agent and ``pull-request-review`` skill.
    * - Prepare a release from the current changelog
      - ``composer changelog:next-version`` then ``composer changelog:promote``
      - Infers the next semantic version, publishes ``Unreleased``, and leaves

@@ -1,0 +1,20 @@
+name: Rigorous Pull Request Review
+
+on:
+  pull_request_target:
+    types: [ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pull-request-number:
+        description: Pull request number to review manually.
+        required: true
+        type: string
+
+jobs:
+  rigorous-review:
+    permissions:
+      contents: read
+      pull-requests: write
+    uses: php-fast-forward/dev-tools/.github/workflows/review.yml@main
+    with:
+      pull-request-number: ${{ github.event.pull_request.number || inputs.pull-request-number || '' }}

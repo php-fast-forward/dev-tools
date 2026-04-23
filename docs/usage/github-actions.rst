@@ -42,6 +42,7 @@ The packaged wrappers currently include:
 
 *   ``tests.yml``
 *   ``reports.yml``
+*   ``review.yml``
 *   ``changelog.yml``
 *   ``wiki.yml`` for pull-request wiki previews
 *   ``wiki-maintenance.yml`` for merged-publication and cleanup work
@@ -175,6 +176,41 @@ wrapper in ``resources/github-actions/changelog.yml``.
 
 .. note::
    Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the ``release/v...`` pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.
+
+Fast Forward Rigorous Review
+----------------------------
+
+The ``review.yml`` workflow standardizes how Fast Forward repositories request
+high-signal pull-request review when a branch is no longer a draft.
+
+**Triggers:**
+*   Pull Request Target (ready_for_review).
+*   Manual trigger (workflow_dispatch).
+
+**Behavior:**
+*   Resolves the target pull request from the lifecycle event or manual input.
+*   Inspects the changed file list and infers high-signal review surfaces such
+    as workflows, local actions, packaged skills, packaged agents, docs,
+    changelog, wiki output, and source or test changes.
+*   Writes a GitHub Actions step summary that points maintainers to the
+    packaged ``review-guardian`` project agent and ``pull-request-review``
+    skill.
+*   Posts or updates a sticky pull-request comment with a deterministic review
+    brief, sample changed files, and a ready-to-run prompt for the dedicated
+    review agent.
+*   Runs only when a pull request actually becomes ready for review, not on
+    every draft update.
+
+**Inputs:**
+*   ``pull-request-number``: required only for manual dispatch.
+
+**Repository permissions:**
+*   ``contents: read``
+*   ``pull-requests: write``
+
+This workflow does not replace human review. It standardizes the review intake
+moment and keeps the same review capability manually invokable for an already
+open pull request.
 
 Maintenance Workflows
 ---------------------

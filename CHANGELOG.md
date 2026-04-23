@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Package a rigorous pull-request review skill, review-guardian agent, and ready-for-review workflow brief for repositories and synchronized consumers (#147)
+
 ### Changed
 
 - Require GitHub issue write readback verification in the github-issues skill (#165)
