@@ -147,6 +147,9 @@ The packaged changelog workflow consumes these commands in two places:
 
 - pull-request validation runs ``changelog:check`` against the base branch to
   require a meaningful changelog update;
+- Dependabot pull-request validation MAY create one minimal ``changed`` entry
+  from the pull-request title before re-running ``changelog:check`` so the
+  branch keeps a persisted release note without manual intervention;
 - manual release preparation uses ``changelog:next-version`` and
   ``changelog:promote`` to create a release pull request, then
   ``changelog:show`` to publish the merged section as GitHub release notes.

@@ -92,6 +92,10 @@ jobs:
         env:
             CHANGELOG_FILE: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
             CHANGELOG_ROOT_VERSION: ${{ github.event.pull_request.head.ref && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
+            BASE_REF: ${{ github.event.pull_request.base.ref }}
+            HEAD_REF: ${{ github.event.pull_request.head.ref }}
+            PULL_REQUEST_NUMBER: ${{ github.event.pull_request.number }}
+            PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
 
         steps:
             - uses: actions/checkout@v6
@@ -114,13 +118,20 @@ jobs:
                   install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Fetch base branch reference
-              env:
-                  BASE_REF: ${{ github.event.pull_request.base.ref }}
               run: git fetch --no-tags --depth=1 origin "+refs/heads/${BASE_REF}:refs/remotes/origin/${BASE_REF}"
 
+            - name: Create Dependabot changelog entry when missing
+              id: dependabot_entry
+              if: ${{ (github.event.pull_request.user.login == 'dependabot[bot]' || github.event.pull_request.user.login == 'app/dependabot' || startsWith(github.event.pull_request.head.ref, 'dependabot/')) && github.event.pull_request.head.repo.full_name == github.repository }}
+              uses: ./.dev-tools-actions/.github/actions/changelog/create-dependabot-entry
+              with:
+                  changelog-file: ${{ env.CHANGELOG_FILE }}
+                  base-ref: ${{ env.BASE_REF }}
+                  head-ref: ${{ env.HEAD_REF }}
+                  pull-request-number: ${{ env.PULL_REQUEST_NUMBER }}
+                  pull-request-title: ${{ env.PULL_REQUEST_TITLE }}
+
             - name: Verify changelog update
-              env:
-                  BASE_REF: ${{ github.event.pull_request.base.ref }}
               run: composer dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
 
             - uses: ./.dev-tools-actions/.github/actions/summary/write
@@ -129,7 +140,9 @@ jobs:
                       ## Changelog Validation Summary
 
                       - Changelog file: `${{ env.CHANGELOG_FILE }}`
-                      - Compared base ref: `origin/${{ github.event.pull_request.base.ref }}`
+                      - Compared base ref: `origin/${{ env.BASE_REF }}`
+                      - Dependabot fallback entry created: `${{ steps.dependabot_entry.outputs.created || 'false' }}`
+                      - Dependabot fallback entry message: `${{ steps.dependabot_entry.outputs.message || 'not needed' }}`
                       - Validation result: success
 
     prepare_release_pull_request:
