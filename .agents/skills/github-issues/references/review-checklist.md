@@ -31,6 +31,9 @@ Use this checklist before finalizing issue content or mutating GitHub.
   user explicitly asked for metadata correction.
 - Project or milestone fields were left empty only for a clear reason, not by omission.
 - A duplicate issue is not being created accidentally.
+- After create or update writes, the issue was re-read from GitHub and the
+  stored body was checked for temporary file paths, placeholder tokens, or
+  other malformed content.
 - The final response will include the issue number and URL.
 
 ## Stop Conditions

@@ -24,6 +24,16 @@ Add metadata flags only when needed:
 After creation, apply project assignment, project field values, or issue links
 through follow-up mutations when the repository context supports them.
 
+Then verify the stored issue body:
+
+```bash
+gh issue view {number} --json number,body,url
+```
+
+The returned body should still contain the intended Markdown content. Treat the
+write as failed if the stored body collapses into a temporary path such as
+`@/tmp/...`, a placeholder token, or another obviously malformed result.
+
 ## Update Issue
 
 ```bash
@@ -35,6 +45,16 @@ gh api repos/{owner}/{repo}/issues/{number} \
 ```
 
 Only include the fields that should change.
+
+Then verify the stored issue body:
+
+```bash
+gh issue view {number} --json number,body,url
+```
+
+The returned body should match the intended update. If the readback shows a
+temporary file reference, placeholder path, or another malformed payload,
+correct the issue before reporting success.
 
 ## Add Issue to an Existing Project
 
@@ -95,5 +115,7 @@ gh api repos/{owner}/{repo}/issues/{number} \
 - Use comments for incremental updates that should preserve the issue description.
 - For new issues, prefer applying metadata immediately after creation so the
   issue lands in GitHub with a complete and reviewable state.
+- After create or update writes, always re-read the issue body from GitHub
+  before reporting success.
 - For backfill passes, update only missing metadata by default and avoid
   rewriting fields that already carry intentional values.

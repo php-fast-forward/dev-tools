@@ -14,7 +14,8 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 3. Build or revise the issue content with [references/templates.md](references/templates.md) and [references/architectural-criteria.md](references/architectural-criteria.md).
 4. Run the content-quality pass in [references/review-checklist.md](references/review-checklist.md).
 5. When the user wants a GitHub write, choose the exact mutation in [references/operations.md](references/operations.md) and the metadata rules in [references/metadata.md](references/metadata.md).
-6. Re-run the GitHub write checks in [references/review-checklist.md](references/review-checklist.md), then return the issue number, URL, and a short summary of what changed.
+6. After create or update mutations, re-read the issue from GitHub and verify that the stored body is the intended issue content rather than a placeholder path, temporary-file reference, or obviously malformed result.
+7. Re-run the GitHub write checks in [references/review-checklist.md](references/review-checklist.md), then return the issue number, URL, and a short summary of what changed.
 
 ## Output Contract
 
@@ -25,11 +26,13 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - Add explicit non-goals when the prompt could expand into multiple initiatives.
 - Ask follow-up questions only when a missing fact would materially change the issue type, acceptance criteria, or target issue. Otherwise make the smallest safe assumption and state it briefly.
 - When publishing or updating an issue, explicitly state which metadata was applied or intentionally omitted: issue type, labels, milestone, project assignment, project field values, and related open issues.
+- Treat a GitHub create or update as incomplete until the issue has been re-read successfully and the stored body has been sanity-checked.
 
 ## Fast Forward Defaults
 
 - Prefer the current repository checkout when the user asks about "this repo" or "this project".
 - Use `gh api` for GitHub write operations.
+- After issue create and update writes, prefer `gh issue view --json body` or an equivalent GitHub readback to verify the stored issue body before reporting success.
 - Prefer issue types over labels for primary categorization when the organization supports them.
 - Reuse only issue types, labels, milestones, projects, and project field options that already exist in the target repository or organization.
 - Prefer filling the maximum useful metadata that can be inferred safely from the issue scope and the available GitHub configuration.
@@ -65,5 +68,6 @@ Use this skill for the full Fast Forward issue lifecycle: draft implementation-r
 - Do not force the code-isolation block onto documentation-only work.
 - Do not ask exploratory questions when repository conventions already provide a safe default.
 - Do not publish a placeholder issue body or mutate GitHub without restating the target issue first.
+- Do not report a create or update as successful before re-reading the issue body from GitHub and confirming it is not a temporary file path, placeholder token, or malformed partial payload.
 - Do not split drafting and publication into separate local skills when this workflow already covers both.
 - Do not invent labels, issue types, milestones, projects, project field values, or issue links that are not already supported by the target repository context.
