@@ -21,9 +21,9 @@
 {% endfor %}
             </source>
             <ignore hidden="true" symlinks="true">
-                <path>tests/**/*</path>
+                <path>.dev-tools/**/*</path>
                 <path>resources/**/*</path>
-                <path>tmp/**/*</path>
+                <path>tests/**/*</path>
                 <path>vendor/**/*</path>
             </ignore>
             <extensions>

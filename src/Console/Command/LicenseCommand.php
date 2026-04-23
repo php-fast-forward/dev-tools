@@ -30,7 +30,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 /**
  * Generates and copies LICENSE files to projects.
@@ -194,7 +193,7 @@ final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInte
             );
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteLicense($input, $output, $targetPath)) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteLicense($targetPath)) {
             $this->notice('Skipped updating {target_path}.', $input, [
                 'target_path' => $targetPath,
             ]);
@@ -224,17 +223,13 @@ final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInte
     /**
      * Prompts whether the generated LICENSE should be written.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
      * @param string $targetPath the license path that would be written
      *
      * @return bool true when the write SHOULD proceed
      */
-    private function shouldWriteLicense(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    private function shouldWriteLicense(string $targetPath): bool
     {
-        $question = new ConfirmationQuestion(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
-
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
     }
 }

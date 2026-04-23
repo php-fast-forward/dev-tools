@@ -27,7 +27,7 @@ Options
 
 ``--cache-dir`` (optional)
    Path to the cache directory for phpDocumentor.
-   Default: ``tmp/cache/phpdoc``.
+   Default: ``.dev-tools/cache/phpdoc``.
 
 ``--init``
    Initialize the configured wiki target as a Git submodule.

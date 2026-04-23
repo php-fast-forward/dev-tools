@@ -23,8 +23,10 @@ use FastForward\DevTools\Console\Command\MetricsCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -38,6 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(MetricsCommand::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class MetricsCommandTest extends TestCase
 {
@@ -72,7 +75,7 @@ final class MetricsCommandTest extends TestCase
         $this->input->getOption('exclude')
             ->willReturn('vendor,tests');
         $this->input->getOption('target')
-            ->willReturn('.dev-tools/metrics');
+            ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS));
         $this->input->getOption('junit')
             ->willReturn(null);
         $this->input->getOption('progress')

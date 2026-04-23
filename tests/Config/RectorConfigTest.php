@@ -19,13 +19,19 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Config;
 
+use Rector\Set\ValueObject\SetList;
+use Ergebnis\Rector\Rules\Faker\GeneratorPropertyFetchToMethodCallRector;
+use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
+use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use ReflectionProperty;
 use FastForward\DevTools\Config\RectorConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
@@ -34,6 +40,8 @@ use Rector\Config\RectorConfig as RectorConfigInterface;
 use function Safe\getcwd;
 
 #[CoversClass(RectorConfig::class)]
+#[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 final class RectorConfigTest extends TestCase
 {
     /**
@@ -98,17 +106,14 @@ final class RectorConfigTest extends TestCase
         self::assertSame([getcwd()], SimpleParameterProvider::provideArrayParameter(Option::PATHS));
         self::assertSame(
             [
-                getcwd() . '/.dev-tools',
-                getcwd() . '/resources',
-                getcwd() . '/vendor',
-                getcwd() . '/tmp',
+                ...WorkingProjectPathResolver::getToolingExcludedDirectories(getcwd()),
                 RemoveUselessReturnTagRector::class,
                 RemoveUselessParamTagRector::class,
             ],
             SimpleParameterProvider::provideArrayParameter(Option::SKIP),
         );
         self::assertSame(
-            getcwd() . '/tmp/cache/rector',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, getcwd()),
             SimpleParameterProvider::provideStringParameter(Option::CACHE_DIR)
         );
         self::assertSame(['php'], SimpleParameterProvider::provideArrayParameter(Option::FILE_EXTENSIONS));
@@ -122,6 +127,49 @@ final class RectorConfigTest extends TestCase
             SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES),
         );
         self::assertNotEmpty(SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_SETS));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillExposeReusableDefaultSetsAndRules(): void
+    {
+        self::assertSame(
+            [
+                SetList::DEAD_CODE,
+                SetList::CODE_QUALITY,
+                SetList::CODING_STYLE,
+                SetList::TYPE_DECLARATION,
+                SetList::PRIVATIZATION,
+                SetList::INSTANCEOF,
+                SetList::EARLY_RETURN,
+            ],
+            RectorConfig::DEFAULT_SETS
+        );
+        self::assertSame(
+            [
+                GeneratorPropertyFetchToMethodCallRector::class,
+                AddMissingMethodPhpDocRector::class,
+                RemoveEmptyDocBlockRector::class,
+            ],
+            RectorConfig::DEFAULT_RULES
+        );
+        self::assertSame(
+            [RemoveUselessReturnTagRector::class, RemoveUselessParamTagRector::class],
+            RectorConfig::DEFAULT_SKIPPED_RULES
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function applySafeMigrationSetWillBeCallableWithoutTheSafePackageInstalled(): void
+    {
+        RectorConfig::applySafeMigrationSet(new RectorConfigInterface());
+
+        self::assertTrue(true);
     }
 
     /**

@@ -24,8 +24,10 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -39,6 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ReportsCommandTest extends TestCase
 {
@@ -71,11 +74,11 @@ final class ReportsCommandTest extends TestCase
         $this->process = $this->prophesize(Process::class);
 
         $this->input->getOption('target')
-            ->willReturn('.dev-tools');
+            ->willReturn(ManagedWorkspace::getOutputDirectory());
         $this->input->getOption('coverage')
-            ->willReturn('.dev-tools/coverage');
+            ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE));
         $this->input->getOption('metrics')
-            ->willReturn('.dev-tools/metrics');
+            ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS));
         $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')

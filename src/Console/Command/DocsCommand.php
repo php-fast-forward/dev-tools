@@ -27,6 +27,7 @@ use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -91,7 +92,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated HTML documentation.',
-                default: '.dev-tools',
+                default: ManagedWorkspace::getOutputDirectory(),
             )
             ->addOption(
                 name: 'source',
@@ -110,7 +111,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
                 name: 'cache-dir',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the cache directory for phpDocumentor.',
-                default: 'tmp/cache/phpdoc',
+                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC),
             );
     }
 

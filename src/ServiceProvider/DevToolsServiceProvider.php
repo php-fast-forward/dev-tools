@@ -73,6 +73,8 @@ use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Psr\Clock\SystemClock;
 use FastForward\DevTools\Resource\DifferInterface;
 use FastForward\DevTools\Resource\UnifiedDiffer;
@@ -91,7 +93,6 @@ use Twig\Loader\LoaderInterface;
 
 use function DI\create;
 use function DI\get;
-use function Safe\getcwd;
 
 /**
  * DevToolsServiceProvider registers the services provided by this package.
@@ -128,7 +129,10 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             GitClientInterface::class => get(GitClient::class),
 
             // Symfony Components
-            FileLocatorInterface::class => create(FileLocator::class)->constructor([getcwd(), \dirname(__DIR__, 2)]),
+            FileLocatorInterface::class => create(FileLocator::class)->constructor([
+                WorkingProjectPathResolver::getProjectPath(),
+                DevToolsPathResolver::getPackagePath(),
+            ]),
 
             // PSR
             LoggerInterface::class => get(OutputFormatLogger::class),
@@ -173,7 +177,9 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             ResolverInterface::class => get(Resolver::class),
 
             // Twig
-            LoaderInterface::class => create(FilesystemLoader::class)->constructor(\dirname(__DIR__, 2) . '/resources'),
+            LoaderInterface::class => create(FilesystemLoader::class)->constructor(
+                DevToolsPathResolver::getResourcesPath()
+            ),
         ];
     }
 

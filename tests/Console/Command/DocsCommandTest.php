@@ -25,8 +25,10 @@ use FastForward\DevTools\Console\Command\DocsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -41,6 +43,7 @@ use Symfony\Component\Process\Process;
 use Twig\Environment;
 
 #[CoversClass(DocsCommand::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class DocsCommandTest extends TestCase
 {
@@ -84,9 +87,9 @@ final class DocsCommandTest extends TestCase
         $this->input->getOption('source')
             ->willReturn('docs');
         $this->input->getOption('target')
-            ->willReturn('.dev-tools');
+            ->willReturn(ManagedWorkspace::getOutputDirectory());
         $this->input->getOption('cache-dir')
-            ->willReturn('tmp/cache/phpdoc');
+            ->willReturn(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC));
         $this->input->getOption('template')
             ->willReturn('vendor/fast-forward/phpdoc-bootstrap-template');
         $this->input->getOption('progress')
@@ -103,12 +106,12 @@ final class DocsCommandTest extends TestCase
             ->willReturn(new OutputFormatter());
         $this->filesystem->getAbsolutePath('docs')
             ->willReturn('/repo/docs');
-        $this->filesystem->getAbsolutePath('.dev-tools')
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::getOutputDirectory())
             ->willReturn('/repo/.dev-tools');
-        $this->filesystem->getAbsolutePath('tmp/cache/phpdoc')
-            ->willReturn('/repo/tmp/cache/phpdoc');
-        $this->filesystem->getAbsolutePath('phpdocumentor.xml', '/repo/tmp/cache/phpdoc')
-            ->willReturn('/repo/tmp/cache/phpdoc/phpdocumentor.xml');
+        $this->filesystem->getAbsolutePath(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC))
+            ->willReturn('/repo/.dev-tools/cache/phpdoc');
+        $this->filesystem->getAbsolutePath('phpdocumentor.xml', '/repo/.dev-tools/cache/phpdoc')
+            ->willReturn('/repo/.dev-tools/cache/phpdoc/phpdocumentor.xml');
         $this->filesystem->makePathRelative('/repo/docs')
             ->willReturn('docs');
         $this->filesystem->exists('/repo/docs')
@@ -164,7 +167,7 @@ final class DocsCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
-        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/tmp/cache/phpdoc')
+        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')
             ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalled();

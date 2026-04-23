@@ -19,11 +19,13 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\GitIgnoreCommand;
 use FastForward\DevTools\GitIgnore\GitIgnoreInterface;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
@@ -36,13 +38,11 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 #[CoversClass(GitIgnoreCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(FileDiff::class)]
 final class GitIgnoreCommandTest extends TestCase
 {
@@ -85,10 +85,7 @@ final class GitIgnoreCommandTest extends TestCase
 
     private ObjectProphecy $logger;
 
-    /**
-     * @var ObjectProphecy<QuestionHelper>
-     */
-    private ObjectProphecy $questionHelper;
+    private ObjectProphecy $io;
 
     /**
      * @var ObjectProphecy<GitIgnoreInterface>
@@ -127,7 +124,7 @@ final class GitIgnoreCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->questionHelper = $this->prophesize(QuestionHelper::class);
+        $this->io = $this->prophesize(IOInterface::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
@@ -135,11 +132,6 @@ final class GitIgnoreCommandTest extends TestCase
         $this->logger->info(Argument::cetera())->will(static function (): void {});
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
-        $this->questionHelper->getName()
-            ->willReturn('question');
-        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
-            ->shouldBeCalled();
-
         $this->gitIgnoreSource = $this->prophesize(GitIgnoreInterface::class);
         $this->gitIgnoreTarget = $this->prophesize(GitIgnoreInterface::class);
         $this->gitIgnoreMerged = $this->prophesize(GitIgnoreInterface::class);
@@ -190,9 +182,7 @@ final class GitIgnoreCommandTest extends TestCase
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
         );
-        $this->command->setHelperSet(new HelperSet([
-            'question' => $this->questionHelper->reveal(),
-        ]));
+        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -309,11 +299,8 @@ final class GitIgnoreCommandTest extends TestCase
             ->willReturn(true);
         $this->input->isInteractive()
             ->willReturn(true);
-        $this->questionHelper->ask(
-            $this->input->reveal(),
-            $this->output->reveal(),
-            Argument::type(ConfirmationQuestion::class),
-        )->willReturn(false)
+        $this->io->askConfirmation(\sprintf('Update managed file %s? [y/N] ', self::TARGET_PATH), false)
+            ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->log(
             'notice',

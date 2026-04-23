@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Config;
 
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
@@ -47,40 +48,119 @@ use function Safe\getcwd;
 final class ECSConfig
 {
     /**
+     * @var array{symfony: bool, symfonyRisky: bool, auto: bool, autoRisky: bool} the PHP-CS-Fixer sets applied by default
+     */
+    public const array DEFAULT_PHP_CS_FIXER_SETS = [
+        'symfony' => true,
+        'symfonyRisky' => true,
+        'auto' => true,
+        'autoRisky' => true,
+    ];
+
+    /**
+     * @var array{psr12: bool, common: bool, symplify: bool, strict: bool, cleanCode: bool} the prepared ECS sets applied by default
+     */
+    public const array DEFAULT_PREPARED_SETS = [
+        'psr12' => true,
+        'common' => true,
+        'symplify' => true,
+        'strict' => true,
+        'cleanCode' => true,
+    ];
+
+    /**
+     * @var list<class-string> the ECS/CS Fixer rules that SHOULD be skipped by default
+     */
+    public const array DEFAULT_SKIPPED_RULES = [
+        PhpdocToCommentFixer::class,
+        NoSuperfluousPhpdocTagsFixer::class,
+        NoEmptyPhpdocFixer::class,
+        PhpdocNoEmptyReturnFixer::class,
+        GlobalNamespaceImportFixer::class,
+        GeneralPhpdocAnnotationRemoveFixer::class,
+    ];
+
+    /**
+     * @var array<class-string, array<string, mixed>> the configured ECS rules applied by default
+     */
+    public const array DEFAULT_CONFIGURED_RULES = [
+        PhpdocAlignFixer::class => [
+            'align' => 'left',
+        ],
+        PhpUnitTestCaseStaticMethodCallsFixer::class => [
+            'call_type' => 'self',
+        ],
+        PhpdocAddMissingParamAnnotationFixer::class => [
+            'only_untyped' => false,
+        ],
+    ];
+
+    /**
      * Creates the default ECS configuration.
+     *
+     * @param callable|null $customize optional callback to customize the configuration builder
      *
      * @return ECSConfigBuilder the configured ECS configuration builder
      */
-    public static function configure(): ECSConfigBuilder
+    public static function configure(?callable $customize = null): ECSConfigBuilder
     {
-        $cwd = getcwd();
+        $workingDirectory = getcwd();
         $config = new ECSConfigBuilder();
 
+        self::applyDefaultPathsAndSkips($config, $workingDirectory);
+        self::applyDefaultRulesAndSets($config);
+
+        if (null !== $customize) {
+            $customize($config);
+        }
+
+        return $config;
+    }
+
+    /**
+     * Applies the default repository paths and skipped rules to an ECS builder.
+     *
+     * @param ECSConfigBuilder $config
+     * @param string $workingDirectory
+     */
+    public static function applyDefaultPathsAndSkips(
+        ECSConfigBuilder $config,
+        string $workingDirectory
+    ): ECSConfigBuilder {
+        $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
+
         return $config
-            ->withPaths([$cwd])
-            ->withSkip([
-                $cwd . '/.dev-tools',
-                $cwd . '/resources',
-                $cwd . '/vendor',
-                $cwd . '/tmp',
-                PhpdocToCommentFixer::class,
-                NoSuperfluousPhpdocTagsFixer::class,
-                NoEmptyPhpdocFixer::class,
-                PhpdocNoEmptyReturnFixer::class,
-                GlobalNamespaceImportFixer::class,
-                GeneralPhpdocAnnotationRemoveFixer::class,
-            ])
+            ->withPaths([$workingDirectory])
+            ->withSkip([...$skipPaths, ...self::DEFAULT_SKIPPED_RULES]);
+    }
+
+    /**
+     * Applies the default ECS sets, root files, and configured rules to an ECS builder.
+     *
+     * @param ECSConfigBuilder $config
+     */
+    public static function applyDefaultRulesAndSets(ECSConfigBuilder $config): ECSConfigBuilder
+    {
+        $config
             ->withRootFiles()
-            ->withPhpCsFixerSets(symfony: true, symfonyRisky: true, auto: true, autoRisky: true)
-            ->withPreparedSets(psr12: true, common: true, symplify: true, strict: true, cleanCode: true)
-            ->withConfiguredRule(PhpdocAlignFixer::class, [
-                'align' => 'left',
-            ])
-            ->withConfiguredRule(PhpUnitTestCaseStaticMethodCallsFixer::class, [
-                'call_type' => 'self',
-            ])
-            ->withConfiguredRule(PhpdocAddMissingParamAnnotationFixer::class, [
-                'only_untyped' => false,
-            ]);
+            ->withPhpCsFixerSets(
+                symfony: self::DEFAULT_PHP_CS_FIXER_SETS['symfony'],
+                symfonyRisky: self::DEFAULT_PHP_CS_FIXER_SETS['symfonyRisky'],
+                auto: self::DEFAULT_PHP_CS_FIXER_SETS['auto'],
+                autoRisky: self::DEFAULT_PHP_CS_FIXER_SETS['autoRisky'],
+            )
+            ->withPreparedSets(
+                psr12: self::DEFAULT_PREPARED_SETS['psr12'],
+                common: self::DEFAULT_PREPARED_SETS['common'],
+                symplify: self::DEFAULT_PREPARED_SETS['symplify'],
+                strict: self::DEFAULT_PREPARED_SETS['strict'],
+                cleanCode: self::DEFAULT_PREPARED_SETS['cleanCode'],
+            );
+
+        foreach (self::DEFAULT_CONFIGURED_RULES as $rule => $configuration) {
+            $config->withConfiguredRule($rule, $configuration);
+        }
+
+        return $config;
     }
 }

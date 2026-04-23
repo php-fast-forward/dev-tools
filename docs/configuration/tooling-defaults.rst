@@ -51,8 +51,10 @@ Generated and Cache Directories
   directories kept in place by the ``skills`` command.
 - ``.agents/agents/`` contains symlinked packaged project agents or
   consumer-owned directories kept in place by the ``agents`` command.
-- ``tmp/cache/phpdoc``, ``tmp/cache/phpunit``, ``tmp/cache/rector``, and
-  ``tmp/cache/.php-cs-fixer.cache`` store tool caches.
+- ``.dev-tools/cache/phpdoc``, ``.dev-tools/cache/phpunit``,
+  ``.dev-tools/cache/rector``, and
+  ``.dev-tools/cache/php-cs-fixer/.php-cs-fixer.cache`` store repository-local
+  tool caches.
 
 Local Versus Packaged Files
 ---------------------------

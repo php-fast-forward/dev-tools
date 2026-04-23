@@ -36,7 +36,6 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 use function Safe\getcwd;
 
@@ -216,11 +215,7 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
             );
         }
 
-        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes(
-            $input,
-            $output,
-            $gitattributesPath
-        )) {
+        if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes($gitattributesPath)) {
             $this->notice(
                 'Skipped updating {gitattributes_path}.',
                 $input,
@@ -254,18 +249,14 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
     /**
      * Prompts whether .gitattributes should be updated.
      *
-     * @param InputInterface $input the command input
-     * @param OutputInterface $output the command output
      * @param string $targetPath the target path that would be updated
      *
      * @return bool true when the update SHOULD proceed
      */
-    private function shouldWriteGitAttributes(InputInterface $input, OutputInterface $output, string $targetPath): bool
+    private function shouldWriteGitAttributes(string $targetPath): bool
     {
-        $question = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
-
-        return (bool) $this->getHelper('question')
-            ->ask($input, $output, $question);
+        return $this->getIO()
+            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
     }
 
     /**

@@ -40,7 +40,7 @@ Options
 
 ``--cache-dir`` (optional)
    Path to the cache directory for phpDocumentor.
-   Default: ``tmp/cache/phpdoc``.
+   Default: ``.dev-tools/cache/phpdoc``.
 
 ``--progress``
    Enable progress output from phpDocumentor.

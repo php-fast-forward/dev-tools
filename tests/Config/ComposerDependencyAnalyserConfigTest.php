@@ -20,14 +20,16 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Config;
 
 use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
 use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
 #[CoversClass(ComposerDependencyAnalyserConfig::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 final class ComposerDependencyAnalyserConfigTest extends TestCase
 {
     /**
@@ -75,38 +77,29 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
      * @return void
      */
     #[Test]
-    public function isInstalledAsDependencyWillDetectVendorPackagePaths(): void
+    public function itWillExposeReusablePackagedDependencyDefaults(): void
     {
-        self::assertFalse($this->invokeDetector('isInstalledAsDependency', '/workspaces/dev-tools/src/Config'));
-        self::assertTrue($this->invokeDetector(
-            'isInstalledAsDependency',
-            '/workspaces/project/vendor/fast-forward/dev-tools/src/Config',
-        ));
+        self::assertContains(
+            'rector/jack',
+            ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_UNUSED_DEPENDENCIES,
+        );
+        self::assertContains(
+            'phpspec/prophecy',
+            ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES,
+        );
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function isDevToolsRepositoryWillDetectRepositoryPaths(): void
+    public function applyPackagedRepositoryIgnoresWillReturnTheSameConfigurationInstance(): void
     {
-        self::assertTrue($this->invokeDetector('isDevToolsRepository', '/workspaces/dev-tools/src/Config'));
-        self::assertFalse($this->invokeDetector(
-            'isDevToolsRepository',
-            '/workspaces/project/vendor/fast-forward/dev-tools/src/Config',
-        ));
-    }
+        $configuration = new Configuration();
 
-    /**
-     * @param string $methodName
-     * @param string $configDirectory
-     *
-     * @return bool
-     */
-    private function invokeDetector(string $methodName, string $configDirectory): bool
-    {
-        $reflectionMethod = new ReflectionMethod(ComposerDependencyAnalyserConfig::class, $methodName);
-
-        return $reflectionMethod->invoke(null, $configDirectory);
+        self::assertSame(
+            $configuration,
+            ComposerDependencyAnalyserConfig::applyPackagedRepositoryIgnores($configuration)
+        );
     }
 }

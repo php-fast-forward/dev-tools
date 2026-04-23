@@ -30,6 +30,7 @@ use FastForward\DevTools\Console\Command\RefactorCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -51,6 +52,7 @@ use Twig\Environment;
 #[CoversClass(PhpDocCommand::class)]
 #[UsesClass(Author::class)]
 #[UsesClass(Support::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class PhpDocCommandTest extends TestCase
 {
@@ -100,7 +102,7 @@ final class PhpDocCommandTest extends TestCase
         $this->input->getOption('fix')
             ->willReturn(false);
         $this->input->getOption('cache-dir')
-            ->willReturn('tmp/cache/php-cs-fixer');
+            ->willReturn(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER));
         $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
@@ -134,8 +136,11 @@ final class PhpDocCommandTest extends TestCase
         $this->renderer->render('docblock/.docheader', Argument::type('array'))->willReturn('docheader');
         $this->fileLocator->locate(PhpDocCommand::CONFIG)->willReturn('/repo/.php-cs-fixer.dist.php');
         $this->fileLocator->locate(RefactorCommand::CONFIG)->willReturn('/repo/rector.php');
-        $this->filesystem->getAbsolutePath(PhpDocCommand::CACHE_FILE, 'tmp/cache/php-cs-fixer')
-            ->willReturn('/repo/tmp/cache/php-cs-fixer/.php-cs-fixer.cache');
+        $this->filesystem->getAbsolutePath(
+            PhpDocCommand::CACHE_FILE,
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER)
+        )
+            ->willReturn('/repo/.dev-tools/cache/php-cs-fixer/.php-cs-fixer.cache');
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()

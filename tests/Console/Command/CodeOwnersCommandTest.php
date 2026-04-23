@@ -19,8 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Symfony\Component\Console\Question\Question;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Composer\IO\IOInterface;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Console\Command\CodeOwnersCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
@@ -37,8 +36,6 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
-use Symfony\Component\Console\Helper\HelperSet;
-use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -79,10 +76,7 @@ final class CodeOwnersCommandTest extends TestCase
      */
     private ObjectProphecy $logger;
 
-    /**
-     * @var ObjectProphecy<QuestionHelper>
-     */
-    private ObjectProphecy $questionHelper;
+    private ObjectProphecy $io;
 
     private CodeOwnersCommand $command;
 
@@ -99,7 +93,7 @@ final class CodeOwnersCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->questionHelper = $this->prophesize(QuestionHelper::class);
+        $this->io = $this->prophesize(IOInterface::class);
 
         $this->input->getOption('file')
             ->willReturn('.github/CODEOWNERS');
@@ -122,20 +116,13 @@ final class CodeOwnersCommandTest extends TestCase
         $this->logger->notice(Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
-        $this->questionHelper->getName()
-            ->willReturn('question');
-        $this->questionHelper->setHelperSet(Argument::type(HelperSet::class))
-            ->shouldBeCalled();
-
         $this->command = new CodeOwnersCommand(
             $this->generator->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
         );
-        $this->command->setHelperSet(new HelperSet([
-            'question' => $this->questionHelper->reveal(),
-        ]));
+        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -289,10 +276,9 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn(true);
         $this->generator->inferOwners()
             ->willReturn([]);
-        $this->questionHelper->ask(
-            $this->input->reveal(),
-            $this->output->reveal(),
-            Argument::type(Question::class),
+        $this->io->ask(
+            'No CODEOWNERS entries could be inferred from composer.json. Enter space-separated owners for "*" or leave blank to use a commented placeholder: ',
+            '',
         )->willReturn('php-fast-forward @mentordosnerds')
             ->shouldBeCalledOnce();
         $this->generator->normalizeOwners('php-fast-forward @mentordosnerds')
@@ -393,11 +379,8 @@ final class CodeOwnersCommandTest extends TestCase
             FileDiff::STATUS_CHANGED,
             'Updating managed file ' . $targetPath . ' from generated CODEOWNERS content.',
         ))->shouldBeCalledOnce();
-        $this->questionHelper->ask(
-            $this->input->reveal(),
-            $this->output->reveal(),
-            Argument::type(ConfirmationQuestion::class),
-        )->willReturn(false)
+        $this->io->askConfirmation(\sprintf('Write managed file %s? [y/N] ', $targetPath), false)
+            ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->log(
             'notice',

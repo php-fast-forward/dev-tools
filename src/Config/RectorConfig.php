@@ -23,6 +23,8 @@ use Composer\InstalledVersions;
 use Ergebnis\Rector\Rules\Faker\GeneratorPropertyFetchToMethodCallRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
+use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use Rector\Config\RectorConfig as RectorConfigInterface;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
@@ -50,6 +52,36 @@ use function Safe\getcwd;
 final class RectorConfig
 {
     /**
+     * @var list<string> the default Rector sets applied to Fast Forward projects
+     */
+    public const array DEFAULT_SETS = [
+        SetList::DEAD_CODE,
+        SetList::CODE_QUALITY,
+        SetList::CODING_STYLE,
+        SetList::TYPE_DECLARATION,
+        SetList::PRIVATIZATION,
+        SetList::INSTANCEOF,
+        SetList::EARLY_RETURN,
+    ];
+
+    /**
+     * @var list<class-string> the default Rector rules applied on top of the configured sets
+     */
+    public const array DEFAULT_RULES = [
+        GeneratorPropertyFetchToMethodCallRector::class,
+        AddMissingMethodPhpDocRector::class,
+        RemoveEmptyDocBlockRector::class,
+    ];
+
+    /**
+     * @var list<class-string> the Rector rules that SHOULD be skipped by default
+     */
+    public const array DEFAULT_SKIPPED_RULES = [
+        RemoveUselessReturnTagRector::class,
+        RemoveUselessParamTagRector::class,
+    ];
+
+    /**
      * Creates the default Rector configuration.
      *
      * @param callable|null $customize optional callback to customize the configuration
@@ -59,58 +91,57 @@ final class RectorConfig
     public static function configure(?callable $customize = null): callable
     {
         return static function (RectorConfigInterface $rectorConfig) use ($customize): void {
-            $cwd = getcwd();
+            $workingDirectory = getcwd();
+            $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
+            $skipRules = self::DEFAULT_SKIPPED_RULES;
 
-            $rectorConfig->sets([
-                SetList::DEAD_CODE,
-                SetList::CODE_QUALITY,
-                SetList::CODING_STYLE,
-                SetList::TYPE_DECLARATION,
-                SetList::PRIVATIZATION,
-                SetList::INSTANCEOF,
-                SetList::EARLY_RETURN,
-            ]);
-            $rectorConfig->paths([$cwd]);
-            $rectorConfig->skip([
-                $cwd . '/.dev-tools',
-                $cwd . '/resources',
-                $cwd . '/vendor',
-                $cwd . '/tmp',
-                RemoveUselessReturnTagRector::class,
-                RemoveUselessParamTagRector::class,
-            ]);
-            $rectorConfig->cacheDirectory($cwd . '/tmp/cache/rector');
+            $rectorConfig->sets(self::DEFAULT_SETS);
+            $rectorConfig->paths([$workingDirectory]);
+            $rectorConfig->skip([...$skipPaths, ...$skipRules]);
+            $rectorConfig->cacheDirectory(
+                ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, $workingDirectory)
+            );
             $rectorConfig->importNames();
             $rectorConfig->removeUnusedImports();
             $rectorConfig->fileExtensions(['php']);
             $rectorConfig->parallel(600);
-            $rectorConfig->rules([
-                GeneratorPropertyFetchToMethodCallRector::class,
-                AddMissingMethodPhpDocRector::class,
-                RemoveEmptyDocBlockRector::class,
-            ]);
+            $rectorConfig->rules(self::DEFAULT_RULES);
 
             $projectPhpVersion = ComposerJsonPhpVersionResolver::resolveFromCwdOrFail();
             $phpLevelSets = PhpLevelSetResolver::resolveFromPhpVersion($projectPhpVersion);
 
             $rectorConfig->sets($phpLevelSets);
 
-            if (InstalledVersions::isInstalled('thecodingmachine/safe', false)) {
-                $packageLocation = InstalledVersions::getInstallPath('thecodingmachine/safe');
-                $safeRectorMigrateFile = $packageLocation . '/rector-migrate.php';
-
-                if (file_exists($safeRectorMigrateFile)) {
-                    $callback = require_once $safeRectorMigrateFile;
-
-                    if (\is_callable($callback)) {
-                        $callback($rectorConfig);
-                    }
-                }
-            }
+            self::applySafeMigrationSet($rectorConfig);
 
             if (null !== $customize) {
                 $customize($rectorConfig);
             }
         };
+    }
+
+    /**
+     * Applies the optional Safe migration callback when the package is installed.
+     *
+     * @param RectorConfigInterface $rectorConfig
+     */
+    public static function applySafeMigrationSet(RectorConfigInterface $rectorConfig): void
+    {
+        if (! InstalledVersions::isInstalled('thecodingmachine/safe', false)) {
+            return;
+        }
+
+        $packageLocation = InstalledVersions::getInstallPath('thecodingmachine/safe');
+        $safeRectorMigrateFile = $packageLocation . '/rector-migrate.php';
+
+        if (! file_exists($safeRectorMigrateFile)) {
+            return;
+        }
+
+        $callback = require_once $safeRectorMigrateFile;
+
+        if (\is_callable($callback)) {
+            $callback($rectorConfig);
+        }
     }
 }

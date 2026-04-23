@@ -24,6 +24,7 @@ use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\SkillsCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -43,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function Safe\getcwd;
 
 #[CoversClass(SkillsCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(PackagedDirectorySynchronizer::class)]
 #[UsesClass(SynchronizeResult::class)]
 #[UsesTrait(LogsCommandResults::class)]
@@ -83,8 +85,6 @@ final class SkillsCommandTest extends TestCase
             ->willReturn(new HelperSet());
         $this->application->getIO()
             ->willReturn($this->io->reveal());
-        $this->filesystem->getAbsolutePath('.agents/skills', \dirname(__DIR__, 3))
-            ->willReturn(getcwd() . '/.agents/skills');
         $this->filesystem->getAbsolutePath('.agents/skills')
             ->willReturn(getcwd() . '/.agents/skills');
 

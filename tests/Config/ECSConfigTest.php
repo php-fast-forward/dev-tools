@@ -20,12 +20,25 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Config;
 
 use FastForward\DevTools\Config\ECSConfig;
+use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
+use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
+use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
+use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
+
+use function Safe\getcwd;
 
 #[CoversClass(ECSConfig::class)]
+#[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 final class ECSConfigTest extends TestCase
 {
     /**
@@ -37,5 +50,32 @@ final class ECSConfigTest extends TestCase
         $result = ECSConfig::configure();
 
         self::assertInstanceOf(ECSConfigBuilder::class, $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillExposeReusableDefaultSkippedRules(): void
+    {
+        self::assertSame([
+            PhpdocToCommentFixer::class,
+            NoSuperfluousPhpdocTagsFixer::class,
+            NoEmptyPhpdocFixer::class,
+            PhpdocNoEmptyReturnFixer::class,
+            GlobalNamespaceImportFixer::class,
+            GeneralPhpdocAnnotationRemoveFixer::class,
+        ], ECSConfig::DEFAULT_SKIPPED_RULES);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function applyDefaultPathsAndSkipsWillKeepWorkingWithABuilder(): void
+    {
+        $builder = new ECSConfigBuilder();
+
+        self::assertInstanceOf(ECSConfigBuilder::class, ECSConfig::applyDefaultPathsAndSkips($builder, getcwd()));
     }
 }

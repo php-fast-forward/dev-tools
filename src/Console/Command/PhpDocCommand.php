@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Twig\Environment;
@@ -124,7 +125,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
                 name: 'cache-dir',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the cache directory for PHP-CS-Fixer.',
-                default: 'tmp/cache/php-cs-fixer',
+                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER),
             );
     }
 
