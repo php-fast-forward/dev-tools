@@ -42,10 +42,16 @@ jobs:
 
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-workflow-source
 
             - name: Resolve workflow PHP version
               id: resolve
-              uses: ./.github/actions/php/resolve-version
+              uses: ./.dev-tools-workflow-source/.github/actions/php/resolve-version
 
     reports:
         needs: resolve_php
@@ -63,9 +69,15 @@ jobs:
             - uses: actions/checkout@v6
               with:
                 fetch-depth: 0
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-workflow-source
 
             - name: Setup PHP and install dependencies
-              uses: ./.github/actions/php/setup-composer
+              uses: ./.dev-tools-workflow-source/.github/actions/php/setup-composer
               with:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
                 extensions: pcov, pcntl
@@ -99,7 +111,7 @@ jobs:
 
             - name: Copy existing previews into publish directory
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
-              uses: ./.github/actions/github-pages/restore-previews
+              uses: ./.dev-tools-workflow-source/.github/actions/github-pages/restore-previews
               with:
                 source: gh-pages-current
                 target: ${{ env.REPORTS_TARGET }}
@@ -134,8 +146,14 @@ jobs:
 
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-workflow-source
 
-            - uses: ./.github/actions/github-pages/verify-deployment
+            - uses: ./.dev-tools-workflow-source/.github/actions/github-pages/verify-deployment
               with:
                 base-url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
                 title: Reports health check failed
@@ -152,8 +170,14 @@ jobs:
 
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-workflow-source
 
-            - uses: ./.github/actions/github-pages/verify-deployment
+            - uses: ./.dev-tools-workflow-source/.github/actions/github-pages/verify-deployment
               with:
                 base-url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}
                 title: Preview health check failed
@@ -195,6 +219,12 @@ jobs:
             - uses: actions/checkout@v6
               with:
                 ref: ${{ github.event.repository.default_branch }}
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-workflow-source
 
             - name: Checkout gh-pages
               uses: actions/checkout@v6
@@ -202,7 +232,7 @@ jobs:
                 ref: gh-pages
                 path: gh-pages
 
-            - uses: ./.github/actions/github-pages/remove-preview
+            - uses: ./.dev-tools-workflow-source/.github/actions/github-pages/remove-preview
               with:
                 path: gh-pages
                 pull-request-number: ${{ github.event.pull_request.number }}
@@ -226,6 +256,12 @@ jobs:
 
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-workflow-source
 
             - name: Checkout gh-pages
               uses: actions/checkout@v6
@@ -233,7 +269,7 @@ jobs:
                 ref: gh-pages
                 path: gh-pages
 
-            - uses: ./.github/actions/github-pages/cleanup-orphaned-previews
+            - uses: ./.dev-tools-workflow-source/.github/actions/github-pages/cleanup-orphaned-previews
               id: cleanup
               with:
                 path: gh-pages
@@ -256,6 +292,12 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-workflow-source
 
             - id: build_summary
               env:
@@ -300,6 +342,6 @@ jobs:
                   echo 'EOF'
                 } >> "$GITHUB_OUTPUT"
 
-            - uses: ./.github/actions/summary/write
+            - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
               with:
                 markdown: ${{ steps.build_summary.outputs.markdown }}

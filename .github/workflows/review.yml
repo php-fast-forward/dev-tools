@@ -27,9 +27,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
 
       - id: render
-        uses: ./.github/actions/review/render-request
+        uses: ./.dev-tools-workflow-source/.github/actions/review/render-request
         with:
           pull-request-number: ${{ inputs.pull-request-number || github.event.inputs.pull-request-number || github.event.pull_request.number || '' }}
 

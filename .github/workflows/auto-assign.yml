@@ -28,8 +28,14 @@ jobs:
       project_number: ${{ steps.resolve.outputs.project-number }}
     steps:
       - uses: actions/checkout@v6
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
       - id: resolve
-        uses: ./.github/actions/project-board/resolve
+        uses: ./.dev-tools-workflow-source/.github/actions/project-board/resolve
         with:
           project: ${{ inputs.project || vars.PROJECT || '' }}
 
@@ -48,7 +54,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/project-board/sync-status
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
+      - uses: ./.dev-tools-workflow-source/.github/actions/project-board/sync-status
         with:
           organization: ${{ github.repository_owner }}
           project: ${{ needs.resolve-project.outputs.project_number }}
@@ -61,7 +73,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: ./.github/actions/project-board/sync-linked-pr-metadata
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
+      - uses: ./.dev-tools-workflow-source/.github/actions/project-board/sync-linked-pr-metadata
 
   sync-pull-request-status:
     needs: resolve-project
@@ -73,10 +91,16 @@ jobs:
       pull_request_status: ${{ steps.compute.outputs.pull-request-status }}
     steps:
       - uses: actions/checkout@v6
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
       - id: compute
-        uses: ./.github/actions/project-board/resolve-pr-status
+        uses: ./.dev-tools-workflow-source/.github/actions/project-board/resolve-pr-status
 
-      - uses: ./.github/actions/project-board/sync-status
+      - uses: ./.dev-tools-workflow-source/.github/actions/project-board/sync-status
         with:
           organization: ${{ github.repository_owner }}
           project: ${{ needs.resolve-project.outputs.project_number }}
@@ -84,7 +108,7 @@ jobs:
           status-value: ${{ steps.compute.outputs.pull-request-status }}
 
       - if: steps.compute.outputs.linked-issue-node-id != '' && steps.compute.outputs.linked-issue-status != ''
-        uses: ./.github/actions/project-board/sync-status
+        uses: ./.dev-tools-workflow-source/.github/actions/project-board/sync-status
         with:
           organization: ${{ github.repository_owner }}
           project: ${{ needs.resolve-project.outputs.project_number }}
@@ -97,10 +121,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
       - id: compute
-        uses: ./.github/actions/project-board/resolve-review-status
+        uses: ./.dev-tools-workflow-source/.github/actions/project-board/resolve-review-status
 
-      - uses: ./.github/actions/project-board/sync-status
+      - uses: ./.dev-tools-workflow-source/.github/actions/project-board/sync-status
         with:
           organization: ${{ github.repository_owner }}
           project: ${{ needs.resolve-project.outputs.project_number }}

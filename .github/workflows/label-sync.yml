@@ -24,6 +24,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
 
       - name: Copy labels from issue to PR
-        uses: ./.github/actions/label-sync/copy-linked-issue-labels
+        uses: ./.dev-tools-workflow-source/.github/actions/label-sync/copy-linked-issue-labels

@@ -30,6 +30,12 @@ jobs:
           ref: main
           submodules: recursive
           fetch-depth: 0
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
 
       - name: Mark workspace as safe for git
         run: |
@@ -38,7 +44,7 @@ jobs:
 
       - name: Prepare wiki publish branch from preview branch
         id: prepare_publish
-        uses: ./.github/actions/wiki/prepare-publish-branch
+        uses: ./.dev-tools-workflow-source/.github/actions/wiki/prepare-publish-branch
         with:
           publish-branch: ${{ env.WIKI_PUBLISH_BRANCH }}
           preview-branch: ${{ env.WIKI_PREVIEW_BRANCH }}
@@ -48,18 +54,18 @@ jobs:
         run: git push --force-with-lease origin HEAD:"${WIKI_PUBLISH_BRANCH}"
 
       - name: Validate wiki publish branch
-        uses: ./.github/actions/wiki/validate-publish-branch
+        uses: ./.dev-tools-workflow-source/.github/actions/wiki/validate-publish-branch
         with:
           publish-branch: ${{ env.WIKI_PUBLISH_BRANCH }}
           preview-branch: ${{ env.WIKI_PREVIEW_BRANCH }}
           expected-preview-sha: ${{ steps.prepare_publish.outputs.expected-preview-sha }}
 
       - name: Delete wiki preview branch
-        uses: ./.github/actions/wiki/delete-preview-branch
+        uses: ./.dev-tools-workflow-source/.github/actions/wiki/delete-preview-branch
         with:
           preview-branch: ${{ env.WIKI_PREVIEW_BRANCH }}
 
-      - uses: ./.github/actions/summary/write
+      - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
         with:
           markdown: |
             ## Wiki Publish Summary
@@ -88,16 +94,22 @@ jobs:
           ref: main
           submodules: recursive
           fetch-depth: 0
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
 
       - name: Mark wiki workspace as safe for git
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
 
       - name: Delete wiki preview branch
-        uses: ./.github/actions/wiki/delete-preview-branch
+        uses: ./.dev-tools-workflow-source/.github/actions/wiki/delete-preview-branch
         with:
           preview-branch: ${{ env.WIKI_PREVIEW_BRANCH }}
 
-      - uses: ./.github/actions/summary/write
+      - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
         with:
           markdown: |
             ## Wiki Preview Cleanup Summary
@@ -121,15 +133,21 @@ jobs:
           ref: main
           submodules: recursive
           fetch-depth: 0
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
 
       - name: Mark wiki workspace as safe for git
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
 
       - name: Delete wiki branches for closed pull requests
         id: cleanup
-        uses: ./.github/actions/wiki/cleanup-orphaned-previews
+        uses: ./.dev-tools-workflow-source/.github/actions/wiki/cleanup-orphaned-previews
 
-      - uses: ./.github/actions/summary/write
+      - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
         with:
           markdown: |
             ## Wiki Orphan Cleanup Summary

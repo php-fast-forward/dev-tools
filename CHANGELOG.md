@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Force reusable workflows to check out the dev-tools repository before resolving local GitHub Actions so consumer wrappers stop failing on missing action paths (#180)
+
 ## [1.19.0] - 2026-04-23
 
 ### Added

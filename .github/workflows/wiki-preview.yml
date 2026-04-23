@@ -19,10 +19,16 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
 
       - name: Resolve workflow PHP version
         id: resolve
-        uses: ./.github/actions/php/resolve-version
+        uses: ./.dev-tools-workflow-source/.github/actions/php/resolve-version
 
   preview:
     needs: resolve_php
@@ -45,8 +51,15 @@ jobs:
           submodules: recursive
           fetch-depth: 0
 
+      - name: Checkout dev-tools workflow action source
+        uses: actions/checkout@v6
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+          path: .dev-tools-workflow-source
+
       - name: Setup PHP and install dependencies
-        uses: ./.github/actions/php/setup-composer
+        uses: ./.dev-tools-workflow-source/.github/actions/php/setup-composer
         with:
           php-version: ${{ needs.resolve_php.outputs.php-version }}
           root-version: dev-${{ github.event.pull_request.head.ref }}
@@ -54,7 +67,7 @@ jobs:
             ${{ github.workspace }}/.github/wiki
 
       - name: Prepare wiki preview branch
-        uses: ./.github/actions/wiki/prepare-preview-branch
+        uses: ./.dev-tools-workflow-source/.github/actions/wiki/prepare-preview-branch
         with:
           preview-branch: ${{ env.WIKI_PREVIEW_BRANCH }}
 
@@ -93,7 +106,7 @@ jobs:
           pull: "--rebase --autostash"
           push: true
 
-      - uses: ./.github/actions/summary/write
+      - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
         with:
           markdown: |
             ## Wiki Preview Summary
