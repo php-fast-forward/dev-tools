@@ -2947,6 +2947,16 @@ composer dev-tools:fix</code></pre>
             
 
 <ul>
+    <li class="dash"><code>--cache-dir</code>
+ to provide a base cache directory for nested cache-aware
+phases;</li>
+
+    <li class="dash"><code>--cache</code>
+ to force cache-aware nested phases to keep caching enabled;</li>
+
+    <li class="dash"><code>--no-cache</code>
+ to force cache-aware nested phases to disable caching;</li>
+
     <li class="dash"><code>--progress</code>
  to re-enable progress output from the nested phases in text
 mode;</li>
@@ -3000,6 +3010,27 @@ terminal inspection.</li>
 
     <li class="dash">The <code>--fix</code>
  option is passed to all phases that support it.</li>
+
+    <li class="dash">Cache stays enabled by default for nested cache-aware phases; omit both flags
+to keep the command default, pass <code>--cache</code>
+ to force it on, and pass
+<code>--no-cache</code>
+ to force it off.</li>
+
+    <li class="dash">The explicit cache intent is propagated to the nested <code>phpdoc</code>
+ and
+<code>reports</code>
+ phases. <code>refactor</code>
+ and <code>code-style</code>
+ do not consume this
+contract.</li>
+
+    <li class="dash">When <code>--cache-dir</code>
+ is provided, <code>phpdoc</code>
+ and <code>reports</code>
+ receive nested
+cache directories under that base path. When it is omitted, each nested tool
+keeps its own default cache directory.</li>
 
     <li class="dash">Progress output is disabled by default across nested phases; use
 <code>--progress</code>

@@ -2955,6 +2955,14 @@ vendor/bin/dev-tools phpdoc [options]</code></pre>
         
         <dd>Path to the cache directory for PHP-CS-Fixer. Default: <code>.dev-tools/cache/php-cs-fixer</code>
 .</dd>
+                                <dt><code>--cache</code>
+</dt>
+        
+        <dd>Force PHP-CS-Fixer caching on for this run.</dd>
+                                <dt><code>--no-cache</code>
+</dt>
+        
+        <dd>Force PHP-CS-Fixer caching off for this run.</dd>
                                 <dt><code>--progress</code>
 </dt>
         
@@ -2989,6 +2997,11 @@ output.</dd>
     <p>Check specific directory:</p>
 
             <pre><code class="language-bash">composer phpdoc ./src</code></pre>
+
+            
+    <p>Check without cache:</p>
+
+            <pre><code class="language-bash">composer phpdoc --no-cache</code></pre>
 
     </section>
 
@@ -3031,6 +3044,15 @@ output.</dd>
 
     <li class="dash">The Rector phase explicitly runs <code>FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
 .</li>
+
+    <li class="dash">Cache stays enabled by default; omit both flags to keep the command default,
+pass <code>--cache</code>
+ to force it on, and pass <code>--no-cache</code>
+ to force it off.</li>
+
+    <li class="dash">When <code>--cache-dir</code>
+ is omitted, PHP-CS-Fixer keeps its default cache
+directory. The option only affects PHP-CS-Fixer when caching is enabled.</li>
 
     <li class="dash">Progress output is disabled by default; use <code>--progress</code>
  to re-enable it in

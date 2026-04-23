@@ -2586,6 +2586,46 @@ Search.appendIndex(
             "summary": "Initializes\u0020the\u0020formatter\u0020with\u0020predefined\u0020styles\u0020for\u0020log\u0020levels.",
             "url": "classes/FastForward-DevTools-Console-Formatter-LogLevelOutputFormatter.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption",
+            "name": "HasCacheOption",
+            "summary": "Provides\u0020the\u0020standard\u0020cache\u0020option\u0020used\u0020by\u0020cache\u002Dwriting\u0020commands.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption\u003A\u003AaddCacheOption\u0028\u0029",
+            "name": "addCacheOption",
+            "summary": "Adds\u0020the\u0020standard\u0020cache\u0020control\u0020option\u0020to\u0020the\u0020current\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheOption"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption\u003A\u003AaddCacheDirOption\u0028\u0029",
+            "name": "addCacheDirOption",
+            "summary": "Adds\u0020the\u0020standard\u0020cache\u0020directory\u0020option\u0020to\u0020the\u0020current\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheDirOption"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption\u003A\u003AisCacheEnabled\u0028\u0029",
+            "name": "isCacheEnabled",
+            "summary": "Resolves\u0020whether\u0020cache\u0020writes\u0020SHOULD\u0020be\u0020enabled\u0020for\u0020the\u0020current\u0020invocation.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isCacheEnabled"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption\u003A\u003AresolveCacheArgument\u0028\u0029",
+            "name": "resolveCacheArgument",
+            "summary": "Returns\u0020the\u0020explicit\u0020cache\u0020flag\u0020that\u0020SHOULD\u0020be\u0020forwarded\u0020to\u0020nested\u0020commands.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheArgument"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption\u003A\u003AresolveCacheDirArgument\u0028\u0029",
+            "name": "resolveCacheDirArgument",
+            "summary": "Resolves\u0020a\u0020nested\u0020cache\u0020directory\u0020for\u0020a\u0020child\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheDirArgument"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption\u003A\u003AhasExplicitCacheDirArgument\u0028\u0029",
+            "name": "hasExplicitCacheDirArgument",
+            "summary": "Determines\u0020whether\u0020the\u0020current\u0020invocation\u0020explicitly\u0020passed\u0020\u0060\u002D\u002Dcache\u002Ddir\u0060.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_hasExplicitCacheDirArgument"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasCacheOption\u003A\u003AisNoCacheRequested\u0028\u0029",
+            "name": "isNoCacheRequested",
+            "summary": "Determines\u0020whether\u0020cache\u0020writes\u0020were\u0020explicitly\u0020disabled\u0020for\u0020the\u0020current\u0020invocation.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isNoCacheRequested"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption",
             "name": "HasJsonOption",
             "summary": "Provides\u0020the\u0020standard\u0020JSON\u0020output\u0020options\u0020used\u0020by\u0020DevTools\u0020commands.",

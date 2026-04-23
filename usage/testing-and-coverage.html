@@ -2915,9 +2915,15 @@ packaged default;</li>
     <li class="dash">uses <code>vendor/autoload.php</code>
  as the default bootstrap file;</li>
 
-    <li class="dash">stores cache data in <code>.dev-tools/cache/phpunit</code>
- unless <code>--no-cache</code>
- is used;</li>
+    <li class="dash">keeps PHPUnit result caching enabled by default;</li>
+
+    <li class="dash">treats <code>--cache</code>
+ as an explicit force-on flag and <code>--no-cache</code>
+ as an
+explicit force-off flag for the current run;</li>
+
+    <li class="dash">uses <code>.dev-tools/cache/phpunit</code>
+ only when caching stays enabled;</li>
 
     <li class="dash">can generate HTML coverage, Testdox, Clover, and raw PHP coverage output
 when <code>--coverage</code>
@@ -2932,8 +2938,8 @@ when <code>--coverage</code>
 
             <pre><code class="language-bash">composer tests
 composer tests -- --filter=PluginTest
-vendor/bin/dev-tools tests --coverage=.dev-tools/coverage
-vendor/bin/dev-tools tests --no-cache --bootstrap=tests/bootstrap.php</code></pre>
+composer tests --coverage=.dev-tools/coverage
+composer tests --no-cache --bootstrap=tests/bootstrap.php</code></pre>
 
     </section>
 

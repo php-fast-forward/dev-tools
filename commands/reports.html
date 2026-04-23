@@ -2955,6 +2955,21 @@ Default: <code>.dev-tools/coverage</code>
         <dd>The target directory for the generated metrics report.
 Default: <code>.dev-tools/metrics</code>
 .</dd>
+                                <dt><code>--cache-dir</code>
+ (optional)</dt>
+        
+        <dd>Base cache directory for nested <code>docs</code>
+ and <code>tests</code>
+ caches.
+When omitted, each nested tool keeps its own default cache directory.</dd>
+                                <dt><code>--cache</code>
+</dt>
+        
+        <dd>Force cache-aware nested documentation and test steps to keep caching enabled.</dd>
+                                <dt><code>--no-cache</code>
+</dt>
+        
+        <dd>Force cache-aware nested documentation and test steps to disable caching.</dd>
                                 <dt><code>--progress</code>
 </dt>
         
@@ -2992,6 +3007,11 @@ output.</dd>
     <p>Generate reports with a custom metrics directory:</p>
 
             <pre><code class="language-bash">composer reports --metrics=.dev-tools/metrics</code></pre>
+
+            
+    <p>Generate reports with cache disabled for nested docs and tests:</p>
+
+            <pre><code class="language-bash">composer reports --no-cache</code></pre>
 
     </section>
 
@@ -3031,6 +3051,25 @@ output.</dd>
 
     <li class="dash">Runs <code>metrics --target</code>
  after tests so the JUnit report is available.</li>
+
+    <li class="dash">Cache stays enabled by default for nested cache-aware steps; omit both flags
+to keep the command default, pass <code>--cache</code>
+ to force it on, and pass
+<code>--no-cache</code>
+ to force it off.</li>
+
+    <li class="dash">The explicit cache intent is propagated to the nested <code>docs</code>
+ and <code>tests</code>
+
+steps. The <code>metrics</code>
+ step does not consume this contract.</li>
+
+    <li class="dash">When <code>--cache-dir</code>
+ is provided, <code>docs</code>
+ and <code>tests</code>
+ receive nested cache
+directories under that base path. When it is omitted, each nested tool keeps
+its own default cache directory.</li>
 
     <li class="dash">Runs tests with progress disabled by default and <code>--coverage-summary</code>
  so

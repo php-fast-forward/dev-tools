@@ -2931,6 +2931,14 @@ Default: <code>.github/wiki</code>
         <dd>Path to the cache directory for phpDocumentor.
 Default: <code>.dev-tools/cache/phpdoc</code>
 .</dd>
+                                <dt><code>--cache</code>
+</dt>
+        
+        <dd>Force phpDocumentor caching on for this run.</dd>
+                                <dt><code>--no-cache</code>
+</dt>
+        
+        <dd>Force phpDocumentor caching off for this run.</dd>
                                 <dt><code>--init</code>
 </dt>
         
@@ -2966,6 +2974,11 @@ output.</dd>
 
             <pre><code class="language-bash">composer wiki --init</code></pre>
 
+            
+    <p>Generate without cache:</p>
+
+            <pre><code class="language-bash">composer wiki --no-cache</code></pre>
+
     </section>
 
             <section class="section " id="exit-codes">
@@ -3000,6 +3013,15 @@ output.</dd>
 <ul>
     <li class="dash">Default output directory is <code>.github/wiki</code>
 .</li>
+
+    <li class="dash">Cache stays enabled by default; omit both flags to keep the command default,
+pass <code>--cache</code>
+ to force it on, and pass <code>--no-cache</code>
+ to force it off.</li>
+
+    <li class="dash">When <code>--cache-dir</code>
+ is omitted, phpDocumentor keeps its default cache
+directory. The option only affects phpDocumentor when caching is enabled.</li>
 
     <li class="dash">Uses the Markdown template from <code>vendor/saggre/phpdocumentor-markdown/themes/markdown</code>
 .</li>

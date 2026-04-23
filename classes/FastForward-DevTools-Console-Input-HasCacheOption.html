@@ -4,7 +4,6 @@
     <meta charset="utf-8">
             <title>fast-forward/dev-tools</title>
     
-
         
     
         
@@ -632,14 +631,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-commands-index-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-commands-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-commands-index-html" class="collapse show">
+            <div id="sidebar-commands-index-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -831,7 +830,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/docs.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             docs
         </a>
@@ -2888,194 +2887,1468 @@
                         <div class="container-fluid">
                             
                             <div class="row g-4">
-                                <div class="col-12">
+                                <div class="col-12 col-xl-9">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            <section class="section " id="docs">
-            <h1>docs</h1>
+                                            
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="" class="text-decoration-none">
+                <i class="fas fa-home text-primary me-1"></i>
+                <span>Home</span>
+            </a>
+        </li>
 
+                    <li class="breadcrumb-item">
+                <a href="namespaces/fastforward.html" class="text-decoration-none">
+                    FastForward
+                </a>
+            </li>
+                    <li class="breadcrumb-item">
+                <a href="namespaces/fastforward-devtools.html" class="text-decoration-none">
+                    DevTools
+                </a>
+            </li>
+                    <li class="breadcrumb-item">
+                <a href="namespaces/fastforward-devtools-console.html" class="text-decoration-none">
+                    Console
+                </a>
+            </li>
+                    <li class="breadcrumb-item">
+                <a href="namespaces/fastforward-devtools-console-input.html" class="text-decoration-none">
+                    Input
+                </a>
+            </li>
+            </ol>
+</nav>
+    <article class="phpdocumentor-element">
+        <div class="mb-4">
+            <div class="mb-4">
+    <div class="d-flex align-items-center gap-3 mb-2">
+        <div class="bg-success-subtle text-success rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+            <i class="fas fa-layer-group"></i>
+        </div>
+        <div>
+            <h2 class="display-5 mb-0">HasCacheOption</h2>
+            <div class="text-body-secondary">Trait</div>
+        </div>
+    </div>
+
+    </div>
+        </div>
+
+        <div class="mb-4">
+            <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">30</span>
+
+    </aside>
+        </div>
+
+        <div class="mb-4">
+                <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Provides the standard cache option used by cache-writing commands.</p>
+    </div>
+
+
+
+
+
+
+    
+    
+<section class="mt-5">
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <i class="fas fa-list-ul text-primary"></i>
+        <h3 id="toc" class="h4 mb-0">
+            Table of Contents
+            <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#toc"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+        </h3>
+    </div>
+
+    <div class="d-grid gap-4">
+        
+        
+        
+        
+        
+        
+        
+        
+        
+                    <section class="card border-0 shadow-sm">
+                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-code text-primary"></i>
+                    <h4 id="toc-methods" class="h6 mb-0 fw-semibold">Methods</h4>
+                </div>
+                <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheDirOption"
+        >
+            addCacheDirOption()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Adds the standard cache directory option to the current command.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: static    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheOption"
+        >
+            addCacheOption()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Adds the standard cache control option to the current command.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: static    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isCacheEnabled"
+        >
+            isCacheEnabled()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Resolves whether cache writes SHOULD be enabled for the current invocation.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheArgument"
+        >
+            resolveCacheArgument()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Returns the explicit cache flag that SHOULD be forwarded to nested commands.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: string|null    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheDirArgument"
+        >
+            resolveCacheDirArgument()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Resolves a nested cache directory for a child command.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: string|null    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_hasExplicitCacheDirArgument"
+        >
+            hasExplicitCacheDirArgument()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Determines whether the current invocation explicitly passed `--cache-dir`.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isNoCacheRequested"
+        >
+            isNoCacheRequested()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Determines whether cache writes were explicitly disabled for the current invocation.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
+</div>
+                        </div>
+                                    </div>
+            </section>
+        
+            </div>
+</section>
+
+        </div>
+
+                        
+        <div class="d-grid gap-4">
             
-    <p>Generates API documentation using phpDocumentor.</p>
-
-            <section class="section " id="description">
-            <h2>Description</h2>
-
             
-    <p>The <code>docs</code>
- command builds HTML documentation using phpDocumentor.
-It generates documentation from:</p>
+                            <section>
+                    <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                        <i class="fas fa-code text-primary"></i>
+                        <span class="fw-semibold">Methods</span>
+                    </div>
+                    <div class="card-body p-4">
+                        
+    <section>
+        <div class="d-grid gap-4">
+                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_addCacheDirOption">
+                <span class="text-primary">addCacheDirOption()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheDirOption"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
 
-            
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Protected</span>
 
-<ul>
-    <li class="dash">PSR-4 paths declared in composer.json (API docs)</li>
+                
+                
+                
+                            </div>
+        </div>
+    </div>
 
-    <li class="dash">Selected source directory (guide docs)</li>
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
 
-</ul>
+    <span>Defined in</span>
 
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">56</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Adds the standard cache directory option to the current command.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">protected</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">addCacheDirOption</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$description</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$default</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">static</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$description</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the cache directory option description</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$default</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the command-specific default cache directory</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
-            <section class="section " id="usage">
-            <h2>Usage</h2>
+    
 
-            <pre><code class="language-bash">composer docs
-composer dev-tools docs
-composer docs [options]
-composer dev-tools docs -- [options]
-vendor/bin/dev-tools docs [options]</code></pre>
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
 
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            static
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
     </section>
 
-            <section class="section " id="options">
-            <h2>Options</h2>
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_addCacheOption">
+                <span class="text-primary">addCacheOption()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheOption"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
 
-            <dl>
-                        <dt><code>--target, -t</code>
- (optional)</dt>
-        
-        <dd>Path to the output directory for the generated HTML documentation.
-Default: <code>.dev-tools</code>
-.</dd>
-                                <dt><code>--source, -s</code>
- (optional)</dt>
-        
-        <dd>Path to the source directory for the guide documentation.
-Default: <code>docs</code>
-.</dd>
-                                <dt><code>--template</code>
- (optional)</dt>
-        
-        <dd>Path to the template directory for the generated HTML documentation.
-Default: <code>vendor/fast-forward/phpdoc-bootstrap-template</code>
-.</dd>
-                                <dt><code>--cache-dir</code>
- (optional)</dt>
-        
-        <dd>Path to the cache directory for phpDocumentor.
-Default: <code>.dev-tools/cache/phpdoc</code>
-.</dd>
-                                <dt><code>--cache</code>
-</dt>
-        
-        <dd>Force phpDocumentor caching on for this run.</dd>
-                                <dt><code>--no-cache</code>
-</dt>
-        
-        <dd>Force phpDocumentor caching off for this run.</dd>
-                                <dt><code>--progress</code>
-</dt>
-        
-        <dd>Enable progress output from phpDocumentor.</dd>
-                                <dt><code>--json</code>
-</dt>
-        
-        <dd>Emit a structured machine-readable payload instead of the normal terminal
-output.</dd>
-                                <dt><code>--pretty-json</code>
-</dt>
-        
-        <dd>Emit the same structured payload with indentation for terminal inspection.</dd>
-            </dl>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Protected</span>
 
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">39</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Adds the standard cache control option to the current command.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">protected</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">addCacheOption</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$description</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">static</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$description</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the cache option description</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
-            <section class="section " id="examples">
-            <h2>Examples</h2>
+    
 
-            
-    <p>Generate docs with defaults:</p>
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
 
-            <pre><code class="language-bash">composer docs</code></pre>
-
-            
-    <p>Generate to custom directory:</p>
-
-            <pre><code class="language-bash">composer docs --target=dist/docs</code></pre>
-
-            
-    <p>Use custom source:</p>
-
-            <pre><code class="language-bash">composer docs --source=docs/user-guide</code></pre>
-
-            
-    <p>Generate without cache:</p>
-
-            <pre><code class="language-bash">composer docs --no-cache</code></pre>
-
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            static
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
     </section>
 
-            <section class="section " id="exit-codes">
-            <h2>Exit Codes</h2>
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_isCacheEnabled">
+                <span class="text-primary">isCacheEnabled()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isCacheEnabled"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
 
-            <table>
-                <thead>
-            <tr>
-                            <th>Code</th>
-                            <th>Meaning</th>
-                    </tr>
-        </thead>
-    <tbody>
-    <tr>
-            <td>0</td>
-            <td>Success. Documentation generated.</td>
-    </tr>
-    <tr>
-            <td>1</td>
-            <td>Failure. Generation error or source not found.</td>
-    </tr>
-</tbody>
-</table>
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Protected</span>
 
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">76</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Resolves whether cache writes SHOULD be enabled for the current invocation.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">protected</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">isCacheEnabled</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$input</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    bool&nbsp;
+                </span><span class="text-primary">$default</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">true</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$input</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the current command input</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$default</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                bool
+                            </span>
+
+                                                            <span class="text-body-secondary">=</span>
+                                <code class="text-success-emphasis mb-0">true</code>
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the command-specific default cache behavior when the option is omitted</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
-            <section class="section " id="behavior">
-            <h2>Behavior</h2>
+    
 
-            
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
 
-<ul>
-    <li class="dash"><code>docs/</code>
- must exist unless you pass another <code>--source</code>
- directory.</li>
-
-    <li class="dash">API pages are built from the PSR-4 paths declared in <code>composer.json</code>
-.</li>
-
-    <li class="dash">Guide pages are built from the selected source directory.</li>
-
-    <li class="dash">Cache stays enabled by default; omit both flags to keep the command default,
-pass <code>--cache</code>
- to force it on, and pass <code>--no-cache</code>
- to force it off.</li>
-
-    <li class="dash">When <code>--cache-dir</code>
- is omitted, phpDocumentor keeps its default cache
-directory. The option only affects phpDocumentor when caching is enabled.</li>
-
-    <li class="dash">A temporary <code>phpdocumentor.xml</code>
- is created for the run and uses the
-configured cache directory only when caching stays enabled.</li>
-
-    <li class="dash">Progress output is disabled by default; use <code>--progress</code>
- to re-enable it in
-text mode.</li>
-
-    <li class="dash"><code>--json</code>
- and <code>--pretty-json</code>
- suppress phpDocumentor progress rendering so
-the structured payload stays readable.</li>
-
-    <li class="dash">Markers: TODO, FIXME, BUG, HACK are included.</li>
-
-</ul>
-
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
     </section>
 
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_resolveCacheArgument">
+                <span class="text-primary">resolveCacheArgument()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheArgument"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Protected</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">94</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Returns the explicit cache flag that SHOULD be forwarded to nested commands.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">protected</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">resolveCacheArgument</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$input</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$input</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the current command input</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
     </section>
 
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            string|null
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_resolveCacheDirArgument">
+                <span class="text-primary">resolveCacheDirArgument()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheDirArgument"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Protected</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">113</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Resolves a nested cache directory for a child command.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">protected</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">resolveCacheDirArgument</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$input</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$path</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">''</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$input</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the current command input</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$path</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                            <span class="text-body-secondary">=</span>
+                                <code class="text-success-emphasis mb-0">''</code>
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the child cache path relative to the current command cache root</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            string|null
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_hasExplicitCacheDirArgument">
+                <span class="text-primary">hasExplicitCacheDirArgument()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_hasExplicitCacheDirArgument"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">139</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Determines whether the current invocation explicitly passed `--cache-dir`.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">hasExplicitCacheDirArgument</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$input</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$input</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the current command input</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_isNoCacheRequested">
+                <span class="text-primary">isNoCacheRequested()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isNoCacheRequested"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Input/HasCacheOption.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-input-hascacheoption.html"><abbr title="src/Console/Input/HasCacheOption.php">HasCacheOption.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">156</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Determines whether cache writes were explicitly disabled for the current invocation.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">isNoCacheRequested</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>&nbsp;
+                </span><span class="text-primary">$input</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>The Composer application already provides a global <code class="prettyprint">--no-cache</code> flag, so commands
+SHALL reuse that switch instead of redefining a local negated variant.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$input</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Input\InputInterface">InputInterface</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the current command input</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
+                            </div>
+        </div>
+    </section>
+
+</article>                    </div>
+    </section>
+
+                    </div>
+                </section>
+                    </div>
+
+        <div class="modal fade" id="source-view" tabindex="-1" aria-labelledby="source-view-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2" id="source-view-label">
+                    <i class="fas fa-code text-primary"></i>
+                    <span>Source View</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body p-0">
+                <pre
+                    class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
+                    style="max-height: 70vh; overflow-y: auto;"
+                    data-src="files/src/Console/Input/HasCacheOption.php.txt"
+                ></pre>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        function loadExternalCodeSnippet(el, url, line) {
+            const pre = el.querySelector('pre[data-src]');
+            if (!pre) return;
+
+            const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+            const language = 'php';
+
+            const code = document.createElement('code');
+            code.className = 'language-' + language;
+
+            pre.textContent = '';
+            if (line) {
+                pre.setAttribute('data-line', line);
+            } else {
+                pre.removeAttribute('data-line');
+            }
+
+            code.textContent = 'Loading…';
+            pre.appendChild(code);
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', src, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
+
+                if (xhr.status < 400 && xhr.responseText) {
+                    code.textContent = xhr.responseText;
+                    Prism.highlightElement(code);
+
+                    if (line) {
+                        const lineElement = pre.querySelector('.line-numbers-rows > span:nth-child(' + line + ')');
+                        if (lineElement) {
+                            pre.scrollTop = lineElement.offsetTop - (pre.offsetHeight / 2);
+                        }
+                    }
+
+                    return;
+                }
+
+                if (xhr.status === 404) {
+                    code.textContent = '✖ Error: File could not be found';
+                    return;
+                }
+
+                if (xhr.status >= 400) {
+                    code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    return;
+                }
+
+                code.textContent = '✖ Error: An unknown error occurred';
+            };
+
+            xhr.send(null);
+        }
+
+        document.querySelectorAll('[data-modal]').forEach(function (trigger) {
+            trigger.addEventListener('click', function (event) {
+                event.preventDefault();
+
+                const modalId = this.dataset.modal;
+                const modalEl = document.getElementById(modalId);
+
+                if (!modalEl) return;
+
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
+
+                loadExternalCodeSnippet(
+                    modalEl,
+                    this.dataset.src || null,
+                    this.dataset.line || null
+                );
+            });
+        });
+    })();
+</script>
+
+    </article>
                                     </div>
                                 </div>
 
+                                                                    <aside class="col-12 col-xl-3 d-none d-xl-block">
+                                        <div class="position-sticky" style="top: 2rem;">
+                                            <div class="bg-body-tertiary border rounded-4 p-3 shadow-sm">
+                                                <div class="d-flex align-items-center gap-2 text-uppercase fw-semibold small text-body-secondary mb-3">
+                                                    <i class="fas fa-list-ul text-primary"></i>
+                                                    <span>On this page</span>
+                                                </div>
+
+                                                            
+    <section>
+        <div class="d-grid gap-4">
+            <div>
+                <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
+                <div class="list-group list-group-flush">
+                                                                                    <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#toc-methods">
+                            Methods
+                        </a>
+                                    </div>
+            </div>
+
+            
+            
+                            <div>
+                    <div class="small text-uppercase fw-semibold text-body-secondary mb-2 d-flex align-items-center gap-2">
+                        <i class="fas fa-code text-primary"></i>
+                        <span>Methods</span>
+                    </div>
+
+                    <div class="list-group list-group-flush">
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheDirOption"
+                            >
+                                <span class="text-truncate">addCacheDirOption()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_addCacheOption"
+                            >
+                                <span class="text-truncate">addCacheOption()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isCacheEnabled"
+                            >
+                                <span class="text-truncate">isCacheEnabled()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheArgument"
+                            >
+                                <span class="text-truncate">resolveCacheArgument()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_resolveCacheDirArgument"
+                            >
+                                <span class="text-truncate">resolveCacheDirArgument()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_hasExplicitCacheDirArgument"
+                            >
+                                <span class="text-truncate">hasExplicitCacheDirArgument()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Input-HasCacheOption.html#method_isNoCacheRequested"
+                            >
+                                <span class="text-truncate">isNoCacheRequested()</span>
+                                                            </a>
+                                            </div>
+                </div>
+                    </div>
+    </section>
+
+                                            </div>
+                                        </div>
+                                    </aside>
                                                             </div>
                         </div>
                     </div>

@@ -2960,10 +2960,14 @@ vendor/bin/dev-tools tests [path] [options]</code></pre>
         
         <dd>Path to the PHPUnit cache directory. Default: <code>.dev-tools/cache/phpunit</code>
 .</dd>
+                                <dt><code>--cache</code>
+</dt>
+        
+        <dd>Force PHPUnit result caching on for this run.</dd>
                                 <dt><code>--no-cache</code>
 </dt>
         
-        <dd>Disable PHPUnit caching.</dd>
+        <dd>Force PHPUnit result caching off for this run.</dd>
                                 <dt><code>--progress</code>
 </dt>
         
@@ -3039,6 +3043,11 @@ payload is not polluted by transient progress rendering.</dd>
             <pre><code class="language-bash">composer tests --no-cache</code></pre>
 
             
+    <p>Force cache on explicitly:</p>
+
+            <pre><code class="language-bash">composer tests --cache</code></pre>
+
+            
     <p>Run with PHPUnit progress output enabled:</p>
 
             <pre><code class="language-bash">composer tests --progress</code></pre>
@@ -3085,6 +3094,15 @@ payload is not polluted by transient progress rendering.</dd>
     <li class="dash">Coverage filters are automatically applied to all PSR-4 paths from composer.json.</li>
 
     <li class="dash">Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.</li>
+
+    <li class="dash">Cache stays enabled by default; omit both flags to keep the command default,
+pass <code>--cache</code>
+ to force it on, and pass <code>--no-cache</code>
+ to force it off.</li>
+
+    <li class="dash">When <code>--cache-dir</code>
+ is omitted, PHPUnit keeps its default cache directory.
+The option only affects the result cache when caching is enabled.</li>
 
     <li class="dash"><code>--coverage-summary</code>
  forwards PHPUnit&#039;s <code>--only-summary-for-coverage-text</code>
