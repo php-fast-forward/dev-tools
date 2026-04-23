@@ -255,6 +255,8 @@ jobs:
             - cleanup_orphaned_previews
         runs-on: ubuntu-latest
         steps:
+            - uses: actions/checkout@v6
+
             - uses: ./.github/actions/summary/write
               with:
                 markdown: |
