@@ -29,6 +29,12 @@ Options
    Path to the cache directory for phpDocumentor.
    Default: ``.dev-tools/cache/phpdoc``.
 
+``--cache``
+   Force phpDocumentor caching on for this run.
+
+``--no-cache``
+   Force phpDocumentor caching off for this run.
+
 ``--init``
    Initialize the configured wiki target as a Git submodule.
 
@@ -60,6 +66,12 @@ Initialize wiki as submodule:
 
    composer wiki --init
 
+Generate without cache:
+
+.. code-block:: bash
+
+   composer wiki --no-cache
+
 Exit Codes
 ---------
 
@@ -77,5 +89,9 @@ Behavior
 ---------
 
 - Default output directory is ``.github/wiki``.
+- Cache stays enabled by default; omit both flags to keep the command default,
+  pass ``--cache`` to force it on, and pass ``--no-cache`` to force it off.
+- When ``--cache-dir`` is omitted, phpDocumentor keeps its default cache
+  directory. The option only affects phpDocumentor when caching is enabled.
 - Uses the Markdown template from ``vendor/saggre/phpdocumentor-markdown/themes/markdown``.
 - The ``--init`` option creates the wiki as a Git submodule pointing to the repository wiki.

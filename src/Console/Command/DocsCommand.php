@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use Twig\Environment;
 use Composer\Command\BaseCommand;
@@ -52,6 +53,7 @@ use function Safe\getcwd;
 )]
 final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 
@@ -81,7 +83,13 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
      */
     protected function configure(): void
     {
-        $this->addJsonOption()
+        $this
+            ->addJsonOption()
+            ->addCacheOption('Whether to enable phpDocumentor caching.')
+            ->addCacheDirOption(
+                description: 'Path to the cache directory for phpDocumentor.',
+                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC),
+            )
             ->addOption(
                 name: 'progress',
                 mode: InputOption::VALUE_NONE,
@@ -106,12 +114,6 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the template directory for the generated HTML documentation.',
                 default: 'vendor/fast-forward/phpdoc-bootstrap-template',
-            )
-            ->addOption(
-                name: 'cache-dir',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Path to the cache directory for phpDocumentor.',
-                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC),
             );
     }
 
@@ -128,6 +130,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
+        $cacheEnabled = $this->isCacheEnabled($input);
 
         $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
@@ -147,13 +150,17 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
             source: $source,
             target: $target,
             template: $input->getOption('template'),
-            cacheDir: $cacheDir
+            cacheDir: $cacheEnabled ? $cacheDir : sys_get_temp_dir(),
         );
 
         $processBuilder = $this->processBuilder
             ->withArgument('--config', $config)
             ->withArgument('--ansi')
             ->withArgument('--markers', 'TODO,FIXME,BUG,HACK');
+
+        if ($cacheEnabled) {
+            $processBuilder = $processBuilder->withArgument('--cache-folder', $cacheDir);
+        }
 
         if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--no-progress');

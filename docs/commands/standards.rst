@@ -35,6 +35,10 @@ Options
 
 This command supports:
 
+- ``--cache-dir`` to provide a base cache directory for nested cache-aware
+  phases;
+- ``--cache`` to force cache-aware nested phases to keep caching enabled;
+- ``--no-cache`` to force cache-aware nested phases to disable caching;
 - ``--progress`` to re-enable progress output from the nested phases in text
   mode;
 - ``--json`` to emit a structured machine-readable payload instead of the
@@ -61,6 +65,15 @@ Behavior
 - This is the default command when running ``composer dev-tools`` without args.
 - Each phase runs in sequence; if any phase fails, the command returns failure.
 - The ``--fix`` option is passed to all phases that support it.
+- Cache stays enabled by default for nested cache-aware phases; omit both flags
+  to keep the command default, pass ``--cache`` to force it on, and pass
+  ``--no-cache`` to force it off.
+- The explicit cache intent is propagated to the nested ``phpdoc`` and
+  ``reports`` phases. ``refactor`` and ``code-style`` do not consume this
+  contract.
+- When ``--cache-dir`` is provided, ``phpdoc`` and ``reports`` receive nested
+  cache directories under that base path. When it is omitted, each nested tool
+  keeps its own default cache directory.
 - Progress output is disabled by default across nested phases; use
   ``--progress`` to re-enable it in text mode.
 - ``--json`` and ``--pretty-json`` are forwarded through every phase so the

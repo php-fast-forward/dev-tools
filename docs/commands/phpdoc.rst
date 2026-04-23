@@ -38,6 +38,12 @@ Options
 ``--cache-dir`` (optional)
    Path to the cache directory for PHP-CS-Fixer. Default: ``.dev-tools/cache/php-cs-fixer``.
 
+``--cache``
+   Force PHP-CS-Fixer caching on for this run.
+
+``--no-cache``
+   Force PHP-CS-Fixer caching off for this run.
+
 ``--progress``
    Enable progress output from PHP-CS-Fixer and the Rector phase.
 
@@ -69,6 +75,12 @@ Check specific directory:
 
    composer phpdoc ./src
 
+Check without cache:
+
+.. code-block:: bash
+
+   composer phpdoc --no-cache
+
 Exit Codes
 ---------
 
@@ -88,6 +100,10 @@ Behavior
 - Creates ``.docheader`` from the packaged template when the file is missing.
 - Uses ``.php-cs-fixer.dist.php`` and ``rector.php`` through local-first fallback.
 - The Rector phase explicitly runs ``FastForward\DevTools\Rector\AddMissingMethodPhpDocRector``.
+- Cache stays enabled by default; omit both flags to keep the command default,
+  pass ``--cache`` to force it on, and pass ``--no-cache`` to force it off.
+- When ``--cache-dir`` is omitted, PHP-CS-Fixer keeps its default cache
+  directory. The option only affects PHP-CS-Fixer when caching is enabled.
 - Progress output is disabled by default; use ``--progress`` to re-enable it in
   text mode.
 - ``--json`` and ``--pretty-json`` forward JSON mode to PHP-CS-Fixer and

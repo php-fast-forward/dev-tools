@@ -12,7 +12,10 @@ When you run ``tests``, DevTools:
 - resolves ``phpunit.xml`` from the consumer root first and falls back to the
   packaged default;
 - uses ``vendor/autoload.php`` as the default bootstrap file;
-- stores cache data in ``.dev-tools/cache/phpunit`` unless ``--no-cache`` is used;
+- keeps PHPUnit result caching enabled by default;
+- treats ``--cache`` as an explicit force-on flag and ``--no-cache`` as an
+  explicit force-off flag for the current run;
+- uses ``.dev-tools/cache/phpunit`` only when caching stays enabled;
 - can generate HTML coverage, Testdox, Clover, and raw PHP coverage output
   when ``--coverage`` is provided.
 
@@ -23,8 +26,8 @@ Useful Examples
 
    composer tests
    composer tests -- --filter=PluginTest
-   vendor/bin/dev-tools tests --coverage=.dev-tools/coverage
-   vendor/bin/dev-tools tests --no-cache --bootstrap=tests/bootstrap.php
+   composer tests --coverage=.dev-tools/coverage
+   composer tests --no-cache --bootstrap=tests/bootstrap.php
 
 Coverage Outputs
 ----------------

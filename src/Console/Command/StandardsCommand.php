@@ -21,7 +21,9 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -42,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class StandardsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 
@@ -65,7 +68,15 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     protected function configure(): void
     {
-        $this->addJsonOption()
+        $this
+            ->addJsonOption()
+            ->addCacheOption(
+                'Whether to enable cache writes in nested cache-aware standards commands.'
+            )
+            ->addCacheDirOption(
+                description: 'Base cache directory used for nested cache-aware standards commands.',
+                default: ManagedWorkspace::getCacheDirectory('standards'),
+            )
             ->addOption(
                 name: 'progress',
                 mode: InputOption::VALUE_NONE,
@@ -88,6 +99,8 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
         $jsonOutput = $this->isJsonOutput($input);
         $prettyJsonOutput = $this->isPrettyJsonOutput($input);
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
+        $cacheArgument = $this->resolveCacheArgument($input);
+        $cacheDirEnabled = '--no-cache' !== $cacheArgument;
 
         $commandOutput = $jsonOutput ? new BufferedOutput() : $output;
         $commands = [];
@@ -107,6 +120,18 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
 
             if ('reports' !== $command && $fix) {
                 $processBuilder = $processBuilder->withArgument('--fix');
+            }
+
+            if (\in_array($command, ['phpdoc', 'reports'], true) && null !== $cacheArgument) {
+                $processBuilder = $processBuilder->withArgument($cacheArgument);
+            }
+
+            if (
+                $cacheDirEnabled
+                && \in_array($command, ['phpdoc', 'reports'], true)
+                && null !== $cacheDir = $this->resolveCacheDirArgument($input, $command)
+            ) {
+                $processBuilder = $processBuilder->withArgument('--cache-dir', $cacheDir);
             }
 
             if ($jsonOutput) {

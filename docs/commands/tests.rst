@@ -41,8 +41,11 @@ Options
 ``--cache-dir`` (optional)
    Path to the PHPUnit cache directory. Default: ``.dev-tools/cache/phpunit``.
 
+``--cache``
+   Force PHPUnit result caching on for this run.
+
 ``--no-cache``
-   Disable PHPUnit caching.
+   Force PHPUnit result caching off for this run.
 
 ``--progress``
    Enable PHPUnit progress output.
@@ -114,6 +117,12 @@ Run without cache:
 
    composer tests --no-cache
 
+Force cache on explicitly:
+
+.. code-block:: bash
+
+   composer tests --cache
+
 Run with PHPUnit progress output enabled:
 
 .. code-block:: bash
@@ -141,6 +150,10 @@ Behavior
 - Local ``phpunit.xml`` is preferred over the packaged default.
 - Coverage filters are automatically applied to all PSR-4 paths from composer.json.
 - Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.
+- Cache stays enabled by default; omit both flags to keep the command default,
+  pass ``--cache`` to force it on, and pass ``--no-cache`` to force it off.
+- When ``--cache-dir`` is omitted, PHPUnit keeps its default cache directory.
+  The option only affects the result cache when caching is enabled.
 - ``--coverage-summary`` forwards PHPUnit's ``--only-summary-for-coverage-text``
   only when coverage text output is generated.
 - progress output is disabled by default.

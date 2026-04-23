@@ -42,6 +42,12 @@ Options
    Path to the cache directory for phpDocumentor.
    Default: ``.dev-tools/cache/phpdoc``.
 
+``--cache``
+   Force phpDocumentor caching on for this run.
+
+``--no-cache``
+   Force phpDocumentor caching off for this run.
+
 ``--progress``
    Enable progress output from phpDocumentor.
 
@@ -73,6 +79,12 @@ Use custom source:
 
    composer docs --source=docs/user-guide
 
+Generate without cache:
+
+.. code-block:: bash
+
+   composer docs --no-cache
+
 Exit Codes
 ---------
 
@@ -92,7 +104,12 @@ Behavior
 - ``docs/`` must exist unless you pass another ``--source`` directory.
 - API pages are built from the PSR-4 paths declared in ``composer.json``.
 - Guide pages are built from the selected source directory.
-- A temporary ``phpdocumentor.xml`` is created in the cache directory.
+- Cache stays enabled by default; omit both flags to keep the command default,
+  pass ``--cache`` to force it on, and pass ``--no-cache`` to force it off.
+- When ``--cache-dir`` is omitted, phpDocumentor keeps its default cache
+  directory. The option only affects phpDocumentor when caching is enabled.
+- A temporary ``phpdocumentor.xml`` is created for the run and uses the
+  configured cache directory only when caching stays enabled.
 - Progress output is disabled by default; use ``--progress`` to re-enable it in
   text mode.
 - ``--json`` and ``--pretty-json`` suppress phpDocumentor progress rendering so

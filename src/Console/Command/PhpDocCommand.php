@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -50,6 +51,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 
@@ -103,7 +105,13 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
      */
     protected function configure(): void
     {
-        $this->addJsonOption()
+        $this
+            ->addJsonOption()
+            ->addCacheOption('Whether to enable PHP-CS-Fixer caching.')
+            ->addCacheDirOption(
+                description: 'Path to the cache directory for PHP-CS-Fixer.',
+                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER),
+            )
             ->addArgument(
                 name: 'path',
                 mode: InputOption::VALUE_OPTIONAL,
@@ -120,12 +128,6 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
                 shortcut: 'f',
                 mode: InputOption::VALUE_NONE,
                 description: 'Whether to fix the PHPDoc issues automatically.',
-            )
-            ->addOption(
-                name: 'cache-dir',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Path to the cache directory for PHP-CS-Fixer.',
-                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER),
             );
     }
 
@@ -146,6 +148,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $fix = (bool) $input->getOption('fix');
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
+        $cacheEnabled = $this->isCacheEnabled($input);
 
         $this->logger->info('Checking and fixing PHPDocs...', [
             'input' => $input,
@@ -156,11 +159,17 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--diff')
-            ->withArgument('--config', $this->fileLocator->locate(self::CONFIG))
-            ->withArgument(
-                '--cache-file',
-                $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
-            );
+            ->withArgument('--config', $this->fileLocator->locate(self::CONFIG));
+
+        if ($cacheEnabled) {
+            $processBuilder = $processBuilder->withArgument('--using-cache=yes')
+                ->withArgument(
+                    '--cache-file',
+                    $this->filesystem->getAbsolutePath(self::CACHE_FILE, $input->getOption('cache-dir'))
+                );
+        } else {
+            $processBuilder = $processBuilder->withArgument('--using-cache=no');
+        }
 
         if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--show-progress=none');

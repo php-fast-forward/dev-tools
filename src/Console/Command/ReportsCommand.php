@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use Composer\Console\Input\InputOption;
+use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -43,6 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 )]
 final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 
@@ -66,7 +68,13 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     protected function configure(): void
     {
-        $this->addJsonOption()
+        $this
+            ->addJsonOption()
+            ->addCacheOption('Whether to enable cache writes in nested docs and tests commands.')
+            ->addCacheDirOption(
+                description: 'Base cache directory used for nested docs and tests command caches.',
+                default: ManagedWorkspace::getCacheDirectory('reports'),
+            )
             ->addOption(
                 name: 'progress',
                 mode: InputOption::VALUE_NONE,
@@ -110,6 +118,8 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
         $prettyJsonOutput = $this->isPrettyJsonOutput($input);
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $cacheArgument = $this->resolveCacheArgument($input);
+        $cacheDirEnabled = '--no-cache' !== $cacheArgument;
         $target = (string) $input->getOption('target');
         $coveragePath = (string) $input->getOption('coverage');
         $metricsPath = (string) $input->getOption('metrics');
@@ -120,6 +130,14 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
 
         $docsBuilder = $this->processBuilder
             ->withArgument('--target', $target);
+
+        if (null !== $cacheArgument) {
+            $docsBuilder = $docsBuilder->withArgument($cacheArgument);
+        }
+
+        if ($cacheDirEnabled && null !== $docsCacheDir = $this->resolveCacheDirArgument($input, 'docs')) {
+            $docsBuilder = $docsBuilder->withArgument('--cache-dir', $docsCacheDir);
+        }
 
         if ($progress) {
             $docsBuilder = $docsBuilder->withArgument('--progress');
@@ -138,6 +156,14 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
         $coverageBuilder = $this->processBuilder
             ->withArgument('--coverage-summary')
             ->withArgument('--coverage', $coveragePath);
+
+        if (null !== $cacheArgument) {
+            $coverageBuilder = $coverageBuilder->withArgument($cacheArgument);
+        }
+
+        if ($cacheDirEnabled && null !== $testsCacheDir = $this->resolveCacheDirArgument($input, 'tests')) {
+            $coverageBuilder = $coverageBuilder->withArgument('--cache-dir', $testsCacheDir);
+        }
 
         if ($progress) {
             $coverageBuilder = $coverageBuilder->withArgument('--progress');

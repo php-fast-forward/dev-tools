@@ -79,6 +79,14 @@ final class ReportsCommandTest extends TestCase
             ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE));
         $this->input->getOption('metrics')
             ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS));
+        $this->input->getOption('cache-dir')
+            ->willReturn(ManagedWorkspace::getCacheDirectory());
+        $this->input->hasParameterOption('--cache-dir', true)
+            ->willReturn(false);
+        $this->input->getOption('cache')
+            ->willReturn(false);
+        $this->input->getOption('no-cache')
+            ->willReturn(false);
         $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
@@ -166,6 +174,56 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder->withArgument('--progress')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalledTimes(3);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithCacheWillForwardCacheOnlyToDocsAndTests(): void
+    {
+        $this->input->getOption('cache')
+            ->willReturn(true);
+        $this->input->hasParameterOption('--cache-dir', true)
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--cache')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(2);
+        $this->processBuilder->withArgument('--cache-dir', ManagedWorkspace::getCacheDirectory('docs'))
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processBuilder->withArgument('--cache-dir', ManagedWorkspace::getCacheDirectory('tests'))
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithNoCacheWillForwardNoCacheOnlyToDocsAndTests(): void
+    {
+        $this->input->getOption('no-cache')
+            ->willReturn(true);
+        $this->input->hasParameterOption('--cache-dir', true)
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--no-cache')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(2);
+        $this->processBuilder->withArgument('--cache-dir', Argument::cetera())
+            ->shouldNotBeCalled();
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ReportsCommand::SUCCESS)
