@@ -9,9 +9,21 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Cleanup orphaned previews
+    - id: cleanup
+      name: Cleanup orphaned previews
       shell: bash
       env:
         INPUT_PATH: ${{ inputs.path }}
         GH_TOKEN: ${{ github.token }}
       run: ${{ github.action_path }}/run.sh
+
+outputs:
+  deleted:
+    description: Number of deleted preview directories.
+    value: ${{ steps.cleanup.outputs.deleted }}
+  skipped:
+    description: Number of retained preview directories.
+    value: ${{ steps.cleanup.outputs.skipped }}
+  unresolved:
+    description: Number of unresolved preview directories.
+    value: ${{ steps.cleanup.outputs.unresolved }}

@@ -118,3 +118,25 @@ jobs:
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || -1 }}
+
+    summarize:
+        if: ${{ always() }}
+        name: Summarize Test Workflow
+        needs:
+            - resolve_php
+            - tests
+            - dependency-health
+        runs-on: ubuntu-latest
+        steps:
+            - uses: ./.github/actions/summary/write
+              with:
+                markdown: |
+                  ## Tests Workflow Summary
+
+                  - Workflow PHP version: `${{ needs.resolve_php.outputs.php-version }}`
+                  - PHP version source: `${{ needs.resolve_php.outputs.php-version-source }}`
+                  - Test matrix: `${{ needs.resolve_php.outputs.test-matrix }}`
+                  - Minimum coverage threshold: `${{ inputs.min-coverage || 80 }}`
+                  - Dependency health `max-outdated`: `${{ inputs.max-outdated || -1 }}`
+                  - Tests job result: `${{ needs.tests.result }}`
+                  - Dependency health result: `${{ needs.dependency-health.result }}`

@@ -16,7 +16,8 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Publish release
+    - id: publish
+      name: Publish release
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
@@ -24,3 +25,11 @@ runs:
         INPUT_TARGET: ${{ inputs.target }}
         INPUT_NOTES_FILE: ${{ inputs.notes-file }}
       run: ${{ github.action_path }}/run.sh
+
+outputs:
+  operation:
+    description: Whether the release was created or updated.
+    value: ${{ steps.publish.outputs.operation }}
+  url:
+    description: URL of the published GitHub release.
+    value: ${{ steps.publish.outputs.url }}

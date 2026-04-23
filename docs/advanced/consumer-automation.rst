@@ -45,6 +45,17 @@ implementation in this repository is increasingly composed from local actions in
    * - ``.github/actions/review/*``
      - Reusable helpers that render deterministic rigorous-review briefs for
        pull requests that just became ready for review.
+   * - ``.github/actions/summary/*``
+     - Shared helpers that append deterministic Markdown outcomes to
+       ``GITHUB_STEP_SUMMARY`` after workflows already know their final URLs,
+       refs, versions, or verification results.
+   * - ``.github/actions/review/*``
+     - Reusable helpers that render deterministic rigorous-review briefs for
+       pull requests that just became ready for review.
+   * - ``.github/actions/summary/*``
+     - Shared helpers that append deterministic Markdown outcomes to
+       ``GITHUB_STEP_SUMMARY`` after workflows already know their final URLs,
+       refs, versions, or verification results.
    * - ``.github/actions/wiki/*``
      - Wiki-specific helpers for preparing preview branches, promoting preview
        content to ``master``, validating publication, and cleaning stale
@@ -110,6 +121,9 @@ How Changelog and Project Automation Fit In
   ``.github/actions/review/*`` and posts a deterministic brief that points
   maintainers to the packaged ``review-guardian`` agent and
   ``pull-request-review`` skill.
+- ``tests.yml``, ``reports.yml``, wiki preview and maintenance flows, and
+  ``changelog.yml`` now delegate final run summaries to
+  ``.github/actions/summary/*`` after their final-state information is known.
 - Project-board automation is no longer just an inline workflow concern; it is
   a reusable local action group shared by issue, pull-request, review, and
   release automation.

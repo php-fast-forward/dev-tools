@@ -59,6 +59,17 @@ jobs:
         with:
           preview-branch: ${{ env.WIKI_PREVIEW_BRANCH }}
 
+      - uses: ./.github/actions/summary/write
+        with:
+          markdown: |
+            ## Wiki Publish Summary
+
+            - Publish branch: `${{ env.WIKI_PUBLISH_BRANCH }}`
+            - Preview branch: `${{ env.WIKI_PREVIEW_BRANCH }}`
+            - Expected preview SHA: `${{ steps.prepare_publish.outputs.expected-preview-sha }}`
+            - Publish validation: completed
+            - Preview cleanup: `${{ env.WIKI_PREVIEW_BRANCH }}` deleted
+
   cleanup_closed_preview:
     name: Delete Closed PR Wiki Preview
     if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == false
@@ -86,6 +97,14 @@ jobs:
         with:
           preview-branch: ${{ env.WIKI_PREVIEW_BRANCH }}
 
+      - uses: ./.github/actions/summary/write
+        with:
+          markdown: |
+            ## Wiki Preview Cleanup Summary
+
+            - Deleted preview branch: `${{ env.WIKI_PREVIEW_BRANCH }}`
+            - Trigger: closed pull request without merge
+
   cleanup_orphaned_previews:
     name: Delete Orphaned Wiki Previews
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
@@ -107,4 +126,14 @@ jobs:
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
 
       - name: Delete wiki branches for closed pull requests
+        id: cleanup
         uses: ./.github/actions/wiki/cleanup-orphaned-previews
+
+      - uses: ./.github/actions/summary/write
+        with:
+          markdown: |
+            ## Wiki Orphan Cleanup Summary
+
+            - Deleted preview branches: `${{ steps.cleanup.outputs.deleted || '0' }}`
+            - Retained preview branches: `${{ steps.cleanup.outputs.skipped || '0' }}`
+            - Unresolved preview branches: `${{ steps.cleanup.outputs.unresolved || '0' }}`

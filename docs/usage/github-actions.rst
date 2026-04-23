@@ -67,15 +67,18 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
     *   Runs a post-deploy health check against the published reports index and coverage URLs with retry/backoff to account for Pages propagation.
     *   Resolves the workflow PHP version from ``composer.lock`` or ``composer.json`` before installing dependencies.
     *   Removes ``.dev-tools/cache`` from the publish directory before deployment so repository-local tool caches never leak into GitHub Pages output.
+    *   Appends a run summary with the published docs, coverage, and metrics URLs plus deployment verification status.
 *   **Pull Requests**:
     *   Generates a **Preview** of the documentation, coverage, and metrics.
     *   Deploys the preview to ``gh-pages`` under ``previews/pr-{number}/``.
     *   Verifies the preview index and coverage URLs after deployment before posting preview links.
     *   Posts a **Sticky Comment** on the PR with links to the live preview, coverage report, and metrics site.
+    *   Appends a run summary with preview URLs and verification status.
     *   Groups nested command output into collapsible GitHub Actions log sections so docs, tests, and metrics are easier to inspect independently.
     *   **Cleanup**: When a PR is closed, the workflow automatically removes the preview directory from the ``gh-pages`` branch to keep the repository clean.
     *   **Concurrency**: New pushes to the same PR cancel older in-progress preview runs without affecting other PRs.
 *   **Scheduled Cleanup**: A scheduled/manual cleanup removes stale ``previews/pr-{number}/`` directories for already closed pull requests.
+*   **Run Summary**: Closed-preview cleanup and orphan cleanup runs append a deterministic summary of the path or counts that were removed.
 
 Fast Forward Wiki
 -----------------
@@ -99,12 +102,16 @@ wrappers:
     installs dependencies, runs ``composer dev-tools wiki -- --target=.github/wiki``,
     commits the generated Markdown into the wiki submodule, and then updates
     the parent repository's submodule pointer when needed.
+*   **Preview Summary**: The preview workflow appends the preview branch name
+    and whether the parent repository submodule pointer changed.
 *   **Merged Publication**: ``wiki-maintenance.yml`` promotes the matching
     ``pr-{number}`` preview branch to ``master`` after a pull request is merged
     into ``main`` and validates the resulting remote SHA.
 *   **Cleanup**: ``wiki-maintenance.yml`` deletes preview branches for closed
     pull requests and also performs scheduled cleanup for stale
     ``pr-{number}`` branches.
+*   **Maintenance Summaries**: Publish and cleanup runs append the affected
+    branch names or cleanup counts to the run summary.
 
 .. note::
    See :doc:`../configuration/repository-setup` for mandatory initial setup required for the Wiki workflow to function.
@@ -124,6 +131,8 @@ The ``tests.yml`` workflow provides standard Continuous Integration.
     alone.
 *   Surfaces logged command failures as native GitHub Actions error annotations,
     including file and line metadata when the command provides them.
+*   Writes a compact run summary with the resolved PHP-version source, test
+    matrix, effective coverage threshold, and dependency-health threshold.
 *   Uses PR-scoped concurrency so newer pushes cancel older in-progress runs for the same pull request.
 
 Fast Forward Changelog
@@ -149,6 +158,7 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Runs ``composer dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
     *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
     *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
+    *   Appends a run summary with the compared base ref and changelog file.
 *   **Manual Release Preparation**:
     *   Checks out the repository default branch with full history.
     *   Resolves the next version from ``Unreleased`` unless a version input is provided.
@@ -156,11 +166,13 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
         ``composer dev-tools changelog:show -- <version>``.
     *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
+    *   Appends a run summary with the resolved version, version source, and pull-request URL.
     *   Requires repository Actions permissions that allow the workflow token to create pull requests.
 *   **Merged Release Pull Requests**:
     *   Detects merged branches that match the configured release branch prefix.
     *   Renders the released changelog section with ``composer dev-tools changelog:show -- <version>``.
     *   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
+    *   Appends a run summary with the published tag and release URL.
     *   Does **not** run for ordinary feature or fix pull requests merged into ``main``.
 
 **Inputs:**

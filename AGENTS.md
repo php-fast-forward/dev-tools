@@ -172,7 +172,7 @@ composer dev-tools
 - `docs/commands/`: command-specific behavior and option details
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
 - `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `review.yml`, `wiki.yml`, `wiki-preview.yml`, `wiki-maintenance.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
-- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `wiki`, `changelog`, and `label-sync`
+- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `summary`, `wiki`, `changelog`, and `label-sync`
 - `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
 - `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
