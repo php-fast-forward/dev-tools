@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.20.0] - 2026-04-23
+
 ### Changed
 
 - Force reusable workflows to sparse-checkout `.github/actions` into a dedicated `.dev-tools-actions` workspace before resolving local GitHub Actions so consumer wrappers stop failing on missing action paths (#180)
@@ -291,7 +293,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.19.0...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.20.0...HEAD
+[1.20.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.19.0...v1.20.0
 [1.19.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.18.0...v1.19.0
 [1.18.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.1...v1.18.0
 [1.17.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.0...v1.17.1
