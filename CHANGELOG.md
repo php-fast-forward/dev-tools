@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.18.0] - 2026-04-23
+
 ### Changed
 
 - Consolidate repository-local DevTools caches under `.dev-tools/cache`, keep published reports free of cache directories, and audit managed artifact path defaults across commands, workflows, and documentation (#151)
@@ -271,7 +273,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.1...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.18.0...HEAD
+[1.18.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.1...v1.18.0
 [1.17.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.0...v1.17.1
 [1.17.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.16.0...v1.17.0
 [1.16.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.15.0...v1.16.0
