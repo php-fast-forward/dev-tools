@@ -2930,6 +2930,17 @@ defaults local while delegating implementation to the reusable workflows in
 <code>php-fast-forward/dev-tools</code>
 .</li>
 
+    <li><strong>Workflow action source checkout</strong>
+ inside the reusable workflows when they
+need local action implementations from <code>.github/actions/</code>
+. The reusable
+workflow performs a sparse checkout of that directory into a dedicated
+<code>.dev-tools-actions</code>
+ workspace path, which keeps the consumer
+repository thin while still letting the reusable workflow resolve action
+paths from the upstream <code>php-fast-forward/dev-tools</code>
+ repository.</li>
+
 </ul>
 
     </section>
