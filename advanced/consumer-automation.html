@@ -2974,6 +2974,14 @@ items through repository delivery states.</td>
 pull requests that just became ready for review.</td>
     </tr>
     <tr>
+            <td><code>.github/actions/summary/*</code>
+</td>
+            <td>Shared helpers that append deterministic Markdown outcomes to
+<code>GITHUB_STEP_SUMMARY</code>
+ after workflows already know their final URLs,
+refs, versions, or verification results.</td>
+    </tr>
+    <tr>
             <td><code>.github/actions/wiki/*</code>
 </td>
             <td>Wiki-specific helpers for preparing preview branches, promoting preview
@@ -3116,6 +3124,14 @@ maintainers to the packaged <code>review-guardian</code>
  agent and
 <code>pull-request-review</code>
  skill.</li>
+
+    <li class="dash"><code>tests.yml</code>
+, <code>reports.yml</code>
+, wiki preview and maintenance flows, and
+<code>changelog.yml</code>
+ now delegate final run summaries to
+<code>.github/actions/summary/*</code>
+ after their final-state information is known.</li>
 
     <li class="dash">Project-board automation is no longer just an inline workflow concern; it is
 a reusable local action group shared by issue, pull-request, review, and
