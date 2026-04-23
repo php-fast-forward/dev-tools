@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-23 06:51:10        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-23 06:52:34        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -262,335 +262,22 @@
 
     var relations = [
     {
-        "name": "\\FastForward\\DevTools\\Funding\\FundingProfileMerger",
+        "name": "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Funding\\FundingProfile",
+        "name": "\\Interop\\Container\\ServiceProviderInterface",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Funding\\FundingYamlCodec",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Yaml\\Yaml",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\Json\\JsonFile",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Git\\GitClient",
+        "name": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
         "size": 3000,
         "relations": [
-            "\\FastForward\\DevTools\\Git\\GitClientInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Symfony\\Component\\Filesystem\\Path",
-            "\\Symfony\\Component\\Process\\Process",
-            "\\RuntimeException"
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace"
         ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Git\\GitClientInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Filesystem\\Path",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Process\\Process",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\RuntimeException",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Filesystem\\FinderFactory",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
-            "\\Symfony\\Component\\Finder\\Finder"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Finder\\Finder",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Filesystem\\Filesystem",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Process\\ProcessBuilder",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\Symfony\\Component\\Process\\Process"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Process\\ProcessQueue",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput",
-            "\\Symfony\\Component\\Process\\Process",
-            "\\Symfony\\Component\\Console\\Output\\NullOutput",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Closure",
-            "\\ReflectionProperty"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\Output\\NullOutput",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Closure",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\ReflectionProperty",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Config\\FileLocatorInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Rector\\AddMissingMethodPhpDocRector",
-        "size": 3000,
-        "relations": [
-            "\\Rector\\Rector\\AbstractRector",
-            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
-            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
-            "\\PhpParser\\Node",
-            "\\PhpParser\\Comment\\Doc",
-            "\\PhpParser\\Node\\Stmt\\ClassMethod",
-            "\\PhpParser\\NodeFinder",
-            "\\PhpParser\\Node\\Name"
-        ]
-    },
-    {
-        "name": "\\Rector\\Rector\\AbstractRector",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\PhpParser\\Node",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\PhpParser\\Comment\\Doc",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\PhpParser\\Node\\Stmt\\ClassMethod",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\PhpParser\\NodeFinder",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\PhpParser\\Node\\Name",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Rector\\AddMissingClassPhpDocRector",
-        "size": 3000,
-        "relations": [
-            "\\Rector\\Rector\\AbstractRector",
-            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
-            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
-            "\\PhpParser\\Node",
-            "\\PhpParser\\Comment\\Doc"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Rector\\RemoveEmptyDocBlockRector",
-        "size": 3000,
-        "relations": [
-            "\\Rector\\Rector\\AbstractRector",
-            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
-            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
-            "\\PhpParser\\Node",
-            "\\PhpParser\\Comment\\Doc"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\Writer",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\Reader",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\GitIgnore"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\GitIgnore",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\ArrayIterator",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\SplFileObject",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\Merger",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\Classifier",
-            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\GitIgnore"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\GitIgnore\\Classifier",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig",
-        "size": 3000,
-        "relations": [
-            "\\ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration",
-            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
-        ]
-    },
-    {
-        "name": "\\ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
@@ -598,375 +285,7 @@
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Config\\RectorConfig",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
-            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
-            "\\Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver",
-            "\\Rector\\Configuration\\PhpLevelSetResolver",
-            "\\Rector\\Config\\RectorConfig",
-            "\\Composer\\InstalledVersions"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Filesystem\\Path"
-        ]
-    },
-    {
-        "name": "\\Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Rector\\Configuration\\PhpLevelSetResolver",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Rector\\Config\\RectorConfig",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\InstalledVersions",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Config\\ECSConfig",
-        "size": 3000,
-        "relations": [
-            "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder",
-            "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver"
-        ]
-    },
-    {
-        "name": "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Psr\\Clock\\SystemClock",
-        "size": 3000,
-        "relations": [
-            "\\Psr\\Clock\\ClockInterface",
-            "\\DateTimeImmutable"
-        ]
-    },
-    {
-        "name": "\\Psr\\Clock\\ClockInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\DateTimeImmutable",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Plugin\\Capability\\CommandProvider",
-            "\\FastForward\\DevTools\\Console\\DevTools"
-        ]
-    },
-    {
-        "name": "\\Composer\\Plugin\\Capability\\CommandProvider",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\DevTools",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Console\\Application",
-            "\\Symfony\\Component\\Console\\CommandLoader\\CommandLoaderInterface",
-            "\\Psr\\Container\\ContainerInterface",
-            "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
-            "\\DI\\Container",
-            "\\ReflectionMethod"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Plugin",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Plugin\\Capable",
-            "\\Composer\\EventDispatcher\\EventSubscriberInterface",
-            "\\Composer\\Plugin\\PluginInterface",
-            "\\Composer\\Script\\Event",
-            "\\Composer\\Composer",
-            "\\Composer\\IO\\IOInterface"
-        ]
-    },
-    {
-        "name": "\\Composer\\Plugin\\Capable",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\EventDispatcher\\EventSubscriberInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\Plugin\\PluginInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\Script\\Event",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\Composer",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\IO\\IOInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-            "\\Composer\\Factory",
-            "\\Composer\\Json\\JsonFile",
-            "\\Composer\\InstalledVersions",
-            "\\DateTimeImmutable",
-            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Author",
-            "\\UnderflowException",
-            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface",
-            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Support",
-            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Funding"
-        ]
-    },
-    {
-        "name": "\\Composer\\Factory",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Author",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\AuthorInterface"
-        ]
-    },
-    {
-        "name": "\\UnderflowException",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Support",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Funding",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\FundingInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\AuthorInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\FundingInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Psr\\Log\\LoggerAwareInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Psr\\Log\\LoggerInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Resource\\UnifiedDiffer",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Resource\\DifferInterface",
-            "\\SebastianBergmann\\Diff\\Differ"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Resource\\DifferInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\SebastianBergmann\\Diff\\Differ",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Resource\\FileDiff",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Resource\\FileDiffer",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\License\\Resolver",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\License\\ResolverInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\License\\ResolverInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\License\\Generator",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\License\\GeneratorInterface",
-            "\\FastForward\\DevTools\\License\\ResolverInterface",
-            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-            "\\Psr\\Clock\\ClockInterface",
-            "\\Twig\\Environment",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\License\\GeneratorInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Twig\\Environment",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryChecker",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Git\\GitClientInterface",
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManager",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
-            "\\FastForward\\DevTools\\Git\\GitClientInterface",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\RuntimeException",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParser",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRenderer",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption",
+        "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
         "size": 3000,
         "relations": [
             "\\Symfony\\Component\\Console\\Input\\InputInterface"
@@ -978,200 +297,22 @@
         "relations": []
     },
     {
-        "name": "\\Symfony\\Component\\Console\\Output\\ConsoleOutputInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\Util\\Platform",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
+        "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger",
         "size": 3000,
         "relations": [
             "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\ArgvInput",
-            "\\Symfony\\Component\\Console\\Output\\ConsoleOutputInterface",
-            "\\Psr\\Clock\\ClockInterface",
-            "\\Ergebnis\\AgentDetector\\Detector",
-            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
-            "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput"
+            "\\LogicException"
         ]
     },
     {
-        "name": "\\Symfony\\Component\\Console\\Input\\ArgvInput",
+        "name": "\\Psr\\Log\\LoggerInterface",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\Ergebnis\\AgentDetector\\Detector",
+        "name": "\\LogicException",
         "size": 3000,
         "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\ReflectionProperty",
-            "\\Symfony\\Component\\Console\\Input\\InputOption"
-        ]
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\Input\\InputOption",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\CommandLoader\\DevToolsCommandLoader",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Console\\CommandLoader\\ContainerCommandLoader",
-            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
-            "\\Psr\\Container\\ContainerInterface",
-            "\\ReflectionClass"
-        ]
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\CommandLoader\\ContainerCommandLoader",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Psr\\Container\\ContainerInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\ReflectionClass",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
-            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "\\InvalidArgumentException"
-        ]
-    },
-    {
-        "name": "\\Composer\\Command\\BaseCommand",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\InvalidArgumentException",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
-            "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Filesystem\\Path"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Composer\\Factory",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Composer\\Json\\JsonManipulator",
-            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
-            "\\Symfony\\Component\\Filesystem\\Path"
-        ]
-    },
-    {
-        "name": "\\Composer\\Json\\JsonManipulator",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Twig\\Environment",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
-        ]
     },
     {
         "name": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand",
@@ -1189,225 +330,41 @@
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand",
+        "name": "\\Composer\\Command\\BaseCommand",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\License\\GeneratorInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
+        "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
+        "name": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec",
-            "\\FastForward\\DevTools\\Funding\\FundingYamlCodec",
-            "\\FastForward\\DevTools\\Funding\\FundingProfileMerger",
-            "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Composer\\Factory",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
+        "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand",
+        "name": "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
+        "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
+        "name": "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "\\Symfony\\Component\\Process\\Process",
-            "\\InvalidArgumentException"
-        ]
+        "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand",
+        "name": "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
         "size": 3000,
         "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\Twig\\Environment",
-            "\\Psr\\Clock\\ClockInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
-            "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Filesystem\\Path"
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand",
+        "name": "\\Symfony\\Component\\Console\\Output\\OutputInterface",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
-        ]
+        "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
+        "name": "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
-            "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand",
-        "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Git\\GitClientInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "\\Symfony\\Component\\Filesystem\\Path"
-        ]
+        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
@@ -1460,45 +417,22 @@
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\RefactorCommand",
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\Symfony\\Component\\Config\\FileLocatorInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
-            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
-        ]
+        "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
+        "name": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
         "size": 3000,
-        "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
+        "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand",
+        "name": "\\FastForward\\DevTools\\Resource\\FileDiffer",
         "size": 3000,
         "relations": [
-            "\\Composer\\Command\\BaseCommand",
-            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\Psr\\Clock\\ClockInterface",
-            "\\Psr\\Log\\LoggerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+            "\\FastForward\\DevTools\\Resource\\DifferInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiff"
         ]
     },
     {
@@ -1516,6 +450,80 @@
         ]
     },
     {
+        "name": "\\FastForward\\DevTools\\CodeOwners\\CodeOwnersGenerator",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Git\\GitClientInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Filesystem\\Path",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand",
         "size": 3000,
         "relations": [
@@ -1531,23 +539,337 @@
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger",
-        "size": 3000,
-        "relations": [
-            "\\Psr\\Log\\LoggerInterface",
-            "\\LogicException"
-        ]
-    },
-    {
-        "name": "\\LogicException",
+        "name": "\\Symfony\\Component\\Config\\FileLocatorInterface",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
+        "name": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand",
         "size": 3000,
         "relations": [
-            "\\Symfony\\Component\\Console\\Input\\InputInterface"
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
+        "size": 3000,
+        "relations": [
+            "\\Psr\\Log\\LoggerAwareInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\PhpDocCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Twig\\Environment",
+            "\\Psr\\Clock\\ClockInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
+        ]
+    },
+    {
+        "name": "\\Twig\\Environment",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Psr\\Clock\\ClockInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
+            "\\Symfony\\Component\\Process\\Process",
+            "\\InvalidArgumentException"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Process\\Process",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\InvalidArgumentException",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\Psr\\Clock\\ClockInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\License\\GeneratorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\GeneratorInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\RefactorCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Twig\\Environment",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Composer\\Factory",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Composer\\Json\\JsonManipulator",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\Composer\\Factory",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Json\\JsonManipulator",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec",
+            "\\FastForward\\DevTools\\Funding\\FundingYamlCodec",
+            "\\FastForward\\DevTools\\Funding\\FundingProfileMerger",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Composer\\Factory",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Funding\\FundingProfile",
+            "\\Composer\\Json\\JsonFile"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Funding\\FundingYamlCodec",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Funding\\FundingProfile",
+            "\\Symfony\\Component\\Yaml\\Yaml"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Funding\\FundingProfileMerger",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Funding\\FundingProfile"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\SyncCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
         ]
     },
     {
@@ -1564,31 +886,137 @@
         ]
     },
     {
-        "name": "\\Composer\\Console\\Application",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\CommandLoader\\CommandLoaderInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
+        "name": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand",
         "size": 3000,
         "relations": [
-            "\\Interop\\Container\\ServiceProviderInterface",
-            "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
-            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
+            "\\InvalidArgumentException"
         ]
     },
     {
-        "name": "\\DI\\Container",
+        "name": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\ReflectionMethod",
+        "name": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Command\\BaseCommand",
+            "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Config\\FileLocatorInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\FastForward\\DevTools\\Resource\\FileDiffer",
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
+            "\\Symfony\\Component\\Console\\Input\\InputInterface",
+            "\\ReflectionProperty",
+            "\\Symfony\\Component\\Console\\Input\\InputOption"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ReflectionProperty",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Input\\InputOption",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
+        "size": 3000,
+        "relations": [
+            "\\Psr\\Log\\LoggerInterface",
+            "\\Symfony\\Component\\Console\\Input\\ArgvInput",
+            "\\Symfony\\Component\\Console\\Output\\ConsoleOutputInterface",
+            "\\Psr\\Clock\\ClockInterface",
+            "\\Ergebnis\\AgentDetector\\Detector",
+            "\\FastForward\\DevTools\\Console\\Logger\\Processor\\ContextProcessorInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Input\\ArgvInput",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Output\\ConsoleOutputInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Ergebnis\\AgentDetector\\Detector",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput",
         "size": 3000,
         "relations": []
     },
@@ -1611,10 +1039,458 @@
         "relations": []
     },
     {
+        "name": "\\Composer\\Util\\Platform",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\DevTools",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Console\\Application",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\CommandLoader\\CommandLoaderInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Psr\\Container\\ContainerInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\DI\\Container",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ReflectionMethod",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\Input\\InputInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\CommandLoader\\DevToolsCommandLoader",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\CommandLoader\\ContainerCommandLoader",
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\Psr\\Container\\ContainerInterface",
+            "\\ReflectionClass"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\CommandLoader\\ContainerCommandLoader",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ReflectionClass",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\Resolver",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\License\\ResolverInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\ResolverInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\License\\Generator",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\License\\GeneratorInterface",
+            "\\FastForward\\DevTools\\License\\ResolverInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Psr\\Clock\\ClockInterface",
+            "\\Twig\\Environment",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\GitIgnore",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ArrayIterator",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\SplFileObject",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Merger",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\MergerInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\Classifier",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnore"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Classifier",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\ClassifierInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Writer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\WriterInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitIgnore\\Reader",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitIgnore\\ReaderInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnoreInterface",
+            "\\FastForward\\DevTools\\GitIgnore\\GitIgnore"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\FileDiff",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\UnifiedDiffer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Resource\\DifferInterface",
+            "\\SebastianBergmann\\Diff\\Differ"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\DifferInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\SebastianBergmann\\Diff\\Differ",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Rector\\RemoveEmptyDocBlockRector",
+        "size": 3000,
+        "relations": [
+            "\\Rector\\Rector\\AbstractRector",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+            "\\PhpParser\\Node",
+            "\\PhpParser\\Comment\\Doc"
+        ]
+    },
+    {
+        "name": "\\Rector\\Rector\\AbstractRector",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\Node",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\Comment\\Doc",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Rector\\AddMissingClassPhpDocRector",
+        "size": 3000,
+        "relations": [
+            "\\Rector\\Rector\\AbstractRector",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+            "\\PhpParser\\Node",
+            "\\PhpParser\\Comment\\Doc"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Rector\\AddMissingMethodPhpDocRector",
+        "size": 3000,
+        "relations": [
+            "\\Rector\\Rector\\AbstractRector",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\RuleDefinition",
+            "\\Symplify\\RuleDocGenerator\\ValueObject\\CodeSample\\CodeSample",
+            "\\PhpParser\\Node",
+            "\\PhpParser\\Comment\\Doc",
+            "\\PhpParser\\Node\\Stmt\\ClassMethod",
+            "\\PhpParser\\NodeFinder",
+            "\\PhpParser\\Node\\Name"
+        ]
+    },
+    {
+        "name": "\\PhpParser\\Node\\Stmt\\ClassMethod",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\NodeFinder",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\PhpParser\\Node\\Name",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Psr\\Clock\\SystemClock",
+        "size": 3000,
+        "relations": [
+            "\\Psr\\Clock\\ClockInterface",
+            "\\DateTimeImmutable"
+        ]
+    },
+    {
+        "name": "\\DateTimeImmutable",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Config\\ECSConfig",
+        "size": 3000,
+        "relations": [
+            "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder",
+            "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver"
+        ]
+    },
+    {
+        "name": "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig",
+        "size": 3000,
+        "relations": [
+            "\\ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
+        ]
+    },
+    {
+        "name": "\\ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Config\\RectorConfig",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "\\Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver",
+            "\\Rector\\Configuration\\PhpLevelSetResolver",
+            "\\Rector\\Config\\RectorConfig",
+            "\\Composer\\InstalledVersions"
+        ]
+    },
+    {
+        "name": "\\Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Rector\\Configuration\\PhpLevelSetResolver",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Rector\\Config\\RectorConfig",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\InstalledVersions",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Plugin\\Capability\\CommandProvider",
+            "\\FastForward\\DevTools\\Console\\DevTools"
+        ]
+    },
+    {
+        "name": "\\Composer\\Plugin\\Capability\\CommandProvider",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
+            "\\Composer\\Factory",
+            "\\Composer\\Json\\JsonFile",
+            "\\Composer\\InstalledVersions",
+            "\\DateTimeImmutable",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Author",
+            "\\UnderflowException",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Support",
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Funding"
+        ]
+    },
+    {
+        "name": "\\Composer\\Json\\JsonFile",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Author",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\AuthorInterface"
+        ]
+    },
+    {
+        "name": "\\UnderflowException",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Support",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\SupportInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\Funding",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Composer\\Json\\Schema\\FundingInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\AuthorInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Json\\Schema\\FundingInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Composer\\Plugin",
+        "size": 3000,
+        "relations": [
+            "\\Composer\\Plugin\\Capable",
+            "\\Composer\\EventDispatcher\\EventSubscriberInterface",
+            "\\Composer\\Plugin\\PluginInterface",
+            "\\Composer\\Script\\Event",
+            "\\Composer\\Composer",
+            "\\Composer\\IO\\IOInterface"
+        ]
+    },
+    {
+        "name": "\\Composer\\Plugin\\Capable",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\EventDispatcher\\EventSubscriberInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Plugin\\PluginInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Script\\Event",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Composer",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\IO\\IOInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilter",
         "size": 3000,
         "relations": [
             "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilterInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\CandidateProvider",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\CandidateProviderInterface"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitAttributes\\Merger",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\GitAttributes\\MergerInterface"
         ]
     },
     {
@@ -1635,6 +1511,15 @@
         ]
     },
     {
+        "name": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Filesystem\\Filesystem",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
+    },
+    {
         "name": "\\FastForward\\DevTools\\GitAttributes\\Reader",
         "size": 3000,
         "relations": [
@@ -1642,18 +1527,90 @@
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\GitAttributes\\Merger",
+        "name": "\\FastForward\\DevTools\\Funding\\FundingProfile",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Yaml\\Yaml",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Git\\GitClient",
         "size": 3000,
         "relations": [
-            "\\FastForward\\DevTools\\GitAttributes\\MergerInterface"
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\Symfony\\Component\\Filesystem\\Path",
+            "\\Symfony\\Component\\Process\\Process",
+            "\\RuntimeException"
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\GitAttributes\\CandidateProvider",
+        "name": "\\RuntimeException",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Process\\ProcessBuilder",
         "size": 3000,
         "relations": [
-            "\\FastForward\\DevTools\\GitAttributes\\CandidateProviderInterface"
+            "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
+            "\\Symfony\\Component\\Process\\Process"
         ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Process\\ProcessQueue",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
+            "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput",
+            "\\Symfony\\Component\\Process\\Process",
+            "\\Symfony\\Component\\Console\\Output\\NullOutput",
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\Closure",
+            "\\ReflectionProperty"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Output\\NullOutput",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Closure",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Psr\\Log\\LoggerAwareInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Filesystem\\FinderFactory",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
+            "\\Symfony\\Component\\Finder\\Finder"
+        ]
+    },
+    {
+        "name": "\\Symfony\\Component\\Finder\\Finder",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Filesystem\\Filesystem",
+        "size": 3000,
+        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\PhpUnit\\Event\\TestSuite\\ByPassfinalsStartedSubscriber",
@@ -1775,9 +1732,71 @@
         "relations": []
     },
     {
-        "name": "\\Interop\\Container\\ServiceProviderInterface",
+        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryChecker",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRenderer",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParser",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManager",
+        "size": 3000,
+        "relations": [
+            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
+            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
+            "\\FastForward\\DevTools\\Git\\GitClientInterface",
+            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
+            "\\RuntimeException",
+            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument"
+        ]
     }
 ];
 
