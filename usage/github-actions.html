@@ -3362,6 +3362,43 @@ open pull request.</p>
 
     </section>
 
+            <section class="section " id="transient-failure-retry">
+            <h2>Transient Failure Retry</h2>
+
+            
+    <p>This repository also keeps a local <code>retry-transient-failures.yml</code>
+ workflow
+that watches completed workflow runs and decides whether a failed run looks
+like a transient GitHub-side infrastructure problem rather than a logic bug in
+the workflow itself.</p>
+
+            
+    <p><strong>Behavior:</strong>
+
+<em>   Runs only after one of the repository&#039;s core workflows finishes with a
+    failure.
+</em>
+   Inspects failed job logs for transient GitHub-side signatures such as
+    checkout or fetch HTTP 500 failures, Git transport RPC errors, and related
+    internal-server-error patterns.
+<em>   Requests a rerun of failed jobs only when every failed job matches those
+    transient signatures.
+</em>
+   Stops after one rerun attempt, so repeated failures still surface clearly
+    to maintainers.
+*   Appends a deterministic summary describing whether a rerun was requested or
+skipped.</p>
+
+            
+    <p><strong>Non-goals:</strong>
+
+<em>   It does not retry PHPUnit failures, lint failures, changelog validation,
+    or other logic or quality-signal regressions.
+</em>
+   It does not introduce unbounded rerun loops.</p>
+
+    </section>
+
     </section>
 
                                     </div>
