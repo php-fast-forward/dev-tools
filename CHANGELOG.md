@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Teach the pull-request review skill to treat workflow-managed wiki pointer updates as expected state before flagging drift (#147)
 - Require GitHub issue write readback verification in the github-issues skill (#165)
 - Standardize cache flags and nested cache-dir propagation across cache-aware commands (#162)
 
