@@ -4,7 +4,6 @@
     <meta charset="utf-8">
             <title>fast-forward/dev-tools</title>
     
-
         
     
         
@@ -632,14 +631,14 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#sidebar-commands-index-html"
-                aria-expanded="true"
+                aria-expanded="false"
                 aria-controls="sidebar-commands-index-html"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
             </div>
 
-            <div id="sidebar-commands-index-html" class="collapse show">
+            <div id="sidebar-commands-index-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
     
@@ -699,7 +698,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/changelog.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             changelog commands
         </a>
@@ -2888,341 +2887,434 @@
                         <div class="container-fluid">
                             
                             <div class="row g-4">
-                                <div class="col-12">
+                                <div class="col-12 col-xl-9">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            <section class="section " id="changelog-commands">
-            <h1>changelog commands</h1>
+                                            
+<nav aria-label="breadcrumb" class="mb-4">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item">
+            <a href="" class="text-decoration-none">
+                <i class="fas fa-home text-primary me-1"></i>
+                <span>Home</span>
+            </a>
+        </li>
 
-            
-    <p>Author, validate, infer, promote, and render managed Keep a Changelog
-sections with the local changelog command set.</p>
+            </ol>
+</nav>
+    <article class="phpdocumentor-element">
+        <div class="mb-4">
+            <div class="mb-5">
+    <div class="d-flex align-items-center gap-3 mb-3">
+        <div class="bg-primary-subtle text-primary rounded-3 d-inline-flex align-items-center justify-content-center" style="width: 3rem; height: 3rem;">
+            <i class="fas fa-file-code"></i>
+        </div>
+        <div>
+            <h2 class="display-5 mb-1">DependabotChangelogEntryMessageResolver.php</h2>
+            <div class="text-body-secondary">File</div>
+        </div>
+    </div>
+</div>
 
-            <section class="section " id="description">
-            <h2>Description</h2>
+        </div>
 
-            
-    <p>Fast Forward DevTools ships a focused changelog surface built around the local
-<code>CHANGELOG.md</code>
- file:</p>
+        <div class="d-grid gap-4">
+            <section class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Fast Forward Development Tools for PHP projects.</p>
+    </div>
 
-            
+                    
+                    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
 
-<ul>
-    <li class="dash"><code>changelog:entry</code>
- adds one categorized entry to <code>Unreleased</code>
- or to an
-explicit release section;</li>
+                    <div>
+                        <p>This file is part of fast-forward/dev-tools project.</p>
 
-    <li class="dash"><code>changelog:check</code>
- verifies that a branch or repository state contains a
-meaningful <code>Unreleased</code>
- change;</li>
+                    </div>
+                </div>
+            </div>
+            </section>
 
-    <li class="dash"><code>changelog:next-version</code>
- infers the next semantic version from the current
-<code>Unreleased</code>
- categories;</li>
+                    
+    <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-tags text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0" id="tags">
+                Tags
+                <a
+    href="files/src-changelog-dependabotchangelogentrymessageresolver.html#tags"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h5>
+        </div>
 
-    <li class="dash"><code>changelog:promote</code>
- publishes <code>Unreleased</code>
- into a dated release section;</li>
+        <div class="d-grid gap-3">
+                                                <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">author</span>
+                            </div>
 
-    <li class="dash"><code>changelog:show</code>
- renders one published section body for GitHub release
-notes or other automation.</li>
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                            </div>
 
-</ul>
+                                                            <div>
+                                    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
 
-            
-    <p>These commands intentionally work on the minimum Keep a Changelog 1.1.0
-structure managed by this repository and by synchronized Fast Forward consumer
-repositories.</p>
+                    <div>
+                        <p>Felipe Sayão Lobato Abreu <a href="mailto:github@mentordosnerds.com">github@mentordosnerds.com</a></p>
 
+                    </div>
+                </div>
+            </div>
+            </section>
+
+                                </div>
+                                                    </div>
+                    </div>
+                                                                <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">license</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                            </div>
+
+                                                            <div>
+                                    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>https://opensource.org/licenses/MIT MIT License</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+                                </div>
+                                                    </div>
+                    </div>
+                                                                <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://github.com/php-fast-forward/">https://github.com/php-fast-forward/</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://github.com/php-fast-forward/dev-tools">https://github.com/php-fast-forward/dev-tools</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://github.com/php-fast-forward/dev-tools/issues">https://github.com/php-fast-forward/dev-tools/issues</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://php-fast-forward.github.io/dev-tools/">https://php-fast-forward.github.io/dev-tools/</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                        <div class="card-body p-3">
+                            <div class="mb-2">
+                                <span class="badge text-bg-info">see</span>
+                            </div>
+
+                            <div class="d-flex flex-wrap gap-2 mb-2">
+                                
+                                
+                                                                    <span class="badge text-bg-light border">
+                                        <a href="https://datatracker.ietf.org/doc/html/rfc2119">https://datatracker.ietf.org/doc/html/rfc2119</a>
+                                    </span>
+                                                            </div>
+
+                                                            <div>
+                                    
+
+                                </div>
+                                                    </div>
+                    </div>
+                                    </div>
     </section>
 
-            <section class="section " id="usage">
-            <h2>Usage</h2>
+                </div>
+            </section>
 
-            <pre><code class="language-bash">composer changelog:entry &quot;Add changelog automation for release workflows (#28)&quot;
-composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 &quot;Preserve published release sections during backfill (#28)&quot;
-composer changelog:entry --json &quot;Add changelog automation for release workflows (#28)&quot;
+            <section class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    
+<section class="mt-5">
+    <div class="d-flex align-items-center gap-2 mb-4">
+        <i class="fas fa-list-ul text-primary"></i>
+        <h3 id="toc" class="h4 mb-0">
+            Table of Contents
+            <a
+    href="files/src-changelog-dependabotchangelogentrymessageresolver.html#toc"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+        </h3>
+    </div>
 
-composer changelog:check
-composer changelog:check --against=origin/main
-composer changelog:check --json
-
-composer changelog:next-version
-composer changelog:next-version --json
-
-composer changelog:promote 1.3.0
-composer changelog:promote 1.3.0 --date=2026-04-19
-composer changelog:promote 1.3.0 --json
-
-composer changelog:show 1.3.0
-composer changelog:show 1.3.0 --json</code></pre>
-
-    </section>
-
-            <section class="section " id="options">
-            <h2>Options</h2>
-
-            <dl>
-                        <dt><code>changelog:entry</code>
-</dt>
+    <div class="d-grid gap-4">
         
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash"><code>--type=&lt;category&gt;</code>
- for <code>added</code>
-, <code>changed</code>
-, <code>deprecated</code>
-,
-<code>removed</code>
-, <code>fixed</code>
-, or <code>security</code>
-;</li>
-
-    <li class="dash"><code>--release=&lt;version&gt;</code>
- to target a published section instead of
-<code>Unreleased</code>
-;</li>
-
-    <li class="dash"><code>--date=&lt;YYYY-MM-DD&gt;</code>
- when a published section should carry a release
-date immediately;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to work with a changelog file other than
-<code>CHANGELOG.md</code>
-;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:check</code>
-</dt>
         
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash"><code>--against=&lt;git-ref&gt;</code>
- to compare the current changelog against a base
-branch or commit;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to validate another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:next-version</code>
-</dt>
         
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash"><code>--current-version=&lt;semver&gt;</code>
- when the current published version should
-be supplied explicitly instead of inferred from the changelog;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to inspect another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:promote</code>
-</dt>
+                    <section class="card border-0 shadow-sm">
+                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
+                    <i class="fas fa-cube text-primary"></i>
+                    <h4 id="toc-classes" class="h6 mb-0 fw-semibold">Classes</h4>
+                </div>
+                <div class="list-group list-group-flush">
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Changelog-DependabotChangelogEntryMessageResolver.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Changelog-DependabotChangelogEntryMessageResolver.html"><abbr title="\FastForward\DevTools\Changelog\DependabotChangelogEntryMessageResolver">DependabotChangelogEntryMessageResolver</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Normalizes minimal changelog entry messages for Dependabot pull requests.</p>
+                                                    </div>
+                                    </div>
+            </section>
         
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash">the required version argument;</li>
-
-    <li class="dash"><code>--date=&lt;YYYY-MM-DD&gt;</code>
- to control the published release date;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to promote another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:show</code>
-</dt>
         
-        <dd>
-    <p>Supports:</p>
+        
+        
+        
+        
+        
+            </div>
+</section>
+                </div>
+            </section>
 
-
-<ul>
-    <li class="dash">the required version argument;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to render another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-raw release-note text;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-            </dl>
-
-    </section>
-
-            <section class="section " id="behavior">
-            <h2>Behavior</h2>
-
+                        
             
+                    </div>
 
-<ul>
-    <li class="dash"><code>changelog:entry</code>
- creates the managed changelog structure automatically
-when the selected file does not exist yet;</li>
+        <div class="modal fade" id="source-view" tabindex="-1" aria-labelledby="source-view-label" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable modal-xl">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header">
+                <h5 class="modal-title d-flex align-items-center gap-2" id="source-view-label">
+                    <i class="fas fa-code text-primary"></i>
+                    <span>Source View</span>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
 
-    <li class="dash"><code>changelog:check</code>
- returns a failing exit code when <code>Unreleased</code>
- is empty
-or does not differ from the selected baseline ref;</li>
+            <div class="modal-body p-0">
+                <pre
+                    class="language-php line-numbers linkable-line-numbers mb-0 rounded-0"
+                    style="max-height: 70vh; overflow-y: auto;"
+                    data-src="files/src/Changelog/DependabotChangelogEntryMessageResolver.php.txt"
+                ></pre>
+            </div>
+        </div>
+    </div>
+</div>
 
-    <li class="dash"><code>changelog:entry --json</code>
- emits the authoring summary as the
-<code>message</code>
- plus structured context describing the file, category, release,
-optional date, and entry text;</li>
+<script>
+    (function () {
+        function loadExternalCodeSnippet(el, url, line) {
+            const pre = el.querySelector('pre[data-src]');
+            if (!pre) return;
 
-    <li class="dash"><code>changelog:check --json</code>
- emits a deterministic JSON payload with
-<code>status</code>
-, <code>message</code>
-, and <code>context</code>
- keys for automation consumers;</li>
+            const src = url || pre.getAttribute('data-src').replace(/\\/g, '/');
+            const language = 'php';
 
-    <li class="dash"><code>changelog:next-version --json</code>
- emits the inferred semantic version
-as the <code>message</code>
- plus structured context describing the inspected changelog
-path and optional current version;</li>
+            const code = document.createElement('code');
+            code.className = 'language-' + language;
 
-    <li class="dash"><code>changelog:next-version</code>
- prints only the inferred semantic version in text
-mode so workflows can capture it safely in shell variables;</li>
+            pre.textContent = '';
+            if (line) {
+                pre.setAttribute('data-line', line);
+            } else {
+                pre.removeAttribute('data-line');
+            }
 
-    <li class="dash"><code>changelog:next-version</code>
- uses <code>Removed</code>
- or <code>Deprecated</code>
- entries for a
-major bump, <code>Added</code>
- or <code>Changed</code>
- entries for a minor bump, and otherwise
-falls back to a patch bump;</li>
+            code.textContent = 'Loading…';
+            pre.appendChild(code);
 
-    <li class="dash"><code>changelog:promote --json</code>
- emits the promotion summary as the
-<code>message</code>
- plus structured context describing the file, version, and
-release date written to the changelog;</li>
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', src, true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState !== 4) return;
 
-    <li class="dash"><code>changelog:promote</code>
- restores an empty <code>Unreleased</code>
- section after
-publishing the requested version;</li>
+                if (xhr.status < 400 && xhr.responseText) {
+                    code.textContent = xhr.responseText;
+                    Prism.highlightElement(code);
 
-    <li class="dash"><code>changelog:show</code>
- prints only the release body in text mode so workflows can
-feed it directly into GitHub release notes;</li>
+                    if (line) {
+                        const lineElement = pre.querySelector('.line-numbers-rows > span:nth-child(' + line + ')');
+                        if (lineElement) {
+                            pre.scrollTop = lineElement.offsetTop - (pre.offsetHeight / 2);
+                        }
+                    }
 
-    <li class="dash"><code>changelog:show --json</code>
- emits the rendered release-notes body as the
-<code>message</code>
- plus structured context describing the file, version, and
-release notes content.</li>
+                    return;
+                }
 
-</ul>
+                if (xhr.status === 404) {
+                    code.textContent = '✖ Error: File could not be found';
+                    return;
+                }
 
-    </section>
+                if (xhr.status >= 400) {
+                    code.textContent = '✖ Error ' + xhr.status + ' while fetching file: ' + xhr.statusText;
+                    return;
+                }
 
-            <section class="section " id="workflow-integration">
-            <h2>Workflow Integration</h2>
+                code.textContent = '✖ Error: An unknown error occurred';
+            };
 
-            
-    <p>The packaged changelog workflow consumes these commands in two places:</p>
+            xhr.send(null);
+        }
 
-            
+        document.querySelectorAll('[data-modal]').forEach(function (trigger) {
+            trigger.addEventListener('click', function (event) {
+                event.preventDefault();
 
-<ul>
-    <li class="dash">pull-request validation runs <code>changelog:check</code>
- against the base branch to
-require a meaningful changelog update;</li>
+                const modalId = this.dataset.modal;
+                const modalEl = document.getElementById(modalId);
 
-    <li class="dash">Dependabot pull-request validation MAY create one minimal <code>changed</code>
- entry
-from the pull-request title before re-running <code>changelog:check</code>
- so the
-branch keeps a persisted release note without manual intervention;</li>
+                if (!modalEl) return;
 
-    <li class="dash">manual release preparation uses <code>changelog:next-version</code>
- and
-<code>changelog:promote</code>
- to create a release pull request, then
-<code>changelog:show</code>
- to publish the merged section as GitHub release notes.</li>
+                const modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+                modal.show();
 
-</ul>
+                loadExternalCodeSnippet(
+                    modalEl,
+                    this.dataset.src || null,
+                    this.dataset.line || null
+                );
+            });
+        });
+    })();
+</script>
 
-            
-    <p>See <a href="./usage/github-actions.html">GitHub Actions Workflows</a> and <a href="./internals/release-publishing.html">Release and Publishing Workflow</a>
-for the workflow-level behavior around those commands.</p>
-
-    </section>
-
-    </section>
-
+    </article>
                                     </div>
                                 </div>
 
+                                                                    <aside class="col-12 col-xl-3 d-none d-xl-block">
+                                        <div class="position-sticky" style="top: 2rem;">
+                                            <div class="bg-body-tertiary border rounded-4 p-3 shadow-sm">
+                                                <div class="d-flex align-items-center gap-2 text-uppercase fw-semibold small text-body-secondary mb-3">
+                                                    <i class="fas fa-list-ul text-primary"></i>
+                                                    <span>On this page</span>
+                                                </div>
+
+                                                        
+    <section>
+        <div class="d-grid gap-4">
+            <div>
+                <div class="small text-uppercase fw-semibold text-body-secondary mb-2">Table of contents</div>
+                <div class="list-group list-group-flush">
+                                                                                                        <a class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent" href="files/src-changelog-dependabotchangelogentrymessageresolver.html#toc-classes">
+                            Classes
+                        </a>
+                                                                                                                    </div>
+            </div>
+
+            
+                    </div>
+    </section>
+
+                                            </div>
+                                        </div>
+                                    </aside>
                                                             </div>
                         </div>
                     </div>

@@ -46,6 +46,16 @@ Search.appendIndex(
             "summary": "Checks\u0020if\u0020there\u0020are\u0020pending\u0020unreleased\u0020entries\u0020in\u0020the\u0020changelog\u0020compared\u0020to\u0020a\u0020given\u0020reference.",
             "url": "classes/FastForward-DevTools-Changelog-Checker-UnreleasedEntryCheckerInterface.html#method_hasPendingChanges"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\DependabotChangelogEntryMessageResolver",
+            "name": "DependabotChangelogEntryMessageResolver",
+            "summary": "Normalizes\u0020minimal\u0020changelog\u0020entry\u0020messages\u0020for\u0020Dependabot\u0020pull\u0020requests.",
+            "url": "classes/FastForward-DevTools-Changelog-DependabotChangelogEntryMessageResolver.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\DependabotChangelogEntryMessageResolver\u003A\u003Aresolve\u0028\u0029",
+            "name": "resolve",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Changelog-DependabotChangelogEntryMessageResolver.html#method_resolve"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
             "name": "ChangelogDocument",
             "summary": "Represents\u0020the\u0020minimal\u0020Keep\u0020a\u0020Changelog\u0020document\u0020structure\u0020used\u0020by\u0020dev\u002Dtools.",
