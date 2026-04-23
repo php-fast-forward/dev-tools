@@ -76,8 +76,10 @@ The synchronized workflow files in consumer repositories are wrappers, not the
 full implementation. The actual reusable workflows live in the upstream
 ``php-fast-forward/dev-tools`` repository. When those reusable workflows need
 local action implementations, they explicitly check out the upstream
-``php-fast-forward/dev-tools`` repository into the run workspace first so the
-consumer repository does not need to mirror ``.github/actions`` locally.
+``php-fast-forward/dev-tools`` repository into a dedicated
+``.dev-tools-actions`` path in the run workspace first, using sparse checkout
+for ``.github/actions`` only, so the consumer repository does not need to
+mirror ``.github/actions`` locally.
 
 That matters most for these cases:
 

@@ -62,11 +62,13 @@ jobs:
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                path: .dev-tools-workflow-source
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
             - name: Resolve workflow PHP version
               id: resolve
-              uses: ./.dev-tools-workflow-source/.github/actions/php/resolve-version
+              uses: ./.dev-tools-actions/.github/actions/php/resolve-version
 
     tests:
         needs: resolve_php
@@ -83,10 +85,12 @@ jobs:
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                path: .dev-tools-workflow-source
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
             - name: Setup PHP and install dependencies
-              uses: ./.dev-tools-workflow-source/.github/actions/php/setup-composer
+              uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                 php-version: ${{ matrix.php-version }}
                 extensions: pcov, pcntl
@@ -123,10 +127,12 @@ jobs:
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                path: .dev-tools-workflow-source
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
             - name: Setup PHP and install dependencies
-              uses: ./.dev-tools-workflow-source/.github/actions/php/setup-composer
+              uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
                 root-version: ${{ env.TESTS_ROOT_VERSION }}
@@ -152,9 +158,11 @@ jobs:
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                path: .dev-tools-workflow-source
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
-            - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
+            - uses: ./.dev-tools-actions/.github/actions/summary/write
               with:
                 markdown: |
                   ## Tests Workflow Summary

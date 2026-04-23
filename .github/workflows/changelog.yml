@@ -76,11 +76,13 @@ jobs:
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                  path: .dev-tools-workflow-source
+                  path: .dev-tools-actions
+                  sparse-checkout: |
+                      .github/actions
 
             - name: Resolve workflow PHP version
               id: resolve
-              uses: ./.dev-tools-workflow-source/.github/actions/php/resolve-version
+              uses: ./.dev-tools-actions/.github/actions/php/resolve-version
 
     validate_pull_request:
         name: Validate PR Changelog
@@ -100,10 +102,12 @@ jobs:
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                  path: .dev-tools-workflow-source
+                  path: .dev-tools-actions
+                  sparse-checkout: |
+                      .github/actions
 
             - name: Setup PHP and install dependencies
-              uses: ./.dev-tools-workflow-source/.github/actions/php/setup-composer
+              uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
                   root-version: ${{ env.CHANGELOG_ROOT_VERSION }}
@@ -119,7 +123,7 @@ jobs:
                   BASE_REF: ${{ github.event.pull_request.base.ref }}
               run: composer dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
 
-            - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
+            - uses: ./.dev-tools-actions/.github/actions/summary/write
               with:
                   markdown: |
                       ## Changelog Validation Summary
@@ -149,10 +153,12 @@ jobs:
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                  path: .dev-tools-workflow-source
+                  path: .dev-tools-actions
+                  sparse-checkout: |
+                      .github/actions
 
             - name: Setup PHP and install dependencies
-              uses: ./.dev-tools-workflow-source/.github/actions/php/setup-composer
+              uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
                   root-version: ${{ env.CHANGELOG_ROOT_VERSION }}
@@ -160,7 +166,7 @@ jobs:
 
             - name: Resolve release version
               id: version
-              uses: ./.dev-tools-workflow-source/.github/actions/changelog/resolve-version
+              uses: ./.dev-tools-actions/.github/actions/changelog/resolve-version
               with:
                   changelog-file: ${{ env.CHANGELOG_FILE }}
                   version: ${{ inputs.version || '' }}
@@ -173,7 +179,7 @@ jobs:
                   composer dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
 
             - name: Render release notes preview
-              uses: ./.dev-tools-workflow-source/.github/actions/changelog/render-release-notes
+              uses: ./.dev-tools-actions/.github/actions/changelog/render-release-notes
               with:
                   changelog-file: ${{ env.CHANGELOG_FILE }}
                   version: ${{ steps.version.outputs.value }}
@@ -206,15 +212,17 @@ jobs:
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                  path: .dev-tools-workflow-source
+                  path: .dev-tools-actions
+                  sparse-checkout: |
+                      .github/actions
 
-            - uses: ./.dev-tools-workflow-source/.github/actions/project-board/transition-status
+            - uses: ./.dev-tools-actions/.github/actions/project-board/transition-status
               with:
                   project: ${{ inputs.project || vars.PROJECT || '' }}
                   from-status: Merged
                   to-status: Release Prepared
 
-            - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
+            - uses: ./.dev-tools-actions/.github/actions/summary/write
               with:
                   markdown: |
                       ## Release Preparation Summary
@@ -246,10 +254,12 @@ jobs:
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                  path: .dev-tools-workflow-source
+                  path: .dev-tools-actions
+                  sparse-checkout: |
+                      .github/actions
 
             - name: Setup PHP and install dependencies
-              uses: ./.dev-tools-workflow-source/.github/actions/php/setup-composer
+              uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
                   root-version: ${{ env.CHANGELOG_ROOT_VERSION }}
@@ -257,20 +267,20 @@ jobs:
 
             - name: Resolve merged release version
               id: version
-              uses: ./.dev-tools-workflow-source/.github/actions/changelog/resolve-merged-version
+              uses: ./.dev-tools-actions/.github/actions/changelog/resolve-merged-version
               with:
                   head-ref: ${{ github.event.pull_request.head.ref }}
                   release-branch-prefix: ${{ env.RELEASE_BRANCH_PREFIX }}
 
             - name: Render release notes
-              uses: ./.dev-tools-workflow-source/.github/actions/changelog/render-release-notes
+              uses: ./.dev-tools-actions/.github/actions/changelog/render-release-notes
               with:
                   changelog-file: ${{ env.CHANGELOG_FILE }}
                   version: ${{ steps.version.outputs.value }}
 
             - name: Publish GitHub release
               id: publish_release
-              uses: ./.dev-tools-workflow-source/.github/actions/changelog/publish-release
+              uses: ./.dev-tools-actions/.github/actions/changelog/publish-release
               with:
                   version: ${{ steps.version.outputs.value }}
                   target: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
@@ -281,16 +291,18 @@ jobs:
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
-                  path: .dev-tools-workflow-source
+                  path: .dev-tools-actions
+                  sparse-checkout: |
+                      .github/actions
 
-            - uses: ./.dev-tools-workflow-source/.github/actions/project-board/transition-status
+            - uses: ./.dev-tools-actions/.github/actions/project-board/transition-status
               with:
                   project: ${{ inputs.project || vars.PROJECT || '' }}
                   from-status: Release Prepared
                   to-status: Released
                   include-current-pull-request: 'true'
 
-            - uses: ./.dev-tools-workflow-source/.github/actions/summary/write
+            - uses: ./.dev-tools-actions/.github/actions/summary/write
               with:
                   markdown: |
                       ## Release Publication Summary
