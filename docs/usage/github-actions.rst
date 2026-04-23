@@ -20,6 +20,12 @@ The automation model now has three layers:
     ``dev-tools:sync``. These wrappers keep triggers and repository-specific
     defaults local while delegating implementation to the reusable workflows in
     ``php-fast-forward/dev-tools``.
+*   **Workflow action source checkout** inside the reusable workflows when they
+    need local action implementations from ``.github/actions/``. The reusable
+    workflow performs a sparse checkout of that directory into a dedicated
+    ``.dev-tools-actions`` workspace path, which keeps the consumer
+    repository thin while still letting the reusable workflow resolve action
+    paths from the upstream ``php-fast-forward/dev-tools`` repository.
 
 Wrapper Workflows
 -----------------

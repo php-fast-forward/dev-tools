@@ -57,10 +57,18 @@ jobs:
 
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
             - name: Resolve workflow PHP version
               id: resolve
-              uses: ./.github/actions/php/resolve-version
+              uses: ./.dev-tools-actions/.github/actions/php/resolve-version
 
     tests:
         needs: resolve_php
@@ -72,9 +80,17 @@ jobs:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
             - name: Setup PHP and install dependencies
-              uses: ./.github/actions/php/setup-composer
+              uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                 php-version: ${{ matrix.php-version }}
                 extensions: pcov, pcntl
@@ -106,9 +122,17 @@ jobs:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
             - name: Setup PHP and install dependencies
-              uses: ./.github/actions/php/setup-composer
+              uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
                 root-version: ${{ env.TESTS_ROOT_VERSION }}
@@ -129,8 +153,16 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - uses: actions/checkout@v6
+            - name: Checkout dev-tools workflow action source
+              uses: actions/checkout@v6
+              with:
+                repository: php-fast-forward/dev-tools
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                path: .dev-tools-actions
+                sparse-checkout: |
+                  .github/actions
 
-            - uses: ./.github/actions/summary/write
+            - uses: ./.dev-tools-actions/.github/actions/summary/write
               with:
                 markdown: |
                   ## Tests Workflow Summary
