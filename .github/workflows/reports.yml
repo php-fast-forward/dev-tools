@@ -206,7 +206,7 @@ jobs:
 
         steps:
             - name: Comment preview URLs on pull request
-              uses: marocchino/sticky-pull-request-comment@v2
+              uses: marocchino/sticky-pull-request-comment@v3
               with:
                 header: pr-preview
                 message: |

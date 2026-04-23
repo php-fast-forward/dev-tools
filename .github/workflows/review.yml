@@ -48,7 +48,7 @@ jobs:
           printf '%s\n' "$REVIEW_SUMMARY" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Comment review request on pull request
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           number: ${{ steps.render.outputs.pull-request-number }}
           header: rigorous-review
