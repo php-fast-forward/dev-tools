@@ -249,3 +249,29 @@ Maintenance Workflows
     *   Promotes all ``Release Prepared`` work into ``Released`` when the release-preparation pull request is merged and the GitHub release is published.
     *   Uses the built-in workflow token for project updates.
 *   **Label Sync**: Synchronizes repository labels with ecosystem standards.
+
+Transient Failure Retry
+-----------------------
+
+This repository also keeps a local ``retry-transient-failures.yml`` workflow
+that watches completed workflow runs and decides whether a failed run looks
+like a transient GitHub-side infrastructure problem rather than a logic bug in
+the workflow itself.
+
+**Behavior:**
+*   Runs only after one of the repository's core workflows finishes with a
+    failure.
+*   Inspects failed job logs for transient GitHub-side signatures such as
+    checkout or fetch HTTP 500 failures, Git transport RPC errors, and related
+    internal-server-error patterns.
+*   Requests a rerun of failed jobs only when every failed job matches those
+    transient signatures.
+*   Stops after one rerun attempt, so repeated failures still surface clearly
+    to maintainers.
+*   Appends a deterministic summary describing whether a rerun was requested or
+    skipped.
+
+**Non-goals:**
+*   It does not retry PHPUnit failures, lint failures, changelog validation,
+    or other logic or quality-signal regressions.
+*   It does not introduce unbounded rerun loops.
