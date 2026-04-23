@@ -247,8 +247,8 @@
         <ul>
             <li class="success">Configure will return configuration</li>
             <li class="success">Configure will apply repository ignores and invoke customization callback</li>
-            <li class="success">Is installed as dependency will detect vendor package paths</li>
-            <li class="success">Is dev tools repository will detect repository paths</li>
+            <li class="success">It will expose reusable packaged dependency defaults</li>
+            <li class="success">Apply packaged repository ignores will return the same configuration instance</li>
         </ul>
         <h2>Composer Funding Codec (FastForward\DevTools\Tests\Funding\ComposerFundingCodec)</h2>
         <ul>
@@ -350,6 +350,12 @@
             <li class="success">It can be constructed with custom tracer and subscriber</li>
             <li class="success">It can be constructed with defaults</li>
         </ul>
+        <h2>Dev Tools Path Resolver (FastForward\DevTools\Tests\Path\DevToolsPathResolver)</h2>
+        <ul>
+            <li class="success">It will expose canonical package paths</li>
+            <li class="success">It will reject absolute package paths</li>
+            <li class="success">It will detect whether dev tools runs from vendor or repository checkout</li>
+        </ul>
         <h2>Dev Tools Service Provider (FastForward\DevTools\Tests\ServiceProvider\DevToolsServiceProvider)</h2>
         <ul>
             <li class="success">Implements service provider interface</li>
@@ -364,6 +370,8 @@
         <h2>ECSConfig (FastForward\DevTools\Tests\Config\ECSConfig)</h2>
         <ul>
             <li class="success">Configure will return e c s config builder</li>
+            <li class="success">It will expose reusable default skipped rules</li>
+            <li class="success">Apply default paths and skips will keep working with a builder</li>
         </ul>
         <h2>Event Tracer (FastForward\DevTools\Tests\PhpUnit\Event\EventTracer)</h2>
         <ul>
@@ -547,6 +555,11 @@
             <li class="success">Format will apply the registered info style</li>
             <li class="success">Format will apply the registered alert style</li>
         </ul>
+        <h2>Managed Workspace (FastForward\DevTools\Tests\Path\ManagedWorkspace)</h2>
+        <ul>
+            <li class="success">It will expose canonical repository managed paths</li>
+            <li class="success">It will normalize path separators when joining managed paths</li>
+        </ul>
         <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
         <ul>
             <li class="success">Render will generate changelog with header and unreleased section</li>
@@ -666,6 +679,8 @@
             <li class="success">Configure will return callable</li>
             <li class="success">Configure with custom callback will return callable</li>
             <li class="success">Configure will apply the default rector configuration and customization callback</li>
+            <li class="success">It will expose reusable default sets and rules</li>
+            <li class="success">Apply safe migration set will be callable without the safe package installed</li>
         </ul>
         <h2>Refactor Command (FastForward\DevTools\Tests\Console\Command\RefactorCommand)</h2>
         <ul>
@@ -762,6 +777,12 @@
         <ul>
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute with init will skip existing wiki submodule</li>
+        </ul>
+        <h2>Working Project Path Resolver (FastForward\DevTools\Tests\Path\WorkingProjectPathResolver)</h2>
+        <ul>
+            <li class="success">It will expose canonical repository root paths</li>
+            <li class="success">It will normalize path separators when joining project paths</li>
+            <li class="success">It will expose the current working project directory or paths under it</li>
         </ul>
         <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>
         <ul>

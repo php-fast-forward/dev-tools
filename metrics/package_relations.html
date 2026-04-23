@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-22 03:44:34        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-23 05:58:13        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -265,13 +265,22 @@
         "name": "FastForward\\DevTools\\ServiceProvider",
         "size": 3000,
         "relations": [
-            "Interop\\Container"
+            "Interop\\Container",
+            "FastForward\\DevTools\\Path"
         ]
     },
     {
         "name": "Interop\\Container",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "FastForward\\DevTools\\Path",
+        "size": 3000,
+        "relations": [
+            "Symfony\\Component\\Filesystem",
+            "global"
+        ]
     },
     {
         "name": "FastForward\\DevTools\\Console\\Command\\Traits",
@@ -304,13 +313,13 @@
             "Composer\\Command",
             "FastForward\\DevTools\\Process",
             "Psr\\Log",
+            "FastForward\\DevTools\\Path",
             "Symfony\\Component\\Console\\Input",
             "Symfony\\Component\\Console\\Output",
             "FastForward\\DevTools\\GitAttributes",
             "FastForward\\DevTools\\Composer\\Json",
             "FastForward\\DevTools\\Filesystem",
             "FastForward\\DevTools\\Resource",
-            "Symfony\\Component\\Console\\Question",
             "FastForward\\DevTools\\CodeOwners",
             "FastForward\\DevTools\\Changelog\\Manager",
             "FastForward\\DevTools\\Changelog\\Checker",
@@ -383,11 +392,6 @@
             "SebastianBergmann\\Diff",
             "FastForward\\DevTools\\Filesystem"
         ]
-    },
-    {
-        "name": "Symfony\\Component\\Console\\Question",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "FastForward\\DevTools\\CodeOwners",
@@ -681,9 +685,11 @@
         "size": 3000,
         "relations": [
             "Symplify\\EasyCodingStandard\\Configuration",
+            "FastForward\\DevTools\\Path",
             "ShipMonk\\ComposerDependencyAnalyser\\Config",
             "Rector\\Php\\PhpVersionResolver",
             "Rector\\Configuration",
+            "Rector\\Config",
             "Composer"
         ]
     },
@@ -704,6 +710,11 @@
     },
     {
         "name": "Rector\\Configuration",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "Rector\\Config",
         "size": 3000,
         "relations": []
     },
@@ -777,6 +788,7 @@
             "PHPUnit\\Event\\TestRunner",
             "FastForward\\DevTools\\PhpUnit\\Event",
             "Joli\\JoliNotif",
+            "FastForward\\DevTools\\Path",
             "Symfony\\Component\\Console\\Helper"
         ]
     },

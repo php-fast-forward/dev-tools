@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-22 03:44:34        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-23 05:58:12        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -272,6 +272,19 @@
         "relations": []
     },
     {
+        "name": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Filesystem\\Path",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
         "size": 3000,
         "relations": [
@@ -310,6 +323,7 @@
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
@@ -334,6 +348,13 @@
         "name": "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Filesystem\\Path"
+        ]
     },
     {
         "name": "\\Symfony\\Component\\Console\\Output\\OutputInterface",
@@ -362,8 +383,7 @@
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
         ]
     },
     {
@@ -416,11 +436,6 @@
         ]
     },
     {
-        "name": "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
         "size": 3000,
         "relations": [
@@ -431,9 +446,7 @@
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Question\\Question",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
         ]
     },
     {
@@ -444,11 +457,6 @@
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Symfony\\Component\\Config\\FileLocatorInterface"
         ]
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\Question\\Question",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
@@ -498,6 +506,7 @@
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Git\\GitClientInterface",
             "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
@@ -558,7 +567,8 @@
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
         ]
     },
     {
@@ -587,6 +597,7 @@
             "\\Twig\\Environment",
             "\\Psr\\Clock\\ClockInterface",
             "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
@@ -638,6 +649,7 @@
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
@@ -668,8 +680,7 @@
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
         ]
     },
     {
@@ -689,9 +700,9 @@
             "\\Symfony\\Component\\Config\\FileLocatorInterface",
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
             "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
         ]
     },
     {
@@ -753,7 +764,8 @@
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
         ]
     },
     {
@@ -768,6 +780,7 @@
             "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
             "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput"
@@ -788,8 +801,8 @@
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Composer\\Json\\JsonManipulator",
-            "\\Symfony\\Component\\Filesystem\\Path",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
+            "\\Symfony\\Component\\Filesystem\\Path"
         ]
     },
     {
@@ -818,8 +831,7 @@
             "\\Psr\\Log\\LoggerInterface",
             "\\Composer\\Factory",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
         ]
     },
     {
@@ -857,7 +869,7 @@
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "\\Symfony\\Component\\Filesystem\\Path"
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
         ]
     },
     {
@@ -886,6 +898,7 @@
             "\\FastForward\\DevTools\\Process\\ProcessBuilderInterface",
             "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "\\Psr\\Log\\LoggerInterface",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
@@ -910,8 +923,7 @@
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Filesystem\\Path",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\Symfony\\Component\\Filesystem\\Path"
         ]
     },
     {
@@ -932,8 +944,7 @@
             "\\Psr\\Log\\LoggerInterface",
             "\\Symfony\\Component\\Console\\Input\\InputInterface",
             "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\Symfony\\Component\\Filesystem\\Path",
-            "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion"
+            "\\Symfony\\Component\\Filesystem\\Path"
         ]
     },
     {
@@ -1290,7 +1301,8 @@
         "name": "\\FastForward\\DevTools\\Config\\ECSConfig",
         "size": 3000,
         "relations": [
-            "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder"
+            "\\Symplify\\EasyCodingStandard\\Configuration\\ECSConfigBuilder",
+            "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver"
         ]
     },
     {
@@ -1302,7 +1314,8 @@
         "name": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig",
         "size": 3000,
         "relations": [
-            "\\ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration"
+            "\\ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
         ]
     },
     {
@@ -1314,8 +1327,11 @@
         "name": "\\FastForward\\DevTools\\Config\\RectorConfig",
         "size": 3000,
         "relations": [
+            "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver",
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\Rector\\Php\\PhpVersionResolver\\ComposerJsonPhpVersionResolver",
             "\\Rector\\Configuration\\PhpLevelSetResolver",
+            "\\Rector\\Config\\RectorConfig",
             "\\Composer\\InstalledVersions"
         ]
     },
@@ -1326,6 +1342,11 @@
     },
     {
         "name": "\\Rector\\Configuration\\PhpLevelSetResolver",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Rector\\Config\\RectorConfig",
         "size": 3000,
         "relations": []
     },
