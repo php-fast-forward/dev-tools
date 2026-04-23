@@ -2966,6 +2966,9 @@ secrets: inherit</code></pre>
     <li><code>reports.yml</code>
 </li>
 
+    <li><code>review.yml</code>
+</li>
+
     <li><code>changelog.yml</code>
 </li>
 
@@ -3253,6 +3256,60 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
 
     </article>
 </div>
+    </section>
+
+            <section class="section " id="fast-forward-rigorous-review">
+            <h2>Fast Forward Rigorous Review</h2>
+
+            
+    <p>The <code>review.yml</code>
+ workflow standardizes how Fast Forward repositories request
+high-signal pull-request review when a branch is no longer a draft.</p>
+
+            
+    <p><strong>Triggers:</strong>
+
+<em>   Pull Request Target (ready_for_review).
+</em>
+   Manual trigger (workflow_dispatch).</p>
+
+            
+    <p><strong>Behavior:</strong>
+
+<em>   Resolves the target pull request from the lifecycle event or manual input.
+</em>
+   Inspects the changed file list and infers high-signal review surfaces such
+    as workflows, local actions, packaged skills, packaged agents, docs,
+    changelog, wiki output, and source or test changes.
+<em>   Writes a GitHub Actions step summary that points maintainers to the
+    packaged ``review-guardian`` project agent and ``pull-request-review``
+    skill.
+</em>
+   Posts or updates a sticky pull-request comment with a deterministic review
+    brief, sample changed files, and a ready-to-run prompt for the dedicated
+    review agent.
+*   Runs only when a pull request actually becomes ready for review, not on
+every draft update.</p>
+
+            
+    <p><strong>Inputs:</strong>
+
+*   <code>pull-request-number</code>
+: required only for manual dispatch.</p>
+
+            
+    <p><strong>Repository permissions:</strong>
+
+<em>   ``contents: read``
+</em>
+   <code>pull-requests: write</code>
+</p>
+
+            
+    <p>This workflow does not replace human review. It standardizes the review intake
+moment and keeps the same review capability manually invokable for an already
+open pull request.</p>
+
     </section>
 
             <section class="section " id="maintenance-workflows">

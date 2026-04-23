@@ -2968,6 +2968,26 @@ inferring review status, syncing linked metadata, and transitioning
 items through repository delivery states.</td>
     </tr>
     <tr>
+            <td><code>.github/actions/review/*</code>
+</td>
+            <td>Reusable helpers that render deterministic rigorous-review briefs for
+pull requests that just became ready for review.</td>
+    </tr>
+    <tr>
+            <td><code>.github/actions/summary/*</code>
+</td>
+            <td>Shared helpers that append deterministic Markdown outcomes to
+<code>GITHUB_STEP_SUMMARY</code>
+ after workflows already know their final URLs,
+refs, versions, or verification results.</td>
+    </tr>
+    <tr>
+            <td><code>.github/actions/review/*</code>
+</td>
+            <td>Reusable helpers that render deterministic rigorous-review briefs for
+pull requests that just became ready for review.</td>
+    </tr>
+    <tr>
             <td><code>.github/actions/summary/*</code>
 </td>
             <td>Shared helpers that append deterministic Markdown outcomes to
@@ -3109,6 +3129,15 @@ branches.</li>
 release branches, publishes GitHub releases from merged release branches, and
 can transition the configured GitHub Project item state alongside those
 lifecycle events.</li>
+
+    <li class="dash"><code>.github/workflows/review.yml</code>
+ composes its ready-for-review intake from
+<code>.github/actions/review/*</code>
+ and posts a deterministic brief that points
+maintainers to the packaged <code>review-guardian</code>
+ agent and
+<code>pull-request-review</code>
+ skill.</li>
 
     <li class="dash"><code>tests.yml</code>
 , <code>reports.yml</code>
