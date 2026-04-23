@@ -199,7 +199,7 @@ jobs:
 
             - name: Create release preparation pull request
               id: create_pr
-              uses: peter-evans/create-pull-request@v7
+              uses: peter-evans/create-pull-request@v8
               with:
                   token: ${{ github.token }}
                   branch: ${{ env.RELEASE_BRANCH_PREFIX }}${{ steps.version.outputs.value }}

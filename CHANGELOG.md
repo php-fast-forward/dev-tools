@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- GitHub Actions(deps): Bump peter-evans/create-pull-request from 7 to 8 (#181)
 - Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)
 
 ## [1.20.0] - 2026-04-23
