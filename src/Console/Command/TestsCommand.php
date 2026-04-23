@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
+use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -52,6 +53,7 @@ use function is_numeric;
 )]
 final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 
@@ -91,7 +93,13 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
      */
     protected function configure(): void
     {
-        $this->addJsonOption()
+        $this
+            ->addJsonOption()
+            ->addCacheOption('Whether to enable PHPUnit result caching.')
+            ->addCacheDirOption(
+                description: 'Path to the PHPUnit cache directory.',
+                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT),
+            )
             ->addArgument(
                 name: 'path',
                 mode: InputArgument::OPTIONAL,
@@ -104,17 +112,6 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the bootstrap file.',
                 default: './vendor/autoload.php',
-            )
-            ->addOption(
-                name: 'cache-dir',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Path to the PHPUnit cache directory.',
-                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT),
-            )
-            ->addOption(
-                name: 'no-cache',
-                mode: InputOption::VALUE_NONE,
-                description: 'Whether to disable PHPUnit caching.',
             )
             ->addOption(
                 name: 'coverage',
@@ -160,6 +157,7 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
     {
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $cacheEnabled = $this->isCacheEnabled($input);
 
         $this->getLogger()
             ->info('Running PHPUnit tests...', [
@@ -186,11 +184,15 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 
-        if (! $input->getOption('no-cache')) {
+        if ($cacheEnabled) {
             $processBuilder = $processBuilder->withArgument(
+                '--cache-result',
+            )->withArgument(
                 '--cache-directory',
                 $this->resolvePath($input, 'cache-dir')
             );
+        } else {
+            $processBuilder = $processBuilder->withArgument('--do-not-cache-result');
         }
 
         [$processBuilder, $coverageReportPath] = $this->configureCoverageArguments(
@@ -307,7 +309,11 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
 
         $coveragePath = null !== $coverageOption
             ? $this->resolvePath($input, 'coverage')
-            : $this->resolvePath($input, 'cache-dir');
+            : (
+                $this->isCacheEnabled($input)
+                    ? $this->resolvePath($input, 'cache-dir')
+                    : ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE)
+            );
 
         foreach ($this->composer->getAutoload('psr-4') as $path) {
             $processBuilder = $processBuilder->withArgument(

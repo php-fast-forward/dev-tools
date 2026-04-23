@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
@@ -50,6 +51,7 @@ use function Safe\getcwd;
 )]
 final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 
@@ -84,19 +86,19 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
      */
     protected function configure(): void
     {
-        $this->addJsonOption()
+        $this
+            ->addJsonOption()
+            ->addCacheOption('Whether to enable phpDocumentor caching.')
+            ->addCacheDirOption(
+                description: 'Path to the cache directory for phpDocumentor.',
+                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC),
+            )
             ->addOption(
                 name: 'target',
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated Markdown documentation.',
                 default: '.github/wiki'
-            )
-            ->addOption(
-                name: 'cache-dir',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Path to the cache directory for phpDocumentor.',
-                default: ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC)
             )
             ->addOption(
                 name: 'init',
@@ -121,6 +123,7 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
+        $cacheEnabled = $this->isCacheEnabled($input);
 
         if ($input->getOption('init')) {
             return $this->initializeWikiSubmodule($input, $target, $processOutput);
@@ -136,8 +139,11 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
             ->withArgument('--visibility', 'public,protected')
             ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
             ->withArgument('--title', $this->composer->getDescription())
-            ->withArgument('--target', $target)
-            ->withArgument('--cache-folder', $input->getOption('cache-dir'));
+            ->withArgument('--target', $target);
+
+        if ($cacheEnabled) {
+            $processBuilder = $processBuilder->withArgument('--cache-folder', $input->getOption('cache-dir'));
+        }
 
         $psr4Namespaces = $this->composer->getAutoload('psr-4');
 

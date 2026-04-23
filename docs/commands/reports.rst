@@ -40,6 +40,16 @@ Options
    The target directory for the generated metrics report.
    Default: ``.dev-tools/metrics``.
 
+``--cache-dir`` (optional)
+   Base cache directory for nested ``docs`` and ``tests`` caches.
+   When omitted, each nested tool keeps its own default cache directory.
+
+``--cache``
+   Force cache-aware nested documentation and test steps to keep caching enabled.
+
+``--no-cache``
+   Force cache-aware nested documentation and test steps to disable caching.
+
 ``--progress``
    Enable progress output in nested ``docs``, ``tests``, and ``metrics`` steps.
 
@@ -71,6 +81,12 @@ Generate reports with a custom metrics directory:
 
    composer reports --metrics=.dev-tools/metrics
 
+Generate reports with cache disabled for nested docs and tests:
+
+.. code-block:: bash
+
+   composer reports --no-cache
+
 Exit Codes
 ---------
 
@@ -89,6 +105,14 @@ Behavior
 
 - Runs ``docs`` in parallel with ``tests --coverage``.
 - Runs ``metrics --target`` after tests so the JUnit report is available.
+- Cache stays enabled by default for nested cache-aware steps; omit both flags
+  to keep the command default, pass ``--cache`` to force it on, and pass
+  ``--no-cache`` to force it off.
+- The explicit cache intent is propagated to the nested ``docs`` and ``tests``
+  steps. The ``metrics`` step does not consume this contract.
+- When ``--cache-dir`` is provided, ``docs`` and ``tests`` receive nested cache
+  directories under that base path. When it is omitted, each nested tool keeps
+  its own default cache directory.
 - Runs tests with progress disabled by default and ``--coverage-summary`` so
   report builds keep PHPUnit output concise.
 - Progress output stays disabled by default across nested steps; use

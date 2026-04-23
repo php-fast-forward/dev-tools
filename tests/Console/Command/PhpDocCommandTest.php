@@ -101,6 +101,10 @@ final class PhpDocCommandTest extends TestCase
 
         $this->input->getOption('fix')
             ->willReturn(false);
+        $this->input->getOption('cache')
+            ->willReturn(false);
+        $this->input->getOption('no-cache')
+            ->willReturn(false);
         $this->input->getOption('cache-dir')
             ->willReturn(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER));
         $this->input->getOption('progress')
@@ -168,6 +172,14 @@ final class PhpDocCommandTest extends TestCase
     public function executeWillCreateDocHeaderAndRunPhpDocProcesses(): void
     {
         $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalled();
+        $this->processBuilder->withArgument('--using-cache=yes')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument(
+            '--cache-file',
+            '/repo/.dev-tools/cache/php-cs-fixer/.php-cs-fixer.cache'
+        )->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
@@ -183,6 +195,29 @@ final class PhpDocCommandTest extends TestCase
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithNoCacheWillDisablePhpCsFixerCache(): void
+    {
+        $this->input->getOption('no-cache')
+            ->willReturn(true);
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalled();
+        $this->processBuilder->withArgument('--using-cache=yes')
+            ->shouldNotBeCalled();
+        $this->processBuilder->withArgument('--cache-file', Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processBuilder->withArgument('--using-cache=no')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }

@@ -92,6 +92,10 @@ final class DocsCommandTest extends TestCase
             ->willReturn(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC));
         $this->input->getOption('template')
             ->willReturn('vendor/fast-forward/phpdoc-bootstrap-template');
+        $this->input->getOption('cache')
+            ->willReturn(false);
+        $this->input->getOption('no-cache')
+            ->willReturn(false);
         $this->input->getOption('progress')
             ->willReturn(false);
         $this->input->getOption('json')
@@ -112,6 +116,8 @@ final class DocsCommandTest extends TestCase
             ->willReturn('/repo/.dev-tools/cache/phpdoc');
         $this->filesystem->getAbsolutePath('phpdocumentor.xml', '/repo/.dev-tools/cache/phpdoc')
             ->willReturn('/repo/.dev-tools/cache/phpdoc/phpdocumentor.xml');
+        $this->filesystem->getAbsolutePath('phpdocumentor.xml', sys_get_temp_dir())
+            ->willReturn(sys_get_temp_dir() . '/phpdocumentor.xml');
         $this->filesystem->makePathRelative('/repo/docs')
             ->willReturn('docs');
         $this->filesystem->exists('/repo/docs')
@@ -169,6 +175,9 @@ final class DocsCommandTest extends TestCase
     {
         $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')
             ->shouldBeCalled();
+        $this->processBuilder->withArgument('--cache-folder', '/repo/.dev-tools/cache/phpdoc')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
@@ -184,6 +193,27 @@ final class DocsCommandTest extends TestCase
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithNoCacheWillSkipPhpDocumentorCacheFolder(): void
+    {
+        $this->input->getOption('no-cache')
+            ->willReturn(true);
+        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', sys_get_temp_dir())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--cache-folder', Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(DocsCommand::SUCCESS)
+            ->shouldBeCalled();
 
         self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
     }

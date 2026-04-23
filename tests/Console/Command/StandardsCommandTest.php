@@ -26,6 +26,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\StandardsCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -33,10 +34,12 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(StandardsCommand::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class StandardsCommandTest extends TestCase
 {
@@ -66,6 +69,14 @@ final class StandardsCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
 
         $this->input->getOption('fix')
+            ->willReturn(false);
+        $this->input->getOption('cache')
+            ->willReturn(false);
+        $this->input->getOption('no-cache')
+            ->willReturn(false);
+        $this->input->getOption('cache-dir')
+            ->willReturn('.dev-tools/cache');
+        $this->input->hasParameterOption('--cache-dir', true)
             ->willReturn(false);
         $this->input->getOption('progress')
             ->willReturn(false);
@@ -134,6 +145,58 @@ final class StandardsCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithCacheWillForwardCacheOnlyToCacheAwareNestedCommands(): void
+    {
+        $this->input->getOption('cache')
+            ->willReturn(true);
+        $this->input->hasParameterOption('--cache-dir', true)
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--cache')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(2);
+        $this->processBuilder->withArgument('--cache-dir', '.dev-tools/cache/phpdoc')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processBuilder->withArgument('--cache-dir', '.dev-tools/cache/reports')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(StandardsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithNoCacheWillForwardNoCacheOnlyToCacheAwareNestedCommands(): void
+    {
+        $this->input->getOption('no-cache')
+            ->willReturn(true);
+        $this->input->hasParameterOption('--cache-dir', true)
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--no-cache')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(2);
+        $this->processBuilder->withArgument('--cache-dir', Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(StandardsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
     }
 
     /**

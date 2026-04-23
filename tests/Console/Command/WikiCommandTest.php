@@ -93,6 +93,10 @@ final class WikiCommandTest extends TestCase
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
             ->willReturn(ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC));
+        $this->input->getOption('cache')
+            ->willReturn(false);
+        $this->input->getOption('no-cache')
+            ->willReturn(false);
         $this->input->getOption('init')
             ->willReturn(false);
         $this->input->getOption('json')
@@ -121,6 +125,9 @@ final class WikiCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
+        $this->processBuilder->withArgument('--cache-folder', ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC))
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
@@ -136,6 +143,25 @@ final class WikiCommandTest extends TestCase
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithNoCacheWillSkipPhpDocumentorCacheFolder(): void
+    {
+        $this->input->getOption('no-cache')
+            ->willReturn(true);
+        $this->processBuilder->withArgument('--cache-folder', Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(WikiCommand::SUCCESS)
+            ->shouldBeCalled();
 
         self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
     }

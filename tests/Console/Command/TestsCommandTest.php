@@ -120,6 +120,9 @@ final class TestsCommandTest extends TestCase
             $this->input->getOption($option->getName())
                 ->willReturn($option->getDefault());
         }
+
+        $this->input->getOption('no-cache')
+            ->willReturn(false);
     }
 
     /**
@@ -131,6 +134,12 @@ final class TestsCommandTest extends TestCase
         $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
             $process->getCommandLine(),
             '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG,
+        ) && str_contains(
+            $process->getCommandLine(),
+            '--cache-result',
+        ) && str_contains(
+            $process->getCommandLine(),
+            '--cache-directory=' . getcwd() . '/.dev-tools/cache/phpunit',
         )))->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
@@ -144,6 +153,28 @@ final class TestsCommandTest extends TestCase
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithNoCacheWillDisablePhpUnitResultCache(): void
+    {
+        $this->input->getOption('no-cache')
+            ->willReturn(true);
+
+        $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
+            $process->getCommandLine(),
+            '--do-not-cache-result',
+        ) && ! str_contains(
+            $process->getCommandLine(),
+            '--cache-directory=',
+        )))->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }
