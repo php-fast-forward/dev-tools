@@ -3045,8 +3045,12 @@ full implementation. The actual reusable workflows live in the upstream
  repository. When those reusable workflows need
 local action implementations, they explicitly check out the upstream
 <code>php-fast-forward/dev-tools</code>
- repository into the run workspace first so the
-consumer repository does not need to mirror <code>.github/actions</code>
+ repository into a dedicated
+<code>.dev-tools-actions</code>
+ path in the run workspace first, using sparse checkout
+for <code>.github/actions</code>
+ only, so the consumer repository does not need to
+mirror <code>.github/actions</code>
  locally.</p>
 
             
