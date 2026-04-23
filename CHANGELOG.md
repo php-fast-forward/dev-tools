@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.19.0] - 2026-04-23
+
 ### Added
 
 - Package a rigorous pull-request review skill, review-guardian agent, and ready-for-review workflow brief for repositories and synchronized consumers (#147)
@@ -285,7 +287,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.18.0...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.19.0...HEAD
+[1.19.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.18.0...v1.19.0
 [1.18.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.1...v1.18.0
 [1.17.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.17.0...v1.17.1
 [1.17.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.16.0...v1.17.0
