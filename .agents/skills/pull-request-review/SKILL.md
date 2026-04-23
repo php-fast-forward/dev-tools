@@ -35,6 +35,9 @@ possible.
 - Treat ``.github/workflows``, ``resources/github-actions``, ``.github/actions``,
   ``.agents/skills``, ``.agents/agents``, ``README.md``, ``docs/``,
   ``CHANGELOG.md``, and ``.github/wiki`` as high-signal review surfaces.
+- When ``.github/wiki`` moves, verify whether the wiki preview or wiki
+  maintenance workflow is expected to refresh the submodule pointer before
+  treating that change as unrelated drift or scope creep.
 - Prefer precise repository file references in every finding.
 - Review what changed, but reason about downstream consumer impact when the PR
   touches packaged assets or synchronized defaults.

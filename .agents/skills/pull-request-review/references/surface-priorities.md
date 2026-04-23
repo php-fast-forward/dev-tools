@@ -22,7 +22,10 @@ Additional Fast Forward review surfaces
 
 - ``README.md`` and ``docs/`` for onboarding, command, or workflow drift.
 - ``CHANGELOG.md`` for notable user-facing or automation-facing changes.
-- ``.github/wiki`` when generated wiki output is touched.
+- ``.github/wiki`` when generated wiki output is touched. In this repository,
+  the wiki preview and wiki maintenance workflows can legitimately move the
+  submodule pointer as workflow-managed state, so confirm whether the change
+  matches that automation before flagging it as unrelated drift.
 - ``resources/`` when synchronized templates or packaged defaults changed.
 
 Typical review questions

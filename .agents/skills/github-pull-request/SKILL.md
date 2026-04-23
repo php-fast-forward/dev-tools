@@ -20,6 +20,10 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 - Keep one branch and one PR per issue.
 - Branch from `main` or the repository integration branch, never from another feature branch.
 - When returning to `main` before starting a new implementation, always fetch and fast-forward from the remote before creating the next feature branch so release files, changelog state, and generated artifacts start from the latest published baseline.
+- Before pushing or reopening prior work, verify whether an earlier PR for the
+  issue or branch is already closed. If the earlier branch has been deleted or
+  the PR is closed, prefer opening a follow-up bug issue and publishing a new
+  branch and PR instead of reviving the old branch name.
 - Prefer local `git` for checkout, commit, and push.
 - Prefer connector-backed GitHub data for issue and PR context when available.
 - Use `phpunit-tests`, `package-readme`, and `sphinx-docs` when the change clearly affects tests or documentation.
@@ -41,6 +45,9 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 
 - Do not batch unrelated issues into one branch or PR.
 - Do not create a duplicate PR if the current branch already has one.
+- Do not push new follow-up work onto a previously closed PR branch that has
+  already been deleted upstream; open a bug issue and start a fresh branch/PR
+  instead.
 - Do not open a PR before running the relevant verification commands.
 - Do not skip a notable changelog update when the implementation changes public behavior, release automation, or repository workflows in a way users or maintainers would expect to see called out.
 - Do not proceed to the next issue if the repository is dirty from unfinished work.

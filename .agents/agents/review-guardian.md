@@ -25,6 +25,9 @@ and generated-output drift before human review time is spent.
 - Treat packaged skills, project agents, workflow wrappers, local actions,
   changelog entries, wiki output, and generated reports as first-class review
   surfaces when touched.
+- Treat ``.github/wiki`` pointer changes as workflow-managed state when they
+  line up with wiki preview or wiki maintenance automation, rather than as
+  automatic evidence of accidental scope creep.
 - Stay reusable across this repository and consumer repositories that
   synchronize DevTools assets.
 
