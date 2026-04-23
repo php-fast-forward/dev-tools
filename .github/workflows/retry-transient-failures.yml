@@ -1,0 +1,169 @@
+name: Retry Transient Workflow Failures
+
+on:
+  workflow_run:
+    workflows:
+      - Project Board Automation
+      - Changelog Automation
+      - Pull Request Label Sync
+      - Generate Reports and Deploy to GitHub Pages
+      - Rigorous Pull Request Review
+      - Run PHPUnit Tests
+      - Maintain Wiki
+      - Maintain Wiki Publication
+      - Update Wiki Preview
+      - Update Wiki
+    types:
+      - completed
+
+permissions:
+  actions: write
+  contents: read
+
+concurrency:
+  group: retry-transient-run-${{ github.event.workflow_run.id }}
+  cancel-in-progress: false
+
+jobs:
+  retry:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    name: Retry Failed Jobs When GitHub Infrastructure Looks Transient
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: retry
+        uses: actions/github-script@v8
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const transientPatterns = [
+              /RPC failed; HTTP 5\d\d/i,
+              /expected flush after ref listing/i,
+              /expected 'packfile'/i,
+              /remote:\s+Internal Server Error/i,
+              /requested URL returned error:\s*5\d\d/i,
+              /fatal:\s+unable to access 'https:\/\/github\.com\/.*': The requested URL returned error:\s*5\d\d/i,
+            ];
+
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+            const runId = Number.parseInt(`${{ github.event.workflow_run.id }}`, 10);
+            const runAttempt = Number.parseInt(`${{ github.event.workflow_run.run_attempt }}`, 10);
+            const workflowName = `${{ github.event.workflow_run.name }}`;
+            const maxRunAttempts = 2;
+
+            const buildSummary = ({ status, failedJobs = [], matchedJobs = [] }) => {
+              const lines = [
+                '## Transient Failure Retry Summary',
+                '',
+                `- Workflow: \`${workflowName}\``,
+                `- Run ID: \`${runId}\``,
+                `- Run attempt: \`${runAttempt}\``,
+                `- Retry status: \`${status}\``,
+              ];
+
+              if (failedJobs.length > 0) {
+                lines.push(`- Failed jobs inspected: ${failedJobs.map((job) => `\`${job}\``).join(', ')}`);
+              }
+
+              if (matchedJobs.length > 0) {
+                lines.push(`- Jobs with transient GitHub failure signatures: ${matchedJobs.map((job) => `\`${job}\``).join(', ')}`);
+              }
+
+              if (status === 'rerun-requested') {
+                lines.push('- Action: Requested a rerun of failed jobs because every failed job matched transient GitHub-side error signatures.');
+              }
+
+              if (status === 'skipped-run-attempt-limit') {
+                lines.push('- Action: Skipped rerun because the run already reached the configured retry limit.');
+              }
+
+              if (status === 'skipped-no-failed-jobs') {
+                lines.push('- Action: Skipped rerun because the workflow reported failure without failed jobs to inspect.');
+              }
+
+              if (status === 'skipped-no-transient-match') {
+                lines.push('- Action: Skipped rerun because at least one failed job did not match the transient GitHub-side signatures.');
+              }
+
+              return lines.join('\n');
+            };
+
+            if (runAttempt >= maxRunAttempts) {
+              const summary = buildSummary({ status: 'skipped-run-attempt-limit' });
+              core.setOutput('status', 'skipped-run-attempt-limit');
+              core.setOutput('summary', summary);
+
+              return;
+            }
+
+            const jobsResponse = await github.rest.actions.listJobsForWorkflowRun({
+              owner,
+              repo,
+              run_id: runId,
+              per_page: 100,
+            });
+
+            const failedJobs = jobsResponse.data.jobs.filter((job) => job.conclusion === 'failure');
+
+            if (failedJobs.length === 0) {
+              const summary = buildSummary({ status: 'skipped-no-failed-jobs' });
+              core.setOutput('status', 'skipped-no-failed-jobs');
+              core.setOutput('summary', summary);
+
+              return;
+            }
+
+            const matchedJobs = [];
+
+            for (const job of failedJobs) {
+              const logsResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/actions/jobs/${job.id}/logs`, {
+                headers: {
+                  Accept: 'application/vnd.github+json',
+                  Authorization: `Bearer ${process.env.GITHUB_TOKEN}`,
+                  'X-GitHub-Api-Version': '2022-11-28',
+                },
+                redirect: 'follow',
+              });
+
+              if (!logsResponse.ok) {
+                throw new Error(`Failed to download logs for job ${job.name}: ${logsResponse.status} ${logsResponse.statusText}`);
+              }
+
+              const logText = await logsResponse.text();
+              const hasTransientMatch = transientPatterns.some((pattern) => pattern.test(logText));
+
+              if (!hasTransientMatch) {
+                const summary = buildSummary({
+                  status: 'skipped-no-transient-match',
+                  failedJobs: failedJobs.map((failedJob) => failedJob.name),
+                  matchedJobs,
+                });
+
+                core.setOutput('status', 'skipped-no-transient-match');
+                core.setOutput('summary', summary);
+
+                return;
+              }
+
+              matchedJobs.push(job.name);
+            }
+
+            await github.request('POST /repos/{owner}/{repo}/actions/runs/{run_id}/rerun-failed-jobs', {
+              owner,
+              repo,
+              run_id: runId,
+            });
+
+            const summary = buildSummary({
+              status: 'rerun-requested',
+              failedJobs: failedJobs.map((job) => job.name),
+              matchedJobs,
+            });
+
+            core.setOutput('status', 'rerun-requested');
+            core.setOutput('summary', summary);
+
+      - name: Write step summary
+        env:
+          RETRY_SUMMARY: ${{ steps.retry.outputs.summary }}
+        run: printf '%s\n' "$RETRY_SUMMARY" >> "$GITHUB_STEP_SUMMARY"

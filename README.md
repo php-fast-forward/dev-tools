@@ -201,7 +201,11 @@ and logged failures emit native workflow error annotations, including file and
 line metadata when commands provide it. The packaged tests, reports, wiki, and
 changelog workflows also append concise Markdown outcomes to
 `GITHUB_STEP_SUMMARY` so maintainers can scan versions, URLs, preview refs,
-verification status, and release results without expanding full logs.
+verification status, and release results without expanding full logs. This
+repository also keeps a bounded retry workflow that reruns failed jobs once
+when failed job logs match transient GitHub-side checkout or transport errors
+such as HTTP 500 fetch failures, while leaving genuine logic and quality
+failures untouched.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before
