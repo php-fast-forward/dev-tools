@@ -107,6 +107,15 @@ jobs:
                   BASE_REF: ${{ github.event.pull_request.base.ref }}
               run: composer dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
 
+            - uses: ./.github/actions/summary/write
+              with:
+                  markdown: |
+                      ## Changelog Validation Summary
+
+                      - Changelog file: `${{ env.CHANGELOG_FILE }}`
+                      - Compared base ref: `origin/${{ github.event.pull_request.base.ref }}`
+                      - Validation result: success
+
     prepare_release_pull_request:
         name: Prepare Release Pull Request
         needs: resolve_php
@@ -181,11 +190,16 @@ jobs:
                   from-status: Merged
                   to-status: Release Prepared
 
-            - name: Summarize prepared release
-              run: |
-                  echo "Prepared release version: ${{ steps.version.outputs.value }}"
-                  echo "Pull request operation: ${{ steps.create_pr.outputs.pull-request-operation || 'none' }}"
-                  echo "Pull request URL: ${{ steps.create_pr.outputs.pull-request-url || 'not created' }}"
+            - uses: ./.github/actions/summary/write
+              with:
+                  markdown: |
+                      ## Release Preparation Summary
+
+                      - Changelog file: `${{ env.CHANGELOG_FILE }}`
+                      - Release version: `${{ steps.version.outputs.value }}`
+                      - Version source: `${{ steps.version.outputs.source }}`
+                      - Pull request operation: `${{ steps.create_pr.outputs.pull-request-operation || 'none' }}`
+                      - Pull request URL: ${{ steps.create_pr.outputs.pull-request-url || 'not created' }}
 
     publish_merged_release:
         name: Publish Merged Release
@@ -225,6 +239,7 @@ jobs:
                   version: ${{ steps.version.outputs.value }}
 
             - name: Publish GitHub release
+              id: publish_release
               uses: ./.github/actions/changelog/publish-release
               with:
                   version: ${{ steps.version.outputs.value }}
@@ -238,3 +253,13 @@ jobs:
                   from-status: Release Prepared
                   to-status: Released
                   include-current-pull-request: 'true'
+
+            - uses: ./.github/actions/summary/write
+              with:
+                  markdown: |
+                      ## Release Publication Summary
+
+                      - Changelog file: `${{ env.CHANGELOG_FILE }}`
+                      - Published tag: `v${{ steps.version.outputs.value }}`
+                      - Release operation: `${{ steps.publish_release.outputs.operation }}`
+                      - Release URL: ${{ steps.publish_release.outputs.url }}

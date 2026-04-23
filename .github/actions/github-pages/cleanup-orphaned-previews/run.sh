@@ -46,6 +46,10 @@ done < <(find previews -mindepth 1 -maxdepth 1 -type d -name 'pr-*' | sort)
 
 echo "Preview cleanup summary: deleted=${deleted}, skipped=${skipped}, unresolved=${unresolved}."
 
+echo "deleted=${deleted}" >> "${GITHUB_OUTPUT}"
+echo "skipped=${skipped}" >> "${GITHUB_OUTPUT}"
+echo "unresolved=${unresolved}" >> "${GITHUB_OUTPUT}"
+
 touch .nojekyll
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

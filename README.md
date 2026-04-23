@@ -198,7 +198,10 @@ underlying tool supports structured output, and otherwise falls back to
 quieter subprocess modes so the captured payload stays machine-readable. In
 GitHub Actions, queued subprocess output is grouped into collapsible sections,
 and logged failures emit native workflow error annotations, including file and
-line metadata when commands provide it.
+line metadata when commands provide it. The packaged tests, reports, wiki, and
+changelog workflows also append concise Markdown outcomes to
+`GITHUB_STEP_SUMMARY` so maintainers can scan versions, URLs, preview refs,
+verification status, and release results without expanding full logs.
 
 When the packaged changelog workflow is synchronized into a consumer
 repository, pull requests are expected to add a notable changelog entry before

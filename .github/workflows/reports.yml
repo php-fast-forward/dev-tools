@@ -219,6 +219,10 @@ jobs:
         permissions:
             contents: write
             pull-requests: read
+        outputs:
+            deleted: ${{ steps.cleanup.outputs.deleted }}
+            skipped: ${{ steps.cleanup.outputs.skipped }}
+            unresolved: ${{ steps.cleanup.outputs.unresolved }}
 
         steps:
             - uses: actions/checkout@v6
@@ -230,6 +234,7 @@ jobs:
                 path: gh-pages
 
             - uses: ./.github/actions/github-pages/cleanup-orphaned-previews
+              id: cleanup
               with:
                 path: gh-pages
 
@@ -237,3 +242,64 @@ jobs:
               run: |
                 cd gh-pages
                 git push
+
+    summarize:
+        if: ${{ always() }}
+        name: Summarize Reports Workflow
+        needs:
+            - resolve_php
+            - reports
+            - verify_main_reports
+            - verify_preview_reports
+            - cleanup_preview
+            - cleanup_orphaned_previews
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v6
+
+            - id: build_summary
+              env:
+                TRIGGER_LABEL: ${{ github.event_name }}${{ github.event.action && format(':{0}', github.event.action) || '' }}
+              run: |
+                {
+                  echo 'markdown<<EOF'
+                  echo '## Reports Workflow Summary'
+                  echo
+                  echo "- Workflow PHP version: \`${{ needs.resolve_php.outputs.php-version }}\`"
+                  echo "- PHP version source: \`${{ needs.resolve_php.outputs.php-version-source }}\`"
+                  echo "- Reports job result: \`${{ needs.reports.result }}\`"
+                  echo "- Main verification result: \`${{ needs.verify_main_reports.result }}\`"
+                  echo "- Preview verification result: \`${{ needs.verify_preview_reports.result }}\`"
+                  echo "- Closed-preview cleanup result: \`${{ needs.cleanup_preview.result }}\`"
+                  echo "- Orphan cleanup result: \`${{ needs.cleanup_orphaned_previews.result }}\`"
+                  echo "- Trigger: \`${TRIGGER_LABEL}\`"
+
+                  if [ "${{ github.event_name }}" = "push" ] || { [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.cleanup-previews }}" != "true" ]; }; then
+                    echo "- Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+                    echo "- Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/coverage/"
+                    echo "- Metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/metrics/"
+                    echo "- Deployment verification: \`${{ needs.verify_main_reports.result }}\`"
+                  fi
+
+                  if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.event.action }}" != "closed" ]; then
+                    echo "- Preview docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/"
+                    echo "- Preview coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/"
+                    echo "- Preview metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/metrics/"
+                    echo "- Preview verification: \`${{ needs.verify_preview_reports.result }}\`"
+                  fi
+
+                  if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.event.action }}" = "closed" ]; then
+                    echo "- Deleted preview path: \`previews/pr-${{ github.event.pull_request.number }}\`"
+                    echo "- Cleanup result: \`${{ needs.cleanup_preview.result }}\`"
+                  fi
+
+                  if [ "${{ github.event_name }}" = "schedule" ] || { [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.cleanup-previews }}" = "true" ]; }; then
+                    echo "- Cleanup summary: deleted=${{ needs.cleanup_orphaned_previews.outputs.deleted || '0' }}, skipped=${{ needs.cleanup_orphaned_previews.outputs.skipped || '0' }}, unresolved=${{ needs.cleanup_orphaned_previews.outputs.unresolved || '0' }}"
+                  fi
+
+                  echo 'EOF'
+                } >> "$GITHUB_OUTPUT"
+
+            - uses: ./.github/actions/summary/write
+              with:
+                markdown: ${{ steps.build_summary.outputs.markdown }}

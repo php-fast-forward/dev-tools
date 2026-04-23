@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Teach the review and pull-request agent skills to treat workflow-managed wiki pointer updates as expected state and to prefer fresh follow-up issues plus PRs over reviving closed deleted branches (#147)
 - Require GitHub issue write readback verification in the github-issues skill (#165)
 - Standardize cache flags and nested cache-dir propagation across cache-aware commands (#162)
+- Add `GITHUB_STEP_SUMMARY` output to tests, reports, wiki, and changelog workflows for clearer final-state workflow results (#148)
 
 ## [1.18.0] - 2026-04-23
 

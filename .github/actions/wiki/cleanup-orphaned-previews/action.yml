@@ -4,9 +4,21 @@ description: Delete wiki preview branches for pull requests that are no longer o
 runs:
   using: composite
   steps:
-    - name: Cleanup orphaned previews
+    - id: cleanup
+      name: Cleanup orphaned previews
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
       working-directory: .github/wiki
       run: ${{ github.action_path }}/run.sh
+
+outputs:
+  deleted:
+    description: Number of deleted preview branches.
+    value: ${{ steps.cleanup.outputs.deleted }}
+  skipped:
+    description: Number of retained preview branches.
+    value: ${{ steps.cleanup.outputs.skipped }}
+  unresolved:
+    description: Number of unresolved preview branches.
+    value: ${{ steps.cleanup.outputs.unresolved }}

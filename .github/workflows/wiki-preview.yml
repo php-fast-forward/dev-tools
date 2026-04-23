@@ -92,3 +92,12 @@ jobs:
           default_author: github_actions
           pull: "--rebase --autostash"
           push: true
+
+      - uses: ./.github/actions/summary/write
+        with:
+          markdown: |
+            ## Wiki Preview Summary
+
+            - Preview branch: `${{ env.WIKI_PREVIEW_BRANCH }}`
+            - Submodule pointer changed: `${{ steps.submodule_status.outputs.changed }}`
+            - Parent repository pointer commit result: `${{ steps.submodule_status.outputs.changed == 'true' && 'updated' || 'unchanged' }}`
