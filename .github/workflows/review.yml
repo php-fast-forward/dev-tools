@@ -1,0 +1,47 @@
+name: Rigorous Pull Request Review
+
+on:
+  workflow_call:
+    inputs:
+      pull-request-number:
+        description: Pull request number to review when the workflow is called manually or through a consumer wrapper.
+        required: false
+        type: string
+        default: ''
+  pull_request_target:
+    types: [ready_for_review]
+  workflow_dispatch:
+    inputs:
+      pull-request-number:
+        description: Pull request number to review manually.
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  request-rigorous-review:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - id: render
+        uses: ./.github/actions/review/render-request
+        with:
+          pull-request-number: ${{ inputs.pull-request-number || github.event.inputs.pull-request-number || github.event.pull_request.number || '' }}
+
+      - name: Write step summary
+        env:
+          REVIEW_SUMMARY: ${{ steps.render.outputs.summary }}
+        run: |
+          printf '%s\n' "$REVIEW_SUMMARY" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Comment review request on pull request
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          number: ${{ steps.render.outputs.pull-request-number }}
+          header: rigorous-review
+          message: ${{ steps.render.outputs.comment }}

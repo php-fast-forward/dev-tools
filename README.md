@@ -27,6 +27,9 @@ across Fast Forward libraries.
   version inference, release promotion, and release-note rendering commands
 - Ships shared workflow stubs, `.editorconfig`, Dependabot configuration, and
   other onboarding defaults for consumer repositories
+- Packages a rigorous pull-request review skill, matching `review-guardian`
+  project agent, and ready-for-review workflow brief for high-signal review
+  intake
 - Generates `.github/CODEOWNERS` files from local project metadata instead of
   shipping repository-specific owners into consumers
 - Synchronizes packaged skills and project-agent prompts into consumer
@@ -217,17 +220,24 @@ The `skills` command keeps `.agents/skills` aligned with the packaged Fast
 Forward skill set. It creates missing links, repairs broken links, and
 preserves existing non-symlink directories. The `dev-tools:sync` command calls
 `skills` automatically after refreshing the rest of the consumer-facing
-automation assets.
+automation assets. The packaged skills include reusable flows for GitHub issue
+authoring, issue implementation, changelog maintenance, and rigorous pull
+request review.
 
 The `agents` command keeps `.agents/agents` aligned with the packaged Fast
 Forward project-agent prompt set. It follows the same symlink-preservation and
 broken-link-repair safety model as the packaged skill synchronization flow, and
-`dev-tools:sync` calls it automatically in normal synchronization mode.
+`dev-tools:sync` calls it automatically in normal synchronization mode. The
+packaged agent set includes role prompts such as `issue-implementer`,
+`docs-writer`, `test-guardian`, `readme-maintainer`, `review-guardian`, and
+`changelog-maintainer`.
 
 The packaged workflow stubs synchronized by `dev-tools:sync` now also include
 changelog automation for pull-request validation and release preparation, so
 consumer repositories can adopt the same changelog-driven release flow without
-copying workflow logic by hand.
+copying workflow logic by hand. They also include a rigorous review intake
+workflow that reacts when a pull request becomes ready for review and posts a
+deterministic brief for the dedicated review agent.
 
 The release workflow is intentionally two-step: `workflow_dispatch` prepares a
 `release/v...` pull request, and merging that release pull request publishes
@@ -271,8 +281,9 @@ keeps the same command vocabulary when you prefer running tools directly from
 `vendor/bin/dev-tools`. The consumer sync flow also refreshes `.agents/skills`
 and `.agents/agents` so agents can discover the packaged skills and packaged
 role prompts shipped with this repository, including workflows for GitHub
-issue/PR handling, changelog maintenance, PHP quality tasks, Sphinx docs,
-README generation, and repository `AGENTS.md` authoring.
+issue/PR handling, changelog maintenance, rigorous pull-request review, PHP
+quality tasks, Sphinx docs, README generation, and repository `AGENTS.md`
+authoring.
 
 ## 🏗️ Architecture
 

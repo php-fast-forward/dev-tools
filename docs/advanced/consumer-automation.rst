@@ -42,6 +42,9 @@ implementation in this repository is increasingly composed from local actions in
      - Reusable project-automation actions for resolving the target board,
        inferring review status, syncing linked metadata, and transitioning
        items through repository delivery states.
+   * - ``.github/actions/review/*``
+     - Reusable helpers that render deterministic rigorous-review briefs for
+       pull requests that just became ready for review.
    * - ``.github/actions/wiki/*``
      - Wiki-specific helpers for preparing preview branches, promoting preview
        content to ``master``, validating publication, and cleaning stale
@@ -103,6 +106,10 @@ How Changelog and Project Automation Fit In
   release branches, publishes GitHub releases from merged release branches, and
   can transition the configured GitHub Project item state alongside those
   lifecycle events.
+- ``.github/workflows/review.yml`` composes its ready-for-review intake from
+  ``.github/actions/review/*`` and posts a deterministic brief that points
+  maintainers to the packaged ``review-guardian`` agent and
+  ``pull-request-review`` skill.
 - Project-board automation is no longer just an inline workflow concern; it is
   a reusable local action group shared by issue, pull-request, review, and
   release automation.

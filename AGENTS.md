@@ -171,8 +171,8 @@ composer dev-tools
 - `README.md`: high-level command surface, architecture overview, and consumer-facing context
 - `docs/commands/`: command-specific behavior and option details
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
-- `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `wiki.yml`, `wiki-preview.yml`, `wiki-maintenance.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
-- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `wiki`, `changelog`, and `label-sync`
+- `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `review.yml`, `wiki.yml`, `wiki-preview.yml`, `wiki-maintenance.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
+- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `wiki`, `changelog`, and `label-sync`
 - `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
 - `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
@@ -200,6 +200,7 @@ composer dev-tools
 - **Updating PHPDoc / PHP Style**: Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
 - **Drafting / Publishing GitHub Issues**: Use skill `github-issues` in `.agents/skills/github-issues/` to transform a short feature description into a complete, production-ready GitHub issue and create or update it on GitHub when needed
 - **Implementing Issues & PRs**: Use skill `github-pull-request` in `.agents/skills/github-pull-request/` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests
+- **Reviewing Pull Requests**: Use skill `pull-request-review` in `.agents/skills/pull-request-review/` for findings-first Fast Forward pull-request review focused on regressions, missing tests, missing docs, workflow risk, and generated-output drift
 
 ## Project Agents
 
@@ -217,4 +218,5 @@ remains the procedural source of truth.
 - Delegate to `docs-writer` when `docs/` must be created or updated.
 - Delegate to `consumer-sync-auditor` when packaged skills, packaged agents, sync assets, wiki, workflow wrappers, local GitHub actions, or consumer bootstrap behavior change.
 - Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
+- Delegate to `review-guardian` when a pull request needs a rigorous findings-first review before or during human review.
 - Delegate to `changelog-maintainer` when a task needs changelog authoring, changelog validation for PRs, release promotion, or release-note export.

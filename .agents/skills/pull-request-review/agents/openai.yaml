@@ -1,0 +1,4 @@
+interface:
+  display_name: "Fast Forward Rigorous Review"
+  short_description: "Review Fast Forward pull requests with a findings-first contract"
+  default_prompt: "Use $pull-request-review to perform a rigorous findings-first review of this Fast Forward pull request."
