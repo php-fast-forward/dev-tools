@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
@@ -101,6 +102,11 @@ final class DependenciesCommand extends BaseCommand implements LoggerAwareComman
                 name: 'dump-usage',
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'Dump usages for the given package pattern and show all matched usages.',
+            )
+            ->addOption(
+                name: 'show-shadow-dependencies',
+                mode: InputOption::VALUE_NONE,
+                description: 'Report shadow dependencies instead of applying Fast Forward intentional-shadow ignores.',
             );
     }
 
@@ -176,7 +182,13 @@ final class DependenciesCommand extends BaseCommand implements LoggerAwareComman
                 ->withArgument('--show-all-usages');
         }
 
-        return $processBuilder->build('vendor/bin/composer-dependency-analyser');
+        $showShadowDependencies = (bool) $input->getOption('show-shadow-dependencies');
+        $process = $processBuilder->build('vendor/bin/composer-dependency-analyser');
+        $process->setEnv([
+            ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES => $showShadowDependencies ? '1' : '0',
+        ]);
+
+        return $process;
     }
 
     /**

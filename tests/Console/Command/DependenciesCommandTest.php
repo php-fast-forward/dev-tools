@@ -21,7 +21,9 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\DependenciesCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
 use FastForward\DevTools\Process\ProcessBuilder;
+use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -79,6 +81,8 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('dump-usage')
             ->willReturn(null);
+        $this->input->getOption('show-shadow-dependencies')
+            ->willReturn(false);
         $this->input->getOption('json')
             ->willReturn(false);
         $this->input->getOption('pretty-json')
@@ -168,11 +172,67 @@ final class DependenciesCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function composerDependencyAnalyserProcessWillHideShadowDependenciesByDefault(): void
+    {
+        $this->input->getOption('show-shadow-dependencies')
+            ->willReturn(false);
+
+        $this->assertComposerDependencyAnalyserEnvironment('0');
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function composerDependencyAnalyserProcessCanReportShadowDependencies(): void
+    {
+        $this->input->getOption('show-shadow-dependencies')
+            ->willReturn(true);
+
+        $this->assertComposerDependencyAnalyserEnvironment('1');
+    }
+
+    /**
      * @return int
      */
     private function executeCommand(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))
             ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+    }
+
+    /**
+     * @param string $expectedValue
+     *
+     * @return void
+     */
+    private function assertComposerDependencyAnalyserEnvironment(string $expectedValue): void
+    {
+        $processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $configuredProcessBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $process = $this->prophesize(Process::class);
+        $command = new DependenciesCommand(
+            $processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->fileLocator->reveal(),
+            $this->logger->reveal(),
+        );
+
+        $processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
+            ->willReturn($configuredProcessBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $configuredProcessBuilder->build('vendor/bin/composer-dependency-analyser')
+            ->willReturn($process->reveal())
+            ->shouldBeCalledOnce();
+        $process->setEnv([
+            ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES => $expectedValue,
+        ])->willReturn($process->reveal())
+            ->shouldBeCalledOnce();
+
+        (new ReflectionMethod($command, 'getComposerDependencyAnalyserCommand'))
+            ->invoke($command, $this->input->reveal());
     }
 }

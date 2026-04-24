@@ -55,6 +55,16 @@ Options
    Asks ``composer-dependency-analyser`` to dump usages for the given package
    or wildcard pattern and enables ``--show-all-usages`` automatically.
 
+``--show-shadow-dependencies`` (optional)
+   Reports shadow dependencies instead of applying the Fast Forward default
+   ignore for intentional dependency groups.
+
+   By default, DevTools hides ``SHADOW_DEPENDENCY`` findings because Fast
+   Forward packages may intentionally require ecosystem bundles, meta packages,
+   or convenience packages that install related dependencies for consumers.
+   Use this flag when auditing whether a package has accidental shadow
+   dependencies that should be removed or documented more precisely.
+
 ``--json``
    Emit a structured machine-readable payload instead of the normal terminal
    output.
@@ -94,6 +104,12 @@ Dump all matched usages for one package:
 .. code-block:: bash
 
    composer dependencies --dump-usage=symfony/console
+
+Audit shadow dependencies:
+
+.. code-block:: bash
+
+   composer dependencies --show-shadow-dependencies
 
 Apply the upgrade workflow and then analyze dependencies:
 
@@ -135,6 +151,8 @@ Behavior
     consumer repositories can extend the baseline instead of copying it whole
   - ``--dump-usages <package>`` and ``--show-all-usages`` when ``--dump-usage``
     is passed to the DevTools command
+  - the ``FAST_FORWARD_DEV_TOOLS_SHOW_SHADOW_DEPENDENCIES`` process environment
+    flag, which is enabled when ``--show-shadow-dependencies`` is passed
 - ``jack breakpoint`` maps ``--max-outdated`` to Jack's ``--limit`` option.
 - ``--max-outdated=-1`` keeps ``jack breakpoint`` in the workflow for reporting,
   but its failure is ignored so only missing or unused dependency findings fail

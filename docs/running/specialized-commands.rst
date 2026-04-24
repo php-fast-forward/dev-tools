@@ -77,6 +77,7 @@ Analyzes missing, unused, misplaced, and outdated Composer dependencies.
    composer dependencies --max-outdated=-1
    composer dependencies --dev
    composer dependencies --dump-usage=symfony/console
+   composer dependencies --show-shadow-dependencies
    composer dependencies --upgrade --dev
 
 Important details:
@@ -88,6 +89,10 @@ Important details:
   override locally;
 - ``--dump-usage=<package>`` forwards to
   ``composer-dependency-analyser --dump-usages <package> --show-all-usages``;
+- ``--show-shadow-dependencies`` keeps shadow dependency findings visible for
+  audits; without it, DevTools hides intentional Fast Forward dependency-group
+  shadows so CI does not fail on ecosystem or meta packages that deliberately
+  install related dependencies for consumers;
 - it uses ``jack breakpoint --limit=<max-outdated>`` to fail when too many
   outdated dependencies accumulate;
 - ``--max-outdated=-1`` keeps the Jack outdated report in the output but
