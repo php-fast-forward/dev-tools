@@ -131,6 +131,9 @@ composer dev-tools tests -- --coverage=.dev-tools/coverage
 - Keep child-process environment policy centralized in `ProcessQueue`
   configurators, including disabling Xdebug for non-coverage subprocesses while
   preserving coverage drivers when PCOV is unavailable.
+- Prefer the project-approved `Safe\*` function imports whenever replacing or
+  adding native PHP calls that have Safe equivalents, so Rector does not have
+  to rewrite them during commit checks.
 
 **Naming Conventions:**
 

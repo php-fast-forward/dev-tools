@@ -27,6 +27,9 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
 
+use function Safe\fopen;
+use function Safe\fclose;
+
 #[CoversClass(OutputCapabilityDetector::class)]
 final class OutputCapabilityDetectorTest extends TestCase
 {
@@ -69,7 +72,9 @@ final class OutputCapabilityDetectorTest extends TestCase
         self::assertIsResource($stream);
 
         try {
-            self::assertFalse((new OutputCapabilityDetector())->supportsAnsi(new StreamOutput($stream)));
+            self::assertFalse(
+                (new OutputCapabilityDetector())->supportsAnsi(new StreamOutput($stream, decorated: false))
+            );
         } finally {
             fclose($stream);
         }
