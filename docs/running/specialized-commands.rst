@@ -461,7 +461,9 @@ Installs packaged Fast Forward Git hooks.
 Important details:
 
 - copies hook files from source to target directory;
-- sets executable permissions on copied hooks;
+- sets executable permissions on copied hooks with ``0o755``;
+- removes an existing drifted hook before recopying it so stale target
+  permissions do not block replacements;
 - ``--source`` defaults to ``resources/git-hooks``;
 - ``--target`` defaults to ``.git/hooks``;
 - ``--no-overwrite`` preserves existing hook files.
