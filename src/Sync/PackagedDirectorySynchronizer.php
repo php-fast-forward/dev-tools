@@ -78,14 +78,13 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
 
         $finder = $this->finderFactory
             ->create()
-            ->directories()
             ->in($packagePath)
             ->depth('== 0');
 
-        foreach ($finder as $packagedDirectory) {
-            $entryName = $packagedDirectory->getFilename();
+        foreach ($finder as $packagedEntry) {
+            $entryName = $packagedEntry->getFilename();
             $targetLink = Path::makeAbsolute($entryName, $targetDir);
-            $sourcePath = $packagedDirectory->getRealPath();
+            $sourcePath = $packagedEntry->getRealPath();
 
             $this->processLink($entryName, $targetLink, $sourcePath, $result);
         }
