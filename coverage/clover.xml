@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777066773">
-  <project timestamp="1777066773" name="Clover Coverage">
+<coverage generated="1777067618">
+  <project timestamp="1777067618" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">

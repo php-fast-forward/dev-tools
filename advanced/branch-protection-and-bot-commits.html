@@ -3277,7 +3277,11 @@ to the configured GitHub Project and moved through the delivery pipeline.</p>
 repository variable <code>PROJECT</code>
  so the workflow can resolve the target GitHub
 Project without hardcoding repository-specific board identifiers into the
-packaged workflow itself. The workflow derives the owner from
+packaged workflow itself. Consumer wrappers that call reusable workflows with
+project-board release transitions MUST also grant <code>repository-projects: write</code>
+
+at the caller level; otherwise GitHub rejects the workflow before the release
+automation starts. The workflow derives the owner from
 <code>github.repository_owner</code>
  and uses the built-in workflow token for the actual
 project mutations. Inside <code>php-fast-forward</code>
