@@ -3131,7 +3131,11 @@ side and replays branch-only changelog entries into the current base
 <code>Unreleased</code>
  section, which avoids placing new entries under a freshly
 published release after <code>main</code>
- moved.</p>
+ moved. Because those automatic resolutions are
+also pushed with the built-in workflow token, the workflow dispatches
+<code>tests.yml</code>
+ for the refreshed branch after a successful push so required test
+statuses can be reported for the new commit.</p>
 
             
     <p>At a high level, the workflows need permission to read repository contents,
@@ -3183,6 +3187,17 @@ pointer updates, <code>actions: write</code>
 pointer commits, and <code>pull-requests: read</code>
  to inspect pull request metadata
 safely.</p>
+
+            
+    <p><code>auto-resolve-conflicts.yml</code>
+ keeps <code>contents: write</code>
+ so it can push
+predictable conflict-resolution commits, <code>pull-requests: write</code>
+ so it can
+inspect pull request state through GitHub tooling, and <code>actions: write</code>
+ so it
+can dispatch <code>tests.yml</code>
+ after it pushes a bot-authored resolution commit.</p>
 
             
     <p><code>wiki-maintenance-entry.yml</code>
