@@ -177,7 +177,10 @@ To enable reusable project automation in consumer repositories, pass
 ``project`` through the thin ``workflow_call`` wrapper or configure the
 repository variable ``PROJECT`` so the workflow can resolve the target GitHub
 Project without hardcoding repository-specific board identifiers into the
-packaged workflow itself. The workflow derives the owner from
+packaged workflow itself. Consumer wrappers that call reusable workflows with
+project-board release transitions MUST also grant ``repository-projects: write``
+at the caller level; otherwise GitHub rejects the workflow before the release
+automation starts. The workflow derives the owner from
 ``github.repository_owner`` and uses the built-in workflow token for the actual
 project mutations. Inside ``php-fast-forward`` repositories, the reusable
 workflow MAY fall back to the first organization Project V2 when no explicit
