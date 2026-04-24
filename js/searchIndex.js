@@ -2911,6 +2911,11 @@ Search.appendIndex(
             "summary": "Concrete\u0020implementation\u0020of\u0020the\u0020standard\u0020filesystem\u0020interface.",
             "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method___construct"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Aexists\u0028\u0029",
             "name": "exists",
             "summary": "Checks\u0020whether\u0020a\u0020file\u0020or\u0020directory\u0020exists.",
@@ -2975,6 +2980,11 @@ Search.appendIndex(
             "name": "dirname",
             "summary": "Returns\u0020a\u0020parent\u0020directory\u0027s\u0020path.",
             "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_dirname"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#property_filesystem"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
             "name": "FilesystemInterface",
@@ -4540,6 +4550,11 @@ Search.appendIndex(
             "name": "repairBrokenLink",
             "summary": "Removes\u0020a\u0020broken\u0020symlink\u0020and\u0020creates\u0020a\u0020fresh\u0020one\u0020pointing\u0020to\u0020the\u0020current\u0020source.",
             "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_repairBrokenLink"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AnormalizeRelativeSourcePath\u0028\u0029",
+            "name": "normalizeRelativeSourcePath",
+            "summary": "Normalizes\u0020a\u0020relative\u0020symlink\u0020target\u0020emitted\u0020by\u0020Symfony\u0020path\u0020helpers.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_normalizeRelativeSourcePath"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AisSymlink\u0028\u0029",
             "name": "isSymlink",

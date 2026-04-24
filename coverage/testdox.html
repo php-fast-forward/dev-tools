@@ -234,6 +234,10 @@
             <li class="success">Execute with coverage below minimum will return failure</li>
             <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
         </ul>
+        <h2>Command Attribute Compatibility (FastForward\DevTools\Tests\Console\Command\CommandAttributeCompatibility)</h2>
+        <ul>
+            <li class="success">As command attributes will not use the help named parameter</li>
+        </ul>
         <h2>Command Input Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CommandInputProcessor)</h2>
         <ul>
             <li class="success">Process will extract provided arguments and options</li>
@@ -442,6 +446,7 @@
             <li class="success">Mkdir will create directory with relative path</li>
             <li class="success">Remove will delete relative path against current working directory</li>
             <li class="success">Symlink and readlink will use absolute paths</li>
+            <li class="success">Symlink will preserve relative origins</li>
             <li class="success">Copy will duplicate files using absolute paths</li>
             <li class="success">Chmod will apply permissions to resolved paths</li>
             <li class="success">Exists will accept iterables of relative paths</li>
@@ -635,6 +640,7 @@
             <li class="success">Synchronize will preserve existing valid symlink</li>
             <li class="success">Synchronize will repair broken symlink</li>
             <li class="success">Synchronize will preserve existing non symlink directory</li>
+            <li class="success">Synchronize will create links for top level files</li>
         </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>
