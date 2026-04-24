@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Config;
 
 use FastForward\DevTools\Config\ECSConfig;
+use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
 use PhpCsFixer\Fixer\Phpdoc\GeneralPhpdocAnnotationRemoveFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
@@ -31,8 +33,8 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
-use FastForward\DevTools\Path\ManagedWorkspace;
-use FastForward\DevTools\Path\WorkingProjectPathResolver;
+
+use function Safe\getcwd;
 
 #[CoversClass(ECSConfig::class)]
 #[UsesClass(ManagedWorkspace::class)]
