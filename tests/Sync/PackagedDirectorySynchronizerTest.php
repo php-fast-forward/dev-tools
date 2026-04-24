@@ -275,7 +275,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
         $targetLink = '/consumer/.agents/agents/issue-editor.md';
         $relativeEntryPath = '../../../package/.agents/agents/issue-editor.md';
 
-        $this->mockFinder($this->createEntry('issue-editor.md', $entryPath));
+        $this->mockFinder($this->createEntry('issue-editor.md', $entryPath, false));
 
         $this->filesystem->exists('/package/.agents/agents')
             ->willReturn(true);
@@ -287,7 +287,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
         $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
-            ->willReturn($relativeEntryPath)
+            ->willReturn($relativeEntryPath . '/')
             ->shouldBeCalledOnce();
         $this->filesystem->symlink($relativeEntryPath, $targetLink)
             ->shouldBeCalledOnce();
@@ -329,13 +329,15 @@ final class PackagedDirectorySynchronizerTest extends TestCase
      *
      * @return SplFileInfo
      */
-    private function createEntry(string $entryName, string $sourcePath): SplFileInfo
+    private function createEntry(string $entryName, string $sourcePath, bool $isDirectory = true): SplFileInfo
     {
         $entry = $this->prophesize(SplFileInfo::class);
         $entry->getFilename()
             ->willReturn($entryName);
         $entry->getRealPath()
             ->willReturn($sourcePath);
+        $entry->isDir()
+            ->willReturn($isDirectory);
 
         return $entry->reveal();
     }

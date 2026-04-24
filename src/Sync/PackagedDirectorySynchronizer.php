@@ -85,8 +85,9 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
             $entryName = $packagedEntry->getFilename();
             $targetLink = Path::makeAbsolute($entryName, $targetDir);
             $sourcePath = $packagedEntry->getRealPath();
+            $isDirectory = $packagedEntry->isDir();
 
-            $this->processLink($entryName, $targetLink, $sourcePath, $result);
+            $this->processLink($entryName, $targetLink, $sourcePath, $isDirectory, $result);
         }
 
         return $result;
@@ -104,10 +105,11 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
         string $entryName,
         string $targetLink,
         string $sourcePath,
+        bool $isDirectory,
         SynchronizeResult $result,
     ): void {
         if (! $this->filesystem->exists($targetLink)) {
-            $this->createNewLink($entryName, $targetLink, $sourcePath, $result);
+            $this->createNewLink($entryName, $targetLink, $sourcePath, $isDirectory, $result);
 
             return;
         }
@@ -118,7 +120,7 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
             return;
         }
 
-        $this->processExistingSymlink($entryName, $targetLink, $sourcePath, $result);
+        $this->processExistingSymlink($entryName, $targetLink, $sourcePath, $isDirectory, $result);
     }
 
     /**
@@ -133,9 +135,13 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
         string $entryName,
         string $targetLink,
         string $sourcePath,
+        bool $isDirectory,
         SynchronizeResult $result,
     ): void {
-        $relativeSourcePath = $this->filesystem->makePathRelative($sourcePath, $this->filesystem->dirname($targetLink));
+        $relativeSourcePath = $this->normalizeRelativeSourcePath(
+            $this->filesystem->makePathRelative($sourcePath, $this->filesystem->dirname($targetLink)),
+            $isDirectory,
+        );
 
         $this->filesystem->symlink($relativeSourcePath, $targetLink);
         $this->logger->info('Created link: ' . $entryName . ' -> ' . $relativeSourcePath);
@@ -168,12 +174,13 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
         string $entryName,
         string $targetLink,
         string $sourcePath,
+        bool $isDirectory,
         SynchronizeResult $result,
     ): void {
         $linkPath = $this->filesystem->readlink($targetLink, true);
 
         if (! $linkPath || ! $this->filesystem->exists($linkPath)) {
-            $this->repairBrokenLink($entryName, $targetLink, $sourcePath, $result);
+            $this->repairBrokenLink($entryName, $targetLink, $sourcePath, $isDirectory, $result);
 
             return;
         }
@@ -194,13 +201,34 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
         string $entryName,
         string $targetLink,
         string $sourcePath,
+        bool $isDirectory,
         SynchronizeResult $result,
     ): void {
         $this->filesystem->remove($targetLink);
         $this->logger->notice('Existing link is broken: ' . $entryName . ' (removing and recreating)');
         $result->addRemovedBrokenLink($entryName);
 
-        $this->createNewLink($entryName, $targetLink, $sourcePath, $result);
+        $this->createNewLink($entryName, $targetLink, $sourcePath, $isDirectory, $result);
+    }
+
+    /**
+     * Normalizes a relative symlink target emitted by Symfony path helpers.
+     *
+     * Files MUST NOT keep the trailing slash that directory-oriented path helpers
+     * may append, otherwise link creation treats them as non-existent directories.
+     *
+     * @param string $relativeSourcePath Relative path from the consumer target directory to the packaged source
+     * @param bool $isDirectory Whether the packaged source is a directory
+     *
+     * @return string Normalized relative symlink target
+     */
+    private function normalizeRelativeSourcePath(string $relativeSourcePath, bool $isDirectory): string
+    {
+        if ($isDirectory) {
+            return $relativeSourcePath;
+        }
+
+        return rtrim($relativeSourcePath, '/');
     }
 
     /**

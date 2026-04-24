@@ -212,6 +212,30 @@ final class FilesystemTest extends TestCase
      * @return void
      */
     #[Test]
+    public function symlinkWillPreserveRelativeOrigins(): void
+    {
+        $currentWorkingDirectory = getcwd();
+        $origin = $this->tempDir . '/origin';
+        $target = $this->tempDir . '/target';
+        $relativeOrigin = 'origin';
+
+        $this->filesystem->mkdir($origin);
+        chdir($this->tempDir);
+
+        try {
+            $this->filesystem->symlink($relativeOrigin, $target);
+        } finally {
+            chdir($currentWorkingDirectory);
+        }
+
+        self::assertSame($relativeOrigin, $this->filesystem->readlink($target));
+        self::assertSame(realpath($origin), $this->filesystem->readlink($target, true));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function copyWillDuplicateFilesUsingAbsolutePaths(): void
     {
         $origin = $this->tempDir . '/origin.txt';
