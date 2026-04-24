@@ -75,7 +75,10 @@ final class DependenciesCommand extends BaseCommand implements LoggerAwareComman
      */
     protected function configure(): void
     {
-        $this->setHelp('This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.');
+        $this->setHelp(
+            'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and'
+            . ' outdated Composer dependencies.'
+        );
 
         $this->addJsonOption()
             ->addOption(

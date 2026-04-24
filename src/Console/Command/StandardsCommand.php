@@ -67,7 +67,10 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     protected function configure(): void
     {
-        $this->setHelp('This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.');
+        $this->setHelp(
+            'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc'
+            . ' validation, code style checks, documentation generation, and tests execution.'
+        );
         $this
             ->addJsonOption()
             ->addCacheOption(

@@ -82,7 +82,9 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     protected function configure(): void
     {
-        $this->setHelp('This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.');
+        $this->setHelp(
+            'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.'
+        );
 
         $this->addJsonOption()
             ->addOption(

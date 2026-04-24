@@ -75,7 +75,10 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
      */
     protected function configure(): void
     {
-        $this->setHelp('This command adds or updates composer.json scripts and GrumPHP extra configuration required by dev-tools.');
+        $this->setHelp(
+            'This command adds or updates composer.json scripts and GrumPHP extra configuration required by'
+            . ' dev-tools.'
+        );
 
         $this->addJsonOption()
             ->addOption(

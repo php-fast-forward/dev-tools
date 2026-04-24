@@ -67,7 +67,10 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     protected function configure(): void
     {
-        $this->setHelp('This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.');
+        $this->setHelp(
+            'This command generates the frontpage for Fast Forward documentation, including links to API'
+            . ' documentation and test reports.'
+        );
         $this
             ->addJsonOption()
             ->addCacheOption('Whether to enable cache writes in nested docs and tests commands.')

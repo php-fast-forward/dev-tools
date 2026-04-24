@@ -65,7 +65,10 @@ final class ChangelogPromoteCommand extends BaseCommand implements LoggerAwareCo
      */
     protected function configure(): void
     {
-        $this->setHelp('This command moves the current Unreleased entries into a released version section, records the release date, and restores an empty Unreleased section.');
+        $this->setHelp(
+            'This command moves the current Unreleased entries into a released version section, records the'
+            . ' release date, and restores an empty Unreleased section.'
+        );
 
         $this->addJsonOption()
             ->addArgument(
