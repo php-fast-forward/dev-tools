@@ -113,6 +113,24 @@ final class GeneratorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function generateWithMissingLicenseWillReturnNull(): void
+    {
+        $this->composer->getLicense()
+            ->willReturn(null);
+        $this->resolver->resolve(null)
+            ->willReturn(null);
+        $this->filesystem->dumpFile(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        $result = $this->generator->generate('/tmp/LICENSE');
+
+        self::assertNull($result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function generateWithValidLicenseWillCreateFile(): void
     {
         $targetPath = '/tmp/LICENSE';

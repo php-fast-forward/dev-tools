@@ -47,13 +47,17 @@ final class Resolver implements ResolverInterface
     /**
      * Resolves a license identifier to its template filename.
      *
-     * @param string $license The license identifier to resolve
+     * @param string|null $license The license identifier to resolve
      *
      * @return string|null The template filename if supported, or null if not
      */
-    public function resolve(string $license): ?string
+    public function resolve(?string $license): ?string
     {
         $normalized = $this->normalize($license);
+
+        if (null === $normalized) {
+            return null;
+        }
 
         if (! isset(self::SUPPORTED_LICENSES[$normalized])) {
             return null;
@@ -65,12 +69,18 @@ final class Resolver implements ResolverInterface
     /**
      * Normalizes the license identifier for comparison.
      *
-     * @param string $license The license identifier to normalize
+     * @param string|null $license The license identifier to normalize
      *
-     * @return string The normalized license string
+     * @return string|null The normalized license string, or null when unavailable
      */
-    private function normalize(string $license): string
+    private function normalize(?string $license): ?string
     {
-        return trim($license);
+        if (null === $license) {
+            return null;
+        }
+
+        $license = trim($license);
+
+        return '' === $license ? null : $license;
     }
 }

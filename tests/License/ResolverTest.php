@@ -65,4 +65,22 @@ final class ResolverTest extends TestCase
     {
         self::assertNull($this->resolver->resolve('Unknown-License'));
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function resolveWithMissingLicenseWillReturnNull(): void
+    {
+        self::assertNull($this->resolver->resolve(null));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function resolveWithEmptyLicenseWillReturnNull(): void
+    {
+        self::assertNull($this->resolver->resolve('  '));
+    }
 }
