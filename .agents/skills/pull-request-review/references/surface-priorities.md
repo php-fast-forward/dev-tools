@@ -33,6 +33,12 @@ Typical review questions
 
 - Did the implementation change behavior without matching tests?
 - Did the workflow wrapper stay aligned with the reusable workflow?
+- Did workflow or action changes include executable validation evidence, not
+  only YAML review?
+- If a workflow pushes bot-authored commits, does it dispatch or mirror
+  required checks for the new commit?
+- Are permissions, local action checkouts, and event-specific inputs valid for
+  reusable workflows and packaged consumer wrappers?
 - Did packaged assets change without explaining the consumer impact?
 - Did docs, README, changelog, or generated outputs remain consistent with the
   implementation?

@@ -25,6 +25,14 @@ and generated-output drift before human review time is spent.
 - Treat packaged skills, project agents, workflow wrappers, local actions,
   changelog entries, wiki output, and generated reports as first-class review
   surfaces when touched.
+- Require explicit validation evidence for workflow, local-action, and
+  packaged-wrapper changes. Prefer deterministic local harnesses, fake
+  ``gh``/``git`` scripts, temporary repositories, ``actionlint`` for workflows,
+  shell/YAML checks, or a temporary validation PR when GitHub-only behavior
+  cannot be exercised locally.
+- When a workflow pushes commits with ``GITHUB_TOKEN``, verify that required
+  checks are dispatched or mirrored for the bot-authored commit before treating
+  the workflow as safe.
 - Treat ``.github/wiki`` pointer changes as workflow-managed state when they
   line up with wiki preview or wiki maintenance automation, rather than as
   automatic evidence of accidental scope creep.
@@ -37,6 +45,8 @@ and generated-output drift before human review time is spent.
 - A maintainer wants a fresh rigorous review pass on an existing pull request.
 - A change touches workflows, generated outputs, synchronized assets, or other
   surfaces where a generic summary would miss important risk.
+- A pull request changes workflow permissions, triggers, local action scripts,
+  packaged workflow wrappers, or bot-authored commit behavior.
 
 ## Boundaries
 

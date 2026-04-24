@@ -17,12 +17,16 @@ possible.
 2. Inspect behavior before style. Start with source, workflows, generated
    outputs, synchronized assets, tests, and documentation that can change
    release or automation behavior.
-3. Produce the review using the findings-first contract. Read
+3. When the pull request changes workflows, local actions, or packaged workflow
+   wrappers, build an executable validation strategy before declaring the
+   surface clean. Read
+   [references/workflow-action-validation.md](references/workflow-action-validation.md).
+4. Produce the review using the findings-first contract. Read
    [references/review-contract.md](references/review-contract.md).
-4. Call out missing or weak tests, missing docs, changelog gaps, generated
+5. Call out missing or weak tests, missing docs, changelog gaps, generated
    artifact drift, and consumer-sync impacts whenever the changed surfaces make
    them relevant.
-5. Only after the findings, add a brief summary or note residual risk. If no
+6. Only after the findings, add a brief summary or note residual risk. If no
    issues are found, say that clearly and mention any remaining verification
    gaps.
 
@@ -38,6 +42,13 @@ possible.
 - When ``.github/wiki`` moves, verify whether the wiki preview or wiki
   maintenance workflow is expected to refresh the submodule pointer before
   treating that change as unrelated drift or scope creep.
+- When workflow automation pushes commits with ``GITHUB_TOKEN``, verify that
+  required checks are dispatched or mirrored for the bot-authored commit before
+  treating the workflow as safe.
+- For workflow, local-action, or packaged-wrapper changes, prefer deterministic
+  validation such as shell/YAML checks, fake ``gh``/``git`` harnesses,
+  temporary repositories, or a temporary validation PR when local simulation
+  cannot cover the behavior.
 - Prefer precise repository file references in every finding.
 - Review what changed, but reason about downstream consumer impact when the PR
   touches packaged assets or synchronized defaults.
@@ -49,6 +60,7 @@ possible.
 | Need | Reference |
 |------|-----------|
 | Decide which changed surfaces deserve the closest scrutiny | [references/surface-priorities.md](references/surface-priorities.md) |
+| Validate workflow, local-action, and packaged-wrapper changes | [references/workflow-action-validation.md](references/workflow-action-validation.md) |
 | Format the review output in the expected findings-first shape | [references/review-contract.md](references/review-contract.md) |
 
 ## Anti-patterns
@@ -58,5 +70,8 @@ possible.
   behavioral or workflow risk exists.
 - Do not ignore generated files, synced assets, or workflow wrappers when the
   pull request touched their sources.
+- Do not mark workflow or action changes clean without an explicit validation
+  strategy and evidence, or a clear residual-risk note when behavior cannot be
+  exercised before merge.
 - Do not claim a pull request is clean without mentioning the verification
   scope or any residual gaps.

@@ -29,9 +29,13 @@ Required review themes:
 - Generated-output drift.
 - Workflow, CI, or release automation risk.
 - Consumer-sync or packaged-asset side effects.
+- Workflow/action validation evidence for changes under ``.github/workflows``,
+  ``.github/actions``, or ``resources/github-actions``.
 
 If no issues are found:
 
 - State that clearly.
 - Mention the scope that was reviewed.
-- Call out any remaining test or verification gaps.
+- Call out any remaining test or verification gaps, including workflow
+  behavior that could not be exercised locally or through a temporary
+  validation run.
