@@ -39,8 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'reports',
-    description: 'Generates the frontpage for Fast Forward documentation.',
-    help: 'This command generates the frontpage for Fast Forward documentation, including links to API documentation and test reports.'
+    description: 'Generates the frontpage for Fast Forward documentation.'
 )]
 final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -68,6 +67,10 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command generates the frontpage for Fast Forward documentation, including links to API'
+            . ' documentation and test reports.'
+        );
         $this
             ->addJsonOption()
             ->addCacheOption('Whether to enable cache writes in nested docs and tests commands.')

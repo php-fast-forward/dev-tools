@@ -163,12 +163,20 @@ final class FilesystemTest extends TestCase
     #[Test]
     public function mkdirWillCreateDirectoryWithRelativePath(): void
     {
-        $dirName = 'nested/dir';
+        $currentWorkingDirectory = getcwd();
 
-        $this->filesystem->mkdir($dirName, 0o777, $this->tempDir);
+        chdir($this->tempDir);
 
-        self::assertTrue($this->filesystem->exists($dirName, $this->tempDir));
-        self::assertDirectoryExists($this->tempDir . '/' . $dirName);
+        try {
+            $dirName = 'nested/dir';
+
+            $this->filesystem->mkdir($dirName);
+
+            self::assertTrue($this->filesystem->exists($dirName, $this->tempDir));
+            self::assertDirectoryExists($this->tempDir . '/' . $dirName);
+        } finally {
+            chdir($currentWorkingDirectory);
+        }
     }
 
     /**
@@ -197,6 +205,30 @@ final class FilesystemTest extends TestCase
         $this->filesystem->mkdir($origin);
         $this->filesystem->symlink($origin, $target);
 
+        self::assertSame(realpath($origin), $this->filesystem->readlink($target, true));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function symlinkWillPreserveRelativeOrigins(): void
+    {
+        $currentWorkingDirectory = getcwd();
+        $origin = $this->tempDir . '/origin';
+        $target = $this->tempDir . '/target';
+        $relativeOrigin = 'origin';
+
+        $this->filesystem->mkdir($origin);
+        chdir($this->tempDir);
+
+        try {
+            $this->filesystem->symlink($relativeOrigin, $target);
+        } finally {
+            chdir($currentWorkingDirectory);
+        }
+
+        self::assertSame($relativeOrigin, $this->filesystem->readlink($target));
         self::assertSame(realpath($origin), $this->filesystem->readlink($target, true));
     }
 

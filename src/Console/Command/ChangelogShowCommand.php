@@ -37,8 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'changelog:show',
-    description: 'Prints the notes body for a released changelog version.',
-    help: 'This command renders the body of one released changelog section so it can be reused for GitHub release notes.'
+    description: 'Prints the notes body for a released changelog version.'
 )]
 final class ChangelogShowCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -63,6 +62,11 @@ final class ChangelogShowCommand extends BaseCommand implements LoggerAwareComma
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command renders the body of one released changelog section so it can be reused for GitHub'
+            . ' release notes.'
+        );
+
         $this->addJsonOption()
             ->addArgument(
                 name: 'version',

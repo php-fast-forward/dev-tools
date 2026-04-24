@@ -35,8 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'agents',
-    description: 'Synchronizes Fast Forward project agents into .agents/agents directory.',
-    help: 'This command ensures the consumer repository contains linked Fast Forward project agents by creating symlinks to the packaged prompts and removing broken links.'
+    description: 'Synchronizes Fast Forward project agents into .agents/agents directory.'
 )]
 final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -63,6 +62,10 @@ final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInter
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command ensures the consumer repository contains linked Fast Forward project agents by creating'
+            . ' symlinks to the packaged prompts and removing broken links.'
+        );
         $this->addJsonOption();
     }
 

@@ -46,8 +46,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'gitignore',
-    description: 'Merges and synchronizes .gitignore files.',
-    help: "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore."
+    description: 'Merges and synchronizes .gitignore files.'
 )]
 final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -88,6 +87,8 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     protected function configure(): void
     {
+        $this->setHelp("This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.");
+
         $this->addJsonOption()
             ->addOption(
                 name: 'source',

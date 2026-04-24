@@ -1,0 +1,36 @@
+{
+    "name": "fast-forward/dev-tools-composer-plugin-consumer-fixture",
+    "type": "project",
+    "require-dev": {
+        "fast-forward/dev-tools": "*@dev"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../..",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "fast-forward/dev-tools": true,
+            "ergebnis/composer-normalize": true,
+            "phpdocumentor/shim": true,
+            "phpro/grumphp-shim": true,
+            "pyrech/composer-changelogs": true
+        }
+    },
+    "scripts": {
+        "dev-tools": "dev-tools",
+        "dev-tools:fix": "@dev-tools --fix"
+    },
+    "extra": {
+        "grumphp": {
+            "config-default-path": "../../../grumphp.yml"
+        }
+    }
+}

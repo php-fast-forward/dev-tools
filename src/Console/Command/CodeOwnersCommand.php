@@ -37,8 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'codeowners',
-    description: 'Generates .github/CODEOWNERS from local project metadata.',
-    help: 'This command infers CODEOWNERS entries from composer.json metadata, falls back to a commented template, and supports drift-aware preview and overwrite flows.'
+    description: 'Generates .github/CODEOWNERS from local project metadata.'
 )]
 final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -67,6 +66,11 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command infers CODEOWNERS entries from composer.json metadata, falls back to a commented'
+            . ' template, and supports drift-aware preview and overwrite flows.'
+        );
+
         $this->addJsonOption()
             ->addOption(
                 name: 'file',

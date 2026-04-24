@@ -45,9 +45,7 @@ use function Safe\getcwd;
  */
 #[AsCommand(
     name: 'wiki',
-    description: 'Generates API documentation in Markdown format.',
-    help: 'This command generates API documentation in Markdown format using phpDocumentor. '
-    . 'It accepts an optional `--target` option to specify the output directory and `--init` to initialize the wiki submodule.'
+    description: 'Generates API documentation in Markdown format.'
 )]
 final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -86,6 +84,7 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
      */
     protected function configure(): void
     {
+        $this->setHelp('This command generates API documentation in Markdown format using phpDocumentor. ');
         $this
             ->addJsonOption()
             ->addCacheOption('Whether to enable phpDocumentor caching.')

@@ -119,9 +119,8 @@ interface FilesystemInterface
      *
      * @param iterable<string>|string $dirs the directory path(s) to create
      * @param int $mode the permissions mode (defaults to 0777)
-     * @param string|null $basePath the base path for relative path resolution
      */
-    public function mkdir(string|iterable $dirs, int $mode = 0o777, ?string $basePath = null): void;
+    public function mkdir(string|iterable $dirs, int $mode = 0o777): void;
 
     /**
      * Computes the relative path from the base path to the target path.

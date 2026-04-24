@@ -37,8 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'dev-tools:sync',
-    description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, CODEOWNERS, .editorconfig, and .gitattributes in the root project.',
-    help: 'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, git metadata, packaged skills, packaged agents, license, and Git hooks.'
+    description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, CODEOWNERS, .editorconfig, and .gitattributes in the root project.'
 )]
 final class SyncCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -63,6 +62,11 @@ final class SyncCommand extends BaseCommand implements LoggerAwareCommandInterfa
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS,'
+            . ' funding metadata, wiki, git metadata, packaged skills, packaged agents, license, and Git hooks.'
+        );
+
         $this->addJsonOption()
             ->addOption(
                 name: 'overwrite',

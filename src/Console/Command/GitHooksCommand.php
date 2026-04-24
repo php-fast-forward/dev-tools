@@ -39,8 +39,7 @@ use Symfony\Component\Filesystem\Path;
  */
 #[AsCommand(
     name: 'git-hooks',
-    description: 'Installs Fast Forward Git hooks.',
-    help: 'This command copies packaged Git hooks into the current repository.'
+    description: 'Installs Fast Forward Git hooks.'
 )]
 final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -71,6 +70,8 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
      */
     protected function configure(): void
     {
+        $this->setHelp('This command copies packaged Git hooks into the current repository.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'source',

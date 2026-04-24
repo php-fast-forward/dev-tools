@@ -48,8 +48,7 @@ use function is_numeric;
  */
 #[AsCommand(
     name: 'tests',
-    description: 'Runs PHPUnit tests.',
-    help: 'This command runs PHPUnit to execute your tests.'
+    description: 'Runs PHPUnit tests.'
 )]
 final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -93,6 +92,7 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
      */
     protected function configure(): void
     {
+        $this->setHelp('This command runs PHPUnit to execute your tests.');
         $this
             ->addJsonOption()
             ->addCacheOption('Whether to enable PHPUnit result caching.')

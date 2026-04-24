@@ -44,8 +44,7 @@ use function is_numeric;
 #[AsCommand(
     name: 'dependencies',
     description: 'Analyzes missing, unused, misplaced, and outdated Composer dependencies.',
-    aliases: ['deps'],
-    help: 'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and outdated Composer dependencies.'
+    aliases: ['deps']
 )]
 final class DependenciesCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -76,6 +75,11 @@ final class DependenciesCommand extends BaseCommand implements LoggerAwareComman
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and'
+            . ' outdated Composer dependencies.'
+        );
+
         $this->addJsonOption()
             ->addOption(
                 name: 'max-outdated',

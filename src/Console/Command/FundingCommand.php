@@ -41,8 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'funding',
-    description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.',
-    help: 'This command merges supported funding entries across composer.json and .github/FUNDING.yml while preserving unsupported providers.'
+    description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.'
 )]
 final class FundingCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -79,6 +78,11 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command merges supported funding entries across composer.json and .github/FUNDING.yml while'
+            . ' preserving unsupported providers.'
+        );
+
         $this->addJsonOption()
             ->addOption(
                 name: 'composer-file',

@@ -39,8 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'license',
-    description: 'Generates a LICENSE file from composer.json license information.',
-    help: 'This command generates a LICENSE file if one does not exist and a supported license is declared in composer.json.'
+    description: 'Generates a LICENSE file from composer.json license information.'
 )]
 final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -69,6 +68,11 @@ final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command generates a LICENSE file if one does not exist and a supported license is declared in'
+            . ' composer.json.'
+        );
+
         $this->addJsonOption()
             ->addOption(
                 name: 'target',
