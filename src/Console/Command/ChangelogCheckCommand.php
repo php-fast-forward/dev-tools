@@ -35,8 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'changelog:check',
-    description: 'Checks whether a changelog file contains meaningful unreleased entries.',
-    help: 'This command validates the current Unreleased section and may compare it against a base git reference to enforce pull request changelog updates.'
+    description: 'Checks whether a changelog file contains meaningful unreleased entries.'
 )]
 final class ChangelogCheckCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -61,6 +60,7 @@ final class ChangelogCheckCommand extends BaseCommand implements LoggerAwareComm
      */
     protected function configure(): void
     {
+        $this->setHelp('This command validates the current Unreleased section and may compare it against a base git reference to enforce pull request changelog updates.');
         $this->addJsonOption()
             ->addOption(
                 name: 'against',

@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Filesystem;
 
-use Override;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path;
 
@@ -32,8 +31,12 @@ use function Safe\getcwd;
  * converting provided paths to absolute representations when a base path is supplied or
  * dynamically inferred from the generic working directory.
  */
-final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
+final class Filesystem implements FilesystemInterface
 {
+    public function __construct(
+        private readonly SymfonyFilesystem $filesystem = new SymfonyFilesystem(),
+    ) {}
+
     /**
      * Checks whether a file or directory exists.
      *
@@ -42,10 +45,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      *
      * @return bool true if the path exists, false otherwise
      */
-    #[Override]
     public function exists(string|iterable $files, ?string $basePath = null): bool
     {
-        return parent::exists($this->getAbsolutePath($files, $basePath));
+        return $this->filesystem->exists($this->getAbsolutePath($files, $basePath));
     }
 
     /**
@@ -56,10 +58,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      *
      * @return string the content of the file
      */
-    #[Override]
     public function readFile(string $filename, ?string $path = null): string
     {
-        return parent::readFile($this->getAbsolutePath($filename, $path));
+        return $this->filesystem->readFile($this->getAbsolutePath($filename, $path));
     }
 
     /**
@@ -69,10 +70,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      * @param mixed $content the content to write
      * @param string|null $path the optional base path to resolve the filename against
      */
-    #[Override]
     public function dumpFile(string $filename, mixed $content, ?string $path = null): void
     {
-        parent::dumpFile($this->getAbsolutePath($filename, $path), $content);
+        $this->filesystem->dumpFile($this->getAbsolutePath($filename, $path), $content);
     }
 
     /**
@@ -82,10 +82,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      * @param string $targetFile the target file path to create
      * @param bool $overwriteNewerFiles whether newer target files MAY be overwritten
      */
-    #[Override]
     public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void
     {
-        parent::copy($this->getAbsolutePath($originFile), $this->getAbsolutePath($targetFile), $overwriteNewerFiles);
+        $this->filesystem->copy($this->getAbsolutePath($originFile), $this->getAbsolutePath($targetFile), $overwriteNewerFiles);
     }
 
     /**
@@ -96,10 +95,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      * @param int $umask the umask to apply
      * @param bool $recursive whether permissions SHOULD be applied recursively
      */
-    #[Override]
     public function chmod(string|iterable $files, int $mode, int $umask = 0o000, bool $recursive = false): void
     {
-        parent::chmod($this->getAbsolutePath($files), $mode, $umask, $recursive);
+        $this->filesystem->chmod($this->getAbsolutePath($files), $mode, $umask, $recursive);
     }
 
     /**
@@ -107,10 +105,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      *
      * @param iterable<string>|string $files the file(s), link(s), or directory(ies) to remove
      */
-    #[Override]
     public function remove(string|iterable $files): void
     {
-        parent::remove($this->getAbsolutePath($files));
+        $this->filesystem->remove($this->getAbsolutePath($files));
     }
 
     /**
@@ -120,10 +117,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      * @param string $targetDir the link path to create
      * @param bool $copyOnWindows whether directories SHOULD be copied on Windows instead of linked
      */
-    #[Override]
     public function symlink(string $originDir, string $targetDir, bool $copyOnWindows = false): void
     {
-        parent::symlink($this->getAbsolutePath($originDir), $this->getAbsolutePath($targetDir), $copyOnWindows);
+        $this->filesystem->symlink($this->getAbsolutePath($originDir), $this->getAbsolutePath($targetDir), $copyOnWindows);
     }
 
     /**
@@ -134,10 +130,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      *
      * @return string|null the link target, or null when the path is not a symbolic link
      */
-    #[Override]
     public function readlink(string $path, bool $canonicalize = false): ?string
     {
-        return parent::readlink($this->getAbsolutePath($path), $canonicalize);
+        return $this->filesystem->readlink($this->getAbsolutePath($path), $canonicalize);
     }
 
     /**
@@ -152,7 +147,7 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
     {
         $basePath ??= getcwd();
 
-        if (! $this->isAbsolutePath($basePath)) {
+        if (! Path::isAbsolute($basePath)) {
             $basePath = Path::makeAbsolute($basePath, getcwd());
         }
 
@@ -168,12 +163,10 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      *
      * @param iterable<string>|string $dirs the directory path(s) to create
      * @param int $mode the permissions mode (defaults to 0777)
-     * @param string|null $basePath the base path for relative path resolution
      */
-    #[Override]
-    public function mkdir(string|iterable $dirs, int $mode = 0o777, ?string $basePath = null): void
+    public function mkdir(string|iterable $dirs, int $mode = 0o777): void
     {
-        parent::mkdir($this->getAbsolutePath($dirs, $basePath), $mode);
+        $this->filesystem->mkdir($this->getAbsolutePath($dirs), $mode);
     }
 
     /**
@@ -184,10 +177,9 @@ final class Filesystem extends SymfonyFilesystem implements FilesystemInterface
      *
      * @return string the computed relative path
      */
-    #[Override]
     public function makePathRelative(string $path, ?string $basePath = null): string
     {
-        return parent::makePathRelative($this->getAbsolutePath($path, $basePath), $basePath ?? getcwd());
+        return $this->filesystem->makePathRelative($this->getAbsolutePath($path, $basePath), $basePath ?? getcwd());
     }
 
     /**

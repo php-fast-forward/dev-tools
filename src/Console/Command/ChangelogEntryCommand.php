@@ -38,8 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'changelog:entry',
-    description: 'Adds a changelog entry to Unreleased or a specific version section.',
-    help: 'This command appends one categorized changelog entry to the selected changelog file so it can be reused by local authoring flows and skills.'
+    description: 'Adds a changelog entry to Unreleased or a specific version section.'
 )]
 final class ChangelogEntryCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -64,6 +63,7 @@ final class ChangelogEntryCommand extends BaseCommand implements LoggerAwareComm
      */
     protected function configure(): void
     {
+        $this->setHelp('This command appends one categorized changelog entry to the selected changelog file so it can be reused by local authoring flows and skills.');
         $this->addJsonOption()
             ->addArgument(
                 name: 'message',
@@ -76,10 +76,6 @@ final class ChangelogEntryCommand extends BaseCommand implements LoggerAwareComm
                 mode: InputOption::VALUE_REQUIRED,
                 description: 'The changelog category (added, changed, deprecated, removed, fixed, security).',
                 default: 'added',
-                suggestedValues: array_map(
-                    static fn(ChangelogEntryType $type): string => strtolower($type->value),
-                    ChangelogEntryType::ordered()
-                ),
             )
             ->addOption(
                 name: 'release',

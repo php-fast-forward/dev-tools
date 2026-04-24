@@ -48,8 +48,7 @@ use function Safe\getcwd;
  */
 #[AsCommand(
     name: 'docs',
-    description: 'Generates API documentation.',
-    help: 'This command generates API documentation using phpDocumentor.',
+    description: 'Generates API documentation.'
 )]
 final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -83,6 +82,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
      */
     protected function configure(): void
     {
+        $this->setHelp('This command generates API documentation using phpDocumentor.');
         $this
             ->addJsonOption()
             ->addCacheOption('Whether to enable phpDocumentor caching.')

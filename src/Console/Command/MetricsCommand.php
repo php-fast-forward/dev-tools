@@ -36,8 +36,7 @@ use function rtrim;
 
 #[AsCommand(
     name: 'metrics',
-    description: 'Analyzes code metrics with PhpMetrics.',
-    help: 'This command runs PhpMetrics to analyze the current working directory.',
+    description: 'Analyzes code metrics with PhpMetrics.'
 )]
 final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -72,6 +71,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     protected function configure(): void
     {
+        $this->setHelp('This command runs PhpMetrics to analyze the current working directory.');
         $this->addJsonOption()
             ->addOption(
                 name: 'progress',

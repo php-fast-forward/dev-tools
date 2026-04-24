@@ -39,8 +39,7 @@ use Symfony\Component\Filesystem\Path;
  */
 #[AsCommand(
     name: 'copy-resource',
-    description: 'Copies a file or directory resource into the current project.',
-    help: 'This command copies a configured source file or every file in a source directory into the target path.'
+    description: 'Copies a file or directory resource into the current project.'
 )]
 final class CopyResourceCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -71,6 +70,7 @@ final class CopyResourceCommand extends BaseCommand implements LoggerAwareComman
      */
     protected function configure(): void
     {
+        $this->setHelp('This command copies a configured source file or every file in a source directory into the target path.');
         $this->addJsonOption()
             ->addOption(
                 name: 'source',

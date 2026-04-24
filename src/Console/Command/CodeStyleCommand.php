@@ -38,8 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'code-style',
-    description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.',
-    help: 'This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.'
+    description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.'
 )]
 final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -83,6 +82,7 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     protected function configure(): void
     {
+        $this->setHelp('This command runs EasyCodingStandard and Composer Normalize to check and fix code style issues.');
         $this->addJsonOption()
             ->addOption(
                 name: 'progress',

@@ -46,8 +46,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'phpdoc',
-    description: 'Checks and fixes PHPDocs.',
-    help: 'This command checks and fixes PHPDocs in your PHP files.',
+    description: 'Checks and fixes PHPDocs.'
 )]
 final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -105,6 +104,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
      */
     protected function configure(): void
     {
+        $this->setHelp('This command checks and fixes PHPDocs in your PHP files.');
         $this
             ->addJsonOption()
             ->addCacheOption('Whether to enable PHP-CS-Fixer caching.')

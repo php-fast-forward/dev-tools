@@ -39,8 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 #[AsCommand(
     name: 'refactor',
     description: 'Runs Rector for code refactoring.',
-    aliases: ['rector'],
-    help: 'This command runs Rector to refactor your code.'
+    aliases: ['rector']
 )]
 final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -79,6 +78,7 @@ final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInt
      */
     protected function configure(): void
     {
+        $this->setHelp('This command runs Rector to refactor your code.');
         $this->addJsonOption()
             ->addOption(
                 name: 'progress',

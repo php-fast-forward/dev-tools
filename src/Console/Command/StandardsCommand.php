@@ -39,8 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'standards',
-    description: 'Runs Fast Forward code standards checks.',
-    help: 'This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.'
+    description: 'Runs Fast Forward code standards checks.'
 )]
 final class StandardsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -68,6 +67,7 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     protected function configure(): void
     {
+        $this->setHelp('This command runs all Fast Forward code standards checks, including code refactoring, PHPDoc validation, code style checks, documentation generation, and tests execution.');
         $this
             ->addJsonOption()
             ->addCacheOption(

@@ -47,9 +47,7 @@ use function Safe\getcwd;
  */
 #[AsCommand(
     name: 'gitattributes',
-    description: 'Manages .gitattributes export-ignore rules for leaner package archives.',
-    help: 'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. '
-    . 'Only paths that exist in the repository are added, existing custom rules are preserved, and "extra.gitattributes.keep-in-export" paths stay in exported archives.'
+    description: 'Manages .gitattributes export-ignore rules for leaner package archives.'
 )]
 final class GitAttributesCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -98,6 +96,11 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
      */
     protected function configure(): void
     {
+        $this->setHelp(
+            'This command adds export-ignore entries for repository-only files and directories to keep them out of Composer package archives. '
+            . 'Only paths that exist in the repository are added, existing custom rules are preserved, and '
+            . '"extra.gitattributes.keep-in-export" paths stay in exported archives.'
+        );
         $this->addJsonOption()
             ->addOption(
                 name: 'dry-run',

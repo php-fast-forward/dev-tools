@@ -44,8 +44,7 @@ use function Safe\getcwd;
  */
 #[AsCommand(
     name: 'update-composer-json',
-    description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
-    help: 'This command adds or updates composer.json scripts and GrumPHP extra configuration required by dev-tools.'
+    description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.'
 )]
 final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -76,6 +75,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
      */
     protected function configure(): void
     {
+        $this->setHelp('This command adds or updates composer.json scripts and GrumPHP extra configuration required by dev-tools.');
         $this->addJsonOption()
             ->addOption(
                 name: 'file',

@@ -36,8 +36,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(
     name: 'changelog:next-version',
-    description: 'Infers the next semantic version from the Unreleased changelog section.',
-    help: 'This command inspects Unreleased changelog categories and prints the next semantic version inferred from the current changelog state.'
+    description: 'Infers the next semantic version from the Unreleased changelog section.'
 )]
 final class ChangelogNextVersionCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
@@ -62,6 +61,7 @@ final class ChangelogNextVersionCommand extends BaseCommand implements LoggerAwa
      */
     protected function configure(): void
     {
+        $this->setHelp('This command inspects Unreleased changelog categories and prints the next semantic version inferred from the current changelog state.');
         $this->addJsonOption()
             ->addOption(
                 name: 'file',
