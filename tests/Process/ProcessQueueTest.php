@@ -35,15 +35,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
 use Symfony\Component\Process\Process;
 
-use function Safe\putenv;
-
 #[CoversClass(ProcessQueue::class)]
 #[UsesClass(GithubActionOutput::class)]
 final class ProcessQueueTest extends TestCase
 {
     use ProphecyTrait;
-
-    private string|false $composerTestsAreRunningEnv;
 
     /**
      * @var ObjectProphecy<ConsoleOutputInterface>
@@ -55,6 +51,11 @@ final class ProcessQueueTest extends TestCase
      */
     private ObjectProphecy $errorOutput;
 
+    /**
+     * @var ObjectProphecy<GithubActionOutput>
+     */
+    private ObjectProphecy $githubActionOutput;
+
     private ProcessQueue $queue;
 
     /**
@@ -62,15 +63,16 @@ final class ProcessQueueTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->composerTestsAreRunningEnv = getenv('COMPOSER_TESTS_ARE_RUNNING');
-        putenv('COMPOSER_TESTS_ARE_RUNNING=1');
-
         $this->output = $this->prophesize(ConsoleOutputInterface::class);
         $this->errorOutput = $this->prophesize(OutputInterface::class);
         $this->output->getErrorOutput()
             ->willReturn($this->errorOutput->reveal());
 
-        $this->queue = new ProcessQueue(new GithubActionOutput($this->output->reveal()));
+        $this->githubActionOutput = $this->prophesize(GithubActionOutput::class);
+        $this->githubActionOutput->group(Argument::type('string'), Argument::type(Closure::class))
+            ->will(static fn(array $arguments): mixed => $arguments[1]());
+
+        $this->queue = new ProcessQueue($this->githubActionOutput->reveal());
     }
 
     /**
@@ -388,12 +390,6 @@ final class ProcessQueueTest extends TestCase
      */
     protected function tearDown(): void
     {
-        if (false === $this->composerTestsAreRunningEnv) {
-            putenv('COMPOSER_TESTS_ARE_RUNNING');
-
-            return;
-        }
-
-        putenv('COMPOSER_TESTS_ARE_RUNNING=' . $this->composerTestsAreRunningEnv);
+        unset($this->queue);
     }
 }
