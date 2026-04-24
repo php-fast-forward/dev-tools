@@ -76,7 +76,8 @@ command list:
    * - ``FastForward\DevTools\Process\ProcessBuilderInterface``
      - ``ProcessBuilderInterface`` and ``ProcessQueueInterface`` build and
        execute subprocess pipelines, while process environment and output
-       Symfony-style sections keep nested command output readable without PTY.
+       Symfony-style sections keep nested command output readable without PTY
+       and suppress unnecessary Xdebug overhead in child processes.
    * - ``Filesystem and metadata``
      - ``FilesystemInterface``, ``ComposerJsonInterface``, and
        ``FileLocatorInterface`` resolve local files, project metadata, and

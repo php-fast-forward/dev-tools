@@ -71,14 +71,18 @@ use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\License\Resolver;
 use FastForward\DevTools\License\ResolverInterface;
+use FastForward\DevTools\Php\Extension;
+use FastForward\DevTools\Php\ExtensionInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ColorPreservingProcessEnvironmentConfigurator;
+use FastForward\DevTools\Process\CompositeProcessEnvironmentConfigurator;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Psr\Clock\SystemClock;
@@ -116,9 +120,14 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
         return [
             // Process
             EnvironmentInterface::class => get(Environment::class),
+            ExtensionInterface::class => get(Extension::class),
             OutputCapabilityDetectorInterface::class => get(OutputCapabilityDetector::class),
             ProcessBuilderInterface::class => get(ProcessBuilder::class),
-            ProcessEnvironmentConfiguratorInterface::class => get(ColorPreservingProcessEnvironmentConfigurator::class),
+            ProcessEnvironmentConfiguratorInterface::class => create(CompositeProcessEnvironmentConfigurator::class)
+                ->constructor([
+                    get(ColorPreservingProcessEnvironmentConfigurator::class),
+                    get(XdebugDisablingProcessEnvironmentConfigurator::class),
+                ]),
             ProcessQueueInterface::class => get(ProcessQueue::class),
 
             // Filesystem

@@ -275,6 +275,9 @@ Important details:
 - human-readable runs keep nested command output grouped with concise local
   section boundaries, pass color-friendly environment variables to
   subprocesses, and forward explicit ANSI flags to Symfony Console tools;
+- queued subprocesses run with ``XDEBUG_MODE=off`` when Xdebug is loaded but
+  the command does not need Xdebug for coverage, or when PCOV can provide
+  coverage instead;
 - it is the reporting stage used by ``standards``.
 
 ``skills``

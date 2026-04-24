@@ -128,6 +128,9 @@ composer dev-tools tests -- --coverage=.dev-tools/coverage
 - Keep color behavior explicit in command wrappers for tools with known flags
   instead of probing binaries dynamically; for example, Symfony/Composer-style
   tools can receive `--ansi`, while PHPUnit uses `--colors=always`.
+- Keep child-process environment policy centralized in `ProcessQueue`
+  configurators, including disabling Xdebug for non-coverage subprocesses while
+  preserving coverage drivers when PCOV is unavailable.
 
 **Naming Conventions:**
 
