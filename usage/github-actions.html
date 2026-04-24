@@ -3482,7 +3482,11 @@ open pull request.</p>
  work into <code>Release Prepared</code>
  when <code>changelog.yml</code>
  opens or updates a release-preparation pull request.
-<em>   Promotes all ``Release Prepared`` work into ``Released`` when the release-preparation pull request is merged and the GitHub release is published.
+<em>   Promotes ``Release Prepared`` work into ``Released`` when the
+    release-preparation pull request is merged and the GitHub release is
+    published, and also promotes any remaining ``Merged`` items as a
+    release-publication safety net when the preparation transition did not
+    run.
 </em>
    Uses the built-in workflow token for project updates.</li>
 
