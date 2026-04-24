@@ -27,8 +27,9 @@ and generated-output drift before human review time is spent.
   surfaces when touched.
 - Require explicit validation evidence for workflow, local-action, and
   packaged-wrapper changes. Prefer deterministic local harnesses, fake
-  ``gh``/``git`` scripts, temporary repositories, shell/YAML checks, or a
-  temporary validation PR when GitHub-only behavior cannot be exercised locally.
+  ``gh``/``git`` scripts, temporary repositories, ``actionlint`` for workflows,
+  shell/YAML checks, or a temporary validation PR when GitHub-only behavior
+  cannot be exercised locally.
 - When a workflow pushes commits with ``GITHUB_TOKEN``, verify that required
   checks are dispatched or mirrored for the bot-authored commit before treating
   the workflow as safe.

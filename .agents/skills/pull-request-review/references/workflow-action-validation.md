@@ -45,7 +45,7 @@ Validation Strategies
 Prefer deterministic local validation when it can cover the changed behavior:
 
 - run ``bash -n`` for shell scripts;
-- parse changed YAML files or run ``actionlint`` when available;
+- parse changed YAML files or run ``actionlint`` after ensuring it is available;
 - use fake ``gh`` and ``git`` wrappers to exercise action scripts without
   calling GitHub;
 - create temporary Git repositories to validate merge, rebase, conflict,
@@ -53,6 +53,34 @@ Prefer deterministic local validation when it can cover the changed behavior:
 - run changed PHP helper scripts directly against synthetic fixtures;
 - verify packaged wrapper inputs, permissions, and reusable workflow paths stay
   aligned with the canonical workflow.
+
+Actionlint Availability
+-----------------------
+
+When workflow files are changed, prefer running ``actionlint`` locally. If it is
+missing, install it before review when the platform has a safe package manager:
+
+- macOS with Homebrew: ``brew install actionlint``;
+- macOS with MacPorts: ``sudo port install actionlint``;
+- Debian-based Linux: download the official ``actionlint`` release archive for
+  the host architecture, unpack the binary into a temporary directory, and run
+  it from there or install it into a user-local ``PATH`` such as
+  ``~/.local/bin``.
+
+``actionlint`` is distributed as a Go binary. It may use ``shellcheck`` for
+``run:`` blocks, and Homebrew installs that dependency automatically. On
+Windows, prefer WSL for now unless the repository already documents a native
+Windows installation path.
+
+Use the broadest relevant command for the changed surfaces, for example:
+
+.. code-block:: bash
+
+   actionlint .github/workflows/*.yml resources/github-actions/*.yml
+
+Record the command and result in the review evidence. If installation is not
+possible, record that as a residual validation gap instead of silently skipping
+workflow linting.
 
 When local simulation cannot cover the behavior, call out the gap and prefer a
 temporary validation branch or pull request. Close that validation PR after
