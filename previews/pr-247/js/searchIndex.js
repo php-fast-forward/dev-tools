@@ -2076,6 +2076,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_ERROR_REPORTING"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003APHP_DEFAULT_SOCKET_TIMEOUT",
+            "name": "PHP_DEFAULT_SOCKET_TIMEOUT",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_DEFAULT_SOCKET_TIMEOUT"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
             "summary": "",

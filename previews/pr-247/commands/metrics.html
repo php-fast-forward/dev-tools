@@ -3003,7 +3003,7 @@ changing your current shell session first.</p>
     <p>Comma-separated directories that should be excluded from analysis.</p>
 
     <p>Default:
-<code>vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources</code>
+<code>vendor,tmp,cache,spec,build,.dev-tools,backup,resources,tests/Fixtures</code>
 .</p>
 </dd>
                                 <dt><code>--target=&lt;directory&gt;</code>
@@ -3095,8 +3095,14 @@ running PhpMetrics in a quieter mode to avoid polluting the captured payload;</l
     <li class="dash">it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
 deprecation notices emitted by the dependency itself;</li>
 
-    <li class="dash">it disables PhpMetrics&#039; Composer package freshness lookup so metrics runs do
-not block on Packagist availability or local network state.</li>
+    <li class="dash">it keeps PhpMetrics&#039; Composer analysis enabled so the reports include package
+metadata from the root <code>composer.json</code>
+ and <code>composer.lock</code>
+, while the
+default exclusions keep nested fixture projects out of that Composer scan;</li>
+
+    <li class="dash">it limits PhpMetrics&#039; per-package Packagist socket wait so package freshness
+enrichment cannot leave metrics generation stuck indefinitely.</li>
 
 </ul>
 
