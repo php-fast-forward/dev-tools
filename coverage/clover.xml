@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777006603">
-  <project timestamp="1777006603" name="Clover Coverage">
+<coverage generated="1777007228">
+  <project timestamp="1777007228" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -4738,18 +4738,18 @@
         <class name="FastForward\DevTools\License\Generator" namespace="FastForward\DevTools\License">
           <metrics complexity="6" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="17" elements="20" coveredelements="20"/>
         </class>
-        <line num="52" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="58" type="stmt" count="4"/>
-        <line num="67" type="method" name="generate" visibility="public" complexity="2" crap="2" count="3"/>
-        <line num="69" type="stmt" count="3"/>
-        <line num="71" type="stmt" count="3"/>
-        <line num="72" type="stmt" count="2"/>
+        <line num="52" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
+        <line num="58" type="stmt" count="5"/>
+        <line num="67" type="method" name="generate" visibility="public" complexity="2" crap="2" count="4"/>
+        <line num="69" type="stmt" count="4"/>
+        <line num="71" type="stmt" count="4"/>
+        <line num="72" type="stmt" count="3"/>
         <line num="75" type="stmt" count="1"/>
         <line num="77" type="stmt" count="1"/>
-        <line num="85" type="method" name="generateContent" visibility="public" complexity="3" crap="3" count="4"/>
-        <line num="87" type="stmt" count="4"/>
-        <line num="89" type="stmt" count="4"/>
-        <line num="90" type="stmt" count="1"/>
+        <line num="85" type="method" name="generateContent" visibility="public" complexity="3" crap="3" count="5"/>
+        <line num="87" type="stmt" count="5"/>
+        <line num="89" type="stmt" count="5"/>
+        <line num="90" type="stmt" count="2"/>
         <line num="94" type="stmt" count="3"/>
         <line num="95" type="stmt" count="3"/>
         <line num="96" type="stmt" count="3"/>
@@ -4762,16 +4762,21 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/License/Resolver.php">
         <class name="FastForward\DevTools\License\Resolver" namespace="FastForward\DevTools\License">
-          <metrics complexity="3" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
+          <metrics complexity="6" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
         </class>
-        <line num="54" type="method" name="resolve" visibility="public" complexity="2" crap="2" count="3"/>
-        <line num="56" type="stmt" count="3"/>
-        <line num="58" type="stmt" count="3"/>
-        <line num="59" type="stmt" count="1"/>
-        <line num="62" type="stmt" count="2"/>
-        <line num="72" type="method" name="normalize" visibility="private" complexity="1" crap="1" count="3"/>
-        <line num="74" type="stmt" count="3"/>
-        <metrics loc="77" ncloc="43" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="5" coveredstatements="5" elements="7" coveredelements="7"/>
+        <line num="54" type="method" name="resolve" visibility="public" complexity="3" crap="3" count="5"/>
+        <line num="56" type="stmt" count="5"/>
+        <line num="58" type="stmt" count="5"/>
+        <line num="59" type="stmt" count="2"/>
+        <line num="62" type="stmt" count="3"/>
+        <line num="63" type="stmt" count="1"/>
+        <line num="66" type="stmt" count="2"/>
+        <line num="76" type="method" name="normalize" visibility="private" complexity="3" crap="3" count="5"/>
+        <line num="78" type="stmt" count="5"/>
+        <line num="79" type="stmt" count="1"/>
+        <line num="82" type="stmt" count="4"/>
+        <line num="84" type="stmt" count="4"/>
+        <metrics loc="87" ncloc="53" classes="1" methods="2" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="10" coveredstatements="10" elements="12" coveredelements="12"/>
       </file>
     </package>
     <file name="/home/runner/work/dev-tools/dev-tools/src/License/GeneratorInterface.php">
@@ -5501,6 +5506,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="127" loc="17687" ncloc="10687" classes="95" methods="438" coveredmethods="361" conditionals="0" coveredconditionals="0" statements="4312" coveredstatements="4027" elements="4750" coveredelements="4388"/>
+    <metrics files="127" loc="17697" ncloc="10697" classes="95" methods="438" coveredmethods="361" conditionals="0" coveredconditionals="0" statements="4317" coveredstatements="4032" elements="4755" coveredelements="4393"/>
   </project>
 </coverage>
