@@ -2076,6 +2076,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_ERROR_REPORTING"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003APHP_DEFAULT_SOCKET_TIMEOUT",
+            "name": "PHP_DEFAULT_SOCKET_TIMEOUT",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_DEFAULT_SOCKET_TIMEOUT"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
             "summary": "",
@@ -2310,6 +2315,11 @@ Search.appendIndex(
             "name": "execute",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003AgetProcessLabel\u0028\u0029",
+            "name": "getProcessLabel",
+            "summary": "Resolves\u0020a\u0020human\u002Dreadable\u0020process\u0020label\u0020for\u0020a\u0020nested\u0020standards\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Command-StandardsCommand.html#method_getProcessLabel"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\StandardsCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
@@ -2931,6 +2941,11 @@ Search.appendIndex(
             "summary": "Determines\u0020whether\u0020workflow\u0020commands\u0020should\u0020be\u0020emitted\u0020for\u0020the\u0020current\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_supportsWorkflowCommands"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AisTruthyEnvironmentFlag\u0028\u0029",
+            "name": "isTruthyEnvironmentFlag",
+            "summary": "Determines\u0020whether\u0020an\u0020environment\u0020flag\u0020is\u0020set\u0020to\u0020a\u0020truthy\u0020value.",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_isTruthyEnvironmentFlag"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AescapeData\u0028\u0029",
             "name": "escapeData",
             "summary": "Escapes\u0020workflow\u002Dcommand\u0020payload\u0020data\u0020according\u0020to\u0020GitHub\u0020Actions\u0020rules.",
@@ -2950,6 +2965,51 @@ Search.appendIndex(
             "name": "output",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#property_output"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputCapabilityDetector",
+            "name": "OutputCapabilityDetector",
+            "summary": "Detects\u0020ANSI\u002Dfriendly\u0020output\u0020by\u0020decoration\u0020state\u0020or\u0020TTY\u002Dbacked\u0020streams.",
+            "url": "classes/FastForward-DevTools-Console-Output-OutputCapabilityDetector.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputCapabilityDetector\u003A\u003AsupportsAnsi\u0028\u0029",
+            "name": "supportsAnsi",
+            "summary": "Determines\u0020whether\u0020the\u0020output\u0020supports\u0020ANSI\u002Dcapable\u0020human\u0020interaction.",
+            "url": "classes/FastForward-DevTools-Console-Output-OutputCapabilityDetector.html#method_supportsAnsi"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputCapabilityDetectorInterface",
+            "name": "OutputCapabilityDetectorInterface",
+            "summary": "Detects\u0020console\u0020output\u0020capabilities\u0020without\u0020requiring\u0020PTY\u002Dbacked\u0020processes.",
+            "url": "classes/FastForward-DevTools-Console-Output-OutputCapabilityDetectorInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\OutputCapabilityDetectorInterface\u003A\u003AsupportsAnsi\u0028\u0029",
+            "name": "supportsAnsi",
+            "summary": "Determines\u0020whether\u0020the\u0020output\u0020supports\u0020ANSI\u002Dcapable\u0020human\u0020interaction.",
+            "url": "classes/FastForward-DevTools-Console-Output-OutputCapabilityDetectorInterface.html#method_supportsAnsi"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\Environment",
+            "name": "Environment",
+            "summary": "Reads\u0020environment\u0020variables\u0020through\u0020PHP\u0027s\u0020native\u0020runtime.",
+            "url": "classes/FastForward-DevTools-Environment-Environment.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\Environment\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "Reads\u0020an\u0020environment\u0020variable.",
+            "url": "classes/FastForward-DevTools-Environment-Environment.html#method_get"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\EnvironmentInterface",
+            "name": "EnvironmentInterface",
+            "summary": "Reads\u0020process\u0020environment\u0020variables\u0020without\u0020binding\u0020callers\u0020to\u0020Composer\u0020APIs.",
+            "url": "classes/FastForward-DevTools-Environment-EnvironmentInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\EnvironmentInterface\u003A\u003Aget\u0028\u0029",
+            "name": "get",
+            "summary": "Reads\u0020an\u0020environment\u0020variable.",
+            "url": "classes/FastForward-DevTools-Environment-EnvironmentInterface.html#method_get"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
@@ -3966,6 +4026,26 @@ Search.appendIndex(
             "summary": "Returns\u0020PHP\u0020source\u0020files\u0020that\u0020tooling\u0020SHOULD\u0020inspect\u0020without\u0020traversing\u0020generated\u0020directories.",
             "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingSourcePaths"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Php\\Extension",
+            "name": "Extension",
+            "summary": "Checks\u0020PHP\u0020runtime\u0020extension\u0020availability\u0020through\u0020PHP\u0027s\u0020native\u0020runtime.",
+            "url": "classes/FastForward-DevTools-Php-Extension.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Php\\Extension\u003A\u003AisLoaded\u0028\u0029",
+            "name": "isLoaded",
+            "summary": "Determines\u0020whether\u0020a\u0020PHP\u0020extension\u0020is\u0020loaded\u0020in\u0020the\u0020current\u0020runtime.",
+            "url": "classes/FastForward-DevTools-Php-Extension.html#method_isLoaded"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Php\\ExtensionInterface",
+            "name": "ExtensionInterface",
+            "summary": "Checks\u0020PHP\u0020runtime\u0020extension\u0020availability\u0020without\u0020coupling\u0020callers\u0020to\u0020global\u0020functions.",
+            "url": "classes/FastForward-DevTools-Php-ExtensionInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Php\\ExtensionInterface\u003A\u003AisLoaded\u0028\u0029",
+            "name": "isLoaded",
+            "summary": "Determines\u0020whether\u0020a\u0020PHP\u0020extension\u0020is\u0020loaded\u0020in\u0020the\u0020current\u0020runtime.",
+            "url": "classes/FastForward-DevTools-Php-ExtensionInterface.html#method_isLoaded"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
             "name": "CoverageSummary",
             "summary": "Represents\u0020the\u0020line\u0020coverage\u0020summary\u0020extracted\u0020from\u0020a\u0020PHPUnit\u0020\u0060coverage\u002Dphp\u0060\u0020report.",
@@ -4136,6 +4216,71 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-PhpUnit-Runner-Extension-DevToolsExtension.html#property_startedSubscriber"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator",
+            "name": "ColorPreservingProcessEnvironmentConfigurator",
+            "summary": "Keeps\u0020nested\u0020process\u0020output\u0020color\u002Dfriendly\u0020without\u0020requiring\u0020PTY\u0020support.",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020color\u002Drelated\u0020environment\u0020variables\u0020for\u0020nested\u0020commands.",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003AshouldForceColor\u0028\u0029",
+            "name": "shouldForceColor",
+            "summary": "Determines\u0020whether\u0020child\u0020processes\u0020should\u0020be\u0020nudged\u0020toward\u0020ANSI\u0020output.",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#method_shouldForceColor"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003AisTruthyEnvironmentFlag\u0028\u0029",
+            "name": "isTruthyEnvironmentFlag",
+            "summary": "Determines\u0020whether\u0020an\u0020environment\u0020flag\u0020is\u0020set\u0020to\u0020a\u0020truthy\u0020value.",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#method_isTruthyEnvironmentFlag"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003AhasNoColorOptOut\u0028\u0029",
+            "name": "hasNoColorOptOut",
+            "summary": "Determines\u0020whether\u0020the\u0020process\u0020or\u0020parent\u0020environment\u0020opted\u0020out\u0020of\u0020color.",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#method_hasNoColorOptOut"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003AsetDefault\u0028\u0029",
+            "name": "setDefault",
+            "summary": "Sets\u0020an\u0020environment\u0020default\u0020while\u0020preserving\u0020caller\u002Dprovided\u0020values.",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#method_setDefault"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ColorPreservingProcessEnvironmentConfigurator\u003A\u003A\u0024outputCapabilityDetector",
+            "name": "outputCapabilityDetector",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ColorPreservingProcessEnvironmentConfigurator.html#property_outputCapabilityDetector"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\CompositeProcessEnvironmentConfigurator",
+            "name": "CompositeProcessEnvironmentConfigurator",
+            "summary": "Applies\u0020multiple\u0020process\u0020environment\u0020configurators\u0020in\u0020a\u0020stable\u0020order.",
+            "url": "classes/FastForward-DevTools-Process-CompositeProcessEnvironmentConfigurator.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\CompositeProcessEnvironmentConfigurator\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-CompositeProcessEnvironmentConfigurator.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\CompositeProcessEnvironmentConfigurator\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020environment\u0020variables\u0020for\u0020a\u0020queued\u0020process.",
+            "url": "classes/FastForward-DevTools-Process-CompositeProcessEnvironmentConfigurator.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\CompositeProcessEnvironmentConfigurator\u003A\u003A\u0024configurators",
+            "name": "configurators",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-CompositeProcessEnvironmentConfigurator.html#property_configurators"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessBuilder",
             "name": "ProcessBuilder",
             "summary": "Builds\u0020immutable\u0020process\u0020definitions\u0020from\u0020a\u0020command\u0020and\u0020a\u0020collection\u0020of\u0020arguments.",
@@ -4180,6 +4325,16 @@ Search.appendIndex(
             "name": "build",
             "summary": "Builds\u0020a\u0020process\u0020instance\u0020for\u0020the\u0020specified\u0020command.",
             "url": "classes/FastForward-DevTools-Process-ProcessBuilderInterface.html#method_build"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessEnvironmentConfiguratorInterface",
+            "name": "ProcessEnvironmentConfiguratorInterface",
+            "summary": "Configures\u0020subprocess\u0020environment\u0020variables\u0020before\u0020queued\u0020execution.",
+            "url": "classes/FastForward-DevTools-Process-ProcessEnvironmentConfiguratorInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessEnvironmentConfiguratorInterface\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020environment\u0020variables\u0020for\u0020a\u0020queued\u0020process.",
+            "url": "classes/FastForward-DevTools-Process-ProcessEnvironmentConfiguratorInterface.html#method_configure"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue",
             "name": "ProcessQueue",
@@ -4241,6 +4396,16 @@ Search.appendIndex(
             "summary": "Writes\u0020buffered\u0020detached\u0020output\u0020to\u0020the\u0020configured\u0020output.",
             "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_writeDetachedOutput"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003ArunInOutputSection\u0028\u0029",
+            "name": "runInOutputSection",
+            "summary": "Runs\u0020a\u0020callback\u0020inside\u0020a\u0020local\u0020Symfony\u002Dstyle\u0020section\u0020when\u0020output\u0020supports\u0020it.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_runInOutputSection"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AshouldRenderLocalSection\u0028\u0029",
+            "name": "shouldRenderLocalSection",
+            "summary": "Determines\u0020whether\u0020local\u0020Symfony\u0020section\u0020chrome\u0020should\u0020be\u0020emitted.",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#method_shouldRenderLocalSection"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003AresolveLabel\u0028\u0029",
             "name": "resolveLabel",
             "summary": "Resolves\u0020the\u0020label\u0020used\u0020when\u0020presenting\u0020queued\u0020process\u0020output.",
@@ -4276,6 +4441,21 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#property_githubActionOutput"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A\u0024environmentConfigurator",
+            "name": "environmentConfigurator",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#property_environmentConfigurator"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueue\u003A\u003A\u0024outputCapabilityDetector",
+            "name": "outputCapabilityDetector",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessQueue.html#property_outputCapabilityDetector"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessQueueInterface",
             "name": "ProcessQueueInterface",
             "summary": "Defines\u0020a\u0020queue\u0020responsible\u0020for\u0020collecting\u0020and\u0020executing\u0020process\u0020instances.",
@@ -4305,6 +4485,56 @@ Search.appendIndex(
             "name": "FAILURE",
             "summary": "Exit\u0020code\u0020indicating\u0020a\u0020queue\u0020failure.",
             "url": "classes/FastForward-DevTools-Process-ProcessQueueInterface.html#constant_FAILURE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator",
+            "name": "XdebugDisablingProcessEnvironmentConfigurator",
+            "summary": "Disables\u0020Xdebug\u0020for\u0020child\u0020processes\u0020unless\u0020coverage\u0020still\u0020needs\u0020it.",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020Xdebug\u002Drelated\u0020environment\u0020variables\u0020for\u0020nested\u0020commands.",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003AshouldDisableXdebug\u0028\u0029",
+            "name": "shouldDisableXdebug",
+            "summary": "Determines\u0020whether\u0020Xdebug\u0020can\u0020be\u0020disabled\u0020for\u0020the\u0020child\u0020process.",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#method_shouldDisableXdebug"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003ArequiresCoverage\u0028\u0029",
+            "name": "requiresCoverage",
+            "summary": "Determines\u0020whether\u0020the\u0020child\u0020process\u0020command\u0020line\u0020requests\u0020coverage.",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#method_requiresCoverage"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003AcontainsCommandLineArgument\u0028\u0029",
+            "name": "containsCommandLineArgument",
+            "summary": "Determines\u0020whether\u0020a\u0020command\u0020line\u0020contains\u0020an\u0020exact\u0020long\u0020option.",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#method_containsCommandLineArgument"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003AisTruthyEnvironmentFlag\u0028\u0029",
+            "name": "isTruthyEnvironmentFlag",
+            "summary": "Determines\u0020whether\u0020an\u0020environment\u0020flag\u0020is\u0020set\u0020to\u0020a\u0020truthy\u0020value.",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#method_isTruthyEnvironmentFlag"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003ACOVERAGE_ARGUMENT_PATTERNS",
+            "name": "COVERAGE_ARGUMENT_PATTERNS",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#constant_COVERAGE_ARGUMENT_PATTERNS"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\XdebugDisablingProcessEnvironmentConfigurator\u003A\u003A\u0024extension",
+            "name": "extension",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#property_extension"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Psr\\Clock\\SystemClock",
             "name": "SystemClock",
@@ -4816,6 +5046,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-console-output.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment",
+            "name": "Environment",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-environment.html"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem",
             "name": "Filesystem",
             "summary": "",
@@ -4850,6 +5085,11 @@ Search.appendIndex(
             "name": "Path",
             "summary": "",
             "url": "namespaces/fastforward-devtools-path.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Php",
+            "name": "Php",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-php.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage",
             "name": "Coverage",

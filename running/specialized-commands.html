@@ -2291,6 +2291,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-environment.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Environment
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-filesystem.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2427,6 +2449,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Path
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-php.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Php
         </a>
 
             </div>
@@ -3148,7 +3192,14 @@ structured while forwarding JSON or quieter modes to the wrapped tools where
 available;</li>
 
     <li class="dash">it suppresses deprecation notices emitted by the PhpMetrics dependency
-itself so the command output stays readable.</li>
+itself so the command output stays readable;</li>
+
+    <li class="dash">it keeps PhpMetrics&#039; Composer analysis enabled so report generation includes
+root package metadata, while default exclusions keep nested fixture projects
+out of that Composer scan;</li>
+
+    <li class="dash">it limits PhpMetrics&#039; per-package Packagist socket wait so package freshness
+enrichment cannot leave report generation stuck indefinitely.</li>
 
 </ul>
 
@@ -3425,6 +3476,15 @@ directories;</li>
  and <code>--pretty-json</code>
  are propagated to each subprocess, while
 their progress output is suppressed where supported;</li>
+
+    <li class="dash">human-readable runs keep nested command output grouped with concise local
+section boundaries, pass color-friendly environment variables to
+subprocesses, and forward explicit ANSI flags to Symfony Console tools;</li>
+
+    <li class="dash">queued subprocesses run with <code>XDEBUG_MODE=off</code>
+ when Xdebug is loaded but
+the command does not need Xdebug for coverage, or when PCOV can provide
+coverage instead;</li>
 
     <li class="dash">it is the reporting stage used by <code>standards</code>
 .</li>

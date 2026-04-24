@@ -2291,6 +2291,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-environment.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Environment
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-filesystem.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2427,6 +2449,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Path
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-php.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Php
         </a>
 
             </div>
@@ -2959,7 +3003,7 @@ changing your current shell session first.</p>
     <p>Comma-separated directories that should be excluded from analysis.</p>
 
     <p>Default:
-<code>vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources</code>
+<code>vendor,tmp,cache,spec,build,.dev-tools,backup,resources,tests/Fixtures</code>
 .</p>
 </dd>
                                 <dt><code>--target=&lt;directory&gt;</code>
@@ -3049,7 +3093,16 @@ text mode;</li>
 running PhpMetrics in a quieter mode to avoid polluting the captured payload;</li>
 
     <li class="dash">it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
-deprecation notices emitted by the dependency itself.</li>
+deprecation notices emitted by the dependency itself;</li>
+
+    <li class="dash">it keeps PhpMetrics&#039; Composer analysis enabled so the reports include package
+metadata from the root <code>composer.json</code>
+ and <code>composer.lock</code>
+, while the
+default exclusions keep nested fixture projects out of that Composer scan;</li>
+
+    <li class="dash">it limits PhpMetrics&#039; per-package Packagist socket wait so package freshness
+enrichment cannot leave metrics generation stuck indefinitely.</li>
 
 </ul>
 

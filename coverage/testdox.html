@@ -224,6 +224,13 @@
             <li class="success">Execute will capture buffered output when json is requested</li>
             <li class="success">Execute will enable progress when requested</li>
         </ul>
+        <h2>Color Preserving Process Environment Configurator (FastForward\DevTools\Tests\Process\ColorPreservingProcessEnvironmentConfigurator)</h2>
+        <ul>
+            <li class="success">Configure adds color environment for decorated output</li>
+            <li class="success">Configure does not override no color opt out</li>
+            <li class="success">Configure does nothing when color is not requested</li>
+            <li class="success">Configure honors parent force color for plain output</li>
+        </ul>
         <h2>Command (FastForward\DevTools\Tests\Console\Command\Command)</h2>
         <ul>
             <li class="success">Execute will run php unit process with config file</li>
@@ -304,6 +311,10 @@
         <h2>Composite Context Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CompositeContextProcessor)</h2>
         <ul>
             <li class="success">Process will apply processors sequentially</li>
+        </ul>
+        <h2>Composite Process Environment Configurator (FastForward\DevTools\Tests\Process\CompositeProcessEnvironmentConfigurator)</h2>
+        <ul>
+            <li class="success">Configure delegates to every configurator</li>
         </ul>
         <h2>Copy Resource Command (FastForward\DevTools\Tests\Console\Command\CopyResourceCommand)</h2>
         <ul>
@@ -390,6 +401,12 @@
             <li class="success">It will expose reusable default skipped rules</li>
             <li class="success">Apply default paths and skips will keep working with a builder</li>
         </ul>
+        <h2>Environment (FastForward\DevTools\Tests\Environment\Environment)</h2>
+        <ul>
+            <li class="success">Get returns null for missing environment variable</li>
+            <li class="success">Get returns default for missing environment variable</li>
+            <li class="success">Get returns environment variable value</li>
+        </ul>
         <h2>Event Tracer (FastForward\DevTools\Tests\PhpUnit\Event\EventTracer)</h2>
         <ul>
             <li class="success">Trace stores events by class with data set #0</li>
@@ -421,6 +438,10 @@
             <li class="success">Filter will remove configured paths even with slash variants</li>
             <li class="success">Filter will preserve original candidate order</li>
             <li class="success">Filter will keep nested candidates when parent path is configured</li>
+        </ul>
+        <h2>Extension (FastForward\DevTools\Tests\Php\Extension)</h2>
+        <ul>
+            <li class="success">Is loaded returns native extension status</li>
         </ul>
         <h2>File Diff (FastForward\DevTools\Tests\Resource\FileDiff)</h2>
         <ul>
@@ -631,6 +652,12 @@
             <li class="success">Execute will run php metrics in quiet mode when json is requested</li>
             <li class="success">Execute will not run php metrics in quiet mode when progress is requested</li>
         </ul>
+        <h2>Output Capability Detector (FastForward\DevTools\Tests\Console\Output\OutputCapabilityDetector)</h2>
+        <ul>
+            <li class="success">Supports ansi when output is decorated</li>
+            <li class="success">Does not support ansi for plain non stream output</li>
+            <li class="success">Does not support ansi for plain non tty stream output</li>
+        </ul>
         <h2>Output Format Logger (FastForward\DevTools\Tests\Console\Logger\OutputFormatLogger)</h2>
         <ul>
             <li class="success">Log will write interpolated info messages to standard output</li>
@@ -680,6 +707,8 @@
             <li class="success">Add will not enable pty for queued processes</li>
             <li class="success">Run with empty queue returns success</li>
             <li class="success">Run with successful blocking process returns success</li>
+            <li class="success">Run configures blocking process environment before execution</li>
+            <li class="success">Run wraps blocking process output in local section</li>
             <li class="success">Run with failing blocking process returns failure</li>
             <li class="success">Run with ignored failing blocking process returns success</li>
             <li class="success">Run with null exit code returns failure</li>
@@ -848,6 +877,17 @@
             <li class="success">Write dumps content to file</li>
             <li class="success">Write with empty entries dumps empty string</li>
             <li class="success">Write with multiple entries joins with newline</li>
+        </ul>
+        <h2>Xdebug Disabling Process Environment Configurator (FastForward\DevTools\Tests\Process\XdebugDisablingProcessEnvironmentConfigurator)</h2>
+        <ul>
+            <li class="success">Configure disables xdebug for non coverage process</li>
+            <li class="success">Configure does not override process xdebug mode</li>
+            <li class="success">Configure does not disable xdebug when parent allows composer xdebug</li>
+            <li class="success">Configure does not disable xdebug when parent already configured xdebug mode</li>
+            <li class="success">Configure does not disable xdebug for coverage when pcov is unavailable</li>
+            <li class="success">Configure disables xdebug for coverage when pcov is available</li>
+            <li class="success">Configure does not treat coverage summary as coverage driver requirement</li>
+            <li class="success">Configure does nothing when xdebug is not loaded</li>
         </ul>
     </body>
 </html>

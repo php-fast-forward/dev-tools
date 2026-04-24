@@ -2291,6 +2291,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-environment.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Environment
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-filesystem.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2427,6 +2449,28 @@
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Path
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-php.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Php
         </a>
 
             </div>
@@ -3191,6 +3235,41 @@ non-PTY in CI or other non-interactive process runners.</p>
             
     <p>When calling lower-level tools directly, use their non-interactive flags and
 provide required values through environment variables or workflow inputs.</p>
+
+    </section>
+
+            <section class="section " id="repeated-composer-xdebug-warnings">
+            <h2>Repeated Composer Xdebug Warnings</h2>
+
+            
+    <p>Scope: local orchestration commands.</p>
+
+            
+    <p>Symptoms:</p>
+
+            
+
+<ul>
+    <li class="dash">Composer repeatedly prints that it is operating slower than normal because
+Xdebug is enabled;</li>
+
+    <li class="dash">aggregate commands emit the warning once per nested Composer subprocess.</li>
+
+</ul>
+
+            
+    <p>Behavior:</p>
+
+            
+    <p>DevTools sets <code>XDEBUG_MODE=off</code>
+ for queued child processes when Xdebug is
+loaded but the child command does not need Xdebug for coverage. Coverage runs
+keep Xdebug available when PCOV is not loaded, and use PCOV when it is
+available. A warning printed by the top-level <code>composer dev-tools</code>
+ process
+can still appear before DevTools itself starts; run that command with
+<code>XDEBUG_MODE=off</code>
+ when Xdebug is not needed for the top-level process.</p>
 
     </section>
 
