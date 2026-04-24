@@ -30,9 +30,9 @@ interface ResolverInterface
     /**
      * Resolves a license identifier to its template filename.
      *
-     * @param string $license The license identifier to resolve
+     * @param string|null $license The license identifier to resolve
      *
      * @return string|null The template filename if supported, or null if not
      */
-    public function resolve(string $license): ?string;
+    public function resolve(?string $license): ?string;
 }
