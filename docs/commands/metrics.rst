@@ -33,7 +33,7 @@ Options
    Comma-separated directories that should be excluded from analysis.
 
    Default:
-   ``vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources``.
+   ``vendor,tmp,cache,spec,build,.dev-tools,backup,resources,tests/Fixtures``.
 
 ``--target=<directory>``
    Output directory for the generated metrics reports.
@@ -94,5 +94,8 @@ Behavior
   running PhpMetrics in a quieter mode to avoid polluting the captured payload;
 - it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
   deprecation notices emitted by the dependency itself;
-- it disables PhpMetrics' Composer package freshness lookup so metrics runs do
-  not block on Packagist availability or local network state.
+- it keeps PhpMetrics' Composer analysis enabled so the reports include package
+  metadata from the root ``composer.json`` and ``composer.lock``, while the
+  default exclusions keep nested fixture projects out of that Composer scan;
+- it limits PhpMetrics' per-package Packagist socket wait so package freshness
+  enrichment cannot leave metrics generation stuck indefinitely.

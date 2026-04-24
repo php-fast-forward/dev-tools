@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Preserve color-friendly nested command environments, explicit Symfony Console ANSI flags, concise process section labels, and offline-safe PhpMetrics execution without restoring PTY (#239)
+- Preserve color-friendly nested command environments, explicit Symfony Console ANSI flags, concise process section labels, and fixture-safe PhpMetrics execution with bounded Packagist lookups without restoring PTY (#239)
 - Disable Xdebug for queued child processes unless coverage requires it without PCOV, reducing repeated Composer Xdebug warnings in orchestrated commands (#239)
 - Keep the reports workflow permission warning loop shell-safe for paths containing backslashes (#244)
 - Keep required PHPUnit matrix checks reporting after workflow-managed `.github/wiki` pointer commits by running the pull-request test workflow without top-level path filters and aligning the packaged consumer test wrapper (#230)

@@ -133,8 +133,11 @@ Important details:
   available;
 - it suppresses deprecation notices emitted by the PhpMetrics dependency
   itself so the command output stays readable;
-- it disables PhpMetrics' Composer package freshness lookup so report
-  generation does not depend on Packagist connectivity.
+- it keeps PhpMetrics' Composer analysis enabled so report generation includes
+  root package metadata, while default exclusions keep nested fixture projects
+  out of that Composer scan;
+- it limits PhpMetrics' per-package Packagist socket wait so package freshness
+  enrichment cannot leave report generation stuck indefinitely.
 
 ``code-style``
 --------------

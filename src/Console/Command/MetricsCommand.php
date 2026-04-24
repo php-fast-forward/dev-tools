@@ -51,6 +51,11 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
     private const int PHP_ERROR_REPORTING = \E_ALL & ~\E_DEPRECATED;
 
     /**
+     * @var int the maximum seconds PhpMetrics may wait on each Packagist package lookup
+     */
+    private const int PHP_DEFAULT_SOCKET_TIMEOUT = 1;
+
+    /**
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PhpMetrics process
      * @param ProcessQueueInterface $processQueue the queue used to execute the PhpMetrics process
      * @param LoggerInterface $logger the output-aware logger
@@ -80,7 +85,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
                 name: 'exclude',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Comma-separated directories that SHOULD be excluded from analysis.',
-                default: 'vendor,test,tests,tmp,cache,spec,build,.dev-tools,backup,resources',
+                default: 'vendor,tmp,cache,spec,build,.dev-tools,backup,resources,tests/Fixtures',
             )
             ->addOption(
                 name: 'target',
@@ -118,7 +123,6 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--git', 'git')
-            ->withArgument('--composer', 'false')
             ->withArgument('--exclude', $exclude)
             ->withArgument('--report-html', $target)
             ->withArgument('--report-json', $target . '/report.json')
@@ -135,7 +139,12 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
         $this->processQueue->add(
             process: $processBuilder
                 ->withArgument('.')
-                ->build([\PHP_BINARY, '-derror_reporting=' . self::PHP_ERROR_REPORTING, self::BINARY]),
+                ->build([
+                    \PHP_BINARY,
+                    '-derror_reporting=' . self::PHP_ERROR_REPORTING,
+                    '-ddefault_socket_timeout=' . self::PHP_DEFAULT_SOCKET_TIMEOUT,
+                    self::BINARY,
+                ]),
             label: 'Generating Metrics with PhpMetrics',
         );
 
