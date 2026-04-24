@@ -24,6 +24,7 @@ use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Clock\ClockInterface;
 use Twig\Environment;
+use Twig\Markup;
 
 /**
  * Generates LICENSE files from composer.json metadata.
@@ -91,7 +92,7 @@ final readonly class Generator implements GeneratorInterface
 
         try {
             $content = $this->renderer->render('licenses/' . $templateFilename, [
-                'copyright_holder' => (string) $this->composer->getAuthors(true),
+                'copyright_holder' => new Markup((string) $this->composer->getAuthors(true), 'UTF-8'),
                 'year' => $this->clock->now()
                     ->format('Y'),
             ]);
