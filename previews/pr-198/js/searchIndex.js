@@ -4551,6 +4551,11 @@ Search.appendIndex(
             "summary": "Removes\u0020a\u0020broken\u0020symlink\u0020and\u0020creates\u0020a\u0020fresh\u0020one\u0020pointing\u0020to\u0020the\u0020current\u0020source.",
             "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_repairBrokenLink"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AnormalizeRelativeSourcePath\u0028\u0029",
+            "name": "normalizeRelativeSourcePath",
+            "summary": "Normalizes\u0020a\u0020relative\u0020symlink\u0020target\u0020emitted\u0020by\u0020Symfony\u0020path\u0020helpers.",
+            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_normalizeRelativeSourcePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AisSymlink\u0028\u0029",
             "name": "isSymlink",
             "summary": "Checks\u0020if\u0020a\u0020path\u0020is\u0020a\u0020symbolic\u0020link.",
