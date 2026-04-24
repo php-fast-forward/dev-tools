@@ -119,11 +119,7 @@ final class Filesystem implements FilesystemInterface
      */
     public function symlink(string $originDir, string $targetDir, bool $copyOnWindows = false): void
     {
-        $origin = Path::isAbsolute($originDir)
-            ? $this->getAbsolutePath($originDir)
-            : $originDir;
-
-        $this->filesystem->symlink($origin, $this->getAbsolutePath($targetDir), $copyOnWindows);
+        $this->filesystem->symlink($originDir, $this->getAbsolutePath($targetDir), $copyOnWindows);
     }
 
     /**
