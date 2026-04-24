@@ -10,8 +10,8 @@ Why This Command Exists
 
 Fast Forward libraries can share agent skills without copying them into every
 consumer repository. The packaged skill directories live in this repository,
-while consumer repositories receive lightweight symlinks that point back to the
-packaged source.
+while consumer repositories receive lightweight repository-relative symlinks
+that point back to the packaged source.
 
 That approach keeps upgrades simple:
 
@@ -38,7 +38,8 @@ What the Command Does
    * - ``.agents/skills`` is missing
      - Creates the directory in the consumer repository.
    * - A packaged skill is missing locally
-     - Creates a symlink that points to the packaged skill directory.
+     - Creates a repository-relative symlink that points to the packaged skill
+       directory.
    * - A valid symlink already exists
      - Leaves the link unchanged.
    * - A symlink is broken

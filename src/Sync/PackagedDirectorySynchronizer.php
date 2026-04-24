@@ -136,8 +136,10 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
         string $sourcePath,
         SynchronizeResult $result,
     ): void {
-        $this->filesystem->symlink($sourcePath, $targetLink);
-        $this->logger->info('Created link: ' . $entryName . ' -> ' . $sourcePath);
+        $relativeSourcePath = $this->filesystem->makePathRelative($sourcePath, $this->filesystem->dirname($targetLink));
+
+        $this->filesystem->symlink($relativeSourcePath, $targetLink);
+        $this->logger->info('Created link: ' . $entryName . ' -> ' . $relativeSourcePath);
         $result->addCreatedLink($entryName);
     }
 

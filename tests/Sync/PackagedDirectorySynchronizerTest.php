@@ -121,6 +121,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
     public function synchronizeWithMissingTargetDirWillCreateItAndCreateLinks(): void
     {
         $entryPath = '/package/.agents/agents/issue-editor';
+        $relativeEntryPath = '../../../package/.agents/agents/issue-editor';
 
         $this->mockFinder($this->createDirectory('issue-editor', $entryPath));
 
@@ -134,9 +135,15 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->shouldBeCalledOnce();
         $this->filesystem->exists('/consumer/.agents/agents/issue-editor')
             ->willReturn(false);
-        $this->filesystem->symlink($entryPath, '/consumer/.agents/agents/issue-editor')
+        $this->filesystem->dirname('/consumer/.agents/agents/issue-editor')
+            ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
-        $this->logger->info('Created link: issue-editor -> ' . $entryPath)->shouldBeCalledOnce();
+        $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
+            ->willReturn($relativeEntryPath)
+            ->shouldBeCalledOnce();
+        $this->filesystem->symlink($relativeEntryPath, '/consumer/.agents/agents/issue-editor')
+            ->shouldBeCalledOnce();
+        $this->logger->info('Created link: issue-editor -> ' . $relativeEntryPath)->shouldBeCalledOnce();
 
         $result = $this->createSynchronizer()
             ->synchronize('/consumer/.agents/agents', '/package/.agents/agents', '.agents/agents');
@@ -188,6 +195,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
         $entryPath = '/package/.agents/agents/issue-editor';
         $targetLink = '/consumer/.agents/agents/issue-editor';
         $brokenPath = '/obsolete/.agents/agents/issue-editor';
+        $relativeEntryPath = '../../../package/.agents/agents/issue-editor';
 
         $this->mockFinder($this->createDirectory('issue-editor', $entryPath));
 
@@ -205,11 +213,17 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->willReturn(false);
         $this->filesystem->remove($targetLink)
             ->shouldBeCalledOnce();
-        $this->filesystem->symlink($entryPath, $targetLink)
+        $this->filesystem->dirname($targetLink)
+            ->willReturn('/consumer/.agents/agents')
+            ->shouldBeCalledOnce();
+        $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
+            ->willReturn($relativeEntryPath)
+            ->shouldBeCalledOnce();
+        $this->filesystem->symlink($relativeEntryPath, $targetLink)
             ->shouldBeCalledOnce();
         $this->logger->notice('Existing link is broken: issue-editor (removing and recreating)')
             ->shouldBeCalledOnce();
-        $this->logger->info('Created link: issue-editor -> ' . $entryPath)
+        $this->logger->info('Created link: issue-editor -> ' . $relativeEntryPath)
             ->shouldBeCalledOnce();
 
         $result = $this->createSynchronizer()

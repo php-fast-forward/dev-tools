@@ -138,6 +138,28 @@ final class MergerTest extends TestCase
      * @return void
      */
     #[Test]
+    public function mergeWillRemoveNestedExportIgnoreRulesWhenParentPathIsKept(): void
+    {
+        $existingContent = implode("\n", [
+            '* text=auto',
+            '/.agents/agents/ export-ignore',
+            '/.agents/skills/ export-ignore',
+            '/tests/ export-ignore',
+        ]);
+
+        $result = $this->merger->merge(
+            $existingContent,
+            ['/.agents/agents/', '/.agents/skills/', '/tests/'],
+            ['/.agents/'],
+        );
+
+        self::assertSame("* text=auto\n" . '/tests/ export-ignore', $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function mergeWillSortExportIgnoreEntriesWithDirectoriesBeforeFiles(): void
     {
         $existingContent = implode("\n", [

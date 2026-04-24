@@ -55,4 +55,20 @@ final class ExportIgnoreFilterTest extends TestCase
 
         self::assertSame(['/docs/', '/.github/'], $result);
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function filterWillKeepNestedCandidatesWhenParentPathIsConfigured(): void
+    {
+        $filter = new ExportIgnoreFilter();
+
+        $result = $filter->filter(
+            ['/.agents/agents/', '/.agents/skills/', '/tests/'],
+            ['/.agents/'],
+        );
+
+        self::assertSame(['/tests/'], $result);
+    }
 }
