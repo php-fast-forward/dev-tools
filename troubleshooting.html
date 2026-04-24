@@ -3153,6 +3153,15 @@ choosing a pointer.</p>
 </ul>
 
             
+    <p>DevTools streams child-process output through Symfony Process callbacks rather
+than forcing pseudo-terminal execution. Aggregated commands such as
+<code>reports</code>
+, <code>standards</code>
+, and <code>dev-tools:fix</code>
+ MUST keep nested commands
+non-PTY in CI or other non-interactive process runners.</p>
+
+            
     <p>Recovery:</p>
 
             <pre><code class="language-bash">composer dev-tools -- --no-interaction</code></pre>
