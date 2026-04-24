@@ -3088,9 +3088,15 @@ a parent-repository pointer update, it explicitly dispatches <code>tests.yml</co
  for
 the pull request head branch so the newest bot-authored commit receives the
 required <code>Run Tests</code>
- matrix checks. Test workflow concurrency cancels older
-in-progress runs for the same pull request so the newest commit owns the
-required check contexts.</p>
+ matrix checks. Because manually dispatched workflow check
+runs are not always treated as pull-request required checks, that dispatched
+test run also mirrors the matrix result into commit statuses named
+<code>Run Tests (8.3)</code>
+, <code>Run Tests (8.4)</code>
+, and <code>Run Tests (8.5)</code>
+. Test workflow
+concurrency cancels older in-progress runs for the same pull request so the
+newest commit owns the required check contexts.</p>
 
             
     <p>At a high level, the workflows need permission to read repository contents,
@@ -3110,9 +3116,12 @@ requests must be updated.</p>
 
             
     <p><code>tests.yml</code>
- only needs <code>contents: read</code>
+ needs <code>contents: read</code>
  because it checks out code, installs
-dependencies, and runs PHPUnit.</p>
+dependencies, and runs PHPUnit. It also declares <code>statuses: write</code>
+ so
+workflow-dispatched test runs can mirror required matrix contexts onto
+bot-authored wiki pointer commits.</p>
 
             
     <p><code>reports.yml</code>
