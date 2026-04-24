@@ -7,7 +7,7 @@ Description
 -----------
 
 The ``skills`` command synchronizes packaged agent skills into the consumer
-repository's ``.agents/skills`` directory using symlinks.
+repository's ``.agents/skills`` directory using repository-relative symlinks.
 
 Usage
 -----
@@ -54,6 +54,6 @@ Behavior
 
 - Verifies the packaged ``.agents/skills`` directory before doing any work.
 - Creates the consumer ``.agents/skills`` directory when missing.
-- Creates missing symlinks to packaged skills.
+- Creates missing repository-relative symlinks to packaged skills.
 - Repairs broken symlinks.
 - Preserves an existing non-symlink directory instead of overwriting it.

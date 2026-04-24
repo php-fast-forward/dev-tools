@@ -40,7 +40,7 @@ final class ExportIgnoreFilter implements ExportIgnoreFilterInterface
      */
     public function filter(array $candidates, array $keepInExportPaths): array
     {
-        $keptPathLookup = [];
+        $keptPaths = [];
 
         foreach ($keepInExportPaths as $path) {
             $normalizedPath = $this->normalizePath($path);
@@ -49,13 +49,28 @@ final class ExportIgnoreFilter implements ExportIgnoreFilterInterface
                 continue;
             }
 
-            $keptPathLookup[$normalizedPath] = true;
+            $keptPaths[] = $normalizedPath;
         }
 
         return array_values(array_filter(
             $candidates,
-            fn(string $candidate): bool => ! isset($keptPathLookup[$this->normalizePath($candidate)])
+            fn(string $candidate): bool => ! $this->isKeptPath($this->normalizePath($candidate), $keptPaths)
         ));
+    }
+
+    /**
+     * @param string $candidate
+     * @param list<string> $keptPaths
+     */
+    private function isKeptPath(string $candidate, array $keptPaths): bool
+    {
+        foreach ($keptPaths as $keptPath) {
+            if ($candidate === $keptPath || str_starts_with($candidate . '/', $keptPath . '/')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

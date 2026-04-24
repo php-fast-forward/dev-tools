@@ -115,6 +115,18 @@ final class WriterTest extends TestCase
      * @return void
      */
     #[Test]
+    public function writeWillNotAddAnExtraBlankLineWhenContentAlreadyEndsWithALineFeed(): void
+    {
+        $this->writer->write('/project/.gitattributes', "/docs/ export-ignore\n");
+
+        $this->filesystem->dumpFile('/project/.gitattributes', "/docs/ export-ignore\n")
+            ->shouldBeCalledOnce();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function writeWillNormalizeMultipleSpaces(): void
     {
         $this->writer->write('/project/.gitattributes', '/docs/   export-ignore');

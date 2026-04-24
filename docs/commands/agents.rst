@@ -7,7 +7,8 @@ Description
 -----------
 
 The ``agents`` command synchronizes packaged project-agent prompts into the
-consumer repository's ``.agents/agents`` directory using symlinks.
+consumer repository's ``.agents/agents`` directory using repository-relative
+symlinks.
 
 Usage
 -----
@@ -54,7 +55,7 @@ Behavior
 
 - Verifies the packaged ``.agents/agents`` directory before doing any work.
 - Creates the consumer ``.agents/agents`` directory when missing.
-- Creates missing symlinks to packaged project agents.
+- Creates missing repository-relative symlinks to packaged project agents.
 - Repairs broken symlinks.
 - Preserves an existing non-symlink directory instead of overwriting it.
 - Reuses the same generic packaged-directory synchronizer as ``skills`` so

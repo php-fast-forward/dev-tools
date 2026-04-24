@@ -11,7 +11,7 @@ Why This Command Exists
 Fast Forward libraries can share role-based project agents without copying
 prompt files into every consumer repository. The packaged agent directories
 live in this repository, while consumer repositories receive lightweight
-symlinks that point back to the packaged source.
+repository-relative symlinks that point back to the packaged source.
 
 That approach keeps upgrades simple:
 
@@ -38,7 +38,8 @@ What the Command Does
    * - ``.agents/agents`` is missing
      - Creates the directory in the consumer repository.
    * - A packaged agent is missing locally
-     - Creates a symlink that points to the packaged agent directory.
+     - Creates a repository-relative symlink that points to the packaged
+       agent directory.
    * - A valid symlink already exists
      - Leaves the link unchanged.
    * - A symlink is broken

@@ -77,7 +77,7 @@ final class Merger implements MergerInterface
             }
 
             $pathKey = $this->normalizePathKey($pathSpec);
-            if (isset($keptExportLookup[$pathKey])) {
+            if ($this->isKeptPath($pathKey, $keptExportLookup)) {
                 continue;
             }
 
@@ -96,7 +96,7 @@ final class Merger implements MergerInterface
             $trimmedEntry = trim($entry);
             $pathKey = $this->normalizePathKey($trimmedEntry);
 
-            if (isset($keptExportLookup[$pathKey])) {
+            if ($this->isKeptPath($pathKey, $keptExportLookup)) {
                 continue;
             }
 
@@ -186,6 +186,21 @@ final class Merger implements MergerInterface
         }
 
         return $lookup;
+    }
+
+    /**
+     * @param string $pathKey
+     * @param array<string, true> $keptExportLookup
+     */
+    private function isKeptPath(string $pathKey, array $keptExportLookup): bool
+    {
+        foreach ($keptExportLookup as $keptPath => $_) {
+            if ($pathKey === $keptPath || str_starts_with($pathKey . '/', $keptPath . '/')) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
