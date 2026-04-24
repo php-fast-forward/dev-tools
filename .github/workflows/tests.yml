@@ -80,6 +80,7 @@ jobs:
         name: Run Tests
         runs-on: ubuntu-latest
         strategy:
+            fail-fast: false
             matrix: ${{ fromJson(needs.resolve_php.outputs.test-matrix) }}
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
@@ -118,6 +119,31 @@ jobs:
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer dev-tools tests -- --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
+
+            - name: Publish required test status
+              if: ${{ always() && inputs.publish-required-statuses }}
+              env:
+                GH_TOKEN: ${{ github.token }}
+                TARGET_SHA: ${{ github.sha }}
+                TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                TEST_CONTEXT: Run Tests (${{ matrix.php-version }})
+                TEST_RESULT: ${{ job.status }}
+              run: |
+                if [ "${TEST_RESULT}" = "success" ]; then
+                  state="success"
+                  description="Workflow-dispatched PHPUnit job passed."
+                else
+                  state="failure"
+                  description="Workflow-dispatched PHPUnit job result: ${TEST_RESULT}."
+                fi
+
+                gh api \
+                  --method POST \
+                  "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
+                  -f state="${state}" \
+                  -f context="${TEST_CONTEXT}" \
+                  -f description="${description}" \
+                  -f target_url="${TARGET_URL}"
 
     dependency-health:
         needs: resolve_php
@@ -184,30 +210,22 @@ jobs:
         if: ${{ always() && inputs.publish-required-statuses }}
         name: Publish Required Test Statuses
         needs:
-            - tests
+            - resolve_php
         runs-on: ubuntu-latest
         steps:
-            - name: Mirror required test matrix contexts
+            - name: Publish pending required test statuses
               env:
                 GH_TOKEN: ${{ github.token }}
                 TARGET_SHA: ${{ github.sha }}
                 TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                TESTS_RESULT: ${{ needs.tests.result }}
+                TEST_MATRIX: ${{ needs.resolve_php.outputs.test-matrix }}
               run: |
-                if [ "${TESTS_RESULT}" = "success" ]; then
-                  state="success"
-                  description="Workflow-dispatched PHPUnit matrix passed."
-                else
-                  state="failure"
-                  description="Workflow-dispatched PHPUnit matrix result: ${TESTS_RESULT}."
-                fi
-
-                for context in "Run Tests (8.3)" "Run Tests (8.4)" "Run Tests (8.5)"; do
+                php -r "foreach (json_decode(getenv('TEST_MATRIX'), true, 512, JSON_THROW_ON_ERROR)['php-version'] as \$version) { echo \$version, PHP_EOL; }" | while IFS= read -r php_version; do
                   gh api \
                     --method POST \
                     "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
-                    -f state="${state}" \
-                    -f context="${context}" \
-                    -f description="${description}" \
+                    -f state="pending" \
+                    -f context="Run Tests (${php_version})" \
+                    -f description="Workflow-dispatched PHPUnit job is pending." \
                     -f target_url="${TARGET_URL}"
                 done
