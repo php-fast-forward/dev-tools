@@ -3292,19 +3292,25 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
 .
     <em>   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
     </em>
-   Appends a run summary with the resolved version, version source, and pull-request URL.
-    <em>   Requires repository Actions permissions that allow the workflow token to create pull requests.
+   Dispatches <code>tests.yml</code>
+ for the release branch with required-status
+        mirroring enabled, because release branches are written by the workflow
+        token and do not receive ordinary <code>pull_request</code>
+ test runs
+        automatically.
+    <em>   Appends a run summary with the resolved version, version source, and pull-request URL.
+    </em>
+   Requires repository Actions permissions that allow the workflow token
+        to create pull requests and dispatch workflows.
+<em>   **Merged Release Pull Requests**:
+    </em>
+   Detects merged branches that match the configured release branch prefix.
+    <em>   Renders the released changelog section with ``composer dev-tools changelog:show -- &lt;version&gt;``.
+    </em>
+   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
+    <em>   Appends a run summary with the published tag and release URL.
 </em>
-   <strong>Merged Release Pull Requests</strong>
-:
-    <em>   Detects merged branches that match the configured release branch prefix.
-    </em>
-   Renders the released changelog section with <code>composer dev-tools changelog:show -- &lt;version&gt;</code>
-.
-    <em>   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
-    </em>
-   Appends a run summary with the published tag and release URL.
-*   Does <strong>not</strong>
+   Does <strong>not</strong>
  run for ordinary feature or fix pull requests merged into <code>main</code>
 .</p>
 
