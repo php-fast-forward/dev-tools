@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.2] - 2026-04-24
+
 ### Fixed
 
 - Dispatch required test status mirroring after changelog release-preparation workflows create or update release pull requests so release branches no longer require branch-protection bypass for workflow-authored commits (#250)
@@ -342,7 +344,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.1...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.2...HEAD
+[1.22.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.1...v1.22.2
 [1.22.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.0...v1.22.1
 [1.22.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.20.0...v1.21.0
