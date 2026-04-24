@@ -13,6 +13,9 @@ Use this checklist before reporting completion.
 - README, docs, wiki, reports, or sync outputs were updated when the change touched them.
 - The PR title follows repository conventions.
 - The PR body includes a clear summary, concrete testing notes, and `Closes #123` style closing text.
+- The published PR body was read back from GitHub and does not contain literal
+  escaped Markdown control characters such as `\n` where real newlines were
+  intended.
 - No duplicate PR was created for the same branch.
 - The final user summary explains what changed, what was verified, and what remains.
 
