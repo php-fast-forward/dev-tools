@@ -226,7 +226,7 @@ jobs:
               env:
                   GH_TOKEN: ${{ github.token }}
                   RELEASE_BRANCH: ${{ env.RELEASE_BRANCH_PREFIX }}${{ steps.version.outputs.value }}
-              run: gh workflow run tests.yml --ref "${RELEASE_BRANCH}" -f max-outdated=-1 -f publish-required-statuses=true
+              run: gh workflow run tests.yml --ref "${RELEASE_BRANCH}" -f publish-required-statuses=true
 
             - uses: actions/checkout@v6
             - name: Checkout dev-tools workflow action source
