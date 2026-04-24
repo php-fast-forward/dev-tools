@@ -93,7 +93,7 @@
             "FastForward\\DevTools\\Tests\\": "tests/"
         },
         "classmap": [
-            "tests/Fixtures/"
+            "tests/Fixtures/Console/"
         ]
     },
     "bin": "bin/dev-tools",

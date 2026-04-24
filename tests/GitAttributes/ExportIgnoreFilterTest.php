@@ -64,10 +64,7 @@ final class ExportIgnoreFilterTest extends TestCase
     {
         $filter = new ExportIgnoreFilter();
 
-        $result = $filter->filter(
-            ['/.agents/agents/', '/.agents/skills/', '/tests/'],
-            ['/.agents/'],
-        );
+        $result = $filter->filter(['/.agents/agents/', '/.agents/skills/', '/tests/'], ['/.agents/']);
 
         self::assertSame(['/tests/'], $result);
     }

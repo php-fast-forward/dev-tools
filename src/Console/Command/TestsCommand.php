@@ -46,10 +46,7 @@ use function is_numeric;
  * Facilitates the execution of the PHPUnit testing framework.
  * This class MUST NOT be overridden and SHALL configure testing parameters dynamically.
  */
-#[AsCommand(
-    name: 'tests',
-    description: 'Runs PHPUnit tests.'
-)]
+#[AsCommand(name: 'tests', description: 'Runs PHPUnit tests.')]
 final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasCacheOption;
@@ -187,10 +184,7 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
         if ($cacheEnabled) {
             $processBuilder = $processBuilder->withArgument(
                 '--cache-result',
-            )->withArgument(
-                '--cache-directory',
-                $this->resolvePath($input, 'cache-dir')
-            );
+            )->withArgument('--cache-directory', $this->resolvePath($input, 'cache-dir'));
         } else {
             $processBuilder = $processBuilder->withArgument('--do-not-cache-result');
         }

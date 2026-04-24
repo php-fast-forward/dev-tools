@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Input;
 
+use Throwable;
 use InvalidArgumentException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -140,7 +141,7 @@ trait HasCacheOption
     {
         try {
             return $input->hasParameterOption('--cache-dir', true);
-        } catch (\Throwable) {
+        } catch (Throwable) {
             return false;
         }
     }

@@ -31,10 +31,13 @@ use function Safe\getcwd;
  * converting provided paths to absolute representations when a base path is supplied or
  * dynamically inferred from the generic working directory.
  */
-final class Filesystem implements FilesystemInterface
+final readonly class Filesystem implements FilesystemInterface
 {
+    /**
+     * @param SymfonyFilesystem $filesystem
+     */
     public function __construct(
-        private readonly SymfonyFilesystem $filesystem = new SymfonyFilesystem(),
+        private SymfonyFilesystem $filesystem = new SymfonyFilesystem(),
     ) {}
 
     /**
@@ -84,7 +87,11 @@ final class Filesystem implements FilesystemInterface
      */
     public function copy(string $originFile, string $targetFile, bool $overwriteNewerFiles = false): void
     {
-        $this->filesystem->copy($this->getAbsolutePath($originFile), $this->getAbsolutePath($targetFile), $overwriteNewerFiles);
+        $this->filesystem->copy(
+            $this->getAbsolutePath($originFile),
+            $this->getAbsolutePath($targetFile),
+            $overwriteNewerFiles
+        );
     }
 
     /**

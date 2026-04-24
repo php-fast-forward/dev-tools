@@ -26,7 +26,12 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
+use function Safe\file_put_contents;
 use function Safe\getcwd;
+use function Safe\mkdir;
+use function Safe\realpath;
+use function sys_get_temp_dir;
+use function uniqid;
 
 #[CoversClass(WorkingProjectPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -39,7 +44,19 @@ final class WorkingProjectPathResolverTest extends TestCase
     public function itWillExposeCanonicalRepositoryRootPaths(): void
     {
         self::assertSame(
-            ['repo/.dev-tools', 'repo/resources', 'repo/vendor'],
+            [
+                'repo/.dev-tools',
+                'repo/backup',
+                'repo/cache',
+                'repo/public',
+                'repo/resources',
+                'repo/tmp',
+                'repo/vendor',
+                'repo/*/vendor',
+                'repo/*/vendor/*',
+                'repo/**/vendor',
+                'repo/**/vendor/*',
+            ],
             WorkingProjectPathResolver::getToolingExcludedDirectories('repo')
         );
     }
@@ -51,8 +68,74 @@ final class WorkingProjectPathResolverTest extends TestCase
     public function itWillNormalizePathSeparatorsWhenJoiningProjectPaths(): void
     {
         self::assertSame(
-            ['tmp/.dev-tools', 'tmp/resources', 'tmp/vendor'],
+            [
+                'tmp/.dev-tools',
+                'tmp/backup',
+                'tmp/cache',
+                'tmp/public',
+                'tmp/resources',
+                'tmp/tmp',
+                'tmp/vendor',
+                'tmp/*/vendor',
+                'tmp/*/vendor/*',
+                'tmp/**/vendor',
+                'tmp/**/vendor/*',
+            ],
             WorkingProjectPathResolver::getToolingExcludedDirectories('tmp/')
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillExposeRelativeToolingSkipPatternsByDefault(): void
+    {
+        self::assertSame(
+            [
+                '.dev-tools',
+                'backup',
+                'cache',
+                'public',
+                'resources',
+                'tmp',
+                'vendor',
+                '*/vendor',
+                '*/vendor/*',
+                '**/vendor',
+                '**/vendor/*',
+            ],
+            WorkingProjectPathResolver::getToolingExcludedDirectories()
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillExposeToolingSourcePathsWithoutTraversingVendorDirectories(): void
+    {
+        $fixtureDirectory = sys_get_temp_dir() . '/dev-tools-path-resolver-' . uniqid();
+
+        mkdir($fixtureDirectory . '/src', recursive: true);
+        mkdir($fixtureDirectory . '/tests/Fixtures/consumer/vendor/package/src', recursive: true);
+        mkdir($fixtureDirectory . '/resources', recursive: true);
+        mkdir($fixtureDirectory . '/backup', recursive: true);
+        mkdir($fixtureDirectory . '/.dev-tools/cache', recursive: true);
+
+        file_put_contents($fixtureDirectory . '/src/Example.php', '<?php');
+        file_put_contents($fixtureDirectory . '/tests/Fixtures/Example.php', '<?php');
+        file_put_contents($fixtureDirectory . '/tests/Fixtures/consumer/vendor/package/src/VendorExample.php', '<?php');
+        file_put_contents($fixtureDirectory . '/resources/Resource.php', '<?php');
+        file_put_contents($fixtureDirectory . '/backup/Backup.php', '<?php');
+        file_put_contents($fixtureDirectory . '/.dev-tools/cache/Cached.php', '<?php');
+
+        self::assertSame(
+            [
+                realpath($fixtureDirectory) . '/src/Example.php',
+                realpath($fixtureDirectory) . '/tests/Fixtures/Example.php',
+            ],
+            WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory))
         );
     }
 

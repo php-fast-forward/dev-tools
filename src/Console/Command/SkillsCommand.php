@@ -44,10 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * target paths, triggers synchronization, and translates the resulting status
  * into Symfony Console output and process exit codes.
  */
-#[AsCommand(
-    name: 'skills',
-    description: 'Synchronizes Fast Forward skills into .agents/skills directory.'
-)]
+#[AsCommand(name: 'skills', description: 'Synchronizes Fast Forward skills into .agents/skills directory.')]
 final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;

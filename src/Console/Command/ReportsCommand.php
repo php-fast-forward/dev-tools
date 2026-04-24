@@ -37,10 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Coordinates the generation of Fast Forward documentation frontpage and related reports.
  * This class MUST NOT be overridden and SHALL securely combine docs and testing commands.
  */
-#[AsCommand(
-    name: 'reports',
-    description: 'Generates the frontpage for Fast Forward documentation.'
-)]
+#[AsCommand(name: 'reports', description: 'Generates the frontpage for Fast Forward documentation.')]
 final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasCacheOption;

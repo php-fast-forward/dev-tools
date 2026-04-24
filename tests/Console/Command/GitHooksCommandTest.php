@@ -351,7 +351,7 @@ final class GitHooksCommandTest extends TestCase
         $this->filesystem->exists('/app/.git/hooks/post-merge')
             ->willReturn(true);
         $this->fileDiffer->diff(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge')
-            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', null))
+            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary'))
             ->shouldBeCalledOnce();
         $this->filesystem->remove('/app/.git/hooks/post-merge')
             ->shouldBeCalledOnce();
@@ -390,12 +390,14 @@ final class GitHooksCommandTest extends TestCase
         $this->filesystem->exists('/app/.git/hooks/post-merge')
             ->willReturn(true);
         $this->fileDiffer->diff(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge')
-            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', null))
+            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary'))
             ->shouldBeCalledOnce();
         $this->filesystem->remove('/app/.git/hooks/post-merge')
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', false)
-            ->willThrow(new IOException('Target file could not be opened for writing.', 0, null, '/app/.git/hooks/post-merge'))
+            ->willThrow(
+                new IOException('Target file could not be opened for writing.', 0, null, '/app/.git/hooks/post-merge')
+            )
             ->shouldBeCalledOnce();
         $this->filesystem->basename('/app/.git/hooks/post-merge')
             ->willReturn('post-merge')
@@ -408,7 +410,7 @@ final class GitHooksCommandTest extends TestCase
                     && '/app/.git/hooks/post-merge' === $context['hook_path']
                     && '/app/.git/hooks/post-merge' === $context['file']
                     && null === $context['line']
-                    && str_contains($context['error'], 'Target file could not be opened for writing.')
+                    && str_contains((string) $context['error'], 'Target file could not be opened for writing.')
             ),
         )->shouldBeCalledOnce();
         $this->logger->error('One or more Git hooks could not be installed automatically.', Argument::type('array'))

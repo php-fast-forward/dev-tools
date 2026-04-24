@@ -100,6 +100,7 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
      * @param string $targetLink Absolute path where the symlink should exist
      * @param string $sourcePath Absolute path to the packaged source directory
      * @param SynchronizeResult $result Result tracker for reporting outcomes
+     * @param bool $isDirectory
      */
     private function processLink(
         string $entryName,
@@ -130,6 +131,7 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
      * @param string $targetLink Absolute path where the symlink will be created
      * @param string $sourcePath Absolute path to the packaged directory
      * @param SynchronizeResult $result Result object for tracking creation
+     * @param bool $isDirectory
      */
     private function createNewLink(
         string $entryName,
@@ -169,6 +171,7 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
      * @param string $targetLink Absolute path to the existing symlink
      * @param string $sourcePath Absolute path to the expected source directory
      * @param SynchronizeResult $result Result tracker for preserved or removed links
+     * @param bool $isDirectory
      */
     private function processExistingSymlink(
         string $entryName,
@@ -196,6 +199,7 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
      * @param string $targetLink Absolute path to the broken symlink
      * @param string $sourcePath Absolute path to the current packaged directory
      * @param SynchronizeResult $result Result tracker for removed and created items
+     * @param bool $isDirectory
      */
     private function repairBrokenLink(
         string $entryName,

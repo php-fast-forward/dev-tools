@@ -92,11 +92,12 @@ final class RectorConfig
     {
         return static function (RectorConfigInterface $rectorConfig) use ($customize): void {
             $workingDirectory = getcwd();
-            $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
+            $paths = WorkingProjectPathResolver::getToolingSourcePaths();
+            $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories();
             $skipRules = self::DEFAULT_SKIPPED_RULES;
 
             $rectorConfig->sets(self::DEFAULT_SETS);
-            $rectorConfig->paths([$workingDirectory]);
+            $rectorConfig->paths($paths);
             $rectorConfig->skip([...$skipPaths, ...$skipRules]);
             $rectorConfig->cacheDirectory(
                 ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, $workingDirectory)

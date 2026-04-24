@@ -35,10 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Generates and synchronizes CODEOWNERS files from local project metadata.
  */
-#[AsCommand(
-    name: 'codeowners',
-    description: 'Generates .github/CODEOWNERS from local project metadata.'
-)]
+#[AsCommand(name: 'codeowners', description: 'Generates .github/CODEOWNERS from local project metadata.')]
 final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;

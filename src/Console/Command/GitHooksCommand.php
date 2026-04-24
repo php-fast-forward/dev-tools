@@ -37,10 +37,7 @@ use Symfony\Component\Filesystem\Path;
 /**
  * Installs packaged Git hooks for the consumer repository.
  */
-#[AsCommand(
-    name: 'git-hooks',
-    description: 'Installs Fast Forward Git hooks.'
-)]
+#[AsCommand(name: 'git-hooks', description: 'Installs Fast Forward Git hooks.')]
 final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
@@ -276,8 +273,12 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
      *
      * @return bool true when the hook was installed successfully
      */
-    private function installHook(string $sourcePath, string $hookPath, bool $replaceExisting, InputInterface $input): bool
-    {
+    private function installHook(
+        string $sourcePath,
+        string $hookPath,
+        bool $replaceExisting,
+        InputInterface $input
+    ): bool {
         try {
             if ($replaceExisting && $this->filesystem->exists($hookPath)) {
                 $this->filesystem->remove($hookPath);
@@ -287,15 +288,15 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
             $this->filesystem->chmod(files: $hookPath, mode: 0o755);
 
             return true;
-        } catch (IOExceptionInterface $exception) {
+        } catch (IOExceptionInterface $ioException) {
             $this->logger->error(
                 'Failed to install {hook_name} hook automatically. Remove or unlock {hook_path} and rerun git-hooks.',
                 [
                     'input' => $input,
                     'hook_name' => $this->filesystem->basename($hookPath),
                     'hook_path' => $hookPath,
-                    'error' => $exception->getMessage(),
-                    'file' => $exception->getPath() ?? $hookPath,
+                    'error' => $ioException->getMessage(),
+                    'file' => $ioException->getPath() ?? $hookPath,
                     'line' => null,
                 ],
             );

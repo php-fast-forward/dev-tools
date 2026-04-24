@@ -34,8 +34,6 @@ use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 
-use function Safe\getcwd;
-
 #[CoversClass(ECSConfig::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]

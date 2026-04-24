@@ -23,6 +23,8 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+use function Safe\glob;
+use function Safe\preg_match_all;
 use function Safe\file_get_contents;
 
 #[CoversNothing]
@@ -45,7 +47,10 @@ final class CommandAttributeCompatibilityTest extends TestCase
                 self::assertStringNotContainsString(
                     'help:',
                     $attribute,
-                    sprintf('The command attribute in %s MUST remain compatible with Composer-discovered Symfony Console versions.', basename($commandFile)),
+                    \sprintf(
+                        'The command attribute in %s MUST remain compatible with Composer-discovered Symfony Console versions.',
+                        basename($commandFile)
+                    ),
                 );
             }
         }

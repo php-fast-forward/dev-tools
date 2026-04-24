@@ -22,20 +22,24 @@ namespace FastForward\DevTools\Tests\License;
 use Exception;
 use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Composer\Json\Schema\Author;
 use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\ResolverInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Psr\Clock\ClockInterface;
 use Twig\Environment;
+use Twig\Loader\ArrayLoader;
 
 #[CoversClass(Generator::class)]
+#[UsesClass(Author::class)]
 final class GeneratorTest extends TestCase
 {
     use ProphecyTrait;
@@ -142,6 +146,40 @@ final class GeneratorTest extends TestCase
         $result = $this->generator->generate($targetPath);
 
         self::assertSame($renderedContent, $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function generateContentWillPreserveLiteralAuthorEmailAngleBrackets(): void
+    {
+        $generator = new Generator(
+            $this->resolver->reveal(),
+            $this->composer->reveal(),
+            $this->clock->reveal(),
+            new Environment(new ArrayLoader([
+                'licenses/mit.txt' => 'Copyright (c) {{ year }} {{ copyright_holder }}',
+            ]), [
+                'autoescape' => 'html',
+            ]),
+            $this->filesystem->reveal(),
+        );
+
+        $this->composer->getLicense()
+            ->willReturn('MIT');
+        $this->resolver->resolve('MIT')
+            ->willReturn('mit.txt');
+        $this->composer->getAuthors(true)
+            ->willReturn(new Author('Felipe Sayão Lobato Abreu', 'github@mentordosnerds.com'));
+        $this->clock->now()
+            ->willReturn(new DateTimeImmutable('2026-04-23'));
+
+        $content = $generator->generateContent();
+
+        self::assertSame('Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>', $content);
+        self::assertStringNotContainsString('&lt;', $content);
+        self::assertStringNotContainsString('&gt;', $content);
     }
 
     /**

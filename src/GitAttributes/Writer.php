@@ -116,8 +116,14 @@ final readonly class Writer implements WriterInterface
             ];
         }
 
-        if ([] !== $rows && 'raw' === $rows[array_key_last($rows)]['type'] && '' === $rows[array_key_last($rows)]['line']) {
-            array_pop($rows);
+        $lastRowKey = array_key_last($rows);
+
+        if (null !== $lastRowKey) {
+            $lastRow = $rows[$lastRowKey];
+
+            if ('raw' === $lastRow['type'] && '' === $lastRow['line']) {
+                array_pop($rows);
+            }
         }
 
         $formattedLines = [];
