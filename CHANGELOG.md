@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Add a branch-protection-safe changelog validation context that fails normal
+  pull requests when changelog validation fails while still passing release
+  preparation branches where validation is intentionally skipped.
 - Teach pull-request publication guidance to read the published PR body back
   from GitHub and fix literal escaped Markdown control characters before
   handing the PR off for review.

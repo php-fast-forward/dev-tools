@@ -168,6 +168,10 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Runs ``composer dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
     *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
     *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
+    *   Publishes the aggregate ``Changelog Validation`` job for every active
+        pull request. This is the branch-protection-safe context to require:
+        it fails when normal changelog validation fails and succeeds for
+        release-preparation branches where validation is intentionally skipped.
     *   Appends a run summary with the compared base ref and changelog file.
 *   **Manual Release Preparation**:
     *   Checks out the repository default branch with full history.
@@ -200,6 +204,11 @@ wrapper in ``resources/github-actions/changelog.yml``.
 *   Under **Workflow permissions**, enable **Read and write permissions**.
 *   Enable **Allow GitHub Actions to create and approve pull requests**.
 *   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.
+*   In branch protection, require the changelog workflow's ``Changelog
+    Validation`` context instead of the internal ``Validate PR Changelog`` job.
+    The internal job is intentionally skipped for release-preparation branches,
+    while the aggregate context stays stable for normal and release pull
+    requests.
 
 .. note::
    Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the ``release/v...`` pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.
