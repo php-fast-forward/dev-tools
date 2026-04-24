@@ -63,7 +63,6 @@ final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInter
     protected function configure(): void
     {
         $this->setHelp('This command ensures the consumer repository contains linked Fast Forward project agents by creating symlinks to the packaged prompts and removing broken links.');
-
         $this->addJsonOption();
     }
 
