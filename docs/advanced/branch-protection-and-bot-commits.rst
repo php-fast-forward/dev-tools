@@ -108,10 +108,12 @@ a parent-repository pointer update, it explicitly dispatches ``tests.yml`` for
 the pull request head branch so the newest bot-authored commit receives the
 required ``Run Tests`` matrix checks. Because manually dispatched workflow check
 runs are not always treated as pull-request required checks, that dispatched
-test run also mirrors the matrix result into commit statuses named
-``Run Tests (8.3)``, ``Run Tests (8.4)``, and ``Run Tests (8.5)``. Test workflow
-concurrency cancels older in-progress runs for the same pull request so the
-newest commit owns the required check contexts.
+test run first publishes pending commit statuses for the resolved PHP matrix and
+then lets each matrix job publish its own final status. The status contexts use
+the same required-check names, such as ``Run Tests (8.3)``, ``Run Tests (8.4)``,
+and ``Run Tests (8.5)``. Test workflow concurrency cancels older in-progress
+runs for the same pull request so the newest commit owns the required check
+contexts.
 
 The predictable-conflict workflow MAY also refresh pull request branches when
 the only conflicts are ``.github/wiki`` pointer drift and/or ``CHANGELOG.md``
