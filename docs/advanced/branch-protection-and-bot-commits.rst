@@ -96,6 +96,14 @@ should either allow the workflow token to update PR branches or require authors
 to refresh generated pointers manually. The preferred path is to allow bot
 updates on PR branches while keeping ``main`` protected.
 
+Required test checks must still report for workflow-managed pointer commits.
+The tests workflow therefore triggers on every pull request update without
+top-level path filters. This ensures GitHub always creates the required
+``Run Tests`` matrix checks for the latest pull request head, including bot
+commits that only refresh ``.github/wiki``. Test workflow concurrency cancels
+older in-progress runs for the same pull request so the newest commit owns the
+required check contexts.
+
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
 content. Keep those permissions scoped to the workflow jobs that actually need

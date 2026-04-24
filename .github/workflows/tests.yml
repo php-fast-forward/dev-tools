@@ -26,13 +26,7 @@ on:
                 type: number
                 default: -1
     pull_request:
-        paths:
-          - 'src/**'
-          - 'tests/**'
-          - 'composer.json'
-          - 'composer.lock'
-          - '.github/actions/**'
-          - '.github/workflows/tests.yml'
+        types: [opened, synchronize, reopened]
     push:
         branches: [ "main" ]
 
