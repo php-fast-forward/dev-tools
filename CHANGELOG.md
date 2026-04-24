@@ -26,6 +26,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keep Composer autoload, Rector, and ECS from traversing nested fixture `vendor` directories when the composer-plugin consumer fixture has installed dependencies (#179)
 - Skip LICENSE generation cleanly when a consumer composer manifest omits or leaves the `license` field empty (#227)
 - Run nested DevTools subprocesses without forcing PTY, fixing aggregate commands in non-interactive environments (#171)
+- Keep required PHPUnit matrix checks reporting after workflow-managed `.github/wiki` pointer commits by moving PR test-skip decisions inside the tests workflow, queueing same-PR test runs, and aligning the packaged consumer test wrapper (#230)
 
 ## [1.20.0] - 2026-04-23
 

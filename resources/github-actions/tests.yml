@@ -2,6 +2,11 @@ name: "Fast Forward Test Suite"
 
 on:
   push:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
   workflow_dispatch:
     inputs:
       max-outdated:
