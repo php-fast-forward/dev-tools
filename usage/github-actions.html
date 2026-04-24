@@ -3276,41 +3276,46 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
    Skips the validation job for pull requests whose head branch matches the configured <code>release-branch-prefix</code>
 , because release-preparation branches intentionally leave <code>Unreleased</code>
  empty after promotion.
-    <em>   Appends a run summary with the compared base ref and changelog file.
-</em>
-   <strong>Manual Release Preparation</strong>
-:
-    <em>   Checks out the repository default branch with full history.
+    <em>   Publishes the aggregate changelog check for every active pull request.
+        Direct workflow invocation uses ``Changelog Validation``; reusable
+        workflow consumers typically expose it namespaced as
+        ``changelog / Changelog Validation``. This is the branch-protection-safe
+        context to require: it fails when normal changelog validation fails and
+        succeeds for release-preparation branches where validation is
+        intentionally skipped.
     </em>
-   Resolves the next version from <code>Unreleased</code>
- unless a version input is provided.
-    <em>   Promotes ``Unreleased`` into the selected version with the current UTC release date.
+   Appends a run summary with the compared base ref and changelog file.
+<em>   **Manual Release Preparation**:
     </em>
-   Writes a release-notes preview file to <code>.dev-tools/release-notes.md</code>
- with
-        <code>composer dev-tools changelog:show -- &lt;version&gt;</code>
+   Checks out the repository default branch with full history.
+    <em>   Resolves the next version from ``Unreleased`` unless a version input is provided.
+    </em>
+   Promotes <code>Unreleased</code>
+ into the selected version with the current UTC release date.
+    <em>   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
+        ``composer dev-tools changelog:show -- &lt;version&gt;``.
+    </em>
+   Opens or updates a release-preparation pull request instead of committing directly to <code>main</code>
 .
-    <em>   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
-    </em>
-   Dispatches <code>tests.yml</code>
- for the release branch with required-status
+    <em>   Dispatches ``tests.yml`` for the release branch with required-status
         mirroring enabled, because release branches are written by the workflow
-        token and do not receive ordinary <code>pull_request</code>
- test runs
+        token and do not receive ordinary ``pull_request`` test runs
         automatically.
-    <em>   Appends a run summary with the resolved version, version source, and pull-request URL.
     </em>
-   Requires repository Actions permissions that allow the workflow token
+   Appends a run summary with the resolved version, version source, and pull-request URL.
+    <em>   Requires repository Actions permissions that allow the workflow token
         to create pull requests and dispatch workflows.
-<em>   **Merged Release Pull Requests**:
-    </em>
-   Detects merged branches that match the configured release branch prefix.
-    <em>   Renders the released changelog section with ``composer dev-tools changelog:show -- &lt;version&gt;``.
-    </em>
-   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
-    <em>   Appends a run summary with the published tag and release URL.
 </em>
-   Does <strong>not</strong>
+   <strong>Merged Release Pull Requests</strong>
+:
+    <em>   Detects merged branches that match the configured release branch prefix.
+    </em>
+   Renders the released changelog section with <code>composer dev-tools changelog:show -- &lt;version&gt;</code>
+.
+    <em>   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
+    </em>
+   Appends a run summary with the published tag and release URL.
+*   Does <strong>not</strong>
  run for ordinary feature or fix pull requests merged into <code>main</code>
 .</p>
 
@@ -3335,7 +3340,26 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
 .
 <em>   Enable **Allow GitHub Actions to create and approve pull requests**.
 </em>
-   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.</p>
+   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.
+*   In branch protection, require the changelog workflow&#039;s aggregate context:</p>
+
+            <blockquote>
+
+<ul>
+    <li class="dash">Direct workflow invocation: <code>Changelog Validation</code>
+</li>
+
+    <li class="dash">Reusable workflow wrapper invocation: <code>changelog / Changelog Validation</code>
+</li>
+
+</ul>
+
+    <p>Use this instead of the internal <code>changelog / Validate PR Changelog</code>
+ job.
+The internal job is intentionally skipped for release-preparation branches,
+while the aggregate context stays stable for normal and release pull
+requests.</p>
+</blockquote>
 
             
         
