@@ -106,10 +106,11 @@ intentional skip message instead of leaving branch protection waiting for
 missing checks. If the pull request does include test-sensitive changes, the
 matrix runs even when the newest commit is only the generated wiki pointer.
 
-Test workflow concurrency queues runs for the same pull request instead of
-canceling in-progress jobs. This prevents the wiki-pointer run from canceling a
-source-change run and then completing with a lightweight skip before the real
-validation has reported.
+Test workflow concurrency cancels older in-progress runs for the same pull
+request. Because the skip decision uses the effective pull request diff instead
+of only the latest commit, a generated wiki-pointer commit still runs the matrix
+when the pull request contains source, test, Composer, test-workflow, packaged
+test-wrapper, or local-action changes.
 
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
