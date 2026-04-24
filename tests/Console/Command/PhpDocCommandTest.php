@@ -98,6 +98,10 @@ final class PhpDocCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
+        $this->process->getEnv()
+            ->willReturn([]);
+        $this->process->setEnv(Argument::type('array'))
+            ->willReturn($this->process->reveal());
 
         $this->input->getOption('fix')
             ->willReturn(false);
@@ -150,7 +154,7 @@ final class PhpDocCommandTest extends TestCase
             $this->processBuilder->reveal()
         );
         $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalledTimes(2);
 
         $this->command = new PhpDocCommand(

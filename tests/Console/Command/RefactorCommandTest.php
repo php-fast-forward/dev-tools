@@ -91,7 +91,7 @@ final class RefactorCommandTest extends TestCase
 
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
 
         $this->command = new RefactorCommand(

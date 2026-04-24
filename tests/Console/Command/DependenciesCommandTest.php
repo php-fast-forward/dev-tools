@@ -108,8 +108,7 @@ final class DependenciesCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenPreviewAndAnalyzersSucceed(): void
     {
-        $this->processQueue->add(Argument::type(Process::class))->shouldBeCalledTimes(3);
-        $this->processQueue->add(Argument::type(Process::class), false)->shouldBeCalledOnce();
+        $this->processQueue->add(Argument::type(Process::class), false, Argument::cetera())->shouldBeCalledTimes(4);
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
@@ -152,8 +151,8 @@ final class DependenciesCommandTest extends TestCase
     {
         $this->input->getOption('max-outdated')
             ->willReturn('-1');
-        $this->processQueue->add(Argument::type(Process::class))->shouldBeCalledTimes(3);
-        $this->processQueue->add(Argument::type(Process::class), true)->shouldBeCalledOnce();
+        $this->processQueue->add(Argument::type(Process::class), false, Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processQueue->add(Argument::type(Process::class), true, Argument::cetera())->shouldBeCalledOnce();
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();

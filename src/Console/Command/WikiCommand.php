@@ -132,6 +132,7 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
         }
 
         $processBuilder = $this->processBuilder
+            ->withArgument('--ansi')
             ->withArgument('--visibility', 'public,protected')
             ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
             ->withArgument('--title', $this->composer->getDescription())
@@ -151,7 +152,10 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
             $processBuilder = $processBuilder->withArgument('--defaultpackagename', $defaultPackageName);
         }
 
-        $this->processQueue->add($processBuilder->build('vendor/bin/phpdoc'));
+        $this->processQueue->add(
+            process: $processBuilder->build('vendor/bin/phpdoc'),
+            label: 'Generating Wiki with phpDocumentor',
+        );
 
         $result = $this->processQueue->run($processOutput);
 
@@ -204,7 +208,8 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
                 ->withArgument('add')
                 ->withArgument($wikiRepoUrl)
                 ->withArgument(Path::makeRelative($wikiSubmodulePath, getcwd()))
-                ->build('git')
+                ->build('git'),
+            label: 'Initializing Wiki Submodule with Git',
         );
 
         $result = $this->processQueue->run($output);

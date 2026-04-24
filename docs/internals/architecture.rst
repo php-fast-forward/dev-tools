@@ -75,7 +75,8 @@ command list:
      - Services
    * - ``FastForward\DevTools\Process\ProcessBuilderInterface``
      - ``ProcessBuilderInterface`` and ``ProcessQueueInterface`` build and
-       execute subprocess pipelines.
+       execute subprocess pipelines, while process environment and output
+       Symfony-style sections keep nested command output readable without PTY.
    * - ``Filesystem and metadata``
      - ``FilesystemInterface``, ``ComposerJsonInterface``, and
        ``FileLocatorInterface`` resolve local files, project metadata, and

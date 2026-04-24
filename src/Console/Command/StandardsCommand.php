@@ -112,6 +112,10 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
             $commands[] = $command;
             $processBuilder = $this->processBuilder;
 
+            if (! $jsonOutput) {
+                $processBuilder = $processBuilder->withArgument('--ansi');
+            }
+
             if ($progress) {
                 $processBuilder = $processBuilder->withArgument('--progress');
             }
@@ -140,7 +144,10 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
                 $processBuilder = $processBuilder->withArgument('--pretty-json');
             }
 
-            $this->processQueue->add($processBuilder->build('composer dev-tools ' . $command . ' --'));
+            $this->processQueue->add(
+                process: $processBuilder->build('composer dev-tools ' . $command . ' --'),
+                label: $this->getProcessLabel($command),
+            );
         }
 
         $result = $this->processQueue->run($commandOutput);
@@ -156,5 +163,23 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
             'output' => $commandOutput,
             'commands' => $commands,
         ]);
+    }
+
+    /**
+     * Resolves a human-readable process label for a nested standards command.
+     *
+     * @param string $command the nested dev-tools command name
+     *
+     * @return string the process section label
+     */
+    private function getProcessLabel(string $command): string
+    {
+        return match ($command) {
+            'refactor' => 'Refactoring Code with DevTools',
+            'phpdoc' => 'Checking PHPDoc with DevTools',
+            'code-style' => 'Checking Code Style with DevTools',
+            'reports' => 'Generating Reports with DevTools',
+            default => 'Running DevTools Command',
+        };
     }
 }

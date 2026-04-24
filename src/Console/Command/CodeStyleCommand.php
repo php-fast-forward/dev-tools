@@ -132,6 +132,7 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
             ->build('composer normalize');
 
         $processBuilder = $this->processBuilder
+            ->withArgument('--ansi')
             ->withArgument('--config', $this->fileLocator->locate(self::CONFIG));
 
         if (! $progress) {
@@ -148,9 +149,12 @@ final class CodeStyleCommand extends BaseCommand implements LoggerAwareCommandIn
 
         $ecs = $processBuilder->build('vendor/bin/ecs');
 
-        $this->processQueue->add($composerUpdate);
-        $this->processQueue->add($composerNormalize);
-        $this->processQueue->add($ecs);
+        $this->processQueue->add(process: $composerUpdate, label: 'Refreshing Composer Lock');
+        $this->processQueue->add(
+            process: $composerNormalize,
+            label: 'Normalizing composer.json with Composer Normalize'
+        );
+        $this->processQueue->add(process: $ecs, label: 'Checking Code Style with Easy Coding Standard');
 
         $result = $this->processQueue->run($processOutput);
 

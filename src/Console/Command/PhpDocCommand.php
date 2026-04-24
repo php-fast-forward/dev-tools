@@ -184,6 +184,7 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
         $phpCsFixer = $processBuilder->build('vendor/bin/php-cs-fixer fix');
 
         $processBuilder = $this->processBuilder
+            ->withArgument('--ansi')
             ->withArgument('--config', $this->fileLocator->locate(RefactorCommand::CONFIG))
             ->withArgument('--autoload-file', 'vendor/autoload.php')
             ->withArgument('--only', AddMissingMethodPhpDocRector::class);
@@ -203,8 +204,8 @@ final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInter
 
         $rector = $processBuilder->build('vendor/bin/rector process');
 
-        $this->processQueue->add($phpCsFixer);
-        $this->processQueue->add($rector);
+        $this->processQueue->add(process: $phpCsFixer, label: 'Fixing PHPDoc File Headers with PHP-CS-Fixer');
+        $this->processQueue->add(process: $rector, label: 'Adding Missing PHPDoc with Rector');
 
         $result = $this->processQueue->run($processOutput);
 

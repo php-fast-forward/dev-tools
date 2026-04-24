@@ -121,6 +121,7 @@ final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInt
 
         $processBuilder = $this->processBuilder
             ->withArgument('process')
+            ->withArgument('--ansi')
             ->withArgument('--config')
             ->withArgument($this->fileLocator->locate(self::CONFIG));
 
@@ -137,7 +138,10 @@ final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInt
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        $this->processQueue->add($processBuilder->build('vendor/bin/rector'));
+        $this->processQueue->add(
+            process: $processBuilder->build('vendor/bin/rector'),
+            label: 'Refactoring Code with Rector',
+        );
 
         $result = $this->processQueue->run($processOutput);
 

@@ -85,8 +85,12 @@ final class SyncCommandTest extends TestCase
     #[Test]
     public function executeWillQueueDedicatedSynchronizationCommands(): void
     {
-        $this->processQueue->add(Argument::type(Process::class), false, false)->shouldBeCalledTimes(2);
-        $this->processQueue->add(Argument::type(Process::class), false, true)->shouldBeCalledTimes(11);
+        $this->processQueue->add(Argument::type(Process::class), false, false, Argument::cetera())->shouldBeCalledTimes(
+            2
+        );
+        $this->processQueue->add(Argument::type(Process::class), false, true, Argument::cetera())->shouldBeCalledTimes(
+            11
+        );
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
@@ -113,8 +117,10 @@ final class SyncCommandTest extends TestCase
     {
         $this->input->getOption('check')
             ->willReturn(true);
-        $this->processQueue->add(Argument::type(Process::class), false, false)->shouldBeCalledTimes(10);
-        $this->processQueue->add(Argument::type(Process::class), false, true)->shouldNotBeCalled();
+        $this->processQueue->add(Argument::type(Process::class), false, false, Argument::cetera())->shouldBeCalledTimes(
+            10
+        );
+        $this->processQueue->add(Argument::type(Process::class), false, true, Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::FAILURE)
             ->shouldBeCalledOnce();
@@ -146,11 +152,14 @@ final class SyncCommandTest extends TestCase
             ->willReturn(true);
         $this->input->getOption('pretty-json')
             ->willReturn(false);
-        $this->processQueue->add(Argument::type(Process::class), false, false)->shouldBeCalledTimes(2);
+        $this->processQueue->add(Argument::type(Process::class), false, false, Argument::cetera())->shouldBeCalledTimes(
+            2
+        );
         $this->processQueue->add(
             Argument::that(static fn(Process $process): bool => str_contains($process->getCommandLine(), '--json')),
             false,
             true,
+            Argument::cetera()
         )->shouldBeCalledTimes(11);
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(SyncCommand::SUCCESS)

@@ -118,6 +118,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--git', 'git')
+            ->withArgument('--composer', 'false')
             ->withArgument('--exclude', $exclude)
             ->withArgument('--report-html', $target)
             ->withArgument('--report-json', $target . '/report.json')
@@ -132,9 +133,10 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
         }
 
         $this->processQueue->add(
-            $processBuilder
+            process: $processBuilder
                 ->withArgument('.')
-                ->build([\PHP_BINARY, '-derror_reporting=' . self::PHP_ERROR_REPORTING, self::BINARY])
+                ->build([\PHP_BINARY, '-derror_reporting=' . self::PHP_ERROR_REPORTING, self::BINARY]),
+            label: 'Generating Metrics with PhpMetrics',
         );
 
         $result = $this->processQueue->run($processOutput);

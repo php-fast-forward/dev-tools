@@ -165,7 +165,7 @@ final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterfa
 
         $phpdoc = $processBuilder->build('vendor/bin/phpdoc');
 
-        $this->processQueue->add($phpdoc);
+        $this->processQueue->add(process: $phpdoc, label: 'Generating API Docs with phpDocumentor');
 
         $result = $this->processQueue->run($processOutput);
 

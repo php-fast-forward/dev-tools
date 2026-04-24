@@ -178,7 +178,7 @@ final class DocsCommandTest extends TestCase
         $this->processBuilder->withArgument('--cache-folder', '/repo/.dev-tools/cache/phpdoc')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(DocsCommand::SUCCESS)
@@ -209,7 +209,7 @@ final class DocsCommandTest extends TestCase
             ->shouldBeCalled();
         $this->processBuilder->withArgument('--cache-folder', Argument::cetera())
             ->shouldNotBeCalled();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(DocsCommand::SUCCESS)

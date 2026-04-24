@@ -129,12 +129,24 @@ final class DependenciesCommand extends BaseCommand implements LoggerAwareComman
             return $this->failure($invalidArgumentException->getMessage(), $input);
         }
 
-        $this->processQueue->add($this->getRaiseToInstalledCommand($input));
-        $this->processQueue->add($this->getOpenVersionsCommand($input));
+        $this->processQueue->add(
+            process: $this->getRaiseToInstalledCommand($input),
+            label: 'Raising Dependency Constraints with Jack',
+        );
+        $this->processQueue->add(
+            process: $this->getOpenVersionsCommand($input),
+            label: 'Opening Dependency Constraints with Jack',
+        );
 
         if ($input->getOption('upgrade')) {
-            $this->processQueue->add($this->getComposerUpdateCommand());
-            $this->processQueue->add($this->getComposerNormalizeCommand());
+            $this->processQueue->add(
+                process: $this->getComposerUpdateCommand(),
+                label: 'Updating Dependencies with Composer'
+            );
+            $this->processQueue->add(
+                process: $this->getComposerNormalizeCommand(),
+                label: 'Normalizing composer.json with Composer Normalize',
+            );
         }
 
         if (! $jsonOutput) {
@@ -143,10 +155,14 @@ final class DependenciesCommand extends BaseCommand implements LoggerAwareComman
             ]);
         }
 
-        $this->processQueue->add($this->getComposerDependencyAnalyserCommand($input));
         $this->processQueue->add(
-            $this->getJackBreakpointCommand($input, $maximumOutdated),
-            $this->shouldIgnoreOutdatedFailures($maximumOutdated),
+            process: $this->getComposerDependencyAnalyserCommand($input),
+            label: 'Analyzing Dependencies with Composer Dependency Analyser',
+        );
+        $this->processQueue->add(
+            process: $this->getJackBreakpointCommand($input, $maximumOutdated),
+            ignoreFailure: $this->shouldIgnoreOutdatedFailures($maximumOutdated),
+            label: 'Checking Outdated Dependencies with Jack',
         );
 
         $result = $this->processQueue->run($processOutput);
@@ -279,7 +295,9 @@ final class DependenciesCommand extends BaseCommand implements LoggerAwareComman
      */
     private function getComposerNormalizeCommand(): Process
     {
-        return $this->processBuilder->build('composer normalize');
+        return $this->processBuilder
+            ->withArgument('--ansi')
+            ->build('composer normalize');
     }
 
     /**

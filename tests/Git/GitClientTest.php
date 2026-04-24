@@ -25,6 +25,7 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use RuntimeException;
@@ -84,7 +85,7 @@ final class GitClientTest extends TestCase
         $this->process->setWorkingDirectory('/repo')
             ->willReturn($this->process->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run()
             ->willReturn(ProcessQueueInterface::SUCCESS)
@@ -117,7 +118,7 @@ final class GitClientTest extends TestCase
         $this->process->setWorkingDirectory('/repo')
             ->willReturn($this->process->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run()
             ->willReturn(ProcessQueueInterface::SUCCESS)
@@ -150,7 +151,7 @@ final class GitClientTest extends TestCase
         $this->process->setWorkingDirectory('/repo')
             ->willReturn($this->process->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run()
             ->willReturn(ProcessQueueInterface::SUCCESS)
@@ -186,7 +187,7 @@ final class GitClientTest extends TestCase
         $this->process->setWorkingDirectory('/repo')
             ->willReturn($this->process->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run()
             ->willReturn(ProcessQueueInterface::FAILURE)

@@ -27,6 +27,7 @@ use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -58,6 +59,11 @@ final class OutputFormatLoggerTest extends TestCase
     private ObjectProphecy $clock;
 
     /**
+     * @var ObjectProphecy<EnvironmentInterface>
+     */
+    private ObjectProphecy $environment;
+
+    /**
      * @var array<string, mixed>
      */
     private array $server;
@@ -77,6 +83,9 @@ final class OutputFormatLoggerTest extends TestCase
         $this->output = $this->prophesize(ConsoleOutputInterface::class);
         $this->errorOutput = $this->prophesize(OutputInterface::class);
         $this->clock = $this->prophesize(ClockInterface::class);
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment->get(Argument::type('string'), Argument::cetera())
+            ->willReturn(null);
 
         $this->output->getErrorOutput()
             ->willReturn($this->errorOutput->reveal());
@@ -96,7 +105,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
-            new GithubActionOutput($this->output->reveal()),
+            $this->createGithubActionOutput(),
         );
 
         $this->output->writeln(
@@ -132,7 +141,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
-            new GithubActionOutput($this->output->reveal()),
+            $this->createGithubActionOutput(),
         );
 
         $this->output->writeln(Argument::type('string'))
@@ -161,7 +170,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
-            new GithubActionOutput($this->output->reveal()),
+            $this->createGithubActionOutput(),
         );
 
         $this->output->writeln(
@@ -188,7 +197,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
-            new GithubActionOutput($this->output->reveal()),
+            $this->createGithubActionOutput(),
         );
 
         $this->output->writeln(
@@ -217,7 +226,7 @@ final class OutputFormatLoggerTest extends TestCase
             $this->clock->reveal(),
             new Detector(),
             new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
-            new GithubActionOutput($this->output->reveal()),
+            $this->createGithubActionOutput(),
         );
 
         $this->output->writeln(
@@ -245,5 +254,13 @@ final class OutputFormatLoggerTest extends TestCase
         }
 
         putenv('COMPOSER_TESTS_ARE_RUNNING=' . $this->composerTestsAreRunningEnv);
+    }
+
+    /**
+     * @return GithubActionOutput
+     */
+    private function createGithubActionOutput(): GithubActionOutput
+    {
+        return new GithubActionOutput($this->output->reveal(), $this->environment->reveal());
     }
 }

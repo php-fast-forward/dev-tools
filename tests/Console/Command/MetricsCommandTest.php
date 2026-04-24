@@ -94,8 +94,11 @@ final class MetricsCommandTest extends TestCase
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()
         );
+        $this->processBuilder->withArgument('--composer', 'false')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
 
         $this->command = new MetricsCommand(

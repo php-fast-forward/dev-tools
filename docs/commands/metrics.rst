@@ -93,4 +93,6 @@ Behavior
 - ``--json`` and ``--pretty-json`` keep DevTools itself structured while
   running PhpMetrics in a quieter mode to avoid polluting the captured payload;
 - it runs PhpMetrics through the active PHP binary and suppresses PhpMetrics
-  deprecation notices emitted by the dependency itself.
+  deprecation notices emitted by the dependency itself;
+- it disables PhpMetrics' Composer package freshness lookup so metrics runs do
+  not block on Packagist availability or local network state.
