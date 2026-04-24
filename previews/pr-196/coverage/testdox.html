@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8"/>
+        <title>Test Documentation</title>
+        <style>
+            body {
+                text-rendering: optimizeLegibility;
+                font-family: Source SansSerif Pro, Arial, sans-serif;
+                font-variant-ligatures: common-ligatures;
+                font-kerning: normal;
+                margin-left: 2rem;
+                background-color: #fff;
+                color: #000;
+            }
+
+            body > ul > li {
+                font-size: larger;
+            }
+
+            h2 {
+                font-size: larger;
+                text-decoration-line: underline;
+                text-decoration-thickness: 2px;
+                margin: 0;
+                padding: 0.5rem 0;
+            }
+
+            ul {
+                list-style: none;
+                margin: 0 0 2rem;
+                padding: 0 0 0 1rem;
+                text-indent: -1rem;
+            }
+
+            .success:before {
+                color: #4e9a06;
+                content: '✓';
+                padding-right: 0.5rem;
+            }
+
+            .defect {
+                color: #a40000;
+            }
+
+            .defect:before {
+                color: #a40000;
+                content: '✗';
+                padding-right: 0.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <h2>Add Missing Class Php Doc Rector (FastForward\DevTools\Tests\Rector\AddMissingClassPhpDocRector)</h2>
+        <ul>
+            <li class="success">Get rule definition will return configured definition</li>
+            <li class="success">Get node types will return class node</li>
+            <li class="success">Refactor will return null if not class node</li>
+            <li class="success">Refactor will return null if node has doc comment</li>
+            <li class="success">Refactor will add doc comment to class without namespace</li>
+            <li class="success">Refactor will add doc comment to class with namespace</li>
+        </ul>
+        <h2>Add Missing Method Php Doc Rector (FastForward\DevTools\Tests\Rector\AddMissingMethodPhpDocRector)</h2>
+        <ul>
+            <li class="success">Get rule definition will return configured definition</li>
+            <li class="success">Get node types will return class method node</li>
+            <li class="success">Refactor will return node if not class method</li>
+            <li class="success">Refactor will add docblock if missing</li>
+            <li class="success">Refactor will not change if docblock exists</li>
+            <li class="success">Refactor will add docblock with complex types</li>
+            <li class="success">Resolve throws will skip non new or non name expressions</li>
+            <li class="success">Resolve throws will handle multiple and duplicates</li>
+            <li class="success">Refactor will add docblock with intersections and unions</li>
+            <li class="success">Refactor will add docblock with fully qualified intersections</li>
+            <li class="success">Refactor will skip return tag for constructors and respect original type names</li>
+            <li class="success">Refactor will return original node when no tags can be generated</li>
+        </ul>
+        <h2>Agents Command (FastForward\DevTools\Tests\Console\Command\AgentsCommand)</h2>
+        <ul>
+            <li class="success">Execute will fail when packaged agents directory does not exist</li>
+            <li class="success">Execute will create agents directory when it does not exist</li>
+            <li class="success">Execute will return failure when synchronizer fails</li>
+        </ul>
+        <h2>Author (FastForward\DevTools\Tests\Composer\Json\Schema\Author)</h2>
+        <ul>
+            <li class="success">Accessors will return values provided to constructor</li>
+            <li class="success">To string will return formatted string when name and email are provided</li>
+            <li class="success">To string will return only name when email is missing</li>
+            <li class="success">To string will return only email when name is missing</li>
+            <li class="success">To string will return empty string when both name and email are missing</li>
+        </ul>
+        <h2>By Passfinals Started Subscriber (FastForward\DevTools\Tests\PhpUnit\Event\TestSuite\ByPassfinalsStartedSubscriber)</h2>
+        <ul>
+            <li class="success">Notify will enable bypass finals</li>
+        </ul>
+        <h2>Candidate Provider (FastForward\DevTools\Tests\GitAttributes\CandidateProvider)</h2>
+        <ul>
+            <li class="success">Folders will return non empty array</li>
+            <li class="success">Folders will start with slash</li>
+            <li class="success">Folders will end with slash</li>
+            <li class="success">Files will return non empty array</li>
+            <li class="success">Files will start with slash</li>
+            <li class="success">Files will not end with slash</li>
+            <li class="success">All will combine folders and files</li>
+            <li class="success">All will have folders first</li>
+            <li class="success">All will have files after folders</li>
+            <li class="success">Folder will contain dot github</li>
+            <li class="success">Files will contain gitignore</li>
+        </ul>
+        <h2>Changelog Check Command (FastForward\DevTools\Tests\Console\Command\ChangelogCheckCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success when unreleased entries exist</li>
+            <li class="success">Execute will return failure when unreleased entries are missing</li>
+            <li class="success">Execute will log failure context when against reference is provided</li>
+        </ul>
+        <h2>Changelog Document (FastForward\DevTools\Tests\Changelog\Document\ChangelogDocument)</h2>
+        <ul>
+            <li class="success">With release will keep the unreleased section at the top</li>
+            <li class="success">Promote unreleased will merge with an existing published version</li>
+            <li class="success">Document accessors will resolve expected release variants</li>
+            <li class="success">Get latest published release will return null when only unreleased exists</li>
+            <li class="success">With release will replace existing version and insert unreleased at the top</li>
+            <li class="success">Promote unreleased will create published release when document is empty</li>
+            <li class="success">Release helpers will normalize entries and support immutable mutators</li>
+        </ul>
+        <h2>Changelog Entry Command (FastForward\DevTools\Tests\Console\Command\ChangelogEntryCommand)</h2>
+        <ul>
+            <li class="success">Execute will add an unreleased entry</li>
+            <li class="success">Execute will pass published release metadata</li>
+        </ul>
+        <h2>Changelog Entry Type (FastForward\DevTools\Tests\Changelog\Entry\ChangelogEntryType)</h2>
+        <ul>
+            <li class="success">Ordered will return keep a changelog section order</li>
+            <li class="success">From input will normalize supported values</li>
+            <li class="success">From input will reject unsupported values</li>
+        </ul>
+        <h2>Changelog Manager (FastForward\DevTools\Tests\Changelog\Manager\ChangelogManager)</h2>
+        <ul>
+            <li class="success">Add entry will create the managed changelog when needed</li>
+            <li class="success">Add entry will preserve existing release dates when no new date is provided</li>
+            <li class="success">Add entry will update an existing release date when a new one is provided</li>
+            <li class="success">Promote will throw when the unreleased section is empty</li>
+            <li class="success">Promote will persist the published release when unreleased entries exist</li>
+            <li class="success">Infer next version will throw when there are no unreleased entries</li>
+            <li class="success">Infer next version will bump minor versions when added entries exist</li>
+            <li class="success">Infer next version will bump major versions when removed entries exist</li>
+            <li class="success">Infer next version will bump patch versions when only fixes exist</li>
+            <li class="success">Render release notes will return the renderer output for the requested release</li>
+            <li class="success">Render release notes will throw when the requested release does not exist</li>
+        </ul>
+        <h2>Changelog Next Version Command (FastForward\DevTools\Tests\Console\Command\ChangelogNextVersionCommand)</h2>
+        <ul>
+            <li class="success">Execute will write the inferred version to output in plain text mode</li>
+            <li class="success">Execute will log the inferred version when json output is requested</li>
+            <li class="success">Execute will pass the explicit current version to inference in plain text mode</li>
+            <li class="success">Execute will return failure when version inference fails</li>
+        </ul>
+        <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
+        <ul>
+            <li class="success">Parse will extract release sections and entries</li>
+            <li class="success">Parse will return default document for empty contents</li>
+            <li class="success">Parse will return default document when no release headings exist</li>
+            <li class="success">Parse will ignore unsupported lines and deduplicate entries within a section</li>
+            <li class="success">Parse will treat empty category bodies as empty entry lists</li>
+            <li class="success">Extract entries will return empty array when category heading is missing</li>
+        </ul>
+        <h2>Changelog Promote Command (FastForward\DevTools\Tests\Console\Command\ChangelogPromoteCommand)</h2>
+        <ul>
+            <li class="success">Execute will use the current date by default</li>
+            <li class="success">Execute will prefer the explicit date</li>
+            <li class="success">Execute will return failure when promotion fails</li>
+        </ul>
+        <h2>Changelog Show Command (FastForward\DevTools\Tests\Console\Command\ChangelogShowCommand)</h2>
+        <ul>
+            <li class="success">Execute will write release notes to output in plain text mode</li>
+            <li class="success">Execute will log release notes when json output is requested</li>
+            <li class="success">Execute will return failure when release notes cannot be rendered</li>
+        </ul>
+        <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
+        <ul>
+            <li class="success">Classify with trailing slash returns directory</li>
+            <li class="success">Classify with wildcard slash returns directory</li>
+            <li class="success">Classify with star slash star returns directory</li>
+            <li class="success">Classify with double star slash returns directory</li>
+            <li class="success">Classify with double star slash at start returns directory</li>
+            <li class="success">Classify with star slash star mid pattern returns directory</li>
+            <li class="success">Classify with wildcard mid pattern returns directory</li>
+            <li class="success">Classify with file pattern returns file</li>
+            <li class="success">Classify with comment returns file</li>
+            <li class="success">Classify with empty string returns file</li>
+            <li class="success">Classify with specific file returns file</li>
+            <li class="success">Is directory with trailing slash returns true</li>
+            <li class="success">Is directory with file pattern returns false</li>
+            <li class="success">Is file with file pattern returns true</li>
+            <li class="success">Is file with directory pattern returns false</li>
+        </ul>
+        <h2>Code Owners Command (FastForward\DevTools\Tests\Console\Command\CodeOwnersCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will write generated code owners when file is missing</li>
+            <li class="success">Execute will skip existing code owners by default</li>
+            <li class="success">Execute will fail check mode when drift is detected</li>
+            <li class="success">Execute will prompt for owners when interactive inference fails</li>
+            <li class="success">Execute will return success on dry run when drift is detected</li>
+            <li class="success">Execute will skip replacing existing code owners when confirmation is declined</li>
+        </ul>
+        <h2>Code Owners Generator (FastForward\DevTools\Tests\CodeOwners\CodeOwnersGenerator)</h2>
+        <ul>
+            <li class="success">Infer owners will collect group and author owners</li>
+            <li class="success">Infer group owner will return repository owner from support source</li>
+            <li class="success">Infer owners will ignore unsupported author entries and invalid urls</li>
+            <li class="success">Infer group owner will return null when support source is missing or invalid</li>
+            <li class="success">Generate will render explicit owners</li>
+            <li class="success">Generate will render commented fallback when owners cannot be inferred</li>
+            <li class="success">Generate will render group owner when author cannot be inferred</li>
+            <li class="success">Normalize owners will preserve handles and emails</li>
+            <li class="success">Normalize owners will drop empty tokens and deduplicate repeated owners</li>
+            <li class="success">Extract git hub helpers will handle supported and unsupported urls</li>
+        </ul>
+        <h2>Code Style Command (FastForward\DevTools\Tests\Console\Command\CodeStyleCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute will return failure when process queue fails</li>
+            <li class="success">Execute will capture buffered output when json is requested</li>
+            <li class="success">Execute will enable progress when requested</li>
+        </ul>
+        <h2>Command (FastForward\DevTools\Tests\Console\Command\Command)</h2>
+        <ul>
+            <li class="success">Execute will run php unit process with config file</li>
+            <li class="success">Execute with no cache will disable php unit result cache</li>
+            <li class="success">Execute will disable php unit progress when json is requested</li>
+            <li class="success">Execute will enable php unit progress when requested</li>
+            <li class="success">Execute with invalid min coverage will return failure</li>
+            <li class="success">Execute with coverage below minimum will return failure</li>
+            <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
+        </ul>
+        <h2>Command Input Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CommandInputProcessor)</h2>
+        <ul>
+            <li class="success">Process will extract provided arguments and options</li>
+            <li class="success">Process will preserve existing command value</li>
+        </ul>
+        <h2>Command Output Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CommandOutputProcessor)</h2>
+        <ul>
+            <li class="success">Process will replace buffered output with its contents</li>
+            <li class="success">Process will extract buffered error output from console output</li>
+        </ul>
+        <h2>Composer Dependency Analyser Config (FastForward\DevTools\Tests\Config\ComposerDependencyAnalyserConfig)</h2>
+        <ul>
+            <li class="success">Configure will return configuration</li>
+            <li class="success">Configure will apply repository ignores and invoke customization callback</li>
+            <li class="success">It will expose reusable packaged dependency defaults</li>
+            <li class="success">Apply packaged repository ignores will return the same configuration instance</li>
+        </ul>
+        <h2>Composer Funding Codec (FastForward\DevTools\Tests\Funding\ComposerFundingCodec)</h2>
+        <ul>
+            <li class="success">Parse will normalize supported and unsupported funding entries</li>
+            <li class="success">Dump will write supported funding and preserve unsupported entries</li>
+            <li class="success">Parse will ignore invalid entries and deduplicate supported values</li>
+            <li class="success">Parse will return empty profile when funding is not an array</li>
+            <li class="success">Parse will treat github entries without parsable url parts as unsupported</li>
+            <li class="success">Dump will remove funding when the profile has no entries</li>
+            <li class="success">Dump will insert funding immediately after support when present</li>
+        </ul>
+        <h2>Composer Json (FastForward\DevTools\Tests\Composer\Json\ComposerJson)</h2>
+        <ul>
+            <li class="success">Identification accessors will return configured data</li>
+            <li class="success">Type will default to library</li>
+            <li class="success">Metadata accessors will return configured data</li>
+            <li class="success">Metadata accessors will return defaults when optional fields are missing</li>
+            <li class="success">Get license will return resolved value</li>
+            <li class="success">Get authors will return normalized author entries</li>
+            <li class="success">Get authors with only first author will throw exception when no authors are defined</li>
+            <li class="success">Get support will return support object</li>
+            <li class="success">Get support will return empty support object when section is invalid</li>
+            <li class="success">Get funding will return funding entries</li>
+            <li class="success">Get funding will ignore invalid entries and invalid section types</li>
+            <li class="success">Get autoload will return configured mappings</li>
+            <li class="success">Get autoload will return empty array when section or requested mapping is invalid</li>
+            <li class="success">Get autoload dev will return configured mappings</li>
+            <li class="success">Get autoload dev will return empty array when section or requested mapping is invalid</li>
+            <li class="success">Get minimum stability will return configured value</li>
+            <li class="success">Get config will return values from config section</li>
+            <li class="success">Get scripts will return scripts section</li>
+            <li class="success">Get scripts will return empty array when section is invalid</li>
+            <li class="success">Get extra will return extra section or specific key</li>
+            <li class="success">Get extra will return empty array when section or requested value is invalid</li>
+            <li class="success">Get bin will return configured binaries</li>
+            <li class="success">Get bin will filter invalid entries and return empty array for invalid sections</li>
+            <li class="success">Get suggest will return package suggestions</li>
+            <li class="success">Get suggest will ignore invalid entries and invalid sections</li>
+            <li class="success">Get comments will return comment data</li>
+            <li class="success">Get comments will return empty array when section is invalid</li>
+            <li class="success">Get minimum stability and config will return normalized values</li>
+            <li class="success">Get minimum stability and config will return defaults for invalid sections</li>
+            <li class="success">Get bin will return scalar string when declared as single binary</li>
+        </ul>
+        <h2>Composite Context Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CompositeContextProcessor)</h2>
+        <ul>
+            <li class="success">Process will apply processors sequentially</li>
+        </ul>
+        <h2>Copy Resource Command (FastForward\DevTools\Tests\Console\Command\CopyResourceCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will copy directory contents into target</li>
+            <li class="success">Execute will fail when source or target are missing</li>
+            <li class="success">Execute will skip existing target by default</li>
+            <li class="success">Execute will show diff before overwriting changed file</li>
+            <li class="success">Execute will report unchanged overwrite as no op</li>
+            <li class="success">Execute will handle binary overwrite gracefully</li>
+            <li class="success">Execute will return failure in check mode when file would change</li>
+            <li class="success">Execute will return success in dry run mode when file would change</li>
+            <li class="success">Execute will skip replacing drifted file when interactive confirmation is declined</li>
+        </ul>
+        <h2>Coverage Summary (FastForward\DevTools\PhpUnit\Coverage\CoverageSummary)</h2>
+        <ul>
+            <li class="success">Executed lines returns value with data set #0</li>
+            <li class="success">Executed lines returns value with data set #1</li>
+            <li class="success">Executed lines returns value with data set #2</li>
+        </ul>
+        <h2>Coverage Summary Loader (FastForward\DevTools\Tests\PhpUnit\Coverage\CoverageSummaryLoader)</h2>
+        <ul>
+            <li class="success">Load will return line coverage summary from php unit coverage report</li>
+            <li class="success">Load with missing coverage report will throw runtime exception</li>
+            <li class="success">Load with invalid coverage report will throw runtime exception</li>
+        </ul>
+        <h2>Dependabot Changelog Entry Message Resolver (FastForward\DevTools\Tests\Changelog\DependabotChangelogEntryMessageResolver)</h2>
+        <ul>
+            <li class="success">Resolve will append the pull request number when the title has no suffix</li>
+            <li class="success">Resolve will preserve an existing pull request suffix</li>
+            <li class="success">Resolve will trim trailing punctuation before appending the suffix</li>
+        </ul>
+        <h2>Dependencies Command (FastForward\DevTools\Tests\Console\Command\DependenciesCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success when preview and analyzers succeed</li>
+            <li class="success">Execute will fail when max outdated is not numeric</li>
+            <li class="success">Execute will ignore jack failures when max outdated is disabled</li>
+        </ul>
+        <h2>Dev Tools (FastForward\DevTools\Tests\Console\DevTools)</h2>
+        <ul>
+            <li class="success">Get default commands will return framework defaults only</li>
+            <li class="success">Constructor will set application name and expose loader commands</li>
+            <li class="success">Create will return instance of dev tools</li>
+        </ul>
+        <h2>Dev Tools Command Loader (FastForward\DevTools\Tests\Console\CommandLoader\DevToolsCommandLoader)</h2>
+        <ul>
+            <li class="success">Constructor will register only instantiable commands</li>
+            <li class="success">Constructor will skip classes without as command attribute</li>
+            <li class="success">Constructor will skip non instantiable and non command classes</li>
+        </ul>
+        <h2>Dev Tools Command Provider (FastForward\DevTools\Tests\Composer\Capability\DevToolsCommandProvider)</h2>
+        <ul>
+            <li class="success">Get commands will return empty array when no commands are registered</li>
+            <li class="success">Get commands will return registered base commands</li>
+        </ul>
+        <h2>Dev Tools Extension (FastForward\DevTools\Tests\PhpUnit\Runner\Extension\DevToolsExtension)</h2>
+        <ul>
+            <li class="success">It can be constructed with custom tracer and subscriber</li>
+            <li class="success">It can be constructed with defaults</li>
+        </ul>
+        <h2>Dev Tools Path Resolver (FastForward\DevTools\Tests\Path\DevToolsPathResolver)</h2>
+        <ul>
+            <li class="success">It will expose canonical package paths</li>
+            <li class="success">It will reject absolute package paths</li>
+            <li class="success">It will detect whether dev tools runs from vendor or repository checkout</li>
+        </ul>
+        <h2>Dev Tools Service Provider (FastForward\DevTools\Tests\ServiceProvider\DevToolsServiceProvider)</h2>
+        <ul>
+            <li class="success">Implements service provider interface</li>
+            <li class="success">Get extensions return empty array</li>
+            <li class="success">Get factories return factories</li>
+        </ul>
+        <h2>Docs Command (FastForward\DevTools\Tests\Console\Command\DocsCommand)</h2>
+        <ul>
+            <li class="success">Execute will fail when source directory is missing</li>
+            <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute with no cache will skip php documentor cache folder</li>
+        </ul>
+        <h2>ECSConfig (FastForward\DevTools\Tests\Config\ECSConfig)</h2>
+        <ul>
+            <li class="success">Configure will return e c s config builder</li>
+            <li class="success">It will expose reusable default skipped rules</li>
+            <li class="success">Apply default paths and skips will keep working with a builder</li>
+        </ul>
+        <h2>Event Tracer (FastForward\DevTools\Tests\PhpUnit\Event\EventTracer)</h2>
+        <ul>
+            <li class="success">Trace stores events by class with data set #0</li>
+            <li class="success">Trace stores events by class with data set #1</li>
+            <li class="success">Trace stores events by class with data set #2</li>
+            <li class="success">Trace stores events by class with data set #3</li>
+            <li class="success">Trace stores events by class with data set #4</li>
+            <li class="success">Count returns correct number of events with data set #0</li>
+            <li class="success">Count returns correct number of events with data set #1</li>
+            <li class="success">Count returns correct number of events with data set #2</li>
+            <li class="success">Count returns correct number of events with data set #3</li>
+            <li class="success">Count returns correct number of events with data set #4</li>
+        </ul>
+        <h2>Existence Checker (FastForward\DevTools\Tests\GitAttributes\ExistenceChecker)</h2>
+        <ul>
+            <li class="success">Exists will return true when path exists</li>
+            <li class="success">Exists will return false when path does not exist</li>
+            <li class="success">Filter existing will keep only existing paths</li>
+            <li class="success">Filter existing will return empty array when none exist</li>
+            <li class="success">Is directory will return true for directory</li>
+            <li class="success">Is directory will return false for file</li>
+            <li class="success">Is file will return true for file</li>
+            <li class="success">Is file will return false for directory</li>
+            <li class="success">Is directory will return false for non existent</li>
+            <li class="success">Is file will return false for non existent</li>
+        </ul>
+        <h2>Export Ignore Filter (FastForward\DevTools\Tests\GitAttributes\ExportIgnoreFilter)</h2>
+        <ul>
+            <li class="success">Filter will remove configured paths even with slash variants</li>
+            <li class="success">Filter will preserve original candidate order</li>
+            <li class="success">Filter will keep nested candidates when parent path is configured</li>
+        </ul>
+        <h2>File Diff (FastForward\DevTools\Tests\Resource\FileDiff)</h2>
+        <ul>
+            <li class="success">Accessors and status helpers will reflect the diff state</li>
+        </ul>
+        <h2>File Differ (FastForward\DevTools\Tests\Resource\FileDiffer)</h2>
+        <ul>
+            <li class="success">Render will return changed result with unified diff</li>
+            <li class="success">Render will return unchanged result when contents match</li>
+            <li class="success">Render will return binary result when null bytes are detected</li>
+            <li class="success">Render will return unreadable result when contents cannot be read</li>
+            <li class="success">Render contents will use the injected differ without custom headers</li>
+            <li class="success">Colorize will wrap unified diff lines with console colors</li>
+            <li class="success">Format for console will return null when diff is missing</li>
+            <li class="success">Format for console will return plain diff when output is not decorated</li>
+            <li class="success">Format for console will return colorized diff when output is decorated</li>
+        </ul>
+        <h2>Filesystem (FastForward\DevTools\Tests\Filesystem\Filesystem)</h2>
+        <ul>
+            <li class="success">Get absolute path will return absolute for relative path</li>
+            <li class="success">Get absolute path will return absolute for multiple relative paths</li>
+            <li class="success">Get absolute path will use provided base path</li>
+            <li class="success">Get absolute path will resolve relative base paths against current working directory</li>
+            <li class="success">Basename will return correct basename</li>
+            <li class="success">Dirname will return correct dirname</li>
+            <li class="success">Make path relative will return relative path against base</li>
+            <li class="success">Dump file and read file will work with relative paths</li>
+            <li class="success">Mkdir will create directory with relative path</li>
+            <li class="success">Remove will delete relative path against current working directory</li>
+            <li class="success">Symlink and readlink will use absolute paths</li>
+            <li class="success">Copy will duplicate files using absolute paths</li>
+            <li class="success">Chmod will apply permissions to resolved paths</li>
+            <li class="success">Exists will accept iterables of relative paths</li>
+        </ul>
+        <h2>Finder Factory (FastForward\DevTools\Tests\Filesystem\FinderFactory)</h2>
+        <ul>
+            <li class="success">Create will return fresh finder instances</li>
+        </ul>
+        <h2>Funding (FastForward\DevTools\Tests\Composer\Json\Schema\Funding)</h2>
+        <ul>
+            <li class="success">Accessors will return values provided to constructor</li>
+        </ul>
+        <h2>Funding Command (FastForward\DevTools\Tests\Console\Command\FundingCommand)</h2>
+        <ul>
+            <li class="success">Execute will create composer funding from funding yaml</li>
+            <li class="success">Execute will create funding yaml from composer funding</li>
+            <li class="success">Execute will merge both sources without duplicating entries</li>
+            <li class="success">Execute will be idempotent when funding metadata already matches</li>
+            <li class="success">Execute will return success when composer file does not exist</li>
+            <li class="success">Execute will return failure in check mode when composer file would change</li>
+            <li class="success">Execute will not write managed files during dry run</li>
+            <li class="success">Execute will skip composer write when interactive confirmation is declined</li>
+            <li class="success">Execute will return failure when composer normalize fails</li>
+            <li class="success">Execute will pass working directory and alternate manifest to composer normalize</li>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will skip funding file synchronization when no supported funding metadata exists</li>
+            <li class="success">Private helpers will prompt and normalize composer file arguments</li>
+        </ul>
+        <h2>Funding Profile (FastForward\DevTools\Tests\Funding\FundingProfile)</h2>
+        <ul>
+            <li class="success">Accessors will return normalized profile values</li>
+            <li class="success">Has yaml content will report whether yaml should exist</li>
+        </ul>
+        <h2>Funding Profile Merger (FastForward\DevTools\Tests\Funding\FundingProfileMerger)</h2>
+        <ul>
+            <li class="success">Merge will combine supported funding and preserve unsupported entries</li>
+        </ul>
+        <h2>Funding Yaml Codec (FastForward\DevTools\Tests\Funding\FundingYamlCodec)</h2>
+        <ul>
+            <li class="success">Parse will normalize supported and unsupported yaml entries</li>
+            <li class="success">Dump will render scalar and list funding keys</li>
+            <li class="success">Dump will render single custom url as list</li>
+            <li class="success">Parse will return empty profile for missing or invalid yaml payloads</li>
+            <li class="success">Parse will normalize lists and discard blank entries</li>
+            <li class="success">Parse will normalize scalar github and custom values</li>
+            <li class="success">Dump will collapse single github sponsor to scalar</li>
+            <li class="success">Private list helpers will normalize and denormalize values</li>
+        </ul>
+        <h2>Generator (FastForward\DevTools\Tests\License\Generator)</h2>
+        <ul>
+            <li class="success">Generate with unsupported license will return null</li>
+            <li class="success">Generate with valid license will create file</li>
+            <li class="success">Generate will return null on template error</li>
+        </ul>
+        <h2>Git Attributes Command (FastForward\DevTools\Tests\Console\Command\GitAttributesCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will return success and write merged gitattributes</li>
+            <li class="success">Execute will respect keep in export composer configuration</li>
+            <li class="success">Execute with no candidates will skip synchronization</li>
+            <li class="success">Execute will return failure in check mode when gitattributes would change</li>
+            <li class="success">Execute will return success in dry run mode when gitattributes would change</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
+            <li class="success">Configured keep in export paths will merge primary and compatibility keys</li>
+        </ul>
+        <h2>Git Client (FastForward\DevTools\Tests\Git\GitClient)</h2>
+        <ul>
+            <li class="success">Get config will build and run the expected git command</li>
+            <li class="success">Show will relativize absolute paths within the repository</li>
+            <li class="success">Show will keep paths that do not belong to the repository unchanged</li>
+            <li class="success">Get config will throw the trimmed error output when the queue fails</li>
+        </ul>
+        <h2>Git Hooks Command (FastForward\DevTools\Tests\Console\Command\GitHooksCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will copy packaged hooks</li>
+            <li class="success">Execute will skip existing hooks when no overwrite is requested</li>
+            <li class="success">Execute will return failure in check mode when hook would change</li>
+            <li class="success">Execute will skip replacing hook when interactive confirmation is declined</li>
+            <li class="success">Execute will remove drifted hook before replacing it</li>
+            <li class="success">Execute will report install failure when replacement still cannot be written</li>
+        </ul>
+        <h2>Git Ignore (FastForward\DevTools\Tests\GitIgnore\GitIgnore)</h2>
+        <ul>
+            <li class="success">Construct with path and entries</li>
+            <li class="success">Path returns file path</li>
+            <li class="success">Entries returns list of entries</li>
+            <li class="success">Get iterator returns array iterator</li>
+            <li class="success">From file with non existent file returns empty git ignore</li>
+            <li class="success">From file with existing file reads entries</li>
+            <li class="success">From file filters empty lines</li>
+        </ul>
+        <h2>Git Ignore Command (FastForward\DevTools\Tests\Console\Command\GitIgnoreCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Command will have expected options</li>
+            <li class="success">Execute will return success when merge succeeds</li>
+            <li class="success">Execute will return success when git ignore is already synchronized</li>
+            <li class="success">Execute will return failure in check mode when drift is detected</li>
+            <li class="success">Execute will return success in dry run mode when drift is detected</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
+        </ul>
+        <h2>Joli Notif Execution Finished Subscriber (FastForward\DevTools\Tests\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber)</h2>
+        <ul>
+            <li class="success">Get title will report success when no issues were recorded</li>
+            <li class="success">Get body will summarize passed failed and errored tests</li>
+            <li class="success">Get passed tests will never return negative numbers</li>
+        </ul>
+        <h2>License Command (FastForward\DevTools\Tests\Console\Command\LicenseCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will return success and write info</li>
+            <li class="success">Execute will skip when license file exists</li>
+            <li class="success">Execute will handle unsupported license</li>
+            <li class="success">Execute will return failure in check mode when license would change</li>
+            <li class="success">Execute will return success in dry run mode when license would change</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
+        </ul>
+        <h2>Log Level Output Formatter (FastForward\DevTools\Tests\Console\Formatter\LogLevelOutputFormatter)</h2>
+        <ul>
+            <li class="success">Constructor will enable decorated output and register expected styles</li>
+            <li class="success">Format will apply the registered info style</li>
+            <li class="success">Format will apply the registered alert style</li>
+        </ul>
+        <h2>Managed Workspace (FastForward\DevTools\Tests\Path\ManagedWorkspace)</h2>
+        <ul>
+            <li class="success">It will expose canonical repository managed paths</li>
+            <li class="success">It will normalize path separators when joining managed paths</li>
+        </ul>
+        <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
+        <ul>
+            <li class="success">Render will generate changelog with header and unreleased section</li>
+            <li class="success">Render will include published sections and references</li>
+            <li class="success">Render release body will omit the release heading</li>
+            <li class="success">Render will omit dangling release date separators when date is missing</li>
+            <li class="success">Render will not insert extra blank lines between rendered sections</li>
+            <li class="success">Render will keep only one blank line between an empty unreleased section and the next release</li>
+            <li class="success">Render will omit references when repository url is missing or blank</li>
+            <li class="success">Render will normalize ssh repository urls and trim trailing git suffix</li>
+            <li class="success">Render will omit references when only unreleased section exists</li>
+        </ul>
+        <h2>Merger (FastForward\DevTools\Tests\GitAttributes\Merger)</h2>
+        <ul>
+            <li class="success">Merge will create managed block when file is empty</li>
+            <li class="success">Merge will preserve custom entries</li>
+            <li class="success">Merge will deduplicate existing and generated entries</li>
+            <li class="success">Merge will remove existing export ignore rules for kept paths</li>
+            <li class="success">Merge will remove nested export ignore rules when parent path is kept</li>
+            <li class="success">Merge will sort export ignore entries with directories before files</li>
+            <li class="success">Merge will preserve comments</li>
+            <li class="success">Merge will normalize whitespace in existing entries</li>
+            <li class="success">Merge will deduplicate normalized entries</li>
+            <li class="success">Merge with empty existing content will create clean output</li>
+            <li class="success">Merge will handle glob patterns with export ignore</li>
+            <li class="success">Merge will sort directories before files</li>
+            <li class="success">Merge will handle multiple whitespace normalize</li>
+            <li class="success">Merge will remove duplicate non export ignore lines</li>
+            <li class="success">Merge will preserve leading whitespace in custom entries</li>
+            <li class="success">Private helpers will normalize and filter path metadata consistently</li>
+        </ul>
+        <h2>Merger (FastForward\DevTools\Tests\GitIgnore\Merger)</h2>
+        <ul>
+            <li class="success">Merge with empty entries</li>
+            <li class="success">Merge removes duplicates</li>
+            <li class="success">Merge sorts directories first</li>
+            <li class="success">Merge removes comments</li>
+            <li class="success">Merge removes empty entries</li>
+            <li class="success">Merge uses project path</li>
+            <li class="success">Merge returns git ignore instance</li>
+        </ul>
+        <h2>Metrics Command (FastForward\DevTools\Tests\Console\Command\MetricsCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute will return failure when process queue fails</li>
+            <li class="success">Execute will run php metrics in quiet mode when json is requested</li>
+            <li class="success">Execute will not run php metrics in quiet mode when progress is requested</li>
+        </ul>
+        <h2>Output Format Logger (FastForward\DevTools\Tests\Console\Logger\OutputFormatLogger)</h2>
+        <ul>
+            <li class="success">Log will write interpolated info messages to standard output</li>
+            <li class="success">Log will write error messages to error output</li>
+            <li class="success">Log will write structured json when json output is requested</li>
+            <li class="success">Log will write pretty printed json when pretty json output is requested</li>
+            <li class="success">Log will write structured json when agent environment is detected</li>
+        </ul>
+        <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>
+        <ul>
+            <li class="success">Set logger will replace the active logger</li>
+            <li class="success">Synchronize with missing package path will return failed result</li>
+            <li class="success">Synchronize with missing target dir will create it and create links</li>
+            <li class="success">Synchronize will preserve existing valid symlink</li>
+            <li class="success">Synchronize will repair broken symlink</li>
+            <li class="success">Synchronize will preserve existing non symlink directory</li>
+        </ul>
+        <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
+        <ul>
+            <li class="success">Execute will create doc header and run php doc processes</li>
+            <li class="success">Execute with no cache will disable php cs fixer cache</li>
+            <li class="success">Execute will handle dump file exception and continue running processes</li>
+            <li class="success">Execute will request structured output and disable progress when json is requested</li>
+            <li class="success">Execute will enable progress when requested</li>
+        </ul>
+        <h2>Plugin (FastForward\DevTools\Tests\Composer\Plugin)</h2>
+        <ul>
+            <li class="success">Get capabilities will return dev tools command provider mapping</li>
+            <li class="success">Get subscribed events will return expected event mapping</li>
+            <li class="success">Activate will do nothing</li>
+            <li class="success">Run sync command will execute dev tools sync</li>
+            <li class="success">Deactivate will do nothing</li>
+            <li class="success">Uninstall will do nothing</li>
+        </ul>
+        <h2>Process Builder (FastForward\DevTools\Tests\Process\ProcessBuilder)</h2>
+        <ul>
+            <li class="success">Constructor with default will create empty arguments</li>
+            <li class="success">Build with simple command will return process instance</li>
+            <li class="success">With argument without value will add argument to list</li>
+            <li class="success">With argument with value will format as key value pair</li>
+            <li class="success">With argument chaining will accumulate all arguments</li>
+            <li class="success">Build will return process instance with arguments</li>
+        </ul>
+        <h2>Process Queue (FastForward\DevTools\Tests\Process\ProcessQueue)</h2>
+        <ul>
+            <li class="success">Run with empty queue returns success</li>
+            <li class="success">Run with successful blocking process returns success</li>
+            <li class="success">Run with failing blocking process returns failure</li>
+            <li class="success">Run with ignored failing blocking process returns success</li>
+            <li class="success">Run with null exit code returns failure</li>
+            <li class="success">Run blocking process exception returns failure</li>
+            <li class="success">Run detached process starts without blocking and waits at the end</li>
+            <li class="success">Run detached process start failure returns failure</li>
+            <li class="success">Run detached process start failure with ignore failure returns success</li>
+            <li class="success">Run will write blocking process output to standard and error outputs</li>
+            <li class="success">Wait will flush finished detached output without waiting for every process</li>
+        </ul>
+        <h2>Reader (FastForward\DevTools\Tests\GitAttributes\Reader)</h2>
+        <ul>
+            <li class="success">Read with non existent file will return empty string</li>
+            <li class="success">Read with existing file will return file contents</li>
+        </ul>
+        <h2>Reader (FastForward\DevTools\Tests\GitIgnore\Reader)</h2>
+        <ul>
+            <li class="success">Read with non existent file returns empty git ignore</li>
+            <li class="success">Read with existing file returns git ignore with entries</li>
+            <li class="success">Read returns git ignore interface instance</li>
+        </ul>
+        <h2>Rector Config (FastForward\DevTools\Tests\Config\RectorConfig)</h2>
+        <ul>
+            <li class="success">Configure will return callable</li>
+            <li class="success">Configure with custom callback will return callable</li>
+            <li class="success">Configure will apply the default rector configuration and customization callback</li>
+            <li class="success">It will expose reusable default sets and rules</li>
+            <li class="success">Apply safe migration set will be callable without the safe package installed</li>
+        </ul>
+        <h2>Refactor Command (FastForward\DevTools\Tests\Console\Command\RefactorCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute will return failure when process queue fails</li>
+            <li class="success">Execute will request json output and disable progress when json is requested</li>
+            <li class="success">Execute will enable progress when requested</li>
+        </ul>
+        <h2>Remove Empty Doc Block Rector (FastForward\DevTools\Tests\Rector\RemoveEmptyDocBlockRector)</h2>
+        <ul>
+            <li class="success">Get rule definition will return configured definition</li>
+            <li class="success">Get node types will return class and class method node</li>
+            <li class="success">Refactor will return null if not class or class method node</li>
+            <li class="success">Refactor will return null if node has no doc comment</li>
+            <li class="success">Refactor will return null if doc comment is not empty</li>
+            <li class="success">Refactor will remove empty doc comment</li>
+            <li class="success">Refactor will remove single line empty doc comment</li>
+            <li class="success">Refactor will remove empty doc comment with spaces</li>
+            <li class="success">Refactor will return null for non supported nodes</li>
+            <li class="success">Is empty doc block will detect content after normalization</li>
+        </ul>
+        <h2>Reports Command (FastForward\DevTools\Tests\Console\Command\ReportsCommand)</h2>
+        <ul>
+            <li class="success">Execute will run reports and return success</li>
+            <li class="success">Execute will capture buffered output when json is requested</li>
+            <li class="success">Execute will forward progress to nested commands when requested</li>
+            <li class="success">Execute with cache will forward cache only to docs and tests</li>
+            <li class="success">Execute with no cache will forward no cache only to docs and tests</li>
+        </ul>
+        <h2>Resolver (FastForward\DevTools\Tests\License\Resolver)</h2>
+        <ul>
+            <li class="success">Resolve with m i t will return template filename</li>
+            <li class="success">Resolve with apache 2 will return apache 20 template</li>
+            <li class="success">Resolve with unknown license will return null</li>
+        </ul>
+        <h2>Skills Command (FastForward\DevTools\Tests\Console\Command\SkillsCommand)</h2>
+        <ul>
+            <li class="success">Execute will fail when packaged skills directory does not exist</li>
+            <li class="success">Execute will create skills directory when it does not exist</li>
+            <li class="success">Execute will return failure when synchronizer fails</li>
+        </ul>
+        <h2>Standards Command (FastForward\DevTools\Tests\Console\Command\StandardsCommand)</h2>
+        <ul>
+            <li class="success">Execute will run suite sequentially</li>
+            <li class="success">Execute will return failure when any command fails</li>
+            <li class="success">Execute with cache will forward cache only to cache aware nested commands</li>
+            <li class="success">Execute with no cache will forward no cache only to cache aware nested commands</li>
+        </ul>
+        <h2>Support (FastForward\DevTools\Tests\Composer\Json\Schema\Support)</h2>
+        <ul>
+            <li class="success">Accessors will return values provided to constructor</li>
+            <li class="success">Constructor will initialize with empty strings by default</li>
+        </ul>
+        <h2>Sync Command (FastForward\DevTools\Tests\Console\Command\SyncCommand)</h2>
+        <ul>
+            <li class="success">Execute will queue dedicated synchronization commands</li>
+            <li class="success">Execute will disable detached mode when checking drift</li>
+            <li class="success">Execute will propagate json output format to sub commands</li>
+        </ul>
+        <h2>Synchronize Result (FastForward\DevTools\Tests\Sync\SynchronizeResult)</h2>
+        <ul>
+            <li class="success">Add created link will record the link name</li>
+            <li class="success">Add preserved link will record the link name</li>
+            <li class="success">Add removed broken link will record the link name</li>
+            <li class="success">Mark failed will set the failed flag</li>
+        </ul>
+        <h2>System Clock (FastForward\DevTools\Tests\Psr\Clock\SystemClock)</h2>
+        <ul>
+            <li class="success">Now will return current date time immutable</li>
+        </ul>
+        <h2>Unified Differ (FastForward\DevTools\Tests\Resource\UnifiedDiffer)</h2>
+        <ul>
+            <li class="success">Diff will return trimmed unified diff output</li>
+        </ul>
+        <h2>Unreleased Entry Checker (FastForward\DevTools\Tests\Changelog\Checker\UnreleasedEntryChecker)</h2>
+        <ul>
+            <li class="success">Has pending changes will return false when the file cannot be read</li>
+            <li class="success">Has pending changes will return false when the unreleased section is empty</li>
+            <li class="success">Has pending changes will return true when unreleased section contains entries</li>
+            <li class="success">Has pending changes will compare against baseline reference</li>
+            <li class="success">Has pending changes will return true when baseline does not contain new entries</li>
+            <li class="success">Has pending changes will ignore entries only inherited from the base branch</li>
+            <li class="success">Has pending changes will still detect branch specific entries alongside inherited ones</li>
+            <li class="success">Has pending changes will return true when the baseline cannot be loaded</li>
+        </ul>
+        <h2>Update Composer Json Command (FastForward\DevTools\Tests\Console\Command\UpdateComposerJsonCommand)</h2>
+        <ul>
+            <li class="success">Command will set expected name description and help</li>
+            <li class="success">Execute will update composer json scripts and extra configuration</li>
+            <li class="success">Execute will add readme metadata when readme exists and composer json does not declare readme</li>
+            <li class="success">Execute will preserve existing readme metadata</li>
+            <li class="success">Execute will skip readme metadata when readme does not exist</li>
+            <li class="success">Execute will return success when composer file does not exist</li>
+            <li class="success">Execute will return success without writing when comparison is unchanged</li>
+            <li class="success">Execute will return failure in check mode when composer json would change</li>
+            <li class="success">Execute will return success in dry run mode when composer json would change</li>
+            <li class="success">Execute will skip writing when interactive confirmation is declined</li>
+        </ul>
+        <h2>Wiki Command (FastForward\DevTools\Tests\Console\Command\WikiCommand)</h2>
+        <ul>
+            <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute with no cache will skip php documentor cache folder</li>
+            <li class="success">Execute with init will skip existing wiki submodule</li>
+        </ul>
+        <h2>Working Project Path Resolver (FastForward\DevTools\Tests\Path\WorkingProjectPathResolver)</h2>
+        <ul>
+            <li class="success">It will expose canonical repository root paths</li>
+            <li class="success">It will normalize path separators when joining project paths</li>
+            <li class="success">It will expose the current working project directory or paths under it</li>
+        </ul>
+        <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>
+        <ul>
+            <li class="success">Write will append trailing line feed</li>
+            <li class="success">Write will align attribute columns using the longest path spec</li>
+            <li class="success">Write will respect escaped whitespace inside the path spec</li>
+            <li class="success">Write will preserve empty lines</li>
+            <li class="success">Write will not add an extra blank line when content already ends with a line feed</li>
+            <li class="success">Write will normalize multiple spaces</li>
+            <li class="success">Write will preserve comments</li>
+            <li class="success">Write will handle multiple spaces between path and attribute</li>
+            <li class="success">Write will normalize content with extra whitespace characters</li>
+            <li class="success">Write will handle paths without attributes as raw entry</li>
+            <li class="success">Write will handle paths with only whitespace attribute as raw entry</li>
+            <li class="success">Write will align with tab separated entries</li>
+        </ul>
+        <h2>Writer (FastForward\DevTools\Tests\GitIgnore\Writer)</h2>
+        <ul>
+            <li class="success">Write dumps content to file</li>
+            <li class="success">Write with empty entries dumps empty string</li>
+            <li class="success">Write with multiple entries joins with newline</li>
+        </ul>
+    </body>
+</html>
