@@ -48,13 +48,9 @@ jobs:
             php-version: ${{ steps.resolve.outputs.php-version }}
             php-version-source: ${{ steps.resolve.outputs.php-version-source }}
             test-matrix: ${{ steps.resolve.outputs.test-matrix }}
-            run-tests: ${{ steps.scope.outputs.run-tests }}
-            test-scope-reason: ${{ steps.scope.outputs.reason }}
 
         steps:
             - uses: actions/checkout@v6
-              with:
-                fetch-depth: 0
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v6
               with:
@@ -68,47 +64,6 @@ jobs:
               id: resolve
               uses: ./.dev-tools-actions/.github/actions/php/resolve-version
 
-            - name: Resolve test workflow scope
-              id: scope
-              shell: bash
-              env:
-                BASE_SHA: ${{ github.event.pull_request.base.sha || '' }}
-              run: |
-                set -euo pipefail
-
-                if [ "${GITHUB_EVENT_NAME}" != "pull_request" ]; then
-                  {
-                    echo "run-tests=true"
-                    echo "reason=non-pull-request-event"
-                  } >> "$GITHUB_OUTPUT"
-
-                  exit 0
-                fi
-
-                git fetch --no-tags --depth=1 origin "${BASE_SHA}"
-                git diff --name-only "${BASE_SHA}...HEAD" > changed-files.txt
-
-                run_tests=false
-                while IFS= read -r changed_file; do
-                  case "${changed_file}" in
-                    src/*|tests/*|composer.json|composer.lock|.github/actions/*|.github/workflows/tests.yml|resources/github-actions/tests.yml)
-                      run_tests=true
-                      break
-                      ;;
-                  esac
-                done < changed-files.txt
-
-                if [ "${run_tests}" = "true" ]; then
-                  reason="test-sensitive-pr-diff"
-                else
-                  reason="no-test-sensitive-pr-diff"
-                fi
-
-                {
-                  echo "run-tests=${run_tests}"
-                  echo "reason=${reason}"
-                } >> "$GITHUB_OUTPUT"
-
     tests:
         needs: resolve_php
         name: Run Tests
@@ -119,9 +74,7 @@ jobs:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v6
-              if: needs.resolve_php.outputs.run-tests == 'true'
             - name: Checkout dev-tools workflow action source
-              if: needs.resolve_php.outputs.run-tests == 'true'
               uses: actions/checkout@v6
               with:
                 repository: php-fast-forward/dev-tools
@@ -131,7 +84,6 @@ jobs:
                   .github/actions
 
             - name: Setup PHP and install dependencies
-              if: needs.resolve_php.outputs.run-tests == 'true'
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                 php-version: ${{ matrix.php-version }}
@@ -141,28 +93,20 @@ jobs:
                 install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Composer Audit
-              if: needs.resolve_php.outputs.run-tests == 'true'
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer audit
 
             - name: Resolve minimum coverage
-              if: needs.resolve_php.outputs.run-tests == 'true'
               id: minimum-coverage
               run: echo "value=${INPUT_MIN_COVERAGE:-80}" >> "$GITHUB_OUTPUT"
               env:
                   INPUT_MIN_COVERAGE: ${{ inputs.min-coverage }}
 
             - name: Run PHPUnit tests
-              if: needs.resolve_php.outputs.run-tests == 'true'
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer dev-tools tests -- --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
-
-            - name: Mark tests intentionally skipped
-              if: needs.resolve_php.outputs.run-tests != 'true'
-              run: |
-                echo "No test-sensitive PR diff detected; required test context completed without running PHPUnit."
 
     dependency-health:
         needs: resolve_php
@@ -172,9 +116,7 @@ jobs:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v6
-              if: needs.resolve_php.outputs.run-tests == 'true'
             - name: Checkout dev-tools workflow action source
-              if: needs.resolve_php.outputs.run-tests == 'true'
               uses: actions/checkout@v6
               with:
                 repository: php-fast-forward/dev-tools
@@ -184,7 +126,6 @@ jobs:
                   .github/actions
 
             - name: Setup PHP and install dependencies
-              if: needs.resolve_php.outputs.run-tests == 'true'
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
@@ -192,15 +133,9 @@ jobs:
                 install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
 
             - name: Run dependency health check
-              if: needs.resolve_php.outputs.run-tests == 'true'
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: composer dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || -1 }}
-
-            - name: Mark dependency health intentionally skipped
-              if: needs.resolve_php.outputs.run-tests != 'true'
-              run: |
-                echo "No test-sensitive PR diff detected; dependency health completed without running dependency analysis."
 
     summarize:
         if: ${{ always() }}
@@ -229,8 +164,6 @@ jobs:
                   - Workflow PHP version: `${{ needs.resolve_php.outputs.php-version }}`
                   - PHP version source: `${{ needs.resolve_php.outputs.php-version-source }}`
                   - Test matrix: `${{ needs.resolve_php.outputs.test-matrix }}`
-                  - Test-sensitive diff: `${{ needs.resolve_php.outputs.run-tests }}`
-                  - Test scope reason: `${{ needs.resolve_php.outputs.test-scope-reason }}`
                   - Minimum coverage threshold: `${{ inputs.min-coverage || 80 }}`
                   - Dependency health `max-outdated`: `${{ inputs.max-outdated || -1 }}`
                   - Tests job result: `${{ needs.tests.result }}`

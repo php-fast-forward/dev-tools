@@ -97,20 +97,12 @@ to refresh generated pointers manually. The preferred path is to allow bot
 updates on PR branches while keeping ``main`` protected.
 
 Required test checks must still report for workflow-managed pointer commits.
-The tests workflow therefore triggers on every pull request update and resolves
-whether the effective pull request diff contains test-sensitive files inside the
-workflow itself. If the latest commit only refreshes ``.github/wiki`` and the
-pull request has no source, test, Composer, test-workflow, packaged test-wrapper,
-or local-action changes, the required ``Run Tests`` matrix jobs complete with an
-intentional skip message instead of leaving branch protection waiting for
-missing checks. If the pull request does include test-sensitive changes, the
-matrix runs even when the newest commit is only the generated wiki pointer.
-
-Test workflow concurrency cancels older in-progress runs for the same pull
-request. Because the skip decision uses the effective pull request diff instead
-of only the latest commit, a generated wiki-pointer commit still runs the matrix
-when the pull request contains source, test, Composer, test-workflow, packaged
-test-wrapper, or local-action changes.
+The tests workflow therefore triggers on every pull request update without
+top-level path filters. This ensures GitHub always creates the required
+``Run Tests`` matrix checks for the latest pull request head, including bot
+commits that only refresh ``.github/wiki``. Test workflow concurrency cancels
+older in-progress runs for the same pull request so the newest commit owns the
+required check contexts.
 
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
