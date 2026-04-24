@@ -309,10 +309,11 @@ jobs:
                   sparse-checkout: |
                       .github/actions
 
-            - uses: ./.dev-tools-actions/.github/actions/project-board/transition-status
+            - id: release_project_status
+              uses: ./.dev-tools-actions/.github/actions/project-board/transition-status
               with:
                   project: ${{ inputs.project || vars.PROJECT || '' }}
-                  from-status: Release Prepared
+                  from-statuses: Release Prepared,Merged
                   to-status: Released
                   include-current-pull-request: 'true'
 
@@ -325,3 +326,6 @@ jobs:
                       - Published tag: `v${{ steps.version.outputs.value }}`
                       - Release operation: `${{ steps.publish_release.outputs.operation }}`
                       - Release URL: ${{ steps.publish_release.outputs.url }}
+                      - Project items released: `${{ steps.release_project_status.outputs.moved-count }}`
+                      - Project items skipped: `${{ steps.release_project_status.outputs.skipped-count }}`
+                      - Project source statuses: `${{ steps.release_project_status.outputs.source-statuses }}`

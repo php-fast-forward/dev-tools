@@ -7,8 +7,23 @@ const board = require('../shared/project-board-client.cjs');
  */
 module.exports = async function transitionStatus({ github, context, core }) {
     const includeCurrentPullRequest = 'true' === (process.env.INPUT_INCLUDE_CURRENT_PULL_REQUEST ?? '').toLowerCase();
-    const fromStatus = process.env.INPUT_FROM_STATUS;
+    const sourceStatuses = [
+        ...(process.env.INPUT_FROM_STATUSES ?? '').split(','),
+        process.env.INPUT_FROM_STATUS ?? '',
+    ]
+        .map((status) => status.trim())
+        .filter((status, index, statuses) => '' !== status && statuses.indexOf(status) === index);
     const toStatus = process.env.INPUT_TO_STATUS;
+
+    core.setOutput('source-statuses', sourceStatuses.join(','));
+
+    if (0 === sourceStatuses.length) {
+        core.info('No source project statuses were provided. Skipping status transition.');
+        core.setOutput('moved-count', '0');
+        core.setOutput('skipped-count', '0');
+
+        return;
+    }
 
     const project = await board.loadConfiguredProject(
         github,
@@ -18,6 +33,8 @@ module.exports = async function transitionStatus({ github, context, core }) {
 
     if (!project) {
         core.info('No configured GitHub Project V2 was resolved. Skipping status transition.');
+        core.setOutput('moved-count', '0');
+        core.setOutput('skipped-count', '0');
 
         return;
     }
@@ -27,107 +44,93 @@ module.exports = async function transitionStatus({ github, context, core }) {
 
     if (!statusField || !targetOption) {
         core.info(`Project "${project.title}" does not expose the expected target status "${toStatus}".`);
+        core.setOutput('moved-count', '0');
+        core.setOutput('skipped-count', '0');
 
         return;
     }
 
-    const result = await github.graphql(
-        `query($owner: String!, $repo: String!, $pullRequestNumber: Int!) {
-          repository(owner: $owner, name: $repo) {
-            issues(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}, states: CLOSED) {
-              nodes {
-                number
-                projectItems(first: 20) {
-                  nodes {
-                    id
-                    project {
-                      ... on ProjectV2 {
-                        id
-                      }
-                    }
-                    fieldValues(first: 20) {
-                      nodes {
-                        __typename
-                        ... on ProjectV2ItemFieldSingleSelectValue {
-                          field {
-                            ... on ProjectV2SingleSelectField {
-                              name
-                            }
-                          }
-                          name
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            pullRequests(first: 100, orderBy: {field: UPDATED_AT, direction: DESC}, states: [MERGED, CLOSED]) {
-              nodes {
-                number
-                projectItems(first: 20) {
-                  nodes {
-                    id
-                    project {
-                      ... on ProjectV2 {
-                        id
-                      }
-                    }
-                    fieldValues(first: 20) {
-                      nodes {
-                        __typename
-                        ... on ProjectV2ItemFieldSingleSelectValue {
-                          field {
-                            ... on ProjectV2SingleSelectField {
-                              name
-                            }
-                          }
-                          name
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            pullRequest(number: $pullRequestNumber) {
-              number
-              projectItems(first: 20) {
-                nodes {
-                  id
-                  project {
+    const loadProjectItems = async () => {
+        const items = [];
+        let cursor = null;
+
+        do {
+            const result = await github.graphql(
+                `query($project: ID!, $cursor: String) {
+                  node(id: $project) {
                     ... on ProjectV2 {
-                      id
-                    }
-                  }
-                  fieldValues(first: 20) {
-                    nodes {
-                      __typename
-                      ... on ProjectV2ItemFieldSingleSelectValue {
-                        field {
-                          ... on ProjectV2SingleSelectField {
-                            name
+                      items(first: 100, after: $cursor) {
+                        pageInfo {
+                          hasNextPage
+                          endCursor
+                        }
+                        nodes {
+                          id
+                          content {
+                            __typename
+                            ... on Issue {
+                              number
+                              title
+                              url
+                            }
+                            ... on PullRequest {
+                              number
+                              title
+                              url
+                            }
+                          }
+                          fieldValues(first: 20) {
+                            nodes {
+                              __typename
+                              ... on ProjectV2ItemFieldSingleSelectValue {
+                                field {
+                                  ... on ProjectV2SingleSelectField {
+                                    name
+                                  }
+                                }
+                                name
+                              }
+                            }
                           }
                         }
-                        name
                       }
                     }
                   }
-                }
-              }
-            }
-          }
-        }`,
-        {
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pullRequestNumber: context.payload.pull_request?.number ?? 0,
-        },
-    );
+                }`,
+                {
+                    project: project.id,
+                    cursor,
+                },
+            );
+
+            const page = result.node?.items;
+
+            items.push(...(page?.nodes ?? []));
+            cursor = page?.pageInfo?.hasNextPage ? page.pageInfo.endCursor : null;
+        } while (null !== cursor);
+
+        return items;
+    };
+
+    const formatLabel = (item) => {
+        const content = item.content;
+
+        if ('Issue' === content?.__typename) {
+            return `Issue #${content.number}`;
+        }
+
+        if ('PullRequest' === content?.__typename) {
+            return `PR #${content.number}`;
+        }
+
+        return `Project item ${item.id}`;
+    };
 
     const moveToStatus = async (item, label) => {
-        if (!item || board.getExistingFieldValue(item, 'Status') !== fromStatus) {
-            return;
+        const currentStatus = board.getExistingFieldValue(item, 'Status');
+
+        if (!sourceStatuses.includes(currentStatus)) {
+            return false;
         }
 
         await board.updateSingleSelectField(
@@ -138,27 +141,29 @@ module.exports = async function transitionStatus({ github, context, core }) {
             targetOption.id,
         );
 
-        core.info(`${label} moved to ${toStatus}.`);
+        core.info(`${label} moved from ${currentStatus} to ${toStatus}.`);
+
+        return true;
     };
 
     if (includeCurrentPullRequest) {
-        await moveToStatus(
-            board.findProjectItem(result.repository.pullRequest?.projectItems?.nodes ?? [], project.id),
-            `Pull request #${context.payload.pull_request.number}`,
-        );
+        core.info('The include-current-pull-request input is kept for compatibility; project item pagination already includes the current pull request when it is on the board.');
     }
 
-    for (const pullRequest of result.repository.pullRequests.nodes) {
-        await moveToStatus(
-            board.findProjectItem(pullRequest.projectItems.nodes, project.id),
-            `PR #${pullRequest.number}`,
-        );
+    let movedCount = 0;
+    let skippedCount = 0;
+
+    for (const item of await loadProjectItems()) {
+        if (await moveToStatus(item, formatLabel(item))) {
+            movedCount++;
+
+            continue;
+        }
+
+        skippedCount++;
     }
 
-    for (const issue of result.repository.issues.nodes) {
-        await moveToStatus(
-            board.findProjectItem(issue.projectItems.nodes, project.id),
-            `Issue #${issue.number}`,
-        );
-    }
+    core.info(`${movedCount} project item(s) moved to ${toStatus}; ${skippedCount} inspected item(s) skipped.`);
+    core.setOutput('moved-count', String(movedCount));
+    core.setOutput('skipped-count', String(skippedCount));
 };

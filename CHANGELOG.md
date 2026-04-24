@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Promote any remaining project-board `Merged` work to `Released` during release publication so bypassed or skipped preparation transitions do not leave completed items stale (#253)
 - Grant project-board write permission in the packaged changelog workflow wrapper so consumer release workflows can call the reusable changelog automation without GitHub rejecting the requested permissions (#251)
 
 ## [1.22.0] - 2026-04-24
