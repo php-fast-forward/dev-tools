@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions(deps): Bump marocchino/sticky-pull-request-comment from 2 to 3 (#182)
 - GitHub Actions(deps): Bump actions/github-script from 8 to 9 (#183)
 - Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)
+- Resolve Dependabot changelog fallback state from the actual PR head branch and report `already-present`, `auto-created`, or `missing` in the workflow summary so rebased PRs cannot pass on inherited `Unreleased` entries alone (#191)
 
 ## [1.20.0] - 2026-04-23
 

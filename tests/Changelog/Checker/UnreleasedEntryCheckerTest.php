@@ -179,6 +179,59 @@ final class UnreleasedEntryCheckerTest extends TestCase
      * @return void
      */
     #[Test]
+    public function hasPendingChangesWillIgnoreEntriesOnlyInheritedFromTheBaseBranch(): void
+    {
+        $this->filesystem->readFile(self::FILE)
+            ->willReturn('current changelog')
+            ->shouldBeCalledOnce();
+        $this->parser->parse('current changelog')
+            ->willReturn($this->createDocument([
+                'Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)',
+            ]))
+            ->shouldBeCalledOnce();
+        $this->gitClient->show('origin/main', self::FILE, self::WORKING_DIRECTORY)
+            ->willReturn('baseline changelog')
+            ->shouldBeCalledOnce();
+        $this->parser->parse('baseline changelog')
+            ->willReturn($this->createDocument([
+                'Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)',
+            ]))
+            ->shouldBeCalledOnce();
+
+        self::assertFalse($this->checker->hasPendingChanges(self::FILE, 'origin/main'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function hasPendingChangesWillStillDetectBranchSpecificEntriesAlongsideInheritedOnes(): void
+    {
+        $this->filesystem->readFile(self::FILE)
+            ->willReturn('current changelog')
+            ->shouldBeCalledOnce();
+        $this->parser->parse('current changelog')
+            ->willReturn($this->createDocument([
+                'Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)',
+                'GitHub Actions(deps): Bump actions/github-script from 8 to 9 (#183)',
+            ]))
+            ->shouldBeCalledOnce();
+        $this->gitClient->show('origin/main', self::FILE, self::WORKING_DIRECTORY)
+            ->willReturn('baseline changelog')
+            ->shouldBeCalledOnce();
+        $this->parser->parse('baseline changelog')
+            ->willReturn($this->createDocument([
+                'Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)',
+            ]))
+            ->shouldBeCalledOnce();
+
+        self::assertTrue($this->checker->hasPendingChanges(self::FILE, 'origin/main'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function hasPendingChangesWillReturnTrueWhenTheBaselineCannotBeLoaded(): void
     {
         $this->filesystem->readFile(self::FILE)

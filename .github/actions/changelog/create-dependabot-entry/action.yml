@@ -22,6 +22,9 @@ outputs:
   created:
     description: Whether a changelog entry was created and pushed.
     value: ${{ steps.create.outputs.created }}
+  status:
+    description: Whether the branch already had an entry, auto-created one, or still remains missing.
+    value: ${{ steps.create.outputs.status }}
   message:
     description: Generated changelog entry message, or empty when no entry was needed.
     value: ${{ steps.create.outputs.message }}
