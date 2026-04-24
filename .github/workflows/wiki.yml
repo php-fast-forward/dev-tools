@@ -11,6 +11,7 @@ concurrency:
 jobs:
   preview:
     permissions:
+      actions: write
       contents: write
       pull-requests: read
     uses: ./.github/workflows/wiki-preview.yml

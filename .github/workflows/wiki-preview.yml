@@ -37,6 +37,7 @@ jobs:
     name: Update Wiki Preview
     runs-on: ubuntu-latest
     permissions:
+      actions: write
       contents: write
       pull-requests: read
 
@@ -110,6 +111,13 @@ jobs:
           pull: "--rebase --autostash"
           push: true
 
+      - name: Dispatch tests for wiki pointer commit
+        if: steps.submodule_status.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          HEAD_REF: ${{ github.event.pull_request.head.ref }}
+        run: gh workflow run tests.yml --ref "${HEAD_REF}" -f max-outdated=-1
+
       - uses: ./.dev-tools-actions/.github/actions/summary/write
         with:
           markdown: |
@@ -118,3 +126,4 @@ jobs:
             - Preview branch: `${{ env.WIKI_PREVIEW_BRANCH }}`
             - Submodule pointer changed: `${{ steps.submodule_status.outputs.changed }}`
             - Parent repository pointer commit result: `${{ steps.submodule_status.outputs.changed == 'true' && 'updated' || 'unchanged' }}`
+            - Tests dispatch result: `${{ steps.submodule_status.outputs.changed == 'true' && 'requested' || 'not needed' }}`
