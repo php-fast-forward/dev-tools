@@ -3112,13 +3112,15 @@ the pull request head branch so the newest bot-authored commit receives the
 required <code>Run Tests</code>
  matrix checks. Because manually dispatched workflow check
 runs are not always treated as pull-request required checks, that dispatched
-test run also mirrors the matrix result into commit statuses named
-<code>Run Tests (8.3)</code>
+test run first publishes pending commit statuses for the resolved PHP matrix and
+then lets each matrix job publish its own final status. The status contexts use
+the same required-check names, such as <code>Run Tests (8.3)</code>
 , <code>Run Tests (8.4)</code>
-, and <code>Run Tests (8.5)</code>
-. Test workflow
-concurrency cancels older in-progress runs for the same pull request so the
-newest commit owns the required check contexts.</p>
+,
+and <code>Run Tests (8.5)</code>
+. Test workflow concurrency cancels older in-progress
+runs for the same pull request so the newest commit owns the required check
+contexts.</p>
 
             
     <p>The predictable-conflict workflow MAY also refresh pull request branches when
