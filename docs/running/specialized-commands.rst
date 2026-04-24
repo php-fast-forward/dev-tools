@@ -132,7 +132,12 @@ Important details:
   structured while forwarding JSON or quieter modes to the wrapped tools where
   available;
 - it suppresses deprecation notices emitted by the PhpMetrics dependency
-  itself so the command output stays readable.
+  itself so the command output stays readable;
+- it keeps PhpMetrics' Composer analysis enabled so report generation includes
+  root package metadata, while default exclusions keep nested fixture projects
+  out of that Composer scan;
+- it limits PhpMetrics' per-package Packagist socket wait so package freshness
+  enrichment cannot leave report generation stuck indefinitely.
 
 ``code-style``
 --------------
@@ -270,6 +275,12 @@ Important details:
   ``--progress`` re-enables it for human-readable runs;
 - ``--json`` and ``--pretty-json`` are propagated to each subprocess, while
   their progress output is suppressed where supported;
+- human-readable runs keep nested command output grouped with concise local
+  section boundaries, pass color-friendly environment variables to
+  subprocesses, and forward explicit ANSI flags to Symfony Console tools;
+- queued subprocesses run with ``XDEBUG_MODE=off`` when Xdebug is loaded but
+  the command does not need Xdebug for coverage, or when PCOV can provide
+  coverage instead;
 - it is the reporting stage used by ``standards``.
 
 ``skills``

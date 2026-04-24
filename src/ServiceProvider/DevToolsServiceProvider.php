@@ -41,6 +41,10 @@ use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
 use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
+use FastForward\DevTools\Console\Output\OutputCapabilityDetector;
+use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
+use FastForward\DevTools\Environment\Environment;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
@@ -67,12 +71,18 @@ use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\License\Resolver;
 use FastForward\DevTools\License\ResolverInterface;
+use FastForward\DevTools\Php\Extension;
+use FastForward\DevTools\Php\ExtensionInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
+use FastForward\DevTools\Process\ColorPreservingProcessEnvironmentConfigurator;
+use FastForward\DevTools\Process\CompositeProcessEnvironmentConfigurator;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Psr\Clock\SystemClock;
@@ -109,7 +119,15 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
     {
         return [
             // Process
+            EnvironmentInterface::class => get(Environment::class),
+            ExtensionInterface::class => get(Extension::class),
+            OutputCapabilityDetectorInterface::class => get(OutputCapabilityDetector::class),
             ProcessBuilderInterface::class => get(ProcessBuilder::class),
+            ProcessEnvironmentConfiguratorInterface::class => create(CompositeProcessEnvironmentConfigurator::class)
+                ->constructor([
+                    get(ColorPreservingProcessEnvironmentConfigurator::class),
+                    get(XdebugDisablingProcessEnvironmentConfigurator::class),
+                ]),
             ProcessQueueInterface::class => get(ProcessQueue::class),
 
             // Filesystem
@@ -145,7 +163,8 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
                 ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),
             GithubActionOutput::class => create(GithubActionOutput::class)->constructor(
-                get(ConsoleOutputInterface::class)
+                get(ConsoleOutputInterface::class),
+                get(EnvironmentInterface::class)
             ),
             ContextProcessorInterface::class => create(CompositeContextProcessor::class)->constructor([
                 get(CommandInputProcessor::class),

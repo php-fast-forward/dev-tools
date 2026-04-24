@@ -221,12 +221,16 @@ final class SyncCommand extends BaseCommand implements LoggerAwareCommandInterfa
             $arguments[] = '--pretty-json';
         }
 
+        if (! $jsonOutput && ! $prettyJsonOutput && ! \in_array('--ansi', $arguments, true)) {
+            $arguments[] = '--ansi';
+        }
+
         foreach ($arguments as $argument) {
             $processBuilder = $processBuilder->withArgument($argument);
         }
 
         $process = $processBuilder->build(DevToolsPathResolver::getBinaryPath());
 
-        $this->processQueue->add($process, detached: $detached);
+        $this->processQueue->add(process: $process, detached: $detached, label: 'Running DevTools Sync Hook');
     }
 }

@@ -131,13 +131,18 @@ final class TestsCommandTest extends TestCase
     #[Test]
     public function executeWillRunPhpUnitProcessWithConfigFile(): void
     {
-        $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
-            $process->getCommandLine(),
-            '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG,
-        ) && str_contains($process->getCommandLine(), '--cache-result') && str_contains(
-            $process->getCommandLine(),
-            '--cache-directory=' . getcwd() . '/.dev-tools/cache/phpunit',
-        )))->shouldBeCalled();
+        $this->processQueue->add(
+            Argument::that(static fn(Process $process): bool => str_contains(
+                $process->getCommandLine(),
+                '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG,
+            ) && str_contains($process->getCommandLine(), '--cache-result') && str_contains(
+                $process->getCommandLine(),
+                '--cache-directory=' . getcwd() . '/.dev-tools/cache/phpunit',
+            ) && str_contains($process->getCommandLine(), '--colors=always')),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
         $this->logger->info('Running PHPUnit tests...', Argument::that(
@@ -163,10 +168,15 @@ final class TestsCommandTest extends TestCase
         $this->input->getOption('no-cache')
             ->willReturn(true);
 
-        $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
-            $process->getCommandLine(),
-            '--do-not-cache-result',
-        ) && ! str_contains($process->getCommandLine(), '--cache-directory=')))->shouldBeCalled();
+        $this->processQueue->add(
+            Argument::that(static fn(Process $process): bool => str_contains(
+                $process->getCommandLine(),
+                '--do-not-cache-result',
+            ) && ! str_contains($process->getCommandLine(), '--cache-directory=')),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
 
@@ -184,10 +194,15 @@ final class TestsCommandTest extends TestCase
         $this->input->getOption('pretty-json')
             ->willReturn(false);
 
-        $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
-            $process->getCommandLine(),
-            '--no-progress',
-        )))->shouldBeCalled();
+        $this->processQueue->add(
+            Argument::that(static fn(Process $process): bool => str_contains(
+                $process->getCommandLine(),
+                '--no-progress',
+            ) && ! str_contains($process->getCommandLine(), '--colors=always')),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
         $this->logger->info('Running PHPUnit tests...', Argument::that(
@@ -212,10 +227,15 @@ final class TestsCommandTest extends TestCase
         $this->input->getOption('progress')
             ->willReturn(true);
 
-        $this->processQueue->add(Argument::that(static fn(Process $process): bool => ! str_contains(
-            $process->getCommandLine(),
-            '--no-progress',
-        )))->shouldBeCalled();
+        $this->processQueue->add(
+            Argument::that(static fn(Process $process): bool => ! str_contains(
+                $process->getCommandLine(),
+                '--no-progress',
+            )),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
 
@@ -256,7 +276,12 @@ final class TestsCommandTest extends TestCase
             ->willReturn('80');
         $this->coverageSummaryLoader->load($coverageReportPath)
             ->willReturn(new CoverageSummary(75, 100));
-        $this->processQueue->add(Argument::type(Process::class))->shouldBeCalled();
+        $this->processQueue->add(
+            Argument::type(Process::class),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
         $this->logger->info('Running PHPUnit tests...', Argument::that(
@@ -287,7 +312,12 @@ final class TestsCommandTest extends TestCase
             ->willReturn('80');
         $this->coverageSummaryLoader->load($coverageReportPath)
             ->willThrow(new RuntimeException('Coverage summary could not be loaded.'));
-        $this->processQueue->add(Argument::type(Process::class))->shouldBeCalled();
+        $this->processQueue->add(
+            Argument::type(Process::class),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
         $this->logger->info('Running PHPUnit tests...', Argument::that(

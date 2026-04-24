@@ -73,7 +73,7 @@ final class MetricsCommandTest extends TestCase
         $this->process = $this->prophesize(Process::class);
 
         $this->input->getOption('exclude')
-            ->willReturn('vendor,tests');
+            ->willReturn('vendor,tests/Fixtures');
         $this->input->getOption('target')
             ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS));
         $this->input->getOption('junit')
@@ -94,8 +94,11 @@ final class MetricsCommandTest extends TestCase
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()
         );
-        $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
-        $this->processQueue->add($this->process->reveal())
+        $this->processBuilder->build(Argument::that(static fn(array $command): bool => \PHP_BINARY === $command[0]
+            && str_starts_with((string) $command[1], '-derror_reporting=')
+            && '-ddefault_socket_timeout=1' === $command[2]
+            && 'vendor/bin/phpmetrics' === $command[3]))->willReturn($this->process->reveal());
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
 
         $this->command = new MetricsCommand(

@@ -156,6 +156,26 @@ Recovery:
 When calling lower-level tools directly, use their non-interactive flags and
 provide required values through environment variables or workflow inputs.
 
+Repeated Composer Xdebug Warnings
+---------------------------------
+
+Scope: local orchestration commands.
+
+Symptoms:
+
+- Composer repeatedly prints that it is operating slower than normal because
+  Xdebug is enabled;
+- aggregate commands emit the warning once per nested Composer subprocess.
+
+Behavior:
+
+DevTools sets ``XDEBUG_MODE=off`` for queued child processes when Xdebug is
+loaded but the child command does not need Xdebug for coverage. Coverage runs
+keep Xdebug available when PCOV is not loaded, and use PCOV when it is
+available. A warning printed by the top-level ``composer dev-tools`` process
+can still appear before DevTools itself starts; run that command with
+``XDEBUG_MODE=off`` when Xdebug is not needed for the top-level process.
+
 GitHub Actions Error Annotations
 --------------------------------
 

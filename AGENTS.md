@@ -111,6 +111,30 @@ composer dev-tools tests -- --coverage=.dev-tools/coverage
 - Rector rules: `src/Rector/`
 - Composer plugin: `src/Composer/`
 
+**Architecture Direction:**
+
+- Avoid introducing new dependencies on `composer/composer` outside the
+  existing Composer plugin integration and legacy surfaces already awaiting
+  decoupling.
+- Prefer DevTools-owned interfaces for generic runtime concerns such as
+  environment variables, process execution, filesystem access, and console
+  presentation instead of reaching for Composer utility classes.
+- When an existing Composer utility is convenient, first check whether a small
+  local abstraction would support the ongoing Composer decoupling work with
+  minimal code.
+- During the Composer-to-Symfony command migration, preserve the global
+  execution affordances already relied on by nested tools: `--ansi`/`--no-ansi`,
+  cache and `--cache-dir` handling, and working-directory behavior.
+- Keep color behavior explicit in command wrappers for tools with known flags
+  instead of probing binaries dynamically; for example, Symfony/Composer-style
+  tools can receive `--ansi`, while PHPUnit uses `--colors=always`.
+- Keep child-process environment policy centralized in `ProcessQueue`
+  configurators, including disabling Xdebug for non-coverage subprocesses while
+  preserving coverage drivers when PCOV is unavailable.
+- Prefer the project-approved `Safe\*` function imports whenever replacing or
+  adding native PHP calls that have Safe equivalents, so Rector does not have
+  to rewrite them during commit checks.
+
 **Naming Conventions:**
 
 - Classes: PascalCase

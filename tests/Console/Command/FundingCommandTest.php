@@ -181,7 +181,7 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
-        $this->processQueue->add($this->normalizeProcess->reveal())
+        $this->processQueue->add($this->normalizeProcess->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
@@ -286,7 +286,7 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Funding changed'))->shouldBeCalledOnce();
-        $this->processQueue->add($this->normalizeProcess->reveal())
+        $this->processQueue->add($this->normalizeProcess->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
@@ -536,7 +536,7 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
-        $this->processQueue->add($this->normalizeProcess->reveal())
+        $this->processQueue->add($this->normalizeProcess->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::FAILURE)->shouldBeCalledOnce();
@@ -596,7 +596,7 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
-        $this->processQueue->add($this->normalizeProcess->reveal())
+        $this->processQueue->add($this->normalizeProcess->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)->shouldBeCalledOnce();
@@ -682,7 +682,7 @@ final class FundingCommandTest extends TestCase
         $this->processBuilder->withArgument('--file', 'composer.alt.json')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalledOnce();
-        $this->processQueue->add($this->normalizeProcess->reveal())
+        $this->processQueue->add($this->normalizeProcess->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS)

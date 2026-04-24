@@ -131,7 +131,7 @@ final class WikiCommandTest extends TestCase
         )
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)
@@ -160,7 +160,7 @@ final class WikiCommandTest extends TestCase
             ->willReturn(true);
         $this->processBuilder->withArgument('--cache-folder', Argument::cetera())
             ->shouldNotBeCalled();
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)

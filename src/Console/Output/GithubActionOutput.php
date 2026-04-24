@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Output;
 
-use Composer\Util\Platform;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 /**
@@ -35,9 +35,11 @@ final class GithubActionOutput
 
     /**
      * @param ConsoleOutputInterface $output the console output used to emit workflow commands
+     * @param EnvironmentInterface $environment reads runtime environment flags
      */
     public function __construct(
         private readonly ConsoleOutputInterface $output,
+        private readonly EnvironmentInterface $environment,
     ) {}
 
     /**
@@ -245,8 +247,22 @@ final class GithubActionOutput
      */
     private function supportsWorkflowCommands(): bool
     {
-        return (bool) Platform::getEnv('GITHUB_ACTIONS')
-            && ! (bool) Platform::getEnv('COMPOSER_TESTS_ARE_RUNNING');
+        return $this->isTruthyEnvironmentFlag('GITHUB_ACTIONS')
+            && ! $this->isTruthyEnvironmentFlag('COMPOSER_TESTS_ARE_RUNNING');
+    }
+
+    /**
+     * Determines whether an environment flag is set to a truthy value.
+     *
+     * @param string $name the environment variable name
+     *
+     * @return bool true when the environment variable is truthy
+     */
+    private function isTruthyEnvironmentFlag(string $name): bool
+    {
+        $value = $this->environment->get($name, '');
+
+        return null !== $value && '' !== $value && '0' !== $value;
     }
 
     /**

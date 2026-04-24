@@ -94,7 +94,7 @@ final class CodeStyleCommandTest extends TestCase
             $this->processBuilder->reveal()
         );
         $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
-        $this->processQueue->add($this->process->reveal())
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalledTimes(3);
 
         $this->command = new CodeStyleCommand(

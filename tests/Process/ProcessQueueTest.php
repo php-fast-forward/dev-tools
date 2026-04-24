@@ -21,6 +21,9 @@ namespace FastForward\DevTools\Tests\Process;
 
 use Closure;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
+use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
+use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -30,10 +33,13 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use Symfony\Component\Console\Formatter\OutputFormatterInterface;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
 use Symfony\Component\Process\Process;
+
+use function Safe\preg_replace;
 
 #[CoversClass(ProcessQueue::class)]
 #[UsesClass(GithubActionOutput::class)]
@@ -52,9 +58,29 @@ final class ProcessQueueTest extends TestCase
     private ObjectProphecy $errorOutput;
 
     /**
+     * @var ObjectProphecy<OutputFormatterInterface>
+     */
+    private ObjectProphecy $outputFormatter;
+
+    /**
      * @var ObjectProphecy<GithubActionOutput>
      */
     private ObjectProphecy $githubActionOutput;
+
+    /**
+     * @var ObjectProphecy<ProcessEnvironmentConfiguratorInterface>
+     */
+    private ObjectProphecy $environmentConfigurator;
+
+    /**
+     * @var ObjectProphecy<EnvironmentInterface>
+     */
+    private ObjectProphecy $environment;
+
+    /**
+     * @var ObjectProphecy<OutputCapabilityDetectorInterface>
+     */
+    private ObjectProphecy $outputCapabilityDetector;
 
     private ProcessQueue $queue;
 
@@ -65,14 +91,41 @@ final class ProcessQueueTest extends TestCase
     {
         $this->output = $this->prophesize(ConsoleOutputInterface::class);
         $this->errorOutput = $this->prophesize(OutputInterface::class);
+        $this->outputFormatter = $this->prophesize(OutputFormatterInterface::class);
         $this->output->getErrorOutput()
             ->willReturn($this->errorOutput->reveal());
+        $this->output->getVerbosity()
+            ->willReturn(OutputInterface::VERBOSITY_NORMAL);
+        $this->output->getFormatter()
+            ->willReturn($this->outputFormatter->reveal());
+        $this->output->write("\n");
+        $this->output->writeln(Argument::type('string'), Argument::type('int'));
+        $this->outputFormatter->isDecorated()
+            ->willReturn(true);
+        $this->outputFormatter->setDecorated(Argument::type('bool'));
+        $this->outputFormatter->format(Argument::type('string'))
+            ->will(static fn(array $arguments): string => preg_replace('/<[^>]+>/', '', $arguments[0]));
+
+        $this->environmentConfigurator = $this->prophesize(ProcessEnvironmentConfiguratorInterface::class);
+
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment->get('GITHUB_ACTIONS')
+            ->willReturn(null);
+
+        $this->outputCapabilityDetector = $this->prophesize(OutputCapabilityDetectorInterface::class);
+        $this->outputCapabilityDetector->supportsAnsi(Argument::type(OutputInterface::class))
+            ->willReturn(false);
 
         $this->githubActionOutput = $this->prophesize(GithubActionOutput::class);
         $this->githubActionOutput->group(Argument::type('string'), Argument::type(Closure::class))
             ->will(static fn(array $arguments): mixed => $arguments[1]());
 
-        $this->queue = new ProcessQueue($this->githubActionOutput->reveal());
+        $this->queue = new ProcessQueue(
+            $this->githubActionOutput->reveal(),
+            $this->environmentConfigurator->reveal(),
+            $this->environment->reveal(),
+            $this->outputCapabilityDetector->reveal()
+        );
     }
 
     /**
@@ -148,6 +201,26 @@ final class ProcessQueueTest extends TestCase
     }
 
     /**
+     * Creates a matcher for SymfonyStyle output blocks.
+     *
+     * @param string $expected the expected line fragment
+     *
+     * @return callable(mixed):bool the prophecy matcher callback
+     */
+    private function containsOutputLine(string $expected): callable
+    {
+        return static function (mixed $messages) use ($expected): bool {
+            foreach ((array) $messages as $message) {
+                if (\is_string($message) && str_contains($message, $expected)) {
+                    return true;
+                }
+            }
+
+            return false;
+        };
+    }
+
+    /**
      * @return void
      */
     #[Test]
@@ -165,6 +238,41 @@ final class ProcessQueueTest extends TestCase
         $process = $this->createBlockingProcessMock();
 
         $this->queue->add($process->reveal());
+
+        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function runConfiguresBlockingProcessEnvironmentBeforeExecution(): void
+    {
+        $process = $this->createBlockingProcessMock();
+        $this->environmentConfigurator->configure($process->reveal(), $this->output->reveal())
+            ->shouldBeCalledOnce();
+
+        $this->queue->add($process->reveal());
+
+        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function runWrapsBlockingProcessOutputInLocalSection(): void
+    {
+        $process = $this->createBlockingProcessMock();
+        $this->outputCapabilityDetector->supportsAnsi($this->output->reveal())
+            ->willReturn(true);
+        $this->output->writeln(
+            Argument::that($this->containsOutputLine('Custom nested command')),
+            OutputInterface::OUTPUT_NORMAL
+        )
+            ->shouldBeCalled();
+
+        $this->queue->add(process: $process->reveal(), label: 'Custom nested command');
 
         self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
@@ -237,8 +345,12 @@ final class ProcessQueueTest extends TestCase
     {
         $detachedProcess = $this->createDetachedProcessMock(true, false);
         $blockingProcess = $this->createBlockingProcessMock();
+        $this->environmentConfigurator->configure($detachedProcess->reveal(), $this->output->reveal())
+            ->shouldBeCalledOnce();
+        $this->environmentConfigurator->configure($blockingProcess->reveal(), $this->output->reveal())
+            ->shouldBeCalledOnce();
 
-        $this->queue->add($detachedProcess->reveal(), detached: true);
+        $this->queue->add(process: $detachedProcess->reveal(), detached: true);
         $this->queue->add($blockingProcess->reveal());
 
         self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
@@ -260,7 +372,7 @@ final class ProcessQueueTest extends TestCase
         $process->start(Argument::type(Closure::class))
             ->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
 
-        $this->queue->add($process->reveal(), detached: true);
+        $this->queue->add(process: $process->reveal(), detached: true);
 
         self::assertSame(ProcessQueueInterface::FAILURE, $this->queue->run($this->output->reveal()));
     }
@@ -281,7 +393,7 @@ final class ProcessQueueTest extends TestCase
         $process->start(Argument::type(Closure::class))
             ->willThrow(new ProcessStartFailedException($process->reveal(), 'Failed'));
 
-        $this->queue->add($process->reveal(), ignoreFailure: true, detached: true);
+        $this->queue->add(process: $process->reveal(), ignoreFailure: true, detached: true);
 
         self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
@@ -375,9 +487,21 @@ final class ProcessQueueTest extends TestCase
             ->shouldBeCalled();
         $this->output->write('second output')
             ->shouldBeCalled();
+        $this->outputCapabilityDetector->supportsAnsi($this->output->reveal())
+            ->willReturn(true);
+        $this->output->writeln(
+            Argument::that($this->containsOutputLine('Running first-command')),
+            OutputInterface::OUTPUT_NORMAL
+        )
+            ->shouldBeCalled();
+        $this->output->writeln(
+            Argument::that($this->containsOutputLine('Running second-command')),
+            OutputInterface::OUTPUT_NORMAL
+        )
+            ->shouldBeCalled();
 
-        $this->queue->add($firstProcess->reveal(), detached: true);
-        $this->queue->add($secondProcess->reveal(), detached: true);
+        $this->queue->add(process: $firstProcess->reveal(), detached: true, label: 'Running first-command');
+        $this->queue->add(process: $secondProcess->reveal(), detached: true, label: 'Running second-command');
 
         self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }

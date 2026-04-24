@@ -181,6 +181,10 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 
+        if (! $jsonOutput) {
+            $processBuilder = $processBuilder->withArgument('--colors=always');
+        }
+
         if ($cacheEnabled) {
             $processBuilder = $processBuilder->withArgument(
                 '--cache-result',
@@ -200,9 +204,10 @@ final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterf
         }
 
         $this->processQueue->add(
-            $processBuilder
+            process: $processBuilder
                 ->withArgument($input->getArgument('path'))
-                ->build('vendor/bin/phpunit')
+                ->build('vendor/bin/phpunit'),
+            label: 'Running PHPUnit Tests',
         );
 
         $result = $this->processQueue->run($processOutput);

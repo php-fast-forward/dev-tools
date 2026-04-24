@@ -500,7 +500,10 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
             $processBuilder = $processBuilder->withArgument('--file', $composerBasename);
         }
 
-        $this->processQueue->add($processBuilder->build('composer normalize'));
+        $this->processQueue->add(
+            process: $processBuilder->build('composer normalize'),
+            label: 'Normalizing composer.json with Composer Normalize',
+        );
 
         return $this->processQueue->run($output);
     }

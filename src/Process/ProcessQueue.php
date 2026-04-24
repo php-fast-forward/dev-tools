@@ -21,10 +21,14 @@ namespace FastForward\DevTools\Process;
 
 use Closure;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
+use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use ReflectionProperty;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
 use Symfony\Component\Process\Process;
 
@@ -68,9 +72,15 @@ final class ProcessQueue implements ProcessQueueInterface
 
     /**
      * @param GithubActionOutput $githubActionOutput wraps grouped queue output in GitHub Actions logs when supported
+     * @param ProcessEnvironmentConfiguratorInterface $environmentConfigurator
+     * @param EnvironmentInterface $environment reads runtime environment flags
+     * @param OutputCapabilityDetectorInterface $outputCapabilityDetector detects ANSI-capable output
      */
     public function __construct(
         private readonly GithubActionOutput $githubActionOutput,
+        private readonly ProcessEnvironmentConfiguratorInterface $environmentConfigurator,
+        private readonly EnvironmentInterface $environment,
+        private readonly OutputCapabilityDetectorInterface $outputCapabilityDetector,
     ) {}
 
     /**
@@ -121,7 +131,7 @@ final class ProcessQueue implements ProcessQueueInterface
             $label = $entry['label'];
 
             if ($detached) {
-                $startupStatusCode = $this->startDetachedProcess($process, $label);
+                $startupStatusCode = $this->startDetachedProcess($process, $output, $label);
 
                 if (
                     ! $ignoreFailure
@@ -176,12 +186,13 @@ final class ProcessQueue implements ProcessQueueInterface
      * sequence completes without throwing an exception.
      *
      * @param Process $process the process to start
+     * @param OutputInterface $output the parent output used to infer process environment
      * @param string $label the label used when presenting the buffered output
      *
      * @return int returns 0 when the process starts successfully, or a non-zero
      *             value when startup fails
      */
-    private function startDetachedProcess(Process $process, string $label): int
+    private function startDetachedProcess(Process $process, OutputInterface $output, string $label): int
     {
         $entry = (object) [
             'process' => $process,
@@ -191,6 +202,7 @@ final class ProcessQueue implements ProcessQueueInterface
         ];
 
         try {
+            $this->environmentConfigurator->configure($process, $output);
             $process->start($this->createBufferedOutputCallback($entry));
             $this->runningDetachedProcesses[] = $entry;
 
@@ -212,6 +224,7 @@ final class ProcessQueue implements ProcessQueueInterface
     private function runBlockingProcess(Process $process, OutputInterface $output): int
     {
         try {
+            $this->environmentConfigurator->configure($process, $output);
             $process->run($this->createOutputCallback($output));
 
             return $process->getExitCode() ?? self::FAILURE;
@@ -231,7 +244,11 @@ final class ProcessQueue implements ProcessQueueInterface
      */
     private function runLabeledBlockingProcess(Process $process, OutputInterface $output, string $label): int
     {
-        $runBlockingProcess = fn(): int => $this->runBlockingProcess($process, $output);
+        $runBlockingProcess = fn(): int => $this->runInOutputSection(
+            $label,
+            $output,
+            fn(): int => $this->runBlockingProcess($process, $output)
+        );
 
         return $this->githubActionOutput->group($label, $runBlockingProcess);
     }
@@ -310,8 +327,13 @@ final class ProcessQueue implements ProcessQueueInterface
                 $entry->errorOutput,
                 $output
             );
+            $renderDetachedOutput = fn(): mixed => $this->runInOutputSection(
+                $entry->label,
+                $output,
+                $writeDetachedOutput
+            );
 
-            $this->githubActionOutput->group($entry->label, $writeDetachedOutput);
+            $this->githubActionOutput->group($entry->label, $renderDetachedOutput);
         }
 
         $this->runningDetachedProcesses = $remainingDetachedProcesses;
@@ -345,6 +367,44 @@ final class ProcessQueue implements ProcessQueueInterface
         }
 
         return true;
+    }
+
+    /**
+     * Runs a callback inside a local Symfony-style section when output supports it.
+     *
+     * GitHub Actions already receives native log groups, while non-ANSI outputs
+     * and JSON buffers should remain free of extra presentation chrome.
+     *
+     * @template TResult
+     *
+     * @param string $label the human-readable process label
+     * @param OutputInterface $output the output that MAY receive section chrome
+     * @param Closure(): TResult $callback the callback to run
+     *
+     * @return TResult
+     */
+    private function runInOutputSection(string $label, OutputInterface $output, Closure $callback): mixed
+    {
+        if (! $this->shouldRenderLocalSection($output)) {
+            return $callback();
+        }
+
+        (new SymfonyStyle(new ArrayInput([]), $output))->section($label);
+
+        return $callback();
+    }
+
+    /**
+     * Determines whether local Symfony section chrome should be emitted.
+     *
+     * @param OutputInterface $output the parent process output
+     *
+     * @return bool true when a local section should be rendered
+     */
+    private function shouldRenderLocalSection(OutputInterface $output): bool
+    {
+        return $this->outputCapabilityDetector->supportsAnsi($output)
+            && null === $this->environment->get('GITHUB_ACTIONS');
     }
 
     /**

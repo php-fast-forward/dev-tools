@@ -131,6 +131,20 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
         $docsBuilder = $this->processBuilder
             ->withArgument('--target', $target);
 
+        $coverageBuilder = $this->processBuilder
+            ->withArgument('--coverage-summary')
+            ->withArgument('--coverage', $coveragePath);
+
+        $metricsBuilder = $this->processBuilder
+            ->withArgument('--junit', $coveragePath . '/junit.xml')
+            ->withArgument('--target', $metricsPath);
+
+        if (! $jsonOutput) {
+            $docsBuilder = $docsBuilder->withArgument('--ansi');
+            $coverageBuilder = $coverageBuilder->withArgument('--ansi');
+            $metricsBuilder = $metricsBuilder->withArgument('--ansi');
+        }
+
         if (null !== $cacheArgument) {
             $docsBuilder = $docsBuilder->withArgument($cacheArgument);
         }
@@ -152,10 +166,6 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
         }
 
         $docs = $docsBuilder->build('composer dev-tools docs --');
-
-        $coverageBuilder = $this->processBuilder
-            ->withArgument('--coverage-summary')
-            ->withArgument('--coverage', $coveragePath);
 
         if (null !== $cacheArgument) {
             $coverageBuilder = $coverageBuilder->withArgument($cacheArgument);
@@ -179,10 +189,6 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
 
         $coverage = $coverageBuilder->build('composer dev-tools tests --');
 
-        $metricsBuilder = $this->processBuilder
-            ->withArgument('--junit', $coveragePath . '/junit.xml')
-            ->withArgument('--target', $metricsPath);
-
         if ($progress) {
             $metricsBuilder = $metricsBuilder->withArgument('--progress');
         }
@@ -197,9 +203,9 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
 
         $metrics = $metricsBuilder->build('composer dev-tools metrics --');
 
-        $this->processQueue->add(process: $docs, detached: true);
-        $this->processQueue->add(process: $coverage);
-        $this->processQueue->add(process: $metrics);
+        $this->processQueue->add(process: $docs, detached: true, label: 'Generating API Docs Report');
+        $this->processQueue->add(process: $coverage, label: 'Generating Coverage Report');
+        $this->processQueue->add(process: $metrics, label: 'Generating Metrics Report');
 
         $result = $this->processQueue->run($processOutput);
 
