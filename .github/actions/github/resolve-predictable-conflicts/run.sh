@@ -58,6 +58,32 @@ is_allowed_conflict_scope() {
     return 0
 }
 
+dispatch_required_tests() {
+    local head_ref="$1"
+
+    if ! gh workflow view tests.yml >/dev/null 2>&1; then
+        append_summary "  - tests dispatch skipped: tests.yml workflow was not found"
+
+        return 0
+    fi
+
+    if gh workflow run tests.yml --ref "${head_ref}" -f max-outdated=-1 -f publish-required-statuses=true >/dev/null 2>&1; then
+        append_summary "  - tests dispatch requested with required status mirroring"
+
+        return 0
+    fi
+
+    if gh workflow run tests.yml --ref "${head_ref}" >/dev/null 2>&1; then
+        append_summary "  - tests dispatch requested without required status mirroring"
+
+        return 0
+    fi
+
+    append_summary "  - failed: resolved branch was pushed, but tests.yml could not be dispatched"
+
+    return 1
+}
+
 resolve_pull_request() {
     local number="$1"
     local title="$2"
@@ -162,6 +188,13 @@ resolve_pull_request() {
     git -C "${workdir}/repo" commit -m "Resolve predictable conflicts with ${base_ref}" >/dev/null 2>&1
     git -C "${workdir}/repo" push origin "HEAD:${head_ref}" >/dev/null 2>&1
     append_summary "  - resolved: pushed an automatic conflict-resolution commit for \`${title}\`"
+
+    if ! dispatch_required_tests "${head_ref}"; then
+        failed_count=$((failed_count + 1))
+
+        return
+    fi
+
     resolved_count=$((resolved_count + 1))
 }
 

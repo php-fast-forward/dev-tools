@@ -118,7 +118,10 @@ the only conflicts are ``.github/wiki`` pointer drift and/or ``CHANGELOG.md``
 ``Unreleased`` drift. It keeps pull request wiki preview pointers on the branch
 side and replays branch-only changelog entries into the current base
 ``Unreleased`` section, which avoids placing new entries under a freshly
-published release after ``main`` moved.
+published release after ``main`` moved. Because those automatic resolutions are
+also pushed with the built-in workflow token, the workflow dispatches
+``tests.yml`` for the refreshed branch after a successful push so required test
+statuses can be reported for the new commit.
 
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
@@ -149,6 +152,11 @@ distinguish open pull requests from closed or merged ones before deleting
 pointer updates, ``actions: write`` to dispatch ``tests.yml`` after bot-authored
 pointer commits, and ``pull-requests: read`` to inspect pull request metadata
 safely.
+
+``auto-resolve-conflicts.yml`` keeps ``contents: write`` so it can push
+predictable conflict-resolution commits, ``pull-requests: write`` so it can
+inspect pull request state through GitHub tooling, and ``actions: write`` so it
+can dispatch ``tests.yml`` after it pushes a bot-authored resolution commit.
 
 ``wiki-maintenance-entry.yml`` and ``wiki-maintenance.yml`` keep
 ``contents: write`` for wiki publication and cleanup tasks, and
