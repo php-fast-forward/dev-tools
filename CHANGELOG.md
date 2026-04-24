@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keep required PHPUnit matrix checks reporting after workflow-managed `.github/wiki` pointer commits by running the pull-request test workflow without top-level path filters and aligning the packaged consumer test wrapper (#230)
 - Ignore intentional Composer Dependency Analyser shadow dependency findings by default while adding `dependencies --show-shadow-dependencies` for audits (#233)
 - Dispatch the required test workflow after wiki preview automation updates a pull-request `.github/wiki` pointer, avoiding permanently pending required checks on bot-authored pointer commits (#230)
+- Mirror workflow-dispatched wiki pointer test results into required `Run Tests` commit statuses so branch protection recognizes bot-authored pointer commits (#230)
 
 ## [1.21.0] - 2026-04-24
 

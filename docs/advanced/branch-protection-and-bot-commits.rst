@@ -106,9 +106,12 @@ does not start another ``pull_request`` or ``push`` workflow run for commits
 pushed with the built-in workflow token. After the wiki preview workflow commits
 a parent-repository pointer update, it explicitly dispatches ``tests.yml`` for
 the pull request head branch so the newest bot-authored commit receives the
-required ``Run Tests`` matrix checks. Test workflow concurrency cancels older
-in-progress runs for the same pull request so the newest commit owns the
-required check contexts.
+required ``Run Tests`` matrix checks. Because manually dispatched workflow check
+runs are not always treated as pull-request required checks, that dispatched
+test run also mirrors the matrix result into commit statuses named
+``Run Tests (8.3)``, ``Run Tests (8.4)``, and ``Run Tests (8.5)``. Test workflow
+concurrency cancels older in-progress runs for the same pull request so the
+newest commit owns the required check contexts.
 
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
@@ -122,8 +125,10 @@ The reusable workflows default to read-only repository access and grant write
 permissions at the job level when generated content must be pushed or pull
 requests must be updated.
 
-``tests.yml`` only needs ``contents: read`` because it checks out code, installs
-dependencies, and runs PHPUnit.
+``tests.yml`` needs ``contents: read`` because it checks out code, installs
+dependencies, and runs PHPUnit. It also declares ``statuses: write`` so
+workflow-dispatched test runs can mirror required matrix contexts onto
+bot-authored wiki pointer commits.
 
 ``reports.yml`` keeps ``contents: write`` on jobs that publish or clean
 ``gh-pages`` content. The pull request preview comment runs as a separate job

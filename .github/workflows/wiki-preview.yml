@@ -116,7 +116,7 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
-        run: gh workflow run tests.yml --ref "${HEAD_REF}" -f max-outdated=-1
+        run: gh workflow run tests.yml --ref "${HEAD_REF}" -f max-outdated=-1 -f publish-required-statuses=true
 
       - uses: ./.dev-tools-actions/.github/actions/summary/write
         with:
