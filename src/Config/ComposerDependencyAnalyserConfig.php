@@ -41,6 +41,8 @@ use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
  */
 final class ComposerDependencyAnalyserConfig
 {
+    public const string ENV_SHOW_SHADOW_DEPENDENCIES = 'FAST_FORWARD_DEV_TOOLS_SHOW_SHADOW_DEPENDENCIES';
+
     /**
      * Dependencies that are only required by the packaged DevTools distribution itself.
      *
@@ -90,6 +92,10 @@ final class ComposerDependencyAnalyserConfig
     {
         $configuration = new Configuration();
 
+        if (! self::shouldShowShadowDependencies()) {
+            self::applyIgnoresShadowDependencies($configuration);
+        }
+
         if (DevToolsPathResolver::isRepositoryCheckout()) {
             self::applyPackagedRepositoryIgnores($configuration);
         }
@@ -102,11 +108,38 @@ final class ComposerDependencyAnalyserConfig
     }
 
     /**
+     * The default configuration ignores shadow dependencies because Fast
+     * Forward packages MAY intentionally require dependency groups. For example,
+     * ecosystem or meta packages can require related PSR or framework packages
+     * so consumers do not need to install every package one by one.
+     *
+     * @param Configuration $configuration the analyser configuration to customize
+     *
+     * @return Configuration the modified configuration with shadow dependencies ignored
+     */
+    public static function applyIgnoresShadowDependencies(Configuration $configuration): Configuration
+    {
+        $configuration->ignoreErrors([ErrorType::SHADOW_DEPENDENCY]);
+
+        return $configuration;
+    }
+
+    /**
+     * Determines whether shadow dependency reports SHOULD remain visible.
+     *
+     * @return bool
+     */
+    public static function shouldShowShadowDependencies(): bool
+    {
+        return '1' === getenv(self::ENV_SHOW_SHADOW_DEPENDENCIES);
+    }
+
+    /**
      * Applies the ignores required only by the packaged DevTools repository.
      *
      * @param Configuration $configuration the analyser configuration to customize
      *
-     * @return void
+     * @return Configuration the modified configuration with packaged repository ignores applied
      */
     public static function applyPackagedRepositoryIgnores(Configuration $configuration): Configuration
     {

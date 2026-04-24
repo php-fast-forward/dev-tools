@@ -28,6 +28,8 @@ use PHPUnit\Framework\TestCase;
 use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
 use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
 
+use function Safe\putenv;
+
 #[CoversClass(ComposerDependencyAnalyserConfig::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 final class ComposerDependencyAnalyserConfigTest extends TestCase
@@ -41,6 +43,48 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
         $configuration = ComposerDependencyAnalyserConfig::configure();
 
         self::assertInstanceOf(Configuration::class, $configuration);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function configureWillIgnoreShadowDependenciesByDefault(): void
+    {
+        $originalValue = getenv(ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES);
+
+        try {
+            putenv(ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES);
+            $configuration = ComposerDependencyAnalyserConfig::configure();
+
+            self::assertTrue(
+                $configuration->getIgnoreList()
+                    ->shouldIgnoreError(ErrorType::SHADOW_DEPENDENCY, null, 'vendor/shadow-package')
+            );
+        } finally {
+            self::restoreShadowDependenciesEnvironment($originalValue);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function configureWillKeepShadowDependenciesVisibleWhenRequested(): void
+    {
+        $originalValue = getenv(ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES);
+
+        try {
+            putenv(ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES . '=1');
+            $configuration = ComposerDependencyAnalyserConfig::configure();
+
+            self::assertFalse(
+                $configuration->getIgnoreList()
+                    ->shouldIgnoreError(ErrorType::SHADOW_DEPENDENCY, null, 'vendor/shadow-package')
+            );
+        } finally {
+            self::restoreShadowDependenciesEnvironment($originalValue);
+        }
     }
 
     /**
@@ -101,5 +145,35 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
             $configuration,
             ComposerDependencyAnalyserConfig::applyPackagedRepositoryIgnores($configuration)
         );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function applyIgnoresShadowDependenciesWillReturnTheSameConfigurationInstance(): void
+    {
+        $configuration = new Configuration();
+
+        self::assertSame(
+            $configuration,
+            ComposerDependencyAnalyserConfig::applyIgnoresShadowDependencies($configuration)
+        );
+    }
+
+    /**
+     * @param false|string $value
+     *
+     * @return void
+     */
+    private static function restoreShadowDependenciesEnvironment(false|string $value): void
+    {
+        if (false === $value) {
+            putenv(ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES);
+
+            return;
+        }
+
+        putenv(ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES . '=' . $value);
     }
 }

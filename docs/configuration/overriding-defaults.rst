@@ -141,6 +141,13 @@ consumers can extend the default configuration using the
 This approach keeps the Fast Forward baseline while letting consumer
 repositories add project-specific ignores or scan rules.
 
+The baseline ignores ``SHADOW_DEPENDENCY`` findings by default because Fast
+Forward packages may intentionally require dependency groups, ecosystem bundles,
+or meta packages that install related dependencies for consumers. Run
+``composer dependencies --show-shadow-dependencies`` when you want to audit
+those findings and decide whether a package should keep, document, or remove a
+direct dependency.
+
 What Is Not Overwritten Automatically
 --------------------------------------
 

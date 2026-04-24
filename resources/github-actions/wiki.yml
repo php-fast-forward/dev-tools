@@ -5,6 +5,7 @@ on:
     types: [opened, synchronize, reopened]
 
 permissions:
+  actions: write
   contents: write
   pull-requests: read
 
@@ -15,6 +16,7 @@ concurrency:
 jobs:
   preview:
     permissions:
+      actions: write
       contents: write
       pull-requests: read
     # Pull-request wiki previews live here. Publication and preview cleanup are

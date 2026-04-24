@@ -99,9 +99,15 @@ updates on PR branches while keeping ``main`` protected.
 Required test checks must still report for workflow-managed pointer commits.
 The tests workflow therefore triggers on every pull request update without
 top-level path filters. This ensures GitHub always creates the required
-``Run Tests`` matrix checks for the latest pull request head, including bot
-commits that only refresh ``.github/wiki``. Test workflow concurrency cancels
-older in-progress runs for the same pull request so the newest commit owns the
+``Run Tests`` matrix checks for ordinary pull request updates.
+
+Workflow-managed ``.github/wiki`` pointer commits need one extra step. GitHub
+does not start another ``pull_request`` or ``push`` workflow run for commits
+pushed with the built-in workflow token. After the wiki preview workflow commits
+a parent-repository pointer update, it explicitly dispatches ``tests.yml`` for
+the pull request head branch so the newest bot-authored commit receives the
+required ``Run Tests`` matrix checks. Test workflow concurrency cancels older
+in-progress runs for the same pull request so the newest commit owns the
 required check contexts.
 
 At a high level, the workflows need permission to read repository contents,
@@ -128,8 +134,9 @@ distinguish open pull requests from closed or merged ones before deleting
 
 ``wiki.yml`` is now preview-only, so its called workflow keeps
 ``contents: write`` for wiki preview commits and parent-repository submodule
-pointer updates, while retaining ``pull-requests: read`` to inspect pull
-request metadata safely.
+pointer updates, ``actions: write`` to dispatch ``tests.yml`` after bot-authored
+pointer commits, and ``pull-requests: read`` to inspect pull request metadata
+safely.
 
 ``wiki-maintenance-entry.yml`` and ``wiki-maintenance.yml`` keep
 ``contents: write`` for wiki publication and cleanup tasks, and
