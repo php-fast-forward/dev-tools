@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-24 03:11:17        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-24 04:56:53        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -276,7 +276,8 @@
         "size": 3000,
         "relations": [
             "\\Symfony\\Component\\Filesystem\\Path",
-            "\\FastForward\\DevTools\\Path\\ManagedWorkspace"
+            "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
+            "\\Symfony\\Component\\Finder\\Finder"
         ]
     },
     {
@@ -1130,8 +1131,14 @@
             "\\FastForward\\DevTools\\Composer\\Json\\ComposerJsonInterface",
             "\\Psr\\Clock\\ClockInterface",
             "\\Twig\\Environment",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface"
+            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
+            "\\Twig\\Markup"
         ]
+    },
+    {
+        "name": "\\Twig\\Markup",
+        "size": 3000,
+        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\GitIgnore\\GitIgnore",
@@ -1594,6 +1601,11 @@
         "relations": []
     },
     {
+        "name": "\\Symfony\\Component\\Finder\\Finder",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
         "size": 3000,
         "relations": []
@@ -1610,11 +1622,6 @@
             "\\FastForward\\DevTools\\Filesystem\\FinderFactoryInterface",
             "\\Symfony\\Component\\Finder\\Finder"
         ]
-    },
-    {
-        "name": "\\Symfony\\Component\\Finder\\Finder",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "\\Symfony\\Component\\Filesystem\\Filesystem",

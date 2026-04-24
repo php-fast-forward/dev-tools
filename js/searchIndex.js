@@ -3916,6 +3916,11 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020project\u0020directories\u0020that\u0020static\u002Danalysis\u0020and\u0020coding\u002Dstyle\u0020tooling\u0020SHOULD\u0020skip.",
             "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingExcludedDirectories"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetToolingSourcePaths\u0028\u0029",
+            "name": "getToolingSourcePaths",
+            "summary": "Returns\u0020PHP\u0020source\u0020files\u0020that\u0020tooling\u0020SHOULD\u0020inspect\u0020without\u0020traversing\u0020generated\u0020directories.",
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingSourcePaths"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
             "name": "CoverageSummary",
             "summary": "Represents\u0020the\u0020line\u0020coverage\u0020summary\u0020extracted\u0020from\u0020a\u0020PHPUnit\u0020\u0060coverage\u002Dphp\u0060\u0020report.",

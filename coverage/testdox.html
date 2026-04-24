@@ -499,6 +499,7 @@
         <ul>
             <li class="success">Generate with unsupported license will return null</li>
             <li class="success">Generate with valid license will create file</li>
+            <li class="success">Generate content will preserve literal author email angle brackets</li>
             <li class="success">Generate will return null on template error</li>
         </ul>
         <h2>Git Attributes Command (FastForward\DevTools\Tests\Console\Command\GitAttributesCommand)</h2>
@@ -808,6 +809,8 @@
         <ul>
             <li class="success">It will expose canonical repository root paths</li>
             <li class="success">It will normalize path separators when joining project paths</li>
+            <li class="success">It will expose relative tooling skip patterns by default</li>
+            <li class="success">It will expose tooling source paths without traversing vendor directories</li>
             <li class="success">It will expose the current working project directory or paths under it</li>
         </ul>
         <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>
