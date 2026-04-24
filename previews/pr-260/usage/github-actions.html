@@ -3276,10 +3276,13 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
    Skips the validation job for pull requests whose head branch matches the configured <code>release-branch-prefix</code>
 , because release-preparation branches intentionally leave <code>Unreleased</code>
  empty after promotion.
-    <em>   Publishes the aggregate ``Changelog Validation`` job for every active
-        pull request. This is the branch-protection-safe context to require:
-        it fails when normal changelog validation fails and succeeds for
-        release-preparation branches where validation is intentionally skipped.
+    <em>   Publishes the aggregate changelog check for every active pull request.
+        Direct workflow invocation uses ``Changelog Validation``; reusable
+        workflow consumers typically expose it namespaced as
+        ``changelog / Changelog Validation``. This is the branch-protection-safe
+        context to require: it fails when normal changelog validation fails and
+        succeeds for release-preparation branches where validation is
+        intentionally skipped.
     </em>
    Appends a run summary with the compared base ref and changelog file.
 <em>   **Manual Release Preparation**:
@@ -3338,12 +3341,25 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
 <em>   Enable **Allow GitHub Actions to create and approve pull requests**.
 </em>
    If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.
-*   In branch protection, require the changelog workflow&#039;s `<code>Changelog
-    Validation`` context instead of the internal ``Validate PR Changelog</code>
-` job.
-    The internal job is intentionally skipped for release-preparation branches,
-    while the aggregate context stays stable for normal and release pull
+*   In branch protection, require the changelog workflow&#039;s aggregate context:</p>
+
+            <blockquote>
+
+<ul>
+    <li class="dash">Direct workflow invocation: <code>Changelog Validation</code>
+</li>
+
+    <li class="dash">Reusable workflow wrapper invocation: <code>changelog / Changelog Validation</code>
+</li>
+
+</ul>
+
+    <p>Use this instead of the internal <code>changelog / Validate PR Changelog</code>
+ job.
+The internal job is intentionally skipped for release-preparation branches,
+while the aggregate context stays stable for normal and release pull
 requests.</p>
+</blockquote>
 
             
         

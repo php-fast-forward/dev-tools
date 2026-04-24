@@ -3118,10 +3118,23 @@ branch and fail when no meaningful <code>Unreleased</code>
 release-preparation flow intentionally empties <code>Unreleased</code>
  after promotion.
 Repositories that protect merges SHOULD require the workflow&#039;s aggregate
-<code>Changelog Validation</code>
- context. That context fails when a normal pull request
-does not pass changelog validation and succeeds for release-preparation
-branches where the internal validation job is intentionally skipped.</p>
+changelog context:</p>
+
+            
+
+<ul>
+    <li class="dash">Direct workflow invocation: <code>Changelog Validation</code>
+</li>
+
+    <li class="dash">Reusable workflow wrapper invocation: <code>changelog / Changelog Validation</code>
+</li>
+
+</ul>
+
+            
+    <p>That context fails when a normal pull request does not pass changelog
+validation and succeeds for release-preparation branches where the internal
+validation job is intentionally skipped.</p>
 
             
     <p>If maintainers must recover the release manually, create the tag from the

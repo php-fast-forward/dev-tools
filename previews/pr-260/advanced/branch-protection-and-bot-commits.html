@@ -3198,15 +3198,16 @@ for the release PR head, which lets branch protection evaluate the final
 workflow-managed release commit without a maintainer bypass.</p>
 
             
-    <p>Changelog validation has its own branch-protection-safe aggregate context. Use
-<code>Changelog Validation</code>
- as the required check instead of the internal
-<code>Validate PR Changelog</code>
- job. The internal validation job is skipped for
-<code>release/v...</code>
- branches by design, while the aggregate job still reports
-success for release-preparation pull requests and failure for normal pull
-requests whose changelog validation did not pass.</p>
+    <p>Changelog validation has its own branch-protection-safe aggregate context.
+For direct workflow runs, use <code>Changelog Validation</code>
+. For consumers of the
+reusable workflow wrapper, use the namespaced check name `<code>changelog / Changelog
+Validation`` instead of the internal ``changelog / Validate PR Changelog</code>
+` job.
+The internal validation job is skipped for <code>release/v...</code>
+ branches by design, while
+the aggregate job still reports success for release-preparation pull requests and
+failure for normal pull requests whose changelog validation did not pass.</p>
 
             
     <p>At a high level, the workflows need permission to read repository contents,
