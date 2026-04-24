@@ -23,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Keep Composer plugin command discovery compatible with consumer environments by moving unsupported Symfony Console named parameters out of command metadata/configuration and by decoupling the custom filesystem wrapper from Composer's bundled Symfony Filesystem signatures (#185)
 - Keep Composer autoload, Rector, and ECS from traversing nested fixture `vendor` directories when the composer-plugin consumer fixture has installed dependencies (#179)
 - Skip LICENSE generation cleanly when a consumer composer manifest omits or leaves the `license` field empty (#227)
+- Run nested DevTools subprocesses without forcing PTY, fixing aggregate commands in non-interactive environments (#171)
 
 ## [1.20.0] - 2026-04-23
 
