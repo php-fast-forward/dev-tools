@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.0] - 2026-04-24
+
 ### Added
 
 - Auto-resolve pull-request conflicts limited to workflow-managed `.github/wiki` pointers and `CHANGELOG.md` `Unreleased` drift (#192)
@@ -329,7 +331,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.21.0...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.0...HEAD
+[1.22.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.21.0...v1.22.0
 [1.21.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.20.0...v1.21.0
 [1.20.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.19.0...v1.20.0
 [1.19.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.18.0...v1.19.0
