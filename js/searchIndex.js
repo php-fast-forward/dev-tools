@@ -1046,10 +1046,25 @@ Search.appendIndex(
             "summary": "Creates\u0020the\u0020default\u0020Composer\u0020Dependency\u0020Analyser\u0020configuration.",
             "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AapplyIgnoresShadowDependencies\u0028\u0029",
+            "name": "applyIgnoresShadowDependencies",
+            "summary": "The\u0020default\u0020configuration\u0020ignores\u0020shadow\u0020dependencies\u0020because\u0020Fast\nForward\u0020packages\u0020MAY\u0020intentionally\u0020require\u0020dependency\u0020groups.\u0020For\u0020example,\necosystem\u0020or\u0020meta\u0020packages\u0020can\u0020require\u0020related\u0020PSR\u0020or\u0020framework\u0020packages\nso\u0020consumers\u0020do\u0020not\u0020need\u0020to\u0020install\u0020every\u0020package\u0020one\u0020by\u0020one.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyIgnoresShadowDependencies"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AshouldShowShadowDependencies\u0028\u0029",
+            "name": "shouldShowShadowDependencies",
+            "summary": "Determines\u0020whether\u0020shadow\u0020dependency\u0020reports\u0020SHOULD\u0020remain\u0020visible.",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_shouldShowShadowDependencies"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AapplyPackagedRepositoryIgnores\u0028\u0029",
             "name": "applyPackagedRepositoryIgnores",
             "summary": "Applies\u0020the\u0020ignores\u0020required\u0020only\u0020by\u0020the\u0020packaged\u0020DevTools\u0020repository.",
             "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyPackagedRepositoryIgnores"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003AENV_SHOW_SHADOW_DEPENDENCIES",
+            "name": "ENV_SHOW_SHADOW_DEPENDENCIES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_ENV_SHOW_SHADOW_DEPENDENCIES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig\u003A\u003ADEFAULT_PACKAGED_UNUSED_DEPENDENCIES",
             "name": "DEFAULT_PACKAGED_UNUSED_DEPENDENCIES",

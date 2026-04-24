@@ -2989,6 +2989,20 @@ before the analyzers.</p>
  to dump usages for the given package
 or wildcard pattern and enables <code>--show-all-usages</code>
  automatically.</dd>
+                                <dt><code>--show-shadow-dependencies</code>
+ (optional)</dt>
+        
+        <dd>
+    <p>Reports shadow dependencies instead of applying the Fast Forward default
+ignore for intentional dependency groups.</p>
+
+    <p>By default, DevTools hides <code>SHADOW_DEPENDENCY</code>
+ findings because Fast
+Forward packages may intentionally require ecosystem bundles, meta packages,
+or convenience packages that install related dependencies for consumers.
+Use this flag when auditing whether a package has accidental shadow
+dependencies that should be removed or documented more precisely.</p>
+</dd>
                                 <dt><code>--json</code>
 </dt>
         
@@ -3029,6 +3043,11 @@ output.</dd>
     <p>Dump all matched usages for one package:</p>
 
             <pre><code class="language-bash">composer dependencies --dump-usage=symfony/console</code></pre>
+
+            
+    <p>Audit shadow dependencies:</p>
+
+            <pre><code class="language-bash">composer dependencies --show-shadow-dependencies</code></pre>
 
             
     <p>Apply the upgrade workflow and then analyze dependencies:</p>
@@ -3096,7 +3115,11 @@ preview or upgrade phase.</li>
  and <code>--show-all-usages</code>
  when <code>--dump-usage</code>
 
-is passed to the DevTools command</li>
+  is passed to the DevTools command
+- the <code>FAST_FORWARD_DEV_TOOLS_SHOW_SHADOW_DEPENDENCIES</code>
+ process environment
+flag, which is enabled when <code>--show-shadow-dependencies</code>
+ is passed</li>
 
     <li class="dash"><code>jack breakpoint</code>
  maps <code>--max-outdated</code>

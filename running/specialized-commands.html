@@ -3020,6 +3020,7 @@ composer dependencies --max-outdated=10
 composer dependencies --max-outdated=-1
 composer dependencies --dev
 composer dependencies --dump-usage=symfony/console
+composer dependencies --show-shadow-dependencies
 composer dependencies --upgrade --dev</code></pre>
 
             
@@ -3043,6 +3044,12 @@ override locally;</li>
  forwards to
 <code>composer-dependency-analyser --dump-usages &lt;package&gt; --show-all-usages</code>
 ;</li>
+
+    <li class="dash"><code>--show-shadow-dependencies</code>
+ keeps shadow dependency findings visible for
+audits; without it, DevTools hides intentional Fast Forward dependency-group
+shadows so CI does not fail on ecosystem or meta packages that deliberately
+install related dependencies for consumers;</li>
 
     <li class="dash">it uses <code>jack breakpoint --limit=&lt;max-outdated&gt;</code>
  to fail when too many

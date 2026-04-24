@@ -3115,6 +3115,22 @@ $configuration-&gt;ignoreErrorsOnPackage(
         &nbsp;= [&#039;ergebnis/composer-normalize&#039;, &#039;fakerphp/faker&#039;, &#039;fast-forward/phpdoc-bootstrap-template&#039;, &#039;php-parallel-lint/php-parallel-lint&#039;, &#039;phpdocumentor/shim&#039;, &#039;phpmetrics/phpmetrics&#039;, &#039;phpro/grumphp-shim&#039;, &#039;pyrech/composer-changelogs&#039;, &#039;rector/jack&#039;, &#039;saggre/phpdocumentor-markdown&#039;, &#039;symfony/var-dumper&#039;]                            </span>
 </div>
                         </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_ENV_SHOW_SHADOW_DEPENDENCIES"
+        >
+            ENV_SHOW_SHADOW_DEPENDENCIES
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+        &nbsp;= &#039;FAST_FORWARD_DEV_TOOLS_SHOW_SHADOW_DEPENDENCIES&#039;                            </span>
+</div>
+                        </div>
                                     </div>
             </section>
         
@@ -3131,6 +3147,28 @@ $configuration-&gt;ignoreErrorsOnPackage(
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyIgnoresShadowDependencies"
+        >
+            applyIgnoresShadowDependencies()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                The default configuration ignores shadow dependencies because Fast
+Forward packages MAY intentionally require dependency groups. For example,
+ecosystem or meta packages can require related PSR or framework packages
+so consumers do not need to install every package one by one.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
             href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyPackagedRepositoryIgnores"
         >
             applyPackagedRepositoryIgnores()
@@ -3142,7 +3180,7 @@ $configuration-&gt;ignoreErrorsOnPackage(
             </div>
 
     <span class="text-body-secondary small text-end">
-                                &nbsp;: void    </span>
+                                &nbsp;: <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>    </span>
 </div>
                         </div>
                                             <div class="list-group-item">
@@ -3162,6 +3200,25 @@ $configuration-&gt;ignoreErrorsOnPackage(
 
     <span class="text-body-secondary small text-end">
                                 &nbsp;: <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_shouldShowShadowDependencies"
+        >
+            shouldShowShadowDependencies()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Determines whether shadow dependency reports SHOULD remain visible.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: bool    </span>
 </div>
                         </div>
                                     </div>
@@ -3231,7 +3288,7 @@ $configuration-&gt;ignoreErrorsOnPackage(
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">76</span>
+    <span class="badge text-bg-light border">78</span>
 
     </aside>
         <div class="mb-4">
@@ -3320,7 +3377,7 @@ runtime for consumer projects that choose to use those capabilities.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">53</span>
+    <span class="badge text-bg-light border">55</span>
 
     </aside>
         <div class="mb-4">
@@ -3376,6 +3433,75 @@ direct requirements automatically.</p>
     
 
         
+    </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="constant_ENV_SHOW_SHADOW_DEPENDENCIES">
+                <span class="text-warning-emphasis">ENV_SHOW_SHADOW_DEPENDENCIES</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_ENV_SHOW_SHADOW_DEPENDENCIES"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Public</span>
+
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">44</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">
+        public
+    </span>
+
+    
+    <span class="text-info-emphasis">
+        mixed
+    </span>
+
+    <span class="text-warning-emphasis fw-semibold">
+        ENV_SHOW_SHADOW_DEPENDENCIES
+    </span>
+
+    <span class="text-body-secondary">=</span>
+
+    <span class="text-success-emphasis">
+        &#039;FAST_FORWARD_DEV_TOOLS_SHOW_SHADOW_DEPENDENCIES&#039;
+    </span>
+</code>
+    </div>
+
+    
+
+    
+
+    
+
+        
     </article>                    </div>
     </section>
 
@@ -3405,10 +3531,10 @@ direct requirements automatically.</p>
                             <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
-            <h4 class="h5 mb-2" id="method_applyPackagedRepositoryIgnores">
-                <span class="text-primary">applyPackagedRepositoryIgnores()</span>
+            <h4 class="h5 mb-2" id="method_applyIgnoresShadowDependencies">
+                <span class="text-primary">applyIgnoresShadowDependencies()</span>
                 <a
-    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyPackagedRepositoryIgnores"
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyIgnoresShadowDependencies"
     class="ms-2 text-decoration-none text-body-secondary"
     aria-label="Permalink"
     title="Permalink"
@@ -3439,11 +3565,14 @@ direct requirements automatically.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">111</span>
+    <span class="badge text-bg-light border">120</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Applies the ignores required only by the packaged DevTools repository.</p>
+        <p class="lead text-body-secondary mb-0">The default configuration ignores shadow dependencies because Fast
+Forward packages MAY intentionally require dependency groups. For example,
+ecosystem or meta packages can require related PSR or framework packages
+so consumers do not need to install every package one by one.</p>
     </div>
 
 
@@ -3456,8 +3585,8 @@ direct requirements automatically.</p>
             <span class="badge text-bg-secondary">static</span>
     
     
-    <span class="text-primary fw-semibold">applyPackagedRepositoryIgnores</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>&nbsp;
-                </span><span class="text-primary">$configuration</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">void</span></code>
+    <span class="text-primary fw-semibold">applyIgnoresShadowDependencies</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>&nbsp;
+                </span><span class="text-primary">$configuration</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr></span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3512,7 +3641,186 @@ direct requirements automatically.</p>
 
         
     
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the modified configuration with shadow dependencies ignored</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_applyPackagedRepositoryIgnores">
+                <span class="text-primary">applyPackagedRepositoryIgnores()</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyPackagedRepositoryIgnores"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Public</span>
+
+                
+                                    <span class="badge text-bg-secondary">Static</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">144</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Applies the ignores required only by the packaged DevTools repository.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">public</span>
+
     
+    
+            <span class="badge text-bg-secondary">static</span>
+    
+    
+    <span class="text-primary fw-semibold">applyPackagedRepositoryIgnores</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>&nbsp;
+                </span><span class="text-primary">$configuration</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis"><abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr></span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$configuration</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the analyser configuration to customize</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            <abbr title="\ShipMonk\ComposerDependencyAnalyser\Config\Configuration">Configuration</abbr>
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the modified configuration with packaged repository ignores applied</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
@@ -3550,7 +3858,7 @@ direct requirements automatically.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">89</span>
+    <span class="badge text-bg-light border">91</span>
 
     </aside>
         <div class="mb-4">
@@ -3657,6 +3965,92 @@ direct requirements automatically.</p>
             </section>
 
                     </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_shouldShowShadowDependencies">
+                <span class="text-primary">shouldShowShadowDependencies()</span>
+                <a
+    href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_shouldShowShadowDependencies"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Public</span>
+
+                
+                                    <span class="badge text-bg-secondary">Static</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Config/ComposerDependencyAnalyserConfig.php" class="text-decoration-none mb-0">
+        <a href="files/src-config-composerdependencyanalyserconfig.html"><abbr title="src/Config/ComposerDependencyAnalyserConfig.php">ComposerDependencyAnalyserConfig.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">132</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Determines whether shadow dependency reports SHOULD remain visible.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">public</span>
+
+    
+    
+            <span class="badge text-bg-secondary">static</span>
+    
+    
+    <span class="text-primary fw-semibold">shouldShowShadowDependencies</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">bool</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+    
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            bool
+                        </span>
+                    </div>
+                
                             </div>
         </div>
     </section>
@@ -3815,6 +4209,12 @@ direct requirements automatically.</p>
                             >
                                 <span class="text-truncate">DEFAULT_PACKAGED_UNUSED_DEPENDENCIES</span>
                                                             </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#constant_ENV_SHOW_SHADOW_DEPENDENCIES"
+                            >
+                                <span class="text-truncate">ENV_SHOW_SHADOW_DEPENDENCIES</span>
+                                                            </a>
                                             </div>
                 </div>
             
@@ -3828,6 +4228,12 @@ direct requirements automatically.</p>
                     <div class="list-group list-group-flush">
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyIgnoresShadowDependencies"
+                            >
+                                <span class="text-truncate">applyIgnoresShadowDependencies()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_applyPackagedRepositoryIgnores"
                             >
                                 <span class="text-truncate">applyPackagedRepositoryIgnores()</span>
@@ -3837,6 +4243,12 @@ direct requirements automatically.</p>
                                 href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_configure"
                             >
                                 <span class="text-truncate">configure()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Config-ComposerDependencyAnalyserConfig.html#method_shouldShowShadowDependencies"
+                            >
+                                <span class="text-truncate">shouldShowShadowDependencies()</span>
                                                             </a>
                                             </div>
                 </div>
