@@ -1,13 +1,3 @@
-.dev-tools/
-.idea/
-.vscode/
-/.agents/
-/.github/
-/vendor/
-backup/
-tmp/
-vendor/
-*.cache
-.DS_Store
-/composer.lock
-composer.lock
+*
+!.gitignore
+!composer.json
