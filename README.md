@@ -177,6 +177,15 @@ missing changelog file on first use, `changelog:check` enforces meaningful
 next semantic version from pending changes, `changelog:promote` publishes the
 current `Unreleased` section into a tagged version, and `changelog:show`
 renders one published section for GitHub release notes.
+Repositories that require changelog enforcement in branch protection should
+require the aggregate changelog check:
+
+- Direct workflow invocation: `Changelog Validation`
+- Reusable workflow wrappers (`resources/github-actions/changelog.yml`): `changelog / Changelog Validation`
+
+This remains stable for normal pull requests and release-preparation branches,
+while the lower-level validation job can be skipped intentionally for
+`release/v...` branches.
 
 Structured output is available across the DevTools command surface through
 `--json`, which returns deterministic `message` / `level` / `context` payloads

@@ -147,6 +147,36 @@ jobs:
                       - Dependabot fallback generated message: `${{ steps.dependabot_entry.outputs.message || 'not needed' }}`
                       - Validation result: success
 
+    changelog_validation:
+        name: Changelog Validation
+        needs:
+            - resolve_php
+            - validate_pull_request
+        if: ${{ always() && github.event.pull_request.number && github.event.pull_request.merged != true }}
+        runs-on: ubuntu-latest
+        env:
+            RELEASE_BRANCH_PREFIX: ${{ inputs.release-branch-prefix || 'release/v' }}
+            VALIDATION_RESULT: ${{ needs.validate_pull_request.result }}
+
+        steps:
+            - name: Require changelog validation result
+              env:
+                  HEAD_REF: ${{ github.event.pull_request.head.ref }}
+              run: |
+                  if [[ "${HEAD_REF}" == "${RELEASE_BRANCH_PREFIX}"* ]]; then
+                      echo "Release preparation branch detected; changelog validation is intentionally skipped."
+                      exit 0
+                  fi
+
+                  if [ "${VALIDATION_RESULT}" = "success" ]; then
+                      echo "Changelog validation passed."
+                      exit 0
+                  fi
+
+                  echo "::error::Changelog validation did not pass for this pull request."
+                  echo "Validation result: ${VALIDATION_RESULT}"
+                  exit 1
+
     prepare_release_pull_request:
         name: Prepare Release Pull Request
         needs: resolve_php
