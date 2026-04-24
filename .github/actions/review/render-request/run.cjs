@@ -15,11 +15,11 @@ function classifyTouchedSurfaces(files) {
       (file) => file === 'README.md' || file.startsWith('docs/'),
     ],
     [
-      'Workflow or local GitHub Action logic changed; scrutinize permissions, triggers, release flow, and CI side effects.',
+      'Workflow or local GitHub Action logic changed; require executable validation of permissions, triggers, bot-authored commits, and CI side effects.',
       (file) => file.startsWith('.github/workflows/') || file.startsWith('.github/actions/'),
     ],
     [
-      'Consumer workflow wrappers changed; verify they still mirror the reusable workflow contract safely.',
+      'Consumer workflow wrappers changed; verify permissions, inputs, and reusable workflow refs remain aligned with the packaged contract.',
       (file) => file.startsWith('resources/github-actions/'),
     ],
     [
@@ -80,6 +80,7 @@ function renderComment({pull, files, focusAreas}) {
     `Use $pull-request-review with the review-guardian agent to review PR #${pull.number} (${pull.html_url}).`,
     'Lead with findings ordered by severity. Include repository file references whenever possible.',
     'Prioritize bugs, regressions, missing tests, missing docs, generated-output drift, and workflow or CI impacts.',
+    'For workflow/action changes, record validation evidence or residual risk; pay special attention to GITHUB_TOKEN pushes and required-check dispatch/mirroring.',
     `Base: ${pull.base.ref}`,
     `Head: ${pull.head.ref} @ ${pull.head.sha.slice(0, 7)}`,
     '```',
@@ -99,6 +100,7 @@ function renderSummary({pull, focusAreas}) {
     '### Findings-first expectations',
     '- Lead with bugs, regressions, missing tests, missing docs, generated-output drift, and workflow or CI risk.',
     '- Include repository file references whenever possible.',
+    '- For workflow/action changes, record executable validation evidence or residual risk, especially around bot-authored commits and required checks.',
   ];
 
   if (focusAreas.length > 0) {

@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Auto-resolve pull-request conflicts limited to workflow-managed `.github/wiki` pointers and `CHANGELOG.md` `Unreleased` drift (#192)
+- Teach the pull-request review skill, review-guardian agent, and review request brief to require explicit validation strategies for workflow, local-action, and packaged-wrapper changes (#241)
 
 ### Fixed
 
