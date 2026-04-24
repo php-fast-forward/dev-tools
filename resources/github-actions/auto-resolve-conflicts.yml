@@ -1,0 +1,35 @@
+name: "Fast Forward Predictable Conflict Resolution"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  workflow_dispatch:
+    inputs:
+      base-ref:
+        description: Base branch inspected for open pull requests.
+        required: false
+        type: string
+        default: main
+      pull-request-number:
+        description: Optional pull request number to inspect. Leave empty to scan open pull requests targeting the base branch.
+        required: false
+        type: string
+        default: ''
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  auto-resolve-conflicts:
+    uses: php-fast-forward/dev-tools/.github/workflows/auto-resolve-conflicts.yml@main
+    with:
+      base-ref: ${{ inputs.base-ref || github.event.pull_request.base.ref || github.event.repository.default_branch || 'main' }}
+      pull-request-number: ${{ inputs.pull-request-number || github.event.pull_request.number || '' }}
+    secrets: inherit

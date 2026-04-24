@@ -62,7 +62,7 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
                     ->shouldIgnoreError(ErrorType::SHADOW_DEPENDENCY, null, 'vendor/shadow-package')
             );
         } finally {
-            self::restoreShadowDependenciesEnvironment($originalValue);
+            $this->restoreShadowDependenciesEnvironment($originalValue);
         }
     }
 
@@ -83,7 +83,7 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
                     ->shouldIgnoreError(ErrorType::SHADOW_DEPENDENCY, null, 'vendor/shadow-package')
             );
         } finally {
-            self::restoreShadowDependenciesEnvironment($originalValue);
+            $this->restoreShadowDependenciesEnvironment($originalValue);
         }
     }
 
@@ -166,7 +166,7 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
      *
      * @return void
      */
-    private static function restoreShadowDependenciesEnvironment(false|string $value): void
+    private function restoreShadowDependenciesEnvironment(false|string $value): void
     {
         if (false === $value) {
             putenv(ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES);

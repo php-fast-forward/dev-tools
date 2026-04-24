@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Auto-resolve pull-request conflicts limited to workflow-managed `.github/wiki` pointers and `CHANGELOG.md` `Unreleased` drift (#192)
+
 ### Fixed
 
 - Keep required PHPUnit matrix checks reporting after workflow-managed `.github/wiki` pointer commits by running the pull-request test workflow without top-level path filters and aligning the packaged consumer test wrapper (#230)

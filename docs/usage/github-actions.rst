@@ -50,6 +50,7 @@ The packaged wrappers currently include:
 *   ``reports.yml``
 *   ``review.yml``
 *   ``changelog.yml``
+*   ``auto-resolve-conflicts.yml``
 *   ``wiki.yml`` for pull-request wiki previews
 *   ``wiki-maintenance.yml`` for merged-publication and cleanup work
 *   ``auto-assign.yml``
@@ -197,6 +198,29 @@ wrapper in ``resources/github-actions/changelog.yml``.
 
 .. note::
    Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the ``release/v...`` pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.
+
+Fast Forward Predictable Conflict Resolution
+--------------------------------------------
+
+The ``auto-resolve-conflicts.yml`` workflow scans pull requests after ``main``
+moves and after pull request updates. It only attempts an automatic merge when
+the conflicted file list is limited to:
+
+*   ``.github/wiki``;
+*   ``CHANGELOG.md``.
+
+For ``.github/wiki`` conflicts, the workflow keeps the pull request side of the
+submodule pointer because that pointer references the preview wiki branch that
+belongs to the pull request. For ``CHANGELOG.md`` conflicts, it treats the base
+branch changelog as authoritative and merges branch-only ``Unreleased`` entries
+back into the current top-level ``Unreleased`` section. That keeps entries in
+the right place even when a release was promoted while the pull request was
+waiting.
+
+If any other file is conflicted, or if GitHub reports a forked pull request
+branch, the workflow stops and leaves the branch for manual resolution. Each
+run writes a summary explaining which pull requests were resolved, skipped, or
+left untouched.
 
 Fast Forward Rigorous Review
 ----------------------------
