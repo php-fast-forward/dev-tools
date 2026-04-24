@@ -1750,6 +1750,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-changelog-conflict.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Conflict
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-changelog-document.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3099,6 +3121,23 @@ concurrency cancels older in-progress runs for the same pull request so the
 newest commit owns the required check contexts.</p>
 
             
+    <p>The predictable-conflict workflow MAY also refresh pull request branches when
+the only conflicts are <code>.github/wiki</code>
+ pointer drift and/or <code>CHANGELOG.md</code>
+
+<code>Unreleased</code>
+ drift. It keeps pull request wiki preview pointers on the branch
+side and replays branch-only changelog entries into the current base
+<code>Unreleased</code>
+ section, which avoids placing new entries under a freshly
+published release after <code>main</code>
+ moved. Because those automatic resolutions are
+also pushed with the built-in workflow token, the workflow dispatches
+<code>tests.yml</code>
+ for the refreshed branch after a successful push so required test
+statuses can be reported for the new commit.</p>
+
+            
     <p>At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
 content. Keep those permissions scoped to the workflow jobs that actually need
@@ -3148,6 +3187,17 @@ pointer updates, <code>actions: write</code>
 pointer commits, and <code>pull-requests: read</code>
  to inspect pull request metadata
 safely.</p>
+
+            
+    <p><code>auto-resolve-conflicts.yml</code>
+ keeps <code>contents: write</code>
+ so it can push
+predictable conflict-resolution commits, <code>pull-requests: write</code>
+ so it can
+inspect pull request state through GitHub tooling, and <code>actions: write</code>
+ so it
+can dispatch <code>tests.yml</code>
+ after it pushes a bot-authored resolution commit.</p>
 
             
     <p><code>wiki-maintenance-entry.yml</code>
@@ -3201,8 +3251,12 @@ shared across issue, pull-request, review, changelog, and release workflows.</p>
             
     <p>Submodule pointer conflicts happen when <code>main</code>
  and the pull request point to
-different generated wiki commits. Resolve them by rebasing the pull request and
-choosing the preview wiki commit that belongs to the pull request.</p>
+different generated wiki commits. The predictable-conflict workflow can resolve
+this automatically when the conflict scope is limited to <code>.github/wiki</code>
+ and
+<code>CHANGELOG.md</code>
+. When resolving it manually, rebase the pull request and choose
+the preview wiki commit that belongs to the pull request.</p>
 
             
     <p>For pull request <code>123</code>

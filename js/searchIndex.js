@@ -46,6 +46,36 @@ Search.appendIndex(
             "summary": "Checks\u0020if\u0020there\u0020are\u0020pending\u0020unreleased\u0020entries\u0020in\u0020the\u0020changelog\u0020compared\u0020to\u0020a\u0020given\u0020reference.",
             "url": "classes/FastForward-DevTools-Changelog-Checker-UnreleasedEntryCheckerInterface.html#method_hasPendingChanges"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver",
+            "name": "UnreleasedChangelogConflictResolver",
+            "summary": "Rebuilds\u0020the\u0020active\u0020Unreleased\u0020section\u0020from\u0020predictable\u0020changelog\u0020conflicts.",
+            "url": "classes/FastForward-DevTools-Changelog-Conflict-UnreleasedChangelogConflictResolver.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Changelog-Conflict-UnreleasedChangelogConflictResolver.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver\u003A\u003Aresolve\u0028\u0029",
+            "name": "resolve",
+            "summary": "Merges\u0020source\u0020Unreleased\u0020entries\u0020into\u0020the\u0020target\u0020changelog\u0020document.",
+            "url": "classes/FastForward-DevTools-Changelog-Conflict-UnreleasedChangelogConflictResolver.html#method_resolve"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver\u003A\u003AflattenEntries\u0028\u0029",
+            "name": "flattenEntries",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Changelog-Conflict-UnreleasedChangelogConflictResolver.html#method_flattenEntries"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver\u003A\u003A\u0024parser",
+            "name": "parser",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Changelog-Conflict-UnreleasedChangelogConflictResolver.html#property_parser"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver\u003A\u003A\u0024renderer",
+            "name": "renderer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Changelog-Conflict-UnreleasedChangelogConflictResolver.html#property_renderer"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Changelog\\DependabotChangelogEntryMessageResolver",
             "name": "DependabotChangelogEntryMessageResolver",
             "summary": "Normalizes\u0020minimal\u0020changelog\u0020entry\u0020messages\u0020for\u0020Dependabot\u0020pull\u0020requests.",
@@ -4665,6 +4695,11 @@ Search.appendIndex(
             "name": "Checker",
             "summary": "",
             "url": "namespaces/fastforward-devtools-changelog-checker.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Changelog\\Conflict",
+            "name": "Conflict",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-changelog-conflict.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Changelog",
             "name": "Changelog",

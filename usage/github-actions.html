@@ -1750,6 +1750,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-changelog-conflict.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Conflict
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-changelog-document.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2983,6 +3005,9 @@ secrets: inherit</code></pre>
     <li><code>changelog.yml</code>
 </li>
 
+    <li><code>auto-resolve-conflicts.yml</code>
+</li>
+
     <li><code>wiki.yml</code>
  for pull-request wiki previews</li>
 
@@ -3276,6 +3301,48 @@ wrapper in <code>resources/github-actions/changelog.yml</code>
 
     </article>
 </div>
+    </section>
+
+            <section class="section " id="fast-forward-predictable-conflict-resolution">
+            <h2>Fast Forward Predictable Conflict Resolution</h2>
+
+            
+    <p>The <code>auto-resolve-conflicts.yml</code>
+ workflow scans pull requests after <code>main</code>
+
+moves and after pull request updates. It only attempts an automatic merge when
+the conflicted file list is limited to:</p>
+
+            
+
+<ul>
+    <li><code>.github/wiki</code>
+;</li>
+
+    <li><code>CHANGELOG.md</code>
+.</li>
+
+</ul>
+
+            
+    <p>For <code>.github/wiki</code>
+ conflicts, the workflow keeps the pull request side of the
+submodule pointer because that pointer references the preview wiki branch that
+belongs to the pull request. For <code>CHANGELOG.md</code>
+ conflicts, it treats the base
+branch changelog as authoritative and merges branch-only <code>Unreleased</code>
+ entries
+back into the current top-level <code>Unreleased</code>
+ section. That keeps entries in
+the right place even when a release was promoted while the pull request was
+waiting.</p>
+
+            
+    <p>If any other file is conflicted, or if GitHub reports a forked pull request
+branch, the workflow stops and leaves the branch for manual resolution. Each
+run writes a summary explaining which pull requests were resolved, skipped, or
+left untouched.</p>
+
     </section>
 
             <section class="section " id="fast-forward-rigorous-review">
