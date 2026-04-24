@@ -28,12 +28,22 @@ const project = {
 /**
  * @param {string} id
  * @param {string} status
+ * @param {'Issue'|'PullRequest'} type
+ * @param {number} number
+ * @param {string} repository
  *
  * @returns {object}
  */
-function projectItem(id, status) {
+function projectItem(id, status, type = 'Issue', number = 1, repository = 'php-fast-forward/dev-tools') {
     return {
         id,
+        content: {
+            __typename: type,
+            number,
+            repository: {
+                nameWithOwner: repository,
+            },
+        },
         project: {
             id: project.id,
         },
@@ -157,27 +167,10 @@ async function withEnvironment(env, callback) {
 
 test('moves items from multiple source statuses to the release status', async () => {
     const projectItems = [
-        {
-            ...projectItem('current-pr', 'Release Prepared'),
-            content: {
-                __typename: 'PullRequest',
-                number: 10,
-            },
-        },
-        {
-            ...projectItem('merged-pr', 'Merged'),
-            content: {
-                __typename: 'PullRequest',
-                number: 9,
-            },
-        },
-        {
-            ...projectItem('backlog-issue', 'Backlog'),
-            content: {
-                __typename: 'Issue',
-                number: 8,
-            },
-        },
+        projectItem('current-pr', 'Release Prepared', 'PullRequest', 10),
+        projectItem('merged-pr', 'Merged', 'PullRequest', 9),
+        projectItem('foreign-merged-pr', 'Merged', 'PullRequest', 7, 'php-fast-forward/enum'),
+        projectItem('backlog-issue', 'Backlog', 'Issue', 8),
     ];
     const {github, mutations} = createGithub(projectItems);
     const {core, outputs} = createCore();
@@ -209,18 +202,12 @@ test('moves items from multiple source statuses to the release status', async ()
     assert.deepEqual(mutations.map((mutation) => mutation.itemId), ['current-pr', 'merged-pr']);
     assert.equal(outputs['source-statuses'], 'Release Prepared,Merged');
     assert.equal(outputs['moved-count'], '2');
-    assert.equal(outputs['skipped-count'], '1');
+    assert.equal(outputs['skipped-count'], '2');
 });
 
 test('keeps the legacy from-status input supported', async () => {
     const projectItems = [
-        {
-            ...projectItem('merged-issue', 'Merged'),
-            content: {
-                __typename: 'Issue',
-                number: 8,
-            },
-        },
+        projectItem('merged-issue', 'Merged', 'Issue', 8),
     ];
     const {github, mutations} = createGithub(projectItems);
     const {core, outputs} = createCore();

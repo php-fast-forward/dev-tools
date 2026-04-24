@@ -70,11 +70,17 @@ module.exports = async function transitionStatus({ github, context, core }) {
                             __typename
                             ... on Issue {
                               number
+                              repository {
+                                nameWithOwner
+                              }
                               title
                               url
                             }
                             ... on PullRequest {
                               number
+                              repository {
+                                nameWithOwner
+                              }
                               title
                               url
                             }
@@ -126,6 +132,12 @@ module.exports = async function transitionStatus({ github, context, core }) {
         return `Project item ${item.id}`;
     };
 
+    const belongsToCurrentRepository = (item) => {
+        const repository = item.content?.repository?.nameWithOwner;
+
+        return `${context.repo.owner}/${context.repo.repo}` === repository;
+    };
+
     const moveToStatus = async (item, label) => {
         const currentStatus = board.getExistingFieldValue(item, 'Status');
 
@@ -154,6 +166,12 @@ module.exports = async function transitionStatus({ github, context, core }) {
     let skippedCount = 0;
 
     for (const item of await loadProjectItems()) {
+        if (!belongsToCurrentRepository(item)) {
+            skippedCount++;
+
+            continue;
+        }
+
         if (await moveToStatus(item, formatLabel(item))) {
             movedCount++;
 
