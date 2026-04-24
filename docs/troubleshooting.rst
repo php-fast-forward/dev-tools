@@ -142,6 +142,11 @@ Likely causes:
 - a tool is prompting for confirmation;
 - CI is missing required environment variables.
 
+DevTools streams child-process output through Symfony Process callbacks rather
+than forcing pseudo-terminal execution. Aggregated commands such as
+``reports``, ``standards``, and ``dev-tools:fix`` MUST keep nested commands
+non-PTY in CI or other non-interactive process runners.
+
 Recovery:
 
 .. code-block:: bash

@@ -87,10 +87,6 @@ final class ProcessQueue implements ProcessQueueInterface
         bool $detached = false,
         ?string $label = null
     ): void {
-        if (Process::isPtySupported()) {
-            $process->setPty(true);
-        }
-
         $this->entries[] = [
             'process' => $process,
             'ignoreFailure' => $ignoreFailure,

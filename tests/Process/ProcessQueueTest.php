@@ -76,19 +76,24 @@ final class ProcessQueueTest extends TestCase
     }
 
     /**
-     * @param ObjectProphecy<Process> $process
-     *
      * @return void
      */
-    private function expectPtyConfiguration(ObjectProphecy $process): void
+    #[Test]
+    public function addWillNotEnablePtyForQueuedProcesses(): void
     {
-        if (! Process::isPtySupported()) {
-            return;
-        }
+        $process = $this->prophesize(Process::class);
+        $process->setPty(Argument::any())
+            ->shouldNotBeCalled();
+        $process->run(Argument::any())
+            ->willReturn(ProcessQueueInterface::SUCCESS);
+        $process->getExitCode()
+            ->willReturn(ProcessQueueInterface::SUCCESS);
+        $process->isRunning()
+            ->willReturn(false);
 
-        $process->setPty(true)
-            ->willReturn($process->reveal())
-            ->shouldBeCalled();
+        $this->queue->add($process->reveal());
+
+        self::assertSame(ProcessQueueInterface::SUCCESS, $this->queue->run($this->output->reveal()));
     }
 
     /**
@@ -102,7 +107,6 @@ final class ProcessQueueTest extends TestCase
         bool $isRunning = false,
     ): ObjectProphecy {
         $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
         $process->run(Argument::any())
             ->willReturn($exitCode ?? ProcessQueueInterface::FAILURE);
         $process->getCommandLine()
@@ -127,7 +131,6 @@ final class ProcessQueueTest extends TestCase
     private function createDetachedProcessMock(bool ...$runningSequence): ObjectProphecy
     {
         $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
         $process->getCommandLine()
             ->willReturn('test-command');
         $process->getWorkingDirectory()
@@ -212,7 +215,6 @@ final class ProcessQueueTest extends TestCase
     public function runBlockingProcessExceptionReturnsFailure(): void
     {
         $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
         $process->getCommandLine()
             ->willReturn('test-command');
         $process->getWorkingDirectory()
@@ -249,7 +251,6 @@ final class ProcessQueueTest extends TestCase
     public function runDetachedProcessStartFailureReturnsFailure(): void
     {
         $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
         $process->getCommandLine()
             ->willReturn('test-command');
         $process->getWorkingDirectory()
@@ -271,7 +272,6 @@ final class ProcessQueueTest extends TestCase
     public function runDetachedProcessStartFailureWithIgnoreFailureReturnsSuccess(): void
     {
         $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
         $process->getCommandLine()
             ->willReturn('test-command');
         $process->getWorkingDirectory()
@@ -295,7 +295,6 @@ final class ProcessQueueTest extends TestCase
         $capturedCallback = null;
 
         $process = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($process);
         $process->run(Argument::that(function ($callback) use (&$capturedCallback): bool {
             $capturedCallback = $callback;
 
@@ -335,7 +334,6 @@ final class ProcessQueueTest extends TestCase
         $capturedSecondCallback = null;
 
         $firstProcess = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($firstProcess);
         $firstProcess->getCommandLine()
             ->willReturn('first-command');
         $firstProcess->getWorkingDirectory()
@@ -355,7 +353,6 @@ final class ProcessQueueTest extends TestCase
             })->shouldBeCalled();
 
         $secondProcess = $this->prophesize(Process::class);
-        $this->expectPtyConfiguration($secondProcess);
         $secondProcess->getCommandLine()
             ->willReturn('second-command');
         $secondProcess->getWorkingDirectory()
