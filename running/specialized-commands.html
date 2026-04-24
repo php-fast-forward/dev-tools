@@ -3761,7 +3761,11 @@ BSD-3-Clause, GPL-3.0, LGPL-3.0, and MPL-2.0);</li>
 <ul>
     <li class="dash">copies hook files from source to target directory;</li>
 
-    <li class="dash">sets executable permissions on copied hooks;</li>
+    <li class="dash">sets executable permissions on copied hooks with <code>0o755</code>
+;</li>
+
+    <li class="dash">removes an existing drifted hook before recopying it so stale target
+permissions do not block replacements;</li>
 
     <li class="dash"><code>--source</code>
  defaults to <code>resources/git-hooks</code>

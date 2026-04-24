@@ -1856,6 +1856,11 @@ Search.appendIndex(
             "summary": "Prompts\u0020whether\u0020a\u0020drifted\u0020hook\u0020should\u0020be\u0020replaced.",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#method_shouldReplaceHook"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003AinstallHook\u0028\u0029",
+            "name": "installHook",
+            "summary": "Installs\u0020a\u0020single\u0020hook\u0020and\u0020rewrites\u0020drifted\u0020targets\u0020defensively.",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#method_installHook"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024filesystem",
             "name": "filesystem",
             "summary": "",

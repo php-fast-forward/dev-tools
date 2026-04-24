@@ -2912,6 +2912,9 @@
 
     <li value="2">Sets executable permissions on copied hooks</li>
 
+    <li value="3">Replaces drifted hooks defensively by removing the previous target before
+recopying it</li>
+
 </ol>
 
     </section>
@@ -2958,7 +2961,17 @@ versions.</dd>
 </dt>
         
         <dd>Prompt before replacing a drifted Git hook.</dd>
-                                <dt><code>--json</code>
+            </dl>
+
+            
+    <p>When a hook still cannot be rewritten because the target remains locked or
+unwritable, the command logs a clear error for that hook, continues processing
+the remaining hooks, and exits non-zero so <code>dev-tools:sync</code>
+ reports the hook
+install problem clearly instead of aborting mid-copy.</p>
+
+            <dl>
+                        <dt><code>--json</code>
 </dt>
         
         <dd>Emit a structured machine-readable payload instead of the normal terminal
@@ -3003,7 +3016,9 @@ output.</dd>
     </tr>
     <tr>
             <td>1</td>
-            <td>Failure. Copy error.</td>
+            <td>Failure. Drift detected in <code>--check</code>
+ mode or one or more hooks could
+not be rewritten automatically.</td>
     </tr>
 </tbody>
 </table>
