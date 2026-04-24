@@ -14,13 +14,20 @@ on:
         required: false
         type: number
         default: -1
+      publish-required-statuses:
+        description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
+        required: false
+        type: boolean
+        default: false
 
 permissions:
   contents: read
+  statuses: write
 
 jobs:
   tests:
     uses: php-fast-forward/dev-tools/.github/workflows/tests.yml@main
     with:
       max-outdated: ${{ inputs.max-outdated || -1 }}
+      publish-required-statuses: ${{ inputs.publish-required-statuses || false }}
     secrets: inherit
