@@ -19,6 +19,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Changelog;
 
+use function Safe\preg_replace;
+use function Safe\preg_match;
+
 /**
  * Normalizes minimal changelog entry messages for Dependabot pull requests.
  */
@@ -32,10 +35,10 @@ final readonly class DependabotChangelogEntryMessageResolver
      */
     public function resolve(string $title, int $pullRequestNumber): string
     {
-        $message = \preg_replace('/\s+/', ' ', \trim($title)) ?? \trim($title);
-        $message = \rtrim($message, " \t\n\r\0\x0B.");
+        $message = preg_replace('/\s+/', ' ', trim($title)) ?? trim($title);
+        $message = rtrim($message, " \t\n\r\0\x0B.");
 
-        if (\preg_match('/\(#\d+\)$/', $message) === 1) {
+        if (1 === preg_match('/\(#\d+\)$/', $message)) {
             return $message;
         }
 

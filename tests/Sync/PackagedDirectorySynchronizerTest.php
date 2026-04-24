@@ -326,6 +326,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
     /**
      * @param string $entryName
      * @param string $sourcePath
+     * @param bool $isDirectory
      *
      * @return SplFileInfo
      */

@@ -44,10 +44,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * The command accepts two options: --source and --target to specify the paths
  * to the canonical and project .gitignore files respectively.
  */
-#[AsCommand(
-    name: 'gitignore',
-    description: 'Merges and synchronizes .gitignore files.'
-)]
+#[AsCommand(name: 'gitignore', description: 'Merges and synchronizes .gitignore files.')]
 final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
@@ -87,7 +84,9 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     protected function configure(): void
     {
-        $this->setHelp("This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.");
+        $this->setHelp(
+            "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore."
+        );
 
         $this->addJsonOption()
             ->addOption(

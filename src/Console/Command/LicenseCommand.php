@@ -37,10 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This command generates a LICENSE file if one does not exist and a supported
  * license is declared in composer.json.
  */
-#[AsCommand(
-    name: 'license',
-    description: 'Generates a LICENSE file from composer.json license information.'
-)]
+#[AsCommand(name: 'license', description: 'Generates a LICENSE file from composer.json license information.')]
 final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;

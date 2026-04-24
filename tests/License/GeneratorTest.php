@@ -177,12 +177,9 @@ final class GeneratorTest extends TestCase
 
         $content = $generator->generateContent();
 
-        self::assertSame(
-            'Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>',
-            $content,
-        );
-        self::assertStringNotContainsString('&lt;', (string) $content);
-        self::assertStringNotContainsString('&gt;', (string) $content);
+        self::assertSame('Copyright (c) 2026 Felipe Sayão Lobato Abreu <github@mentordosnerds.com>', $content);
+        self::assertStringNotContainsString('&lt;', $content);
+        self::assertStringNotContainsString('&gt;', $content);
     }
 
     /**

@@ -103,10 +103,13 @@ final class RectorConfigTest extends TestCase
         $callback(new RectorConfigInterface());
 
         self::assertTrue($customizeWasCalled);
-        self::assertSame([getcwd()], SimpleParameterProvider::provideArrayParameter(Option::PATHS));
+        self::assertSame(
+            WorkingProjectPathResolver::getToolingSourcePaths(),
+            SimpleParameterProvider::provideArrayParameter(Option::PATHS)
+        );
         self::assertSame(
             [
-                ...WorkingProjectPathResolver::getToolingExcludedDirectories(getcwd()),
+                ...WorkingProjectPathResolver::getToolingExcludedDirectories(),
                 RemoveUselessReturnTagRector::class,
                 RemoveUselessParamTagRector::class,
             ],

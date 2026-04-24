@@ -37,10 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Executes the full suite of Fast Forward code standard checks.
  * This class MUST NOT be modified through inheritance and SHALL streamline code validation workflows.
  */
-#[AsCommand(
-    name: 'standards',
-    description: 'Runs Fast Forward code standards checks.'
-)]
+#[AsCommand(name: 'standards', description: 'Runs Fast Forward code standards checks.')]
 final class StandardsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasCacheOption;
@@ -73,9 +70,7 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
         );
         $this
             ->addJsonOption()
-            ->addCacheOption(
-                'Whether to enable cache writes in nested cache-aware standards commands.'
-            )
+            ->addCacheOption('Whether to enable cache writes in nested cache-aware standards commands.')
             ->addCacheDirOption(
                 description: 'Base cache directory used for nested cache-aware standards commands.',
                 default: ManagedWorkspace::getCacheDirectory('standards'),

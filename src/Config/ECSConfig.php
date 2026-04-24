@@ -127,10 +127,11 @@ final class ECSConfig
         ECSConfigBuilder $config,
         string $workingDirectory
     ): ECSConfigBuilder {
-        $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories($workingDirectory);
+        $paths = WorkingProjectPathResolver::getToolingSourcePaths($workingDirectory);
+        $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories();
 
         return $config
-            ->withPaths([$workingDirectory])
+            ->withPaths($paths)
             ->withSkip([...$skipPaths, ...self::DEFAULT_SKIPPED_RULES]);
     }
 

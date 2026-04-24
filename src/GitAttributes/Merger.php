@@ -194,7 +194,7 @@ final class Merger implements MergerInterface
      */
     private function isKeptPath(string $pathKey, array $keptExportLookup): bool
     {
-        foreach ($keptExportLookup as $keptPath => $_) {
+        foreach (array_keys($keptExportLookup) as $keptPath) {
             if ($pathKey === $keptPath || str_starts_with($pathKey . '/', $keptPath . '/')) {
                 return true;
             }

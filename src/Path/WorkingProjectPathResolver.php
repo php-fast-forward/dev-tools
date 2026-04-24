@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Path;
 
+use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Path;
 
 use function Safe\getcwd;
@@ -53,8 +54,48 @@ final class WorkingProjectPathResolver
     {
         return [
             ManagedWorkspace::getOutputDirectory(baseDir: $baseDir),
+            Path::join($baseDir, 'backup'),
+            Path::join($baseDir, 'cache'),
+            Path::join($baseDir, 'public'),
             Path::join($baseDir, 'resources'),
+            Path::join($baseDir, 'tmp'),
             Path::join($baseDir, 'vendor'),
+            Path::join($baseDir, '*/vendor'),
+            Path::join($baseDir, '*/vendor/*'),
+            Path::join($baseDir, '**/vendor'),
+            Path::join($baseDir, '**/vendor/*'),
         ];
+    }
+
+    /**
+     * Returns PHP source files that tooling SHOULD inspect without traversing generated directories.
+     *
+     * @param string $baseDir the optional repository base directory used to materialize absolute paths
+     *
+     * @return list<string>
+     */
+    public static function getToolingSourcePaths(string $baseDir = ''): array
+    {
+        $workingDirectory = '' === $baseDir ? getcwd() : $baseDir;
+        $finder = Finder::create()
+            ->files()
+            ->name('*.php')
+            ->in($workingDirectory)
+            ->exclude(['.dev-tools', 'backup', 'cache', 'public', 'resources', 'tmp', 'vendor'])
+            ->sortByName();
+        $paths = [];
+
+        foreach ($finder as $file) {
+            $realPath = $file->getRealPath();
+
+            if (false === $realPath) {
+                continue;
+            }
+
+            $relativePath = Path::makeRelative($realPath, $workingDirectory);
+            $paths[] = Path::join($baseDir, $relativePath);
+        }
+
+        return $paths;
     }
 }

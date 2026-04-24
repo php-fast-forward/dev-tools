@@ -46,10 +46,7 @@ use function Safe\getcwd;
  * queue so logging and grouped output stay consistent with the rest of the
  * command surface.
  */
-#[AsCommand(
-    name: 'docs',
-    description: 'Generates API documentation.'
-)]
+#[AsCommand(name: 'docs', description: 'Generates API documentation.')]
 final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasCacheOption;

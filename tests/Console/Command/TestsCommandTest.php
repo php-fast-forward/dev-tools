@@ -134,10 +134,7 @@ final class TestsCommandTest extends TestCase
         $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
             $process->getCommandLine(),
             '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG,
-        ) && str_contains(
-            $process->getCommandLine(),
-            '--cache-result',
-        ) && str_contains(
+        ) && str_contains($process->getCommandLine(), '--cache-result') && str_contains(
             $process->getCommandLine(),
             '--cache-directory=' . getcwd() . '/.dev-tools/cache/phpunit',
         )))->shouldBeCalled();
@@ -169,10 +166,7 @@ final class TestsCommandTest extends TestCase
         $this->processQueue->add(Argument::that(static fn(Process $process): bool => str_contains(
             $process->getCommandLine(),
             '--do-not-cache-result',
-        ) && ! str_contains(
-            $process->getCommandLine(),
-            '--cache-directory=',
-        )))->shouldBeCalled();
+        ) && ! str_contains($process->getCommandLine(), '--cache-directory=')))->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
 

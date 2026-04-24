@@ -27,6 +27,9 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(DependabotChangelogEntryMessageResolver::class)]
 final class DependabotChangelogEntryMessageResolverTest extends TestCase
 {
+    /**
+     * @return void
+     */
     #[Test]
     public function resolveWillAppendThePullRequestNumberWhenTheTitleHasNoSuffix(): void
     {
@@ -38,6 +41,9 @@ final class DependabotChangelogEntryMessageResolverTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function resolveWillPreserveAnExistingPullRequestSuffix(): void
     {
@@ -49,6 +55,9 @@ final class DependabotChangelogEntryMessageResolverTest extends TestCase
         );
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function resolveWillTrimTrailingPunctuationBeforeAppendingTheSuffix(): void
     {

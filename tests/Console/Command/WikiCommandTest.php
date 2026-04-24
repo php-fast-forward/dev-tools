@@ -125,7 +125,10 @@ final class WikiCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
-        $this->processBuilder->withArgument('--cache-folder', ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC))
+        $this->processBuilder->withArgument(
+            '--cache-folder',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC)
+        )
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal())

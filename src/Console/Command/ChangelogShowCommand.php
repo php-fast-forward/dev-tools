@@ -35,10 +35,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Prints the rendered notes body for a released changelog version.
  */
-#[AsCommand(
-    name: 'changelog:show',
-    description: 'Prints the notes body for a released changelog version.'
-)]
+#[AsCommand(name: 'changelog:show', description: 'Prints the notes body for a released changelog version.')]
 final class ChangelogShowCommand extends BaseCommand implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
