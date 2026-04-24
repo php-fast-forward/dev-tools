@@ -49,7 +49,6 @@ use function Safe\rmdir;
 
 #[CoversClass(GitHooksCommand::class)]
 #[UsesClass(FileDiff::class)]
-#[UsesClass(IOException::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class GitHooksCommandTest extends TestCase
 {
