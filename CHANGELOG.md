@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Dispatch required test status mirroring after changelog release-preparation workflows create or update release pull requests so release branches no longer require branch-protection bypass for workflow-authored commits (#250)
+
 ## [1.22.1] - 2026-04-24
 
 ### Fixed

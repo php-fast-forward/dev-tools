@@ -176,8 +176,13 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
         ``composer dev-tools changelog:show -- <version>``.
     *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
+    *   Dispatches ``tests.yml`` for the release branch with required-status
+        mirroring enabled, because release branches are written by the workflow
+        token and do not receive ordinary ``pull_request`` test runs
+        automatically.
     *   Appends a run summary with the resolved version, version source, and pull-request URL.
-    *   Requires repository Actions permissions that allow the workflow token to create pull requests.
+    *   Requires repository Actions permissions that allow the workflow token
+        to create pull requests and dispatch workflows.
 *   **Merged Release Pull Requests**:
     *   Detects merged branches that match the configured release branch prefix.
     *   Renders the released changelog section with ``composer dev-tools changelog:show -- <version>``.
