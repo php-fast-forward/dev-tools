@@ -141,8 +141,9 @@ jobs:
 
                       - Changelog file: `${{ env.CHANGELOG_FILE }}`
                       - Compared base ref: `origin/${{ env.BASE_REF }}`
+                      - Dependabot fallback status: `${{ steps.dependabot_entry.outputs.status || 'not needed' }}`
                       - Dependabot fallback entry created: `${{ steps.dependabot_entry.outputs.created || 'false' }}`
-                      - Dependabot fallback entry message: `${{ steps.dependabot_entry.outputs.message || 'not needed' }}`
+                      - Dependabot fallback generated message: `${{ steps.dependabot_entry.outputs.message || 'not needed' }}`
                       - Validation result: success
 
     prepare_release_pull_request:
