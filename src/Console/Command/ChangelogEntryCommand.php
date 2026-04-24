@@ -64,6 +64,7 @@ final class ChangelogEntryCommand extends BaseCommand implements LoggerAwareComm
     protected function configure(): void
     {
         $this->setHelp('This command appends one categorized changelog entry to the selected changelog file so it can be reused by local authoring flows and skills.');
+
         $this->addJsonOption()
             ->addArgument(
                 name: 'message',

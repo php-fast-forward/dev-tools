@@ -101,6 +101,7 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
             . 'Only paths that exist in the repository are added, existing custom rules are preserved, and '
             . '"extra.gitattributes.keep-in-export" paths stay in exported archives.'
         );
+
         $this->addJsonOption()
             ->addOption(
                 name: 'dry-run',

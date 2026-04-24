@@ -80,6 +80,7 @@ final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInter
     protected function configure(): void
     {
         $this->setHelp('This command ensures the consumer repository contains linked Fast Forward skills by creating symlinks to the packaged skills and removing broken links.');
+
         $this->addJsonOption();
     }
 

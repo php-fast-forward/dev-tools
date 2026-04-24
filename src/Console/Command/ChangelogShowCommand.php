@@ -63,6 +63,7 @@ final class ChangelogShowCommand extends BaseCommand implements LoggerAwareComma
     protected function configure(): void
     {
         $this->setHelp('This command renders the body of one released changelog section so it can be reused for GitHub release notes.');
+
         $this->addJsonOption()
             ->addArgument(
                 name: 'version',

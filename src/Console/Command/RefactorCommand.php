@@ -79,6 +79,7 @@ final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInt
     protected function configure(): void
     {
         $this->setHelp('This command runs Rector to refactor your code.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'progress',

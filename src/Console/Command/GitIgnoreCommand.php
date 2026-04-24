@@ -88,6 +88,7 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
     protected function configure(): void
     {
         $this->setHelp("This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.");
+
         $this->addJsonOption()
             ->addOption(
                 name: 'source',

@@ -61,6 +61,7 @@ final class ChangelogCheckCommand extends BaseCommand implements LoggerAwareComm
     protected function configure(): void
     {
         $this->setHelp('This command validates the current Unreleased section and may compare it against a base git reference to enforce pull request changelog updates.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'against',

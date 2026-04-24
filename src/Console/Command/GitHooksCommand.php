@@ -71,6 +71,7 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
     protected function configure(): void
     {
         $this->setHelp('This command copies packaged Git hooks into the current repository.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'source',

@@ -71,6 +71,7 @@ final class CopyResourceCommand extends BaseCommand implements LoggerAwareComman
     protected function configure(): void
     {
         $this->setHelp('This command copies a configured source file or every file in a source directory into the target path.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'source',

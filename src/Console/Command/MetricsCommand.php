@@ -72,6 +72,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
     protected function configure(): void
     {
         $this->setHelp('This command runs PhpMetrics to analyze the current working directory.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'progress',

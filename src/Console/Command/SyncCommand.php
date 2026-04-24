@@ -63,6 +63,7 @@ final class SyncCommand extends BaseCommand implements LoggerAwareCommandInterfa
     protected function configure(): void
     {
         $this->setHelp('This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS, funding metadata, wiki, git metadata, packaged skills, packaged agents, license, and Git hooks.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'overwrite',

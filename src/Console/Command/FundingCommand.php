@@ -79,6 +79,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
     protected function configure(): void
     {
         $this->setHelp('This command merges supported funding entries across composer.json and .github/FUNDING.yml while preserving unsupported providers.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'composer-file',

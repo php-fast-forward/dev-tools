@@ -67,6 +67,7 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
     protected function configure(): void
     {
         $this->setHelp('This command infers CODEOWNERS entries from composer.json metadata, falls back to a commented template, and supports drift-aware preview and overwrite flows.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'file',

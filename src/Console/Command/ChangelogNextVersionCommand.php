@@ -62,6 +62,7 @@ final class ChangelogNextVersionCommand extends BaseCommand implements LoggerAwa
     protected function configure(): void
     {
         $this->setHelp('This command inspects Unreleased changelog categories and prints the next semantic version inferred from the current changelog state.');
+
         $this->addJsonOption()
             ->addOption(
                 name: 'file',
