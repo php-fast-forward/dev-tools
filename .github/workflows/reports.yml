@@ -194,12 +194,56 @@ jobs:
                   /coverage/|Preview coverage report
                   /metrics/|Preview metrics report
 
+    validate_main_reports_html:
+        if: (github.event_name == 'push' || github.event_name == 'workflow_dispatch') && !(github.event_name == 'workflow_dispatch' && inputs.cleanup-previews)
+        name: Validate Main Reports HTML
+        needs: verify_main_reports
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout published reports
+              uses: actions/checkout@v6
+              with:
+                ref: gh-pages
+                path: gh-pages
+
+            - name: Exclude pull request previews from main validation
+              run: rm -rf gh-pages/previews
+
+            - name: Validate published main reports HTML
+              uses: anishathalye/proof-html@v2
+              with:
+                directory: ./gh-pages
+                disable_external: true
+                check_external_hash: false
+
+    validate_preview_reports_html:
+        if: github.event_name == 'pull_request' && github.event.action != 'closed'
+        name: Validate Pull Request Reports HTML
+        needs: verify_preview_reports
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout published reports
+              uses: actions/checkout@v6
+              with:
+                ref: gh-pages
+                path: gh-pages
+
+            - name: Validate published preview reports HTML
+              uses: anishathalye/proof-html@v2
+              with:
+                directory: ./gh-pages/previews/pr-${{ github.event.pull_request.number }}
+                disable_external: true
+                check_external_hash: false
+
     comment_preview:
         if: github.event_name == 'pull_request' && github.event.action != 'closed'
         name: Comment Pull Request Preview URLs
         needs:
             - reports
             - verify_preview_reports
+            - validate_preview_reports_html
         runs-on: ubuntu-latest
         permissions:
             pull-requests: write
@@ -299,6 +343,8 @@ jobs:
             - reports
             - verify_main_reports
             - verify_preview_reports
+            - validate_main_reports_html
+            - validate_preview_reports_html
             - cleanup_preview
             - cleanup_orphaned_previews
         runs-on: ubuntu-latest
@@ -325,7 +371,9 @@ jobs:
                   echo "- PHP version source: \`${{ needs.resolve_php.outputs.php-version-source }}\`"
                   echo "- Reports job result: \`${{ needs.reports.result }}\`"
                   echo "- Main verification result: \`${{ needs.verify_main_reports.result }}\`"
+                  echo "- Main HTML validation result: \`${{ needs.validate_main_reports_html.result }}\`"
                   echo "- Preview verification result: \`${{ needs.verify_preview_reports.result }}\`"
+                  echo "- Preview HTML validation result: \`${{ needs.validate_preview_reports_html.result }}\`"
                   echo "- Closed-preview cleanup result: \`${{ needs.cleanup_preview.result }}\`"
                   echo "- Orphan cleanup result: \`${{ needs.cleanup_orphaned_previews.result }}\`"
                   echo "- Trigger: \`${TRIGGER_LABEL}\`"
@@ -335,6 +383,7 @@ jobs:
                     echo "- Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/coverage/"
                     echo "- Metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/metrics/"
                     echo "- Deployment verification: \`${{ needs.verify_main_reports.result }}\`"
+                    echo "- HTML validation: \`${{ needs.validate_main_reports_html.result }}\`"
                   fi
 
                   if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.event.action }}" != "closed" ]; then
@@ -342,6 +391,7 @@ jobs:
                     echo "- Preview coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/"
                     echo "- Preview metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/metrics/"
                     echo "- Preview verification: \`${{ needs.verify_preview_reports.result }}\`"
+                    echo "- Preview HTML validation: \`${{ needs.validate_preview_reports_html.result }}\`"
                   fi
 
                   if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.event.action }}" = "closed" ]; then

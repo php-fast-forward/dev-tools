@@ -71,7 +71,8 @@ How GitHub Pages Publishing Works
 ---------------------------------
 
 - ``.github/workflows/reports.yml`` runs ``composer dev-tools reports``.
-- The workflow delegates repeated GitHub Pages tasks to
+- The workflow verifies published URLs, validates published HTML with
+  ``proof-html``, and delegates repeated GitHub Pages tasks to
   ``.github/actions/github-pages/*`` instead of keeping that shell logic inline.
 - Pull requests publish previews under ``previews/pr-<number>/``.
 - On the ``main`` branch, GitHub Pages serves the generated site from the root
