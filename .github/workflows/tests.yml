@@ -13,6 +13,11 @@ on:
                 required: false
                 type: number
                 default: -1
+            publish-required-statuses:
+                description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
+                required: false
+                type: boolean
+                default: false
     workflow_dispatch:
         inputs:
             min-coverage:
@@ -25,6 +30,11 @@ on:
                 required: false
                 type: number
                 default: -1
+            publish-required-statuses:
+                description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
+                required: false
+                type: boolean
+                default: false
     pull_request:
         types: [opened, synchronize, reopened]
     push:
@@ -32,6 +42,7 @@ on:
 
 permissions:
     contents: read
+    statuses: write
 
 concurrency:
     group: ${{ github.event_name == 'pull_request' && format('tests-pr-{0}', github.event.pull_request.number) || format('tests-{0}', github.ref) }}
@@ -168,3 +179,35 @@ jobs:
                   - Dependency health `max-outdated`: `${{ inputs.max-outdated || -1 }}`
                   - Tests job result: `${{ needs.tests.result }}`
                   - Dependency health result: `${{ needs.dependency-health.result }}`
+
+    publish_required_statuses:
+        if: ${{ always() && inputs.publish-required-statuses }}
+        name: Publish Required Test Statuses
+        needs:
+            - tests
+        runs-on: ubuntu-latest
+        steps:
+            - name: Mirror required test matrix contexts
+              env:
+                GH_TOKEN: ${{ github.token }}
+                TARGET_SHA: ${{ github.sha }}
+                TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                TESTS_RESULT: ${{ needs.tests.result }}
+              run: |
+                if [ "${TESTS_RESULT}" = "success" ]; then
+                  state="success"
+                  description="Workflow-dispatched PHPUnit matrix passed."
+                else
+                  state="failure"
+                  description="Workflow-dispatched PHPUnit matrix result: ${TESTS_RESULT}."
+                fi
+
+                for context in "Run Tests (8.3)" "Run Tests (8.4)" "Run Tests (8.5)"; do
+                  gh api \
+                    --method POST \
+                    "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
+                    -f state="${state}" \
+                    -f context="${context}" \
+                    -f description="${description}" \
+                    -f target_url="${TARGET_URL}"
+                done
