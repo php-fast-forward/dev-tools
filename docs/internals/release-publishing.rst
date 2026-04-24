@@ -101,9 +101,14 @@ branch and fail when no meaningful ``Unreleased`` entry is added. Generated
 ``release/v...`` pull requests are excluded from that validation because the
 release-preparation flow intentionally empties ``Unreleased`` after promotion.
 Repositories that protect merges SHOULD require the workflow's aggregate
-``Changelog Validation`` context. That context fails when a normal pull request
-does not pass changelog validation and succeeds for release-preparation
-branches where the internal validation job is intentionally skipped.
+changelog context:
+
+- Direct workflow invocation: ``Changelog Validation``
+- Reusable workflow wrapper invocation: ``changelog / Changelog Validation``
+
+That context fails when a normal pull request does not pass changelog
+validation and succeeds for release-preparation branches where the internal
+validation job is intentionally skipped.
 
 If maintainers must recover the release manually, create the tag from the
 verified ``main`` commit:

@@ -134,12 +134,13 @@ enabled. The dispatched run publishes the same required ``Run Tests`` contexts
 for the release PR head, which lets branch protection evaluate the final
 workflow-managed release commit without a maintainer bypass.
 
-Changelog validation has its own branch-protection-safe aggregate context. Use
-``Changelog Validation`` as the required check instead of the internal
-``Validate PR Changelog`` job. The internal validation job is skipped for
-``release/v...`` branches by design, while the aggregate job still reports
-success for release-preparation pull requests and failure for normal pull
-requests whose changelog validation did not pass.
+Changelog validation has its own branch-protection-safe aggregate context.
+For direct workflow runs, use ``Changelog Validation``. For consumers of the
+reusable workflow wrapper, use the namespaced check name ``changelog / Changelog
+Validation`` instead of the internal ``changelog / Validate PR Changelog`` job.
+The internal validation job is skipped for ``release/v...`` branches by design, while
+the aggregate job still reports success for release-preparation pull requests and
+failure for normal pull requests whose changelog validation did not pass.
 
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
