@@ -411,6 +411,7 @@
         <ul>
             <li class="success">Filter will remove configured paths even with slash variants</li>
             <li class="success">Filter will preserve original candidate order</li>
+            <li class="success">Filter will keep nested candidates when parent path is configured</li>
         </ul>
         <h2>File Diff (FastForward\DevTools\Tests\Resource\FileDiff)</h2>
         <ul>
@@ -586,6 +587,7 @@
             <li class="success">Merge will preserve custom entries</li>
             <li class="success">Merge will deduplicate existing and generated entries</li>
             <li class="success">Merge will remove existing export ignore rules for kept paths</li>
+            <li class="success">Merge will remove nested export ignore rules when parent path is kept</li>
             <li class="success">Merge will sort export ignore entries with directories before files</li>
             <li class="success">Merge will preserve comments</li>
             <li class="success">Merge will normalize whitespace in existing entries</li>
@@ -806,6 +808,7 @@
             <li class="success">Write will align attribute columns using the longest path spec</li>
             <li class="success">Write will respect escaped whitespace inside the path spec</li>
             <li class="success">Write will preserve empty lines</li>
+            <li class="success">Write will not add an extra blank line when content already ends with a line feed</li>
             <li class="success">Write will normalize multiple spaces</li>
             <li class="success">Write will preserve comments</li>
             <li class="success">Write will handle multiple spaces between path and attribute</li>

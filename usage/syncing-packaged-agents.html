@@ -2908,7 +2908,7 @@ directory aligned with the packaged project-agent prompts shipped inside
     <p>Fast Forward libraries can share role-based project agents without copying
 prompt files into every consumer repository. The packaged agent directories
 live in this repository, while consumer repositories receive lightweight
-symlinks that point back to the packaged source.</p>
+repository-relative symlinks that point back to the packaged source.</p>
 
             
     <p>That approach keeps upgrades simple:</p>
@@ -2954,7 +2954,8 @@ vendor/bin/dev-tools agents</code></pre>
     </tr>
     <tr>
             <td>A packaged agent is missing locally</td>
-            <td>Creates a symlink that points to the packaged agent directory.</td>
+            <td>Creates a repository-relative symlink that points to the packaged
+agent directory.</td>
     </tr>
     <tr>
             <td>A valid symlink already exists</td>

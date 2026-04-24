@@ -2907,8 +2907,8 @@ directory aligned with the skills shipped inside
             
     <p>Fast Forward libraries can share agent skills without copying them into every
 consumer repository. The packaged skill directories live in this repository,
-while consumer repositories receive lightweight symlinks that point back to the
-packaged source.</p>
+while consumer repositories receive lightweight repository-relative symlinks
+that point back to the packaged source.</p>
 
             
     <p>That approach keeps upgrades simple:</p>
@@ -2954,7 +2954,8 @@ vendor/bin/dev-tools skills</code></pre>
     </tr>
     <tr>
             <td>A packaged skill is missing locally</td>
-            <td>Creates a symlink that points to the packaged skill directory.</td>
+            <td>Creates a repository-relative symlink that points to the packaged skill
+directory.</td>
     </tr>
     <tr>
             <td>A valid symlink already exists</td>

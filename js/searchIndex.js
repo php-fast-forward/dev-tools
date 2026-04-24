@@ -3346,6 +3346,11 @@ Search.appendIndex(
             "summary": "Filters\u0020export\u002Dignore\u0020candidates\u0020using\u0020the\u0020configured\u0020keep\u002Din\u002Dexport\u0020paths.",
             "url": "classes/FastForward-DevTools-GitAttributes-ExportIgnoreFilter.html#method_filter"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilter\u003A\u003AisKeptPath\u0028\u0029",
+            "name": "isKeptPath",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-GitAttributes-ExportIgnoreFilter.html#method_isKeptPath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\GitAttributes\\ExportIgnoreFilter\u003A\u003AnormalizePath\u0028\u0029",
             "name": "normalizePath",
             "summary": "Normalizes\u0020a\u0020configured\u0020path\u0020for\u0020stable\u0020matching.",
@@ -3380,6 +3385,11 @@ Search.appendIndex(
             "name": "keepInExportLookup",
             "summary": "Builds\u0020a\u0020lookup\u0020table\u0020for\u0020paths\u0020that\u0020MUST\u0020stay\u0020in\u0020the\u0020exported\u0020archive.",
             "url": "classes/FastForward-DevTools-GitAttributes-Merger.html#method_keepInExportLookup"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Merger\u003A\u003AisKeptPath\u0028\u0029",
+            "name": "isKeptPath",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-GitAttributes-Merger.html#method_isKeptPath"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Merger\u003A\u003AgeneratedDirectoryLookup\u0028\u0029",
             "name": "generatedDirectoryLookup",
