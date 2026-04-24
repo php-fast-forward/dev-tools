@@ -8,7 +8,12 @@ inputs:
     default: ''
   from-status:
     description: Source project status name.
-    required: true
+    required: false
+    default: ''
+  from-statuses:
+    description: Comma-separated source project status names.
+    required: false
+    default: ''
   to-status:
     description: Destination project status name.
     required: true
@@ -17,13 +22,26 @@ inputs:
     required: false
     default: 'false'
 
+outputs:
+  moved-count:
+    description: Number of project items moved to the destination status.
+    value: ${{ steps.transition.outputs.moved-count }}
+  skipped-count:
+    description: Number of project items inspected but not moved.
+    value: ${{ steps.transition.outputs.skipped-count }}
+  source-statuses:
+    description: Comma-separated source statuses used for the transition.
+    value: ${{ steps.transition.outputs.source-statuses }}
+
 runs:
   using: composite
   steps:
-    - uses: actions/github-script@v8
+    - id: transition
+      uses: actions/github-script@v8
       env:
         INPUT_PROJECT: ${{ inputs.project }}
         INPUT_FROM_STATUS: ${{ inputs.from-status }}
+        INPUT_FROM_STATUSES: ${{ inputs.from-statuses }}
         INPUT_TO_STATUS: ${{ inputs.to-status }}
         INPUT_INCLUDE_CURRENT_PULL_REQUEST: ${{ inputs.include-current-pull-request }}
       with:

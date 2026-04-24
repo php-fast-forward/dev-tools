@@ -279,7 +279,11 @@ Maintenance Workflows
     *   Promotes approved pull requests into ``Ready to Merge``.
     *   Moves merged pull requests and linked issues into ``Merged``.
     *   Moves all currently ``Merged`` work into ``Release Prepared`` when ``changelog.yml`` opens or updates a release-preparation pull request.
-    *   Promotes all ``Release Prepared`` work into ``Released`` when the release-preparation pull request is merged and the GitHub release is published.
+    *   Promotes ``Release Prepared`` work into ``Released`` when the
+        release-preparation pull request is merged and the GitHub release is
+        published, and also promotes any remaining ``Merged`` items as a
+        release-publication safety net when the preparation transition did not
+        run.
     *   Uses the built-in workflow token for project updates.
 *   **Label Sync**: Synchronizes repository labels with ecosystem standards.
 
