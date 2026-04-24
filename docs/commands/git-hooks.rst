@@ -11,6 +11,8 @@ The ``git-hooks`` command installs the hook templates maintained in
 
 1. Copies hook files from a source directory to the target hooks directory
 2. Sets executable permissions on copied hooks
+3. Replaces drifted hooks defensively by removing the previous target before
+   recopying it
 
 Usage
 -----
@@ -43,6 +45,11 @@ Options
 
 ``--interactive``
    Prompt before replacing a drifted Git hook.
+
+When a hook still cannot be rewritten because the target remains locked or
+unwritable, the command logs a clear error for that hook, continues processing
+the remaining hooks, and exits non-zero so ``dev-tools:sync`` reports the hook
+install problem clearly instead of aborting mid-copy.
 
 ``--json``
    Emit a structured machine-readable payload instead of the normal terminal
@@ -77,4 +84,5 @@ Exit Codes
    * - 0
      - Success. Hooks installed successfully.
    * - 1
-     - Failure. Copy error.
+     - Failure. Drift detected in ``--check`` mode or one or more hooks could
+       not be rewritten automatically.

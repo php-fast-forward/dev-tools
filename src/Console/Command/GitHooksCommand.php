@@ -31,6 +31,7 @@ use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -129,7 +130,8 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
             ->files()
             ->in($sourcePath);
 
-        $status = self::SUCCESS;
+        $checkFailure = false;
+        $installFailure = false;
 
         foreach ($files as $file) {
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
@@ -180,7 +182,7 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
                 }
 
                 if ($check) {
-                    $status = self::FAILURE;
+                    $checkFailure = true;
 
                     continue;
                 }
@@ -203,8 +205,11 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
                 }
             }
 
-            $this->filesystem->copy($file->getRealPath(), $hookPath, $overwrite || $interactive);
-            $this->filesystem->chmod($hookPath, 755, 0o755);
+            if (! $this->installHook($file->getRealPath(), $hookPath, $overwrite || $interactive, $input)) {
+                $installFailure = true;
+
+                continue;
+            }
 
             $this->success(
                 'Installed {hook_name} hook.',
@@ -216,9 +221,20 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
             );
         }
 
-        if (self::FAILURE === $status) {
+        if ($checkFailure) {
             return $this->failure(
                 'One or more Git hooks require synchronization updates.',
+                $input,
+                [
+                    'target' => $targetPath,
+                ],
+                $targetPath,
+            );
+        }
+
+        if ($installFailure) {
+            return $this->failure(
+                'One or more Git hooks could not be installed automatically.',
                 $input,
                 [
                     'target' => $targetPath,
@@ -247,5 +263,43 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
     {
         return $this->getIO()
             ->askConfirmation(\sprintf('Replace drifted Git hook %s? [y/N] ', $hookPath), false);
+    }
+
+    /**
+     * Installs a single hook and rewrites drifted targets defensively.
+     *
+     * @param string $sourcePath the packaged hook path
+     * @param string $hookPath the target repository hook path
+     * @param bool $replaceExisting whether an existing hook SHOULD be removed first
+     * @param InputInterface $input the originating command input
+     *
+     * @return bool true when the hook was installed successfully
+     */
+    private function installHook(string $sourcePath, string $hookPath, bool $replaceExisting, InputInterface $input): bool
+    {
+        try {
+            if ($replaceExisting && $this->filesystem->exists($hookPath)) {
+                $this->filesystem->remove($hookPath);
+            }
+
+            $this->filesystem->copy($sourcePath, $hookPath, false);
+            $this->filesystem->chmod(files: $hookPath, mode: 0o755);
+
+            return true;
+        } catch (IOExceptionInterface $exception) {
+            $this->logger->error(
+                'Failed to install {hook_name} hook automatically. Remove or unlock {hook_path} and rerun git-hooks.',
+                [
+                    'input' => $input,
+                    'hook_name' => $this->filesystem->basename($hookPath),
+                    'hook_path' => $hookPath,
+                    'error' => $exception->getMessage(),
+                    'file' => $exception->getPath() ?? $hookPath,
+                    'line' => null,
+                ],
+            );
+
+            return false;
+        }
     }
 }

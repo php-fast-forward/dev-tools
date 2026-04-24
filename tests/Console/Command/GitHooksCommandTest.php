@@ -39,6 +39,7 @@ use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\Finder;
 
 use function Safe\mkdir;
@@ -164,9 +165,9 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn('/app/.git/hooks');
         $this->filesystem->exists('/app/.git/hooks/post-merge')
             ->willReturn(false);
-        $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', true)
+        $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', false)
             ->shouldBeCalledOnce();
-        $this->filesystem->chmod('/app/.git/hooks/post-merge', 755, 0o755)
+        $this->filesystem->chmod('/app/.git/hooks/post-merge', 0o755)
             ->shouldBeCalledOnce();
         $this->logger->log('info', 'Installed {hook_name} hook.', Argument::type('array'))
             ->shouldBeCalledOnce();
@@ -325,6 +326,97 @@ final class GitHooksCommandTest extends TestCase
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRemoveDriftedHookBeforeReplacingIt(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('resources/git-hooks');
+        $this->input->getOption('target')
+            ->willReturn('.git/hooks');
+        $this->input->getOption('no-overwrite')
+            ->willReturn(false);
+
+        $this->fileLocator->locate('resources/git-hooks')
+            ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
+        $this->filesystem->getAbsolutePath('.git/hooks')
+            ->willReturn('/app/.git/hooks');
+        $this->filesystem->exists('/app/.git/hooks/post-merge')
+            ->willReturn(true);
+        $this->fileDiffer->diff(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge')
+            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', null))
+            ->shouldBeCalledOnce();
+        $this->filesystem->remove('/app/.git/hooks/post-merge')
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', false)
+            ->shouldBeCalledOnce();
+        $this->filesystem->chmod('/app/.git/hooks/post-merge', 0o755)
+            ->shouldBeCalledOnce();
+        $this->logger->log('info', 'Installed {hook_name} hook.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+        $this->logger->log('info', 'Git hook synchronization completed successfully.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+
+        self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillReportInstallFailureWhenReplacementStillCannotBeWritten(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('resources/git-hooks');
+        $this->input->getOption('target')
+            ->willReturn('.git/hooks');
+        $this->input->getOption('no-overwrite')
+            ->willReturn(false);
+
+        $this->fileLocator->locate('resources/git-hooks')
+            ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
+        $this->filesystem->getAbsolutePath('.git/hooks')
+            ->willReturn('/app/.git/hooks');
+        $this->filesystem->exists('/app/.git/hooks/post-merge')
+            ->willReturn(true);
+        $this->fileDiffer->diff(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge')
+            ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', null))
+            ->shouldBeCalledOnce();
+        $this->filesystem->remove('/app/.git/hooks/post-merge')
+            ->shouldBeCalledOnce();
+        $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', false)
+            ->willThrow(new IOException('Target file could not be opened for writing.', 0, null, '/app/.git/hooks/post-merge'))
+            ->shouldBeCalledOnce();
+        $this->filesystem->basename('/app/.git/hooks/post-merge')
+            ->willReturn('post-merge')
+            ->shouldBeCalledOnce();
+        $this->logger->error(
+            'Failed to install {hook_name} hook automatically. Remove or unlock {hook_path} and rerun git-hooks.',
+            Argument::that(
+                static fn(array $context): bool => $context['input'] instanceof InputInterface
+                    && 'post-merge' === $context['hook_name']
+                    && '/app/.git/hooks/post-merge' === $context['hook_path']
+                    && '/app/.git/hooks/post-merge' === $context['file']
+                    && null === $context['line']
+                    && str_contains($context['error'], 'Target file could not be opened for writing.')
+            ),
+        )->shouldBeCalledOnce();
+        $this->logger->error('One or more Git hooks could not be installed automatically.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+        $this->filesystem->chmod(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        self::assertSame(GitHooksCommand::FAILURE, $this->executeCommand());
     }
 
     /**

@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Keep packaged `.agents` payloads exportable and synchronize packaged skills and agents with repository-relative symlink targets so consumer repositories no longer receive broken absolute machine paths (#188)
+- Rewrite drifted Git hooks by removing the previous target first, restore the intended `0o755` executable mode, and report unwritable hook replacements cleanly when `.git/hooks` stays locked (#190)
 
 ## [1.20.0] - 2026-04-23
 
