@@ -26,6 +26,9 @@ pull request.
   warranted.
 - Open or update the pull request with a clear title, summary, and verification
   notes.
+- Read the published pull-request body back from GitHub and fix literal
+  escaped Markdown control characters, such as `\n`, before reporting the PR
+  as ready.
 
 ## Use When
 

@@ -11,8 +11,8 @@ on:
             max-outdated:
                 description: Maximum number of outdated packages allowed by the dependencies command.
                 required: false
-                type: number
-                default: -1
+                type: string
+                default: '-1'
             publish-required-statuses:
                 description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
                 required: false
@@ -28,8 +28,8 @@ on:
             max-outdated:
                 description: Maximum number of outdated packages allowed by the dependencies command.
                 required: false
-                type: number
-                default: -1
+                type: string
+                default: '-1'
             publish-required-statuses:
                 description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
                 required: false

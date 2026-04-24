@@ -60,6 +60,20 @@ Examples:
 - Create a draft PR when the user explicitly wants review before finalization or when you still need external confirmation.
 - Create a ready PR when verification is complete and the change is ready for review.
 
+## Published Body Readback
+
+After creating or updating the PR body, read the published body back from
+GitHub before reporting the PR as ready.
+
+- Use `gh pr view <number> --json body --jq .body` or an equivalent
+  connector readback.
+- Confirm the body does not contain escaped Markdown control characters such
+  as literal `\n`, `\t`, or JSON-escaped list content.
+- If escaped control characters appear, update the body with a file or stdin
+  payload that preserves real newlines, then read it back again.
+- Treat the readback as part of PR publication, especially when the body was
+  assembled by shell command substitution, JSON output, or automation.
+
 ## Optional Follow-ups
 
 Apply only when the repository workflow or the user asks for them:

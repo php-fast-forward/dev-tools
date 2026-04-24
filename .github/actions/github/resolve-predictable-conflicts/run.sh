@@ -67,7 +67,7 @@ dispatch_required_tests() {
         return 0
     fi
 
-    if gh workflow run tests.yml --ref "${head_ref}" -f max-outdated=-1 -f publish-required-statuses=true >/dev/null 2>&1; then
+    if gh workflow run tests.yml --ref "${head_ref}" -f publish-required-statuses=true >/dev/null 2>&1; then
         append_summary "  - tests dispatch requested with required status mirroring"
 
         return 0
