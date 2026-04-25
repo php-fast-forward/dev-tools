@@ -19,12 +19,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Funding;
 
-use Composer\Json\JsonFile;
-
-use function Safe\json_encode;
 use function Safe\parse_url;
 use function Safe\preg_match;
 use function array_values;
+use function Safe\json_decode;
+use function Safe\json_encode;
 use function trim;
 
 /**
@@ -41,7 +40,7 @@ final readonly class ComposerFundingCodec
      */
     public function parse(string $contents): FundingProfile
     {
-        $data = JsonFile::parseJson($contents);
+        $data = $this->decodeJsonContents($contents);
         $funding = $data['funding'] ?? [];
 
         if (! \is_array($funding)) {
@@ -120,7 +119,7 @@ final readonly class ComposerFundingCodec
             $entries[] = $unsupportedEntry;
         }
 
-        $data = JsonFile::parseJson($contents);
+        $data = $this->decodeJsonContents($contents);
         unset($data['funding']);
 
         if ([] === $entries) {
@@ -187,5 +186,19 @@ final readonly class ComposerFundingCodec
         }
 
         return $orderedData;
+    }
+
+    /**
+     * Decodes a Composer JSON payload to an array.
+     *
+     * @param string $contents the JSON source
+     *
+     * @return array<string, mixed> the decoded payload
+     */
+    private function decodeJsonContents(string $contents): array
+    {
+        $data = json_decode($contents, true, 512, \JSON_THROW_ON_ERROR);
+
+        return \is_array($data) ? $data : [];
     }
 }

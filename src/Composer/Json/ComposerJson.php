@@ -20,19 +20,16 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Composer\Json;
 
 use RuntimeException;
-use UnexpectedValueException;
-use Composer\Factory;
 use Composer\InstalledVersions;
-use Composer\Json\JsonFile;
 use DateTimeImmutable;
 use FastForward\DevTools\Composer\Json\Schema\Author;
 use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
 use FastForward\DevTools\Composer\Json\Schema\Funding;
 use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use UnderflowException;
-
-use function Safe\realpath;
+use function Safe\json_decode;
 
 /**
  * Represents a specialized reader for a Composer JSON file.
@@ -83,17 +80,17 @@ final class ComposerJson implements ComposerJsonInterface
      *                          default Composer file path SHALL be used.
      *
      * @throws RuntimeException when $path is'nt provided and COMPOSER environment variable is set to a directory
-     * @throws UnexpectedValueException when composer.json can't be parsed
+     * @throws RuntimeException when composer manifest files cannot be read or parsed
      */
     public function __construct(?string $path = null)
     {
-        $pathLocal = realpath(Factory::getComposerFile());
+        $pathLocal = WorkingProjectPathResolver::getProjectPath('composer.json');
 
         $path ??= $pathLocal;
         $installedJsonPath = \dirname($pathLocal) . '/vendor/composer/installed.json';
 
-        $this->data = (new JsonFile($path))->read();
-        $this->installed = (new JsonFile($installedJsonPath))->read();
+        $this->data = $this->readComposerJsonFile($path);
+        $this->installed = $this->readComposerInstalledManifest($installedJsonPath);
     }
 
     /**
@@ -206,7 +203,7 @@ final class ComposerJson implements ComposerJsonInterface
      */
     public function getTime(): ?DateTimeImmutable
     {
-        $packages = $this->installed['packages'];
+        $packages = $this->installed['packages'] ?? [];
 
         if (isset($packages[$this->getName()])) {
             return new DateTimeImmutable($packages[$this->getName()]['time']);
@@ -583,5 +580,61 @@ final class ComposerJson implements ComposerJsonInterface
         }
 
         return \is_array($comments) ? $comments : [];
+    }
+
+    /**
+     * Reads and decodes a composer manifest file.
+     *
+     * @param string $path the manifest path
+     *
+     * @return array<string, mixed> the parsed payload
+     */
+    private function readComposerJsonFile(string $path): array
+    {
+        if (! file_exists($path)) {
+            throw new RuntimeException(
+                \sprintf('Unable to read composer manifest file at path: %s', $path),
+            );
+        }
+
+        return $this->decodeJson($path);
+    }
+
+    /**
+     * Reads and decodes the composer installed manifest.
+     *
+     * @param string $path installed manifest path
+     *
+     * @return array<string, mixed> the parsed payload
+     */
+    private function readComposerInstalledManifest(string $path): array
+    {
+        if (! file_exists($path)) {
+            return [];
+        }
+
+        return $this->decodeJson($path);
+    }
+
+    /**
+     * Decodes a JSON file.
+     *
+     * @param string $path the file path
+     *
+     * @return array<string, mixed> the decoded payload
+     */
+    private function decodeJson(string $path): array
+    {
+        $contents = file_get_contents($path);
+
+        if (false === $contents) {
+            throw new RuntimeException(
+                \sprintf('Unable to read composer manifest file at path: %s', $path),
+            );
+        }
+
+        $data = json_decode($contents, true, 512, \JSON_THROW_ON_ERROR);
+
+        return \is_array($data) ? $data : [];
     }
 }
