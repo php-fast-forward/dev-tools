@@ -39,9 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class MUST NOT be modified through inheritance and SHALL streamline code validation workflows.
  */
 #[AsCommand(name: 'standards', description: 'Runs Fast Forward code standards checks.')]
-final class StandardsCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasCacheOption;
+final class StandardsCommand extends Command
+{    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

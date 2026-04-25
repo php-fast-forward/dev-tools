@@ -51,9 +51,8 @@ use function Safe\getcwd;
     name: 'gitattributes',
     description: 'Manages .gitattributes export-ignore rules for leaner package archives.'
 )]
-final class GitAttributesCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class GitAttributesCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     private const string FILENAME = '.gitattributes';

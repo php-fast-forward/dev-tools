@@ -48,9 +48,8 @@ use function Safe\getcwd;
     name: 'update-composer-json',
     description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.'
 )]
-final class UpdateComposerJsonCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class UpdateComposerJsonCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

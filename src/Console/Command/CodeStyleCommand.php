@@ -40,9 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'code-style',
     description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.'
 )]
-final class CodeStyleCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class CodeStyleCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

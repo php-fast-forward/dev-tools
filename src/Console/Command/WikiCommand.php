@@ -44,9 +44,8 @@ use function Safe\getcwd;
  * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
  */
 #[AsCommand(name: 'wiki', description: 'Generates API documentation in Markdown format.')]
-final class WikiCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasCacheOption;
+final class WikiCommand extends Command
+{    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

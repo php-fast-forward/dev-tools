@@ -45,9 +45,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * into Symfony Console output and process exit codes.
  */
 #[AsCommand(name: 'skills', description: 'Synchronizes Fast Forward skills into .agents/skills directory.')]
-final class SkillsCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class SkillsCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     private const string SKILLS_DIRECTORY = '.agents/skills';

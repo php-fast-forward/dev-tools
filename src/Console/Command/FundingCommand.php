@@ -44,9 +44,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'funding',
     description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.'
 )]
-final class FundingCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class FundingCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

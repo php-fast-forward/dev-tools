@@ -40,9 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'changelog:promote',
     description: 'Promotes Unreleased entries into a published changelog version.'
 )]
-final class ChangelogPromoteCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class ChangelogPromoteCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

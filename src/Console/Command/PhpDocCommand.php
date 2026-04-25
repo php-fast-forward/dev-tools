@@ -45,9 +45,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * The class MUST NOT be extended and SHALL coordinate tools like PHP-CS-Fixer and Rector.
  */
 #[AsCommand(name: 'phpdoc', description: 'Checks and fixes PHPDocs.')]
-final class PhpDocCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasCacheOption;
+final class PhpDocCommand extends Command
+{    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

@@ -47,9 +47,8 @@ use function Safe\getcwd;
  * command surface.
  */
 #[AsCommand(name: 'docs', description: 'Generates API documentation.')]
-final class DocsCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasCacheOption;
+final class DocsCommand extends Command
+{    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

@@ -37,9 +37,8 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'changelog:check',
     description: 'Checks whether a changelog file contains meaningful unreleased entries.'
 )]
-final class ChangelogCheckCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class ChangelogCheckCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

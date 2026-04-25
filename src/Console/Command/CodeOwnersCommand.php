@@ -38,9 +38,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Generates and synchronizes CODEOWNERS files from local project metadata.
  */
 #[AsCommand(name: 'codeowners', description: 'Generates .github/CODEOWNERS from local project metadata.')]
-final class CodeOwnersCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class CodeOwnersCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

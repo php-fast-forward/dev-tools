@@ -35,9 +35,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use function rtrim;
 
 #[AsCommand(name: 'metrics', description: 'Analyzes code metrics with PhpMetrics.')]
-final class MetricsCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class MetricsCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

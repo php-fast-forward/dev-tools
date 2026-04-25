@@ -39,9 +39,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class MUST NOT be overridden and SHALL securely combine docs and testing commands.
  */
 #[AsCommand(name: 'reports', description: 'Generates the frontpage for Fast Forward documentation.')]
-final class ReportsCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasCacheOption;
+final class ReportsCommand extends Command
+{    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

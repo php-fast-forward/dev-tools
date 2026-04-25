@@ -38,9 +38,8 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'changelog:next-version',
     description: 'Infers the next semantic version from the Unreleased changelog section.'
 )]
-final class ChangelogNextVersionCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class ChangelogNextVersionCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

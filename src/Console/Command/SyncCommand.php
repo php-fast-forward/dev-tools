@@ -40,9 +40,8 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, CODEOWNERS, .editorconfig, and .gitattributes in the root project.',
     aliases: ['dev-tools:sync', 'sync'],
 )]
-final class SyncCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class SyncCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

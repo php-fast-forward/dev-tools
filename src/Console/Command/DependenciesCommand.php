@@ -47,9 +47,8 @@ use function is_numeric;
     description: 'Analyzes missing, unused, misplaced, and outdated Composer dependencies.',
     aliases: ['deps']
 )]
-final class DependenciesCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class DependenciesCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';

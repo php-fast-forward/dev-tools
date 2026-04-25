@@ -47,9 +47,8 @@ use function is_numeric;
  * This class MUST NOT be overridden and SHALL configure testing parameters dynamically.
  */
 #[AsCommand(name: 'tests', description: 'Runs PHPUnit tests.')]
-final class TestsCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasCacheOption;
+final class TestsCommand extends Command
+{    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

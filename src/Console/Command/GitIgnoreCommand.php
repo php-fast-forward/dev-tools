@@ -47,9 +47,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * to the canonical and project .gitignore files respectively.
  */
 #[AsCommand(name: 'gitignore', description: 'Merges and synchronizes .gitignore files.')]
-final class GitIgnoreCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class GitIgnoreCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

@@ -40,9 +40,8 @@ use Symfony\Component\Filesystem\Path;
  * Installs packaged Git hooks for the consumer repository.
  */
 #[AsCommand(name: 'git-hooks', description: 'Installs Fast Forward Git hooks.')]
-final class GitHooksCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class GitHooksCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**

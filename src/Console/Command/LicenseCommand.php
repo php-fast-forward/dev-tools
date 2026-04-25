@@ -40,7 +40,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * license is declared in composer.json.
  */
 #[AsCommand(name: 'license', description: 'Generates a LICENSE file from composer.json license information.')]
-final class LicenseCommand extends Command implements LoggerAwareCommandInterface
+final class LicenseCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;

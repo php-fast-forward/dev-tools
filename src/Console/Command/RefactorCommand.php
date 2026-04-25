@@ -37,9 +37,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class MUST NOT be extended and SHALL encapsulate the logic for Rector invocation.
  */
 #[AsCommand(name: 'refactor', description: 'Runs Rector for code refactoring.', aliases: ['rector'])]
-final class RefactorCommand extends Command implements LoggerAwareCommandInterface
-{
-    use HasJsonOption;
+final class RefactorCommand extends Command
+{    use HasJsonOption;
     use LogsCommandResults;
 
     /**
