@@ -7,14 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.22.3] - 2026-04-25
+
 ### Fixed
 
 - Add a branch-protection-safe changelog validation context that fails normal
-  pull requests when changelog validation fails while still passing release
-  preparation branches where validation is intentionally skipped.
 - Teach pull-request publication guidance to read the published PR body back
-  from GitHub and fix literal escaped Markdown control characters before
-  handing the PR off for review.
 - Keep workflow-dispatched test runs from failing before job creation by treating `max-outdated` as a string input and relying on the workflow default when release, wiki, or conflict automation dispatches required test status mirroring.
 
 ## [1.22.2] - 2026-04-24
@@ -354,7 +352,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.2...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.3...HEAD
+[1.22.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.2...v1.22.3
 [1.22.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.1...v1.22.2
 [1.22.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.0...v1.22.1
 [1.22.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.21.0...v1.22.0
