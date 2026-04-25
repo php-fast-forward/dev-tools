@@ -21,7 +21,9 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 
 use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
+use FastForward\DevTools\Console\Command\ProxyCommand;
 use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Console\DevToolsComposer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -42,6 +44,8 @@ final class DevToolsCommandProviderTest extends TestCase
 
     private ObjectProphecy $devTools;
 
+    private ObjectProphecy $devToolsComposer;
+
     private DevToolsCommandProvider $commandProvider;
 
     /**
@@ -51,18 +55,26 @@ final class DevToolsCommandProviderTest extends TestCase
     {
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->devTools = $this->prophesize(DevTools::class);
+        $this->devToolsComposer = $this->prophesize(DevToolsComposer::class);
 
         $this->container->get(DevTools::class)
             ->willReturn($this->devTools->reveal())
             ->shouldBeCalledOnce();
+        $this->container->get(DevToolsComposer::class)
+            ->willReturn($this->devToolsComposer->reveal())
+            ->shouldBeCalledOnce();
 
         $this->devTools->all()
+            ->willReturn([])->shouldBeCalledOnce();
+        $this->devToolsComposer->all()
             ->willReturn([])->shouldBeCalledOnce();
 
         $this->commandProvider = new DevToolsCommandProvider();
 
         $property = new ReflectionProperty(DevTools::class, 'container');
         $property->setValue(null, $this->container->reveal());
+        $propertyComposer = new ReflectionProperty(DevToolsComposer::class, 'container');
+        $propertyComposer->setValue(null, $this->container->reveal());
     }
 
     /**
@@ -83,16 +95,85 @@ final class DevToolsCommandProviderTest extends TestCase
     #[Test]
     public function getCommandsWillReturnRegisteredBaseCommands(): void
     {
-        $composerCommand = $this->prophesize(BaseCommand::class)->reveal();
-        $symfonyCommand = $this->prophesize(Command::class)->reveal();
+        $composerCommand = new class extends BaseCommand {
+            public function __construct()
+            {
+                parent::__construct('legacy');
+            }
+
+            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
+            {
+                return self::SUCCESS;
+            }
+        };
+        $symfonyCommand = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('agents');
+            }
+
+            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
+            {
+                return self::SUCCESS;
+            }
+        };
 
         $this->devTools->all()
-            ->willReturn([$composerCommand, $symfonyCommand])->shouldBeCalledOnce();
+            ->willReturn([$symfonyCommand])->shouldBeCalledOnce();
+        $this->devToolsComposer->all()
+            ->willReturn([$composerCommand])->shouldBeCalledOnce();
 
         $commands = $this->commandProvider->getCommands();
 
         self::assertIsArray($commands);
-        self::assertCount(1, $commands);
+        self::assertCount(2, $commands);
         self::assertSame($composerCommand, $commands[0]);
+        self::assertInstanceOf(ProxyCommand::class, $commands[1]);
+        self::assertSame('agents', $commands[1]->getName());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommandsWillSkipLegacyReservedSymfonyAliases(): void
+    {
+        $legacyCommand = new class extends BaseCommand {
+            public function __construct()
+            {
+                parent::__construct('migrated');
+            }
+
+            public function getAliases(): array
+            {
+                return ['agents-alias'];
+            }
+
+            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
+            {
+                return self::SUCCESS;
+            }
+        };
+        $symfonyCommand = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('migrated');
+            }
+
+            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
+            {
+                return self::SUCCESS;
+            }
+        };
+
+        $this->devTools->all()
+            ->willReturn([$symfonyCommand])->shouldBeCalledOnce();
+        $this->devToolsComposer->all()
+            ->willReturn([$legacyCommand])->shouldBeCalledOnce();
+
+        $commands = $this->commandProvider->getCommands();
+
+        self::assertCount(1, $commands);
+        self::assertSame($legacyCommand, $commands[0]);
     }
 }

@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\CommandLoader;
 
 use ArrayIterator;
-use FastForward\DevTools\Console\Command\CodeStyleCommand;
+use FastForward\DevTools\Console\Command\AgentsCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -36,7 +36,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 #[CoversClass(DevToolsCommandLoader::class)]
-#[UsesClass(CodeStyleCommand::class)]
+#[UsesClass(AgentsCommand::class)]
 final class DevToolsCommandLoaderTest extends TestCase
 {
     use ProphecyTrait;
@@ -90,16 +90,47 @@ final class DevToolsCommandLoaderTest extends TestCase
             ->shouldBeCalled();
         $this->finder->getIterator()
             ->willReturn(new ArrayIterator([
-                new SplFileInfo($commandDirectory . '/CodeStyleCommand.php', '', 'CodeStyleCommand.php'),
+                new SplFileInfo($commandDirectory . '/AgentsCommand.php', '', 'AgentsCommand.php'),
             ]))->shouldBeCalled();
 
-        $this->container->has(CodeStyleCommand::class)->willReturn(true)->shouldBeCalled();
-        $this->container->get(CodeStyleCommand::class)->willReturn($command->reveal())->shouldBeCalled();
+        $this->container->has(AgentsCommand::class)->willReturn(true)->shouldBeCalled();
+        $this->container->get(AgentsCommand::class)->willReturn($command->reveal())->shouldBeCalled();
 
         $loader = new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
 
-        self::assertTrue($loader->has('code-style'));
-        self::assertSame($command->reveal(), $loader->get('code-style'));
+        self::assertTrue($loader->has('agents'));
+        self::assertSame($command->reveal(), $loader->get('agents'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function constructorWillSkipLegacyBaseCommands(): void
+    {
+        $commandDirectory = \dirname(__DIR__, 3) . '/src/Console/Command';
+
+        $this->finderFactory->create()
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalledOnce();
+        $this->finder->files()
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->in(Argument::type('string'))->willReturn($this->finder->reveal())->shouldBeCalled();
+        $this->finder->notPath('Traits')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->name('*.php')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->getIterator()
+            ->willReturn(new ArrayIterator([
+                new SplFileInfo($commandDirectory . '/CodeStyleCommand.php', '', 'CodeStyleCommand.php'),
+            ]))->shouldBeCalled();
+
+        $loader = new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
+
+        self::assertFalse($loader->has('code-style'));
     }
 
     /**

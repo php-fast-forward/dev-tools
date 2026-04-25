@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\CommandLoader;
 
+use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -35,6 +36,7 @@ use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
  * console commands and SHALL only register classes that:
  * - Are instantiable
  * - Extend the Symfony\Component\Console\Command\Command base class
+ * - Are not Composer\Command\BaseCommand-based command implementations
  * - Declare the Symfony\Component\Console\Attribute\AsCommand attribute
  *
  * The command name MUST be extracted from the AsCommand attribute metadata and
@@ -53,9 +55,9 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
      * @param FinderFactoryInterface $finderFactory
      * @param ContainerInterface $container
      */
-    public function __construct(FinderFactoryInterface $finderFactory, ContainerInterface $container)
+    public function __construct(FinderFactoryInterface $finderFactory, ContainerInterface $container, bool $skipLegacyBaseCommands = false)
     {
-        parent::__construct($container, $this->getCommandMap($finderFactory));
+        parent::__construct($container, $this->getCommandMap($finderFactory, $skipLegacyBaseCommands));
     }
 
     /**
@@ -65,7 +67,7 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
      *
      * @return array
      */
-    private function getCommandMap(FinderFactoryInterface $finderFactory): array
+    private function getCommandMap(FinderFactoryInterface $finderFactory, bool $skipLegacyBaseCommands): array
     {
         $commandMap = [];
 
@@ -86,6 +88,10 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
             }
 
             if (! $reflection->isSubclassOf(Command::class)) {
+                continue;
+            }
+
+            if ($skipLegacyBaseCommands && $reflection->isSubclassOf(BaseCommand::class)) {
                 continue;
             }
 

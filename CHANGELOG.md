@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add a hybrid command runtime bootstrap and capability bridge that keeps command discovery split between migrated Symfony commands (`DevTools`) and legacy Composer `BaseCommand` commands (`DevToolsComposer`) while exposing proxy commands during Composer execution for the first migration step (#199)
+
 ## [1.22.3] - 2026-04-25
 
 ### Fixed

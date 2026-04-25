@@ -19,32 +19,26 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console;
 
+use Composer\Console\Application;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use DI\Container;
 use Psr\Container\ContainerInterface;
 use ReflectionMethod;
-use Symfony\Component\Console\Application;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
 /**
- * Wraps the fast-forward console tooling suite conceptually as an isolated application instance.
- * Extending the base application, it MUST provide default command injections safely.
+ * Legacy composer-backed application that exposes non-migrated BaseCommand commands.
  */
-final class DevTools extends Application
+final class DevToolsComposer extends Application
 {
     /**
-     * @var ContainerInterface holds the static container instance for global access within the DevTools context
+     * @var ContainerInterface holds the shared container instance for global access within the DevTools composer context
      */
     private static ?ContainerInterface $container = null;
 
     /**
-     * Initializes the DevTools global context and dependency graph.
-     *
-     * The method MUST define default configurations and MAY accept an explicit command provider.
-     * It SHALL instruct the runner to treat the `standards` command generically as its default endpoint.
-     *
-     * @param CommandLoaderInterface $commandLoader the command loader responsible for providing command instances
+     * @param CommandLoaderInterface $commandLoader
      */
     public function __construct(CommandLoaderInterface $commandLoader)
     {
@@ -55,9 +49,9 @@ final class DevTools extends Application
     }
 
     /**
-     * Create DevTools instance from container.
+     * Create DevToolsComposer instance from container.
      *
-     * @return DevTools
+     * @return DevToolsComposer
      */
     public static function create(): self
     {
@@ -78,10 +72,7 @@ final class DevTools extends Application
     }
 
     /**
-     * Retrieves the default set of commands provided by the Symfony Application.
-     *
-     * The method SHOULD NOT add composer-specific commands to the list,
-     * as they are handled separately by composer when loaded as a plugin.
+     * Retrieves the default set of commands provided by the Composer Application.
      *
      * @return array
      */
