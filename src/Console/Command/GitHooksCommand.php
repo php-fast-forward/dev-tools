@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
@@ -28,9 +27,12 @@ use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Path;
 
@@ -38,7 +40,7 @@ use Symfony\Component\Filesystem\Path;
  * Installs packaged Git hooks for the consumer repository.
  */
 #[AsCommand(name: 'git-hooks', description: 'Installs Fast Forward Git hooks.')]
-final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class GitHooksCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -51,6 +53,7 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
      * @param FileDiffer $fileDiffer
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
@@ -58,6 +61,7 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
         private readonly FinderFactoryInterface $finderFactory,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -259,8 +263,12 @@ final class GitHooksCommand extends BaseCommand implements LoggerAwareCommandInt
      */
     private function shouldReplaceHook(string $hookPath): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Replace drifted Git hook %s? [y/N] ', $hookPath), false);
+        $confirmation = new ConfirmationQuestion(
+            \sprintf('Replace drifted Git hook %s? [y/N] ', $hookPath),
+            false,
+        );
+
+        return $this->io->askQuestion($confirmation);
     }
 
     /**

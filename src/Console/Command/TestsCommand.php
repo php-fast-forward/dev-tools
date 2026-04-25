@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
@@ -34,6 +33,7 @@ use Psr\Log\LoggerInterface;
 use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -47,7 +47,7 @@ use function is_numeric;
  * This class MUST NOT be overridden and SHALL configure testing parameters dynamically.
  */
 #[AsCommand(name: 'tests', description: 'Runs PHPUnit tests.')]
-final class TestsCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class TestsCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasCacheOption;
     use HasJsonOption;

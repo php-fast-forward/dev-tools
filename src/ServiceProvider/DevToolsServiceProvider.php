@@ -34,7 +34,6 @@ use FastForward\DevTools\Changelog\Renderer\MarkdownRendererInterface;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
-use FastForward\DevTools\Console\CommandLoader\SymfonyDevToolsCommandLoader;
 use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
 use FastForward\DevTools\Console\DevTools;
 use FastForward\DevTools\Console\Logger\OutputFormatLogger;
@@ -86,7 +85,6 @@ use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
 use FastForward\DevTools\Path\DevToolsPathResolver;
-use FastForward\DevTools\Console\DevToolsComposer;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Psr\Clock\SystemClock;
 use FastForward\DevTools\Resource\DifferInterface;
@@ -99,8 +97,11 @@ use SebastianBergmann\Diff\Output\UnifiedDiffOutputBuilder;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 
@@ -160,9 +161,10 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             ClockInterface::class => get(SystemClock::class),
 
             // Console
+            InputInterface::class => get(ArgvInput::class),
+            OutputInterface::class => get(ConsoleOutputInterface::class),
             CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
-            DevTools::class => create(DevTools::class)->constructor(get(SymfonyDevToolsCommandLoader::class)),
-            DevToolsComposer::class => create(DevToolsComposer::class)->constructor(get(DevToolsCommandLoader::class)),
+            DevTools::class => create(DevTools::class)->constructor(get(DevToolsCommandLoader::class)),
             CommandProvider::class => get(DevToolsCommandProvider::class),
             ConsoleOutputInterface::class => create(ConsoleOutput::class)
                 ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)

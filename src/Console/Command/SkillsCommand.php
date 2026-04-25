@@ -20,13 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -45,7 +45,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * into Symfony Console output and process exit codes.
  */
 #[AsCommand(name: 'skills', description: 'Synchronizes Fast Forward skills into .agents/skills directory.')]
-final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class SkillsCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -68,7 +68,7 @@ final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInter
         private readonly FilesystemInterface $filesystem,
         private readonly LoggerInterface $logger,
     ) {
-        parent::__construct();
+        parent::__construct('skills');
     }
 
     /**
@@ -129,8 +129,6 @@ final class SkillsCommand extends BaseCommand implements LoggerAwareCommandInter
             $directoryCreated = true;
             $this->logger->info('Created .agents/skills directory.');
         }
-
-        $this->synchronizer->setLogger($this->getIO());
 
         $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::SKILLS_DIRECTORY);
 

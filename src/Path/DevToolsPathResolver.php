@@ -68,6 +68,18 @@ final class DevToolsPathResolver
     }
 
     /**
+     * Returns the packaged DevTools binary command with a subcommand.
+     *
+     * @param string $command the DevTools subcommand to append
+     */
+    public static function getBinaryCommand(string $command): string
+    {
+        $binaryPath = self::getPackagePath(self::BINARY);
+
+        return \sprintf('%s %s', $binaryPath, $command);
+    }
+
+    /**
      * Returns the packaged resources directory or a path under it.
      *
      * @param string $path the optional relative segment to append under resources

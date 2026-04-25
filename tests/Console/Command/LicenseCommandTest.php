@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\LicenseCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
@@ -98,7 +99,7 @@ final class LicenseCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->input->getOption('dry-run')
@@ -121,8 +122,8 @@ final class LicenseCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -370,7 +371,7 @@ final class LicenseCommandTest extends TestCase
             FileDiff::STATUS_CHANGED,
             'Updating managed file ' . $targetPath . ' from generated LICENSE content.',
         ))->shouldBeCalledOnce();
-        $this->io->askConfirmation(\sprintf('Write managed file %s? [y/N] ', $targetPath), false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->notice(

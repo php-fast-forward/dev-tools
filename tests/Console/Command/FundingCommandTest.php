@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\FundingCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -91,7 +92,7 @@ final class FundingCommandTest extends TestCase
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->normalizeProcess = $this->prophesize(Process::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->output->isDecorated()
             ->willReturn(false);
@@ -133,8 +134,8 @@ final class FundingCommandTest extends TestCase
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -466,7 +467,7 @@ final class FundingCommandTest extends TestCase
             ->willReturn(true);
         $this->input->isInteractive()
             ->willReturn(true);
-        $this->io->askConfirmation('Update managed file composer.json? [y/N] ', false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->filesystem->exists('composer.json')
@@ -672,7 +673,7 @@ final class FundingCommandTest extends TestCase
         $shouldWriteManagedFile = new ReflectionMethod($this->command, 'shouldWriteManagedFile');
         $normalizeComposerFile = new ReflectionMethod($this->command, 'normalizeComposerFile');
 
-        $this->io->askConfirmation('Update managed file composer.alt.json? [y/N] ', false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(true)
             ->shouldBeCalledOnce();
         $this->filesystem->dirname('composer.alt.json')

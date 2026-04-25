@@ -20,10 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console;
 
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
-use Override;
 use DI\Container;
 use Psr\Container\ContainerInterface;
-use ReflectionMethod;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
@@ -75,21 +73,5 @@ final class DevTools extends Application
         }
 
         return self::$container;
-    }
-
-    /**
-     * Retrieves the default set of commands provided by the Symfony Application.
-     *
-     * The method SHOULD NOT add composer-specific commands to the list,
-     * as they are handled separately by composer when loaded as a plugin.
-     *
-     * @return array
-     */
-    #[Override]
-    protected function getDefaultCommands(): array
-    {
-        $reflectionMethod = new ReflectionMethod(Application::class, __FUNCTION__);
-
-        return $reflectionMethod->invoke($this);
     }
 }

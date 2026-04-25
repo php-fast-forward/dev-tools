@@ -17,7 +17,7 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Console\Command;
+namespace FastForward\DevTools\Composer\Command;
 
 use Composer\Command\BaseCommand;
 use Symfony\Component\Console\Command\Command;
@@ -29,17 +29,20 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 final class ProxyCommand extends BaseCommand
 {
+    /**
+     * @param Command $command the Symfony command adapted for Composer plugin execution
+     */
     public function __construct(
         private readonly Command $command,
     ) {
-        parent::__construct($command->getName());
+        parent::__construct($this->command->getName());
 
-        $this->setAliases($command->getAliases());
-        $this->setDescription($command->getDescription());
-        $this->setHelp($command->getHelp());
-        $this->setDefinition(clone $command->getDefinition());
-        $this->setHidden($command->isHidden());
-        $this->setIgnoreValidationErrors($command->ignoreValidationErrors());
+        $this
+            ->setAliases($this->command->getAliases())
+            ->setDescription($this->command->getDescription())
+            ->setHelp($this->command->getHelp())
+            ->setDefinition(clone $this->command->getDefinition())
+            ->setHidden($this->command->isHidden());
     }
 
     /**
@@ -50,9 +53,6 @@ final class ProxyCommand extends BaseCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->command->setApplication($this->getApplication());
-        $this->command->setHelperSet($this->getHelperSet());
-
         return $this->command->run($input, $output);
     }
 }

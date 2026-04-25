@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\CommandLoader;
 
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
@@ -36,7 +35,6 @@ use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
  * console commands and SHALL only register classes that:
  * - Are instantiable
  * - Extend the Symfony\Component\Console\Command\Command base class
- * - Are not Composer\Command\BaseCommand-based command implementations
  * - Declare the Symfony\Component\Console\Attribute\AsCommand attribute
  *
  * The command name MUST be extracted from the AsCommand attribute metadata and
@@ -55,9 +53,9 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
      * @param FinderFactoryInterface $finderFactory
      * @param ContainerInterface $container
      */
-    public function __construct(FinderFactoryInterface $finderFactory, ContainerInterface $container, bool $skipLegacyBaseCommands = false)
+    public function __construct(FinderFactoryInterface $finderFactory, ContainerInterface $container)
     {
-        parent::__construct($container, $this->getCommandMap($finderFactory, $skipLegacyBaseCommands));
+        parent::__construct($container, $this->getCommandMap($finderFactory));
     }
 
     /**
@@ -67,7 +65,7 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
      *
      * @return array
      */
-    private function getCommandMap(FinderFactoryInterface $finderFactory, bool $skipLegacyBaseCommands): array
+    private function getCommandMap(FinderFactoryInterface $finderFactory): array
     {
         $commandMap = [];
 
@@ -91,10 +89,6 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
                 continue;
             }
 
-            if ($skipLegacyBaseCommands && $reflection->isSubclassOf(BaseCommand::class)) {
-                continue;
-            }
-
             $attribute = $reflection->getAttributes(AsCommand::class)[0] ?? null;
 
             if (null === $attribute) {
@@ -102,7 +96,15 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
             }
 
             $arguments = $attribute->getArguments();
-            $commandMap[$arguments['name']] = $class;
+            $commandNames = [$arguments['name'], ...($arguments['aliases'] ?? [])];
+
+            foreach ($commandNames as $commandName) {
+                if ('' === $commandName) {
+                    continue;
+                }
+
+                $commandMap[$commandName] = $class;
+            }
         }
 
         return $commandMap;

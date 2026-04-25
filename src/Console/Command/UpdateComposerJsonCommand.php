@@ -225,16 +225,17 @@ final class UpdateComposerJsonCommand extends Command implements LoggerAwareComm
             $scripts = [];
         }
 
-        foreach ($this->scripts() as $name => $command) {
+        foreach ($this->getScripts() as $name => $command) {
             $scripts[$name] = $command;
         }
 
         $composerJsonData['scripts'] = $scripts;
 
-        if ('' === $this->composer->getReadme() && $this->filesystem->exists('README.md', \dirname($file))) {
-            if (! isset($composerJsonData['readme'])) {
-                $composerJsonData['readme'] = 'README.md';
-            }
+        if ('' === $this->composer->getReadme() && $this->filesystem->exists(
+            'README.md',
+            \dirname($file)
+        ) && ! isset($composerJsonData['readme'])) {
+            $composerJsonData['readme'] = 'README.md';
         }
 
         $extra = $composerJsonData['extra'] ?? [];
@@ -263,7 +264,7 @@ final class UpdateComposerJsonCommand extends Command implements LoggerAwareComm
      *
      * @return array<string, string> the script name to command map
      */
-    private function scripts(): array
+    private function getScripts(): array
     {
         return [
             'dev-tools' => 'dev-tools',

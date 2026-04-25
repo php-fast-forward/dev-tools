@@ -19,8 +19,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Prophecy\Argument;
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\GitAttributesCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
@@ -135,7 +136,7 @@ final class GitAttributesCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
@@ -168,8 +169,8 @@ final class GitAttributesCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -484,7 +485,7 @@ final class GitAttributesCommandTest extends TestCase
                 FileDiff::STATUS_CHANGED,
                 'Managed file needs update.',
             ))->shouldBeCalledOnce();
-        $this->io->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $gitattributesPath), false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->notice('Skipped updating {gitattributes_path}.', Argument::type('array'))

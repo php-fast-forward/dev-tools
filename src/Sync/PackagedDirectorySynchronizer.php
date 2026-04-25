@@ -21,14 +21,13 @@ namespace FastForward\DevTools\Sync;
 
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Filesystem\Path;
 
 /**
  * Synchronizes one packaged directory of symlinked entries into a consumer repository.
  */
-final class PackagedDirectorySynchronizer implements LoggerAwareInterface
+final class PackagedDirectorySynchronizer
 {
     /**
      * Initializes the synchronizer with a filesystem and finder factory.
@@ -42,14 +41,6 @@ final class PackagedDirectorySynchronizer implements LoggerAwareInterface
         private readonly FinderFactoryInterface $finderFactory,
         private LoggerInterface $logger,
     ) {}
-
-    /**
-     * {@inheritDoc}
-     */
-    public function setLogger(LoggerInterface $logger): void
-    {
-        $this->logger = $logger;
-    }
 
     /**
      * Synchronizes packaged directory entries into the consumer repository.

@@ -91,8 +91,6 @@ final class AgentsCommandTest extends TestCase
 
         $this->filesystem->exists($agentsPath)
             ->willReturn(false);
-        $this->synchronizer->setLogger($this->logger->reveal())
-            ->shouldNotBeCalled();
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
         $this->logger->info('Starting agents synchronization...')
             ->shouldBeCalledOnce();
@@ -123,8 +121,6 @@ final class AgentsCommandTest extends TestCase
         $this->filesystem->exists($agentsPath)
             ->willReturn(true, false);
         $this->filesystem->mkdir($agentsPath)
-            ->shouldBeCalledOnce();
-        $this->synchronizer->setLogger($this->logger->reveal())
             ->shouldBeCalledOnce();
         $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
@@ -159,8 +155,6 @@ final class AgentsCommandTest extends TestCase
 
         $this->filesystem->exists($agentsPath)
             ->willReturn(true, true);
-        $this->synchronizer->setLogger($this->logger->reveal())
-            ->shouldBeCalledOnce();
         $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
             ->shouldBeCalledOnce();

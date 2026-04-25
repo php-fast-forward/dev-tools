@@ -21,12 +21,12 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Throwable;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -38,7 +38,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'changelog:next-version',
     description: 'Infers the next semantic version from the Unreleased changelog section.'
 )]
-final class ChangelogNextVersionCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class ChangelogNextVersionCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

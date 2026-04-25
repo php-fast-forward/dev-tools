@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\CommandLoader;
 
 use ArrayIterator;
 use FastForward\DevTools\Console\Command\AgentsCommand;
+use FastForward\DevTools\Console\Command\SyncCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -37,6 +38,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 #[CoversClass(DevToolsCommandLoader::class)]
 #[UsesClass(AgentsCommand::class)]
+#[UsesClass(SyncCommand::class)]
 final class DevToolsCommandLoaderTest extends TestCase
 {
     use ProphecyTrait;
@@ -106,7 +108,7 @@ final class DevToolsCommandLoaderTest extends TestCase
      * @return void
      */
     #[Test]
-    public function constructorWillSkipLegacyBaseCommands(): void
+    public function constructorWillRegisterCommandAliasesFromAsCommandAttribute(): void
     {
         $commandDirectory = \dirname(__DIR__, 3) . '/src/Console/Command';
 
@@ -125,12 +127,15 @@ final class DevToolsCommandLoaderTest extends TestCase
             ->shouldBeCalled();
         $this->finder->getIterator()
             ->willReturn(new ArrayIterator([
-                new SplFileInfo($commandDirectory . '/CodeStyleCommand.php', '', 'CodeStyleCommand.php'),
+                new SplFileInfo($commandDirectory . '/SyncCommand.php', '', 'SyncCommand.php'),
             ]))->shouldBeCalled();
+        $this->container->has(SyncCommand::class)->willReturn(true)->shouldBeCalled();
 
         $loader = new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
 
-        self::assertFalse($loader->has('code-style'));
+        self::assertTrue($loader->has('synchronize'));
+        self::assertTrue($loader->has('dev-tools:sync'));
+        self::assertTrue($loader->has('sync'));
     }
 
     /**

@@ -98,8 +98,6 @@ final class AgentsCommand extends Command implements LoggerAwareCommandInterface
             $this->logger->info('Created .agents/agents directory.');
         }
 
-        $this->synchronizer->setLogger($this->logger);
-
         $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::AGENTS_DIRECTORY);
 
         if ($result->failed()) {

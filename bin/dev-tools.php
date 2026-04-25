@@ -20,19 +20,10 @@ declare(strict_types=1);
 namespace FastForward\DevTools;
 
 use FastForward\DevTools\Console\DevTools;
-use FastForward\DevTools\Console\DevToolsComposer;
-use Symfony\Component\Console\Input\ArgvInput;
 
 $projectVendorAutoload = \dirname(__DIR__, 4) . '/vendor/autoload.php';
 $pluginVendorAutoload = \dirname(__DIR__) . '/vendor/autoload.php';
 
 require_once file_exists($projectVendorAutoload) ? $projectVendorAutoload : $pluginVendorAutoload;
 
-$input = new ArgvInput([...$argv, '--no-plugins']);
-
-$command = $input->getFirstArgument();
-$application = (null !== $command && DevTools::create()->has($command))
-    ? DevTools::create()
-    : DevToolsComposer::create();
-
-$application->run($input);
+DevTools::create()->run();

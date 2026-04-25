@@ -29,6 +29,8 @@ use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use UnderflowException;
+
+use function Safe\file_get_contents;
 use function Safe\json_decode;
 
 /**
@@ -592,9 +594,7 @@ final class ComposerJson implements ComposerJsonInterface
     private function readComposerJsonFile(string $path): array
     {
         if (! file_exists($path)) {
-            throw new RuntimeException(
-                \sprintf('Unable to read composer manifest file at path: %s', $path),
-            );
+            throw new RuntimeException(\sprintf('Unable to read composer manifest file at path: %s', $path));
         }
 
         return $this->decodeJson($path);
@@ -628,9 +628,7 @@ final class ComposerJson implements ComposerJsonInterface
         $contents = file_get_contents($path);
 
         if (false === $contents) {
-            throw new RuntimeException(
-                \sprintf('Unable to read composer manifest file at path: %s', $path),
-            );
+            throw new RuntimeException(\sprintf('Unable to read composer manifest file at path: %s', $path));
         }
 
         $data = json_decode($contents, true, 512, \JSON_THROW_ON_ERROR);

@@ -20,13 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -37,7 +37,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class MUST NOT be extended and SHALL encapsulate the logic for Rector invocation.
  */
 #[AsCommand(name: 'refactor', description: 'Runs Rector for code refactoring.', aliases: ['rector'])]
-final class RefactorCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class RefactorCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;

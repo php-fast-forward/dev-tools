@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -31,6 +30,7 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -44,7 +44,7 @@ use function Safe\getcwd;
  * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
  */
 #[AsCommand(name: 'wiki', description: 'Generates API documentation in Markdown format.')]
-final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class WikiCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasCacheOption;
     use HasJsonOption;
@@ -68,7 +68,7 @@ final class WikiCommand extends BaseCommand implements LoggerAwareCommandInterfa
         private readonly GitClientInterface $gitClient,
         private readonly LoggerInterface $logger,
     ) {
-        return parent::__construct();
+        parent::__construct();
     }
 
     /**

@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Console\Command\CodeOwnersCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
@@ -93,7 +94,7 @@ final class CodeOwnersCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
 
         $this->input->getOption('file')
             ->willReturn('.github/CODEOWNERS');
@@ -121,8 +122,8 @@ final class CodeOwnersCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -278,7 +279,6 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn([]);
         $this->io->ask(
             'No CODEOWNERS entries could be inferred from composer.json. Enter space-separated owners for "*" or leave blank to use a commented placeholder: ',
-            '',
         )->willReturn('php-fast-forward @mentordosnerds')
             ->shouldBeCalledOnce();
         $this->generator->normalizeOwners('php-fast-forward @mentordosnerds')
@@ -379,7 +379,7 @@ final class CodeOwnersCommandTest extends TestCase
             FileDiff::STATUS_CHANGED,
             'Updating managed file ' . $targetPath . ' from generated CODEOWNERS content.',
         ))->shouldBeCalledOnce();
-        $this->io->askConfirmation(\sprintf('Write managed file %s? [y/N] ', $targetPath), false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->log(

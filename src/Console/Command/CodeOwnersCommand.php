@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -28,15 +27,18 @@ use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Generates and synchronizes CODEOWNERS files from local project metadata.
  */
 #[AsCommand(name: 'codeowners', description: 'Generates .github/CODEOWNERS from local project metadata.')]
-final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class CodeOwnersCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -48,12 +50,14 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
      * @param FilesystemInterface $filesystem the filesystem used to read and write the target file
      * @param FileDiffer $fileDiffer the differ used to report managed-file drift
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io
      */
     public function __construct(
         private readonly CodeOwnersGenerator $generator,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -207,13 +211,11 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
      */
     private function promptForOwners(): array
     {
-        $answer = (string) $this->getIO()
-            ->ask(
-                'No CODEOWNERS entries could be inferred from composer.json. Enter space-separated owners for "*" or leave blank to use a commented placeholder: ',
-                '',
-            );
+        $answer = (string) $this->io->ask(
+            'No CODEOWNERS entries could be inferred from composer.json. Enter space-separated owners for "*" or leave blank to use a commented placeholder: ',
+        );
 
-        return $this->generator->normalizeOwners($answer);
+        return $this->generator->normalizeOwners($answer ?? '');
     }
 
     /**
@@ -225,7 +227,14 @@ final class CodeOwnersCommand extends BaseCommand implements LoggerAwareCommandI
      */
     private function shouldWriteCodeOwners(string $targetPath): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
+        $confirmation = new ConfirmationQuestion(
+            \sprintf(
+                'The generated CODEOWNERS file differs from the existing file at %s. Overwrite? [y/N] ',
+                $targetPath
+            ),
+            false,
+        );
+
+        return $this->io->askQuestion($confirmation);
     }
 }

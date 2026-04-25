@@ -20,16 +20,17 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
-use Composer\Console\Input\InputOption;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -38,7 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class MUST NOT be overridden and SHALL securely combine docs and testing commands.
  */
 #[AsCommand(name: 'reports', description: 'Generates the frontpage for Fast Forward documentation.')]
-final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class ReportsCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasCacheOption;
     use HasJsonOption;
@@ -165,7 +166,7 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
             $docsBuilder = $docsBuilder->withArgument('--pretty-json');
         }
 
-        $docs = $docsBuilder->build('composer dev-tools docs --');
+        $docs = $docsBuilder->build(DevToolsPathResolver::getBinaryCommand('docs'));
 
         if (null !== $cacheArgument) {
             $coverageBuilder = $coverageBuilder->withArgument($cacheArgument);
@@ -187,7 +188,7 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
             $coverageBuilder = $coverageBuilder->withArgument('--pretty-json');
         }
 
-        $coverage = $coverageBuilder->build('composer dev-tools tests --');
+        $coverage = $coverageBuilder->build(DevToolsPathResolver::getBinaryCommand('tests'));
 
         if ($progress) {
             $metricsBuilder = $metricsBuilder->withArgument('--progress');
@@ -201,7 +202,7 @@ final class ReportsCommand extends BaseCommand implements LoggerAwareCommandInte
             $metricsBuilder = $metricsBuilder->withArgument('--pretty-json');
         }
 
-        $metrics = $metricsBuilder->build('composer dev-tools metrics --');
+        $metrics = $metricsBuilder->build(DevToolsPathResolver::getBinaryCommand('metrics'));
 
         $this->processQueue->add(process: $docs, detached: true, label: 'Generating API Docs Report');
         $this->processQueue->add(process: $coverage, label: 'Generating Coverage Report');

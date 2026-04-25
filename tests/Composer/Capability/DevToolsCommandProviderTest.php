@@ -19,11 +19,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Composer\Capability;
 
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
-use FastForward\DevTools\Console\Command\ProxyCommand;
+use FastForward\DevTools\Composer\Command\ProxyCommand;
 use FastForward\DevTools\Console\DevTools;
-use FastForward\DevTools\Console\DevToolsComposer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -33,6 +31,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Container\ContainerInterface;
 use ReflectionProperty;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
 
 #[CoversClass(DevToolsCommandProvider::class)]
 #[UsesClass(DevTools::class)]
@@ -44,8 +43,6 @@ final class DevToolsCommandProviderTest extends TestCase
 
     private ObjectProphecy $devTools;
 
-    private ObjectProphecy $devToolsComposer;
-
     private DevToolsCommandProvider $commandProvider;
 
     /**
@@ -55,26 +52,18 @@ final class DevToolsCommandProviderTest extends TestCase
     {
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->devTools = $this->prophesize(DevTools::class);
-        $this->devToolsComposer = $this->prophesize(DevToolsComposer::class);
 
         $this->container->get(DevTools::class)
             ->willReturn($this->devTools->reveal())
             ->shouldBeCalledOnce();
-        $this->container->get(DevToolsComposer::class)
-            ->willReturn($this->devToolsComposer->reveal())
-            ->shouldBeCalledOnce();
 
         $this->devTools->all()
-            ->willReturn([])->shouldBeCalledOnce();
-        $this->devToolsComposer->all()
             ->willReturn([])->shouldBeCalledOnce();
 
         $this->commandProvider = new DevToolsCommandProvider();
 
         $property = new ReflectionProperty(DevTools::class, 'container');
         $property->setValue(null, $this->container->reveal());
-        $propertyComposer = new ReflectionProperty(DevToolsComposer::class, 'container');
-        $propertyComposer->setValue(null, $this->container->reveal());
     }
 
     /**
@@ -93,87 +82,33 @@ final class DevToolsCommandProviderTest extends TestCase
      * @return void
      */
     #[Test]
-    public function getCommandsWillReturnRegisteredBaseCommands(): void
+    public function getCommandsWillReturnComposerProxyCommandsForRegisteredSymfonyCommands(): void
     {
-        $composerCommand = new class extends BaseCommand {
-            public function __construct()
-            {
-                parent::__construct('legacy');
-            }
+        $symfonyCommand = $this->prophesize(Command::class);
+        $inputDefinition = $this->prophesize(InputDefinition::class);
 
-            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
-            {
-                return self::SUCCESS;
-            }
-        };
-        $symfonyCommand = new class extends Command {
-            public function __construct()
-            {
-                parent::__construct('agents');
-            }
-
-            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
-            {
-                return self::SUCCESS;
-            }
-        };
+        $symfonyCommand->getName()
+            ->willReturn('agents');
+        $symfonyCommand->getAliases()
+            ->willReturn([]);
+        $symfonyCommand->getDescription()
+            ->willReturn('Synchronize agents.');
+        $symfonyCommand->getHelp()
+            ->willReturn('');
+        $symfonyCommand->getDefinition()
+            ->willReturn($inputDefinition->reveal());
+        $symfonyCommand->isHidden()
+            ->willReturn(false);
 
         $this->devTools->all()
-            ->willReturn([$symfonyCommand])->shouldBeCalledOnce();
-        $this->devToolsComposer->all()
-            ->willReturn([$composerCommand])->shouldBeCalledOnce();
+            ->willReturn([$symfonyCommand->reveal()])
+            ->shouldBeCalledOnce();
 
         $commands = $this->commandProvider->getCommands();
 
         self::assertIsArray($commands);
-        self::assertCount(2, $commands);
-        self::assertSame($composerCommand, $commands[0]);
-        self::assertInstanceOf(ProxyCommand::class, $commands[1]);
-        self::assertSame('agents', $commands[1]->getName());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function getCommandsWillSkipLegacyReservedSymfonyAliases(): void
-    {
-        $legacyCommand = new class extends BaseCommand {
-            public function __construct()
-            {
-                parent::__construct('migrated');
-            }
-
-            public function getAliases(): array
-            {
-                return ['agents-alias'];
-            }
-
-            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
-            {
-                return self::SUCCESS;
-            }
-        };
-        $symfonyCommand = new class extends Command {
-            public function __construct()
-            {
-                parent::__construct('migrated');
-            }
-
-            protected function execute(\Symfony\Component\Console\Input\InputInterface $input, \Symfony\Component\Console\Output\OutputInterface $output): int
-            {
-                return self::SUCCESS;
-            }
-        };
-
-        $this->devTools->all()
-            ->willReturn([$symfonyCommand])->shouldBeCalledOnce();
-        $this->devToolsComposer->all()
-            ->willReturn([$legacyCommand])->shouldBeCalledOnce();
-
-        $commands = $this->commandProvider->getCommands();
-
         self::assertCount(1, $commands);
-        self::assertSame($legacyCommand, $commands[0]);
+        self::assertInstanceOf(ProxyCommand::class, $commands[0]);
+        self::assertSame('agents', $commands[0]->getName());
     }
 }

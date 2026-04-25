@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -33,9 +32,12 @@ use FastForward\DevTools\GitAttributes\WriterInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 use function Safe\getcwd;
 
@@ -49,7 +51,7 @@ use function Safe\getcwd;
     name: 'gitattributes',
     description: 'Manages .gitattributes export-ignore rules for leaner package archives.'
 )]
-final class GitAttributesCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class GitAttributesCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -75,6 +77,7 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
      * @param ComposerJsonInterface $composer the composer.json accessor
      * @param FileDiffer $fileDiffer
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io
      */
     public function __construct(
         private readonly CandidateProviderInterface $candidateProvider,
@@ -87,6 +90,7 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -259,8 +263,9 @@ final class GitAttributesCommand extends BaseCommand implements LoggerAwareComma
      */
     private function shouldWriteGitAttributes(string $targetPath): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
+        $confirmation = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
+
+        return $this->io->askQuestion($confirmation);
     }
 
     /**

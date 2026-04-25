@@ -20,14 +20,15 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -38,7 +39,7 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class MUST NOT be modified through inheritance and SHALL streamline code validation workflows.
  */
 #[AsCommand(name: 'standards', description: 'Runs Fast Forward code standards checks.')]
-final class StandardsCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class StandardsCommand extends Command implements LoggerAwareCommandInterface
 {
     use HasCacheOption;
     use HasJsonOption;
@@ -145,7 +146,7 @@ final class StandardsCommand extends BaseCommand implements LoggerAwareCommandIn
             }
 
             $this->processQueue->add(
-                process: $processBuilder->build('composer dev-tools ' . $command . ' --'),
+                process: $processBuilder->build(DevToolsPathResolver::getBinaryCommand($command)),
                 label: $this->getProcessLabel($command),
             );
         }
