@@ -13,8 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Align the standards pipeline to invoke PHPDoc checks via the `php-cs-fixer` command name/alias and route standards cache to `.dev-tools/cache/php-cs-fixer`, preserving backwards compatibility for existing `docheader`-style entry points.
-- Rename the command entry point from `standards:phpdoc` to `standards:docheader` and keep both `docheader` and `php-cs-fixer` aliases for compatibility (`standards:phpdoc` is intentionally not kept as a command name).
+- Restore `standards:phpdoc` as the command entry point for PHPDoc checks while keeping
+  the legacy aliases `docheader` and `php-cs-fixer`.
+- Remove the `phpdoc` alias from `reports:docs` to avoid command-name collisions with
+  the standards PHPDoc check command.
 
 ## [1.22.3] - 2026-04-25
 

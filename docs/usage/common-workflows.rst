@@ -11,7 +11,7 @@ Most day-to-day work falls into one of the flows below.
      - What happens
    * - Check everything before a pull request
      - ``composer dev-tools``
-     - Runs ``refactor``, ``docheader``, ``code-style``, and ``reports`` in
+     - Runs ``refactor``, ``phpdoc``, ``code-style``, and ``reports`` in
        order.
    * - Auto-fix what can be changed safely
      - ``composer dev-tools:fix``

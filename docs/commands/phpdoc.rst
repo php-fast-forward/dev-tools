@@ -1,12 +1,12 @@
-docheader
-=========
+phpdoc
+======
 
 Checks and fixes PHPDoc comments.
 
 Description
 -----------
 
-The ``docheader`` command coordinates PHPDoc checking and fixing using:
+The ``phpdoc`` command coordinates PHPDoc checking and fixing using:
 (alias ``docheader`` and ``php-cs-fixer``)
 
 - PHP-CS-Fixer - fixes PHPDoc formatting
@@ -19,11 +19,10 @@ Usage
 
 .. code-block:: bash
 
-   composer docheader
-   composer php-cs-fixer
-   composer docheader [options]
-   composer dev-tools docheader -- [options]
-   vendor/bin/dev-tools docheader [options]
+   composer phpdoc
+   composer phpdoc [options]
+   composer dev-tools phpdoc -- [options]
+   vendor/bin/dev-tools phpdoc [options]
 
 Arguments
 ---------
@@ -63,25 +62,25 @@ Check PHPDocs (dry-run):
 
 .. code-block:: bash
 
-   composer docheader
+   composer phpdoc
 
 Fix PHPDocs automatically:
 
 .. code-block:: bash
 
-   composer docheader --fix
+   composer phpdoc --fix
 
 Check specific directory:
 
 .. code-block:: bash
 
-   composer docheader ./src
+   composer phpdoc ./src
 
 Check without cache:
 
 .. code-block:: bash
 
-   composer docheader --no-cache
+   composer phpdoc --no-cache
 
 Exit Codes
 ---------

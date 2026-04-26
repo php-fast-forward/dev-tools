@@ -49,7 +49,7 @@ use function Safe\getcwd;
 #[AsCommand(
     name: 'reports:docs',
     description: 'Generates API documentation.',
-    aliases: ['reports:phpdoc', 'phpdoc', 'phpDocumentor', 'docs'],
+    aliases: ['reports:phpdoc', 'phpDocumentor', 'docs'],
 )]
 final class DocsCommand extends Command
 {

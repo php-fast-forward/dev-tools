@@ -1,14 +1,14 @@
-Rector and Docheader Automation
+Rector and PHPDoc Automation
 ===============================
 
 The package uses two different Rector entry points, and that difference matters
 when you are trying to understand why a rule did or did not run.
 
-``refactor`` Versus ``docheader``
+``refactor`` Versus ``phpdoc``
 ------------------------------
 
 - ``refactor`` uses the full ``rector.php`` file.
-- ``docheader`` runs PHP-CS-Fixer first and then executes Rector with
+- ``phpdoc`` runs PHP-CS-Fixer first and then executes Rector with
   ``--only \FastForward\DevTools\Rector\AddMissingMethodPhpDocRector``.
 
 Rules Shipped by the Package
@@ -19,7 +19,7 @@ Rules Shipped by the Package
 
    * - Rule
      - Enabled in packaged ``rector.php``
-     - Used directly by ``docheader``
+     - Used directly by ``phpdoc``
      - Purpose
    * - ``FastForward\DevTools\Rector\AddMissingMethodPhpDocRector``
      - Yes
@@ -45,7 +45,7 @@ rules when ``thecodingmachine/safe`` is installed.
 Why ``.docheader`` Appears Automatically
 ----------------------------------------
 
-The ``docheader`` command creates ``.docheader`` in the consumer root when it is
+The ``phpdoc`` command creates ``.docheader`` in the consumer root when it is
 missing. The template comes from the packaged file and the package name is
 rewritten to match the current project whenever Composer metadata is
 available.

@@ -14,7 +14,7 @@ Execution Order
 ``standards`` runs these commands in sequence:
 
 1. ``refactor``
-2. ``docheader``
+2. ``phpdoc``
 3. ``code-style``
 4. ``reports``
 
@@ -31,7 +31,7 @@ To allow the tools to modify files, use one of the following entry points:
    composer dev-tools:fix
    vendor/bin/dev-tools --fix
 
-The flag mainly affects ``refactor``, ``docheader``, and ``code-style``. The
+The flag mainly affects ``refactor``, ``phpdoc``, and ``code-style``. The
 reporting steps still run, but they do not use the flag themselves.
 
 When the Unified Command Is the Right Choice

@@ -107,7 +107,7 @@ composer code-style
 composer refactor
 
 # Check and fix PHPDoc comments
-composer docheader
+composer phpdoc
 
 # Generate HTML API documentation using phpDocumentor
 composer docs

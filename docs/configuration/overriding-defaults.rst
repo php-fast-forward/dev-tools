@@ -38,7 +38,7 @@ Commands and Their Configuration Files
    * - ``dependencies``
      - ``composer-dependency-analyser.php``
      - Falls back to the packaged Composer Dependency Analyser configuration.
-   * - ``docheader``
+   * - ``phpdoc``
      - ``.php-cs-fixer.dist.php`` and ``rector.php``
      - Falls back to the packaged files; ``.docheader`` is created locally
        when missing.
@@ -62,7 +62,7 @@ A Practical Example
 -------------------
 
 To customize Rector for one library, create ``rector.php`` in the consumer
-project root. The ``refactor`` command and the Rector phase inside ``docheader``
+project root. The ``refactor`` command and the Rector phase inside ``phpdoc``
 will use that file instead of the packaged default.
 
 Extending ECS Configuration

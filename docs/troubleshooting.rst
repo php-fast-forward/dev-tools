@@ -238,7 +238,7 @@ Recovery:
 
 .. code-block:: bash
 
-    composer dev-tools docheader
+    composer dev-tools phpdoc
     composer dev-tools docs
 
 Fix source PHPDoc first, then regenerate docs. Avoid editing generated API
