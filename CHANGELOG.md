@@ -7,16 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.23.0] - 2026-04-26
+
 ### Added
 
 - Add a hybrid command runtime bootstrap and capability bridge that keeps command discovery split between migrated Symfony commands (`DevTools`) and legacy Composer `BaseCommand` commands (`DevToolsComposer`) while exposing proxy commands during Composer execution for the first migration step (#199)
-
-### Changed
-
-- Restore `standards:phpdoc` as the command entry point for PHPDoc checks while keeping
-  the legacy aliases `docheader` and `php-cs-fixer`.
-- Remove the `phpdoc` alias from `reports:docs` to avoid command-name collisions with
-  the standards PHPDoc check command.
 
 ## [1.22.3] - 2026-04-25
 
@@ -363,7 +358,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.3...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.23.0...HEAD
+[1.23.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.3...v1.23.0
 [1.22.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.2...v1.22.3
 [1.22.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.1...v1.22.2
 [1.22.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.0...v1.22.1
