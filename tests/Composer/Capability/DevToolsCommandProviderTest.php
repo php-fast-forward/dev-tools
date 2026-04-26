@@ -96,8 +96,8 @@ final class DevToolsCommandProviderTest extends TestCase
             ])
             ->shouldBeCalledOnce();
 
-        $commands = $this->commandProvider->getCommands();
-        $command = array_values($commands)[0];
+        $commands = array_values($this->commandProvider->getCommands());
+        $command = $commands[0];
 
         self::assertIsArray($commands);
         self::assertCount(1, $commands);
@@ -124,12 +124,13 @@ final class DevToolsCommandProviderTest extends TestCase
             ])
             ->shouldBeCalledOnce();
 
-        $commands = $this->commandProvider->getCommands();
+        $commands = array_values($this->commandProvider->getCommands());
+        $proxyCommand = $commands[0];
 
         self::assertCount(1, $commands);
-        self::assertInstanceOf(ProxyCommand::class, $commands[0]);
-        self::assertSame('reports:tests', $commands[0]->getName());
-        self::assertSame(['tests', 'phpunit'], $commands[0]->getAliases());
+        self::assertInstanceOf(ProxyCommand::class, $proxyCommand);
+        self::assertSame('reports:tests', $proxyCommand->getName());
+        self::assertSame(['tests', 'phpunit'], $proxyCommand->getAliases());
     }
 
     /**
@@ -151,8 +152,7 @@ final class DevToolsCommandProviderTest extends TestCase
             ])
             ->shouldBeCalledOnce();
 
-        $commands = $this->commandProvider->getCommands();
-        $proxyCommand = $commands[0];
+        $proxyCommand = array_values($this->commandProvider->getCommands())[0];
 
         self::assertInstanceOf(ProxyCommand::class, $proxyCommand);
         self::assertSame('dev-tools:standards', $proxyCommand->getName());
