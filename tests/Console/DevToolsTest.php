@@ -114,7 +114,7 @@ final class DevToolsTest extends TestCase
      * @return void
      */
     #[Test]
-    public function getCommandsWillYieldLoaderCommandsWithPreservedKeys(): void
+    public function allWillReturnLoaderCommandsWithPreservedKeys(): void
     {
         $commands = [
             'agents' => new class extends Command {
@@ -133,14 +133,23 @@ final class DevToolsTest extends TestCase
 
         $this->commandLoader->getNames()
             ->willReturn(array_keys($commands));
+        $this->commandLoader->has('agents')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->has('sync')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
         $this->commandLoader->get('agents')
             ->willReturn($commands['agents']);
         $this->commandLoader->get('sync')
             ->willReturn($commands['sync']);
 
-        $providedCommands = iterator_to_array($this->devTools->getCommands());
+        $providedCommands = $this->devTools->all();
 
-        self::assertSame($commands, $providedCommands);
+        self::assertArrayHasKey('agents', $providedCommands);
+        self::assertArrayHasKey('sync', $providedCommands);
+        self::assertSame($commands['agents'], $providedCommands['agents']);
+        self::assertSame($commands['sync'], $providedCommands['sync']);
     }
 
     /**
