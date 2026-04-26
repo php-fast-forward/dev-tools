@@ -45,11 +45,13 @@ use function Safe\getcwd;
  * Updates composer.json with the Fast Forward dev-tools integration metadata.
  */
 #[AsCommand(
-    name: 'update-composer-json',
-    description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.'
+    name: 'dev-tools:sync:composer',
+    description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
+    aliases: ['composer.json', 'update-composer-json'],
 )]
 final class UpdateComposerJsonCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

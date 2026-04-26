@@ -3,7 +3,7 @@
     "description": "Fixture project used to verify DevTools Composer plugin consumer behavior.",
     "license": "MIT",
     "type": "project",
-    "require-dev": {
+    "require": {
         "fast-forward/dev-tools": "*@dev"
     },
     "repositories": [

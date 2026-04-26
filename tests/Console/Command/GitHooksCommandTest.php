@@ -136,7 +136,7 @@ final class GitHooksCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('git-hooks', $this->command->getName());
+        self::assertSame('git:hooks', $this->command->getName());
         self::assertSame('Installs Fast Forward Git hooks.', $this->command->getDescription());
         self::assertSame(
             'This command copies packaged Git hooks into the current repository.',

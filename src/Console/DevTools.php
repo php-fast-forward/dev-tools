@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console;
 
+use Override;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use DI\Container;
 use Psr\Container\ContainerInterface;
@@ -31,6 +32,14 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
  */
 final class DevTools extends Application
 {
+    private const string LOGO = <<<'LOGO'
+         ____             _____           _
+        |  _ \  _____   _|_   _|__   ___ | |___
+        | | | |/ _ \ \ / / | |/ _ \ / _ \| / __|
+        | |_| |  __/\ V /  | | (_) | (_) | \__ \
+        |____/ \___| \_/   |_|\___/ \___/|_|___/
+        LOGO;
+
     /**
      * @var ContainerInterface holds the static container instance for global access within the DevTools context
      */
@@ -50,6 +59,17 @@ final class DevTools extends Application
 
         $this->setDefaultCommand('standards');
         $this->setCommandLoader($commandLoader);
+    }
+
+    /**
+     * Gets the help message for the DevTools application, including the ASCII logo.
+     *
+     * @return string
+     */
+    #[Override]
+    public function getHelp(): string
+    {
+        return self::LOGO . "\n\n" . parent::getHelp();
     }
 
     /**

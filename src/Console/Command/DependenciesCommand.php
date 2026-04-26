@@ -43,12 +43,13 @@ use function is_numeric;
  * deterministic report that is friendly for local development and CI runs.
  */
 #[AsCommand(
-    name: 'dependencies',
+    name: 'dev-tools:deps',
     description: 'Analyzes missing, unused, misplaced, and outdated Composer dependencies.',
-    aliases: ['deps']
+    aliases: ['deps', 'dependencies']
 )]
 final class DependenciesCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     private const string ANALYSER_CONFIG = 'composer-dependency-analyser.php';

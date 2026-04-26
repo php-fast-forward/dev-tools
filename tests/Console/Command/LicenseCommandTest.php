@@ -132,7 +132,7 @@ final class LicenseCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('license', $this->command->getName());
+        self::assertSame('license:generate', $this->command->getName());
         self::assertSame(
             'Generates a LICENSE file from composer.json license information.',
             $this->command->getDescription()

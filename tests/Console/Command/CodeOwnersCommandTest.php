@@ -132,7 +132,7 @@ final class CodeOwnersCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('codeowners', $this->command->getName());
+        self::assertSame('github:codeowners', $this->command->getName());
         self::assertSame(
             'Generates .github/CODEOWNERS from local project metadata.',
             $this->command->getDescription(),

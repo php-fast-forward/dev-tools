@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Command\ReportsCommand;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -42,6 +43,7 @@ use Symfony\Component\Process\Process;
 
 #[CoversClass(ReportsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ReportsCommandTest extends TestCase
 {

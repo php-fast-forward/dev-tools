@@ -41,7 +41,8 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Adds a changelog entry to Unreleased or a specific version section.'
 )]
 final class ChangelogEntryCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

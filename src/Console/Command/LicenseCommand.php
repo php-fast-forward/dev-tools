@@ -39,7 +39,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * This command generates a LICENSE file if one does not exist and a supported
  * license is declared in composer.json.
  */
-#[AsCommand(name: 'license', description: 'Generates a LICENSE file from composer.json license information.')]
+#[AsCommand(
+    name: 'license:generate',
+    description: 'Generates a LICENSE file from composer.json license information.',
+    aliases: ['LICENSE.md', 'license'],
+)]
 final class LicenseCommand extends Command
 {
     use HasJsonOption;

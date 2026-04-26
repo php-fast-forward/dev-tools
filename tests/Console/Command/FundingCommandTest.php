@@ -615,7 +615,7 @@ final class FundingCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('funding', $this->command->getName());
+        self::assertSame('github:funding', $this->command->getName());
         self::assertSame(
             'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.',
             $this->command->getDescription(),

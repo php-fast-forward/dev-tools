@@ -44,9 +44,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  * target paths, triggers synchronization, and translates the resulting status
  * into Symfony Console output and process exit codes.
  */
-#[AsCommand(name: 'skills', description: 'Synchronizes Fast Forward skills into .agents/skills directory.')]
+#[AsCommand(
+    name: 'agents:skills',
+    description: 'Synchronizes Fast Forward skills into .agents/skills directory.',
+    aliases: ['skills']
+)]
 final class SkillsCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     private const string SKILLS_DIRECTORY = '.agents/skills';
@@ -67,7 +72,7 @@ final class SkillsCommand extends Command
         private readonly FilesystemInterface $filesystem,
         private readonly LoggerInterface $logger,
     ) {
-        parent::__construct('skills');
+        parent::__construct();
     }
 
     /**

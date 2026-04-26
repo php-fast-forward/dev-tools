@@ -39,9 +39,14 @@ use Symfony\Component\Filesystem\Path;
 /**
  * Installs packaged Git hooks for the consumer repository.
  */
-#[AsCommand(name: 'git-hooks', description: 'Installs Fast Forward Git hooks.')]
+#[AsCommand(
+    name: 'git:hooks',
+    description: 'Installs Fast Forward Git hooks.',
+    aliases: ['.git/hooks', 'git-hooks'],
+)]
 final class GitHooksCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**
@@ -300,7 +305,7 @@ final class GitHooksCommand extends Command
                 'Failed to install {hook_name} hook automatically. Remove or unlock {hook_path} and rerun git-hooks.',
                 [
                     'input' => $input,
-                    'hook_name' => $this->filesystem->basename($hookPath),
+                    'hook_name' => $this->filesystem->getBasename($hookPath),
                     'hook_path' => $hookPath,
                     'error' => $ioException->getMessage(),
                     'file' => $ioException->getPath() ?? $hookPath,

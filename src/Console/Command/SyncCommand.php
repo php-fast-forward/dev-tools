@@ -36,12 +36,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Orchestrates dev-tools synchronization commands for the consumer repository.
  */
 #[AsCommand(
-    name: 'synchronize',
+    name: 'dev-tools:sync',
     description: 'Installs and synchronizes dev-tools scripts, GitHub Actions workflows, CODEOWNERS, .editorconfig, and .gitattributes in the root project.',
-    aliases: ['dev-tools:sync', 'sync'],
+    aliases: ['sync'],
 )]
 final class SyncCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

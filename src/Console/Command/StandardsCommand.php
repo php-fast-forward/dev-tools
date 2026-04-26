@@ -38,9 +38,14 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Executes the full suite of Fast Forward code standard checks.
  * This class MUST NOT be modified through inheritance and SHALL streamline code validation workflows.
  */
-#[AsCommand(name: 'standards', description: 'Runs Fast Forward code standards checks.')]
+#[AsCommand(
+    name: 'dev-tools:standards',
+    description: 'Runs Fast Forward code standards checks.',
+    aliases: ['standards'],
+)]
 final class StandardsCommand extends Command
-{    use HasCacheOption;
+{
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

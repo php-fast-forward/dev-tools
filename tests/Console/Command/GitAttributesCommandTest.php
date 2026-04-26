@@ -179,7 +179,7 @@ final class GitAttributesCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('gitattributes', $this->command->getName());
+        self::assertSame('git:attributes', $this->command->getName());
         self::assertSame(
             'Manages .gitattributes export-ignore rules for leaner package archives.',
             $this->command->getDescription()

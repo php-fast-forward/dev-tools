@@ -33,9 +33,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Synchronizes packaged Fast Forward project agents into the consumer repository.
  */
-#[AsCommand(name: 'agents', description: 'Synchronizes Fast Forward project agents into .agents/agents directory.')]
+#[AsCommand(
+    name: 'agents:agents',
+    description: 'Synchronizes Fast Forward project agents into .agents/agents directory.',
+    aliases: ['agents'],
+)]
 final class AgentsCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     private const string AGENTS_DIRECTORY = '.agents/agents';

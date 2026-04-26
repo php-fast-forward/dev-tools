@@ -39,9 +39,14 @@ use Symfony\Component\Filesystem\Path;
 /**
  * Copies packaged or local resources into the consumer repository.
  */
-#[AsCommand(name: 'copy-resource', description: 'Copies a file or directory resource into the current project.')]
+#[AsCommand(
+    name: 'dev-tools:sync:copy',
+    description: 'Copies a file or directory resource into the current project.',
+    aliases: ['copy-resource']
+)]
 final class CopyResourceCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

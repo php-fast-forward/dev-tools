@@ -21,6 +21,9 @@ namespace FastForward\DevTools\Console\Output;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\StreamOutput;
+use Throwable;
+
+use function Safe\stream_isatty;
 
 /**
  * Detects ANSI-friendly output by decoration state or TTY-backed streams.
@@ -44,6 +47,10 @@ final class OutputCapabilityDetector implements OutputCapabilityDetectorInterfac
             return false;
         }
 
-        return stream_isatty($output->getStream());
+        try {
+            return stream_isatty($output->getStream());
+        } catch (Throwable) {
+            return false;
+        }
     }
 }

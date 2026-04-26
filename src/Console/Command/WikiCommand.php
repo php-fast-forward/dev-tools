@@ -43,9 +43,14 @@ use function Safe\getcwd;
  * Handles the generation of API documentation for the project.
  * This class MUST NOT be extended and SHALL utilize phpDocumentor to accomplish its task.
  */
-#[AsCommand(name: 'wiki', description: 'Generates API documentation in Markdown format.')]
+#[AsCommand(
+    name: 'github:wiki',
+    description: 'Generates API documentation in Markdown format.',
+    aliases: ['.github/wiki', 'wiki'],
+)]
 final class WikiCommand extends Command
-{    use HasCacheOption;
+{
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

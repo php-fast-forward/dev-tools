@@ -35,11 +35,13 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(StandardsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class StandardsCommandTest extends TestCase
 {

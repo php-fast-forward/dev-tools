@@ -46,9 +46,10 @@ use function is_numeric;
  * Facilitates the execution of the PHPUnit testing framework.
  * This class MUST NOT be overridden and SHALL configure testing parameters dynamically.
  */
-#[AsCommand(name: 'tests', description: 'Runs PHPUnit tests.')]
+#[AsCommand(name: 'reports:tests', description: 'Runs PHPUnit tests.', aliases: ['phpunit', 'tests'])]
 final class TestsCommand extends Command
-{    use HasCacheOption;
+{
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

@@ -192,7 +192,7 @@ final class GitIgnoreCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('gitignore', $this->command->getName());
+        self::assertSame('git:ignore', $this->command->getName());
         self::assertSame('Merges and synchronizes .gitignore files.', $this->command->getDescription());
         self::assertSame(
             "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.",

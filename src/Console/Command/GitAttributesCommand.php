@@ -48,11 +48,13 @@ use function Safe\getcwd;
  * to keep them out of Composer package archives.
  */
 #[AsCommand(
-    name: 'gitattributes',
-    description: 'Manages .gitattributes export-ignore rules for leaner package archives.'
+    name: 'git:attributes',
+    description: 'Manages .gitattributes export-ignore rules for leaner package archives.',
+    aliases: ['.gitattributes', 'gitattributes'],
 )]
 final class GitAttributesCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     private const string FILENAME = '.gitattributes';

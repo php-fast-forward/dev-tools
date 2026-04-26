@@ -31,6 +31,8 @@ use Symfony\Component\Console\Command\Command;
  */
 final class DevToolsCommandProvider implements CommandProvider
 {
+    private const string COMMAND_NAMESPACE = 'FastForward\\DevTools\\Console\\Command\\';
+
     /**
      * {@inheritDoc}
      */
@@ -38,7 +40,10 @@ final class DevToolsCommandProvider implements CommandProvider
     {
         return array_map(
             static fn(Command $command): BaseCommand => new ProxyCommand($command),
-            DevTools::create()->all(),
+            array_filter(
+                DevTools::create()->all(),
+                static fn(Command $command): bool => str_starts_with($command::class, self::COMMAND_NAMESPACE),
+            ),
         );
     }
 }

@@ -46,9 +46,14 @@ use function Safe\getcwd;
  * queue so logging and grouped output stay consistent with the rest of the
  * command surface.
  */
-#[AsCommand(name: 'docs', description: 'Generates API documentation.')]
+#[AsCommand(
+    name: 'reports:docs',
+    description: 'Generates API documentation.',
+    aliases: ['reports:phpdoc', 'phpdoc', 'phpDocumentor', 'docs'],
+)]
 final class DocsCommand extends Command
-{    use HasCacheOption;
+{
+    use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
 

@@ -37,9 +37,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Generates and synchronizes CODEOWNERS files from local project metadata.
  */
-#[AsCommand(name: 'codeowners', description: 'Generates .github/CODEOWNERS from local project metadata.')]
+#[AsCommand(
+    name: 'github:codeowners',
+    description: 'Generates .github/CODEOWNERS from local project metadata.',
+    aliases: ['.github/CODEOWNERS', 'codeowners'],
+)]
 final class CodeOwnersCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**
@@ -112,7 +117,7 @@ final class CodeOwnersCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $targetPath = $this->filesystem->getAbsolutePath((string) $input->getOption('file'));
-        $targetDirectory = $this->filesystem->dirname($targetPath);
+        $targetDirectory = $this->filesystem->getDirectory($targetPath);
         $overwrite = (bool) $input->getOption('overwrite');
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');

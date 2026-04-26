@@ -132,7 +132,7 @@ final class CopyResourceCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('copy-resource', $this->command->getName());
+        self::assertSame('dev-tools:sync:copy', $this->command->getName());
         self::assertSame(
             'Copies a file or directory resource into the current project.',
             $this->command->getDescription()

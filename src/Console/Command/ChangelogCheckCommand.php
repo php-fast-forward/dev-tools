@@ -38,7 +38,8 @@ use Symfony\Component\Console\Output\OutputInterface;
     description: 'Checks whether a changelog file contains meaningful unreleased entries.'
 )]
 final class ChangelogCheckCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

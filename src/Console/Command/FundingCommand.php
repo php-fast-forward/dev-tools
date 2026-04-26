@@ -41,11 +41,13 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Synchronizes funding metadata between composer.json and .github/FUNDING.yml.
  */
 #[AsCommand(
-    name: 'funding',
-    description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.'
+    name: 'github:funding',
+    description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.',
+    aliases: ['.github/FUNDING.yml', 'composer:funding', 'funding'],
 )]
 final class FundingCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**
@@ -451,7 +453,7 @@ final class FundingCommand extends Command
             );
         }
 
-        $this->filesystem->mkdir($this->filesystem->dirname($fundingFile));
+        $this->filesystem->mkdir($this->filesystem->getDirectory($fundingFile));
         $this->filesystem->dumpFile($fundingFile, $updatedFundingContents);
 
         return $this->success(
@@ -491,13 +493,13 @@ final class FundingCommand extends Command
             ->withArgument('--ansi')
             ->withArgument('--no-update-lock');
 
-        $workingDirectory = $this->filesystem->dirname($composerFile);
+        $workingDirectory = $this->filesystem->getDirectory($composerFile);
 
         if ('.' !== $workingDirectory) {
             $processBuilder = $processBuilder->withArgument('--working-dir', $workingDirectory);
         }
 
-        $composerBasename = $this->filesystem->basename($composerFile);
+        $composerBasename = $this->filesystem->getBasename($composerFile);
 
         if ('composer.json' !== $composerBasename) {
             $processBuilder = $processBuilder->withArgument('--file', $composerBasename);

@@ -37,7 +37,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  */
 #[AsCommand(name: 'changelog:show', description: 'Prints the notes body for a released changelog version.')]
 final class ChangelogShowCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

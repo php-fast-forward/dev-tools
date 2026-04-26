@@ -34,9 +34,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function rtrim;
 
-#[AsCommand(name: 'metrics', description: 'Analyzes code metrics with PhpMetrics.')]
+#[AsCommand(
+    name: 'reports:metrics',
+    description: 'Analyzes code metrics with PhpMetrics.',
+    aliases: ['reports:phpmetrics', 'phpmetrics', 'metrics'],
+)]
 final class MetricsCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

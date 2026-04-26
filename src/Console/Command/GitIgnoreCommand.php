@@ -46,9 +46,14 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * The command accepts two options: --source and --target to specify the paths
  * to the canonical and project .gitignore files respectively.
  */
-#[AsCommand(name: 'gitignore', description: 'Merges and synchronizes .gitignore files.')]
+#[AsCommand(
+    name: 'git:ignore',
+    description: 'Merges and synchronizes .gitignore files.',
+    aliases: ['.gitignore', 'gitignore'],
+)]
 final class GitIgnoreCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**

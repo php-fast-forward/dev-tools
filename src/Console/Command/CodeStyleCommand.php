@@ -37,11 +37,13 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This class MUST NOT be overridden and SHALL rely on external tools like ECS and Composer Normalize.
  */
 #[AsCommand(
-    name: 'code-style',
-    description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.'
+    name: 'standards:code-style',
+    description: 'Checks and fixes code style issues using EasyCodingStandard and Composer Normalize.',
+    aliases: ['code-style']
 )]
 final class CodeStyleCommand extends Command
-{    use HasJsonOption;
+{
+    use HasJsonOption;
     use LogsCommandResults;
 
     /**
