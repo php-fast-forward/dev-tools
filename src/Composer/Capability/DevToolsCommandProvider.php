@@ -19,11 +19,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Composer\Capability;
 
-use Composer\Command\BaseCommand;
 use Composer\Plugin\Capability\CommandProvider;
 use FastForward\DevTools\Composer\Command\ProxyCommand;
 use FastForward\DevTools\Console\DevTools;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * Provides a registry of custom dev-tools commands mapped for Composer integration.
@@ -38,12 +36,22 @@ final class DevToolsCommandProvider implements CommandProvider
      */
     public function getCommands()
     {
-        return array_map(
-            static fn(Command $command): BaseCommand => new ProxyCommand($command),
-            array_filter(
-                DevTools::create()->all(),
-                static fn(Command $command): bool => str_starts_with($command::class, self::COMMAND_NAMESPACE),
-            ),
-        );
+        $commands = [];
+
+        foreach (DevTools::create()->all() as $command) {
+            if (! str_starts_with($command::class, self::COMMAND_NAMESPACE)) {
+                continue;
+            }
+
+            $id = spl_object_hash($command);
+
+            if (isset($commands[$id])) {
+                continue;
+            }
+
+            $commands[$id] = new ProxyCommand($command);
+        }
+
+        return $commands;
     }
 }

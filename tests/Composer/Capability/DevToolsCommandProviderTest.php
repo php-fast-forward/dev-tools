@@ -95,10 +95,11 @@ final class DevToolsCommandProviderTest extends TestCase
             ->shouldBeCalledOnce();
 
         $commands = $this->commandProvider->getCommands();
+        $command = array_values($commands)[0];
 
         self::assertIsArray($commands);
         self::assertCount(1, $commands);
-        self::assertInstanceOf(ProxyCommand::class, $commands[0]);
-        self::assertSame('agents', $commands[0]->getName());
+        self::assertInstanceOf(ProxyCommand::class, $command);
+        self::assertSame('agents', $command->getName());
     }
 }
