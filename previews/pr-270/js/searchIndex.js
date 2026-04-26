@@ -506,11 +506,6 @@ Search.appendIndex(
             "summary": "\u007B\u0040inheritDoc\u007D",
             "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_getCommands"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003ACOMMAND_NAMESPACE",
-            "name": "COMMAND_NAMESPACE",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#constant_COMMAND_NAMESPACE"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand",
             "name": "ProxyCommand",
             "summary": "Adapts\u0020migrated\u0020Symfony\u0020commands\u0020to\u0020Composer\u0027s\u0020BaseCommand\u0020contract.",
@@ -2706,6 +2701,11 @@ Search.appendIndex(
             "summary": "Gets\u0020the\u0020help\u0020message\u0020for\u0020the\u0020DevTools\u0020application,\u0020including\u0020the\u0020ASCII\u0020logo.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getHelp"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetCommands\u0028\u0029",
+            "name": "getCommands",
+            "summary": "Retrieves\u0020the\u0020shared\u0020DevTools\u0020service\u0020container.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getCommands"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003Acreate\u0028\u0029",
             "name": "create",
             "summary": "Create\u0020DevTools\u0020instance\u0020from\u0020container.",
@@ -2725,6 +2725,11 @@ Search.appendIndex(
             "name": "container",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#property_container"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024commandLoader",
+            "name": "commandLoader",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_commandLoader"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter",
             "name": "LogLevelOutputFormatter",
