@@ -811,7 +811,7 @@
             href="./commands/phpdoc.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            phpdoc
+            docheader
         </a>
 
             </div>
@@ -1244,7 +1244,7 @@
             href="./advanced/rector-and-phpdoc.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
-            Rector and PHPDoc Automation
+            Rector and Docheader Automation
         </a>
 
             </div>
@@ -2978,16 +2978,16 @@
                             <div class="row g-4">
                                 <div class="col-12">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            <section class="section " id="rector-and-phpdoc-automation">
-            <h1>Rector and PHPDoc Automation</h1>
+                                            <section class="section " id="rector-and-docheader-automation">
+            <h1>Rector and Docheader Automation</h1>
 
             
     <p>The package uses two different Rector entry points, and that difference matters
 when you are trying to understand why a rule did or did not run.</p>
 
-            <section class="section " id="refactor-versus-phpdoc">
+            <section class="section " id="refactor-versus-docheader">
             <h2><code>refactor</code>
- Versus <code>phpdoc</code>
+ Versus <code>docheader</code>
 </h2>
 
             
@@ -2997,7 +2997,7 @@ when you are trying to understand why a rule did or did not run.</p>
  uses the full <code>rector.php</code>
  file.</li>
 
-    <li class="dash"><code>phpdoc</code>
+    <li class="dash"><code>docheader</code>
  runs PHP-CS-Fixer first and then executes Rector with
 <code>--only \FastForward\DevTools\Rector\AddMissingMethodPhpDocRector</code>
 .</li>
@@ -3015,7 +3015,7 @@ when you are trying to understand why a rule did or did not run.</p>
                             <th>Rule</th>
                             <th>Enabled in packaged <code>rector.php</code>
 </th>
-                            <th>Used directly by <code>phpdoc</code>
+                            <th>Used directly by <code>docheader</code>
 </th>
                             <th>Purpose</th>
                     </tr>
@@ -3068,7 +3068,7 @@ rules when <code>thecodingmachine/safe</code>
  Appears Automatically</h2>
 
             
-    <p>The <code>phpdoc</code>
+    <p>The <code>docheader</code>
  command creates <code>.docheader</code>
  in the consumer root when it is
 missing. The template comes from the packaged file and the package name is
