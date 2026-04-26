@@ -53,13 +53,12 @@ final class DevTools extends Application
      *
      * @param CommandLoaderInterface $commandLoader the command loader responsible for providing command instances
      */
-    public function __construct(
-        private readonly CommandLoaderInterface $commandLoader
-    ) {
+    public function __construct(CommandLoaderInterface $commandLoader)
+    {
         parent::__construct('Fast Forward Dev Tools');
 
-        $this->setDefaultCommand('standards');
-        $this->setCommandLoader($this->commandLoader);
+        $this->setDefaultCommand('dev-tools:standards');
+        $this->setCommandLoader($commandLoader);
     }
 
     /**
@@ -71,18 +70,6 @@ final class DevTools extends Application
     public function getHelp(): string
     {
         return self::LOGO . "\n\n" . parent::getHelp();
-    }
-
-    /**
-     * Retrieves the shared DevTools service container.
-     *
-     * @return iterable
-     */
-    public function getCommands(): iterable
-    {
-        foreach ($this->commandLoader->getNames() as $name) {
-            yield $name => $this->commandLoader->get($name);
-        }
     }
 
     /**

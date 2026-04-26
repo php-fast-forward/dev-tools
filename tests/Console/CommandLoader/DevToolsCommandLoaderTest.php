@@ -108,7 +108,7 @@ final class DevToolsCommandLoaderTest extends TestCase
      * @return void
      */
     #[Test]
-    public function constructorWillRegisterCommandAliasesFromAsCommandAttribute(): void
+    public function constructorWillRegisterPrimaryCommandFromAsCommandAttribute(): void
     {
         $commandDirectory = \dirname(__DIR__, 3) . '/src/Console/Command';
 
@@ -134,7 +134,6 @@ final class DevToolsCommandLoaderTest extends TestCase
         $loader = new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
 
         self::assertTrue($loader->has('dev-tools:sync'));
-        self::assertTrue($loader->has('sync'));
     }
 
     /**

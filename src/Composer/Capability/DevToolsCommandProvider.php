@@ -22,7 +22,6 @@ namespace FastForward\DevTools\Composer\Capability;
 use Composer\Plugin\Capability\CommandProvider;
 use FastForward\DevTools\Composer\Command\ProxyCommand;
 use FastForward\DevTools\Console\DevTools;
-use Symfony\Component\Console\Command\Command;
 
 /**
  * Provides a registry of custom dev-tools commands mapped for Composer integration.
@@ -31,13 +30,29 @@ use Symfony\Component\Console\Command\Command;
 final class DevToolsCommandProvider implements CommandProvider
 {
     /**
+     * @var string the namespace prefix for dev-tools console commands to be registered as Composer commands
+     */
+    private const string COMMAND_NAMESPACE = 'FastForward\DevTools\Console\Command';
+
+    /**
      * {@inheritDoc}
      */
     public function getCommands()
     {
-        return array_map(
-            static fn(Command $command): ProxyCommand => new ProxyCommand($command),
-            iterator_to_array(DevTools::create()->getCommands()),
-        );
+        $commands = [];
+
+        foreach (DevTools::create()->all() as $registeredName => $command) {
+            if ($registeredName !== $command->getName()) {
+                continue;
+            }
+
+            if (! str_starts_with($command::class, self::COMMAND_NAMESPACE)) {
+                continue;
+            }
+
+            $commands[] = new ProxyCommand($command);
+        }
+
+        return $commands;
     }
 }

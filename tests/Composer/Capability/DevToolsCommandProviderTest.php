@@ -57,7 +57,7 @@ final class DevToolsCommandProviderTest extends TestCase
             ->willReturn($this->devTools->reveal())
             ->shouldBeCalledOnce();
 
-        $this->devTools->getCommands()
+        $this->devTools->all()
             ->willReturn([])->shouldBeCalledOnce();
 
         $this->commandProvider = new DevToolsCommandProvider();
@@ -90,8 +90,10 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->devTools->getCommands()
-            ->willReturn([$symfonyCommand])
+        $this->devTools->all()
+            ->willReturn([
+                'agents' => $symfonyCommand,
+            ])
             ->shouldBeCalledOnce();
 
         $commands = $this->commandProvider->getCommands();
