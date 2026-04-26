@@ -112,7 +112,7 @@ final class DevToolsCommandProviderTest extends TestCase
     public function getCommandsWillIgnoreAliasEntriesFromApplicationAllRegistry(): void
     {
         $symfonyCommand = new FixtureWithoutAsCommand('reports:tests');
-        $symfonyCommand->setAliases(['tests']);
+        $symfonyCommand->setAliases(['tests', 'phpunit']);
         $symfonyCommand->setDescription('Runs PHPUnit tests.');
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
@@ -129,5 +129,33 @@ final class DevToolsCommandProviderTest extends TestCase
         self::assertCount(1, $commands);
         self::assertInstanceOf(ProxyCommand::class, $commands[0]);
         self::assertSame('reports:tests', $commands[0]->getName());
+        self::assertSame(['tests', 'phpunit'], $commands[0]->getAliases());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommandsWillPreserveAliasDefinitionsInProxyCommand(): void
+    {
+        $symfonyCommand = new FixtureWithoutAsCommand('dev-tools:standards');
+        $symfonyCommand->setAliases(['standards']);
+        $symfonyCommand->setDescription('Runs standards checks.');
+        $symfonyCommand->setHelp('');
+        $symfonyCommand->setHidden(false);
+
+        $this->devTools->all()
+            ->willReturn([
+                'dev-tools:standards' => $symfonyCommand,
+                'standards' => $symfonyCommand,
+            ])
+            ->shouldBeCalledOnce();
+
+        $commands = $this->commandProvider->getCommands();
+        $proxyCommand = $commands[0];
+
+        self::assertInstanceOf(ProxyCommand::class, $proxyCommand);
+        self::assertSame('dev-tools:standards', $proxyCommand->getName());
+        self::assertSame(['standards'], $proxyCommand->getAliases());
     }
 }
