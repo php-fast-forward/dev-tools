@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777236247">
-  <project timestamp="1777236247" name="Clover Coverage">
+<coverage generated="1777236442">
+  <project timestamp="1777236442" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -512,15 +512,15 @@
         <class name="FastForward\DevTools\Composer\Capability\DevToolsCommandProvider" namespace="FastForward\DevTools\Composer\Capability">
           <metrics complexity="4" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="7" elements="9" coveredelements="7"/>
         </class>
-        <line num="40" type="method" name="getCommands" visibility="public" complexity="4" crap="4.03" count="3"/>
-        <line num="42" type="stmt" count="3"/>
-        <line num="44" type="stmt" count="3"/>
-        <line num="50" type="stmt" count="2"/>
-        <line num="51" type="stmt" count="1"/>
-        <line num="54" type="stmt" count="2"/>
+        <line num="40" type="method" name="getCommands" visibility="public" complexity="4" crap="4.03" count="4"/>
+        <line num="42" type="stmt" count="4"/>
+        <line num="44" type="stmt" count="4"/>
+        <line num="50" type="stmt" count="3"/>
+        <line num="51" type="stmt" count="2"/>
+        <line num="54" type="stmt" count="3"/>
         <line num="55" type="stmt" count="0"/>
-        <line num="58" type="stmt" count="2"/>
-        <line num="61" type="stmt" count="3"/>
+        <line num="58" type="stmt" count="3"/>
+        <line num="61" type="stmt" count="4"/>
         <metrics loc="64" ncloc="35" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="7" elements="9" coveredelements="7"/>
       </file>
     </package>
