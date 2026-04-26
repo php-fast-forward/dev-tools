@@ -55,9 +55,9 @@ final class GitHooksCommand extends Command
      * @param FilesystemInterface $filesystem the filesystem used to copy hooks
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
-     * @param FileDiffer $fileDiffer
+     * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,

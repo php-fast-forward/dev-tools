@@ -68,9 +68,9 @@ final class GitIgnoreCommand extends Command
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface|null $writer the writer component
      * @param FileLocatorInterface $fileLocator the file locator
-     * @param FileDiffer $fileDiffer
+     * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly MergerInterface $merger,

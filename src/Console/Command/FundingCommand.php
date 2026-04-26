@@ -61,7 +61,7 @@ final class FundingCommand extends Command
      * @param ProcessBuilderInterface $processBuilder the process builder used to normalize composer.json after updates
      * @param ProcessQueueInterface $processQueue the process queue used to execute composer normalize
      * @param LoggerInterface $logger the output-aware logger
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,

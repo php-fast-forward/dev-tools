@@ -35,7 +35,6 @@ use FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
-use FastForward\DevTools\Console\DevTools;
 use FastForward\DevTools\Console\Logger\OutputFormatLogger;
 use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
@@ -164,7 +163,6 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             InputInterface::class => get(ArgvInput::class),
             OutputInterface::class => get(ConsoleOutputInterface::class),
             CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
-            DevTools::class => create(DevTools::class)->constructor(get(DevToolsCommandLoader::class)),
             CommandProvider::class => get(DevToolsCommandProvider::class),
             ConsoleOutputInterface::class => create(ConsoleOutput::class)
                 ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)

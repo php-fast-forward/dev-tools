@@ -57,7 +57,7 @@ final class CopyResourceCommand extends Command
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
      * @param FileDiffer $fileDiffer the service used to summarize overwrite changes
      * @param LoggerInterface $logger the output-aware logger
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,

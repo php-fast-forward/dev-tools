@@ -181,7 +181,7 @@ final class StandardsCommand extends Command
     {
         return match ($command) {
             'refactor' => 'Refactoring Code with DevTools',
-            'phpdoc', 'docheader', 'php-cs-fixer' => 'Checking PHPDoc with DevTools',
+            'phpdoc' => 'Checking PHPDoc with DevTools',
             'code-style' => 'Checking Code Style with DevTools',
             'reports' => 'Generating Reports with DevTools',
             default => 'Running DevTools Command',

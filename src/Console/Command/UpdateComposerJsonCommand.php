@@ -60,9 +60,9 @@ final class UpdateComposerJsonCommand extends Command
      * @param ComposerJsonInterface $composer the composer.json metadata accessor
      * @param FilesystemInterface $filesystem the filesystem used to read and write composer.json
      * @param FileLocatorInterface $fileLocator the locator used to resolve packaged configuration files
-     * @param FileDiffer $fileDiffer
+     * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly ComposerJsonInterface $composer,

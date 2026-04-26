@@ -54,9 +54,9 @@ final class LicenseCommand extends Command
      *
      * @param GeneratorInterface $generator the generator component
      * @param FilesystemInterface $filesystem the filesystem component
-     * @param FileDiffer $fileDiffer
+     * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly GeneratorInterface $generator,

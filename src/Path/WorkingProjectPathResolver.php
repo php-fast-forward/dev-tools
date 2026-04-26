@@ -69,24 +69,10 @@ final class WorkingProjectPathResolver
      */
     public static function getToolingExcludedDirectories(string $baseDir = ''): array
     {
-        $excludeFromBaseDir = [
-            '.dev-tools' => ManagedWorkspace::getOutputDirectory(baseDir: $baseDir),
-            'backup' => Path::join($baseDir, 'backup'),
-            'cache' => Path::join($baseDir, 'cache'),
-            'public' => Path::join($baseDir, 'public'),
-            'resources' => Path::join($baseDir, 'resources'),
-            'tmp' => Path::join($baseDir, 'tmp'),
-            'vendor' => Path::join($baseDir, 'vendor'),
-            '*/vendor' => Path::join($baseDir, '*/vendor'),
-            '*/vendor/*' => Path::join($baseDir, '*/vendor/*'),
-            '**/vendor' => Path::join($baseDir, '**/vendor'),
-            '**/vendor/*' => Path::join($baseDir, '**/vendor/*'),
-        ];
-
         $directories = [];
 
         foreach (self::TOOLING_EXCLUDED_DIRECTORIES as $excludedDirectory) {
-            $directories[] = $excludeFromBaseDir[$excludedDirectory];
+            $directories[] = Path::join($baseDir, $excludedDirectory);
         }
 
         return $directories;

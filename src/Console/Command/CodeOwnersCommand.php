@@ -54,7 +54,7 @@ final class CodeOwnersCommand extends Command
      * @param FilesystemInterface $filesystem the filesystem used to read and write the target file
      * @param FileDiffer $fileDiffer the differ used to report managed-file drift
      * @param LoggerInterface $logger the output-aware logger
-     * @param SymfonyStyle $io
+     * @param SymfonyStyle $io the SymfonyStyle instance for interactive prompts
      */
     public function __construct(
         private readonly CodeOwnersGenerator $generator,
