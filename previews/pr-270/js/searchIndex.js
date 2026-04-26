@@ -4116,6 +4116,11 @@ Search.appendIndex(
             "summary": "Returns\u0020PHP\u0020source\u0020files\u0020that\u0020tooling\u0020SHOULD\u0020inspect\u0020without\u0020traversing\u0020generated\u0020directories.",
             "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingSourcePaths"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003ATOOLING_EXCLUDED_DIRECTORIES",
+            "name": "TOOLING_EXCLUDED_DIRECTORIES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#constant_TOOLING_EXCLUDED_DIRECTORIES"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Php\\Extension",
             "name": "Extension",
             "summary": "Checks\u0020PHP\u0020runtime\u0020extension\u0020availability\u0020through\u0020PHP\u0027s\u0020native\u0020runtime.",
