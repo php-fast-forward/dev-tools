@@ -359,13 +359,13 @@
         <ul>
             <li class="success">Get default commands will return framework defaults only</li>
             <li class="success">Constructor will set application name and expose loader commands</li>
-            <li class="success">Get commands will yield loader commands with preserved keys</li>
+            <li class="success">All will return loader commands with preserved keys</li>
             <li class="success">Create will return instance of dev tools</li>
         </ul>
         <h2>Dev Tools Command Loader (FastForward\DevTools\Tests\Console\CommandLoader\DevToolsCommandLoader)</h2>
         <ul>
             <li class="success">Constructor will register only instantiable commands</li>
-            <li class="success">Constructor will register command aliases from as command attribute</li>
+            <li class="success">Constructor will register primary command from as command attribute</li>
             <li class="success">Constructor will skip classes without as command attribute</li>
             <li class="success">Constructor will skip non instantiable and non command classes</li>
         </ul>
@@ -373,6 +373,7 @@
         <ul>
             <li class="success">Get commands will return empty array when no commands are registered</li>
             <li class="success">Get commands will return composer proxy commands for registered symfony commands</li>
+            <li class="success">Get commands will ignore alias entries from application all registry</li>
         </ul>
         <h2>Dev Tools Extension (FastForward\DevTools\Tests\PhpUnit\Runner\Extension\DevToolsExtension)</h2>
         <ul>

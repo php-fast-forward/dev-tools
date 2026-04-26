@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777227967">
-  <project timestamp="1777227967" name="Clover Coverage">
+<coverage generated="1777235766">
+  <project timestamp="1777235766" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -510,14 +510,18 @@
     <package name="FastForward\DevTools\Composer\Capability">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/Capability/DevToolsCommandProvider.php">
         <class name="FastForward\DevTools\Composer\Capability\DevToolsCommandProvider" namespace="FastForward\DevTools\Composer\Capability">
-          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
+          <metrics complexity="4" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="7" elements="9" coveredelements="7"/>
         </class>
-        <line num="36" type="method" name="getCommands" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="38" type="stmt" count="2"/>
-        <line num="39" type="stmt" count="2"/>
-        <line num="40" type="stmt" count="2"/>
-        <line num="41" type="stmt" count="2"/>
-        <metrics loc="44" ncloc="23" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="4" coveredstatements="4" elements="5" coveredelements="5"/>
+        <line num="40" type="method" name="getCommands" visibility="public" complexity="4" crap="4.03" count="3"/>
+        <line num="42" type="stmt" count="3"/>
+        <line num="44" type="stmt" count="3"/>
+        <line num="45" type="stmt" count="2"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="2"/>
+        <line num="50" type="stmt" count="0"/>
+        <line num="53" type="stmt" count="2"/>
+        <line num="56" type="stmt" count="3"/>
+        <metrics loc="59" ncloc="35" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="7" elements="9" coveredelements="7"/>
       </file>
     </package>
     <package name="FastForward\DevTools\Composer\Command">
@@ -3785,25 +3789,22 @@
     <package name="FastForward\DevTools\Console">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/DevTools.php">
         <class name="FastForward\DevTools\Console\DevTools" namespace="FastForward\DevTools\Console">
-          <metrics complexity="7" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="10" elements="16" coveredelements="14"/>
+          <metrics complexity="5" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="8" elements="13" coveredelements="11"/>
         </class>
         <line num="56" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
-        <line num="59" type="stmt" count="4"/>
+        <line num="58" type="stmt" count="4"/>
+        <line num="60" type="stmt" count="4"/>
         <line num="61" type="stmt" count="4"/>
-        <line num="62" type="stmt" count="4"/>
-        <line num="70" type="method" name="getHelp" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="73" type="stmt" count="0"/>
-        <line num="81" type="method" name="getCommands" visibility="public" complexity="2" crap="2" count="1"/>
-        <line num="83" type="stmt" count="1"/>
-        <line num="84" type="stmt" count="1"/>
-        <line num="93" type="method" name="create" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="69" type="method" name="getHelp" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="72" type="stmt" count="0"/>
+        <line num="80" type="method" name="create" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="82" type="stmt" count="1"/>
+        <line num="88" type="method" name="getContainer" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="90" type="stmt" count="1"/>
+        <line num="91" type="stmt" count="1"/>
+        <line num="92" type="stmt" count="1"/>
         <line num="95" type="stmt" count="1"/>
-        <line num="101" type="method" name="getContainer" visibility="public" complexity="2" crap="2" count="1"/>
-        <line num="103" type="stmt" count="1"/>
-        <line num="104" type="stmt" count="1"/>
-        <line num="105" type="stmt" count="1"/>
-        <line num="108" type="stmt" count="1"/>
-        <metrics loc="111" ncloc="64" classes="1" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="11" coveredstatements="10" elements="16" coveredelements="14"/>
+        <metrics loc="98" ncloc="56" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="8" elements="13" coveredelements="11"/>
       </file>
     </package>
     <package name="FastForward\DevTools\Console\Formatter">
@@ -5868,6 +5869,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="138" loc="18940" ncloc="11479" classes="103" methods="472" coveredmethods="384" conditionals="0" coveredconditionals="0" statements="4580" coveredstatements="4260" elements="5052" coveredelements="4644"/>
+    <metrics files="138" loc="18942" ncloc="11483" classes="103" methods="471" coveredmethods="382" conditionals="0" coveredconditionals="0" statements="4582" coveredstatements="4261" elements="5053" coveredelements="4643"/>
   </project>
 </coverage>
