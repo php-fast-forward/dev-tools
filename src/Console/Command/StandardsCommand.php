@@ -113,7 +113,7 @@ final class StandardsCommand extends Command
             'input' => $input,
         ]);
 
-        foreach (['refactor', 'phpdoc', 'code-style', 'reports'] as $command) {
+        foreach (['refactor', 'php-cs-fixer', 'code-style', 'reports'] as $command) {
             $commands[] = $command;
             $processBuilder = $this->processBuilder;
 
@@ -129,13 +129,13 @@ final class StandardsCommand extends Command
                 $processBuilder = $processBuilder->withArgument('--fix');
             }
 
-            if (\in_array($command, ['phpdoc', 'reports'], true) && null !== $cacheArgument) {
+            if (\in_array($command, ['php-cs-fixer', 'reports'], true) && null !== $cacheArgument) {
                 $processBuilder = $processBuilder->withArgument($cacheArgument);
             }
 
             if (
                 $cacheDirEnabled
-                && \in_array($command, ['phpdoc', 'reports'], true)
+                && \in_array($command, ['php-cs-fixer', 'reports'], true)
                 && null !== $cacheDir = $this->resolveCacheDirArgument($input, $command)
             ) {
                 $processBuilder = $processBuilder->withArgument('--cache-dir', $cacheDir);
@@ -181,7 +181,7 @@ final class StandardsCommand extends Command
     {
         return match ($command) {
             'refactor' => 'Refactoring Code with DevTools',
-            'phpdoc' => 'Checking PHPDoc with DevTools',
+            'php-cs-fixer', 'dockblock' => 'Checking PHPDoc with DevTools',
             'code-style' => 'Checking Code Style with DevTools',
             'reports' => 'Generating Reports with DevTools',
             default => 'Running DevTools Command',

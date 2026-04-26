@@ -118,7 +118,7 @@ final class StandardsCommandTest extends TestCase
             'Code standards checks completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface
-                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
+                && ['refactor', 'php-cs-fixer', 'code-style', 'reports'] === $context['commands']),
         )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
@@ -143,7 +143,7 @@ final class StandardsCommandTest extends TestCase
             'Code standards checks failed.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface
-                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
+                && ['refactor', 'php-cs-fixer', 'code-style', 'reports'] === $context['commands']),
         )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::FAILURE, $this->invokeExecute());
@@ -162,7 +162,7 @@ final class StandardsCommandTest extends TestCase
         $this->processBuilder->withArgument('--cache')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalledTimes(2);
-        $this->processBuilder->withArgument('--cache-dir', '.dev-tools/cache/phpdoc')
+        $this->processBuilder->withArgument('--cache-dir', '.dev-tools/cache/php-cs-fixer')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalledOnce();
         $this->processBuilder->withArgument('--cache-dir', '.dev-tools/cache/reports')

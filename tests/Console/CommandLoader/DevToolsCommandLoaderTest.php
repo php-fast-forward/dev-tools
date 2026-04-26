@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Command\SyncCommand;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
+use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -169,6 +170,47 @@ final class DevToolsCommandLoaderTest extends TestCase
         self::assertTrue($loader->has('reports:tests'));
         self::assertTrue($loader->has('tests'));
         self::assertTrue($loader->has('phpunit'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function constructorWillFailWhenCommandNameConflicts(): void
+    {
+        $commandDirectory = \dirname(__DIR__, 3);
+        $fixtureDirectory = $commandDirectory . '/tests/Fixtures/Console/Command';
+        $srcDirectory = $commandDirectory . '/src/Console/Command';
+
+        $this->finderFactory->create()
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalledOnce();
+        $this->finder->files()
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->in(Argument::type('string'))->willReturn($this->finder->reveal())->shouldBeCalled();
+        $this->finder->notPath('Traits')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->name('*.php')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->getIterator()
+            ->willReturn(new ArrayIterator([
+                new SplFileInfo(
+                    $fixtureDirectory . '/FixtureDuplicateCommandName.php',
+                    '',
+                    'FixtureDuplicateCommandName.php'
+                ),
+                new SplFileInfo($srcDirectory . '/AgentsCommand.php', '', 'AgentsCommand.php'),
+            ]))->shouldBeCalled();
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Command agents is already registered and cannot be assigned to FastForward\\DevTools\\Console\\Command\\AgentsCommand.'
+        );
+
+        new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
     }
 
     /**
