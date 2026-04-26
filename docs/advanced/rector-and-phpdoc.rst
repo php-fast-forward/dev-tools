@@ -1,5 +1,5 @@
 Rector and PHPDoc Automation
-===============================
+============================
 
 The package uses two different Rector entry points, and that difference matters
 when you are trying to understand why a rule did or did not run.
