@@ -104,4 +104,30 @@ final class DevToolsCommandProviderTest extends TestCase
         self::assertInstanceOf(ProxyCommand::class, $command);
         self::assertSame('agents', $command->getName());
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommandsWillIgnoreAliasEntriesFromApplicationAllRegistry(): void
+    {
+        $symfonyCommand = new FixtureWithoutAsCommand('reports:tests');
+        $symfonyCommand->setAliases(['tests']);
+        $symfonyCommand->setDescription('Runs PHPUnit tests.');
+        $symfonyCommand->setHelp('');
+        $symfonyCommand->setHidden(false);
+
+        $this->devTools->all()
+            ->willReturn([
+                'reports:tests' => $symfonyCommand,
+                'tests' => $symfonyCommand,
+            ])
+            ->shouldBeCalledOnce();
+
+        $commands = $this->commandProvider->getCommands();
+
+        self::assertCount(1, $commands);
+        self::assertInstanceOf(ProxyCommand::class, $commands[0]);
+        self::assertSame('reports:tests', $commands[0]->getName());
+    }
 }
