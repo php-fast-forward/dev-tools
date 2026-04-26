@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777188646">
-  <project timestamp="1777188646" name="Clover Coverage">
+<coverage generated="1777190655">
+  <project timestamp="1777190655" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -510,17 +510,19 @@
     <package name="FastForward\DevTools\Composer\Capability">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/Capability/DevToolsCommandProvider.php">
         <class name="FastForward\DevTools\Composer\Capability\DevToolsCommandProvider" namespace="FastForward\DevTools\Composer\Capability">
-          <metrics complexity="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
+          <metrics complexity="4" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="7" elements="10" coveredelements="7"/>
         </class>
-        <line num="39" type="method" name="getCommands" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="37" type="method" name="getCommands" visibility="public" complexity="4" crap="4.18" count="2"/>
+        <line num="39" type="stmt" count="2"/>
         <line num="41" type="stmt" count="2"/>
-        <line num="42" type="stmt" count="2"/>
-        <line num="43" type="stmt" count="2"/>
-        <line num="44" type="stmt" count="2"/>
-        <line num="45" type="stmt" count="2"/>
-        <line num="46" type="stmt" count="2"/>
-        <line num="47" type="stmt" count="2"/>
-        <metrics loc="50" ncloc="29" classes="1" methods="1" coveredmethods="1" conditionals="0" coveredconditionals="0" statements="7" coveredstatements="7" elements="8" coveredelements="8"/>
+        <line num="42" type="stmt" count="1"/>
+        <line num="43" type="stmt" count="0"/>
+        <line num="46" type="stmt" count="1"/>
+        <line num="48" type="stmt" count="1"/>
+        <line num="49" type="stmt" count="0"/>
+        <line num="52" type="stmt" count="1"/>
+        <line num="55" type="stmt" count="2"/>
+        <metrics loc="58" ncloc="37" classes="1" methods="1" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="9" coveredstatements="7" elements="10" coveredelements="7"/>
       </file>
     </package>
     <package name="FastForward\DevTools\Composer\Command">
@@ -5868,6 +5870,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="138" loc="18933" ncloc="11477" classes="103" methods="471" coveredmethods="383" conditionals="0" coveredconditionals="0" statements="4581" coveredstatements="4261" elements="5052" coveredelements="4644"/>
+    <metrics files="138" loc="18941" ncloc="11485" classes="103" methods="471" coveredmethods="382" conditionals="0" coveredconditionals="0" statements="4583" coveredstatements="4261" elements="5054" coveredelements="4643"/>
   </project>
 </coverage>
