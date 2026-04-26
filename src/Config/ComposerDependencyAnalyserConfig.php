@@ -152,6 +152,7 @@ final class ComposerDependencyAnalyserConfig
             self::DEFAULT_PACKAGED_PROD_ONLY_IN_DEV_DEPENDENCIES,
             [ErrorType::PROD_DEPENDENCY_ONLY_IN_DEV],
         );
+        $configuration->ignoreErrorsOnPackage('composer/composer', [ErrorType::DEV_DEPENDENCY_IN_PROD]);
 
         return $configuration;
     }
