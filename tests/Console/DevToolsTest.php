@@ -114,6 +114,39 @@ final class DevToolsTest extends TestCase
      * @return void
      */
     #[Test]
+    public function getCommandsWillYieldLoaderCommandsWithPreservedKeys(): void
+    {
+        $commands = [
+            'agents' => new class extends Command {
+                public function __construct()
+                {
+                    parent::__construct('agents');
+                }
+            },
+            'sync' => new class extends Command {
+                public function __construct()
+                {
+                    parent::__construct('sync');
+                }
+            },
+        ];
+
+        $this->commandLoader->getNames()
+            ->willReturn(array_keys($commands));
+        $this->commandLoader->get('agents')
+            ->willReturn($commands['agents']);
+        $this->commandLoader->get('sync')
+            ->willReturn($commands['sync']);
+
+        $providedCommands = iterator_to_array($this->devTools->getCommands());
+
+        self::assertSame($commands, $providedCommands);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function createWillReturnInstanceOfDevTools(): void
     {
         $reflectionProperty = new ReflectionProperty(DevTools::class, 'container');
