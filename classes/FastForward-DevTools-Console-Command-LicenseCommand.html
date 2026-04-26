@@ -1962,6 +1962,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-composer-command.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Command
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-composer-json.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3003,7 +3025,7 @@
             <div class="mb-3">
             <span class="text-body-secondary me-2">extends</span>
             <span class="badge rounded-pill text-bg-primary">
-                <abbr title="\Composer\Command\BaseCommand">BaseCommand</abbr>
+                <abbr title="\Symfony\Component\Console\Command\Command">Command</abbr>
             </span>
         </div>
     
@@ -3020,12 +3042,6 @@
         </nav>
     
     <div class="d-grid gap-2">
-                    <div class="d-flex flex-wrap align-items-center gap-2">
-                <span class="text-body-secondary">implements</span>
-                                    <span class="badge rounded-pill text-bg-info">
-                        <a href="classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html"><abbr title="\FastForward\DevTools\Console\Command\LoggerAwareCommandInterface">LoggerAwareCommandInterface</abbr></a>
-                    </span>
-                            </div>
         
                     <div class="d-flex flex-wrap align-items-center gap-2">
                 <span class="text-body-secondary">uses</span>
@@ -3061,7 +3077,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">40</span>
+    <span class="badge text-bg-light border">42</span>
 
     </aside>
         </div>
@@ -3121,12 +3137,17 @@ license is declared in composer.json.</p>
                             <div class="small">
                                             <span class="fw-semibold text-body-secondary">$name</span>
                         <span class="text-body-secondary">:</span>
-                                        <code>&#039;license&#039;</code>
+                                        <code>&#039;license:generate&#039;</code>
                 </div>
                             <div class="small">
                                             <span class="fw-semibold text-body-secondary">$description</span>
                         <span class="text-body-secondary">:</span>
                                         <code>&#039;Generates a LICENSE file from composer.json license information.&#039;</code>
+                </div>
+                            <div class="small">
+                                            <span class="fw-semibold text-body-secondary">$aliases</span>
+                        <span class="text-body-secondary">:</span>
+                                        <code>[&#039;LICENSE.md&#039;, &#039;license&#039;]</code>
                 </div>
                     </div>
     </div>                            </div>
@@ -3151,20 +3172,6 @@ license is declared in composer.json.</p>
     <div class="d-grid gap-4">
         
         
-                    <section class="card border-0 shadow-sm">
-                <div class="card-header bg-body-tertiary border-0 d-flex align-items-center gap-2">
-                    <i class="fas fa-plug text-primary"></i>
-                    <h4 id="toc-interfaces" class="h6 mb-0 fw-semibold">Interfaces</h4>
-                </div>
-                <div class="list-group list-group-flush">
-                                            <div class="list-group-item">
-                            <a href="classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html" class="fw-semibold text-decoration-none">
-                                <a href="classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html"><abbr title="\FastForward\DevTools\Console\Command\LoggerAwareCommandInterface">LoggerAwareCommandInterface</abbr></a>
-                            </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Defines the logger contract consumed by reusable command result helpers.</p>
-                                                    </div>
-                                    </div>
-            </section>
         
         
         
@@ -3223,6 +3230,22 @@ license is declared in composer.json.</p>
 
     <span class="text-body-secondary small text-end">
                         &nbsp;: <a href="classes/FastForward-DevTools-License-GeneratorInterface.html"><abbr title="\FastForward\DevTools\License\GeneratorInterface">GeneratorInterface</abbr></a>            </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_io"
+        >
+            $io
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                        &nbsp;: <abbr title="\Symfony\Component\Console\Style\SymfonyStyle">SymfonyStyle</abbr>            </span>
 </div>
                         </div>
                                             <div class="list-group-item">
@@ -3508,7 +3531,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">57</span>
+    <span class="badge text-bg-light border">64</span>
 
     </aside>
     
@@ -3578,7 +3601,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">56</span>
+    <span class="badge text-bg-light border">63</span>
 
     </aside>
     
@@ -3648,7 +3671,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">55</span>
+    <span class="badge text-bg-light border">62</span>
 
     </aside>
     
@@ -3667,6 +3690,76 @@ license is declared in composer.json.</p>
 
     <span class="text-primary fw-semibold">
         $generator
+    </span>
+
+    </code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+        
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="property_io">
+                <span class="text-primary">$io</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_io"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                                    <span class="badge text-bg-info">Read-only</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Command/LicenseCommand.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-command-licensecommand.html"><abbr title="src/Console/Command/LicenseCommand.php">LicenseCommand.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">66</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+            <span class="badge text-bg-light border text-dark">
+            private
+        </span>
+    
+    
+    <span class="text-info-emphasis">
+        <abbr title="\Symfony\Component\Console\Style\SymfonyStyle">SymfonyStyle</abbr>
+    </span>
+
+    <span class="text-primary fw-semibold">
+        $io
     </span>
 
     </code>
@@ -3718,7 +3811,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">58</span>
+    <span class="badge text-bg-light border">65</span>
 
     </aside>
     
@@ -3811,7 +3904,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">54</span>
+    <span class="badge text-bg-light border">61</span>
 
     </aside>
         <div class="mb-4">
@@ -3831,7 +3924,8 @@ license is declared in composer.json.</p>
                 </span><span class="text-primary">$generator</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html"><abbr title="\FastForward\DevTools\Filesystem\FilesystemInterface">FilesystemInterface</abbr></a>&nbsp;
                 </span><span class="text-primary">$filesystem</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-Resource-FileDiffer.html"><abbr title="\FastForward\DevTools\Resource\FileDiffer">FileDiffer</abbr></a>&nbsp;
                 </span><span class="text-primary">$fileDiffer</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;
-                </span><span class="text-primary">$logger</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+                </span><span class="text-primary">$logger</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Style\SymfonyStyle">SymfonyStyle</abbr>&nbsp;
+                </span><span class="text-primary">$io</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3926,6 +4020,19 @@ license is declared in composer.json.</p>
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the file differ used to summarize synchronization changes</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -3954,6 +4061,38 @@ license is declared in composer.json.</p>
 
                 <div>
                     <p>the output-aware logger</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$io</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <abbr title="\Symfony\Component\Console\Style\SymfonyStyle">SymfonyStyle</abbr>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the input/output service used to interact with the user</p>
 
                 </div>
             </div>
@@ -4090,7 +4229,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">66</span>
+    <span class="badge text-bg-light border">74</span>
 
     </aside>
         <div class="mb-4">
@@ -4157,7 +4296,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">107</span>
+    <span class="badge text-bg-light border">115</span>
 
     </aside>
         <div class="mb-4">
@@ -5036,7 +5175,7 @@ license is declared in composer.json.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">231</span>
+    <span class="badge text-bg-light border">239</span>
 
     </aside>
         <div class="mb-4">
@@ -5536,6 +5675,12 @@ license is declared in composer.json.</p>
                                 href="classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_generator"
                             >
                                 <span class="text-truncate">$generator</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_io"
+                            >
+                                <span class="text-truncate">$io</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"

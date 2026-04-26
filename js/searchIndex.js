@@ -506,6 +506,31 @@ Search.appendIndex(
             "summary": "\u007B\u0040inheritDoc\u007D",
             "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_getCommands"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003ACOMMAND_NAMESPACE",
+            "name": "COMMAND_NAMESPACE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#constant_COMMAND_NAMESPACE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand",
+            "name": "ProxyCommand",
+            "summary": "Adapts\u0020migrated\u0020Symfony\u0020commands\u0020to\u0020Composer\u0027s\u0020BaseCommand\u0020contract.",
+            "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand\u003A\u003A\u0024command",
+            "name": "command",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html#property_command"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson",
             "name": "ComposerJson",
             "summary": "Represents\u0020a\u0020specialized\u0020reader\u0020for\u0020a\u0020Composer\u0020JSON\u0020file.",
@@ -620,6 +645,21 @@ Search.appendIndex(
             "name": "getComments",
             "summary": "Returns\u0020comment\u0020metadata\u0020associated\u0020with\u0020the\u0020Composer\u0020file.",
             "url": "classes/FastForward-DevTools-Composer-Json-ComposerJson.html#method_getComments"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson\u003A\u003AreadComposerJsonFile\u0028\u0029",
+            "name": "readComposerJsonFile",
+            "summary": "Reads\u0020and\u0020decodes\u0020a\u0020composer\u0020manifest\u0020file.",
+            "url": "classes/FastForward-DevTools-Composer-Json-ComposerJson.html#method_readComposerJsonFile"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson\u003A\u003AreadComposerInstalledManifest\u0028\u0029",
+            "name": "readComposerInstalledManifest",
+            "summary": "Reads\u0020and\u0020decodes\u0020the\u0020composer\u0020installed\u0020manifest.",
+            "url": "classes/FastForward-DevTools-Composer-Json-ComposerJson.html#method_readComposerInstalledManifest"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson\u003A\u003AdecodeJson\u0028\u0029",
+            "name": "decodeJson",
+            "summary": "Decodes\u0020a\u0020JSON\u0020file.",
+            "url": "classes/FastForward-DevTools-Composer-Json-ComposerJson.html#method_decodeJson"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson\u003A\u003A\u0024data",
             "name": "data",
@@ -1446,6 +1486,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_logger"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CodeOwnersCommand.html#property_io"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeStyleCommand",
             "name": "CodeStyleCommand",
             "summary": "Represents\u0020the\u0020command\u0020responsible\u0020for\u0020checking\u0020and\u0020fixing\u0020code\u0020style\u0020issues.",
@@ -1550,6 +1595,11 @@ Search.appendIndex(
             "name": "logger",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CopyResourceCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-CopyResourceCommand.html#property_io"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand",
             "name": "DependenciesCommand",
@@ -1776,6 +1826,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_logger"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-FundingCommand.html#property_io"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand",
             "name": "GitAttributesCommand",
             "summary": "Provides\u0020functionality\u0020to\u0020manage\u0020.gitattributes\u0020export\u002Dignore\u0020rules.",
@@ -1876,6 +1931,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_logger"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitAttributesCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitAttributesCommand.html#property_io"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
             "name": "GitHooksCommand",
             "summary": "Installs\u0020packaged\u0020Git\u0020hooks\u0020for\u0020the\u0020consumer\u0020repository.",
@@ -1930,6 +1990,11 @@ Search.appendIndex(
             "name": "logger",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_io"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand",
             "name": "GitIgnoreCommand",
@@ -1991,6 +2056,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_logger"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitIgnoreCommand.html#property_io"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand",
             "name": "LicenseCommand",
             "summary": "Generates\u0020and\u0020copies\u0020LICENSE\u0020files\u0020to\u0020projects.",
@@ -2036,15 +2106,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_logger"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
-            "name": "LoggerAwareCommandInterface",
-            "summary": "Defines\u0020the\u0020logger\u0020contract\u0020consumed\u0020by\u0020reusable\u0020command\u0020result\u0020helpers.",
-            "url": "classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface\u003A\u003AgetLogger\u0028\u0029",
-            "name": "getLogger",
-            "summary": "Returns\u0020the\u0020logger\u0020used\u0020to\u0020emit\u0020command\u0020lifecycle\u0020messages.",
-            "url": "classes/FastForward-DevTools-Console-Command-LoggerAwareCommandInterface.html#method_getLogger"
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\LicenseCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-LicenseCommand.html#property_io"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand",
             "name": "MetricsCommand",
@@ -2511,10 +2576,15 @@ Search.appendIndex(
             "summary": "Prompts\u0020whether\u0020composer.json\u0020should\u0020be\u0020updated.",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#method_shouldUpdateComposerJson"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003Ascripts\u0028\u0029",
-            "name": "scripts",
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003AupdatedComposerJsonContents\u0028\u0029",
+            "name": "updatedComposerJsonContents",
+            "summary": "Builds\u0020the\u0020managed\u0020composer.json\u0020payload.",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#method_updatedComposerJsonContents"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003AgetScripts\u0028\u0029",
+            "name": "getScripts",
             "summary": "Returns\u0020the\u0020Composer\u0020scripts\u0020managed\u0020by\u0020this\u0020command.",
-            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#method_scripts"
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#method_getScripts"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024composer",
             "name": "composer",
@@ -2540,6 +2610,11 @@ Search.appendIndex(
             "name": "logger",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_logger"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024io",
+            "name": "io",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_io"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand",
             "name": "WikiCommand",
@@ -2626,6 +2701,11 @@ Search.appendIndex(
             "summary": "Initializes\u0020the\u0020DevTools\u0020global\u0020context\u0020and\u0020dependency\u0020graph.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetHelp\u0028\u0029",
+            "name": "getHelp",
+            "summary": "Gets\u0020the\u0020help\u0020message\u0020for\u0020the\u0020DevTools\u0020application,\u0020including\u0020the\u0020ASCII\u0020logo.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getHelp"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003Acreate\u0028\u0029",
             "name": "create",
             "summary": "Create\u0020DevTools\u0020instance\u0020from\u0020container.",
@@ -2636,10 +2716,10 @@ Search.appendIndex(
             "summary": "Retrieves\u0020the\u0020shared\u0020DevTools\u0020service\u0020container.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getContainer"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetDefaultCommands\u0028\u0029",
-            "name": "getDefaultCommands",
-            "summary": "Retrieves\u0020the\u0020default\u0020set\u0020of\u0020commands\u0020provided\u0020by\u0020the\u0020Symfony\u0020Application.",
-            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getDefaultCommands"
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ALOGO",
+            "name": "LOGO",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#constant_LOGO"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024container",
             "name": "container",
@@ -3076,15 +3156,15 @@ Search.appendIndex(
             "summary": "Computes\u0020the\u0020relative\u0020path\u0020from\u0020the\u0020base\u0020path\u0020to\u0020the\u0020target\u0020path.",
             "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_makePathRelative"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Abasename\u0028\u0029",
-            "name": "basename",
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003AgetBasename\u0028\u0029",
+            "name": "getBasename",
             "summary": "Returns\u0020the\u0020trailing\u0020name\u0020component\u0020of\u0020a\u0020path.",
-            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_basename"
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_getBasename"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003Adirname\u0028\u0029",
-            "name": "dirname",
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003AgetDirectory\u0028\u0029",
+            "name": "getDirectory",
             "summary": "Returns\u0020a\u0020parent\u0020directory\u0027s\u0020path.",
-            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_dirname"
+            "url": "classes/FastForward-DevTools-Filesystem-Filesystem.html#method_getDirectory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem\u003A\u003A\u0024filesystem",
             "name": "filesystem",
@@ -3151,15 +3231,15 @@ Search.appendIndex(
             "summary": "Computes\u0020the\u0020relative\u0020path\u0020from\u0020the\u0020base\u0020path\u0020to\u0020the\u0020target\u0020path.",
             "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_makePathRelative"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Abasename\u0028\u0029",
-            "name": "basename",
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003AgetBasename\u0028\u0029",
+            "name": "getBasename",
             "summary": "Returns\u0020the\u0020trailing\u0020name\u0020component\u0020of\u0020a\u0020path.",
-            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_basename"
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_getBasename"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003Adirname\u0028\u0029",
-            "name": "dirname",
+            "fqsen": "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface\u003A\u003AgetDirectory\u0028\u0029",
+            "name": "getDirectory",
             "summary": "Returns\u0020a\u0020parent\u0020directory\u0027s\u0020path.",
-            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_dirname"
+            "url": "classes/FastForward-DevTools-Filesystem-FilesystemInterface.html#method_getDirectory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\FinderFactory",
             "name": "FinderFactory",
@@ -3205,6 +3285,11 @@ Search.appendIndex(
             "name": "insertFundingEntries",
             "summary": "Inserts\u0020funding\u0020entries\u0020in\u0020a\u0020stable\u0020Composer\u0020key\u0020order.",
             "url": "classes/FastForward-DevTools-Funding-ComposerFundingCodec.html#method_insertFundingEntries"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Funding\\ComposerFundingCodec\u003A\u003AdecodeJsonContents\u0028\u0029",
+            "name": "decodeJsonContents",
+            "summary": "Decodes\u0020a\u0020Composer\u0020JSON\u0020payload\u0020to\u0020an\u0020array.",
+            "url": "classes/FastForward-DevTools-Funding-ComposerFundingCodec.html#method_decodeJsonContents"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Funding\\FundingProfile",
             "name": "FundingProfile",
@@ -3921,6 +4006,11 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020packaged\u0020DevTools\u0020binary\u0020path.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getBinaryPath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetBinaryCommand\u0028\u0029",
+            "name": "getBinaryCommand",
+            "summary": "Returns\u0020the\u0020packaged\u0020DevTools\u0020binary\u0020command\u0020with\u0020a\u0020subcommand.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getBinaryCommand"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetResourcesPath\u0028\u0029",
             "name": "getResourcesPath",
             "summary": "Returns\u0020the\u0020packaged\u0020resources\u0020directory\u0020or\u0020a\u0020path\u0020under\u0020it.",
@@ -4025,6 +4115,11 @@ Search.appendIndex(
             "name": "getToolingSourcePaths",
             "summary": "Returns\u0020PHP\u0020source\u0020files\u0020that\u0020tooling\u0020SHOULD\u0020inspect\u0020without\u0020traversing\u0020generated\u0020directories.",
             "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingSourcePaths"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003ATOOLING_EXCLUDED_DIRECTORIES",
+            "name": "TOOLING_EXCLUDED_DIRECTORIES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#constant_TOOLING_EXCLUDED_DIRECTORIES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Php\\Extension",
             "name": "Extension",
@@ -4796,11 +4891,6 @@ Search.appendIndex(
             "summary": "Initializes\u0020the\u0020synchronizer\u0020with\u0020a\u0020filesystem\u0020and\u0020finder\u0020factory.",
             "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method___construct"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003AsetLogger\u0028\u0029",
-            "name": "setLogger",
-            "summary": "\u007B\u0040inheritDoc\u007D",
-            "url": "classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html#method_setLogger"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer\u003A\u003Asynchronize\u0028\u0029",
             "name": "synchronize",
             "summary": "Synchronizes\u0020packaged\u0020directory\u0020entries\u0020into\u0020the\u0020consumer\u0020repository.",
@@ -4980,6 +5070,11 @@ Search.appendIndex(
             "name": "Capability",
             "summary": "",
             "url": "namespaces/fastforward-devtools-composer-capability.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Command",
+            "name": "Command",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-composer-command.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Json",
             "name": "Json",

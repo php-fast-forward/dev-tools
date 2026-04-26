@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-25 00:10:09        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-26 22:26:36        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -93,7 +93,7 @@
                             <path d="M0 0h24v24H0z" fill="none">
                             <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z">
                         </svg>
-                        Violations (70)
+                        Violations (73)
                     </a>
                 </li>
                                     <li>
@@ -317,12 +317,7 @@
         "relations": []
     },
     {
-        "name": "\\Composer\\Command\\BaseCommand",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\LoggerAwareCommandInterface",
+        "name": "\\Symfony\\Component\\Console\\Command\\Command",
         "size": 3000,
         "relations": []
     },
@@ -398,6 +393,16 @@
     },
     {
         "name": "\\FastForward\\DevTools\\Resource\\FileDiffer",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Style\\SymfonyStyle",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Console\\Question\\ConfirmationQuestion",
         "size": 3000,
         "relations": []
     },
@@ -572,16 +577,6 @@
         "relations": []
     },
     {
-        "name": "\\Composer\\Factory",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\Json\\JsonManipulator",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\FundingCommand",
         "size": 3000,
         "relations": []
@@ -727,7 +722,7 @@
         "relations": []
     },
     {
-        "name": "\\Composer\\Console\\Application",
+        "name": "\\Symfony\\Component\\Console\\Application",
         "size": 3000,
         "relations": []
     },
@@ -743,11 +738,6 @@
     },
     {
         "name": "\\DI\\Container",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\ReflectionMethod",
         "size": 3000,
         "relations": []
     },
@@ -778,6 +768,11 @@
     },
     {
         "name": "\\ReflectionClass",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\RuntimeException",
         "size": 3000,
         "relations": []
     },
@@ -977,6 +972,16 @@
         "relations": []
     },
     {
+        "name": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Composer\\Command\\BaseCommand",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider",
         "size": 3000,
         "relations": []
@@ -988,11 +993,6 @@
     },
     {
         "name": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Composer\\Json\\JsonFile",
         "size": 3000,
         "relations": []
     },
@@ -1127,11 +1127,6 @@
         "relations": []
     },
     {
-        "name": "\\RuntimeException",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "\\FastForward\\DevTools\\Process\\ProcessBuilder",
         "size": 3000,
         "relations": []
@@ -1162,11 +1157,6 @@
         "relations": []
     },
     {
-        "name": "\\Symfony\\Component\\Console\\Style\\SymfonyStyle",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "\\FastForward\\DevTools\\Process\\CompositeProcessEnvironmentConfigurator",
         "size": 3000,
         "relations": []
@@ -1188,11 +1178,6 @@
     },
     {
         "name": "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Psr\\Log\\LoggerAwareInterface",
         "size": 3000,
         "relations": []
     },
@@ -1397,21 +1382,20 @@
         "relations": []
     },
     {
+        "name": "\\ReflectionMethod",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\AgentsCommandTest",
         "size": 3000,
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
-            "\\Symfony\\Component\\Console\\Helper\\HelperSet",
             "\\FastForward\\DevTools\\Console\\Command\\AgentsCommand",
             "\\Prophecy\\Argument",
             "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
             "\\ReflectionMethod"
         ]
-    },
-    {
-        "name": "\\Symfony\\Component\\Console\\Helper\\HelperSet",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogEntryCommandTest",
@@ -1604,7 +1588,6 @@
         "size": 3000,
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
-            "\\Symfony\\Component\\Console\\Helper\\HelperSet",
             "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand",
             "\\Prophecy\\Argument",
             "\\FastForward\\DevTools\\Sync\\SynchronizeResult",
@@ -1705,12 +1688,17 @@
         ]
     },
     {
-        "name": "\\anonymous@00000000000008040000000000000000",
+        "name": "\\anonymous@0000000000000cd20000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\Symfony\\Component\\Console\\Command\\Command",
+        "name": "\\anonymous@000000000000066f0000000000000000",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\anonymous@00000000000012660000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -1719,8 +1707,11 @@
         "size": 3000,
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
+            "\\Prophecy\\Argument",
             "\\FastForward\\DevTools\\Console\\DevTools",
-            "\\anonymous@00000000000008040000000000000000",
+            "\\anonymous@0000000000000cd20000000000000000",
+            "\\anonymous@000000000000066f0000000000000000",
+            "\\anonymous@00000000000012660000000000000000",
             "\\ReflectionProperty",
             "\\ReflectionMethod"
         ]
@@ -1765,7 +1756,7 @@
         ]
     },
     {
-        "name": "\\anonymous@00000000000003320000000000000000",
+        "name": "\\anonymous@000000000000210e0000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -1787,7 +1778,7 @@
             "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
             "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
             "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
-            "\\anonymous@00000000000003320000000000000000",
+            "\\anonymous@000000000000210e0000000000000000",
             "\\stdClass",
             "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput"
         ]
@@ -1926,7 +1917,7 @@
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000001cea0000000000000000",
+        "name": "\\anonymous@00000000000006790000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -1941,7 +1932,7 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\anonymous@0000000000001cea0000000000000000"
+            "\\anonymous@00000000000006790000000000000000"
         ]
     },
     {
@@ -2135,7 +2126,15 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider",
-            "\\ReflectionProperty"
+            "\\ReflectionProperty",
+            "\\FastForward\\DevTools\\Console\\Command\\FixtureWithoutAsCommand"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\FixtureWithoutAsCommand",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\Command\\Command"
         ]
     },
     {
@@ -2380,8 +2379,7 @@
             "\\PHPUnit\\Framework\\TestCase",
             "\\Symfony\\Component\\Finder\\SplFileInfo",
             "\\ArrayIterator",
-            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
-            "\\Psr\\Log\\LoggerInterface"
+            "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer"
         ]
     },
     {
@@ -2436,7 +2434,7 @@
         ]
     },
     {
-        "name": "\\anonymous@000000000000244b0000000000000000",
+        "name": "\\anonymous@00000000000023fc0000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2457,7 +2455,7 @@
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "\\RuntimeException",
-            "\\anonymous@000000000000244b0000000000000000",
+            "\\anonymous@00000000000023fc0000000000000000",
             "\\SebastianBergmann\\CodeCoverage\\Filter",
             "\\SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "\\SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",
@@ -2498,6 +2496,25 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\PhpUnit\\Runner\\Extension\\DevToolsExtension"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\FixtureAbstractCommand",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\Command\\Command"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\FixtureWithoutCommandParent",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Console\\Command\\FixtureDuplicateCommandName",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\Command\\Command"
         ]
     },
     {

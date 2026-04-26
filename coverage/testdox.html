@@ -359,18 +359,24 @@
         <ul>
             <li class="success">Get default commands will return framework defaults only</li>
             <li class="success">Constructor will set application name and expose loader commands</li>
+            <li class="success">All will return loader commands with preserved keys</li>
             <li class="success">Create will return instance of dev tools</li>
         </ul>
         <h2>Dev Tools Command Loader (FastForward\DevTools\Tests\Console\CommandLoader\DevToolsCommandLoader)</h2>
         <ul>
             <li class="success">Constructor will register only instantiable commands</li>
+            <li class="success">Constructor will register primary command from as command attribute</li>
+            <li class="success">Constructor will register aliases from as command attribute</li>
+            <li class="success">Constructor will fail when command name conflicts</li>
             <li class="success">Constructor will skip classes without as command attribute</li>
             <li class="success">Constructor will skip non instantiable and non command classes</li>
         </ul>
         <h2>Dev Tools Command Provider (FastForward\DevTools\Tests\Composer\Capability\DevToolsCommandProvider)</h2>
         <ul>
             <li class="success">Get commands will return empty array when no commands are registered</li>
-            <li class="success">Get commands will return registered base commands</li>
+            <li class="success">Get commands will return composer proxy commands for registered symfony commands</li>
+            <li class="success">Get commands will ignore alias entries from application all registry</li>
+            <li class="success">Get commands will preserve alias definitions in proxy command</li>
         </ul>
         <h2>Dev Tools Extension (FastForward\DevTools\Tests\PhpUnit\Runner\Extension\DevToolsExtension)</h2>
         <ul>
@@ -668,7 +674,6 @@
         </ul>
         <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>
         <ul>
-            <li class="success">Set logger will replace the active logger</li>
             <li class="success">Synchronize with missing package path will return failed result</li>
             <li class="success">Synchronize with missing target dir will create it and create links</li>
             <li class="success">Synchronize will preserve existing valid symlink</li>
@@ -854,7 +859,7 @@
             <li class="success">It will expose canonical repository root paths</li>
             <li class="success">It will normalize path separators when joining project paths</li>
             <li class="success">It will expose relative tooling skip patterns by default</li>
-            <li class="success">It will expose tooling source paths without traversing vendor directories</li>
+            <li class="success">It will expose tooling source paths ignoring excluded directories</li>
             <li class="success">It will expose the current working project directory or paths under it</li>
         </ul>
         <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>
