@@ -811,7 +811,7 @@
             href="./commands/phpdoc.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
-            docheader
+            phpdoc
         </a>
 
             </div>
@@ -1244,7 +1244,7 @@
             href="./advanced/rector-and-phpdoc.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            Rector and Docheader Automation
+            Rector and PHPDoc Automation
         </a>
 
             </div>
@@ -2978,8 +2978,8 @@
                             <div class="row g-4">
                                 <div class="col-12">
                                     <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
-                                            <section class="section " id="docheader">
-            <h1>docheader</h1>
+                                            <section class="section " id="phpdoc">
+            <h1>phpdoc</h1>
 
             
     <p>Checks and fixes PHPDoc comments.</p>
@@ -2988,7 +2988,7 @@
             <h2>Description</h2>
 
             
-    <p>The <code>docheader</code>
+    <p>The <code>phpdoc</code>
  command coordinates PHPDoc checking and fixing using:
 (alias <code>docheader</code>
  and <code>php-cs-fixer</code>
@@ -3013,11 +3013,10 @@
             <section class="section " id="usage">
             <h2>Usage</h2>
 
-            <pre><code class="language-bash">composer docheader
-composer php-cs-fixer
-composer docheader [options]
-composer dev-tools docheader -- [options]
-vendor/bin/dev-tools docheader [options]</code></pre>
+            <pre><code class="language-bash">composer phpdoc
+composer phpdoc [options]
+composer dev-tools phpdoc -- [options]
+vendor/bin/dev-tools phpdoc [options]</code></pre>
 
     </section>
 
@@ -3078,22 +3077,22 @@ output.</dd>
             
     <p>Check PHPDocs (dry-run):</p>
 
-            <pre><code class="language-bash">composer docheader</code></pre>
+            <pre><code class="language-bash">composer phpdoc</code></pre>
 
             
     <p>Fix PHPDocs automatically:</p>
 
-            <pre><code class="language-bash">composer docheader --fix</code></pre>
+            <pre><code class="language-bash">composer phpdoc --fix</code></pre>
 
             
     <p>Check specific directory:</p>
 
-            <pre><code class="language-bash">composer docheader ./src</code></pre>
+            <pre><code class="language-bash">composer phpdoc ./src</code></pre>
 
             
     <p>Check without cache:</p>
 
-            <pre><code class="language-bash">composer docheader --no-cache</code></pre>
+            <pre><code class="language-bash">composer phpdoc --no-cache</code></pre>
 
     </section>
 
