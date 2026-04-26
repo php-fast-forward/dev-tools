@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\CommandLoader;
 use ArrayIterator;
 use FastForward\DevTools\Console\Command\AgentsCommand;
 use FastForward\DevTools\Console\Command\SyncCommand;
+use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -134,6 +135,40 @@ final class DevToolsCommandLoaderTest extends TestCase
         $loader = new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
 
         self::assertTrue($loader->has('dev-tools:sync'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function constructorWillRegisterAliasesFromAsCommandAttribute(): void
+    {
+        $commandDirectory = \dirname(__DIR__, 3) . '/src/Console/Command';
+
+        $this->finderFactory->create()
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalledOnce();
+        $this->finder->files()
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->in(Argument::type('string'))->willReturn($this->finder->reveal())->shouldBeCalled();
+        $this->finder->notPath('Traits')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->name('*.php')
+            ->willReturn($this->finder->reveal())
+            ->shouldBeCalled();
+        $this->finder->getIterator()
+            ->willReturn(new ArrayIterator([
+                new SplFileInfo($commandDirectory . '/TestsCommand.php', '', 'TestsCommand.php'),
+            ]))->shouldBeCalled();
+        $this->container->has(TestsCommand::class)->willReturn(true)->shouldBeCalled();
+
+        $loader = new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
+
+        self::assertTrue($loader->has('reports:tests'));
+        self::assertTrue($loader->has('tests'));
+        self::assertTrue($loader->has('phpunit'));
     }
 
     /**

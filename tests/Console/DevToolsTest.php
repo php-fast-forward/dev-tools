@@ -31,6 +31,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -67,6 +68,8 @@ final class DevToolsTest extends TestCase
         $this->commandLoader = $this->prophesize(CommandLoaderInterface::class);
         $this->commandLoader->getNames()
             ->willReturn([]);
+        $this->commandLoader->has(Argument::type('string'))
+            ->willReturn(false);
         $this->devTools = new DevTools($this->commandLoader->reveal());
     }
 

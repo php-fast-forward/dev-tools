@@ -42,6 +42,11 @@ final class DevToolsCommandProvider implements CommandProvider
         $commands = [];
 
         foreach (DevTools::create()->all() as $registeredName => $command) {
+            /**
+             * Composer plugin registrations must be canonicalized to one command per Symfony command.
+             * The application exposes alias keys in `all()`, but Composer interprets each entry as
+             * an independent command and emits override warnings.
+             */
             if ($registeredName !== $command->getName()) {
                 continue;
             }
