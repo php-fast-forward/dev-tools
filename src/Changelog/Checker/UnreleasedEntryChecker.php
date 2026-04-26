@@ -74,7 +74,7 @@ final readonly class UnreleasedEntryChecker implements UnreleasedEntryCheckerInt
         }
 
         try {
-            $baseline = $this->gitClient->show($againstReference, $file, $this->filesystem->dirname($file));
+            $baseline = $this->gitClient->show($againstReference, $file, $this->filesystem->getDirectory($file));
         } catch (Throwable) {
             return true;
         }
