@@ -37,8 +37,9 @@ subprocess execution is needed.
      - ``refactor``
      - Runs Rector with local or packaged configuration.
    * - ``FastForward\DevTools\Console\Command\PhpDocCommand``
-     - ``phpdoc``
-     - Runs PHP-CS-Fixer and a focused Rector PHPDoc pass.
+     - ``standards:docheader``
+     - Runs PHP-CS-Fixer and a focused Rector PHPDoc pass. Supported aliases:
+       ``docheader`` and ``php-cs-fixer``.
    * - ``FastForward\DevTools\Console\Command\CodeStyleCommand``
      - ``code-style``
      - Runs Composer Normalize and ECS.

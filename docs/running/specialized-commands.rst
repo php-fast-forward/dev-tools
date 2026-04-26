@@ -179,15 +179,15 @@ Important details:
 - ``--json`` and ``--pretty-json`` forward ``--output-format json`` to Rector
   and disable its progress bar.
 
-``phpdoc``
-----------
+``docheader`` (alias: ``php-cs-fixer``)
+---------------------------------------
 
 Coordinates PHP-CS-Fixer and a focused Rector pass for missing method PHPDoc.
 
 .. code-block:: bash
 
-   composer phpdoc
-   composer phpdoc --fix
+   composer docheader
+   composer php-cs-fixer --fix
 
 Important details:
 

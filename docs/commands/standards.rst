@@ -9,7 +9,7 @@ Description
 The ``standards`` command runs the full quality pipeline:
 
 1. ``refactor`` - Rector code refactoring
-2. ``phpdoc`` - PHPDoc checks and fixes
+2. ``docheader`` - PHPDoc checks and fixes
 3. ``code-style`` - Code style checking
 4. ``reports`` - Documentation and test reports
 
@@ -68,10 +68,10 @@ Behavior
 - Cache stays enabled by default for nested cache-aware phases; omit both flags
   to keep the command default, pass ``--cache`` to force it on, and pass
   ``--no-cache`` to force it off.
-- The explicit cache intent is propagated to the nested ``phpdoc`` and
+- The explicit cache intent is propagated to the nested ``docheader`` and
   ``reports`` phases. ``refactor`` and ``code-style`` do not consume this
   contract.
-- When ``--cache-dir`` is provided, ``phpdoc`` and ``reports`` receive nested
+- When ``--cache-dir`` is provided, ``docheader`` and ``reports`` receive nested
   cache directories under that base path. When it is omitted, each nested tool
   keeps its own default cache directory.
 - Progress output is disabled by default across nested phases; use

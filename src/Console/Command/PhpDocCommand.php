@@ -44,8 +44,8 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Provides operations to inspect, lint, and repair PHPDoc comments across the project.
  * The class MUST NOT be extended and SHALL coordinate tools like PHP-CS-Fixer and Rector.
  */
-#[AsCommand(name: 'standards:dockblock', description: 'Checks and fixes PHPDocs.', aliases: [
-    'dockblock',
+#[AsCommand(name: 'standards:docheader', description: 'Checks and fixes PHPDocs.', aliases: [
+    'docheader',
     'php-cs-fixer',
 ])]
 final class PhpDocCommand extends Command

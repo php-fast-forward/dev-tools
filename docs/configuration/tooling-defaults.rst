@@ -14,16 +14,16 @@ create them on day one.
      - ``code-style``
      - Fallback ECS configuration.
    * - ``rector.php``
-     - ``refactor`` and ``phpdoc``
+     - ``refactor`` and ``docheader``
      - Fallback Rector configuration.
    * - ``phpunit.xml``
      - ``tests``
      - Registers ``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension``.
    * - ``.php-cs-fixer.dist.php``
-     - ``phpdoc``
+     - ``docheader``
      - Controls header and PHPDoc fixer behavior.
    * - ``.docheader``
-     - ``phpdoc``
+     - ``docheader``
      - Created into the consumer root on demand when missing.
    * - ``.editorconfig``
      - ``dev-tools:sync``
