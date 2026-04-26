@@ -73,7 +73,7 @@ final class MetricsCommandTest extends TestCase
         $this->process = $this->prophesize(Process::class);
 
         $this->input->getOption('exclude')
-            ->willReturn('vendor,tests/Fixtures');
+            ->willReturn('vendor');
         $this->input->getOption('target')
             ->willReturn(ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS));
         $this->input->getOption('junit')

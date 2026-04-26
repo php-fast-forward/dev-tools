@@ -89,7 +89,7 @@ final class MetricsCommand extends Command
                 name: 'exclude',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Comma-separated directories that SHOULD be excluded from analysis.',
-                default: 'vendor,tmp,cache,spec,build,.dev-tools,backup,resources,tests/Fixtures',
+                default: 'vendor,tmp,cache,spec,build,.dev-tools,backup,resources',
             )
             ->addOption(
                 name: 'target',

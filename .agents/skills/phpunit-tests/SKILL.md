@@ -83,4 +83,57 @@ Choose the smallest command that proves the change.
 - Re-run after fixes until the targeted tests pass.
 - If failures come from unrelated pre-existing breakage, call that out separately and do not silently claim success.
 
+### Composer plugin validation flow
+
+Some repository test scenarios are only valid when DevTools is executed as a Composer plugin.
+Create a temporary fixture under `backup/` before running plugin-based verification.
+
+```bash
+PROJECT_ROOT="$(pwd)"
+PLUGIN_FIXTURE="$PROJECT_ROOT/backup/composer-plugin-consumer"
+mkdir -p "$PROJECT_ROOT/backup"
+rm -rf "$PLUGIN_FIXTURE"
+mkdir -p "$PLUGIN_FIXTURE"
+
+cat > "$PLUGIN_FIXTURE/composer.json" <<'JSON'
+{
+    "name": "fast-forward/dev-tools-composer-plugin-consumer-fixture",
+    "description": "Fixture project used to validate DevTools plugin behavior.",
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "fast-forward/dev-tools": "*@dev"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../..",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "ergebnis/composer-normalize": true,
+            "fast-forward/dev-tools": true,
+            "phpdocumentor/shim": true,
+            "phpro/grumphp-shim": true,
+            "pyrech/composer-changelogs": true
+        }
+    },
+    "scripts": {
+        "dev-tools": "dev-tools",
+        "dev-tools:fix": "@dev-tools --fix"
+    }
+}
+JSON
+
+cd "$PLUGIN_FIXTURE"
+composer install
+composer tests
+```
+
 Read [references/generation-checklist.md](references/generation-checklist.md) before writing or repairing tests in an unfamiliar repository.
