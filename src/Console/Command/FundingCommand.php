@@ -19,8 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use Composer\Command\BaseCommand;
-use Composer\Factory;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -32,18 +30,22 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Synchronizes funding metadata between composer.json and .github/FUNDING.yml.
  */
 #[AsCommand(
-    name: 'funding',
-    description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.'
+    name: 'github:funding',
+    description: 'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.',
+    aliases: ['.github/FUNDING.yml', 'composer:funding', 'funding'],
 )]
-final class FundingCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class FundingCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -59,6 +61,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
      * @param ProcessBuilderInterface $processBuilder the process builder used to normalize composer.json after updates
      * @param ProcessQueueInterface $processQueue the process queue used to execute composer normalize
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
@@ -69,6 +72,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -88,7 +92,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
                 name: 'composer-file',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the composer.json file to synchronize.',
-                default: Factory::getComposerFile(),
+                default: 'composer.json',
             )
             ->addOption(
                 name: 'funding-file',
@@ -449,7 +453,7 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
             );
         }
 
-        $this->filesystem->mkdir($this->filesystem->dirname($fundingFile));
+        $this->filesystem->mkdir($this->filesystem->getDirectory($fundingFile));
         $this->filesystem->dumpFile($fundingFile, $updatedFundingContents);
 
         return $this->success(
@@ -470,8 +474,9 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     private function shouldWriteManagedFile(string $targetFile): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $targetFile), false);
+        $confirmation = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetFile), false);
+
+        return $this->io->askQuestion($confirmation);
     }
 
     /**
@@ -488,13 +493,13 @@ final class FundingCommand extends BaseCommand implements LoggerAwareCommandInte
             ->withArgument('--ansi')
             ->withArgument('--no-update-lock');
 
-        $workingDirectory = $this->filesystem->dirname($composerFile);
+        $workingDirectory = $this->filesystem->getDirectory($composerFile);
 
         if ('.' !== $workingDirectory) {
             $processBuilder = $processBuilder->withArgument('--working-dir', $workingDirectory);
         }
 
-        $composerBasename = $this->filesystem->basename($composerFile);
+        $composerBasename = $this->filesystem->getBasename($composerFile);
 
         if ('composer.json' !== $composerBasename) {
             $processBuilder = $processBuilder->withArgument('--file', $composerBasename);

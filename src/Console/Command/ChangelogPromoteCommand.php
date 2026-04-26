@@ -21,13 +21,13 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use Throwable;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -40,7 +40,7 @@ use Symfony\Component\Console\Output\OutputInterface;
     name: 'changelog:promote',
     description: 'Promotes Unreleased entries into a published changelog version.'
 )]
-final class ChangelogPromoteCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class ChangelogPromoteCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;

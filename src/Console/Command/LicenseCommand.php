@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -27,9 +26,12 @@ use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Generates and copies LICENSE files to projects.
@@ -37,8 +39,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  * This command generates a LICENSE file if one does not exist and a supported
  * license is declared in composer.json.
  */
-#[AsCommand(name: 'license', description: 'Generates a LICENSE file from composer.json license information.')]
-final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInterface
+#[AsCommand(
+    name: 'license:generate',
+    description: 'Generates a LICENSE file from composer.json license information.',
+    aliases: ['LICENSE.md', 'license'],
+)]
+final class LicenseCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -48,14 +54,16 @@ final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInte
      *
      * @param GeneratorInterface $generator the generator component
      * @param FilesystemInterface $filesystem the filesystem component
-     * @param FileDiffer $fileDiffer
+     * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly GeneratorInterface $generator,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -230,7 +238,8 @@ final class LicenseCommand extends BaseCommand implements LoggerAwareCommandInte
      */
     private function shouldWriteLicense(string $targetPath): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
+        $confirmation = new ConfirmationQuestion(\sprintf('Write managed file %s? [y/N] ', $targetPath), false);
+
+        return $this->io->askQuestion($confirmation);
     }
 }

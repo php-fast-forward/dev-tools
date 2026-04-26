@@ -7,6 +7,7 @@ Description
 -----------
 
 The ``phpdoc`` command coordinates PHPDoc checking and fixing using:
+(alias ``docheader`` and ``php-cs-fixer``)
 
 - PHP-CS-Fixer - fixes PHPDoc formatting
 - Rector with ``AddMissingMethodPhpDocRector`` - adds missing method PHPDoc

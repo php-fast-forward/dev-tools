@@ -19,8 +19,9 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 use FastForward\DevTools\Resource\FileDiff;
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\GitHooksCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
@@ -90,7 +91,7 @@ final class GitHooksCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
@@ -114,8 +115,8 @@ final class GitHooksCommandTest extends TestCase
             $this->finderFactory->reveal(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -135,7 +136,7 @@ final class GitHooksCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('git-hooks', $this->command->getName());
+        self::assertSame('git:hooks', $this->command->getName());
         self::assertSame('Installs Fast Forward Git hooks.', $this->command->getDescription());
         self::assertSame(
             'This command copies packaged Git hooks into the current repository.',
@@ -309,7 +310,7 @@ final class GitHooksCommandTest extends TestCase
         $this->fileDiffer->formatForConsole("@@ -1 +1 @@\n-old\n+new", false)
             ->willReturn("@@ -1 +1 @@\n-old\n+new")
             ->shouldBeCalledOnce();
-        $this->io->askConfirmation('Replace drifted Git hook /app/.git/hooks/post-merge? [y/N] ', false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->notice(
@@ -399,7 +400,7 @@ final class GitHooksCommandTest extends TestCase
                 new IOException('Target file could not be opened for writing.', 0, null, '/app/.git/hooks/post-merge')
             )
             ->shouldBeCalledOnce();
-        $this->filesystem->basename('/app/.git/hooks/post-merge')
+        $this->filesystem->getBasename('/app/.git/hooks/post-merge')
             ->willReturn('post-merge')
             ->shouldBeCalledOnce();
         $this->logger->error(

@@ -2,6 +2,10 @@
 
 declare(strict_types=1);
 
+require __DIR__ . '/vendor/autoload.php';
+
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
+
 $rules = [
     'phpdoc_indent' => true,
     'phpdoc_order' => [
@@ -39,11 +43,7 @@ if (file_exists($docheader)) {
 
 $finder = PhpCsFixer\Finder::create()
     ->in([getcwd()])
-    ->exclude('public')
-    ->exclude('resources')
-    ->exclude('vendor')
-    ->exclude('tmp')
-;
+    ->exclude(WorkingProjectPathResolver::TOOLING_EXCLUDED_DIRECTORIES);
 
 return (new PhpCsFixer\Config())
     ->setRiskyAllowed(false)

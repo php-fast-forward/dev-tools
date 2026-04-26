@@ -26,6 +26,7 @@ use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
 use FastForward\DevTools\Composer\Json\Schema\Funding;
 use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -41,6 +42,7 @@ use function Safe\unlink;
 #[UsesClass(Author::class)]
 #[UsesClass(Funding::class)]
 #[UsesClass(Support::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 final class ComposerJsonTest extends TestCase
 {
     /**

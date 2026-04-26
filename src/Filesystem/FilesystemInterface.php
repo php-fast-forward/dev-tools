@@ -140,7 +140,7 @@ interface FilesystemInterface
      *
      * @return string the base name of the given path
      */
-    public function basename(string $path, string $suffix = ''): string;
+    public function getBasename(string $path, string $suffix = ''): string;
 
     /**
      * Returns a parent directory's path.
@@ -150,5 +150,5 @@ interface FilesystemInterface
      *
      * @return string the parent path name
      */
-    public function dirname(string $path, int $levels = 1): string;
+    public function getDirectory(string $path, int $levels = 1): string;
 }

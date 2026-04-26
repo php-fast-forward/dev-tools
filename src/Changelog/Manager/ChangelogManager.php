@@ -189,7 +189,7 @@ final readonly class ChangelogManager implements ChangelogManagerInterface
     {
         $this->filesystem->dumpFile(
             $file,
-            $this->renderer->render($document, $this->resolveRepositoryUrl($this->filesystem->dirname($file))),
+            $this->renderer->render($document, $this->resolveRepositoryUrl($this->filesystem->getDirectory($file))),
         );
     }
 }

@@ -19,18 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 
-/**
- * Defines the logger contract consumed by reusable command result helpers.
- *
- * Commands that compose shared logging traits expose their logger through this
- * interface so the traits can stay agnostic of the concrete command class.
- */
-interface LoggerAwareCommandInterface
-{
-    /**
-     * Returns the logger used to emit command lifecycle messages.
-     */
-    public function getLogger(): LoggerInterface;
-}
+#[AsCommand(name: 'agents')]
+final class FixtureDuplicateCommandName extends Command {}

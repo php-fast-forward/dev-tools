@@ -33,7 +33,7 @@ Options
 
 ``--composer-file`` (optional)
    Path to the Composer manifest to synchronize. Default:
-   ``Factory::getComposerFile()``.
+   ``composer.json``.
 
 ``--funding-file`` (optional)
    Path to the GitHub funding file to synchronize. Default:

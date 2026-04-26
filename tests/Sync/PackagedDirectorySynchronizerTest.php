@@ -77,29 +77,6 @@ final class PackagedDirectorySynchronizerTest extends TestCase
      * @return void
      */
     #[Test]
-    public function setLoggerWillReplaceTheActiveLogger(): void
-    {
-        $replacementLogger = $this->prophesize(LoggerInterface::class);
-        $synchronizer = $this->createSynchronizer();
-
-        $this->filesystem->exists('/package/.agents/agents')
-            ->willReturn(false);
-
-        $synchronizer->setLogger($replacementLogger->reveal());
-
-        $replacementLogger->error('No packaged .agents/agents found at: /package/.agents/agents')
-            ->shouldBeCalledOnce();
-
-        $result = $synchronizer
-            ->synchronize('/consumer/.agents/agents', '/package/.agents/agents', '.agents/agents');
-
-        self::assertTrue($result->failed());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
     public function synchronizeWithMissingPackagePathWillReturnFailedResult(): void
     {
         $this->filesystem->exists('/package/.agents/agents')
@@ -135,7 +112,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->shouldBeCalledOnce();
         $this->filesystem->exists('/consumer/.agents/agents/issue-editor')
             ->willReturn(false);
-        $this->filesystem->dirname('/consumer/.agents/agents/issue-editor')
+        $this->filesystem->getDirectory('/consumer/.agents/agents/issue-editor')
             ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
         $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
@@ -213,7 +190,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->willReturn(false);
         $this->filesystem->remove($targetLink)
             ->shouldBeCalledOnce();
-        $this->filesystem->dirname($targetLink)
+        $this->filesystem->getDirectory($targetLink)
             ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
         $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
@@ -283,7 +260,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->willReturn(true);
         $this->filesystem->exists($targetLink)
             ->willReturn(false);
-        $this->filesystem->dirname($targetLink)
+        $this->filesystem->getDirectory($targetLink)
             ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
         $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
@@ -348,20 +325,10 @@ final class PackagedDirectorySynchronizerTest extends TestCase
      */
     private function createSynchronizer(): PackagedDirectorySynchronizer
     {
-        return $this->createSynchronizerWithLogger($this->logger->reveal());
-    }
-
-    /**
-     * @param LoggerInterface $logger
-     *
-     * @return PackagedDirectorySynchronizer
-     */
-    private function createSynchronizerWithLogger(LoggerInterface $logger): PackagedDirectorySynchronizer
-    {
         return new PackagedDirectorySynchronizer(
             $this->filesystem->reveal(),
             $this->finderFactory->reveal(),
-            $logger,
+            $this->logger->reveal(),
         );
     }
 }

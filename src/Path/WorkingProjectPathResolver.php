@@ -30,6 +30,23 @@ use function Safe\getcwd;
 final class WorkingProjectPathResolver
 {
     /**
+     * @var list<string> repository-local directories ignored by tooling
+     */
+    public const array TOOLING_EXCLUDED_DIRECTORIES = [
+        '.dev-tools',
+        'backup',
+        'cache',
+        'public',
+        'resources',
+        'tmp',
+        'vendor',
+        '*/vendor',
+        '*/vendor/*',
+        '**/vendor',
+        '**/vendor/*',
+    ];
+
+    /**
      * Returns the current working project directory or a path under it.
      *
      * @param string $path the optional relative segment to append under the project directory
@@ -52,19 +69,13 @@ final class WorkingProjectPathResolver
      */
     public static function getToolingExcludedDirectories(string $baseDir = ''): array
     {
-        return [
-            ManagedWorkspace::getOutputDirectory(baseDir: $baseDir),
-            Path::join($baseDir, 'backup'),
-            Path::join($baseDir, 'cache'),
-            Path::join($baseDir, 'public'),
-            Path::join($baseDir, 'resources'),
-            Path::join($baseDir, 'tmp'),
-            Path::join($baseDir, 'vendor'),
-            Path::join($baseDir, '*/vendor'),
-            Path::join($baseDir, '*/vendor/*'),
-            Path::join($baseDir, '**/vendor'),
-            Path::join($baseDir, '**/vendor/*'),
-        ];
+        $directories = [];
+
+        foreach (self::TOOLING_EXCLUDED_DIRECTORIES as $excludedDirectory) {
+            $directories[] = Path::join($baseDir, $excludedDirectory);
+        }
+
+        return $directories;
     }
 
     /**
@@ -81,7 +92,7 @@ final class WorkingProjectPathResolver
             ->files()
             ->name('*.php')
             ->in($workingDirectory)
-            ->exclude(['.dev-tools', 'backup', 'cache', 'public', 'resources', 'tmp', 'vendor'])
+            ->exclude(self::TOOLING_EXCLUDED_DIRECTORIES)
             ->sortByName();
         $paths = [];
 

@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\CommandLoader;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use Psr\Container\ContainerInterface;
 use ReflectionClass;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\ContainerCommandLoader;
@@ -96,7 +97,29 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
             }
 
             $arguments = $attribute->getArguments();
-            $commandMap[$arguments['name']] = $class;
+            $commandName = $arguments['name'] ?? $arguments[0] ?? '';
+            $aliases = $arguments['aliases'] ?? $arguments[2] ?? [];
+            $commandNames = [$commandName, ...((array) $aliases)];
+
+            foreach ($commandNames as $commandName) {
+                if (! \is_string($commandName)) {
+                    continue;
+                }
+
+                if ('' === $commandName) {
+                    continue;
+                }
+
+                if (\array_key_exists($commandName, $commandMap) && $commandMap[$commandName] !== $class) {
+                    throw new RuntimeException(\sprintf(
+                        'Command %s is already registered and cannot be assigned to %s.',
+                        $commandName,
+                        $class
+                    ));
+                }
+
+                $commandMap[$commandName] = $class;
+            }
         }
 
         return $commandMap;

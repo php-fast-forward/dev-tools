@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -29,16 +28,23 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Path;
 
 /**
  * Copies packaged or local resources into the consumer repository.
  */
-#[AsCommand(name: 'copy-resource', description: 'Copies a file or directory resource into the current project.')]
-final class CopyResourceCommand extends BaseCommand implements LoggerAwareCommandInterface
+#[AsCommand(
+    name: 'dev-tools:sync:copy',
+    description: 'Copies a file or directory resource into the current project.',
+    aliases: ['copy-resource']
+)]
+final class CopyResourceCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -51,6 +57,7 @@ final class CopyResourceCommand extends BaseCommand implements LoggerAwareComman
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
      * @param FileDiffer $fileDiffer the service used to summarize overwrite changes
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
@@ -58,6 +65,7 @@ final class CopyResourceCommand extends BaseCommand implements LoggerAwareComman
         private readonly FinderFactoryInterface $finderFactory,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -309,7 +317,11 @@ final class CopyResourceCommand extends BaseCommand implements LoggerAwareComman
      */
     private function shouldReplaceResource(string $targetPath): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Replace drifted resource %s? [y/N] ', $targetPath), false);
+        $confirmation = new ConfirmationQuestion(
+            \sprintf('Replace drifted resource %s? [y/N] ', $targetPath),
+            false,
+        );
+
+        return $this->io->askQuestion($confirmation);
     }
 }

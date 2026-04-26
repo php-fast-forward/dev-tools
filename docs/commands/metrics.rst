@@ -33,7 +33,7 @@ Options
    Comma-separated directories that should be excluded from analysis.
 
    Default:
-   ``vendor,tmp,cache,spec,build,.dev-tools,backup,resources,tests/Fixtures``.
+   ``vendor,tmp,cache,spec,build,.dev-tools,backup,resources``.
 
 ``--target=<directory>``
    Output directory for the generated metrics reports.

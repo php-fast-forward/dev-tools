@@ -85,7 +85,7 @@ final class ChangelogManagerTest extends TestCase
             $this->renderer->reveal(),
             $this->gitClient->reveal(),
         );
-        $this->filesystem->dirname(self::FILE)
+        $this->filesystem->getDirectory(self::FILE)
             ->willReturn(self::WORKING_DIRECTORY);
     }
 

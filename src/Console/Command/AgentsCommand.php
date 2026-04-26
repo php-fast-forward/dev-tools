@@ -20,21 +20,25 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
  * Synchronizes packaged Fast Forward project agents into the consumer repository.
  */
-#[AsCommand(name: 'agents', description: 'Synchronizes Fast Forward project agents into .agents/agents directory.')]
-final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInterface
+#[AsCommand(
+    name: 'agents:agents',
+    description: 'Synchronizes Fast Forward project agents into .agents/agents directory.',
+    aliases: ['agents'],
+)]
+final class AgentsCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -97,8 +101,6 @@ final class AgentsCommand extends BaseCommand implements LoggerAwareCommandInter
             $directoryCreated = true;
             $this->logger->info('Created .agents/agents directory.');
         }
-
-        $this->synchronizer->setLogger($this->getIO());
 
         $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::AGENTS_DIRECTORY);
 

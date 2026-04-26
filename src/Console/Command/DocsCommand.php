@@ -24,13 +24,13 @@ use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use Twig\Environment;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -46,8 +46,12 @@ use function Safe\getcwd;
  * queue so logging and grouped output stay consistent with the rest of the
  * command surface.
  */
-#[AsCommand(name: 'docs', description: 'Generates API documentation.')]
-final class DocsCommand extends BaseCommand implements LoggerAwareCommandInterface
+#[AsCommand(
+    name: 'reports:docs',
+    description: 'Generates API documentation.',
+    aliases: ['reports:phpdoc', 'phpDocumentor', 'docs'],
+)]
+final class DocsCommand extends Command
 {
     use HasCacheOption;
     use HasJsonOption;

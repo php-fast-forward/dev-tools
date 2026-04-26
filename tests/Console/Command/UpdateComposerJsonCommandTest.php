@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\UpdateComposerJsonCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -78,7 +79,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
@@ -102,8 +103,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -112,7 +113,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('update-composer-json', $this->command->getName());
+        self::assertSame('dev-tools:sync:composer', $this->command->getName());
         self::assertSame(
             'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
             $this->command->getDescription()
@@ -432,7 +433,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
                 FileDiff::STATUS_CHANGED,
                 'composer.json must be updated.',
             ))->shouldBeCalledOnce();
-        $this->io->askConfirmation('Update managed file /app/composer.json? [y/N] ', false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->log(

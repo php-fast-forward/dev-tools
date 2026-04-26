@@ -81,6 +81,7 @@ final readonly class ColorPreservingProcessEnvironmentConfigurator implements Pr
         if ($this->outputCapabilityDetector->supportsAnsi($output)) {
             return true;
         }
+
         if ($this->isTruthyEnvironmentFlag('FORCE_COLOR')) {
             return true;
         }

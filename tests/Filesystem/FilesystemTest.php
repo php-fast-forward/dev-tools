@@ -114,8 +114,8 @@ final class FilesystemTest extends TestCase
     #[Test]
     public function basenameWillReturnCorrectBasename(): void
     {
-        self::assertSame('file', $this->filesystem->basename('/path/to/file.txt', '.txt'));
-        self::assertSame('file.txt', $this->filesystem->basename('/path/to/file.txt'));
+        self::assertSame('file', $this->filesystem->getBasename('/path/to/file.txt', '.txt'));
+        self::assertSame('file.txt', $this->filesystem->getBasename('/path/to/file.txt'));
     }
 
     /**
@@ -124,8 +124,8 @@ final class FilesystemTest extends TestCase
     #[Test]
     public function dirnameWillReturnCorrectDirname(): void
     {
-        self::assertSame('/path/to', $this->filesystem->dirname('/path/to/file.txt'));
-        self::assertSame('/path', $this->filesystem->dirname('/path/to/file.txt', 2));
+        self::assertSame('/path/to', $this->filesystem->getDirectory('/path/to/file.txt'));
+        self::assertSame('/path', $this->filesystem->getDirectory('/path/to/file.txt', 2));
     }
 
     /**

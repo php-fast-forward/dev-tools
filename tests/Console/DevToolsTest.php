@@ -31,6 +31,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
+use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
 use ReflectionProperty;
@@ -67,6 +68,8 @@ final class DevToolsTest extends TestCase
         $this->commandLoader = $this->prophesize(CommandLoaderInterface::class);
         $this->commandLoader->getNames()
             ->willReturn([]);
+        $this->commandLoader->has(Argument::type('string'))
+            ->willReturn(false);
         $this->devTools = new DevTools($this->commandLoader->reveal());
     }
 
@@ -108,6 +111,48 @@ final class DevToolsTest extends TestCase
         self::assertSame('Fast Forward Dev Tools', $this->devTools->getName());
         self::assertTrue($this->devTools->has('custom'));
         self::assertSame($customCommand, $this->devTools->get('custom'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function allWillReturnLoaderCommandsWithPreservedKeys(): void
+    {
+        $commands = [
+            'agents' => new class extends Command {
+                public function __construct()
+                {
+                    parent::__construct('agents');
+                }
+            },
+            'sync' => new class extends Command {
+                public function __construct()
+                {
+                    parent::__construct('sync');
+                }
+            },
+        ];
+
+        $this->commandLoader->getNames()
+            ->willReturn(array_keys($commands));
+        $this->commandLoader->has('agents')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->has('sync')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('agents')
+            ->willReturn($commands['agents']);
+        $this->commandLoader->get('sync')
+            ->willReturn($commands['sync']);
+
+        $providedCommands = $this->devTools->all();
+
+        self::assertArrayHasKey('agents', $providedCommands);
+        self::assertArrayHasKey('sync', $providedCommands);
+        self::assertSame($commands['agents'], $providedCommands['agents']);
+        self::assertSame($commands['sync'], $providedCommands['sync']);
     }
 
     /**

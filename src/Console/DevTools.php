@@ -19,12 +19,10 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console;
 
-use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
-use Composer\Console\Application as ComposerApplication;
+use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use DI\Container;
 use Psr\Container\ContainerInterface;
-use ReflectionMethod;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
@@ -32,8 +30,16 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
  * Wraps the fast-forward console tooling suite conceptually as an isolated application instance.
  * Extending the base application, it MUST provide default command injections safely.
  */
-final class DevTools extends ComposerApplication
+final class DevTools extends Application
 {
+    private const string LOGO = <<<'LOGO'
+         ____             _____           _
+        |  _ \  _____   _|_   _|__   ___ | |___
+        | | | |/ _ \ \ / / | |/ _ \ / _ \| / __|
+        | |_| |  __/\ V /  | | (_) | (_) | \__ \
+        |____/ \___| \_/   |_|\___/ \___/|_|___/
+        LOGO;
+
     /**
      * @var ContainerInterface holds the static container instance for global access within the DevTools context
      */
@@ -51,8 +57,19 @@ final class DevTools extends ComposerApplication
     {
         parent::__construct('Fast Forward Dev Tools');
 
-        $this->setDefaultCommand('standards');
+        $this->setDefaultCommand('dev-tools:standards');
         $this->setCommandLoader($commandLoader);
+    }
+
+    /**
+     * Gets the help message for the DevTools application, including the ASCII logo.
+     *
+     * @return string
+     */
+    #[Override]
+    public function getHelp(): string
+    {
+        return self::LOGO . "\n\n" . parent::getHelp();
     }
 
     /**
@@ -76,21 +93,5 @@ final class DevTools extends ComposerApplication
         }
 
         return self::$container;
-    }
-
-    /**
-     * Retrieves the default set of commands provided by the Symfony Application.
-     *
-     * The method SHOULD NOT add composer-specific commands to the list,
-     * as they are handled separately by composer when loaded as a plugin.
-     *
-     * @return array
-     */
-    #[Override]
-    protected function getDefaultCommands(): array
-    {
-        $reflectionMethod = new ReflectionMethod(Application::class, __FUNCTION__);
-
-        return $reflectionMethod->invoke($this);
     }
 }

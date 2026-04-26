@@ -71,7 +71,7 @@ final class UnreleasedEntryCheckerTest extends TestCase
         $this->gitClient = $this->prophesize(GitClientInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->parser = $this->prophesize(ChangelogParserInterface::class);
-        $this->filesystem->dirname(self::FILE)
+        $this->filesystem->getDirectory(self::FILE)
             ->willReturn(self::WORKING_DIRECTORY);
         $this->checker = new UnreleasedEntryChecker(
             $this->filesystem->reveal(),

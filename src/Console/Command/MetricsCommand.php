@@ -20,13 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -34,8 +34,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function rtrim;
 
-#[AsCommand(name: 'metrics', description: 'Analyzes code metrics with PhpMetrics.')]
-final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInterface
+#[AsCommand(
+    name: 'reports:metrics',
+    description: 'Analyzes code metrics with PhpMetrics.',
+    aliases: ['reports:phpmetrics', 'phpmetrics', 'metrics'],
+)]
+final class MetricsCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -85,7 +89,7 @@ final class MetricsCommand extends BaseCommand implements LoggerAwareCommandInte
                 name: 'exclude',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Comma-separated directories that SHOULD be excluded from analysis.',
-                default: 'vendor,tmp,cache,spec,build,.dev-tools,backup,resources,tests/Fixtures',
+                default: 'vendor,tmp,cache,spec,build,.dev-tools,backup,resources',
             )
             ->addOption(
                 name: 'target',

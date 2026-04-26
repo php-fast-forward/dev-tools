@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\GitIgnoreCommand;
 use FastForward\DevTools\GitIgnore\GitIgnoreInterface;
 use FastForward\DevTools\GitIgnore\MergerInterface;
@@ -124,7 +125,7 @@ final class GitIgnoreCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
@@ -181,8 +182,8 @@ final class GitIgnoreCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -191,7 +192,7 @@ final class GitIgnoreCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('gitignore', $this->command->getName());
+        self::assertSame('git:ignore', $this->command->getName());
         self::assertSame('Merges and synchronizes .gitignore files.', $this->command->getDescription());
         self::assertSame(
             "This command merges the canonical .gitignore from dev-tools with the project's existing .gitignore.",
@@ -299,7 +300,7 @@ final class GitIgnoreCommandTest extends TestCase
             ->willReturn(true);
         $this->input->isInteractive()
             ->willReturn(true);
-        $this->io->askConfirmation(\sprintf('Update managed file %s? [y/N] ', self::TARGET_PATH), false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->logger->log(

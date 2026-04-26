@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -29,6 +28,7 @@ use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -43,11 +43,11 @@ use function is_numeric;
  * deterministic report that is friendly for local development and CI runs.
  */
 #[AsCommand(
-    name: 'dependencies',
+    name: 'dev-tools:deps',
     description: 'Analyzes missing, unused, misplaced, and outdated Composer dependencies.',
-    aliases: ['deps']
+    aliases: ['deps', 'dependencies']
 )]
-final class DependenciesCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class DependenciesCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;

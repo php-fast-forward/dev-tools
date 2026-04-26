@@ -26,11 +26,13 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
+use function Safe\scandir;
+use function Safe\rmdir;
+use function Safe\unlink;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
 use function Safe\mkdir;
 use function Safe\realpath;
-use function sys_get_temp_dir;
 use function uniqid;
 
 #[CoversClass(WorkingProjectPathResolver::class)]
@@ -113,9 +115,9 @@ final class WorkingProjectPathResolverTest extends TestCase
      * @return void
      */
     #[Test]
-    public function itWillExposeToolingSourcePathsWithoutTraversingVendorDirectories(): void
+    public function itWillExposeToolingSourcePathsIgnoringExcludedDirectories(): void
     {
-        $fixtureDirectory = sys_get_temp_dir() . '/dev-tools-path-resolver-' . uniqid();
+        $fixtureDirectory = \dirname(__DIR__, 2) . '/backup/dev-tools-path-resolver-' . uniqid();
 
         mkdir($fixtureDirectory . '/src', recursive: true);
         mkdir($fixtureDirectory . '/tests/Fixtures/consumer/vendor/package/src', recursive: true);
@@ -130,13 +132,55 @@ final class WorkingProjectPathResolverTest extends TestCase
         file_put_contents($fixtureDirectory . '/backup/Backup.php', '<?php');
         file_put_contents($fixtureDirectory . '/.dev-tools/cache/Cached.php', '<?php');
 
-        self::assertSame(
-            [
-                realpath($fixtureDirectory) . '/src/Example.php',
-                realpath($fixtureDirectory) . '/tests/Fixtures/Example.php',
-            ],
-            WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory))
-        );
+        try {
+            self::assertSame(
+                [
+                    realpath($fixtureDirectory) . '/src/Example.php',
+                    realpath($fixtureDirectory) . '/tests/Fixtures/Example.php',
+                ],
+                WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory))
+            );
+        } finally {
+            self::cleanupFixtureDirectory($fixtureDirectory);
+        }
+    }
+
+    /**
+     * @param string $fixtureDirectory
+     *
+     * @return void
+     */
+    private static function cleanupFixtureDirectory(string $fixtureDirectory): void
+    {
+        if (! is_dir($fixtureDirectory) && ! is_link($fixtureDirectory)) {
+            return;
+        }
+
+        $entries = scandir($fixtureDirectory);
+        if (false === $entries) {
+            return;
+        }
+
+        foreach ($entries as $entry) {
+            if ('.' === $entry) {
+                continue;
+            }
+
+            if ('..' === $entry) {
+                continue;
+            }
+
+            $path = $fixtureDirectory . '/' . $entry;
+
+            if (is_link($path) || is_file($path)) {
+                unlink($path);
+                continue;
+            }
+
+            self::cleanupFixtureDirectory($path);
+        }
+
+        rmdir($fixtureDirectory);
     }
 
     /**

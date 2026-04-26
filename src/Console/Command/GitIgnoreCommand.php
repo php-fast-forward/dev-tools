@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\GitIgnore\MergerInterface;
 use FastForward\DevTools\GitIgnore\ReaderInterface;
@@ -31,9 +30,12 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**
  * Provides functionality to merge and synchronize .gitignore files.
@@ -44,8 +46,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  * The command accepts two options: --source and --target to specify the paths
  * to the canonical and project .gitignore files respectively.
  */
-#[AsCommand(name: 'gitignore', description: 'Merges and synchronizes .gitignore files.')]
-final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandInterface
+#[AsCommand(
+    name: 'git:ignore',
+    description: 'Merges and synchronizes .gitignore files.',
+    aliases: ['.gitignore', 'gitignore'],
+)]
+final class GitIgnoreCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -62,8 +68,9 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
      * @param ReaderInterface $reader the reader component
      * @param WriterInterface|null $writer the writer component
      * @param FileLocatorInterface $fileLocator the file locator
-     * @param FileDiffer $fileDiffer
+     * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly MergerInterface $merger,
@@ -72,6 +79,7 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
         private readonly FileLocatorInterface $fileLocator,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -214,7 +222,8 @@ final class GitIgnoreCommand extends BaseCommand implements LoggerAwareCommandIn
      */
     private function shouldWriteGitIgnore(string $targetPath): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
+        $confirmation = new ConfirmationQuestion(\sprintf('Update managed file %s? [y/N] ', $targetPath), false);
+
+        return $this->io->askQuestion($confirmation);
     }
 }

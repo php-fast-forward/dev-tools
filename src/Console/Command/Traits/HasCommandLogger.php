@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command\Traits;
 
-use FastForward\DevTools\Console\Command\LoggerAwareCommandInterface;
 use LogicException;
 use Psr\Log\LoggerInterface;
 
@@ -39,15 +38,18 @@ trait HasCommandLogger
      */
     public function getLogger(): LoggerInterface
     {
-        if (
-            ! $this instanceof LoggerAwareCommandInterface
-            || (! property_exists($this, 'logger') || null === $this->logger)
-            || ! $this->logger instanceof LoggerInterface
-        ) {
+        if (! property_exists($this, 'logger') || null === $this->logger) {
             throw new LogicException(\sprintf(
-                'Commands using %s MUST implement %s and expose an initialized $logger property with an instance of %s.',
+                'Commands using %s MUST expose an initialized $logger property with an instance of %s.',
                 LogsCommandResults::class,
-                LoggerAwareCommandInterface::class,
+                LoggerInterface::class,
+            ));
+        }
+
+        if (! $this->logger instanceof LoggerInterface) {
+            throw new LogicException(\sprintf(
+                'Commands using %s MUST expose a %s instance on the $logger property.',
+                LogsCommandResults::class,
                 LoggerInterface::class,
             ));
         }

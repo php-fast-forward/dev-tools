@@ -19,8 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\Console\Application;
-use Composer\IO\IOInterface;
 use FastForward\DevTools\Console\Command\AgentsCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -37,7 +35,6 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use ReflectionMethod;
-use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -62,10 +59,6 @@ final class AgentsCommandTest extends TestCase
 
     private ObjectProphecy $output;
 
-    private ObjectProphecy $application;
-
-    private ObjectProphecy $io;
-
     private AgentsCommand $command;
 
     /**
@@ -78,13 +71,6 @@ final class AgentsCommandTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->application = $this->prophesize(Application::class);
-        $this->io = $this->prophesize(IOInterface::class);
-
-        $this->application->getHelperSet()
-            ->willReturn(new HelperSet());
-        $this->application->getIO()
-            ->willReturn($this->io->reveal());
         $this->filesystem->getAbsolutePath('.agents/agents')
             ->willReturn(getcwd() . '/.agents/agents');
 
@@ -93,7 +79,6 @@ final class AgentsCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->logger->reveal(),
         );
-        $this->command->setApplication($this->application->reveal());
     }
 
     /**
@@ -106,7 +91,6 @@ final class AgentsCommandTest extends TestCase
 
         $this->filesystem->exists($agentsPath)
             ->willReturn(false);
-        $this->synchronizer->setLogger(Argument::cetera())->shouldNotBeCalled();
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
         $this->logger->info('Starting agents synchronization...')
             ->shouldBeCalledOnce();
@@ -137,8 +121,6 @@ final class AgentsCommandTest extends TestCase
         $this->filesystem->exists($agentsPath)
             ->willReturn(true, false);
         $this->filesystem->mkdir($agentsPath)
-            ->shouldBeCalledOnce();
-        $this->synchronizer->setLogger($this->io->reveal())
             ->shouldBeCalledOnce();
         $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
@@ -173,8 +155,6 @@ final class AgentsCommandTest extends TestCase
 
         $this->filesystem->exists($agentsPath)
             ->willReturn(true, true);
-        $this->synchronizer->setLogger($this->io->reveal())
-            ->shouldBeCalledOnce();
         $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
             ->shouldBeCalledOnce();

@@ -19,7 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Composer\IO\IOInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\FundingCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -91,7 +92,7 @@ final class FundingCommandTest extends TestCase
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->normalizeProcess = $this->prophesize(Process::class);
-        $this->io = $this->prophesize(IOInterface::class);
+        $this->io = $this->prophesize(SymfonyStyle::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->output->isDecorated()
             ->willReturn(false);
@@ -111,11 +112,11 @@ final class FundingCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('interactive')
             ->willReturn(false);
-        $this->filesystem->dirname('.github/FUNDING.yml')
+        $this->filesystem->getDirectory('.github/FUNDING.yml')
             ->willReturn('.github');
-        $this->filesystem->dirname('composer.json')
+        $this->filesystem->getDirectory('composer.json')
             ->willReturn('.');
-        $this->filesystem->basename('composer.json')
+        $this->filesystem->getBasename('composer.json')
             ->willReturn('composer.json');
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
@@ -133,8 +134,8 @@ final class FundingCommandTest extends TestCase
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->logger->reveal(),
+            $this->io->reveal(),
         );
-        $this->command->setIO($this->io->reveal());
     }
 
     /**
@@ -466,7 +467,7 @@ final class FundingCommandTest extends TestCase
             ->willReturn(true);
         $this->input->isInteractive()
             ->willReturn(true);
-        $this->io->askConfirmation('Update managed file composer.json? [y/N] ', false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
         $this->filesystem->exists('composer.json')
@@ -572,9 +573,9 @@ final class FundingCommandTest extends TestCase
             ->willReturn(true);
         $this->filesystem->readFile('.github/FUNDING.yml')
             ->willReturn($fundingYaml);
-        $this->filesystem->dirname($composerFile)
+        $this->filesystem->getDirectory($composerFile)
             ->willReturn('build/custom');
-        $this->filesystem->basename($composerFile)
+        $this->filesystem->getBasename($composerFile)
             ->willReturn('composer.alt.json');
         $this->processBuilder->withArgument('--working-dir', 'build/custom')
             ->willReturn($this->processBuilder->reveal())
@@ -614,7 +615,7 @@ final class FundingCommandTest extends TestCase
     #[Test]
     public function commandWillSetExpectedNameDescriptionAndHelp(): void
     {
-        self::assertSame('funding', $this->command->getName());
+        self::assertSame('github:funding', $this->command->getName());
         self::assertSame(
             'Synchronizes funding metadata between composer.json and .github/FUNDING.yml.',
             $this->command->getDescription(),
@@ -672,12 +673,12 @@ final class FundingCommandTest extends TestCase
         $shouldWriteManagedFile = new ReflectionMethod($this->command, 'shouldWriteManagedFile');
         $normalizeComposerFile = new ReflectionMethod($this->command, 'normalizeComposerFile');
 
-        $this->io->askConfirmation('Update managed file composer.alt.json? [y/N] ', false)
+        $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(true)
             ->shouldBeCalledOnce();
-        $this->filesystem->dirname('composer.alt.json')
+        $this->filesystem->getDirectory('composer.alt.json')
             ->willReturn('.');
-        $this->filesystem->basename('composer.alt.json')
+        $this->filesystem->getBasename('composer.alt.json')
             ->willReturn('composer.alt.json');
         $this->processBuilder->withArgument('--file', 'composer.alt.json')
             ->willReturn($this->processBuilder->reveal())

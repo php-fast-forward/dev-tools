@@ -30,11 +30,11 @@ use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Twig\Environment;
-use Composer\Command\BaseCommand;
 use Throwable;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -44,8 +44,12 @@ use Symfony\Component\Console\Output\OutputInterface;
  * Provides operations to inspect, lint, and repair PHPDoc comments across the project.
  * The class MUST NOT be extended and SHALL coordinate tools like PHP-CS-Fixer and Rector.
  */
-#[AsCommand(name: 'phpdoc', description: 'Checks and fixes PHPDocs.')]
-final class PhpDocCommand extends BaseCommand implements LoggerAwareCommandInterface
+#[AsCommand(name: 'standards:phpdoc', description: 'Checks and fixes PHPDocs.', aliases: [
+    'phpdoc',
+    'docheader',
+    'php-cs-fixer',
+])]
+final class PhpDocCommand extends Command
 {
     use HasCacheOption;
     use HasJsonOption;

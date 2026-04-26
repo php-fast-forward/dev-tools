@@ -20,9 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
-use Composer\Command\BaseCommand;
-use Composer\Factory;
-use Composer\Json\JsonManipulator;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
@@ -32,21 +29,27 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Path;
 
+use function Safe\json_decode;
+use function Safe\json_encode;
 use function Safe\getcwd;
 
 /**
  * Updates composer.json with the Fast Forward dev-tools integration metadata.
  */
 #[AsCommand(
-    name: 'update-composer-json',
-    description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.'
+    name: 'dev-tools:sync:composer',
+    description: 'Updates composer.json with Fast Forward dev-tools scripts and metadata.',
+    aliases: ['composer.json', 'update-composer-json'],
 )]
-final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAwareCommandInterface
+final class UpdateComposerJsonCommand extends Command
 {
     use HasJsonOption;
     use LogsCommandResults;
@@ -57,8 +60,9 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
      * @param ComposerJsonInterface $composer the composer.json metadata accessor
      * @param FilesystemInterface $filesystem the filesystem used to read and write composer.json
      * @param FileLocatorInterface $fileLocator the locator used to resolve packaged configuration files
-     * @param FileDiffer $fileDiffer
+     * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
+     * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly ComposerJsonInterface $composer,
@@ -66,6 +70,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
         private readonly FileLocatorInterface $fileLocator,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
+        private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
     }
@@ -86,7 +91,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
                 shortcut: 'f',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the composer.json file to update.',
-                default: Factory::getComposerFile(),
+                default: 'composer.json',
             )
             ->addOption(
                 name: 'dry-run',
@@ -132,22 +137,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
         }
 
         $currentContents = $this->filesystem->readFile($file);
-        $manipulator = new JsonManipulator($currentContents);
-        $grumphpConfig = DevToolsPathResolver::getPackagePath('grumphp.yml');
-
-        foreach ($this->scripts() as $name => $command) {
-            $manipulator->addSubNode('scripts', $name, $command);
-        }
-
-        if ('' === $this->composer->getReadme() && $this->filesystem->exists('README.md', \dirname($file))) {
-            $manipulator->addProperty('readme', 'README.md');
-        }
-
-        $manipulator->addSubNode('extra', 'grumphp', [
-            'config-default-path' => Path::makeRelative($grumphpConfig, getcwd()),
-        ], true);
-
-        $updatedContents = $manipulator->getContents();
+        $updatedContents = $this->updatedComposerJsonContents($currentContents, $file);
         $comparison = $this->fileDiffer->diffContents(
             'generated dev-tools composer.json configuration',
             $file,
@@ -205,8 +195,69 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
      */
     private function shouldUpdateComposerJson(string $file): bool
     {
-        return $this->getIO()
-            ->askConfirmation(\sprintf('Update managed file %s? [y/N] ', $file), false);
+        $confirmationMessage = \sprintf(
+            'composer.json file %s has changes. Do you want to update it with the new dev-tools configuration?',
+            $file,
+        );
+
+        $confirmation = new ConfirmationQuestion($confirmationMessage, false);
+
+        return $this->io->askQuestion($confirmation);
+    }
+
+    /**
+     * Builds the managed composer.json payload.
+     *
+     * @param string $currentContents the current composer.json file contents
+     * @param string $file the path being updated, used to resolve local README checks
+     *
+     * @return string the composer.json payload with managed sections applied
+     */
+    private function updatedComposerJsonContents(string $currentContents, string $file): string
+    {
+        $composerJsonData = json_decode($currentContents, true, 512, \JSON_THROW_ON_ERROR);
+
+        if (! \is_array($composerJsonData)) {
+            $composerJsonData = [];
+        }
+
+        $scripts = $composerJsonData['scripts'] ?? [];
+        if (! \is_array($scripts)) {
+            $scripts = [];
+        }
+
+        foreach ($this->getScripts() as $name => $command) {
+            $scripts[$name] = $command;
+        }
+
+        $composerJsonData['scripts'] = $scripts;
+
+        if ('' === $this->composer->getReadme() && $this->filesystem->exists(
+            'README.md',
+            \dirname($file)
+        ) && ! isset($composerJsonData['readme'])) {
+            $composerJsonData['readme'] = 'README.md';
+        }
+
+        $extra = $composerJsonData['extra'] ?? [];
+        if (! \is_array($extra)) {
+            $extra = [];
+        }
+
+        $grumphpConfig = DevToolsPathResolver::getPackagePath('grumphp.yml');
+        $grumphpExtra = $extra['grumphp'] ?? [];
+        if (! \is_array($grumphpExtra)) {
+            $grumphpExtra = [];
+        }
+
+        $grumphpExtra['config-default-path'] = Path::makeRelative($grumphpConfig, getcwd());
+        $extra['grumphp'] = $grumphpExtra;
+        $composerJsonData['extra'] = $extra;
+
+        return json_encode(
+            $composerJsonData,
+            \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE
+        ) . "\n";
     }
 
     /**
@@ -214,7 +265,7 @@ final class UpdateComposerJsonCommand extends BaseCommand implements LoggerAware
      *
      * @return array<string, string> the script name to command map
      */
-    private function scripts(): array
+    private function getScripts(): array
     {
         return [
             'dev-tools' => 'dev-tools',

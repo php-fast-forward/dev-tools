@@ -197,7 +197,7 @@ final readonly class Filesystem implements FilesystemInterface
      *
      * @return string the base name of the given path
      */
-    public function basename(string $path, string $suffix = ''): string
+    public function getBasename(string $path, string $suffix = ''): string
     {
         return basename($path, $suffix);
     }
@@ -210,7 +210,7 @@ final readonly class Filesystem implements FilesystemInterface
      *
      * @return string the parent path name
      */
-    public function dirname(string $path, int $levels = 1): string
+    public function getDirectory(string $path, int $levels = 1): string
     {
         return \dirname($path, $levels);
     }
