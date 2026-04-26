@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777241162">
-  <project timestamp="1777241162" name="Clover Coverage">
+<coverage generated="1777241408">
+  <project timestamp="1777241408" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -808,7 +808,7 @@
     <package name="FastForward\DevTools\Config">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Config/ComposerDependencyAnalyserConfig.php">
         <class name="FastForward\DevTools\Config\ComposerDependencyAnalyserConfig" namespace="FastForward\DevTools\Config">
-          <metrics complexity="7" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="21" coveredstatements="21" elements="25" coveredelements="25"/>
+          <metrics complexity="7" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="26" coveredelements="26"/>
         </class>
         <line num="91" type="method" name="configure" visibility="public" complexity="4" crap="4" count="4"/>
         <line num="93" type="stmt" count="4"/>
@@ -834,8 +834,9 @@
         <line num="152" type="stmt" count="5"/>
         <line num="153" type="stmt" count="5"/>
         <line num="154" type="stmt" count="5"/>
-        <line num="156" type="stmt" count="5"/>
-        <metrics loc="159" ncloc="82" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="21" coveredstatements="21" elements="25" coveredelements="25"/>
+        <line num="155" type="stmt" count="5"/>
+        <line num="157" type="stmt" count="5"/>
+        <metrics loc="160" ncloc="83" classes="1" methods="4" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="22" coveredstatements="22" elements="26" coveredelements="26"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Config/ECSConfig.php">
         <class name="FastForward\DevTools\Config\ECSConfig" namespace="FastForward\DevTools\Config">
@@ -5883,6 +5884,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="138" loc="18991" ncloc="11524" classes="103" methods="471" coveredmethods="382" conditionals="0" coveredconditionals="0" statements="4596" coveredstatements="4274" elements="5067" coveredelements="4656"/>
+    <metrics files="138" loc="18992" ncloc="11525" classes="103" methods="471" coveredmethods="382" conditionals="0" coveredconditionals="0" statements="4597" coveredstatements="4275" elements="5068" coveredelements="4657"/>
   </project>
 </coverage>
