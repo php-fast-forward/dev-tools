@@ -27,7 +27,7 @@ use Symfony\Component\Filesystem\Path;
 /**
  * Synchronizes one packaged directory of symlinked entries into a consumer repository.
  */
-final class PackagedDirectorySynchronizer
+final readonly class PackagedDirectorySynchronizer
 {
     /**
      * Initializes the synchronizer with a filesystem and finder factory.
@@ -37,8 +37,8 @@ final class PackagedDirectorySynchronizer
      * @param LoggerInterface $logger Logger for recording synchronization actions and decisions
      */
     public function __construct(
-        private readonly FilesystemInterface $filesystem,
-        private readonly FinderFactoryInterface $finderFactory,
+        private FilesystemInterface $filesystem,
+        private FinderFactoryInterface $finderFactory,
         private LoggerInterface $logger,
     ) {}
 
@@ -132,7 +132,7 @@ final class PackagedDirectorySynchronizer
         SynchronizeResult $result,
     ): void {
         $relativeSourcePath = $this->normalizeRelativeSourcePath(
-            $this->filesystem->makePathRelative($sourcePath, $this->filesystem->dirname($targetLink)),
+            $this->filesystem->makePathRelative($sourcePath, $this->filesystem->getDirectory($targetLink)),
             $isDirectory,
         );
 

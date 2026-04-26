@@ -400,7 +400,7 @@ final class GitHooksCommandTest extends TestCase
                 new IOException('Target file could not be opened for writing.', 0, null, '/app/.git/hooks/post-merge')
             )
             ->shouldBeCalledOnce();
-        $this->filesystem->basename('/app/.git/hooks/post-merge')
+        $this->filesystem->getBasename('/app/.git/hooks/post-merge')
             ->willReturn('post-merge')
             ->shouldBeCalledOnce();
         $this->logger->error(

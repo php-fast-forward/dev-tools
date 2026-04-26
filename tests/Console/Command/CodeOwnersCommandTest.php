@@ -155,7 +155,7 @@ final class CodeOwnersCommandTest extends TestCase
 
         $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
             ->willReturn($targetPath);
-        $this->filesystem->dirname($targetPath)
+        $this->filesystem->getDirectory($targetPath)
             ->willReturn($targetDirectory);
         $this->filesystem->exists($targetPath)
             ->willReturn(false, false);
@@ -193,7 +193,7 @@ final class CodeOwnersCommandTest extends TestCase
 
         $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
             ->willReturn($targetPath);
-        $this->filesystem->dirname($targetPath)
+        $this->filesystem->getDirectory($targetPath)
             ->willReturn('/project/.github');
         $this->filesystem->exists($targetPath)
             ->willReturn(true);
@@ -227,7 +227,7 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn(true);
         $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
             ->willReturn($targetPath);
-        $this->filesystem->dirname($targetPath)
+        $this->filesystem->getDirectory($targetPath)
             ->willReturn('/project/.github');
         $this->filesystem->exists($targetPath)
             ->willReturn(true);
@@ -269,7 +269,7 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn(true);
         $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
             ->willReturn($targetPath);
-        $this->filesystem->dirname($targetPath)
+        $this->filesystem->getDirectory($targetPath)
             ->willReturn($targetDirectory);
         $this->filesystem->exists($targetPath)
             ->willReturn(false, false);
@@ -318,7 +318,7 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn(true);
         $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
             ->willReturn($targetPath);
-        $this->filesystem->dirname($targetPath)
+        $this->filesystem->getDirectory($targetPath)
             ->willReturn('/project/.github');
         $this->filesystem->exists($targetPath)
             ->willReturn(true);
@@ -359,7 +359,7 @@ final class CodeOwnersCommandTest extends TestCase
             ->willReturn(true);
         $this->filesystem->getAbsolutePath('.github/CODEOWNERS')
             ->willReturn($targetPath);
-        $this->filesystem->dirname($targetPath)
+        $this->filesystem->getDirectory($targetPath)
             ->willReturn('/project/.github');
         $this->filesystem->exists($targetPath)
             ->willReturn(true);

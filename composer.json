@@ -41,7 +41,6 @@
     "require": {
         "php": "^8.3",
         "composer-plugin-api": "^2.0",
-        "composer/composer": "^2.9",
         "container-interop/service-provider": "^0.4.1",
         "dg/bypass-finals": "^1.9",
         "ergebnis/agent-detector": "^1.1",
@@ -81,6 +80,9 @@
         "symplify/easy-coding-standard": "^13.0",
         "thecodingmachine/safe": "^3.4",
         "twig/twig": "^3.24"
+    },
+    "require-dev": {
+        "composer/composer": "^2.9"
     },
     "minimum-stability": "stable",
     "autoload": {

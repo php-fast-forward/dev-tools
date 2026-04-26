@@ -112,11 +112,11 @@ final class FundingCommandTest extends TestCase
             ->willReturn(false);
         $this->input->getOption('interactive')
             ->willReturn(false);
-        $this->filesystem->dirname('.github/FUNDING.yml')
+        $this->filesystem->getDirectory('.github/FUNDING.yml')
             ->willReturn('.github');
-        $this->filesystem->dirname('composer.json')
+        $this->filesystem->getDirectory('composer.json')
             ->willReturn('.');
-        $this->filesystem->basename('composer.json')
+        $this->filesystem->getBasename('composer.json')
             ->willReturn('composer.json');
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
@@ -573,9 +573,9 @@ final class FundingCommandTest extends TestCase
             ->willReturn(true);
         $this->filesystem->readFile('.github/FUNDING.yml')
             ->willReturn($fundingYaml);
-        $this->filesystem->dirname($composerFile)
+        $this->filesystem->getDirectory($composerFile)
             ->willReturn('build/custom');
-        $this->filesystem->basename($composerFile)
+        $this->filesystem->getBasename($composerFile)
             ->willReturn('composer.alt.json');
         $this->processBuilder->withArgument('--working-dir', 'build/custom')
             ->willReturn($this->processBuilder->reveal())
@@ -676,9 +676,9 @@ final class FundingCommandTest extends TestCase
         $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(true)
             ->shouldBeCalledOnce();
-        $this->filesystem->dirname('composer.alt.json')
+        $this->filesystem->getDirectory('composer.alt.json')
             ->willReturn('.');
-        $this->filesystem->basename('composer.alt.json')
+        $this->filesystem->getBasename('composer.alt.json')
             ->willReturn('composer.alt.json');
         $this->processBuilder->withArgument('--file', 'composer.alt.json')
             ->willReturn($this->processBuilder->reveal())

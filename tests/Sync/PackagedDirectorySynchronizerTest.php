@@ -112,7 +112,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->shouldBeCalledOnce();
         $this->filesystem->exists('/consumer/.agents/agents/issue-editor')
             ->willReturn(false);
-        $this->filesystem->dirname('/consumer/.agents/agents/issue-editor')
+        $this->filesystem->getDirectory('/consumer/.agents/agents/issue-editor')
             ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
         $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
@@ -190,7 +190,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->willReturn(false);
         $this->filesystem->remove($targetLink)
             ->shouldBeCalledOnce();
-        $this->filesystem->dirname($targetLink)
+        $this->filesystem->getDirectory($targetLink)
             ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
         $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
@@ -260,7 +260,7 @@ final class PackagedDirectorySynchronizerTest extends TestCase
             ->willReturn(true);
         $this->filesystem->exists($targetLink)
             ->willReturn(false);
-        $this->filesystem->dirname($targetLink)
+        $this->filesystem->getDirectory($targetLink)
             ->willReturn('/consumer/.agents/agents')
             ->shouldBeCalledOnce();
         $this->filesystem->makePathRelative($entryPath, '/consumer/.agents/agents')
