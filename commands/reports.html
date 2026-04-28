@@ -3095,19 +3095,26 @@ vendor/bin/dev-tools reports -- [options]</code></pre>
  (optional)</dt>
         
         <dd>The target directory for the generated documentation.
-Default: <code>.dev-tools</code>
-.</dd>
+Default: selected workspace directory, <code>.dev-tools</code>
+ unless
+<code>--workspace-dir</code>
+ or <code>FAST_FORWARD_WORKSPACE_DIR</code>
+ is configured.</dd>
                                 <dt><code>--coverage, -c</code>
  (optional)</dt>
         
         <dd>The target directory for the generated test coverage report.
-Default: <code>.dev-tools/coverage</code>
+Default: selected workspace <code>coverage</code>
+ directory, usually
+<code>.dev-tools/coverage</code>
 .</dd>
                                 <dt><code>--metrics</code>
  (optional)</dt>
         
         <dd>The target directory for the generated metrics report.
-Default: <code>.dev-tools/metrics</code>
+Default: selected workspace <code>metrics</code>
+ directory, usually
+<code>.dev-tools/metrics</code>
 .</dd>
                                 <dt><code>--cache-dir</code>
  (optional)</dt>

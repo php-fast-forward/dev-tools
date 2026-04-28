@@ -2186,6 +2186,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_execute"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003AgetDefaultExcludedDirectories\u0028\u0029",
+            "name": "getDefaultExcludedDirectories",
+            "summary": "Returns\u0020the\u0020default\u0020PhpMetrics\u0020directory\u0020exclusion\u0020list.",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#method_getDefaultExcludedDirectories"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003ABINARY",
             "name": "BINARY",
             "summary": "",
@@ -2200,6 +2205,11 @@ Search.appendIndex(
             "name": "PHP_DEFAULT_SOCKET_TIMEOUT",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_PHP_DEFAULT_SOCKET_TIMEOUT"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003ADEFAULT_EXCLUDED_DIRECTORIES",
+            "name": "DEFAULT_EXCLUDED_DIRECTORIES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#constant_DEFAULT_EXCLUDED_DIRECTORIES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
@@ -2825,6 +2835,11 @@ Search.appendIndex(
             "name": "getWorkingDirectoryOption",
             "summary": "Resolves\u0020the\u0020raw\u0020working\u002Ddirectory\u0020option\u0020before\u0020command\u0020parsing.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getWorkingDirectoryOption"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AconfigureWorkspaceDirectory\u0028\u0029",
+            "name": "configureWorkspaceDirectory",
+            "summary": "Applies\u0020the\u0020configured\u0020workspace\u0020directory\u0020before\u0020resolving\u0020command\u0020defaults.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_configureWorkspaceDirectory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ArunAutoUpdateWhenRequested\u0028\u0029",
             "name": "runAutoUpdateWhenRequested",
@@ -4261,6 +4276,21 @@ Search.appendIndex(
             "summary": "Returns\u0020a\u0020repository\u002Dlocal\u0020managed\u0020cache\u0020directory.",
             "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#method_getCacheDirectory"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003AgetWorkspaceRoot\u0028\u0029",
+            "name": "getWorkspaceRoot",
+            "summary": "Returns\u0020the\u0020configured\u0020workspace\u0020root.",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#method_getWorkspaceRoot"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003AgetProjectRelativeWorkspaceRoot\u0028\u0029",
+            "name": "getProjectRelativeWorkspaceRoot",
+            "summary": "Returns\u0020the\u0020workspace\u0020root\u0020as\u0020a\u0020project\u002Drelative\u0020directory\u0020when\u0020tooling\nshould\u0020skip\u0020generated\u0020artifacts\u0020during\u0020source\u0020scans.",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#method_getProjectRelativeWorkspaceRoot"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003AENV_WORKSPACE_DIR",
+            "name": "ENV_WORKSPACE_DIR",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Path-ManagedWorkspace.html#constant_ENV_WORKSPACE_DIR"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\ManagedWorkspace\u003A\u003ACOVERAGE",
             "name": "COVERAGE",
             "summary": "",
@@ -4320,6 +4350,11 @@ Search.appendIndex(
             "name": "getToolingSourcePaths",
             "summary": "Returns\u0020PHP\u0020source\u0020files\u0020that\u0020tooling\u0020SHOULD\u0020inspect\u0020without\u0020traversing\u0020generated\u0020directories.",
             "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingSourcePaths"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003AgetToolingExcludedDirectoryNames\u0028\u0029",
+            "name": "getToolingExcludedDirectoryNames",
+            "summary": "Returns\u0020repository\u002Drelative\u0020directories\u0020ignored\u0020by\u0020tooling.",
+            "url": "classes/FastForward-DevTools-Path-WorkingProjectPathResolver.html#method_getToolingExcludedDirectoryNames"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\WorkingProjectPathResolver\u003A\u003ATOOLING_EXCLUDED_DIRECTORIES",
             "name": "TOOLING_EXCLUDED_DIRECTORIES",

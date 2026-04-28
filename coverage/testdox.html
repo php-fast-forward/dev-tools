@@ -384,6 +384,7 @@
             <li class="success">Is self update command will use self update command attribute names and aliases</li>
             <li class="success">Is self update command will reject other commands</li>
             <li class="success">Run auto update when requested will update global installation when current binary is global</li>
+            <li class="success">Configure workspace directory will expose workspace directory to managed workspace</li>
         </ul>
         <h2>Dev Tools Command Loader (FastForward\DevTools\Tests\Console\CommandLoader\DevToolsCommandLoader)</h2>
         <ul>
@@ -635,6 +636,8 @@
         <ul>
             <li class="success">It will expose canonical repository managed paths</li>
             <li class="success">It will normalize path separators when joining managed paths</li>
+            <li class="success">It will use configured relative workspace root</li>
+            <li class="success">It will use configured absolute workspace root</li>
         </ul>
         <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
         <ul>
@@ -683,6 +686,7 @@
             <li class="success">Execute will return failure when process queue fails</li>
             <li class="success">Execute will run php metrics in quiet mode when json is requested</li>
             <li class="success">Execute will not run php metrics in quiet mode when progress is requested</li>
+            <li class="success">Configure will exclude custom relative workspace by default</li>
         </ul>
         <h2>Output Capability Detector (FastForward\DevTools\Tests\Console\Output\OutputCapabilityDetector)</h2>
         <ul>
@@ -918,9 +922,11 @@
         <h2>Working Project Path Resolver (FastForward\DevTools\Tests\Path\WorkingProjectPathResolver)</h2>
         <ul>
             <li class="success">It will expose canonical repository root paths</li>
+            <li class="success">It will include custom relative workspace in tooling skip patterns</li>
             <li class="success">It will normalize path separators when joining project paths</li>
             <li class="success">It will expose relative tooling skip patterns by default</li>
             <li class="success">It will expose tooling source paths ignoring excluded directories</li>
+            <li class="success">It will ignore custom workspace when resolving tooling source paths</li>
             <li class="success">It will expose the current working project directory or paths under it</li>
         </ul>
         <h2>Writer (FastForward\DevTools\Tests\GitAttributes\Writer)</h2>

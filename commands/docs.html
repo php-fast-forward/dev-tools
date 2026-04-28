@@ -3088,8 +3088,11 @@ vendor/bin/dev-tools docs [options]</code></pre>
  (optional)</dt>
         
         <dd>Path to the output directory for the generated HTML documentation.
-Default: <code>.dev-tools</code>
-.</dd>
+Default: selected workspace directory, <code>.dev-tools</code>
+ unless
+<code>--workspace-dir</code>
+ or <code>FAST_FORWARD_WORKSPACE_DIR</code>
+ is configured.</dd>
                                 <dt><code>--source, -s</code>
  (optional)</dt>
         
@@ -3106,7 +3109,8 @@ Default: <code>vendor/fast-forward/phpdoc-bootstrap-template</code>
  (optional)</dt>
         
         <dd>Path to the cache directory for phpDocumentor.
-Default: <code>.dev-tools/cache/phpdoc</code>
+Default: selected workspace cache directory, usually
+<code>.dev-tools/cache/phpdoc</code>
 .</dd>
                                 <dt><code>--cache</code>
 </dt>

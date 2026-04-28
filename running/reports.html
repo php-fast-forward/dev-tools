@@ -3063,16 +3063,25 @@ publishes a generated reports directory to GitHub Pages.</p>
             
     
 <ol start="1" type="1">
-    <li value="1"><code>docs --target .dev-tools</code>
-</li>
+    <li value="1"><code>docs</code>
+ with the selected workspace target</li>
 
-    <li value="2"><code>tests --coverage .dev-tools/coverage --coverage-summary</code>
-</li>
+    <li value="2"><code>tests --coverage</code>
+ with the selected workspace coverage target</li>
 
-    <li value="3"><code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
-</li>
+    <li value="3"><code>metrics --target</code>
+ with the selected workspace metrics target and JUnit
+input from the selected workspace coverage directory</li>
 
 </ol>
+
+            
+    <p>With the default workspace, those steps resolve to <code>docs --target .dev-tools</code>
+,
+<code>tests --coverage .dev-tools/coverage --coverage-summary</code>
+, and
+<code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
+.</p>
 
     </section>
 
@@ -3085,17 +3094,18 @@ publishes a generated reports directory to GitHub Pages.</p>
             
 
 <ul>
-    <li class="dash">the documentation site rooted at <code>.dev-tools/</code>
+    <li class="dash">the documentation site rooted at the selected workspace, usually
+<code>.dev-tools/</code>
 ;</li>
 
     <li class="dash">guide pages generated from the local <code>docs/</code>
  source;</li>
 
-    <li class="dash">coverage reports inside <code>.dev-tools/coverage/</code>
-;</li>
+    <li class="dash">coverage reports inside the selected workspace <code>coverage</code>
+ directory;</li>
 
-    <li class="dash">PhpMetrics output inside <code>.dev-tools/metrics/</code>
-;</li>
+    <li class="dash">PhpMetrics output inside the selected workspace <code>metrics</code>
+ directory;</li>
 
     <li class="dash"><code>.dev-tools/coverage/testdox.html</code>
  and <code>.dev-tools/coverage/clover.xml</code>

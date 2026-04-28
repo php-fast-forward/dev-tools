@@ -3248,6 +3248,7 @@ outdated dependencies are found.</li>
 
             <pre><code class="language-bash">composer metrics
 composer metrics --target=.dev-tools/metrics
+FAST_FORWARD_WORKSPACE_DIR=.artifacts composer metrics
 composer --working-dir=packages/example metrics</code></pre>
 
             
@@ -3272,6 +3273,11 @@ directories first;</li>
 <code>report-summary.json</code>
  in the same directory for CI artifacts or manual
 review;</li>
+
+    <li class="dash">when <code>--target</code>
+ is omitted, metrics output is written under the selected
+DevTools workspace, usually <code>.dev-tools/metrics</code>
+;</li>
 
     <li class="dash"><code>--json</code>
  and <code>--pretty-json</code>
@@ -3530,13 +3536,17 @@ forces it off for a single run;</li>
             
 
 <ul>
-    <li class="dash">it calls <code>docs --target .dev-tools</code>
-;</li>
+    <li class="dash">it calls <code>docs</code>
+, <code>tests --coverage</code>
+, and <code>metrics</code>
+ with defaults rooted
+in the selected DevTools workspace;</li>
 
-    <li class="dash">it calls <code>tests --coverage .dev-tools/coverage --coverage-summary</code>
-;</li>
-
-    <li class="dash">it calls <code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
+    <li class="dash">with the default workspace, that is equivalent to <code>docs --target .dev-tools</code>
+,
+<code>tests --coverage .dev-tools/coverage --coverage-summary</code>
+, and
+<code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
 ;</li>
 
     <li class="dash"><code>docs</code>

@@ -3078,6 +3078,7 @@ installations update the current project by default.</p>
 options before the command name:</p>
 
             <pre><code class="language-bash">vendor/bin/dev-tools --working-dir=/path/to/project tests
+vendor/bin/dev-tools --workspace-dir=.artifacts reports
 vendor/bin/dev-tools --auto-update tests</code></pre>
 
             
@@ -3089,6 +3090,22 @@ binary operate on another project without first changing shell directories.
 Composer executions can use Composer&#039;s own <code>--working-dir</code>
 /<code>-d</code>
  option.</p>
+
+            
+    <p><code>--workspace-dir</code>
+ (or <code>-w</code>
+) changes where generated DevTools artifacts and
+caches are written when command-specific paths are omitted. It does not change
+the project root selected by <code>--working-dir</code>
+. Composer plugin executions can use
+<code>FAST_FORWARD_WORKSPACE_DIR=.artifacts</code>
+ to apply the same workspace policy.
+Explicit command options such as <code>--target</code>
+, <code>--coverage</code>
+, <code>--metrics</code>
+,
+and <code>--cache-dir</code>
+ continue to take precedence over the workspace default.</p>
 
             
     <p><code>--auto-update</code>

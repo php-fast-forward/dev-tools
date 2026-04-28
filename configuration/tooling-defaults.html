@@ -3132,7 +3132,8 @@ repositories through symlinks.</td>
 
 <ul>
     <li class="dash"><code>.dev-tools/</code>
- contains generated documentation and report output.</li>
+ contains generated documentation and report output by
+default.</li>
 
     <li class="dash"><code>.dev-tools/coverage/</code>
  contains HTML coverage, Testdox, Clover, and raw
@@ -3168,6 +3169,23 @@ consumer-owned directories kept in place by the <code>agents</code>
 tool caches.</li>
 
 </ul>
+
+            
+    <p>The standalone binary accepts <code>--workspace-dir</code>
+ to replace the generated
+artifact root used by those defaults. Composer executions can set
+<code>FAST_FORWARD_WORKSPACE_DIR</code>
+ for the same behavior. <code>--working-dir</code>
+ still
+selects the project root, while <code>--workspace-dir</code>
+ selects where generated
+artifacts and caches are written. Explicit command options such as
+<code>--target</code>
+, <code>--coverage</code>
+, <code>--metrics</code>
+, and <code>--cache-dir</code>
+ override the
+workspace default.</p>
 
     </section>
 

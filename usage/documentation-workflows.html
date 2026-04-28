@@ -3150,12 +3150,21 @@ guide directory does not exist.</li>
 .</li>
 
     <li class="dash"><code>reports</code>
- runs <code>docs --target .dev-tools</code>
- and
-<code>tests --coverage .dev-tools/coverage</code>
- and then
+ runs <code>docs</code>
+, <code>tests --coverage</code>
+, and <code>metrics</code>
+ using the
+selected DevTools workspace defaults. With the default workspace that means
+<code>docs --target .dev-tools</code>
+, <code>tests --coverage .dev-tools/coverage</code>
+, and
 <code>metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml</code>
-.</li>
+.
+When <code>--workspace-dir</code>
+ or <code>FAST_FORWARD_WORKSPACE_DIR</code>
+ selects another
+workspace, those nested defaults move together unless an explicit command
+option overrides them.</li>
 
 </ul>
 
@@ -3173,17 +3182,17 @@ guide directory does not exist.</li>
     <li class="dash">guide pages generated from <code>docs/</code>
 ;</li>
 
-    <li class="dash">coverage data under <code>.dev-tools/coverage</code>
- when <code>reports</code>
- or
-<code>tests --coverage</code>
+    <li class="dash">coverage data under the selected workspace <code>coverage</code>
+ directory when
+<code>reports</code>
+ or <code>tests --coverage</code>
  is used;</li>
 
-    <li class="dash">metrics data under <code>.dev-tools/metrics</code>
- when <code>reports</code>
+    <li class="dash">metrics data under the selected workspace <code>metrics</code>
+ directory when
+<code>reports</code>
  or <code>metrics</code>
- is
-used;</li>
+ is used;</li>
 
     <li class="dash">Markdown API pages under <code>.github/wiki</code>
  when <code>wiki</code>

@@ -3092,7 +3092,11 @@ changing your current shell session first.</p>
 
     <p>Default:
 <code>vendor,tmp,cache,spec,build,.dev-tools,backup,resources</code>
-.</p>
+ plus a custom
+relative workspace directory when <code>--workspace-dir</code>
+ or
+<code>FAST_FORWARD_WORKSPACE_DIR</code>
+ selects one.</p>
 </dd>
                                 <dt><code>--target=&lt;directory&gt;</code>
 </dt>
@@ -3100,7 +3104,9 @@ changing your current shell session first.</p>
         <dd>
     <p>Output directory for the generated metrics reports.</p>
 
-    <p>Default: <code>.dev-tools/metrics</code>
+    <p>Default: selected workspace <code>metrics</code>
+ directory, usually
+<code>.dev-tools/metrics</code>
 .</p>
 
     <p>The command writes:</p>
