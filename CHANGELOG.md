@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Show the DevTools ASCII logo by default on all top-level command executions, while adding a `--no-logo` global option and automatically suppressing the banner for `--json` / `--pretty-json` invocations (including automatic forwarding of `--no-logo` to internal DevTools subprocesses) to avoid banner repetition in orchestrated command queues (#277)
+
 ### Added
 
 - Add a configurable DevTools generated artifact workspace through `--workspace-dir` and `FAST_FORWARD_WORKSPACE_DIR`, keeping explicit output/cache command options authoritative (#274)

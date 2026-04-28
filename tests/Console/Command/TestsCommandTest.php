@@ -28,6 +28,7 @@ use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -48,6 +49,7 @@ use function Safe\getcwd;
 
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(CoverageSummary::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]

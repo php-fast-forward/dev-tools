@@ -19,14 +19,17 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Process;
 
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ProcessBuilder::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 final class ProcessBuilderTest extends TestCase
 {
     use ProphecyTrait;
@@ -118,5 +121,49 @@ final class ProcessBuilderTest extends TestCase
 
         self::assertInstanceOf(Process::class, $process);
         self::assertSame("'php' 'artisan' 'serve' '--verbose' '--env=dev'", $process->getCommandLine());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function buildWillInjectNoLogoArgumentForDevToolsCommands(): void
+    {
+        $process = $this->builder
+            ->build(DevToolsPathResolver::getBinaryCommand('tests'));
+
+        self::assertSame(
+            "'" . DevToolsPathResolver::getBinaryPath() . "' '--no-logo' 'tests'",
+            $process->getCommandLine(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function buildWillKeepExistingNoLogoArgumentWhenProvidedInArguments(): void
+    {
+        $process = $this->builder
+            ->withArgument('--no-logo')
+            ->withArgument('--ansi')
+            ->build(DevToolsPathResolver::getBinaryCommand('tests'));
+
+        self::assertSame(
+            "'" . DevToolsPathResolver::getBinaryPath() . "' 'tests' '--no-logo' '--ansi'",
+            $process->getCommandLine(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function buildWillNotInjectNoLogoArgumentForNonDevToolsCommands(): void
+    {
+        $process = $this->builder
+            ->build('vendor/bin/phpunit');
+
+        self::assertSame("'vendor/bin/phpunit'", $process->getCommandLine());
     }
 }

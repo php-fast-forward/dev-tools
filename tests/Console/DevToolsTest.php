@@ -62,8 +62,11 @@ use Symfony\Component\Console\Command\DumpCompletionCommand;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 use function Safe\putenv;
 
@@ -215,6 +218,148 @@ final class DevToolsTest extends TestCase
         self::assertTrue($definition->hasOption('workspace-dir'));
         self::assertSame('w', $definition->getOption('workspace-dir')->getShortcut());
         self::assertTrue($definition->hasOption('auto-update'));
+        self::assertTrue($definition->hasOption('no-logo'));
+        self::assertFalse($definition->getOption('no-logo')->acceptValue());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillRenderLogoUnlessNoLogoOptionIsProvided(): void
+    {
+        $input = new ArrayInput([
+            'command' => 'list',
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldBeCalledOnce();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
+        self::assertStringContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillNotRenderLogoWhenNoLogoOptionIsSet(): void
+    {
+        $input = new ArrayInput([
+            '--no-logo' => true,
+            'command' => 'list',
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $this->invokeDoRun($input, $output);
+
+        self::assertStringNotContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillNotRenderLogoWhenJsonOptionIsProvided(): void
+    {
+        $command = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('standards');
+            }
+
+            protected function configure(): void
+            {
+                $this->addOption(name: 'json', mode: InputOption::VALUE_NONE, description: 'Emit structured JSON output.');
+                $this->setCode(static fn(InputInterface $input, OutputInterface $output): int => Command::SUCCESS);
+            }
+        };
+
+        $this->commandLoader->has('standards')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('standards')
+            ->willReturn($command)
+            ->shouldBeCalledOnce();
+        $input = new ArrayInput([
+            'command' => 'standards',
+            '--json' => true,
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
+        self::assertStringNotContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillNotRenderLogoWhenPrettyJsonOptionIsProvided(): void
+    {
+        $command = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('standards');
+            }
+
+            protected function configure(): void
+            {
+                $this->addOption(name: 'pretty-json', mode: InputOption::VALUE_NONE, description: 'Emit pretty JSON output.');
+                $this->setCode(static fn(InputInterface $input, OutputInterface $output): int => Command::SUCCESS);
+            }
+        };
+
+        $this->commandLoader->has('standards')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('standards')
+            ->willReturn($command)
+            ->shouldBeCalledOnce();
+        $input = new ArrayInput([
+            'command' => 'standards',
+            '--pretty-json' => true,
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
+        self::assertStringNotContainsString('_____', $output->fetch());
     }
 
     /**
@@ -403,5 +548,18 @@ final class DevToolsTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod($this->devTools, 'configureWorkspaceDirectory');
         $reflectionMethod->invoke($this->devTools, $input);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
+    private function invokeDoRun(InputInterface $input, OutputInterface $output): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->devTools, 'doRun');
+
+        return (int) $reflectionMethod->invoke($this->devTools, $input, $output);
     }
 }

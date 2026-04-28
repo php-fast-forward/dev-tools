@@ -53,6 +53,8 @@ final class DevTools extends Application
         | | | |/ _ \ \ / / | |/ _ \ / _ \| / __|
         | |_| |  __/\ V /  | | (_) | (_) | \__ \
         |____/ \___| \_/   |_|\___/ \___/|_|___/
+        ========================================
+
         LOGO;
 
     /**
@@ -88,17 +90,6 @@ final class DevTools extends Application
     }
 
     /**
-     * Gets the help message for the DevTools application, including the ASCII logo.
-     *
-     * @return string
-     */
-    #[Override]
-    public function getHelp(): string
-    {
-        return self::LOGO . "\n\n" . parent::getHelp();
-    }
-
-    /**
      * Returns the application-level input definition with DevTools runtime options.
      *
      * @return InputDefinition the global application input definition
@@ -128,6 +119,12 @@ final class DevTools extends Application
             description: 'Store generated DevTools artifacts in the given directory.',
         ));
 
+        $definition->addOption(new InputOption(
+            name: 'no-logo',
+            mode: InputOption::VALUE_NONE,
+            description: 'Hide the startup ASCII logo.',
+        ));
+
         return $definition;
     }
 
@@ -142,6 +139,14 @@ final class DevTools extends Application
     #[Override]
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        $noLogo = (bool) $input->getParameterOption('--no-logo', null, true)
+            || (bool) $input->hasParameterOption('--json', true)
+            || (bool) $input->hasParameterOption('--pretty-json', true);
+
+        if (! $noLogo) {
+            $output->writeln(self::LOGO);
+        }
+
         try {
             $this->workingDirectorySwitcher->switchTo($this->getWorkingDirectoryOption($input));
             $this->configureWorkspaceDirectory($input);
@@ -151,7 +156,7 @@ final class DevTools extends Application
             return Command::FAILURE;
         }
 
-        if (! $this->isSelfUpdateCommand($input)) {
+        if (! $noLogo && ! $this->isSelfUpdateCommand($input)) {
             $this->runAutoUpdateWhenRequested($input, $output);
             $this->versionCheckNotifier->notify($output);
         }
