@@ -516,15 +516,10 @@ Search.appendIndex(
             "summary": "Returns\u0020command\u0020aliases\u0020that\u0020may\u0020be\u0020safely\u0020exposed\u0020to\u0020Composer.",
             "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_getComposerAliases"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003AisComposerReservedName\u0028\u0029",
-            "name": "isComposerReservedName",
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003AisRegisteredCommand\u0028\u0029",
+            "name": "isRegisteredCommand",
             "summary": "Detects\u0020names\u0020already\u0020owned\u0020by\u0020Composer\u0027s\u0020active\u0020command\u0020surface.",
-            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_isComposerReservedName"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003AgetComposerReservedNames\u0028\u0029",
-            "name": "getComposerReservedNames",
-            "summary": "Returns\u0020command\u0020names\u0020reserved\u0020by\u0020the\u0020active\u0020Composer\u0020project.",
-            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_getComposerReservedNames"
+            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_isRegisteredCommand"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003ACOMMAND_NAMESPACE",
             "name": "COMMAND_NAMESPACE",
@@ -555,6 +550,26 @@ Search.appendIndex(
             "name": "command",
             "summary": "",
             "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html#property_command"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface",
+            "name": "DevToolsPluginInterface",
+            "summary": "Defines\u0020DevTools\u002Dspecific\u0020Composer\u0020plugin\u0020conventions.",
+            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface\u003A\u003AgetReservedCommandNames\u0028\u0029",
+            "name": "getReservedCommandNames",
+            "summary": "Returns\u0020command\u0020names\u0020and\u0020aliases\u0020that\u0020DevTools\u0020plugin\u0020commands\u0020MUST\u0020NOT\u0020override.",
+            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html#method_getReservedCommandNames"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface\u003A\u003AisRegisteredCommand\u0028\u0029",
+            "name": "isRegisteredCommand",
+            "summary": "Detects\u0020whether\u0020a\u0020command\u0020name\u0020or\u0020alias\u0020is\u0020already\u0020registered\u0020in\u0020Composer\u0027s\u0020command\u0020surface.",
+            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html#method_isRegisteredCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface\u003A\u003ACOMPOSER_COMMAND_NAMES",
+            "name": "COMPOSER_COMMAND_NAMES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html#constant_COMPOSER_COMMAND_NAMES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson",
             "name": "ComposerJson",
@@ -1121,6 +1136,11 @@ Search.appendIndex(
             "summary": "Returns\u0020Composer\u0020command\u0020names\u0020that\u0020DevTools\u0020plugin\u0020commands\u0020MUST\u0020NOT\u0020override.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_getReservedCommandNames"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003AisRegisteredCommand\u0028\u0029",
+            "name": "isRegisteredCommand",
+            "summary": "Detects\u0020whether\u0020a\u0020command\u0020name\u0020or\u0020alias\u0020is\u0020already\u0020registered\u0020in\u0020Composer\u0027s\u0020command\u0020surface.",
+            "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_isRegisteredCommand"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003Aactivate\u0028\u0029",
             "name": "activate",
             "summary": "Handles\u0020activation\u0020lifecycle\u0020events\u0020for\u0020the\u0020Composer\u0020session.",
@@ -1140,11 +1160,6 @@ Search.appendIndex(
             "name": "getRootScriptCommandNames",
             "summary": "Returns\u0020custom\u0020Composer\u0020script\u0020command\u0020names\u0020from\u0020the\u0020active\u0020root\u0020package.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_getRootScriptCommandNames"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003ACOMPOSER_COMMAND_NAMES",
-            "name": "COMPOSER_COMMAND_NAMES",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Composer-Plugin.html#constant_COMPOSER_COMMAND_NAMES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003A\u0024composer",
             "name": "composer",
@@ -5376,6 +5391,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-composer-command.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer",
+            "name": "Composer",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-composer.html"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Json",
             "name": "Json",
             "summary": "",
@@ -5385,11 +5405,6 @@ Search.appendIndex(
             "name": "Schema",
             "summary": "",
             "url": "namespaces/fastforward-devtools-composer-json-schema.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer",
-            "name": "Composer",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools-composer.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Config",
             "name": "Config",

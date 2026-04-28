@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777398773">
-  <project timestamp="1777398773" name="Clover Coverage">
+<coverage generated="1777399196">
+  <project timestamp="1777399196" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -510,7 +510,7 @@
     <package name="FastForward\DevTools\Composer\Capability">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/Capability/DevToolsCommandProvider.php">
         <class name="FastForward\DevTools\Composer\Capability\DevToolsCommandProvider" namespace="FastForward\DevTools\Composer\Capability">
-          <metrics complexity="11" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="17" elements="23" coveredelements="21"/>
+          <metrics complexity="9" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="16" elements="21" coveredelements="19"/>
         </class>
         <line num="44" type="method" name="__construct" visibility="public" complexity="2" crap="2" count="6"/>
         <line num="46" type="stmt" count="6"/>
@@ -531,11 +531,9 @@
         <line num="91" type="stmt" count="4"/>
         <line num="92" type="stmt" count="4"/>
         <line num="93" type="stmt" count="4"/>
-        <line num="101" type="method" name="isComposerReservedName" visibility="private" complexity="2" crap="2" count="5"/>
+        <line num="101" type="method" name="isRegisteredCommand" visibility="private" complexity="1" crap="1" count="5"/>
         <line num="103" type="stmt" count="5"/>
-        <line num="111" type="method" name="getComposerReservedNames" visibility="private" complexity="1" crap="1" count="5"/>
-        <line num="113" type="stmt" count="5"/>
-        <metrics loc="116" ncloc="67" classes="1" methods="5" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="18" coveredstatements="17" elements="23" coveredelements="21"/>
+        <metrics loc="106" ncloc="62" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="17" coveredstatements="16" elements="21" coveredelements="19"/>
       </file>
     </package>
     <package name="FastForward\DevTools\Composer\Command">
@@ -556,6 +554,9 @@
         <metrics loc="61" ncloc="34" classes="1" methods="2" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="0" elements="10" coveredelements="0"/>
       </file>
     </package>
+    <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/DevToolsPluginInterface.php">
+      <metrics loc="98" ncloc="71" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+    </file>
     <package name="FastForward\DevTools\Composer\Json">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/Json/ComposerJson.php">
         <class name="FastForward\DevTools\Composer\Json\ComposerJson" namespace="FastForward\DevTools\Composer\Json">
@@ -794,43 +795,45 @@
     <package name="FastForward\DevTools\Composer">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/Plugin.php">
         <class name="FastForward\DevTools\Composer\Plugin" namespace="FastForward\DevTools\Composer">
-          <metrics complexity="11" methods="8" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="26" coveredstatements="25" elements="34" coveredelements="32"/>
+          <metrics complexity="13" methods="9" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="27" coveredstatements="26" elements="36" coveredelements="34"/>
         </class>
-        <line num="103" type="method" name="getCapabilities" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="105" type="stmt" count="1"/>
-        <line num="106" type="stmt" count="1"/>
-        <line num="107" type="stmt" count="1"/>
-        <line num="118" type="method" name="getSubscribedEvents" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="120" type="stmt" count="1"/>
-        <line num="121" type="stmt" count="1"/>
-        <line num="122" type="stmt" count="1"/>
-        <line num="123" type="stmt" count="1"/>
-        <line num="136" type="method" name="runSyncCommand" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="47" type="method" name="getCapabilities" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="49" type="stmt" count="1"/>
+        <line num="50" type="stmt" count="1"/>
+        <line num="51" type="stmt" count="1"/>
+        <line num="62" type="method" name="getSubscribedEvents" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="64" type="stmt" count="1"/>
+        <line num="65" type="stmt" count="1"/>
+        <line num="66" type="stmt" count="1"/>
+        <line num="67" type="stmt" count="1"/>
+        <line num="80" type="method" name="runSyncCommand" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="82" type="stmt" count="1"/>
+        <line num="83" type="stmt" count="1"/>
+        <line num="84" type="stmt" count="1"/>
+        <line num="85" type="stmt" count="1"/>
+        <line num="93" type="method" name="getReservedCommandNames" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="95" type="stmt" count="2"/>
+        <line num="96" type="stmt" count="2"/>
+        <line num="97" type="stmt" count="2"/>
+        <line num="98" type="stmt" count="2"/>
+        <line num="106" type="method" name="isRegisteredCommand" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="108" type="stmt" count="1"/>
+        <line num="121" type="method" name="activate" visibility="public" complexity="1" crap="1" count="3"/>
+        <line num="123" type="stmt" count="3"/>
+        <line num="136" type="method" name="deactivate" visibility="public" complexity="1" crap="1" count="1"/>
         <line num="138" type="stmt" count="1"/>
-        <line num="139" type="stmt" count="1"/>
-        <line num="140" type="stmt" count="1"/>
-        <line num="141" type="stmt" count="1"/>
-        <line num="149" type="method" name="getReservedCommandNames" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="151" type="stmt" count="1"/>
-        <line num="152" type="stmt" count="1"/>
+        <line num="151" type="method" name="uninstall" visibility="public" complexity="1" crap="1" count="1"/>
         <line num="153" type="stmt" count="1"/>
-        <line num="154" type="stmt" count="1"/>
-        <line num="167" type="method" name="activate" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="161" type="method" name="getRootScriptCommandNames" visibility="private" complexity="4" crap="4.03" count="2"/>
+        <line num="163" type="stmt" count="2"/>
+        <line num="164" type="stmt" count="0"/>
+        <line num="167" type="stmt" count="2"/>
         <line num="169" type="stmt" count="2"/>
-        <line num="182" type="method" name="deactivate" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="184" type="stmt" count="1"/>
-        <line num="197" type="method" name="uninstall" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="199" type="stmt" count="1"/>
-        <line num="207" type="method" name="getRootScriptCommandNames" visibility="private" complexity="4" crap="4.03" count="1"/>
-        <line num="209" type="stmt" count="1"/>
-        <line num="210" type="stmt" count="0"/>
-        <line num="213" type="stmt" count="1"/>
-        <line num="215" type="stmt" count="1"/>
-        <line num="216" type="stmt" count="1"/>
-        <line num="217" type="stmt" count="1"/>
-        <line num="220" type="stmt" count="1"/>
-        <line num="223" type="stmt" count="1"/>
-        <metrics loc="226" ncloc="142" classes="1" methods="8" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="26" coveredstatements="25" elements="34" coveredelements="32"/>
+        <line num="170" type="stmt" count="2"/>
+        <line num="171" type="stmt" count="1"/>
+        <line num="174" type="stmt" count="2"/>
+        <line num="177" type="stmt" count="2"/>
+        <metrics loc="180" ncloc="91" classes="1" methods="9" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="27" coveredstatements="26" elements="36" coveredelements="34"/>
       </file>
     </package>
     <package name="FastForward\DevTools\Config">
@@ -6100,6 +6103,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="148" loc="19880" ncloc="12088" classes="109" methods="499" coveredmethods="399" conditionals="0" coveredconditionals="0" statements="4735" coveredstatements="4348" elements="5234" coveredelements="4747"/>
+    <metrics files="149" loc="19922" ncloc="12103" classes="109" methods="499" coveredmethods="399" conditionals="0" coveredconditionals="0" statements="4735" coveredstatements="4348" elements="5234" coveredelements="4747"/>
   </project>
 </coverage>
