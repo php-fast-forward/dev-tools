@@ -2386,6 +2386,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#method___construct"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003AgetCommandNames\u0028\u0029",
+            "name": "getCommandNames",
+            "summary": "Returns\u0020the\u0020command\u0020name\u0020and\u0020aliases\u0020declared\u0020through\u0020AsCommand.",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#method_getCommandNames"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003Aconfigure\u0028\u0029",
             "name": "configure",
             "summary": "Configures\u0020the\u0020self\u002Dupdate\u0020command.",
