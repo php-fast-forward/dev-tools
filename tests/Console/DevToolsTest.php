@@ -33,6 +33,7 @@ use FastForward\DevTools\Process\CompositeProcessEnvironmentConfigurator;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
+use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
 use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
@@ -66,6 +67,7 @@ use Symfony\Component\Console\Input\InputInterface;
 #[UsesClass(DevToolsServiceProvider::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesClass(SelfUpdateCommand::class)]
+#[UsesClass(ClassReflection::class)]
 #[UsesClass(LogLevelOutputFormatter::class)]
 #[UsesClass(GithubActionOutput::class)]
 #[UsesClass(ColorPreservingProcessEnvironmentConfigurator::class)]

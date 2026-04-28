@@ -20,9 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use Psr\Log\LoggerInterface;
-use ReflectionClass;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,21 +65,12 @@ final class SelfUpdateCommand extends Command
             return $commandNames;
         }
 
-        $reflection = new ReflectionClass(self::class);
-        $attribute = $reflection->getAttributes(AsCommand::class)[0] ?? null;
-
-        if (null === $attribute) {
-            return $commandNames = [];
-        }
-
-        $arguments = $attribute->getArguments();
-        $commandName = $arguments['name'] ?? $arguments[0] ?? '';
-        $aliases = $arguments['aliases'] ?? $arguments[2] ?? [];
-        $commandNames = [$commandName, ...((array) $aliases)];
+        $arguments = ClassReflection::getAttributeArguments(self::class, AsCommand::class);
+        $commandNames = [$arguments['name'], ...$arguments['aliases']];
 
         return $commandNames = array_values(array_filter(
             $commandNames,
-            static fn(mixed $commandName): bool => \is_string($commandName) && '' !== $commandName,
+            static fn(string $commandName): bool => '' !== $commandName,
         ));
     }
 

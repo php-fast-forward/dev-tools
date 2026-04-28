@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use Prophecy\Argument;
 use FastForward\DevTools\Console\Command\SelfUpdateCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -35,6 +36,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(SelfUpdateCommand::class)]
+#[UsesClass(ClassReflection::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class SelfUpdateCommandTest extends TestCase
 {
