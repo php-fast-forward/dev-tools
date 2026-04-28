@@ -10,21 +10,12 @@ Usage
 .. code-block:: bash
 
    vendor/bin/dev-tools self-update
-   vendor/bin/dev-tools self-update --global
    composer dev-tools:self-update
 
-Options
--------
-
-.. list-table::
-   :header-rows: 1
-   :widths: 24 76
-
-   * - Option
-     - Description
-   * - ``--global``
-     - Run ``composer global update fast-forward/dev-tools`` instead of
-       updating the current project installation.
+When the standalone ``dev-tools`` binary is itself loaded from Composer's
+global installation, ``self-update`` automatically targets
+``composer global update fast-forward/dev-tools``. Local project
+installations update the current project by default.
 
 Global runtime options
 ----------------------
@@ -42,11 +33,11 @@ paths, managed files, or command defaults. This lets a globally installed
 binary operate on another project without first changing shell directories.
 Composer executions can use Composer's own ``--working-dir``/``-d`` option.
 
-``--auto-update`` runs the project self-update flow before the requested
-command. The same behavior MAY be enabled with ``FAST_FORWARD_AUTO_UPDATE``;
-set it to ``global`` when the update should target Composer's global
-installation. Auto-update failures are reported as warnings and do not block
-the requested command.
+``--auto-update`` runs the self-update flow before the requested command. The
+same behavior MAY be enabled with ``FAST_FORWARD_AUTO_UPDATE=1``. When the
+active ``dev-tools`` binary is already installed globally, auto-update also
+targets the global installation by default. Auto-update failures are reported
+as warnings and do not block the requested command.
 
 Version freshness check
 -----------------------

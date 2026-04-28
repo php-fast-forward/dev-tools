@@ -22,11 +22,11 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
@@ -43,10 +43,12 @@ final class SelfUpdateCommand extends Command
 
     /**
      * @param SelfUpdateRunnerInterface $selfUpdateRunner the runner that executes Composer's update command
+     * @param SelfUpdateScopeResolverInterface $scopeResolver resolves whether the active binary is globally installed
      * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly SelfUpdateRunnerInterface $selfUpdateRunner,
+        private readonly SelfUpdateScopeResolverInterface $scopeResolver,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -80,14 +82,9 @@ final class SelfUpdateCommand extends Command
     protected function configure(): void
     {
         $this->setHelp(
-            'This command updates fast-forward/dev-tools through Composer. By default it updates the current'
-            . ' project installation; use --global for Composer global installations.'
-        );
-
-        $this->addOption(
-            name: 'global',
-            mode: InputOption::VALUE_NONE,
-            description: 'Update the Composer global fast-forward/dev-tools installation.',
+            'This command updates fast-forward/dev-tools through Composer. When DevTools is running from'
+            . ' Composer global, the command updates that global installation automatically; otherwise it updates'
+            . ' the current project installation.'
         );
     }
 
@@ -101,7 +98,7 @@ final class SelfUpdateCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $global = (bool) $input->getOption('global');
+        $global = $this->scopeResolver->isGlobalInstallation();
 
         $this->logger->info('Updating DevTools installation...', [
             'input' => $input,

@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Command\SelfUpdateCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -54,6 +55,11 @@ final class SelfUpdateCommandTest extends TestCase
     private ObjectProphecy $logger;
 
     /**
+     * @var ObjectProphecy<SelfUpdateScopeResolverInterface>
+     */
+    private ObjectProphecy $scopeResolver;
+
+    /**
      * @var ObjectProphecy<InputInterface>
      */
     private ObjectProphecy $input;
@@ -71,6 +77,7 @@ final class SelfUpdateCommandTest extends TestCase
     protected function setUp(): void
     {
         $this->selfUpdateRunner = $this->prophesize(SelfUpdateRunnerInterface::class);
+        $this->scopeResolver = $this->prophesize(SelfUpdateScopeResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -80,7 +87,11 @@ final class SelfUpdateCommandTest extends TestCase
             ->will(static function (): void {});
         $this->logger->error(Argument::cetera())
             ->will(static function (): void {});
-        $this->command = new SelfUpdateCommand($this->selfUpdateRunner->reveal(), $this->logger->reveal());
+        $this->command = new SelfUpdateCommand(
+            $this->selfUpdateRunner->reveal(),
+            $this->scopeResolver->reveal(),
+            $this->logger->reveal()
+        );
     }
 
     /**
@@ -101,7 +112,7 @@ final class SelfUpdateCommandTest extends TestCase
     #[Test]
     public function executeWillUpdateProjectInstallation(): void
     {
-        $this->input->getOption('global')
+        $this->scopeResolver->isGlobalInstallation()
             ->willReturn(false);
         $this->selfUpdateRunner->update(false, $this->output->reveal())
             ->willReturn(SelfUpdateCommand::SUCCESS)
@@ -116,13 +127,28 @@ final class SelfUpdateCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenUpdateFails(): void
     {
-        $this->input->getOption('global')
-            ->willReturn(true);
-        $this->selfUpdateRunner->update(true, $this->output->reveal())
+        $this->scopeResolver->isGlobalInstallation()
+            ->willReturn(false);
+        $this->selfUpdateRunner->update(false, $this->output->reveal())
             ->willReturn(SelfUpdateCommand::FAILURE)
             ->shouldBeCalledOnce();
 
         self::assertSame(SelfUpdateCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillUpdateGlobalInstallationWhenCurrentBinaryIsGlobal(): void
+    {
+        $this->scopeResolver->isGlobalInstallation()
+            ->willReturn(true);
+        $this->selfUpdateRunner->update(true, $this->output->reveal())
+            ->willReturn(SelfUpdateCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        self::assertSame(SelfUpdateCommand::SUCCESS, $this->executeCommand());
     }
 
     /**

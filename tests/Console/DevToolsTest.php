@@ -36,8 +36,10 @@ use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
 use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
+use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateScopeResolver;
 use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
@@ -60,6 +62,7 @@ use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 #[CoversClass(DevTools::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -78,6 +81,7 @@ use Symfony\Component\Console\Input\InputInterface;
 #[UsesClass(ProcessQueue::class)]
 #[UsesClass(XdebugDisablingProcessEnvironmentConfigurator::class)]
 #[UsesClass(ComposerSelfUpdateRunner::class)]
+#[UsesClass(ComposerSelfUpdateScopeResolver::class)]
 #[UsesClass(ComposerVersionChecker::class)]
 #[UsesClass(VersionCheckNotifier::class)]
 #[UsesClass(WorkingDirectorySwitcher::class)]
@@ -106,6 +110,11 @@ final class DevToolsTest extends TestCase
     private ObjectProphecy $selfUpdateRunner;
 
     /**
+     * @var ObjectProphecy<SelfUpdateScopeResolverInterface>
+     */
+    private ObjectProphecy $selfUpdateScopeResolver;
+
+    /**
      * @var ObjectProphecy<EnvironmentInterface>
      */
     private ObjectProphecy $environment;
@@ -126,6 +135,7 @@ final class DevToolsTest extends TestCase
         $this->workingDirectorySwitcher = $this->prophesize(WorkingDirectorySwitcherInterface::class);
         $this->versionCheckNotifier = $this->prophesize(VersionCheckNotifierInterface::class);
         $this->selfUpdateRunner = $this->prophesize(SelfUpdateRunnerInterface::class);
+        $this->selfUpdateScopeResolver = $this->prophesize(SelfUpdateScopeResolverInterface::class);
         $this->environment = $this->prophesize(EnvironmentInterface::class);
         $this->devTools = $this->createDevTools();
     }
@@ -269,6 +279,29 @@ final class DevToolsTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function runAutoUpdateWhenRequestedWillUpdateGlobalInstallationWhenCurrentBinaryIsGlobal(): void
+    {
+        $input = $this->prophesize(InputInterface::class);
+        $output = $this->prophesize(OutputInterface::class);
+        $input->hasParameterOption('--auto-update', true)
+            ->willReturn(true);
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->selfUpdateScopeResolver->isGlobalInstallation()
+            ->willReturn(true);
+        $this->selfUpdateRunner->update(true, $output->reveal())
+            ->willReturn(Command::SUCCESS)
+            ->shouldBeCalledOnce();
+        $output->writeln(Argument::type('string'))
+            ->shouldNotBeCalled();
+
+        $this->invokeRunAutoUpdateWhenRequested($input->reveal(), $output->reveal());
+    }
+
+    /**
      * @return DevTools
      */
     private function createDevTools(): DevTools
@@ -278,6 +311,7 @@ final class DevToolsTest extends TestCase
             $this->workingDirectorySwitcher->reveal(),
             $this->versionCheckNotifier->reveal(),
             $this->selfUpdateRunner->reveal(),
+            $this->selfUpdateScopeResolver->reveal(),
             $this->environment->reveal(),
         );
     }
@@ -307,5 +341,17 @@ final class DevToolsTest extends TestCase
         $reflectionMethod = new ReflectionMethod($this->devTools, 'isSelfUpdateCommand');
 
         return (bool) $reflectionMethod->invoke($this->devTools, $input);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return void
+     */
+    private function invokeRunAutoUpdateWhenRequested(InputInterface $input, OutputInterface $output): void
+    {
+        $reflectionMethod = new ReflectionMethod($this->devTools, 'runAutoUpdateWhenRequested');
+        $reflectionMethod->invoke($this->devTools, $input, $output);
     }
 }

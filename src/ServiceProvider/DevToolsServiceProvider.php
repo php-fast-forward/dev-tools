@@ -86,8 +86,10 @@ use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
 use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
+use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateScopeResolver;
 use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
@@ -147,6 +149,7 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
 
             // Self-update
             SelfUpdateRunnerInterface::class => get(ComposerSelfUpdateRunner::class),
+            SelfUpdateScopeResolverInterface::class => get(ComposerSelfUpdateScopeResolver::class),
             VersionCheckerInterface::class => get(ComposerVersionChecker::class),
             VersionCheckNotifierInterface::class => get(VersionCheckNotifier::class),
             WorkingDirectorySwitcherInterface::class => get(WorkingDirectorySwitcher::class),

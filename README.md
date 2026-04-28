@@ -294,7 +294,7 @@ skills they depend on.
 | `composer codeowners` | Generates managed `.github/CODEOWNERS` content from local repository metadata. |
 | `composer gitattributes` | Manages export-ignore rules in `.gitattributes`. |
 | `composer dev-tools:sync` | Updates scripts, CODEOWNERS, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, packaged skills, and packaged agents. |
-| `vendor/bin/dev-tools self-update` / `composer dev-tools:self-update` | Updates the local DevTools package, or the Composer global installation with `--global`. |
+| `vendor/bin/dev-tools self-update` / `composer dev-tools:self-update` | Updates the local DevTools package, or the Composer global installation when the active binary is globally installed. |
 
 ## 🔌 Integration
 

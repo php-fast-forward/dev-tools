@@ -23,6 +23,7 @@ use FastForward\DevTools\Console\Command\SelfUpdateCommand;
 use Override;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
@@ -66,6 +67,7 @@ final class DevTools extends Application
      * @param WorkingDirectorySwitcherInterface $workingDirectorySwitcher switches the process working directory
      * @param VersionCheckNotifierInterface $versionCheckNotifier emits non-blocking version freshness warnings
      * @param SelfUpdateRunnerInterface $selfUpdateRunner runs explicit or automatic self-update flows
+     * @param SelfUpdateScopeResolverInterface $selfUpdateScopeResolver resolves whether the active binary is global
      * @param EnvironmentInterface $environment reads environment flags for optional auto-update behavior
      */
     public function __construct(
@@ -73,6 +75,7 @@ final class DevTools extends Application
         private readonly WorkingDirectorySwitcherInterface $workingDirectorySwitcher,
         private readonly VersionCheckNotifierInterface $versionCheckNotifier,
         private readonly SelfUpdateRunnerInterface $selfUpdateRunner,
+        private readonly SelfUpdateScopeResolverInterface $selfUpdateScopeResolver,
         private readonly EnvironmentInterface $environment,
     ) {
         parent::__construct('Fast Forward Dev Tools');
@@ -195,7 +198,8 @@ final class DevTools extends Application
         }
 
         try {
-            $statusCode = $this->selfUpdateRunner->update('global' === $autoUpdateMode, $output);
+            $global = $this->selfUpdateScopeResolver->isGlobalInstallation();
+            $statusCode = $this->selfUpdateRunner->update($global, $output);
         } catch (Throwable) {
             $output->writeln('<comment>DevTools auto-update failed; continuing with the requested command.</comment>');
 
@@ -224,6 +228,6 @@ final class DevTools extends Application
      */
     private function isTruthyAutoUpdateMode(?string $mode): bool
     {
-        return null !== $mode && \in_array(strtolower($mode), ['1', 'true', 'yes', 'on', 'global'], true);
+        return null !== $mode && \in_array(strtolower($mode), ['1', 'true', 'yes', 'on'], true);
     }
 }
