@@ -29,7 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Add a branch-protection-safe changelog validation context that fails normal
+- Add a branch-protection-safe changelog validation context that fails normal validation runs when changelog requirements are not satisfied.
 - Teach pull-request publication guidance to read the published PR body back
 - Keep workflow-dispatched test runs from failing before job creation by treating `max-outdated` as a string input and relying on the workflow default when release, wiki, or conflict automation dispatches required test status mirroring.
 
