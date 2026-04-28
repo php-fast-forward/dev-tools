@@ -379,6 +379,10 @@
             <li class="success">Get default commands will return framework defaults only</li>
             <li class="success">Constructor will set application name and expose loader commands</li>
             <li class="success">Constructor will register global runtime options</li>
+            <li class="success">Do run will render logo unless no logo option is provided</li>
+            <li class="success">Do run will not render logo when no logo option is set</li>
+            <li class="success">Do run will not render logo when json option is provided</li>
+            <li class="success">Do run will not render logo when pretty json option is provided</li>
             <li class="success">All will return loader commands with preserved keys</li>
             <li class="success">Create will return instance of dev tools</li>
             <li class="success">Is self update command will use self update command attribute names and aliases</li>
@@ -737,6 +741,9 @@
             <li class="success">With argument with value will format as key value pair</li>
             <li class="success">With argument chaining will accumulate all arguments</li>
             <li class="success">Build will return process instance with arguments</li>
+            <li class="success">Build will inject no logo argument for dev tools commands</li>
+            <li class="success">Build will keep existing no logo argument when provided in arguments</li>
+            <li class="success">Build will not inject no logo argument for non dev tools commands</li>
         </ul>
         <h2>Process Queue (FastForward\DevTools\Tests\Process\ProcessQueue)</h2>
         <ul>

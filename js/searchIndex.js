@@ -2806,11 +2806,6 @@ Search.appendIndex(
             "summary": "Initializes\u0020the\u0020DevTools\u0020global\u0020context\u0020and\u0020dependency\u0020graph.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method___construct"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetHelp\u0028\u0029",
-            "name": "getHelp",
-            "summary": "Gets\u0020the\u0020help\u0020message\u0020for\u0020the\u0020DevTools\u0020application,\u0020including\u0020the\u0020ASCII\u0020logo.",
-            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getHelp"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetDefaultInputDefinition\u0028\u0029",
             "name": "getDefaultInputDefinition",
             "summary": "Returns\u0020the\u0020application\u002Dlevel\u0020input\u0020definition\u0020with\u0020DevTools\u0020runtime\u0020options.",
@@ -4640,6 +4635,21 @@ Search.appendIndex(
             "name": "build",
             "summary": "Builds\u0020a\u0020process\u0020instance\u0020for\u0020the\u0020specified\u0020command.",
             "url": "classes/FastForward-DevTools-Process-ProcessBuilder.html#method_build"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessBuilder\u003A\u003AshouldAddLogoSuppressionArgument\u0028\u0029",
+            "name": "shouldAddLogoSuppressionArgument",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessBuilder.html#method_shouldAddLogoSuppressionArgument"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessBuilder\u003A\u003AprependLogoSuppressionArgument\u0028\u0029",
+            "name": "prependLogoSuppressionArgument",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessBuilder.html#method_prependLogoSuppressionArgument"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Process\\ProcessBuilder\u003A\u003ANO_LOGO_ARGUMENT",
+            "name": "NO_LOGO_ARGUMENT",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Process-ProcessBuilder.html#constant_NO_LOGO_ARGUMENT"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Process\\ProcessBuilder\u003A\u003A\u0024arguments",
             "name": "arguments",
