@@ -11,10 +11,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Add a configurable DevTools generated artifact workspace through `--workspace-dir` and `FAST_FORWARD_WORKSPACE_DIR`, keeping explicit output/cache command options authoritative (#274)
 - Add a standalone DevTools `self-update` command plus global `--working-dir` and `--auto-update` binary options for local or global installations (#272)
+- Show the DevTools ASCII logo by default on all top-level command executions, while adding a `--no-logo` global option and automatically suppressing the banner for `--json` / `--pretty-json` invocations (including automatic forwarding of `--no-logo` to internal DevTools subprocesses) to avoid banner repetition in orchestrated command queues (#277)
 
 ### Fixed
 
-- Show the DevTools ASCII logo by default on all top-level command executions, while adding a `--no-logo` global option and automatically suppressing the banner for `--json` / `--pretty-json` invocations (including automatic forwarding of `--no-logo` to internal DevTools subprocesses) to avoid banner repetition in orchestrated command queues (#277)
+- Prevent DevTools from breaking changelog workflows by keeping raw output clean for `changelog:show` and `changelog:next-version` (suppressing the startup ASCII logo when these commands run without explicit `--json`/`--pretty-json`) (#280)
 
 ## [1.23.0] - 2026-04-26
 
