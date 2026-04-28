@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <title>Dashboard for /home/runner/work/dev-tools/dev-tools/src/Console</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="../_css/bootstrap.min.css?v=12.5.6" rel="stylesheet" type="text/css">
+  <link href="../_css/billboard.min.css?v=12.5.6" rel="stylesheet" type="text/css">
+  <link href="../_css/style.css?v=12.5.6" rel="stylesheet" type="text/css">
+  <link href="../_css/custom.css" rel="stylesheet" type="text/css">
+ </head>
+ <body>
+  <header>
+   <div class="container-fluid">
+    <div class="row">
+     <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+       <ol class="breadcrumb">
+         <li class="breadcrumb-item"><a href="../index.html">/home/runner/work/dev-tools/dev-tools/src</a></li>
+         <li class="breadcrumb-item"><a href="index.html">Console</a></li>
+         <li class="breadcrumb-item active">(Dashboard)</li>
+
+       </ol>
+      </nav>
+     </div>
+    </div>
+   </div>
+  </header>
+  <div class="container-fluid">
+   <div class="row">
+    <div class="col-md-12">
+     <h2>Classes</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="classesCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="classComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Output/GithubActionOutput.php.html#32">FastForward\DevTools\Console\Output\GithubActionOutput</a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Command/Traits/HasCommandLogger.php.html#32">FastForward\DevTools\Console\Command\Traits\HasCommandLogger</a></td><td class="text-right">23%</td></tr>
+       <tr><td><a href="Command/WikiCommand.php.html#46">FastForward\DevTools\Console\Command\WikiCommand</a></td><td class="text-right">67%</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#31">FastForward\DevTools\Console\Input\HasCacheOption</a></td><td class="text-right">70%</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#32">FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor</a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#45">FastForward\DevTools\Console\Command\DependenciesCommand</a></td><td class="text-right">78%</td></tr>
+       <tr><td><a href="Command/FundingCommand.php.html#43">FastForward\DevTools\Console\Command\FundingCommand</a></td><td class="text-right">82%</td></tr>
+       <tr><td><a href="DevTools.php.html#48">FastForward\DevTools\Console\DevTools</a></td><td class="text-right">88%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Class</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Output/GithubActionOutput.php.html#32">FastForward\DevTools\Console\Output\GithubActionOutput</a></td><td class="text-right">0.0%</td><td class="text-right">29</td><td class="text-right">870</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#32">FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor</a></td><td class="text-right">75.3%</td><td class="text-right">41</td><td class="text-right">66</td></tr>
+       <tr><td><a href="Command/FundingCommand.php.html#43">FastForward\DevTools\Console\Command\FundingCommand</a></td><td class="text-right">82.4%</td><td class="text-right">33</td><td class="text-right">38</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#45">FastForward\DevTools\Console\Command\DependenciesCommand</a></td><td class="text-right">78.7%</td><td class="text-right">27</td><td class="text-right">34</td></tr>
+       <tr><td><a href="DevTools.php.html#48">FastForward\DevTools\Console\DevTools</a></td><td class="text-right">88.6%</td><td class="text-right">29</td><td class="text-right">30</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#31">FastForward\DevTools\Console\Input\HasCacheOption</a></td><td class="text-right">70.3%</td><td class="text-right">20</td><td class="text-right">30</td></tr>
+       <tr><td><a href="Command/WikiCommand.php.html#46">FastForward\DevTools\Console\Command\WikiCommand</a></td><td class="text-right">67.7%</td><td class="text-right">14</td><td class="text-right">20</td></tr>
+       <tr><td><a href="Command/Traits/HasCommandLogger.php.html#32">FastForward\DevTools\Console\Command\Traits\HasCommandLogger</a></td><td class="text-right">23.1%</td><td class="text-right">4</td><td class="text-right">11</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-12">
+     <h2 style="margin-top: 3rem;">Methods</h2>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3>Coverage Distribution</h3>
+     <div id="methodsCoverageDistribution" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3>Complexity</h3>
+     <div id="methodComplexity" style="height: 300px;">
+       <svg></svg>
+     </div>
+    </div>
+   </div>
+   <div class="row">
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Insufficient Coverage</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Command/DependenciesCommand.php.html#282"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getComposerUpdateCommand">getComposerUpdateCommand</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#296"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getComposerNormalizeCommand">getComposerNormalizeCommand</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Command/WikiCommand.php.html#239"><abbr title="FastForward\DevTools\Console\Command\WikiCommand::getGitRepositoryUrl">getGitRepositoryUrl</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#40"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::__construct">__construct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#48"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::__destruct">__destruct</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#65"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::error">error</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#94"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::warning">warning</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#123"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::notice">notice</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#149"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::debug">debug</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#161"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::startGroup">startGroup</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#176"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::endGroup">endGroup</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#196"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::group">group</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#214"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::emit">emit</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#248"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::supportsWorkflowCommands">supportsWorkflowCommands</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#259"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::escapeData">escapeData</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#272"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::escapeProperty">escapeProperty</abbr></a></td><td class="text-right">0%</td></tr>
+       <tr><td><a href="Command/Traits/HasCommandLogger.php.html#39"><abbr title="FastForward\DevTools\Console\Command\Traits\HasCommandLogger::getLogger">getLogger</abbr></a></td><td class="text-right">23%</td></tr>
+       <tr><td><a href="Command/WikiCommand.php.html#191"><abbr title="FastForward\DevTools\Console\Command\WikiCommand::initializeWikiSubmodule">initializeWikiSubmodule</abbr></a></td><td class="text-right">32%</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#140"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::hasExplicitCacheDirArgument">hasExplicitCacheDirArgument</abbr></a></td><td class="text-right">33%</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#157"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::isNoCacheRequested">isNoCacheRequested</abbr></a></td><td class="text-right">33%</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#111"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::extractProvidedArguments">extractProvidedArguments</abbr></a></td><td class="text-right">47%</td></tr>
+       <tr><td><a href="Command/FundingCommand.php.html#337"><abbr title="FastForward\DevTools\Console\Command\FundingCommand::handleFundingFile">handleFundingFile</abbr></a></td><td class="text-right">57%</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#228"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::optionTokens">optionTokens</abbr></a></td><td class="text-right">57%</td></tr>
+       <tr><td><a href="DevTools.php.html#230"><abbr title="FastForward\DevTools\Console\DevTools::runAutoUpdateWhenRequested">runAutoUpdateWhenRequested</abbr></a></td><td class="text-right">60%</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#114"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::resolveCacheDirArgument">resolveCacheDirArgument</abbr></a></td><td class="text-right">60%</td></tr>
+       <tr><td><a href="Command/TestsCommand.php.html#298"><abbr title="FastForward\DevTools\Console\Command\TestsCommand::configureCoverageArguments">configureCoverageArguments</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#91"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::inferCommandName">inferCommandName</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#40"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::addCacheOption">addCacheOption</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="Input/HasJsonOption.php.html#53"><abbr title="FastForward\DevTools\Console\Input\HasJsonOption::isJsonOutput">isJsonOutput</abbr></a></td><td class="text-right">66%</td></tr>
+       <tr><td><a href="DevTools.php.html#149"><abbr title="FastForward\DevTools\Console\DevTools::doRun">doRun</abbr></a></td><td class="text-right">72%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#121"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::execute">execute</abbr></a></td><td class="text-right">74%</td></tr>
+       <tr><td><a href="DevTools.php.html#275"><abbr title="FastForward\DevTools\Console\DevTools::isRawOutputCommand">isRawOutputCommand</abbr></a></td><td class="text-right">75%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#188"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getComposerDependencyAnalyserCommand">getComposerDependencyAnalyserCommand</abbr></a></td><td class="text-right">76%</td></tr>
+       <tr><td><a href="Logger/OutputFormatLogger.php.html#108"><abbr title="FastForward\DevTools\Console\Logger\OutputFormatLogger::emitGithubActionAnnotation">emitGithubActionAnnotation</abbr></a></td><td class="text-right">77%</td></tr>
+       <tr><td><a href="Command/WikiCommand.php.html#121"><abbr title="FastForward\DevTools\Console\Command\WikiCommand::execute">execute</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#77"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::isCacheEnabled">isCacheEnabled</abbr></a></td><td class="text-right">80%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#218"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getJackBreakpointCommand">getJackBreakpointCommand</abbr></a></td><td class="text-right">83%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#240"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getOpenVersionsCommand">getOpenVersionsCommand</abbr></a></td><td class="text-right">83%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#262"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getRaiseToInstalledCommand">getRaiseToInstalledCommand</abbr></a></td><td class="text-right">83%</td></tr>
+       <tr><td><a href="Command/GitIgnoreCommand.php.html#139"><abbr title="FastForward\DevTools\Console\Command\GitIgnoreCommand::execute">execute</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#310"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::resolveMaximumOutdated">resolveMaximumOutdated</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Command/UpdateComposerJsonCommand.php.html#216"><abbr title="FastForward\DevTools\Console\Command\UpdateComposerJsonCommand::updatedComposerJsonContents">updatedComposerJsonContents</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#182"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::resolveDefinition">resolveDefinition</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#205"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::resolveArrayParameters">resolveArrayParameters</abbr></a></td><td class="text-right">85%</td></tr>
+       <tr><td><a href="Command/CodeOwnersCommand.php.html#117"><abbr title="FastForward\DevTools\Console\Command\CodeOwnersCommand::execute">execute</abbr></a></td><td class="text-right">86%</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#57"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::addCacheDirOption">addCacheDirOption</abbr></a></td><td class="text-right">87%</td></tr>
+       <tr><td><a href="Command/TestsCommand.php.html#153"><abbr title="FastForward\DevTools\Console\Command\TestsCommand::execute">execute</abbr></a></td><td class="text-right">88%</td></tr>
+       <tr><td><a href="Logger/OutputFormatLogger.php.html#210"><abbr title="FastForward\DevTools\Console\Logger\OutputFormatLogger::interpolate">interpolate</abbr></a></td><td class="text-right">88%</td></tr>
+       <tr><td><a href="Command/SelfUpdateCommand.php.html#62"><abbr title="FastForward\DevTools\Console\Command\SelfUpdateCommand::getCommandNames">getCommandNames</abbr></a></td><td class="text-right">88%</td></tr>
+       <tr><td><a href="Command/TestsCommand.php.html#270"><abbr title="FastForward\DevTools\Console\Command\TestsCommand::resolveMinimumCoverage">resolveMinimumCoverage</abbr></a></td><td class="text-right">88%</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+    <div class="col-md-6">
+     <h3 style="margin-top: 2rem;">Project Risks</h3>
+     <div class="scrollbox">
+      <table class="table">
+       <thead>
+        <tr>
+         <th>Method</th>
+         <th class="text-right">Coverage</th>
+         <th class="text-right">Complexity</th>
+         <th class="text-right"><abbr title="Change Risk Anti-Patterns (CRAP) Index">CRAP</abbr></th>
+        </tr>
+       </thead>
+       <tbody>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#111"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::extractProvidedArguments">extractProvidedArguments</abbr></a></td><td class="text-right">47.4%</td><td class="text-right">11</td><td class="text-right">28</td></tr>
+       <tr><td><a href="Command/FundingCommand.php.html#337"><abbr title="FastForward\DevTools\Console\Command\FundingCommand::handleFundingFile">handleFundingFile</abbr></a></td><td class="text-right">57.1%</td><td class="text-right">13</td><td class="text-right">26</td></tr>
+       <tr><td><a href="Command/CodeOwnersCommand.php.html#117"><abbr title="FastForward\DevTools\Console\Command\CodeOwnersCommand::execute">execute</abbr></a></td><td class="text-right">86.4%</td><td class="text-right">21</td><td class="text-right">22</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#65"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::error">error</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#94"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::warning">warning</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#123"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::notice">notice</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#214"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::emit">emit</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">4</td><td class="text-right">20</td></tr>
+       <tr><td><a href="Command/TestsCommand.php.html#153"><abbr title="FastForward\DevTools\Console\Command\TestsCommand::execute">execute</abbr></a></td><td class="text-right">88.1%</td><td class="text-right">13</td><td class="text-right">13</td></tr>
+       <tr><td><a href="Command/Traits/HasCommandLogger.php.html#39"><abbr title="FastForward\DevTools\Console\Command\Traits\HasCommandLogger::getLogger">getLogger</abbr></a></td><td class="text-right">23.1%</td><td class="text-right">4</td><td class="text-right">11</td></tr>
+       <tr><td><a href="Command/TestsCommand.php.html#298"><abbr title="FastForward\DevTools\Console\Command\TestsCommand::configureCoverageArguments">configureCoverageArguments</abbr></a></td><td class="text-right">66.7%</td><td class="text-right">8</td><td class="text-right">10</td></tr>
+       <tr><td><a href="Command/GitIgnoreCommand.php.html#139"><abbr title="FastForward\DevTools\Console\Command\GitIgnoreCommand::execute">execute</abbr></a></td><td class="text-right">85.5%</td><td class="text-right">9</td><td class="text-right">9</td></tr>
+       <tr><td><a href="Command/UpdateComposerJsonCommand.php.html#216"><abbr title="FastForward\DevTools\Console\Command\UpdateComposerJsonCommand::updatedComposerJsonContents">updatedComposerJsonContents</abbr></a></td><td class="text-right">85.7%</td><td class="text-right">9</td><td class="text-right">9</td></tr>
+       <tr><td><a href="Logger/OutputFormatLogger.php.html#210"><abbr title="FastForward\DevTools\Console\Logger\OutputFormatLogger::interpolate">interpolate</abbr></a></td><td class="text-right">88.2%</td><td class="text-right">9</td><td class="text-right">9</td></tr>
+       <tr><td><a href="Command/WikiCommand.php.html#121"><abbr title="FastForward\DevTools\Console\Command\WikiCommand::execute">execute</abbr></a></td><td class="text-right">80.0%</td><td class="text-right">8</td><td class="text-right">8</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#114"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::resolveCacheDirArgument">resolveCacheDirArgument</abbr></a></td><td class="text-right">60.0%</td><td class="text-right">6</td><td class="text-right">8</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#121"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::execute">execute</abbr></a></td><td class="text-right">74.4%</td><td class="text-right">6</td><td class="text-right">6</td></tr>
+       <tr><td><a href="DevTools.php.html#230"><abbr title="FastForward\DevTools\Console\DevTools::runAutoUpdateWhenRequested">runAutoUpdateWhenRequested</abbr></a></td><td class="text-right">60.0%</td><td class="text-right">5</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Logger/OutputFormatLogger.php.html#108"><abbr title="FastForward\DevTools\Console\Logger\OutputFormatLogger::emitGithubActionAnnotation">emitGithubActionAnnotation</abbr></a></td><td class="text-right">77.8%</td><td class="text-right">6</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#228"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::optionTokens">optionTokens</abbr></a></td><td class="text-right">57.1%</td><td class="text-right">5</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#48"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::__destruct">__destruct</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#161"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::startGroup">startGroup</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#176"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::endGroup">endGroup</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Output/GithubActionOutput.php.html#248"><abbr title="FastForward\DevTools\Console\Output\GithubActionOutput::supportsWorkflowCommands">supportsWorkflowCommands</abbr></a></td><td class="text-right">0.0%</td><td class="text-right">2</td><td class="text-right">6</td></tr>
+       <tr><td><a href="Command/TestsCommand.php.html#270"><abbr title="FastForward\DevTools\Console\Command\TestsCommand::resolveMinimumCoverage">resolveMinimumCoverage</abbr></a></td><td class="text-right">88.9%</td><td class="text-right">5</td><td class="text-right">5</td></tr>
+       <tr><td><a href="Command/WikiCommand.php.html#191"><abbr title="FastForward\DevTools\Console\Command\WikiCommand::initializeWikiSubmodule">initializeWikiSubmodule</abbr></a></td><td class="text-right">32.3%</td><td class="text-right">3</td><td class="text-right">5</td></tr>
+       <tr><td><a href="DevTools.php.html#149"><abbr title="FastForward\DevTools\Console\DevTools::doRun">doRun</abbr></a></td><td class="text-right">72.7%</td><td class="text-right">5</td><td class="text-right">5</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#91"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::inferCommandName">inferCommandName</abbr></a></td><td class="text-right">66.7%</td><td class="text-right">5</td><td class="text-right">5</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#188"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getComposerDependencyAnalyserCommand">getComposerDependencyAnalyserCommand</abbr></a></td><td class="text-right">76.9%</td><td class="text-right">4</td><td class="text-right">4</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#218"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getJackBreakpointCommand">getJackBreakpointCommand</abbr></a></td><td class="text-right">83.3%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#240"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getOpenVersionsCommand">getOpenVersionsCommand</abbr></a></td><td class="text-right">83.3%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#262"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::getRaiseToInstalledCommand">getRaiseToInstalledCommand</abbr></a></td><td class="text-right">83.3%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Command/DependenciesCommand.php.html#310"><abbr title="FastForward\DevTools\Console\Command\DependenciesCommand::resolveMaximumOutdated">resolveMaximumOutdated</abbr></a></td><td class="text-right">85.7%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#182"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::resolveDefinition">resolveDefinition</abbr></a></td><td class="text-right">85.7%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Logger/Processor/CommandInputProcessor.php.html#205"><abbr title="FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor::resolveArrayParameters">resolveArrayParameters</abbr></a></td><td class="text-right">85.7%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#77"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::isCacheEnabled">isCacheEnabled</abbr></a></td><td class="text-right">80.0%</td><td class="text-right">3</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#140"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::hasExplicitCacheDirArgument">hasExplicitCacheDirArgument</abbr></a></td><td class="text-right">33.3%</td><td class="text-right">2</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#157"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::isNoCacheRequested">isNoCacheRequested</abbr></a></td><td class="text-right">33.3%</td><td class="text-right">2</td><td class="text-right">3</td></tr>
+       <tr><td><a href="Command/SelfUpdateCommand.php.html#62"><abbr title="FastForward\DevTools\Console\Command\SelfUpdateCommand::getCommandNames">getCommandNames</abbr></a></td><td class="text-right">88.9%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+       <tr><td><a href="DevTools.php.html#275"><abbr title="FastForward\DevTools\Console\DevTools::isRawOutputCommand">isRawOutputCommand</abbr></a></td><td class="text-right">75.0%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#40"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::addCacheOption">addCacheOption</abbr></a></td><td class="text-right">66.7%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+       <tr><td><a href="Input/HasCacheOption.php.html#57"><abbr title="FastForward\DevTools\Console\Input\HasCacheOption::addCacheDirOption">addCacheDirOption</abbr></a></td><td class="text-right">87.5%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+       <tr><td><a href="Input/HasJsonOption.php.html#53"><abbr title="FastForward\DevTools\Console\Input\HasJsonOption::isJsonOutput">isJsonOutput</abbr></a></td><td class="text-right">66.7%</td><td class="text-right">2</td><td class="text-right">2</td></tr>
+
+       </tbody>
+      </table>
+     </div>
+    </div>
+   </div>
+   <footer>
+    <hr/>
+    <p>
+     <small>Generated by <a href="https://github.com/sebastianbergmann/php-code-coverage" target="_top">php-code-coverage 12.5.6</a> using <a href="https://www.php.net/" target="_top">PHP 8.3.30</a> and <a href="https://phpunit.de/">PHPUnit 12.5.23</a> at Tue Apr 28 22:15:07 UTC 2026.</small>
+    </p>
+   </footer>
+  </div>
+  <script src="../_js/billboard.pkgd.min.js?v=12.5.6" type="text/javascript"></script>
+  <script type="application/json" id="complexity_class">[[0,29,"Output\/GithubActionOutput.php.html#32","FastForward\\DevTools\\Console\\Output\\GithubActionOutput","870"],[23.076923076923077,4,"Command\/Traits\/HasCommandLogger.php.html#32","FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger","11.28"],[67.74193548387096,14,"Command\/WikiCommand.php.html#46","FastForward\\DevTools\\Console\\Command\\WikiCommand","20.58"],[70.27027027027027,20,"Input\/HasCacheOption.php.html#31","FastForward\\DevTools\\Console\\Input\\HasCacheOption","30.51"],[75.34246575342466,41,"Logger\/Processor\/CommandInputProcessor.php.html#32","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor","66.20"],[78.68852459016394,27,"Command\/DependenciesCommand.php.html#45","FastForward\\DevTools\\Console\\Command\\DependenciesCommand","34.06"],[82.3943661971831,33,"Command\/FundingCommand.php.html#43","FastForward\\DevTools\\Console\\Command\\FundingCommand","38.94"],[88.57142857142857,29,"DevTools.php.html#48","FastForward\\DevTools\\Console\\DevTools","30.26"],[90.05524861878453,33,"Command\/TestsCommand.php.html#49","FastForward\\DevTools\\Console\\Command\\TestsCommand","34.07"],[90.9090909090909,4,"Input\/HasJsonOption.php.html#28","FastForward\\DevTools\\Console\\Input\\HasJsonOption","4.01"],[91.20879120879121,12,"Command\/GitIgnoreCommand.php.html#49","FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand","12.10"],[91.8918918918919,25,"Command\/CodeOwnersCommand.php.html#40","FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand","25.33"],[92.5925925925926,25,"Logger\/OutputFormatLogger.php.html#44","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger","25.25"],[93.33333333333333,10,"CommandLoader\/DevToolsCommandLoader.php.html#45","FastForward\\DevTools\\Console\\CommandLoader\\DevToolsCommandLoader","10.03"],[93.33333333333333,9,"Logger\/Processor\/CommandOutputProcessor.php.html#29","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor","9.02"],[93.44262295081968,15,"Command\/LicenseCommand.php.html#42","FastForward\\DevTools\\Console\\Command\\LicenseCommand","15.06"],[94.5945945945946,24,"Command\/StandardsCommand.php.html#41","FastForward\\DevTools\\Console\\Command\\StandardsCommand","24.09"],[96.42857142857143,23,"Command\/UpdateComposerJsonCommand.php.html#47","FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand","23"],[96.55172413793103,6,"Command\/SelfUpdateCommand.php.html#35","FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand","6"],[96.5909090909091,12,"Command\/DocsCommand.php.html#49","FastForward\\DevTools\\Console\\Command\\DocsCommand","12"],[97,22,"Command\/ReportsCommand.php.html#41","FastForward\\DevTools\\Console\\Command\\ReportsCommand","22"],[98.24561403508771,12,"Command\/CodeStyleCommand.php.html#39","FastForward\\DevTools\\Console\\Command\\CodeStyleCommand","12"],[98.55072463768117,11,"Command\/MetricsCommand.php.html#37","FastForward\\DevTools\\Console\\Command\\MetricsCommand","11"],[98.74213836477988,31,"Command\/GitHooksCommand.php.html#42","FastForward\\DevTools\\Console\\Command\\GitHooksCommand","31"],[99.1869918699187,15,"Command\/GitAttributesCommand.php.html#50","FastForward\\DevTools\\Console\\Command\\GitAttributesCommand","15"],[99.21875,30,"Command\/SyncCommand.php.html#38","FastForward\\DevTools\\Console\\Command\\SyncCommand","30"],[100,6,"Command\/AgentsCommand.php.html#36","FastForward\\DevTools\\Console\\Command\\AgentsCommand","6"],[100,4,"Command\/ChangelogCheckCommand.php.html#36","FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand","4"],[100,5,"Command\/ChangelogEntryCommand.php.html#39","FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand","5"],[100,5,"Command\/ChangelogNextVersionCommand.php.html#37","FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand","5"],[100,5,"Command\/ChangelogPromoteCommand.php.html#39","FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand","5"],[100,5,"Command\/ChangelogShowCommand.php.html#38","FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand","5"],[100,29,"Command\/CopyResourceCommand.php.html#42","FastForward\\DevTools\\Console\\Command\\CopyResourceCommand","29"],[100,15,"Command\/PhpDocCommand.php.html#47","FastForward\\DevTools\\Console\\Command\\PhpDocCommand","15"],[100,9,"Command\/RefactorCommand.php.html#39","FastForward\\DevTools\\Console\\Command\\RefactorCommand","9"],[100,6,"Command\/SkillsCommand.php.html#47","FastForward\\DevTools\\Console\\Command\\SkillsCommand","6"],[100,1,"Formatter\/LogLevelOutputFormatter.php.html#38","FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter","1"],[100,3,"Logger\/Processor\/CompositeContextProcessor.php.html#25","FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor","3"],[100,4,"Output\/OutputCapabilityDetector.php.html#31","FastForward\\DevTools\\Console\\Output\\OutputCapabilityDetector","4"],[100,3,"Command\/Traits\/LogsCommandResults.php.html#33","FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults","3"]]</script>
+  <script type="application/json" id="complexity_method">[[0,1,"Command\/DependenciesCommand.php.html#282","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::getComposerUpdateCommand","2"],[0,1,"Command\/DependenciesCommand.php.html#296","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::getComposerNormalizeCommand","2"],[0,1,"Command\/WikiCommand.php.html#239","FastForward\\DevTools\\Console\\Command\\WikiCommand::getGitRepositoryUrl","2"],[0,1,"Output\/GithubActionOutput.php.html#40","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::__construct","2"],[0,2,"Output\/GithubActionOutput.php.html#48","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::__destruct","6"],[0,4,"Output\/GithubActionOutput.php.html#65","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::error","20"],[0,4,"Output\/GithubActionOutput.php.html#94","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::warning","20"],[0,4,"Output\/GithubActionOutput.php.html#123","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::notice","20"],[0,1,"Output\/GithubActionOutput.php.html#149","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::debug","2"],[0,2,"Output\/GithubActionOutput.php.html#161","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::startGroup","6"],[0,2,"Output\/GithubActionOutput.php.html#176","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::endGroup","6"],[0,1,"Output\/GithubActionOutput.php.html#196","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::group","2"],[0,4,"Output\/GithubActionOutput.php.html#214","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::emit","20"],[0,2,"Output\/GithubActionOutput.php.html#248","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::supportsWorkflowCommands","6"],[0,1,"Output\/GithubActionOutput.php.html#259","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::escapeData","2"],[0,1,"Output\/GithubActionOutput.php.html#272","FastForward\\DevTools\\Console\\Output\\GithubActionOutput::escapeProperty","2"],[23.076923076923077,4,"Command\/Traits\/HasCommandLogger.php.html#39","FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger::getLogger","11.28"],[32.25806451612903,3,"Command\/WikiCommand.php.html#191","FastForward\\DevTools\\Console\\Command\\WikiCommand::initializeWikiSubmodule","5.80"],[33.33333333333333,2,"Input\/HasCacheOption.php.html#140","FastForward\\DevTools\\Console\\Input\\HasCacheOption::hasExplicitCacheDirArgument","3.19"],[33.33333333333333,2,"Input\/HasCacheOption.php.html#157","FastForward\\DevTools\\Console\\Input\\HasCacheOption::isNoCacheRequested","3.19"],[47.368421052631575,11,"Logger\/Processor\/CommandInputProcessor.php.html#111","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::extractProvidedArguments","28.64"],[57.14285714285714,13,"Command\/FundingCommand.php.html#337","FastForward\\DevTools\\Console\\Command\\FundingCommand::handleFundingFile","26.30"],[57.14285714285714,5,"Logger\/Processor\/CommandInputProcessor.php.html#228","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::optionTokens","6.97"],[60,5,"DevTools.php.html#230","FastForward\\DevTools\\Console\\DevTools::runAutoUpdateWhenRequested","6.60"],[60,6,"Input\/HasCacheOption.php.html#114","FastForward\\DevTools\\Console\\Input\\HasCacheOption::resolveCacheDirArgument","8.30"],[66.66666666666666,8,"Command\/TestsCommand.php.html#298","FastForward\\DevTools\\Console\\Command\\TestsCommand::configureCoverageArguments","10.37"],[66.66666666666666,5,"Logger\/Processor\/CommandInputProcessor.php.html#91","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::inferCommandName","5.93"],[66.66666666666666,2,"Input\/HasCacheOption.php.html#40","FastForward\\DevTools\\Console\\Input\\HasCacheOption::addCacheOption","2.15"],[66.66666666666666,2,"Input\/HasJsonOption.php.html#53","FastForward\\DevTools\\Console\\Input\\HasJsonOption::isJsonOutput","2.15"],[72.72727272727273,5,"DevTools.php.html#149","FastForward\\DevTools\\Console\\DevTools::doRun","5.51"],[74.4186046511628,6,"Command\/DependenciesCommand.php.html#121","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::execute","6.60"],[75,2,"DevTools.php.html#275","FastForward\\DevTools\\Console\\DevTools::isRawOutputCommand","2.06"],[76.92307692307693,4,"Command\/DependenciesCommand.php.html#188","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::getComposerDependencyAnalyserCommand","4.20"],[77.77777777777779,6,"Logger\/OutputFormatLogger.php.html#108","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger::emitGithubActionAnnotation","6.40"],[80,8,"Command\/WikiCommand.php.html#121","FastForward\\DevTools\\Console\\Command\\WikiCommand::execute","8.51"],[80,3,"Input\/HasCacheOption.php.html#77","FastForward\\DevTools\\Console\\Input\\HasCacheOption::isCacheEnabled","3.07"],[83.33333333333334,3,"Command\/DependenciesCommand.php.html#218","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::getJackBreakpointCommand","3.04"],[83.33333333333334,3,"Command\/DependenciesCommand.php.html#240","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::getOpenVersionsCommand","3.04"],[83.33333333333334,3,"Command\/DependenciesCommand.php.html#262","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::getRaiseToInstalledCommand","3.04"],[85.45454545454545,9,"Command\/GitIgnoreCommand.php.html#139","FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand::execute","9.25"],[85.71428571428571,3,"Command\/DependenciesCommand.php.html#310","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::resolveMaximumOutdated","3.03"],[85.71428571428571,9,"Command\/UpdateComposerJsonCommand.php.html#216","FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand::updatedComposerJsonContents","9.24"],[85.71428571428571,3,"Logger\/Processor\/CommandInputProcessor.php.html#182","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::resolveDefinition","3.03"],[85.71428571428571,3,"Logger\/Processor\/CommandInputProcessor.php.html#205","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::resolveArrayParameters","3.03"],[86.36363636363636,21,"Command\/CodeOwnersCommand.php.html#117","FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand::execute","22.12"],[87.5,2,"Input\/HasCacheOption.php.html#57","FastForward\\DevTools\\Console\\Input\\HasCacheOption::addCacheDirOption","2.01"],[88.05970149253731,13,"Command\/TestsCommand.php.html#153","FastForward\\DevTools\\Console\\Command\\TestsCommand::execute","13.29"],[88.23529411764706,9,"Logger\/OutputFormatLogger.php.html#210","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger::interpolate","9.13"],[88.88888888888889,2,"Command\/SelfUpdateCommand.php.html#62","FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand::getCommandNames","2.01"],[88.88888888888889,5,"Command\/TestsCommand.php.html#270","FastForward\\DevTools\\Console\\Command\\TestsCommand::resolveMinimumCoverage","5.03"],[90,10,"Command\/FundingCommand.php.html#213","FastForward\\DevTools\\Console\\Command\\FundingCommand::handleComposerFile","10.10"],[90,4,"Logger\/Processor\/CommandInputProcessor.php.html#154","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::extractProvidedOptions","4.02"],[90.9090909090909,16,"Command\/StandardsCommand.php.html#100","FastForward\\DevTools\\Console\\Command\\StandardsCommand::execute","16.19"],[91.39784946236558,12,"Command\/LicenseCommand.php.html#115","FastForward\\DevTools\\Console\\Command\\LicenseCommand::execute","12.09"],[91.66666666666666,9,"Command\/SyncCommand.php.html#208","FastForward\\DevTools\\Console\\Command\\SyncCommand::queueDevToolsCommand","9.05"],[91.66666666666666,7,"Logger\/Processor\/CommandOutputProcessor.php.html#36","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor::process","7.03"],[92.10526315789474,8,"Command\/DocsCommand.php.html#129","FastForward\\DevTools\\Console\\Command\\DocsCommand::execute","8.03"],[93.10344827586206,9,"CommandLoader\/DevToolsCommandLoader.php.html#69","FastForward\\DevTools\\Console\\CommandLoader\\DevToolsCommandLoader::getCommandMap","9.03"],[95.3125,20,"Command\/ReportsCommand.php.html#120","FastForward\\DevTools\\Console\\Command\\ReportsCommand::execute","20"],[97.43589743589743,6,"Command\/MetricsCommand.php.html#127","FastForward\\DevTools\\Console\\Command\\MetricsCommand::execute","6"],[97.5609756097561,10,"Command\/CodeStyleCommand.php.html#115","FastForward\\DevTools\\Console\\Command\\CodeStyleCommand::execute","10"],[97.97979797979798,24,"Command\/GitHooksCommand.php.html#125","FastForward\\DevTools\\Console\\Command\\GitHooksCommand::execute","24"],[98.93617021276596,11,"Command\/GitAttributesCommand.php.html#136","FastForward\\DevTools\\Console\\Command\\GitAttributesCommand::execute","11"],[100,1,"Command\/AgentsCommand.php.html#53","FastForward\\DevTools\\Console\\Command\\AgentsCommand::__construct","1"],[100,1,"Command\/AgentsCommand.php.html#64","FastForward\\DevTools\\Console\\Command\\AgentsCommand::configure","1"],[100,4,"Command\/AgentsCommand.php.html#79","FastForward\\DevTools\\Console\\Command\\AgentsCommand::execute","4"],[100,1,"Command\/ChangelogCheckCommand.php.html#50","FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand::__construct","1"],[100,1,"Command\/ChangelogCheckCommand.php.html#61","FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand::configure","1"],[100,2,"Command\/ChangelogCheckCommand.php.html#88","FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand::execute","2"],[100,1,"Command\/ChangelogEntryCommand.php.html#53","FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand::__construct","1"],[100,1,"Command\/ChangelogEntryCommand.php.html#64","FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand::configure","1"],[100,3,"Command\/ChangelogEntryCommand.php.html#109","FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand::execute","3"],[100,1,"Command\/ChangelogNextVersionCommand.php.html#51","FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand::__construct","1"],[100,1,"Command\/ChangelogNextVersionCommand.php.html#62","FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand::configure","1"],[100,3,"Command\/ChangelogNextVersionCommand.php.html#89","FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand::execute","3"],[100,1,"Command\/ChangelogPromoteCommand.php.html#54","FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand::__construct","1"],[100,1,"Command\/ChangelogPromoteCommand.php.html#66","FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand::configure","1"],[100,3,"Command\/ChangelogPromoteCommand.php.html#98","FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand::execute","3"],[100,1,"Command\/ChangelogShowCommand.php.html#49","FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand::__construct","1"],[100,1,"Command\/ChangelogShowCommand.php.html#60","FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand::configure","1"],[100,3,"Command\/ChangelogShowCommand.php.html#87","FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand::execute","3"],[100,1,"Command\/CodeOwnersCommand.php.html#59","FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand::__construct","1"],[100,1,"Command\/CodeOwnersCommand.php.html#72","FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand::configure","1"],[100,1,"Command\/CodeOwnersCommand.php.html#216","FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand::promptForOwners","1"],[100,1,"Command\/CodeOwnersCommand.php.html#232","FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand::shouldWriteCodeOwners","1"],[100,1,"Command\/CodeStyleCommand.php.html#67","FastForward\\DevTools\\Console\\Command\\CodeStyleCommand::__construct","1"],[100,1,"Command\/CodeStyleCommand.php.html#84","FastForward\\DevTools\\Console\\Command\\CodeStyleCommand::configure","1"],[100,1,"Command\/CopyResourceCommand.php.html#62","FastForward\\DevTools\\Console\\Command\\CopyResourceCommand::__construct","1"],[100,1,"Command\/CopyResourceCommand.php.html#76","FastForward\\DevTools\\Console\\Command\\CopyResourceCommand::configure","1"],[100,4,"Command\/CopyResourceCommand.php.html#127","FastForward\\DevTools\\Console\\Command\\CopyResourceCommand::execute","4"],[100,2,"Command\/CopyResourceCommand.php.html#173","FastForward\\DevTools\\Console\\Command\\CopyResourceCommand::copyDirectory","2"],[100,20,"Command\/CopyResourceCommand.php.html#224","FastForward\\DevTools\\Console\\Command\\CopyResourceCommand::copyFile","20"],[100,1,"Command\/CopyResourceCommand.php.html#318","FastForward\\DevTools\\Console\\Command\\CopyResourceCommand::shouldReplaceResource","1"],[100,1,"Command\/DependenciesCommand.php.html#65","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::__construct","1"],[100,1,"Command\/DependenciesCommand.php.html#77","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::configure","1"],[100,1,"Command\/DependenciesCommand.php.html#334","FastForward\\DevTools\\Console\\Command\\DependenciesCommand::shouldIgnoreOutdatedFailures","1"],[100,1,"Command\/DocsCommand.php.html#70","FastForward\\DevTools\\Console\\Command\\DocsCommand::__construct","1"],[100,1,"Command\/DocsCommand.php.html#84","FastForward\\DevTools\\Console\\Command\\DocsCommand::configure","1"],[100,2,"Command\/DocsCommand.php.html#197","FastForward\\DevTools\\Console\\Command\\DocsCommand::createPhpDocumentorConfig","2"],[100,1,"Command\/FundingCommand.php.html#66","FastForward\\DevTools\\Console\\Command\\FundingCommand::__construct","1"],[100,1,"Command\/FundingCommand.php.html#83","FastForward\\DevTools\\Console\\Command\\FundingCommand::configure","1"],[100,4,"Command\/FundingCommand.php.html#128","FastForward\\DevTools\\Console\\Command\\FundingCommand::execute","4"],[100,1,"Command\/FundingCommand.php.html#475","FastForward\\DevTools\\Console\\Command\\FundingCommand::shouldWriteManagedFile","1"],[100,3,"Command\/FundingCommand.php.html#490","FastForward\\DevTools\\Console\\Command\\FundingCommand::normalizeComposerFile","3"],[100,1,"Command\/GitAttributesCommand.php.html#83","FastForward\\DevTools\\Console\\Command\\GitAttributesCommand::__construct","1"],[100,1,"Command\/GitAttributesCommand.php.html#102","FastForward\\DevTools\\Console\\Command\\GitAttributesCommand::configure","1"],[100,1,"Command\/GitAttributesCommand.php.html#265","FastForward\\DevTools\\Console\\Command\\GitAttributesCommand::shouldWriteGitAttributes","1"],[100,1,"Command\/GitAttributesCommand.php.html#281","FastForward\\DevTools\\Console\\Command\\GitAttributesCommand::configuredKeepInExportPaths","1"],[100,1,"Command\/GitHooksCommand.php.html#62","FastForward\\DevTools\\Console\\Command\\GitHooksCommand::__construct","1"],[100,1,"Command\/GitHooksCommand.php.html#76","FastForward\\DevTools\\Console\\Command\\GitHooksCommand::configure","1"],[100,1,"Command\/GitHooksCommand.php.html#268","FastForward\\DevTools\\Console\\Command\\GitHooksCommand::shouldReplaceHook","1"],[100,4,"Command\/GitHooksCommand.php.html#288","FastForward\\DevTools\\Console\\Command\\GitHooksCommand::installHook","4"],[100,1,"Command\/GitIgnoreCommand.php.html#75","FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand::__construct","1"],[100,1,"Command\/GitIgnoreCommand.php.html#93","FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand::configure","1"],[100,1,"Command\/GitIgnoreCommand.php.html#223","FastForward\\DevTools\\Console\\Command\\GitIgnoreCommand::shouldWriteGitIgnore","1"],[100,1,"Command\/LicenseCommand.php.html#61","FastForward\\DevTools\\Console\\Command\\LicenseCommand::__construct","1"],[100,1,"Command\/LicenseCommand.php.html#74","FastForward\\DevTools\\Console\\Command\\LicenseCommand::configure","1"],[100,1,"Command\/LicenseCommand.php.html#239","FastForward\\DevTools\\Console\\Command\\LicenseCommand::shouldWriteLicense","1"],[100,1,"Command\/MetricsCommand.php.html#81","FastForward\\DevTools\\Console\\Command\\MetricsCommand::__construct","1"],[100,1,"Command\/MetricsCommand.php.html#92","FastForward\\DevTools\\Console\\Command\\MetricsCommand::configure","1"],[100,3,"Command\/MetricsCommand.php.html#187","FastForward\\DevTools\\Console\\Command\\MetricsCommand::getDefaultExcludedDirectories","3"],[100,1,"Command\/PhpDocCommand.php.html#86","FastForward\\DevTools\\Console\\Command\\PhpDocCommand::__construct","1"],[100,1,"Command\/PhpDocCommand.php.html#106","FastForward\\DevTools\\Console\\Command\\PhpDocCommand::configure","1"],[100,11,"Command\/PhpDocCommand.php.html#146","FastForward\\DevTools\\Console\\Command\\PhpDocCommand::execute","11"],[100,2,"Command\/PhpDocCommand.php.html#235","FastForward\\DevTools\\Console\\Command\\PhpDocCommand::ensureDocHeaderExists","2"],[100,1,"Command\/RefactorCommand.php.html#62","FastForward\\DevTools\\Console\\Command\\RefactorCommand::__construct","1"],[100,1,"Command\/RefactorCommand.php.html#79","FastForward\\DevTools\\Console\\Command\\RefactorCommand::configure","1"],[100,7,"Command\/RefactorCommand.php.html#115","FastForward\\DevTools\\Console\\Command\\RefactorCommand::execute","7"],[100,1,"Command\/ReportsCommand.php.html#59","FastForward\\DevTools\\Console\\Command\\ReportsCommand::__construct","1"],[100,1,"Command\/ReportsCommand.php.html#70","FastForward\\DevTools\\Console\\Command\\ReportsCommand::configure","1"],[100,1,"Command\/SelfUpdateCommand.php.html#49","FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand::__construct","1"],[100,1,"Command\/SelfUpdateCommand.php.html#82","FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand::configure","1"],[100,2,"Command\/SelfUpdateCommand.php.html#99","FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand::execute","2"],[100,1,"Command\/SkillsCommand.php.html#70","FastForward\\DevTools\\Console\\Command\\SkillsCommand::__construct","1"],[100,1,"Command\/SkillsCommand.php.html#81","FastForward\\DevTools\\Console\\Command\\SkillsCommand::configure","1"],[100,4,"Command\/SkillsCommand.php.html#111","FastForward\\DevTools\\Console\\Command\\SkillsCommand::execute","4"],[100,1,"Command\/StandardsCommand.php.html#57","FastForward\\DevTools\\Console\\Command\\StandardsCommand::__construct","1"],[100,1,"Command\/StandardsCommand.php.html#70","FastForward\\DevTools\\Console\\Command\\StandardsCommand::configure","1"],[100,6,"Command\/StandardsCommand.php.html#180","FastForward\\DevTools\\Console\\Command\\StandardsCommand::getProcessLabel","6"],[100,1,"Command\/SyncCommand.php.html#53","FastForward\\DevTools\\Console\\Command\\SyncCommand::__construct","1"],[100,1,"Command\/SyncCommand.php.html#64","FastForward\\DevTools\\Console\\Command\\SyncCommand::configure","1"],[100,19,"Command\/SyncCommand.php.html#99","FastForward\\DevTools\\Console\\Command\\SyncCommand::execute","19"],[100,1,"Command\/TestsCommand.php.html#70","FastForward\\DevTools\\Console\\Command\\TestsCommand::__construct","1"],[100,1,"Command\/TestsCommand.php.html#90","FastForward\\DevTools\\Console\\Command\\TestsCommand::configure","1"],[100,1,"Command\/TestsCommand.php.html#260","FastForward\\DevTools\\Console\\Command\\TestsCommand::resolvePath","1"],[100,4,"Command\/TestsCommand.php.html#349","FastForward\\DevTools\\Console\\Command\\TestsCommand::validateMinimumCoverage","4"],[100,1,"Command\/UpdateComposerJsonCommand.php.html#67","FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand::__construct","1"],[100,1,"Command\/UpdateComposerJsonCommand.php.html#81","FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand::configure","1"],[100,10,"Command\/UpdateComposerJsonCommand.php.html#121","FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand::execute","10"],[100,1,"Command\/UpdateComposerJsonCommand.php.html#196","FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand::shouldUpdateComposerJson","1"],[100,1,"Command\/UpdateComposerJsonCommand.php.html#268","FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand::getScripts","1"],[100,1,"Command\/WikiCommand.php.html#67","FastForward\\DevTools\\Console\\Command\\WikiCommand::__construct","1"],[100,1,"Command\/WikiCommand.php.html#86","FastForward\\DevTools\\Console\\Command\\WikiCommand::configure","1"],[100,1,"CommandLoader\/DevToolsCommandLoader.php.html#57","FastForward\\DevTools\\Console\\CommandLoader\\DevToolsCommandLoader::__construct","1"],[100,1,"DevTools.php.html#88","FastForward\\DevTools\\Console\\DevTools::__construct","1"],[100,1,"DevTools.php.html#107","FastForward\\DevTools\\Console\\DevTools::getDefaultInputDefinition","1"],[100,1,"DevTools.php.html#178","FastForward\\DevTools\\Console\\DevTools::create","1"],[100,2,"DevTools.php.html#186","FastForward\\DevTools\\Console\\DevTools::getContainer","2"],[100,2,"DevTools.php.html#201","FastForward\\DevTools\\Console\\DevTools::getWorkingDirectoryOption","2"],[100,3,"DevTools.php.html#213","FastForward\\DevTools\\Console\\DevTools::configureWorkspaceDirectory","3"],[100,4,"DevTools.php.html#257","FastForward\\DevTools\\Console\\DevTools::shouldRenderLogo","4"],[100,1,"DevTools.php.html#291","FastForward\\DevTools\\Console\\DevTools::isSelfUpdateCommand","1"],[100,2,"DevTools.php.html#301","FastForward\\DevTools\\Console\\DevTools::isTruthyAutoUpdateMode","2"],[100,1,"Formatter\/LogLevelOutputFormatter.php.html#49","FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter::__construct","1"],[100,1,"Logger\/OutputFormatLogger.php.html#65","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger::__construct","1"],[100,2,"Logger\/OutputFormatLogger.php.html#85","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger::log","2"],[100,3,"Logger\/OutputFormatLogger.php.html#138","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger::formatMessage","3"],[100,3,"Logger\/OutputFormatLogger.php.html#172","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger::isJsonOutput","3"],[100,1,"Logger\/OutputFormatLogger.php.html#188","FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger::isPrettyJsonOutput","1"],[100,3,"Logger\/Processor\/CommandInputProcessor.php.html#39","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::process","3"],[100,7,"Logger\/Processor\/CommandInputProcessor.php.html#59","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor::processInputContext","7"],[100,2,"Logger\/Processor\/CommandOutputProcessor.php.html#68","FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor::extractBufferedOutput","2"],[100,1,"Logger\/Processor\/CompositeContextProcessor.php.html#30","FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor::__construct","1"],[100,2,"Logger\/Processor\/CompositeContextProcessor.php.html#39","FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor::process","2"],[100,4,"Output\/OutputCapabilityDetector.php.html#40","FastForward\\DevTools\\Console\\Output\\OutputCapabilityDetector::supportsAnsi","4"],[100,1,"Command\/Traits\/LogsCommandResults.php.html#46","FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults::notice","1"],[100,1,"Command\/Traits\/LogsCommandResults.php.html#65","FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults::success","1"],[100,1,"Command\/Traits\/LogsCommandResults.php.html#93","FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults::failure","1"],[100,3,"Input\/HasCacheOption.php.html#95","FastForward\\DevTools\\Console\\Input\\HasCacheOption::resolveCacheArgument","3"],[100,1,"Input\/HasJsonOption.php.html#35","FastForward\\DevTools\\Console\\Input\\HasJsonOption::addJsonOption","1"],[100,1,"Input\/HasJsonOption.php.html#67","FastForward\\DevTools\\Console\\Input\\HasJsonOption::isPrettyJsonOutput","1"]]</script>
+  <script type="text/javascript" defer>
+  const barLabels = [
+    '0%',
+    '0-10%',
+    '10-20%',
+    '20-30%',
+    '30-40%',
+    '40-50%',
+    '50-60%',
+    '60-70%',
+    '70-80%',
+    '80-90%',
+    '90-100%',
+    '100%'
+  ];
+  const barConfig = (name, fullName, values) => ({
+    axis: {
+      x: {
+        type: "category",
+        categories: barLabels,
+      },
+      y: {
+        label: {
+          text: `#${name}`,
+          position: 'outer-top',
+        },
+      },
+    },
+    bindto: `#${name}CoverageDistribution`,
+    data: {
+      columns: [
+        [fullName].concat(values),
+      ],
+      colors: {
+        [fullName]: "rgba(69, 114, 167, 0.75)",
+      },
+      type: "bar",
+    },
+    bar: {
+      width: {
+        ratio: 0.9,
+      },
+    },
+    grid: {
+      focus: {
+        show: false,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">Coverage ${barLabels[data[0].x]}</th></tr>
+            <tr><td class="value">${data[0].value} ${name}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  bb.generate(
+    barConfig('classes', "Class Coverage", [1,0,0,1,0,0,0,1,3,2,18,14])
+  );
+  bb.generate(
+    barConfig('methods', "Method Coverage", [16,0,0,1,3,1,2,6,5,16,13,118])
+  );
+
+  const scatterConfig = (name, complexityData) => ({
+    axis: {
+      x: {
+        label: {
+          text: 'Code Coverage (in percent)',
+          position: 'outer-right',
+        },
+        tick: {
+          values: [0, 20, 40, 60, 80, 100],
+        },
+      },
+      y: {
+        label: {
+          text: 'Cyclomatic Complexity',
+          position: 'outer-top',
+        },
+        min: 0,
+        padding: {
+          bottom: 0,
+          top: 5,
+        },
+      },
+    },
+    bindto: `#${name}Complexity`,
+    data: {
+      columns: [
+        ["complexity_x"].concat(complexityData.map(d => d[0])),
+        ["complexity"].concat(complexityData.map(d => d[1])),
+      ],
+      onclick: function(data, element) {
+        window.location = complexityData[data.index][2];
+      },
+      type: "scatter",
+      xs: {
+        "complexity": "complexity_x",
+      },
+    },
+    grid: {
+      focus: {
+        show: true,
+        y: true,
+      },
+      x: {
+        show: true,
+      },
+      y: {
+        show: true,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    tooltip: {
+      contents: function (data) {
+        const coverage = Math.round(data[0].x);
+        const complexity = data[0].value;
+        const targetName = complexityData[data[0].index][3];
+        const crap = complexityData[data[0].index][4];
+        return `<table class="bb-tooltip"><tbody>
+            <tr><th colspan="2">${targetName}</th></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Coverage</td><td class="name">${coverage}%</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Complexity</td><td class="value">${complexity}</td></tr>
+            <tr class="bb-tooltip-name-complexity"><td>Crap</td><td class="value">${crap}</td></tr>
+          </tbody></table>`;
+      },
+      grouped: false,
+    },
+  });
+  const classComplexityData = JSON.parse(document.getElementById('complexity_class').textContent);
+  bb.generate(
+    scatterConfig("class", classComplexityData)
+  );
+  const methodComplexityData = JSON.parse(document.getElementById('complexity_method').textContent);
+  bb.generate(
+    scatterConfig("method", methodComplexityData),
+  );
+  </script>
+ </body>
+</html>
