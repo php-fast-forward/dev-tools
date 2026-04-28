@@ -47,6 +47,11 @@ use function Safe\putenv;
  */
 final class DevTools extends Application
 {
+    private const array RAW_OUTPUT_COMMANDS = [
+        'changelog:next-version',
+        'changelog:show',
+    ];
+
     private const string LOGO = <<<'LOGO'
          ____             _____           _
         |  _ \  _____   _|_   _|__   ___ | |___
@@ -139,12 +144,9 @@ final class DevTools extends Application
     #[Override]
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        $noLogo = (bool) $input->getParameterOption('--no-logo', null, true)
-            || (bool) $input->hasParameterOption('--json', true)
-            || (bool) $input->hasParameterOption('--pretty-json', true);
-        $noLogo = $noLogo || $this->isRawOutputCommand($input);
+        $shouldRenderLogo = $this->shouldRenderLogo($input);
 
-        if (! $noLogo) {
+        if ($shouldRenderLogo) {
             $output->writeln(self::LOGO);
         }
 
@@ -157,7 +159,7 @@ final class DevTools extends Application
             return Command::FAILURE;
         }
 
-        if (! $noLogo && ! $this->isSelfUpdateCommand($input)) {
+        if ($shouldRenderLogo && ! $this->isSelfUpdateCommand($input)) {
             $this->runAutoUpdateWhenRequested($input, $output);
             $this->versionCheckNotifier->notify($output);
         }
@@ -255,16 +257,36 @@ final class DevTools extends Application
     }
 
     /**
+     * Whether to show the startup ASCII logo for this invocation.
+     *
+     * @param InputInterface $input
+     */
+    private function shouldRenderLogo(InputInterface $input): bool
+    {
+        return ! $this->isLogoSuppressedByOptions($input)
+            && ! $this->isRawOutputCommand($input);
+    }
+
+    /**
+     * Detects CLI flags that explicitly suppress logo output.
+     *
+     * @param InputInterface $input
+     */
+    private function isLogoSuppressedByOptions(InputInterface $input): bool
+    {
+        return (bool) $input->getParameterOption('--no-logo', null, true)
+            || (bool) $input->hasParameterOption('--json', true)
+            || (bool) $input->hasParameterOption('--pretty-json', true);
+    }
+
+    /**
      * Identifies commands that must keep CLI output unprefixed by logos.
      *
      * @param InputInterface $input
      */
     private function isRawOutputCommand(InputInterface $input): bool
     {
-        return \in_array((string) $input->getFirstArgument(), [
-            'changelog:next-version',
-            'changelog:show',
-        ], true);
+        return \in_array((string) $input->getFirstArgument(), self::RAW_OUTPUT_COMMANDS, true);
     }
 
     /**
