@@ -3252,6 +3252,22 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_scopeResolver"
+        >
+            $scopeResolver
+        </a>
+
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                        &nbsp;: <a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface">SelfUpdateScopeResolverInterface</abbr></a>            </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
             href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_selfUpdateRunner"
         >
             $selfUpdateRunner
@@ -3470,7 +3486,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">50</span>
+    <span class="badge text-bg-light border">52</span>
 
     </aside>
     
@@ -3489,6 +3505,76 @@
 
     <span class="text-primary fw-semibold">
         $logger
+    </span>
+
+    </code>
+    </div>
+
+    
+
+    
+
+    
+
+        
+        
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="property_scopeResolver">
+                <span class="text-primary">$scopeResolver</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_scopeResolver"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                                    <span class="badge text-bg-info">Read-only</span>
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Command/SelfUpdateCommand.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-command-selfupdatecommand.html"><abbr title="src/Console/Command/SelfUpdateCommand.php">SelfUpdateCommand.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">51</span>
+
+    </aside>
+    
+    
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+            <span class="badge text-bg-light border text-dark">
+            private
+        </span>
+    
+    
+    <span class="text-info-emphasis">
+        <a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface">SelfUpdateScopeResolverInterface</abbr></a>
+    </span>
+
+    <span class="text-primary fw-semibold">
+        $scopeResolver
     </span>
 
     </code>
@@ -3540,7 +3626,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">49</span>
+    <span class="badge text-bg-light border">50</span>
 
     </aside>
     
@@ -3633,7 +3719,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">48</span>
+    <span class="badge text-bg-light border">49</span>
 
     </aside>
     
@@ -3647,7 +3733,8 @@
     
     
     <span class="text-primary fw-semibold">__construct</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateRunnerInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface">SelfUpdateRunnerInterface</abbr></a>&nbsp;
-                </span><span class="text-primary">$selfUpdateRunner</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;
+                </span><span class="text-primary">$selfUpdateRunner</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface">SelfUpdateScopeResolverInterface</abbr></a>&nbsp;
+                </span><span class="text-primary">$scopeResolver</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis"><abbr title="\Psr\Log\LoggerInterface">LoggerInterface</abbr>&nbsp;
                 </span><span class="text-primary">$logger</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
 
@@ -3688,6 +3775,38 @@
 
                 <div>
                     <p>the runner that executes Composer's update command</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$scopeResolver</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface">SelfUpdateScopeResolverInterface</abbr></a>
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>resolves whether the active binary is globally installed</p>
 
                 </div>
             </div>
@@ -3773,7 +3892,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">60</span>
+    <span class="badge text-bg-light border">62</span>
 
     </aside>
         <div class="mb-4">
@@ -3858,7 +3977,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">80</span>
+    <span class="badge text-bg-light border">82</span>
 
     </aside>
         <div class="mb-4">
@@ -3925,7 +4044,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">102</span>
+    <span class="badge text-bg-light border">99</span>
 
     </aside>
         <div class="mb-4">
@@ -4892,6 +5011,12 @@
                                 href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_logger"
                             >
                                 <span class="text-truncate">$logger</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_scopeResolver"
+                            >
+                                <span class="text-truncate">$scopeResolver</span>
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"

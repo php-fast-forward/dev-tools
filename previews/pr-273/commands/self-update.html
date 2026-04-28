@@ -3057,34 +3057,16 @@ through Composer.</p>
             <h2>Usage</h2>
 
             <pre><code class="language-bash">vendor/bin/dev-tools self-update
-vendor/bin/dev-tools self-update --global
 composer dev-tools:self-update</code></pre>
 
-    </section>
-
-            <section class="section " id="options">
-            <h2>Options</h2>
-
-            <table class="colwidths-grid">
-            <colgroup>
-                                    <col style="width: 24%">
-                        </colgroup>
-        <thead>
-            <tr>
-                            <th>Option</th>
-                            <th>Description</th>
-                    </tr>
-        </thead>
-    <tbody>
-    <tr>
-            <td><code>--global</code>
-</td>
-            <td>Run <code>composer global update fast-forward/dev-tools</code>
- instead of
-updating the current project installation.</td>
-    </tr>
-</tbody>
-</table>
+            
+    <p>When the standalone <code>dev-tools</code>
+ binary is itself loaded from Composer&#039;s
+global installation, <code>self-update</code>
+ automatically targets
+<code>composer global update fast-forward/dev-tools</code>
+. Local project
+installations update the current project by default.</p>
 
     </section>
 
@@ -3110,13 +3092,13 @@ Composer executions can use Composer&#039;s own <code>--working-dir</code>
 
             
     <p><code>--auto-update</code>
- runs the project self-update flow before the requested
-command. The same behavior MAY be enabled with <code>FAST_FORWARD_AUTO_UPDATE</code>
-;
-set it to <code>global</code>
- when the update should target Composer&#039;s global
-installation. Auto-update failures are reported as warnings and do not block
-the requested command.</p>
+ runs the self-update flow before the requested command. The
+same behavior MAY be enabled with <code>FAST_FORWARD_AUTO_UPDATE=1</code>
+. When the
+active <code>dev-tools</code>
+ binary is already installed globally, auto-update also
+targets the global installation by default. Auto-update failures are reported
+as warnings and do not block the requested command.</p>
 
     </section>
 

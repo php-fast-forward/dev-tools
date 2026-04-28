@@ -2406,6 +2406,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_selfUpdateRunner"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003A\u0024scopeResolver",
+            "name": "scopeResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_scopeResolver"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003A\u0024logger",
             "name": "logger",
             "summary": "",
@@ -2860,6 +2865,11 @@ Search.appendIndex(
             "name": "selfUpdateRunner",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#property_selfUpdateRunner"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024selfUpdateScopeResolver",
+            "name": "selfUpdateScopeResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_selfUpdateScopeResolver"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024environment",
             "name": "environment",
@@ -5106,6 +5116,41 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver",
+            "name": "ComposerSelfUpdateScopeResolver",
+            "summary": "Detects\u0020Composer\u0020global\u0020DevTools\u0020installations\u0020from\u0020known\u0020Composer\u0020home\u0020paths.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003AisGlobalInstallation\u0028\u0029",
+            "name": "isGlobalInstallation",
+            "summary": "Returns\u0020whether\u0020DevTools\u0020is\u0020running\u0020from\u0020Composer\u0027s\u0020global\u0020installation.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method_isGlobalInstallation"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003AgetComposerHomeCandidates\u0028\u0029",
+            "name": "getComposerHomeCandidates",
+            "summary": "Returns\u0020candidate\u0020Composer\u0020home\u0020directories\u0020for\u0020supported\u0020platforms.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method_getComposerHomeCandidates"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003APACKAGE_PATH",
+            "name": "PACKAGE_PATH",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#constant_PACKAGE_PATH"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003A\u0024packagePath",
+            "name": "packagePath",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#property_packagePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker",
             "name": "ComposerVersionChecker",
             "summary": "Resolves\u0020DevTools\u0020freshness\u0020through\u0020Composer\u0020metadata\u0020without\u0020coupling\u0020callers\u0020to\u0020Composer\u0020commands.",
@@ -5150,6 +5195,16 @@ Search.appendIndex(
             "name": "update",
             "summary": "Updates\u0020the\u0020installed\u0020DevTools\u0020package.",
             "url": "classes/FastForward-DevTools-SelfUpdate-SelfUpdateRunnerInterface.html#method_update"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\SelfUpdateScopeResolverInterface",
+            "name": "SelfUpdateScopeResolverInterface",
+            "summary": "Resolves\u0020whether\u0020self\u002Dupdate\u0020SHOULD\u0020target\u0020the\u0020local\u0020project\u0020or\u0020Composer\u0020global\u0020project.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\SelfUpdateScopeResolverInterface\u003A\u003AisGlobalInstallation\u0028\u0029",
+            "name": "isGlobalInstallation",
+            "summary": "Returns\u0020whether\u0020DevTools\u0020is\u0020running\u0020from\u0020Composer\u0027s\u0020global\u0020installation.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html#method_isGlobalInstallation"
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckerInterface",
             "name": "VersionCheckerInterface",
