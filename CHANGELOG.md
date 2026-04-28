@@ -326,7 +326,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Make ECS and Rector configuration extensible for consumer overrides (#19).
 
-## [1.0.4] - 2026-03-26
+## [1.0.4] - 2026-04-26
 
 ### Fixed
 
