@@ -22,12 +22,14 @@ namespace FastForward\DevTools\Tests\Process;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(ProcessBuilder::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 final class ProcessBuilderTest extends TestCase
 {
     use ProphecyTrait;

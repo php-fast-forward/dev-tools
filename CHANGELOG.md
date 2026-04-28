@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Hide DevTools logo in nested subprocesses by adding a new `--no-logo` global option for the top-level application and automatically attaching it to internal DevTools child processes, avoiding banner repetition in orchestrated command queues (#277)
+- Show the DevTools ASCII logo by default on all top-level command executions, while adding a `--no-logo` global option that is automatically forwarded to internal DevTools subprocesses to avoid banner repetition in orchestrated command queues (#277)
 
 ### Added
 
