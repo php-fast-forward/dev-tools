@@ -53,9 +53,9 @@ final class DevTools extends Application
         | | | |/ _ \ \ / / | |/ _ \ / _ \| / __|
         | |_| |  __/\ V /  | | (_) | (_) | \__ \
         |____/ \___| \_/   |_|\___/ \___/|_|___/
-        LOGO;
+        ========================================
 
-    private const string NO_LOGO_OPTION = 'no-logo';
+        LOGO;
 
     /**
      * @var ContainerInterface holds the static container instance for global access within the DevTools context
