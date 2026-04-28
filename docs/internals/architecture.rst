@@ -94,5 +94,8 @@ command list:
      - Git ignore, Git attributes, license, resource diffing, and coverage
        summary services support consumer sync and reporting workflows.
    * - ``Shared infrastructure``
-     - ``LoggerInterface``, ``ClockInterface``, and Twig's
-       ``LoaderInterface`` provide reusable runtime infrastructure.
+     - ``LoggerInterface``, ``ClockInterface``,
+       ``RuntimeEnvironmentInterface``, and Twig's ``LoaderInterface``
+       provide reusable runtime infrastructure, including centralized checks
+       for GitHub Actions, generic CI, Composer test runs, and truthy
+       environment flags.

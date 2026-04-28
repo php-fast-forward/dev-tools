@@ -1,13 +1,14 @@
 Command Classes
 ===============
 
-All public CLI commands extend ``Composer\Command\BaseCommand``. Most command
-classes are resolved lazily through ``DevToolsCommandLoader`` and receive
-their collaborators from the shared ``DevToolsServiceProvider`` container,
-while orchestration commands such as ``standards`` dispatch other commands
-through the console application itself. The architecture also relies on
-``ProcessBuilder`` and ``ProcessQueue`` for fluent process management where
-subprocess execution is needed.
+All public CLI commands are Symfony Console commands resolved lazily through
+``DevToolsCommandLoader``. Command classes receive their collaborators from
+the shared ``DevToolsServiceProvider`` container, while orchestration commands
+such as ``standards`` dispatch other commands through the console application
+itself. Composer integration uses proxy commands to expose that same Symfony
+command set without forcing each command to extend Composer's ``BaseCommand``.
+The architecture also relies on ``ProcessBuilder`` and ``ProcessQueue`` for
+fluent process management where subprocess execution is needed.
 
 .. list-table::
    :header-rows: 1
@@ -95,3 +96,6 @@ subprocess execution is needed.
    * - ``FastForward\DevTools\Console\Command\UpdateComposerJsonCommand``
      - ``update-composer-json``
      - Updates the composer.json file to match the packaged schema.
+   * - ``FastForward\DevTools\Console\Command\SelfUpdateCommand``
+     - ``dev-tools:self-update``
+     - Updates the local or global DevTools installation through Composer.

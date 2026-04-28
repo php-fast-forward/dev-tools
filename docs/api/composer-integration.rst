@@ -31,7 +31,11 @@ Composer Plugin Classes
      - Registers the command provider and runs ``dev-tools:sync`` after
        Composer install and update.
    * - ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``
-     - Instantiates and returns the available command classes.
+     - Exposes Symfony command instances to Composer through proxy commands
+       while filtering names and aliases already registered by Composer or the
+       root project's scripts.
+   * - ``FastForward\DevTools\Composer\Command\ProxyCommand``
+     - Adapts one Symfony command to Composer's command provider contract.
    * - ``FastForward\DevTools\Console\DevTools``
      - Console application used by the local binary.
 
