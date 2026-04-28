@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-28 18:29:23        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-28 19:22:10        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -262,6 +262,21 @@
 
     var relations = [
     {
+        "name": "\\FastForward\\DevTools\\Reflection\\ClassReflection",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ReflectionClass",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\ReflectionMethod",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Funding\\FundingProfileMerger",
         "size": 3000,
         "relations": []
@@ -408,6 +423,11 @@
     },
     {
         "name": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface",
         "size": 3000,
         "relations": []
     },
@@ -643,6 +663,11 @@
     },
     {
         "name": "\\FastForward\\DevTools\\Environment\\Environment",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment",
         "size": 3000,
         "relations": []
     },
@@ -1036,11 +1061,6 @@
         "relations": []
     },
     {
-        "name": "\\ReflectionClass",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand",
         "size": 3000,
         "relations": []
@@ -1426,17 +1446,32 @@
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Tests\\Funding\\FundingProfileTest",
+        "name": "\\FastForward\\DevTools\\Tests\\Reflection\\ClassReflectionTest",
         "size": 3000,
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Funding\\FundingProfile"
+            "\\FastForward\\DevTools\\Reflection\\ClassReflection"
         ]
     },
     {
         "name": "\\PHPUnit\\Framework\\TestCase",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Tests\\Reflection\\FixtureCommandWithPositionalAttribute",
+        "size": 3000,
+        "relations": [
+            "\\Symfony\\Component\\Console\\Command\\Command"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Tests\\Funding\\FundingProfileTest",
+        "size": 3000,
+        "relations": [
+            "\\PHPUnit\\Framework\\TestCase",
+            "\\FastForward\\DevTools\\Funding\\FundingProfile"
+        ]
     },
     {
         "name": "\\FastForward\\DevTools\\Tests\\Funding\\FundingYamlCodecTest",
@@ -1448,11 +1483,6 @@
             "\\Symfony\\Component\\Yaml\\Yaml",
             "\\ReflectionMethod"
         ]
-    },
-    {
-        "name": "\\ReflectionMethod",
-        "size": 3000,
-        "relations": []
     },
     {
         "name": "\\FastForward\\DevTools\\Tests\\Funding\\ComposerFundingCodecTest",
@@ -1799,6 +1829,14 @@
         ]
     },
     {
+        "name": "\\FastForward\\DevTools\\Tests\\Environment\\RuntimeEnvironmentTest",
+        "size": 3000,
+        "relations": [
+            "\\PHPUnit\\Framework\\TestCase",
+            "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment"
+        ]
+    },
+    {
         "name": "\\FastForward\\DevTools\\Tests\\SelfUpdate\\ComposerSelfUpdateRunnerTest",
         "size": 3000,
         "relations": [
@@ -1906,7 +1944,7 @@
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000001b8c0000000000000000",
+        "name": "\\anonymous@0000000000001bf20000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -1921,7 +1959,7 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\anonymous@0000000000001b8c0000000000000000"
+            "\\anonymous@0000000000001bf20000000000000000"
         ]
     },
     {
@@ -2091,7 +2129,7 @@
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000000c6c0000000000000000",
+        "name": "\\anonymous@00000000000019f70000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2105,7 +2143,6 @@
         "size": 3000,
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
-            "\\Prophecy\\Argument",
             "\\DateTimeImmutable",
             "\\Symfony\\Component\\Console\\Input\\ArgvInput",
             "\\Ergebnis\\AgentDetector\\Detector",
@@ -2113,7 +2150,8 @@
             "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
             "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
             "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
-            "\\anonymous@0000000000000c6c0000000000000000",
+            "\\Prophecy\\Argument",
+            "\\anonymous@00000000000019f70000000000000000",
             "\\stdClass",
             "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput"
         ]
@@ -2492,17 +2530,17 @@
         ]
     },
     {
-        "name": "\\anonymous@0000000000000a170000000000000000",
+        "name": "\\anonymous@00000000000015e60000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@00000000000011390000000000000000",
+        "name": "\\anonymous@000000000000056f0000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@00000000000015ab0000000000000000",
+        "name": "\\anonymous@00000000000008410000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2512,9 +2550,9 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\Prophecy\\Argument",
-            "\\anonymous@0000000000000a170000000000000000",
-            "\\anonymous@00000000000011390000000000000000",
-            "\\anonymous@00000000000015ab0000000000000000",
+            "\\anonymous@00000000000015e60000000000000000",
+            "\\anonymous@000000000000056f0000000000000000",
+            "\\anonymous@00000000000008410000000000000000",
             "\\ReflectionProperty",
             "\\FastForward\\DevTools\\Console\\DevTools",
             "\\ReflectionMethod",
@@ -2622,7 +2660,7 @@
         ]
     },
     {
-        "name": "\\anonymous@000000000000073b0000000000000000",
+        "name": "\\anonymous@0000000000000b900000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2643,7 +2681,7 @@
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "\\RuntimeException",
-            "\\anonymous@000000000000073b0000000000000000",
+            "\\anonymous@0000000000000b900000000000000000",
             "\\SebastianBergmann\\CodeCoverage\\Filter",
             "\\SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "\\SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",

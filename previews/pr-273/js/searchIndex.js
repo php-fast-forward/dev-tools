@@ -543,7 +543,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "",
+            "summary": "Executes\u0020the\u0020proxied\u0020Symfony\u0020command\u0020through\u0020Composer\u0027s\u0020command\u0020contract.",
             "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html#method_execute"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand\u003A\u003A\u0024command",
@@ -3161,11 +3161,6 @@ Search.appendIndex(
             "summary": "Determines\u0020whether\u0020workflow\u0020commands\u0020should\u0020be\u0020emitted\u0020for\u0020the\u0020current\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_supportsWorkflowCommands"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AisTruthyEnvironmentFlag\u0028\u0029",
-            "name": "isTruthyEnvironmentFlag",
-            "summary": "Determines\u0020whether\u0020an\u0020environment\u0020flag\u0020is\u0020set\u0020to\u0020a\u0020truthy\u0020value.",
-            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_isTruthyEnvironmentFlag"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AescapeData\u0028\u0029",
             "name": "escapeData",
             "summary": "Escapes\u0020workflow\u002Dcommand\u0020payload\u0020data\u0020according\u0020to\u0020GitHub\u0020Actions\u0020rules.",
@@ -3230,6 +3225,66 @@ Search.appendIndex(
             "name": "get",
             "summary": "Reads\u0020an\u0020environment\u0020variable.",
             "url": "classes/FastForward-DevTools-Environment-EnvironmentInterface.html#method_get"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment",
+            "name": "RuntimeEnvironment",
+            "summary": "Resolves\u0020common\u0020runtime\u002Denvironment\u0020flags\u0020used\u0020by\u0020DevTools\u0020integrations.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisEnabled\u0028\u0029",
+            "name": "isEnabled",
+            "summary": "Returns\u0020whether\u0020a\u0020truthy\u0020environment\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isEnabled"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisGithubActions\u0028\u0029",
+            "name": "isGithubActions",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020GitHub\u0020Actions.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isGithubActions"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisCi\u0028\u0029",
+            "name": "isCi",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020a\u0020CI\u0020environment.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isCi"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisComposerTestRun\u0028\u0029",
+            "name": "isComposerTestRun",
+            "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isComposerTestRun"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface",
+            "name": "RuntimeEnvironmentInterface",
+            "summary": "Answers\u0020common\u0020runtime\u002Denvironment\u0020questions\u0020from\u0020process\u0020environment\u0020flags.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisEnabled\u0028\u0029",
+            "name": "isEnabled",
+            "summary": "Returns\u0020whether\u0020a\u0020truthy\u0020environment\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isEnabled"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisGithubActions\u0028\u0029",
+            "name": "isGithubActions",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020GitHub\u0020Actions.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isGithubActions"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisCi\u0028\u0029",
+            "name": "isCi",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020a\u0020CI\u0020environment.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isCi"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisComposerTestRun\u0028\u0029",
+            "name": "isComposerTestRun",
+            "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isComposerTestRun"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
@@ -4861,6 +4916,21 @@ Search.appendIndex(
             "summary": "Ascertains\u0020visually\u0020and\u0020technically\u0020if\u0020a\u0020provided\u0020block\u0020comprises\u0020an\u0020absolute\u0020empty\u0020placeholder\u0020structure\u0020safely.",
             "url": "classes/FastForward-DevTools-Rector-RemoveEmptyDocBlockRector.html#method_isEmptyDocBlock"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection\\ClassReflection",
+            "name": "ClassReflection",
+            "summary": "Centralizes\u0020small\u0020reflection\u0020lookups\u0020used\u0020by\u0020DevTools\u0020runtime\u0020metadata.",
+            "url": "classes/FastForward-DevTools-Reflection-ClassReflection.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection\\ClassReflection\u003A\u003AisInstantiableSubclassOf\u0028\u0029",
+            "name": "isInstantiableSubclassOf",
+            "summary": "Detects\u0020whether\u0020a\u0020class\u0020can\u0020be\u0020instantiated\u0020as\u0020a\u0020subclass\u0020of\u0020another\u0020class.",
+            "url": "classes/FastForward-DevTools-Reflection-ClassReflection.html#method_isInstantiableSubclassOf"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection\\ClassReflection\u003A\u003AgetAttributeArguments\u0028\u0029",
+            "name": "getAttributeArguments",
+            "summary": "Returns\u0020the\u0020first\u0020matching\u0020attribute\u0020arguments\u0020normalized\u0020by\u0020constructor\u0020parameter\u0020name.",
+            "url": "classes/FastForward-DevTools-Reflection-ClassReflection.html#method_getAttributeArguments"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Resource\\DifferInterface",
             "name": "DifferInterface",
             "summary": "Defines\u0020the\u0020contract\u0020for\u0020generating\u0020unified\u0020diffs.",
@@ -5106,10 +5176,20 @@ Search.appendIndex(
             "summary": "Warns\u0020when\u0020a\u0020newer\u0020stable\u0020DevTools\u0020version\u0020is\u0020available.",
             "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#method_notify"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003AshouldSkipVersionCheck\u0028\u0029",
+            "name": "shouldSkipVersionCheck",
+            "summary": "Returns\u0020whether\u0020DevTools\u0020SHOULD\u0020skip\u0020the\u0020best\u002Deffort\u0020version\u0020check.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#method_shouldSkipVersionCheck"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003A\u0024versionChecker",
             "name": "versionChecker",
             "summary": "",
             "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#property_versionChecker"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#property_environment"
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifierInterface",
             "name": "VersionCheckNotifierInterface",
@@ -5550,6 +5630,11 @@ Search.appendIndex(
             "name": "Rector",
             "summary": "",
             "url": "namespaces/fastforward-devtools-rector.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection",
+            "name": "Reflection",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-reflection.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Resource",
             "name": "Resource",

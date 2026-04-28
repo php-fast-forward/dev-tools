@@ -2813,6 +2813,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-reflection.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Reflection
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-resource.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3108,7 +3130,12 @@ metadata for the latest stable <code>fast-forward/dev-tools</code>
 stable version is available, DevTools prints a warning recommending
 <code>dev-tools self-update</code>
 . This check is best-effort: network, Composer, or
-metadata failures are ignored so the requested command can continue normally.</p>
+metadata failures are ignored so the requested command can continue normally.
+The check is skipped automatically in CI environments, including GitHub
+Actions, so freshly installed consumer workflows do not spend time querying
+release metadata. Set <code>FAST_FORWARD_SKIP_VERSION_CHECK=1</code>
+ to disable the
+warning in other non-interactive contexts.</p>
 
     </section>
 

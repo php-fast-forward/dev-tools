@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-28 18:29:23        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-28 19:22:10        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -262,6 +262,18 @@
 
     var relations = [
     {
+        "name": "FastForward\\DevTools\\Reflection",
+        "size": 3000,
+        "relations": [
+            "global"
+        ]
+    },
+    {
+        "name": "global",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "FastForward\\DevTools\\Funding",
         "size": 3000,
         "relations": [
@@ -304,11 +316,6 @@
     },
     {
         "name": "Symfony\\Component\\Process",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "global",
         "size": 3000,
         "relations": []
     },
@@ -509,6 +516,7 @@
         "relations": [
             "Symfony\\Component\\Console\\Output",
             "global",
+            "FastForward\\DevTools\\Environment",
             "FastForward\\DevTools\\Process",
             "FastForward\\DevTools\\Path",
             "Composer"
@@ -754,6 +762,7 @@
             "Symfony\\Component\\Console\\CommandLoader",
             "FastForward\\DevTools\\Filesystem",
             "Psr\\Container",
+            "FastForward\\DevTools\\Reflection",
             "global"
         ]
     },
@@ -774,7 +783,7 @@
             "Symfony\\Component\\Console\\Command",
             "FastForward\\DevTools\\SelfUpdate",
             "Psr\\Log",
-            "global",
+            "FastForward\\DevTools\\Reflection",
             "Symfony\\Component\\Console\\Input",
             "Symfony\\Component\\Console\\Output",
             "FastForward\\DevTools\\PhpUnit\\Coverage",
@@ -783,6 +792,7 @@
             "Symfony\\Component\\Config",
             "FastForward\\DevTools\\Process",
             "FastForward\\DevTools\\Path",
+            "global",
             "FastForward\\DevTools\\Resource",
             "Symfony\\Component\\Console\\Style",
             "Symfony\\Component\\Filesystem",
@@ -949,6 +959,15 @@
         "name": "Interop\\Container",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "FastForward\\DevTools\\Tests\\Reflection",
+        "size": 3000,
+        "relations": [
+            "PHPUnit\\Framework",
+            "FastForward\\DevTools\\Reflection",
+            "Symfony\\Component\\Console\\Command"
+        ]
     },
     {
         "name": "FastForward\\DevTools\\Tests\\Funding",
@@ -1268,11 +1287,11 @@
         "relations": [
             "global",
             "PHPUnit\\Framework",
-            "Prophecy",
             "Symfony\\Component\\Console\\Input",
             "Ergebnis\\AgentDetector",
             "FastForward\\DevTools\\Console\\Logger\\Processor",
             "FastForward\\DevTools\\Console\\Logger",
+            "Prophecy",
             "FastForward\\DevTools\\Console\\Output"
         ]
     },
