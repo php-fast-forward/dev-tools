@@ -55,19 +55,23 @@ What Each Command Is For
 - ``docs`` builds the HTML documentation site. It fails early if the source
   guide directory does not exist.
 - ``wiki`` builds Markdown API pages intended for ``.github/wiki``.
-- ``reports`` runs ``docs --target .dev-tools`` and
-  ``tests --coverage .dev-tools/coverage`` and then
+- ``reports`` runs ``docs``, ``tests --coverage``, and ``metrics`` using the
+  selected DevTools workspace defaults. With the default workspace that means
+  ``docs --target .dev-tools``, ``tests --coverage .dev-tools/coverage``, and
   ``metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml``.
+  When ``--workspace-dir`` or ``FAST_FORWARD_WORKSPACE_DIR`` selects another
+  workspace, those nested defaults move together unless an explicit command
+  option overrides them.
 
 Outputs to Expect
 -----------------
 
 - an HTML site rooted at the target directory chosen for ``docs``;
 - guide pages generated from ``docs/``;
-- coverage data under ``.dev-tools/coverage`` when ``reports`` or
-  ``tests --coverage`` is used;
-- metrics data under ``.dev-tools/metrics`` when ``reports`` or ``metrics`` is
-  used;
+- coverage data under the selected workspace ``coverage`` directory when
+  ``reports`` or ``tests --coverage`` is used;
+- metrics data under the selected workspace ``metrics`` directory when
+  ``reports`` or ``metrics`` is used;
 - Markdown API pages under ``.github/wiki`` when ``wiki`` is used.
 
 Troubleshooting

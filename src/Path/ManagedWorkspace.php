@@ -27,6 +27,11 @@ use Symfony\Component\Filesystem\Path;
 final class ManagedWorkspace
 {
     /**
+     * @var string the environment variable used to override the generated artifact workspace
+     */
+    public const string ENV_WORKSPACE_DIR = 'FAST_FORWARD_WORKSPACE_DIR';
+
+    /**
      * @var string the output segment used for coverage artifacts
      */
     public const string COVERAGE = 'coverage';
@@ -59,7 +64,7 @@ final class ManagedWorkspace
     /**
      * @var string the repository-local root directory for generated artifacts
      */
-    private const string WORKSPACE_ROOT = '.dev-tools';
+    public const string WORKSPACE_ROOT = '.dev-tools';
 
     /**
      * @var string the repository-local root directory for generated tool caches
@@ -78,9 +83,7 @@ final class ManagedWorkspace
      */
     public static function getOutputDirectory(string $path = '', string $baseDir = ''): string
     {
-        $baseDir = '' === $baseDir
-            ? self::WORKSPACE_ROOT
-            : Path::join($baseDir, self::WORKSPACE_ROOT);
+        $baseDir = self::getWorkspaceRoot($baseDir);
 
         return '' === $path
             ? $baseDir
@@ -104,5 +107,57 @@ final class ManagedWorkspace
         return '' === $path
             ? $baseDir
             : Path::join($baseDir, $path);
+    }
+
+    /**
+     * Returns the configured workspace root.
+     *
+     * Relative workspace paths stay relative when no base directory is provided.
+     * When a base directory is provided, relative workspaces are materialized
+     * under that base directory while absolute workspaces are used as-is.
+     *
+     * @param string $baseDir the optional repository root used to resolve a relative workspace
+     */
+    public static function getWorkspaceRoot(string $baseDir = ''): string
+    {
+        $workspaceRoot = getenv(self::ENV_WORKSPACE_DIR);
+
+        if (false === $workspaceRoot || '' === $workspaceRoot) {
+            $workspaceRoot = self::WORKSPACE_ROOT;
+        }
+
+        if ('' === $baseDir || Path::isAbsolute($workspaceRoot)) {
+            return $workspaceRoot;
+        }
+
+        return Path::join($baseDir, $workspaceRoot);
+    }
+
+    /**
+     * Returns the workspace root as a project-relative directory when tooling
+     * should skip generated artifacts during source scans.
+     *
+     * @param string $baseDir the optional repository root used to relativize absolute workspace paths
+     */
+    public static function getProjectRelativeWorkspaceRoot(string $baseDir = ''): ?string
+    {
+        $workspaceRoot = self::getWorkspaceRoot();
+
+        if (! Path::isAbsolute($workspaceRoot)) {
+            return $workspaceRoot;
+        }
+
+        if ('' === $baseDir) {
+            return null;
+        }
+
+        $baseDir = Path::canonicalize($baseDir);
+        $workspaceRoot = Path::canonicalize($workspaceRoot);
+
+        if ($baseDir === $workspaceRoot || ! str_starts_with($workspaceRoot, $baseDir . '/')) {
+            return null;
+        }
+
+        return Path::makeRelative($workspaceRoot, $baseDir);
     }
 }

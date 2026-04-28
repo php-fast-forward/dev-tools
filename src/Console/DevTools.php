@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console;
 use FastForward\DevTools\Console\Command\SelfUpdateCommand;
 use Override;
 use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
@@ -37,6 +38,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+
+use function Safe\putenv;
 
 /**
  * Wraps the fast-forward console tooling suite conceptually as an isolated application instance.
@@ -118,6 +121,13 @@ final class DevTools extends Application
             description: 'Update fast-forward/dev-tools before running the requested command.',
         ));
 
+        $definition->addOption(new InputOption(
+            name: 'workspace-dir',
+            shortcut: 'w',
+            mode: InputOption::VALUE_REQUIRED,
+            description: 'Store generated DevTools artifacts in the given directory.',
+        ));
+
         return $definition;
     }
 
@@ -134,6 +144,7 @@ final class DevTools extends Application
     {
         try {
             $this->workingDirectorySwitcher->switchTo($this->getWorkingDirectoryOption($input));
+            $this->configureWorkspaceDirectory($input);
         } catch (Throwable $throwable) {
             $output->writeln(\sprintf('<error>%s</error>', $throwable->getMessage()));
 
@@ -181,6 +192,22 @@ final class DevTools extends Application
         $workingDirectory = $input->getParameterOption(['--working-dir', '-d'], null, true);
 
         return \is_string($workingDirectory) ? $workingDirectory : null;
+    }
+
+    /**
+     * Applies the configured workspace directory before resolving command defaults.
+     *
+     * @param InputInterface $input the application input
+     */
+    private function configureWorkspaceDirectory(InputInterface $input): void
+    {
+        $workspaceDirectory = $input->getParameterOption('--workspace-dir', null, true);
+
+        if (! \is_string($workspaceDirectory) || '' === $workspaceDirectory) {
+            return;
+        }
+
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=' . $workspaceDirectory);
     }
 
     /**

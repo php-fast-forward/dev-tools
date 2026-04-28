@@ -24,9 +24,19 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
+use function Safe\putenv;
+
 #[CoversClass(ManagedWorkspace::class)]
 final class ManagedWorkspaceTest extends TestCase
 {
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
+    }
+
     /**
      * @return void
      */
@@ -62,5 +72,40 @@ final class ManagedWorkspaceTest extends TestCase
     {
         self::assertSame('tmp/.dev-tools/metrics', ManagedWorkspace::getOutputDirectory('/metrics', 'tmp/'));
         self::assertSame('tmp/.dev-tools/cache/phpunit', ManagedWorkspace::getCacheDirectory('/phpunit', 'tmp/'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillUseConfiguredRelativeWorkspaceRoot(): void
+    {
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
+
+        self::assertSame('.artifacts', ManagedWorkspace::getWorkspaceRoot());
+        self::assertSame('.artifacts/coverage', ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE));
+        self::assertSame(
+            'tmp/.artifacts/cache/phpunit',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT, 'tmp')
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillUseConfiguredAbsoluteWorkspaceRoot(): void
+    {
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=/tmp/dev-tools-artifacts');
+
+        self::assertSame('/tmp/dev-tools-artifacts', ManagedWorkspace::getWorkspaceRoot());
+        self::assertSame(
+            '/tmp/dev-tools-artifacts/metrics',
+            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS, 'tmp')
+        );
+        self::assertSame(
+            '/tmp/dev-tools-artifacts/cache/rector',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, 'tmp')
+        );
     }
 }

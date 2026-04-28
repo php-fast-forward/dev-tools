@@ -71,7 +71,7 @@ final class WorkingProjectPathResolver
     {
         $directories = [];
 
-        foreach (self::TOOLING_EXCLUDED_DIRECTORIES as $excludedDirectory) {
+        foreach (self::getToolingExcludedDirectoryNames($baseDir) as $excludedDirectory) {
             $directories[] = Path::join($baseDir, $excludedDirectory);
         }
 
@@ -88,11 +88,12 @@ final class WorkingProjectPathResolver
     public static function getToolingSourcePaths(string $baseDir = ''): array
     {
         $workingDirectory = '' === $baseDir ? getcwd() : $baseDir;
+        $excludedDirectories = self::getToolingExcludedDirectoryNames($workingDirectory);
         $finder = Finder::create()
             ->files()
             ->name('*.php')
             ->in($workingDirectory)
-            ->exclude(self::TOOLING_EXCLUDED_DIRECTORIES)
+            ->exclude($excludedDirectories)
             ->sortByName();
         $paths = [];
 
@@ -108,5 +109,24 @@ final class WorkingProjectPathResolver
         }
 
         return $paths;
+    }
+
+    /**
+     * Returns repository-relative directories ignored by tooling.
+     *
+     * @param string $baseDir the optional repository base directory used to relativize a custom workspace
+     *
+     * @return list<string>
+     */
+    private static function getToolingExcludedDirectoryNames(string $baseDir = ''): array
+    {
+        $directories = self::TOOLING_EXCLUDED_DIRECTORIES;
+        $workspaceRoot = ManagedWorkspace::getProjectRelativeWorkspaceRoot($baseDir);
+
+        if (null !== $workspaceRoot && ! \in_array($workspaceRoot, $directories, true)) {
+            $directories[] = $workspaceRoot;
+        }
+
+        return $directories;
     }
 }

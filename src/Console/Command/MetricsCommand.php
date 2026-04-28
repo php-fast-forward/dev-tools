@@ -60,6 +60,20 @@ final class MetricsCommand extends Command
     private const int PHP_DEFAULT_SOCKET_TIMEOUT = 1;
 
     /**
+     * @var list<string> the directories PhpMetrics SHOULD skip by default
+     */
+    private const array DEFAULT_EXCLUDED_DIRECTORIES = [
+        'vendor',
+        'tmp',
+        'cache',
+        'spec',
+        'build',
+        ManagedWorkspace::WORKSPACE_ROOT,
+        'backup',
+        'resources',
+    ];
+
+    /**
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PhpMetrics process
      * @param ProcessQueueInterface $processQueue the queue used to execute the PhpMetrics process
      * @param LoggerInterface $logger the output-aware logger
@@ -89,7 +103,7 @@ final class MetricsCommand extends Command
                 name: 'exclude',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Comma-separated directories that SHOULD be excluded from analysis.',
-                default: 'vendor,tmp,cache,spec,build,.dev-tools,backup,resources',
+                default: implode(',', $this->getDefaultExcludedDirectories()),
             )
             ->addOption(
                 name: 'target',
@@ -163,5 +177,22 @@ final class MetricsCommand extends Command
         return $this->failure('Code metrics analysis failed.', $input, [
             'output' => $processOutput,
         ]);
+    }
+
+    /**
+     * Returns the default PhpMetrics directory exclusion list.
+     *
+     * @return list<string>
+     */
+    private function getDefaultExcludedDirectories(): array
+    {
+        $directories = self::DEFAULT_EXCLUDED_DIRECTORIES;
+        $workspaceRoot = ManagedWorkspace::getProjectRelativeWorkspaceRoot();
+
+        if (null !== $workspaceRoot && ! \in_array($workspaceRoot, $directories, true)) {
+            $directories[] = $workspaceRoot;
+        }
+
+        return $directories;
     }
 }

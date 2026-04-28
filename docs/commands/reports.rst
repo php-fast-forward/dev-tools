@@ -30,15 +30,18 @@ Options
 
 ``--target`` (optional)
    The target directory for the generated documentation.
-   Default: ``.dev-tools``.
+   Default: selected workspace directory, ``.dev-tools`` unless
+   ``--workspace-dir`` or ``FAST_FORWARD_WORKSPACE_DIR`` is configured.
 
 ``--coverage, -c`` (optional)
    The target directory for the generated test coverage report.
-   Default: ``.dev-tools/coverage``.
+   Default: selected workspace ``coverage`` directory, usually
+   ``.dev-tools/coverage``.
 
 ``--metrics`` (optional)
    The target directory for the generated metrics report.
-   Default: ``.dev-tools/metrics``.
+   Default: selected workspace ``metrics`` directory, usually
+   ``.dev-tools/metrics``.
 
 ``--cache-dir`` (optional)
    Base cache directory for nested ``docs`` and ``tests`` caches.
