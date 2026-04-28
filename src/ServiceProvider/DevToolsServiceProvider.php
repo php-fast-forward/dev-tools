@@ -45,6 +45,8 @@ use FastForward\DevTools\Console\Output\OutputCapabilityDetector;
 use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
 use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
@@ -132,6 +134,7 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
         return [
             // Process
             EnvironmentInterface::class => get(Environment::class),
+            RuntimeEnvironmentInterface::class => get(RuntimeEnvironment::class),
             ExtensionInterface::class => get(Extension::class),
             OutputCapabilityDetectorInterface::class => get(OutputCapabilityDetector::class),
             ProcessBuilderInterface::class => get(ProcessBuilder::class),
@@ -186,7 +189,7 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),
             GithubActionOutput::class => create(GithubActionOutput::class)->constructor(
                 get(ConsoleOutputInterface::class),
-                get(EnvironmentInterface::class)
+                get(RuntimeEnvironmentInterface::class)
             ),
             ContextProcessorInterface::class => create(CompositeContextProcessor::class)->constructor([
                 get(CommandInputProcessor::class),

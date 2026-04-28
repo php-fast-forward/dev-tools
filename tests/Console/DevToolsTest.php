@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\DevTools;
 use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
@@ -70,6 +71,7 @@ use Symfony\Component\Console\Input\InputInterface;
 #[UsesClass(ClassReflection::class)]
 #[UsesClass(LogLevelOutputFormatter::class)]
 #[UsesClass(GithubActionOutput::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[UsesClass(ColorPreservingProcessEnvironmentConfigurator::class)]
 #[UsesClass(CompositeProcessEnvironmentConfigurator::class)]
 #[UsesClass(ProcessBuilder::class)]

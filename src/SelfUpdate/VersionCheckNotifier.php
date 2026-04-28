@@ -19,7 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\SelfUpdate;
 
-use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use Throwable;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -30,11 +30,11 @@ final readonly class VersionCheckNotifier implements VersionCheckNotifierInterfa
 {
     /**
      * @param VersionCheckerInterface $versionChecker the checker used to resolve latest release metadata
-     * @param EnvironmentInterface $environment the environment reader used to skip non-interactive CI checks
+     * @param RuntimeEnvironmentInterface $environment resolves runtime environment capabilities
      */
     public function __construct(
         private VersionCheckerInterface $versionChecker,
-        private EnvironmentInterface $environment,
+        private RuntimeEnvironmentInterface $environment,
     ) {}
 
     /**
@@ -70,22 +70,10 @@ final readonly class VersionCheckNotifier implements VersionCheckNotifierInterfa
      */
     private function shouldSkipVersionCheck(): bool
     {
-        foreach (['FAST_FORWARD_SKIP_VERSION_CHECK', 'GITHUB_ACTIONS', 'CI'] as $name) {
-            if ($this->isTruthy($this->environment->get($name, ''))) {
-                return true;
-            }
+        if ($this->environment->isCi()) {
+            return true;
         }
 
-        return false;
-    }
-
-    /**
-     * Returns whether an environment value represents an enabled flag.
-     *
-     * @param string|null $value the environment value to inspect
-     */
-    private function isTruthy(?string $value): bool
-    {
-        return \in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
+        return $this->environment->isEnabled('FAST_FORWARD_SKIP_VERSION_CHECK');
     }
 }

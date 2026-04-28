@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Process;
 use Closure;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
-use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use ReflectionProperty;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
@@ -73,13 +73,13 @@ final class ProcessQueue implements ProcessQueueInterface
     /**
      * @param GithubActionOutput $githubActionOutput wraps grouped queue output in GitHub Actions logs when supported
      * @param ProcessEnvironmentConfiguratorInterface $environmentConfigurator
-     * @param EnvironmentInterface $environment reads runtime environment flags
+     * @param RuntimeEnvironmentInterface $environment resolves runtime environment capabilities
      * @param OutputCapabilityDetectorInterface $outputCapabilityDetector detects ANSI-capable output
      */
     public function __construct(
         private readonly GithubActionOutput $githubActionOutput,
         private readonly ProcessEnvironmentConfiguratorInterface $environmentConfigurator,
-        private readonly EnvironmentInterface $environment,
+        private readonly RuntimeEnvironmentInterface $environment,
         private readonly OutputCapabilityDetectorInterface $outputCapabilityDetector,
     ) {}
 
@@ -404,7 +404,7 @@ final class ProcessQueue implements ProcessQueueInterface
     private function shouldRenderLocalSection(OutputInterface $output): bool
     {
         return $this->outputCapabilityDetector->supportsAnsi($output)
-            && null === $this->environment->get('GITHUB_ACTIONS');
+            && ! $this->environment->isGithubActions();
     }
 
     /**

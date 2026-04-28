@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\SelfUpdate;
 
 use Prophecy\Argument;
-use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckResult;
@@ -50,7 +50,7 @@ final class VersionCheckNotifierTest extends TestCase
     private ObjectProphecy $output;
 
     /**
-     * @var ObjectProphecy<EnvironmentInterface>
+     * @var ObjectProphecy<RuntimeEnvironmentInterface>
      */
     private ObjectProphecy $environment;
 
@@ -63,7 +63,7 @@ final class VersionCheckNotifierTest extends TestCase
     {
         $this->versionChecker = $this->prophesize(VersionCheckerInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->environment = $this->prophesize(RuntimeEnvironmentInterface::class);
         $this->notifier = new VersionCheckNotifier($this->versionChecker->reveal(), $this->environment->reveal());
     }
 
@@ -105,12 +105,8 @@ final class VersionCheckNotifierTest extends TestCase
     #[Test]
     public function notifyWillStaySilentInCi(): void
     {
-        $this->environment->get('FAST_FORWARD_SKIP_VERSION_CHECK', '')
-            ->willReturn('');
-        $this->environment->get('GITHUB_ACTIONS', '')
-            ->willReturn('');
-        $this->environment->get('CI', '')
-            ->willReturn('true');
+        $this->environment->isCi()
+            ->willReturn(true);
         $this->versionChecker->check()
             ->shouldNotBeCalled();
         $this->output->writeln(Argument::any())
@@ -125,8 +121,10 @@ final class VersionCheckNotifierTest extends TestCase
     #[Test]
     public function notifyWillStaySilentWhenVersionCheckIsDisabled(): void
     {
-        $this->environment->get('FAST_FORWARD_SKIP_VERSION_CHECK', '')
-            ->willReturn('1');
+        $this->environment->isCi()
+            ->willReturn(false);
+        $this->environment->isEnabled('FAST_FORWARD_SKIP_VERSION_CHECK')
+            ->willReturn(true);
         $this->versionChecker->check()
             ->shouldNotBeCalled();
         $this->output->writeln(Argument::any())
@@ -140,11 +138,9 @@ final class VersionCheckNotifierTest extends TestCase
      */
     private function willRunVersionCheck(): void
     {
-        $this->environment->get('FAST_FORWARD_SKIP_VERSION_CHECK', '')
-            ->willReturn('');
-        $this->environment->get('GITHUB_ACTIONS', '')
-            ->willReturn('');
-        $this->environment->get('CI', '')
-            ->willReturn('');
+        $this->environment->isCi()
+            ->willReturn(false);
+        $this->environment->isEnabled('FAST_FORWARD_SKIP_VERSION_CHECK')
+            ->willReturn(false);
     }
 }

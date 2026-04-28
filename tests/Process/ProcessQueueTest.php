@@ -22,7 +22,7 @@ namespace FastForward\DevTools\Tests\Process;
 use Closure;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
-use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -73,7 +73,7 @@ final class ProcessQueueTest extends TestCase
     private ObjectProphecy $environmentConfigurator;
 
     /**
-     * @var ObjectProphecy<EnvironmentInterface>
+     * @var ObjectProphecy<RuntimeEnvironmentInterface>
      */
     private ObjectProphecy $environment;
 
@@ -108,9 +108,9 @@ final class ProcessQueueTest extends TestCase
 
         $this->environmentConfigurator = $this->prophesize(ProcessEnvironmentConfiguratorInterface::class);
 
-        $this->environment = $this->prophesize(EnvironmentInterface::class);
-        $this->environment->get('GITHUB_ACTIONS')
-            ->willReturn(null);
+        $this->environment = $this->prophesize(RuntimeEnvironmentInterface::class);
+        $this->environment->isGithubActions()
+            ->willReturn(false);
 
         $this->outputCapabilityDetector = $this->prophesize(OutputCapabilityDetectorInterface::class);
         $this->outputCapabilityDetector->supportsAnsi(Argument::type(OutputInterface::class))
