@@ -48,10 +48,12 @@ final class ProxyCommand extends BaseCommand
     }
 
     /**
-     * @param InputInterface $input
-     * @param OutputInterface $output
+     * Executes the proxied Symfony command through Composer's command contract.
      *
-     * @return int
+     * @param InputInterface $input the Composer command input
+     * @param OutputInterface $output the Composer command output
+     *
+     * @return int the proxied command status code
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

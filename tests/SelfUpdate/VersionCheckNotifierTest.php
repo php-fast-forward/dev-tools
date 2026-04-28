@@ -38,8 +38,14 @@ final class VersionCheckNotifierTest extends TestCase
 {
     use ProphecyTrait;
 
+    /**
+     * @var ObjectProphecy<VersionCheckerInterface>
+     */
     private ObjectProphecy $versionChecker;
 
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
     private ObjectProphecy $output;
 
     private VersionCheckNotifier $notifier;

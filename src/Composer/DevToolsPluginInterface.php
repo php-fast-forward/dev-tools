@@ -26,6 +26,9 @@ use Composer\Plugin\PluginInterface;
  */
 interface DevToolsPluginInterface extends PluginInterface
 {
+    /**
+     * @var list<string> composer command names and aliases that DevTools MUST NOT override
+     */
     public const array COMPOSER_COMMAND_NAMES = [
         '_complete',
         'about',

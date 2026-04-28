@@ -42,12 +42,24 @@ final class SelfUpdateCommandTest extends TestCase
 {
     use ProphecyTrait;
 
+    /**
+     * @var ObjectProphecy<SelfUpdateRunnerInterface>
+     */
     private ObjectProphecy $selfUpdateRunner;
 
+    /**
+     * @var ObjectProphecy<LoggerInterface>
+     */
     private ObjectProphecy $logger;
 
+    /**
+     * @var ObjectProphecy<InputInterface>
+     */
     private ObjectProphecy $input;
 
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
     private ObjectProphecy $output;
 
     private SelfUpdateCommand $command;

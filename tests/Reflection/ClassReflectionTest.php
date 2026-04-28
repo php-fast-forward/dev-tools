@@ -90,5 +90,8 @@ final class ClassReflectionTest extends TestCase
     }
 }
 
+/**
+ * Fixture command that declares AsCommand through positional arguments.
+ */
 #[AsCommand('fixture', 'Fixture command.', ['alias'])]
 final class FixtureCommandWithPositionalAttribute extends Command {}

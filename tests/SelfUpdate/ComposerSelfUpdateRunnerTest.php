@@ -35,12 +35,24 @@ final class ComposerSelfUpdateRunnerTest extends TestCase
 {
     use ProphecyTrait;
 
+    /**
+     * @var ObjectProphecy<ProcessBuilderInterface>
+     */
     private ObjectProphecy $processBuilder;
 
+    /**
+     * @var ObjectProphecy<ProcessQueueInterface>
+     */
     private ObjectProphecy $processQueue;
 
+    /**
+     * @var ObjectProphecy<Process>
+     */
     private ObjectProphecy $process;
 
+    /**
+     * @var ObjectProphecy<OutputInterface>
+     */
     private ObjectProphecy $output;
 
     private ComposerSelfUpdateRunner $runner;
