@@ -290,7 +290,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Exclude context7.json from packaged exports and broaden GitAttributes test coverage (#27).
 
-## [1.2.2] - 2026-03-26
+## [1.2.2] - 2026-04-12
 
 ### Added
 
