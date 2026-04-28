@@ -501,15 +501,35 @@ Search.appendIndex(
             "summary": "Provides\u0020a\u0020registry\u0020of\u0020custom\u0020dev\u002Dtools\u0020commands\u0020mapped\u0020for\u0020Composer\u0020integration.",
             "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method___construct"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003AgetCommands\u0028\u0029",
             "name": "getCommands",
             "summary": "\u007B\u0040inheritDoc\u007D",
             "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_getCommands"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003AgetComposerAliases\u0028\u0029",
+            "name": "getComposerAliases",
+            "summary": "Returns\u0020command\u0020aliases\u0020that\u0020may\u0020be\u0020safely\u0020exposed\u0020to\u0020Composer.",
+            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_getComposerAliases"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003AisRegisteredCommand\u0028\u0029",
+            "name": "isRegisteredCommand",
+            "summary": "Detects\u0020names\u0020already\u0020owned\u0020by\u0020Composer\u0027s\u0020active\u0020command\u0020surface.",
+            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#method_isRegisteredCommand"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003ACOMMAND_NAMESPACE",
             "name": "COMMAND_NAMESPACE",
             "summary": "",
             "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#constant_COMMAND_NAMESPACE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider\u003A\u003A\u0024plugin",
+            "name": "plugin",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-Capability-DevToolsCommandProvider.html#property_plugin"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand",
             "name": "ProxyCommand",
@@ -523,13 +543,28 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand\u003A\u003Aexecute\u0028\u0029",
             "name": "execute",
-            "summary": "",
+            "summary": "Executes\u0020the\u0020proxied\u0020Symfony\u0020command\u0020through\u0020Composer\u0027s\u0020command\u0020contract.",
             "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html#method_execute"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Command\\ProxyCommand\u003A\u003A\u0024command",
             "name": "command",
             "summary": "",
             "url": "classes/FastForward-DevTools-Composer-Command-ProxyCommand.html#property_command"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface",
+            "name": "DevToolsPluginInterface",
+            "summary": "Defines\u0020DevTools\u002Dspecific\u0020Composer\u0020plugin\u0020conventions.",
+            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface\u003A\u003AisRegisteredCommand\u0028\u0029",
+            "name": "isRegisteredCommand",
+            "summary": "Detects\u0020whether\u0020a\u0020command\u0020name\u0020or\u0020alias\u0020is\u0020already\u0020registered\u0020in\u0020Composer\u0027s\u0020command\u0020surface.",
+            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html#method_isRegisteredCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface\u003A\u003ACOMPOSER_COMMAND_NAMES",
+            "name": "COMPOSER_COMMAND_NAMES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html#constant_COMPOSER_COMMAND_NAMES"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Json\\ComposerJson",
             "name": "ComposerJson",
@@ -1091,6 +1126,16 @@ Search.appendIndex(
             "summary": "Handles\u0020the\u0020automated\u0020script\u0020installation.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_runSyncCommand"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003AisRegisteredCommand\u0028\u0029",
+            "name": "isRegisteredCommand",
+            "summary": "Detects\u0020whether\u0020a\u0020command\u0020name\u0020or\u0020alias\u0020is\u0020already\u0020registered\u0020in\u0020Composer\u0027s\u0020command\u0020surface.",
+            "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_isRegisteredCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003AgetReservedCommandNames\u0028\u0029",
+            "name": "getReservedCommandNames",
+            "summary": "Returns\u0020command\u0020names\u0020and\u0020aliases\u0020that\u0020DevTools\u0020plugin\u0020commands\u0020MUST\u0020NOT\u0020override.",
+            "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_getReservedCommandNames"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003Aactivate\u0028\u0029",
             "name": "activate",
             "summary": "Handles\u0020activation\u0020lifecycle\u0020events\u0020for\u0020the\u0020Composer\u0020session.",
@@ -1105,6 +1150,16 @@ Search.appendIndex(
             "name": "uninstall",
             "summary": "Handles\u0020final\u0020uninstallation\u0020processes\u0020logically.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_uninstall"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003AgetRootScriptCommandNames\u0028\u0029",
+            "name": "getRootScriptCommandNames",
+            "summary": "Returns\u0020custom\u0020Composer\u0020script\u0020command\u0020names\u0020from\u0020the\u0020active\u0020root\u0020package.",
+            "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_getRootScriptCommandNames"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003A\u0024composer",
+            "name": "composer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Composer-Plugin.html#property_composer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig",
             "name": "ComposerDependencyAnalyserConfig",
@@ -2321,6 +2376,46 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ReportsCommand.html#property_logger"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand",
+            "name": "SelfUpdateCommand",
+            "summary": "Updates\u0020the\u0020installed\u0020DevTools\u0020package\u0020through\u0020Composer.",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003AgetCommandNames\u0028\u0029",
+            "name": "getCommandNames",
+            "summary": "Returns\u0020the\u0020command\u0020name\u0020and\u0020aliases\u0020declared\u0020through\u0020AsCommand.",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#method_getCommandNames"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003Aconfigure\u0028\u0029",
+            "name": "configure",
+            "summary": "Configures\u0020the\u0020self\u002Dupdate\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#method_configure"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003Aexecute\u0028\u0029",
+            "name": "execute",
+            "summary": "Executes\u0020the\u0020Composer\u0020update\u0020flow.",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#method_execute"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003A\u0024selfUpdateRunner",
+            "name": "selfUpdateRunner",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_selfUpdateRunner"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003A\u0024scopeResolver",
+            "name": "scopeResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_scopeResolver"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand\u003A\u003A\u0024logger",
+            "name": "logger",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html#property_logger"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SkillsCommand",
             "name": "SkillsCommand",
             "summary": "Synchronizes\u0020packaged\u0020Fast\u0020Forward\u0020skills\u0020into\u0020the\u0020consumer\u0020repository.",
@@ -2706,6 +2801,16 @@ Search.appendIndex(
             "summary": "Gets\u0020the\u0020help\u0020message\u0020for\u0020the\u0020DevTools\u0020application,\u0020including\u0020the\u0020ASCII\u0020logo.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getHelp"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetDefaultInputDefinition\u0028\u0029",
+            "name": "getDefaultInputDefinition",
+            "summary": "Returns\u0020the\u0020application\u002Dlevel\u0020input\u0020definition\u0020with\u0020DevTools\u0020runtime\u0020options.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getDefaultInputDefinition"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AdoRun\u0028\u0029",
+            "name": "doRun",
+            "summary": "Runs\u0020the\u0020application\u0020after\u0020applying\u0020global\u0020runtime\u0020options.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_doRun"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003Acreate\u0028\u0029",
             "name": "create",
             "summary": "Create\u0020DevTools\u0020instance\u0020from\u0020container.",
@@ -2716,6 +2821,26 @@ Search.appendIndex(
             "summary": "Retrieves\u0020the\u0020shared\u0020DevTools\u0020service\u0020container.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getContainer"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetWorkingDirectoryOption\u0028\u0029",
+            "name": "getWorkingDirectoryOption",
+            "summary": "Resolves\u0020the\u0020raw\u0020working\u002Ddirectory\u0020option\u0020before\u0020command\u0020parsing.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_getWorkingDirectoryOption"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ArunAutoUpdateWhenRequested\u0028\u0029",
+            "name": "runAutoUpdateWhenRequested",
+            "summary": "Runs\u0020an\u0020explicit\u0020automatic\u0020update\u0020without\u0020letting\u0020failures\u0020block\u0020the\u0020requested\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_runAutoUpdateWhenRequested"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AisSelfUpdateCommand\u0028\u0029",
+            "name": "isSelfUpdateCommand",
+            "summary": "Detects\u0020whether\u0020the\u0020current\u0020invocation\u0020targets\u0020the\u0020self\u002Dupdate\u0020command.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_isSelfUpdateCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AisTruthyAutoUpdateMode\u0028\u0029",
+            "name": "isTruthyAutoUpdateMode",
+            "summary": "Interprets\u0020environment\u0020values\u0020that\u0020enable\u0020auto\u002Dupdate.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_isTruthyAutoUpdateMode"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ALOGO",
             "name": "LOGO",
             "summary": "",
@@ -2725,6 +2850,31 @@ Search.appendIndex(
             "name": "container",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#property_container"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024workingDirectorySwitcher",
+            "name": "workingDirectorySwitcher",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_workingDirectorySwitcher"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024versionCheckNotifier",
+            "name": "versionCheckNotifier",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_versionCheckNotifier"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024selfUpdateRunner",
+            "name": "selfUpdateRunner",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_selfUpdateRunner"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024selfUpdateScopeResolver",
+            "name": "selfUpdateScopeResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_selfUpdateScopeResolver"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_environment"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter",
             "name": "LogLevelOutputFormatter",
@@ -3021,11 +3171,6 @@ Search.appendIndex(
             "summary": "Determines\u0020whether\u0020workflow\u0020commands\u0020should\u0020be\u0020emitted\u0020for\u0020the\u0020current\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_supportsWorkflowCommands"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AisTruthyEnvironmentFlag\u0028\u0029",
-            "name": "isTruthyEnvironmentFlag",
-            "summary": "Determines\u0020whether\u0020an\u0020environment\u0020flag\u0020is\u0020set\u0020to\u0020a\u0020truthy\u0020value.",
-            "url": "classes/FastForward-DevTools-Console-Output-GithubActionOutput.html#method_isTruthyEnvironmentFlag"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput\u003A\u003AescapeData\u0028\u0029",
             "name": "escapeData",
             "summary": "Escapes\u0020workflow\u002Dcommand\u0020payload\u0020data\u0020according\u0020to\u0020GitHub\u0020Actions\u0020rules.",
@@ -3090,6 +3235,66 @@ Search.appendIndex(
             "name": "get",
             "summary": "Reads\u0020an\u0020environment\u0020variable.",
             "url": "classes/FastForward-DevTools-Environment-EnvironmentInterface.html#method_get"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment",
+            "name": "RuntimeEnvironment",
+            "summary": "Resolves\u0020common\u0020runtime\u002Denvironment\u0020flags\u0020used\u0020by\u0020DevTools\u0020integrations.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisEnabled\u0028\u0029",
+            "name": "isEnabled",
+            "summary": "Returns\u0020whether\u0020a\u0020truthy\u0020environment\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isEnabled"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisGithubActions\u0028\u0029",
+            "name": "isGithubActions",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020GitHub\u0020Actions.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isGithubActions"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisCi\u0028\u0029",
+            "name": "isCi",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020a\u0020CI\u0020environment.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isCi"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisComposerTestRun\u0028\u0029",
+            "name": "isComposerTestRun",
+            "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isComposerTestRun"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface",
+            "name": "RuntimeEnvironmentInterface",
+            "summary": "Answers\u0020common\u0020runtime\u002Denvironment\u0020questions\u0020from\u0020process\u0020environment\u0020flags.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisEnabled\u0028\u0029",
+            "name": "isEnabled",
+            "summary": "Returns\u0020whether\u0020a\u0020truthy\u0020environment\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isEnabled"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisGithubActions\u0028\u0029",
+            "name": "isGithubActions",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020GitHub\u0020Actions.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isGithubActions"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisCi\u0028\u0029",
+            "name": "isCi",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020runs\u0020in\u0020a\u0020CI\u0020environment.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isCi"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisComposerTestRun\u0028\u0029",
+            "name": "isComposerTestRun",
+            "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isComposerTestRun"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
@@ -4721,6 +4926,21 @@ Search.appendIndex(
             "summary": "Ascertains\u0020visually\u0020and\u0020technically\u0020if\u0020a\u0020provided\u0020block\u0020comprises\u0020an\u0020absolute\u0020empty\u0020placeholder\u0020structure\u0020safely.",
             "url": "classes/FastForward-DevTools-Rector-RemoveEmptyDocBlockRector.html#method_isEmptyDocBlock"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection\\ClassReflection",
+            "name": "ClassReflection",
+            "summary": "Centralizes\u0020small\u0020reflection\u0020lookups\u0020used\u0020by\u0020DevTools\u0020runtime\u0020metadata.",
+            "url": "classes/FastForward-DevTools-Reflection-ClassReflection.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection\\ClassReflection\u003A\u003AisInstantiableSubclassOf\u0028\u0029",
+            "name": "isInstantiableSubclassOf",
+            "summary": "Detects\u0020whether\u0020a\u0020class\u0020can\u0020be\u0020instantiated\u0020as\u0020a\u0020subclass\u0020of\u0020another\u0020class.",
+            "url": "classes/FastForward-DevTools-Reflection-ClassReflection.html#method_isInstantiableSubclassOf"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection\\ClassReflection\u003A\u003AgetAttributeArguments\u0028\u0029",
+            "name": "getAttributeArguments",
+            "summary": "Returns\u0020the\u0020first\u0020matching\u0020attribute\u0020arguments\u0020normalized\u0020by\u0020constructor\u0020parameter\u0020name.",
+            "url": "classes/FastForward-DevTools-Reflection-ClassReflection.html#method_getAttributeArguments"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Resource\\DifferInterface",
             "name": "DifferInterface",
             "summary": "Defines\u0020the\u0020contract\u0020for\u0020generating\u0020unified\u0020diffs.",
@@ -4865,6 +5085,236 @@ Search.appendIndex(
             "name": "differ",
             "summary": "",
             "url": "classes/FastForward-DevTools-Resource-UnifiedDiffer.html#property_differ"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateRunner",
+            "name": "ComposerSelfUpdateRunner",
+            "summary": "Updates\u0020DevTools\u0020through\u0020the\u0020active\u0020Composer\u0020executable.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateRunner\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateRunner\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "Updates\u0020the\u0020installed\u0020DevTools\u0020package.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html#method_update"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateRunner\u003A\u003APACKAGE",
+            "name": "PACKAGE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html#constant_PACKAGE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateRunner\u003A\u003A\u0024processBuilder",
+            "name": "processBuilder",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html#property_processBuilder"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateRunner\u003A\u003A\u0024processQueue",
+            "name": "processQueue",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver",
+            "name": "ComposerSelfUpdateScopeResolver",
+            "summary": "Detects\u0020Composer\u0020global\u0020DevTools\u0020installations\u0020from\u0020known\u0020Composer\u0020home\u0020paths.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003AisGlobalInstallation\u0028\u0029",
+            "name": "isGlobalInstallation",
+            "summary": "Returns\u0020whether\u0020DevTools\u0020is\u0020running\u0020from\u0020Composer\u0027s\u0020global\u0020installation.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method_isGlobalInstallation"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003AgetComposerHomeCandidates\u0028\u0029",
+            "name": "getComposerHomeCandidates",
+            "summary": "Returns\u0020candidate\u0020Composer\u0020home\u0020directories\u0020for\u0020supported\u0020platforms.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method_getComposerHomeCandidates"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003APACKAGE_PATH",
+            "name": "PACKAGE_PATH",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#constant_PACKAGE_PATH"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003A\u0024packagePath",
+            "name": "packagePath",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#property_packagePath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker",
+            "name": "ComposerVersionChecker",
+            "summary": "Resolves\u0020DevTools\u0020freshness\u0020through\u0020Composer\u0020metadata\u0020without\u0020coupling\u0020callers\u0020to\u0020Composer\u0020commands.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003Acheck\u0028\u0029",
+            "name": "check",
+            "summary": "Returns\u0020version\u0020information\u0020when\u0020it\u0020can\u0020be\u0020resolved\u0020without\u0020blocking\u0020command\u0020execution.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method_check"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AresolveLatestStableVersion\u0028\u0029",
+            "name": "resolveLatestStableVersion",
+            "summary": "Resolves\u0020the\u0020latest\u0020stable\u0020DevTools\u0020version\u0020available\u0020to\u0020Composer.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method_resolveLatestStableVersion"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003APACKAGE",
+            "name": "PACKAGE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#constant_PACKAGE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003ATIMEOUT_SECONDS",
+            "name": "TIMEOUT_SECONDS",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#constant_TIMEOUT_SECONDS"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003A\u0024processBuilder",
+            "name": "processBuilder",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#property_processBuilder"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\SelfUpdateRunnerInterface",
+            "name": "SelfUpdateRunnerInterface",
+            "summary": "Runs\u0020the\u0020Composer\u0020command\u0020that\u0020updates\u0020the\u0020installed\u0020DevTools\u0020package.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-SelfUpdateRunnerInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\SelfUpdateRunnerInterface\u003A\u003Aupdate\u0028\u0029",
+            "name": "update",
+            "summary": "Updates\u0020the\u0020installed\u0020DevTools\u0020package.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-SelfUpdateRunnerInterface.html#method_update"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\SelfUpdateScopeResolverInterface",
+            "name": "SelfUpdateScopeResolverInterface",
+            "summary": "Resolves\u0020whether\u0020self\u002Dupdate\u0020SHOULD\u0020target\u0020the\u0020local\u0020project\u0020or\u0020Composer\u0020global\u0020project.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\SelfUpdateScopeResolverInterface\u003A\u003AisGlobalInstallation\u0028\u0029",
+            "name": "isGlobalInstallation",
+            "summary": "Returns\u0020whether\u0020DevTools\u0020is\u0020running\u0020from\u0020Composer\u0027s\u0020global\u0020installation.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html#method_isGlobalInstallation"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckerInterface",
+            "name": "VersionCheckerInterface",
+            "summary": "Checks\u0020whether\u0020the\u0020installed\u0020DevTools\u0020package\u0020is\u0020behind\u0020the\u0020latest\u0020stable\u0020release.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckerInterface\u003A\u003Acheck\u0028\u0029",
+            "name": "check",
+            "summary": "Returns\u0020version\u0020information\u0020when\u0020it\u0020can\u0020be\u0020resolved\u0020without\u0020blocking\u0020command\u0020execution.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html#method_check"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier",
+            "name": "VersionCheckNotifier",
+            "summary": "Emits\u0020update\u0020warnings\u0020while\u0020ensuring\u0020version\u0020checks\u0020never\u0020block\u0020the\u0020requested\u0020command.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003Anotify\u0028\u0029",
+            "name": "notify",
+            "summary": "Warns\u0020when\u0020a\u0020newer\u0020stable\u0020DevTools\u0020version\u0020is\u0020available.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#method_notify"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003AshouldSkipVersionCheck\u0028\u0029",
+            "name": "shouldSkipVersionCheck",
+            "summary": "Returns\u0020whether\u0020DevTools\u0020SHOULD\u0020skip\u0020the\u0020best\u002Deffort\u0020version\u0020check.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#method_shouldSkipVersionCheck"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003A\u0024versionChecker",
+            "name": "versionChecker",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#property_versionChecker"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifierInterface",
+            "name": "VersionCheckNotifierInterface",
+            "summary": "Emits\u0020non\u002Dblocking\u0020DevTools\u0020freshness\u0020notices\u0020for\u0020interactive\u0020binary\u0020runs.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifierInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifierInterface\u003A\u003Anotify\u0028\u0029",
+            "name": "notify",
+            "summary": "Warns\u0020when\u0020a\u0020newer\u0020stable\u0020DevTools\u0020version\u0020is\u0020available.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifierInterface.html#method_notify"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult",
+            "name": "VersionCheckResult",
+            "summary": "Describes\u0020the\u0020installed\u0020and\u0020latest\u0020known\u0020DevTools\u0020versions.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult\u003A\u003AgetCurrentVersion\u0028\u0029",
+            "name": "getCurrentVersion",
+            "summary": "Returns\u0020the\u0020currently\u0020installed\u0020DevTools\u0020version.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html#method_getCurrentVersion"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult\u003A\u003AgetLatestVersion\u0028\u0029",
+            "name": "getLatestVersion",
+            "summary": "Returns\u0020the\u0020latest\u0020stable\u0020DevTools\u0020version\u0020known\u0020to\u0020Composer.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html#method_getLatestVersion"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult\u003A\u003AisOutdated\u0028\u0029",
+            "name": "isOutdated",
+            "summary": "Detects\u0020whether\u0020the\u0020installed\u0020version\u0020is\u0020older\u0020than\u0020the\u0020latest\u0020stable\u0020version.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html#method_isOutdated"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult\u003A\u003Anormalize\u0028\u0029",
+            "name": "normalize",
+            "summary": "Normalizes\u0020common\u0020Composer\u0020tag\u0020prefixes\u0020before\u0020version\u0020comparison.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html#method_normalize"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult\u003A\u003A\u0024currentVersion",
+            "name": "currentVersion",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html#property_currentVersion"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckResult\u003A\u003A\u0024latestVersion",
+            "name": "latestVersion",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html#property_latestVersion"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\WorkingDirectorySwitcher",
+            "name": "WorkingDirectorySwitcher",
+            "summary": "Applies\u0020Composer\u002Dlike\u0020working\u002Ddirectory\u0020switching\u0020for\u0020the\u0020standalone\u0020binary.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcher.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\WorkingDirectorySwitcher\u003A\u003AswitchTo\u0028\u0029",
+            "name": "switchTo",
+            "summary": "Switches\u0020to\u0020the\u0020provided\u0020working\u0020directory\u0020when\u0020one\u0020is\u0020configured.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcher.html#method_switchTo"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\WorkingDirectorySwitcherInterface",
+            "name": "WorkingDirectorySwitcherInterface",
+            "summary": "Switches\u0020the\u0020process\u0020working\u0020directory\u0020before\u0020command\u0020execution\u0020starts.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcherInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\WorkingDirectorySwitcherInterface\u003A\u003AswitchTo\u0028\u0029",
+            "name": "switchTo",
+            "summary": "Switches\u0020to\u0020the\u0020provided\u0020working\u0020directory\u0020when\u0020one\u0020is\u0020configured.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcherInterface.html#method_switchTo"
         },                {
             "fqsen": "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
             "name": "DevToolsServiceProvider",
@@ -5076,6 +5526,11 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-composer-command.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer",
+            "name": "Composer",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-composer.html"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Json",
             "name": "Json",
             "summary": "",
@@ -5085,11 +5540,6 @@ Search.appendIndex(
             "name": "Schema",
             "summary": "",
             "url": "namespaces/fastforward-devtools-composer-json-schema.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer",
-            "name": "Composer",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools-composer.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Config",
             "name": "Config",
@@ -5236,10 +5686,20 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-rector.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Reflection",
+            "name": "Reflection",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-reflection.html"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Resource",
             "name": "Resource",
             "summary": "",
             "url": "namespaces/fastforward-devtools-resource.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate",
+            "name": "SelfUpdate",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-selfupdate.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\ServiceProvider",
             "name": "ServiceProvider",

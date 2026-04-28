@@ -962,6 +962,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./commands/self-update.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            self-update
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./commands/funding.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2791,10 +2813,54 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-reflection.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Reflection
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-resource.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Resource
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-selfupdate.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            SelfUpdate
         </a>
 
             </div>
@@ -2982,19 +3048,20 @@
             <h1>Command Classes</h1>
 
             
-    <p>All public CLI commands extend <code>Composer\Command\BaseCommand</code>
-. Most command
-classes are resolved lazily through <code>DevToolsCommandLoader</code>
- and receive
-their collaborators from the shared <code>DevToolsServiceProvider</code>
- container,
-while orchestration commands such as <code>standards</code>
- dispatch other commands
-through the console application itself. The architecture also relies on
-<code>ProcessBuilder</code>
+    <p>All public CLI commands are Symfony Console commands resolved lazily through
+<code>DevToolsCommandLoader</code>
+. Command classes receive their collaborators from
+the shared <code>DevToolsServiceProvider</code>
+ container, while orchestration commands
+such as <code>standards</code>
+ dispatch other commands through the console application
+itself. Composer integration uses proxy commands to expose that same Symfony
+command set without forcing each command to extend Composer&#039;s <code>BaseCommand</code>
+.
+The architecture also relies on <code>ProcessBuilder</code>
  and <code>ProcessQueue</code>
- for fluent process management where
-subprocess execution is needed.</p>
+ for
+fluent process management where subprocess execution is needed.</p>
 
             <table>
                 <thead>
@@ -3197,6 +3264,13 @@ skills and project agents.</td>
             <td><code>update-composer-json</code>
 </td>
             <td>Updates the composer.json file to match the packaged schema.</td>
+    </tr>
+    <tr>
+            <td><code>FastForward\DevTools\Console\Command\SelfUpdateCommand</code>
+</td>
+            <td><code>dev-tools:self-update</code>
+</td>
+            <td>Updates the local or global DevTools installation through Composer.</td>
     </tr>
 </tbody>
 </table>

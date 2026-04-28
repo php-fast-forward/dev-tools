@@ -176,6 +176,14 @@
             <li class="success">Execute will log release notes when json output is requested</li>
             <li class="success">Execute will return failure when release notes cannot be rendered</li>
         </ul>
+        <h2>Class Reflection (FastForward\DevTools\Tests\Reflection\ClassReflection)</h2>
+        <ul>
+            <li class="success">Is instantiable subclass of will return true for matching class</li>
+            <li class="success">Is instantiable subclass of will return false for non matching class</li>
+            <li class="success">Get attribute arguments will return arguments for matching attribute</li>
+            <li class="success">Get attribute arguments will return null when attribute does not exist</li>
+            <li class="success">Get attribute arguments will normalize positional arguments</li>
+        </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
             <li class="success">Classify with trailing slash returns directory</li>
@@ -308,6 +316,17 @@
             <li class="success">Get minimum stability and config will return defaults for invalid sections</li>
             <li class="success">Get bin will return scalar string when declared as single binary</li>
         </ul>
+        <h2>Composer Self Update Runner (FastForward\DevTools\Tests\SelfUpdate\ComposerSelfUpdateRunner)</h2>
+        <ul>
+            <li class="success">Update will run project composer update</li>
+            <li class="success">Update will run global composer update</li>
+        </ul>
+        <h2>Composer Self Update Scope Resolver (FastForward\DevTools\Tests\SelfUpdate\ComposerSelfUpdateScopeResolver)</h2>
+        <ul>
+            <li class="success">Is global installation will return true when package lives under composer home</li>
+            <li class="success">Is global installation will return true when package lives under default composer home</li>
+            <li class="success">Is global installation will return false when package lives under project vendor</li>
+        </ul>
         <h2>Composite Context Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CompositeContextProcessor)</h2>
         <ul>
             <li class="success">Process will apply processors sequentially</li>
@@ -359,8 +378,12 @@
         <ul>
             <li class="success">Get default commands will return framework defaults only</li>
             <li class="success">Constructor will set application name and expose loader commands</li>
+            <li class="success">Constructor will register global runtime options</li>
             <li class="success">All will return loader commands with preserved keys</li>
             <li class="success">Create will return instance of dev tools</li>
+            <li class="success">Is self update command will use self update command attribute names and aliases</li>
+            <li class="success">Is self update command will reject other commands</li>
+            <li class="success">Run auto update when requested will update global installation when current binary is global</li>
         </ul>
         <h2>Dev Tools Command Loader (FastForward\DevTools\Tests\Console\CommandLoader\DevToolsCommandLoader)</h2>
         <ul>
@@ -376,7 +399,9 @@
             <li class="success">Get commands will return empty array when no commands are registered</li>
             <li class="success">Get commands will return composer proxy commands for registered symfony commands</li>
             <li class="success">Get commands will ignore alias entries from application all registry</li>
-            <li class="success">Get commands will preserve alias definitions in proxy command</li>
+            <li class="success">Get commands will preserve safe aliases through composer plugin</li>
+            <li class="success">Get commands will not expose self update alias to composer</li>
+            <li class="success">Get commands will not expose commands owned by composer</li>
         </ul>
         <h2>Dev Tools Extension (FastForward\DevTools\Tests\PhpUnit\Runner\Extension\DevToolsExtension)</h2>
         <ul>
@@ -394,6 +419,7 @@
             <li class="success">Implements service provider interface</li>
             <li class="success">Get extensions return empty array</li>
             <li class="success">Get factories return factories</li>
+            <li class="success">File locator resolves working project path when the service is requested</li>
         </ul>
         <h2>Docs Command (FastForward\DevTools\Tests\Console\Command\DocsCommand)</h2>
         <ul>
@@ -694,6 +720,7 @@
             <li class="success">Get capabilities will return dev tools command provider mapping</li>
             <li class="success">Get subscribed events will return expected event mapping</li>
             <li class="success">Activate will do nothing</li>
+            <li class="success">Is registered command will detect reserved command names</li>
             <li class="success">Run sync command will execute dev tools sync</li>
             <li class="success">Deactivate will do nothing</li>
             <li class="success">Uninstall will do nothing</li>
@@ -779,6 +806,28 @@
             <li class="success">Resolve with missing license will return null</li>
             <li class="success">Resolve with empty license will return null</li>
         </ul>
+        <h2>Runtime Environment (FastForward\DevTools\Tests\Environment\RuntimeEnvironment)</h2>
+        <ul>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "missing"</li>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "empty"</li>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "zero"</li>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "false"</li>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "one"</li>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "true"</li>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "yes"</li>
+            <li class="success">Is enabled will return whether environment flag is truthy with data set "on"</li>
+            <li class="success">Is github actions will return whether github actions flag is enabled</li>
+            <li class="success">Is ci will return true when github actions is enabled</li>
+            <li class="success">Is ci will return true when generic ci is enabled</li>
+            <li class="success">Is composer test run will return whether composer tests flag is enabled</li>
+        </ul>
+        <h2>Self Update Command (FastForward\DevTools\Tests\Console\Command\SelfUpdateCommand)</h2>
+        <ul>
+            <li class="success">Get command names will return attribute name and aliases</li>
+            <li class="success">Execute will update project installation</li>
+            <li class="success">Execute will return failure when update fails</li>
+            <li class="success">Execute will update global installation when current binary is global</li>
+        </ul>
         <h2>Skills Command (FastForward\DevTools\Tests\Console\Command\SkillsCommand)</h2>
         <ul>
             <li class="success">Execute will fail when packaged skills directory does not exist</li>
@@ -847,6 +896,18 @@
             <li class="success">Execute will return failure in check mode when composer json would change</li>
             <li class="success">Execute will return success in dry run mode when composer json would change</li>
             <li class="success">Execute will skip writing when interactive confirmation is declined</li>
+        </ul>
+        <h2>Version Check Notifier (FastForward\DevTools\Tests\SelfUpdate\VersionCheckNotifier)</h2>
+        <ul>
+            <li class="success">Notify will write warning when dev tools is outdated</li>
+            <li class="success">Notify will stay silent when check fails</li>
+            <li class="success">Notify will stay silent in ci</li>
+            <li class="success">Notify will stay silent when version check is disabled</li>
+        </ul>
+        <h2>Version Check Result (FastForward\DevTools\Tests\SelfUpdate\VersionCheckResult)</h2>
+        <ul>
+            <li class="success">Is outdated will return true when latest stable version is newer</li>
+            <li class="success">Is outdated will return false when versions match</li>
         </ul>
         <h2>Wiki Command (FastForward\DevTools\Tests\Console\Command\WikiCommand)</h2>
         <ul>

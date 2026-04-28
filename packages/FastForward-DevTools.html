@@ -961,6 +961,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="./commands/self-update.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            self-update
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="./commands/funding.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2790,10 +2812,54 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-reflection.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Reflection
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-resource.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Resource
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-selfupdate.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            SelfUpdate
         </a>
 
             </div>
@@ -3063,6 +3129,12 @@
                                                             <p class="text-body-secondary mb-0 mt-1">Renders managed changelog domain objects into markdown.</p>
                                                     </div>
                                             <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html"><abbr title="\FastForward\DevTools\Composer\DevToolsPluginInterface">DevToolsPluginInterface</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Defines DevTools-specific Composer plugin conventions.</p>
+                                                    </div>
+                                            <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Composer-Json-ComposerJsonInterface.html" class="fw-semibold text-decoration-none">
                                 <a href="classes/FastForward-DevTools-Composer-Json-ComposerJsonInterface.html"><abbr title="\FastForward\DevTools\Composer\Json\ComposerJsonInterface">ComposerJsonInterface</abbr></a>
                             </a>
@@ -3105,6 +3177,12 @@ of a composer.json file.</p>
                                 <a href="classes/FastForward-DevTools-Environment-EnvironmentInterface.html"><abbr title="\FastForward\DevTools\Environment\EnvironmentInterface">EnvironmentInterface</abbr></a>
                             </a>
                                                             <p class="text-body-secondary mb-0 mt-1">Reads process environment variables without binding callers to Composer APIs.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html"><abbr title="\FastForward\DevTools\Environment\RuntimeEnvironmentInterface">RuntimeEnvironmentInterface</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Answers common runtime-environment questions from process environment flags.</p>
                                                     </div>
                                             <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Filesystem-FilesystemInterface.html" class="fw-semibold text-decoration-none">
@@ -3237,6 +3315,36 @@ of a composer.json file.</p>
                                 <a href="classes/FastForward-DevTools-Resource-DifferInterface.html"><abbr title="\FastForward\DevTools\Resource\DifferInterface">DifferInterface</abbr></a>
                             </a>
                                                             <p class="text-body-secondary mb-0 mt-1">Defines the contract for generating unified diffs.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateRunnerInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateRunnerInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface">SelfUpdateRunnerInterface</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Runs the Composer command that updates the installed DevTools package.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-SelfUpdateScopeResolverInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface">SelfUpdateScopeResolverInterface</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Resolves whether self-update SHOULD target the local project or Composer global project.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\VersionCheckerInterface">VersionCheckerInterface</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Checks whether the installed DevTools package is behind the latest stable release.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifierInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifierInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface">VersionCheckNotifierInterface</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Emits non-blocking DevTools freshness notices for interactive binary runs.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcherInterface.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcherInterface.html"><abbr title="\FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface">WorkingDirectorySwitcherInterface</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Switches the process working directory before command execution starts.</p>
                                                     </div>
                                     </div>
             </section>
@@ -3482,6 +3590,12 @@ composer.json file.</p>
                                                             <p class="text-body-secondary mb-0 mt-1">Coordinates the generation of Fast Forward documentation frontpage and related reports.</p>
                                                     </div>
                                             <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html"><abbr title="\FastForward\DevTools\Console\Command\SelfUpdateCommand">SelfUpdateCommand</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Updates the installed DevTools package through Composer.</p>
+                                                    </div>
+                                            <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html" class="fw-semibold text-decoration-none">
                                 <a href="classes/FastForward-DevTools-Console-Command-SkillsCommand.html"><abbr title="\FastForward\DevTools\Console\Command\SkillsCommand">SkillsCommand</abbr></a>
                             </a>
@@ -3578,6 +3692,12 @@ and integrates with a PSR-11 compatible container to lazily instantiate commands
                                 <a href="classes/FastForward-DevTools-Environment-Environment.html"><abbr title="\FastForward\DevTools\Environment\Environment">Environment</abbr></a>
                             </a>
                                                             <p class="text-body-secondary mb-0 mt-1">Reads environment variables through PHP&#039;s native runtime.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Environment-RuntimeEnvironment.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Environment-RuntimeEnvironment.html"><abbr title="\FastForward\DevTools\Environment\RuntimeEnvironment">RuntimeEnvironment</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Resolves common runtime-environment flags used by DevTools integrations.</p>
                                                     </div>
                                             <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Filesystem-Filesystem.html" class="fw-semibold text-decoration-none">
@@ -3815,6 +3935,12 @@ optional failure suppression.</p>
                                                             <p class="text-body-secondary mb-0 mt-1">Implements automation targeting the removal of purposeless empty DocBlock structures natively.</p>
                                                     </div>
                                             <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Reflection-ClassReflection.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Reflection-ClassReflection.html"><abbr title="\FastForward\DevTools\Reflection\ClassReflection">ClassReflection</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Centralizes small reflection lookups used by DevTools runtime metadata.</p>
+                                                    </div>
+                                            <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Resource-FileDiff.html" class="fw-semibold text-decoration-none">
                                 <a href="classes/FastForward-DevTools-Resource-FileDiff.html"><abbr title="\FastForward\DevTools\Resource\FileDiff">FileDiff</abbr></a>
                             </a>
@@ -3831,6 +3957,42 @@ optional failure suppression.</p>
                                 <a href="classes/FastForward-DevTools-Resource-UnifiedDiffer.html"><abbr title="\FastForward\DevTools\Resource\UnifiedDiffer">UnifiedDiffer</abbr></a>
                             </a>
                                                             <p class="text-body-secondary mb-0 mt-1">Generates unified diffs using the default Sebastian diff output builder.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateRunner.html"><abbr title="\FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner">ComposerSelfUpdateRunner</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Updates DevTools through the active Composer executable.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html"><abbr title="\FastForward\DevTools\SelfUpdate\ComposerSelfUpdateScopeResolver">ComposerSelfUpdateScopeResolver</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Detects Composer global DevTools installations from known Composer home paths.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html"><abbr title="\FastForward\DevTools\SelfUpdate\ComposerVersionChecker">ComposerVersionChecker</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Resolves DevTools freshness through Composer metadata without coupling callers to Composer commands.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckNotifier.html"><abbr title="\FastForward\DevTools\SelfUpdate\VersionCheckNotifier">VersionCheckNotifier</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Emits update warnings while ensuring version checks never block the requested command.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-VersionCheckResult.html"><abbr title="\FastForward\DevTools\SelfUpdate\VersionCheckResult">VersionCheckResult</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Describes the installed and latest known DevTools versions.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcher.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcher.html"><abbr title="\FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher">WorkingDirectorySwitcher</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Applies Composer-like working-directory switching for the standalone binary.</p>
                                                     </div>
                                             <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-ServiceProvider-DevToolsServiceProvider.html" class="fw-semibold text-decoration-none">

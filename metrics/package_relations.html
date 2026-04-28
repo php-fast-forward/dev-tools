@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-26 22:32:15        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-28 20:52:24        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -266,7 +266,8 @@
         "size": 3000,
         "relations": [
             "Interop\\Container",
-            "FastForward\\DevTools\\Path"
+            "FastForward\\DevTools\\Path",
+            "Symfony\\Component\\Config"
         ]
     },
     {
@@ -282,6 +283,11 @@
             "global",
             "Symfony\\Component\\Finder"
         ]
+    },
+    {
+        "name": "Symfony\\Component\\Config",
+        "size": 3000,
+        "relations": []
     },
     {
         "name": "FastForward\\DevTools\\Console\\Command\\Traits",
@@ -337,6 +343,8 @@
             "FastForward\\DevTools\\License",
             "FastForward\\DevTools\\GitIgnore",
             "FastForward\\DevTools\\Changelog\\Entry",
+            "FastForward\\DevTools\\SelfUpdate",
+            "FastForward\\DevTools\\Reflection",
             "FastForward\\DevTools\\Funding",
             "FastForward\\DevTools\\PhpUnit\\Coverage"
         ]
@@ -457,11 +465,6 @@
         "relations": []
     },
     {
-        "name": "Symfony\\Component\\Config",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "FastForward\\DevTools\\Sync",
         "size": 3000,
         "relations": [
@@ -507,6 +510,26 @@
         "name": "FastForward\\DevTools\\Changelog\\Entry",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "FastForward\\DevTools\\SelfUpdate",
+        "size": 3000,
+        "relations": [
+            "FastForward\\DevTools\\Process",
+            "FastForward\\DevTools\\Path",
+            "Composer",
+            "FastForward\\DevTools\\Environment",
+            "Symfony\\Component\\Console\\Output",
+            "global",
+            "Symfony\\Component\\Filesystem"
+        ]
+    },
+    {
+        "name": "FastForward\\DevTools\\Reflection",
+        "size": 3000,
+        "relations": [
+            "global"
+        ]
     },
     {
         "name": "FastForward\\DevTools\\Funding",
@@ -581,9 +604,14 @@
         "relations": [
             "Symfony\\Component\\Console",
             "Symfony\\Component\\Console\\CommandLoader",
+            "FastForward\\DevTools\\SelfUpdate",
+            "FastForward\\DevTools\\Environment",
+            "Symfony\\Component\\Console\\Input",
+            "Symfony\\Component\\Console\\Output",
             "Psr\\Container",
             "FastForward\\DevTools\\ServiceProvider",
-            "DI"
+            "DI",
+            "FastForward\\DevTools\\Console\\Command"
         ]
     },
     {
@@ -621,6 +649,7 @@
             "Symfony\\Component\\Console\\CommandLoader",
             "FastForward\\DevTools\\Filesystem",
             "Psr\\Container",
+            "FastForward\\DevTools\\Reflection",
             "global"
         ]
     },
@@ -749,7 +778,8 @@
         "relations": [
             "Composer\\Plugin\\Capability",
             "FastForward\\DevTools\\Console",
-            "FastForward\\DevTools\\Composer\\Command"
+            "FastForward\\DevTools\\Composer\\Command",
+            "Symfony\\Component\\Console\\Command"
         ]
     },
     {
@@ -936,7 +966,8 @@
         "size": 3000,
         "relations": [
             "PHPUnit\\Framework",
-            "FastForward\\DevTools\\ServiceProvider"
+            "FastForward\\DevTools\\ServiceProvider",
+            "DI"
         ]
     },
     {
@@ -977,8 +1008,10 @@
             "Symfony\\Component\\Console\\Command",
             "PHPUnit\\Framework",
             "Prophecy",
+            "global",
             "FastForward\\DevTools\\Console",
-            "global"
+            "Symfony\\Component\\Console\\Input",
+            "Symfony\\Component\\Console\\Output"
         ]
     },
     {
@@ -997,11 +1030,11 @@
         "relations": [
             "global",
             "PHPUnit\\Framework",
-            "Prophecy",
             "Symfony\\Component\\Console\\Input",
             "Ergebnis\\AgentDetector",
             "FastForward\\DevTools\\Console\\Logger\\Processor",
             "FastForward\\DevTools\\Console\\Logger",
+            "Prophecy",
             "FastForward\\DevTools\\Console\\Output"
         ]
     },
@@ -1173,6 +1206,16 @@
         ]
     },
     {
+        "name": "FastForward\\DevTools\\Tests\\SelfUpdate",
+        "size": 3000,
+        "relations": [
+            "PHPUnit\\Framework",
+            "FastForward\\DevTools\\SelfUpdate",
+            "global",
+            "Prophecy"
+        ]
+    },
+    {
         "name": "FastForward\\DevTools\\Tests\\GitAttributes",
         "size": 3000,
         "relations": [
@@ -1230,6 +1273,15 @@
         "name": "Symfony\\Component\\Process\\Exception",
         "size": 3000,
         "relations": []
+    },
+    {
+        "name": "FastForward\\DevTools\\Tests\\Reflection",
+        "size": 3000,
+        "relations": [
+            "PHPUnit\\Framework",
+            "FastForward\\DevTools\\Reflection",
+            "Symfony\\Component\\Console\\Command"
+        ]
     },
     {
         "name": "FastForward\\DevTools\\Tests\\Path",
