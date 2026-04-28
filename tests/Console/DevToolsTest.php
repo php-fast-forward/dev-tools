@@ -49,6 +49,7 @@ use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -345,6 +346,50 @@ final class DevToolsTest extends TestCase
         $input = new ArrayInput([
             'command' => 'standards',
             '--pretty-json' => true,
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
+        self::assertStringNotContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    #[TestWith(['changelog:show'])]
+    #[TestWith(['changelog:next-version'])]
+    public function doRunWillNotRenderLogoWhenRawOutputCommandIsRequested(string $commandName): void
+    {
+        $command = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('placeholder');
+                $this->setCode(static fn(InputInterface $input, OutputInterface $output): int => Command::SUCCESS);
+            }
+        };
+
+        $command->setName($commandName);
+
+        $this->commandLoader->has($commandName)
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get($commandName)
+            ->willReturn($command)
+            ->shouldBeCalledOnce();
+
+        $input = new ArrayInput([
+            'command' => $commandName,
         ]);
 
         $output = new BufferedOutput();
