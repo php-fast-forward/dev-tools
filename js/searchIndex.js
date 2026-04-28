@@ -2841,6 +2841,16 @@ Search.appendIndex(
             "summary": "Runs\u0020an\u0020explicit\u0020automatic\u0020update\u0020without\u0020letting\u0020failures\u0020block\u0020the\u0020requested\u0020command.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_runAutoUpdateWhenRequested"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AshouldRenderLogo\u0028\u0029",
+            "name": "shouldRenderLogo",
+            "summary": "Determines\u0020whether\u0020the\u0020startup\u0020logo\u0020should\u0020be\u0020rendered\u0020for\u0020this\u0020invocation.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_shouldRenderLogo"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AisRawOutputCommand\u0028\u0029",
+            "name": "isRawOutputCommand",
+            "summary": "Checks\u0020whether\u0020the\u0020current\u0020command\u0020is\u0020designed\u0020for\u0020raw\u0020output\u0020mode.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_isRawOutputCommand"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AisSelfUpdateCommand\u0028\u0029",
             "name": "isSelfUpdateCommand",
             "summary": "Detects\u0020whether\u0020the\u0020current\u0020invocation\u0020targets\u0020the\u0020self\u002Dupdate\u0020command.",
@@ -2855,6 +2865,11 @@ Search.appendIndex(
             "name": "LOGO",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#constant_LOGO"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ARAW_OUTPUT_COMMANDS",
+            "name": "RAW_OUTPUT_COMMANDS",
+            "summary": "Commands\u0020that\u0020require\u0020raw\u0020output\u0020and\u0020therefore\u0020must\u0020not\u0020render\u0020the\u0020logo.",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#constant_RAW_OUTPUT_COMMANDS"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024container",
             "name": "container",
