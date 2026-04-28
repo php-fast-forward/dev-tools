@@ -382,7 +382,7 @@
             <li class="success">Get commands will return empty array when no commands are registered</li>
             <li class="success">Get commands will return composer proxy commands for registered symfony commands</li>
             <li class="success">Get commands will ignore alias entries from application all registry</li>
-            <li class="success">Get commands will not expose aliases through composer plugin</li>
+            <li class="success">Get commands will preserve safe aliases through composer plugin</li>
             <li class="success">Get commands will not expose self update alias to composer</li>
             <li class="success">Get commands will not expose commands owned by composer</li>
         </ul>
@@ -702,7 +702,7 @@
             <li class="success">Get capabilities will return dev tools command provider mapping</li>
             <li class="success">Get subscribed events will return expected event mapping</li>
             <li class="success">Activate will do nothing</li>
-            <li class="success">Get reserved command names will include root scripts</li>
+            <li class="success">Get reserved command names will include composer commands and root scripts</li>
             <li class="success">Run sync command will execute dev tools sync</li>
             <li class="success">Deactivate will do nothing</li>
             <li class="success">Uninstall will do nothing</li>
