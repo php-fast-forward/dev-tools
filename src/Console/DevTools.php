@@ -139,7 +139,9 @@ final class DevTools extends Application
     #[Override]
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        $noLogo = (bool) $input->getParameterOption('--no-logo', null, true);
+        $noLogo = (bool) $input->getParameterOption('--no-logo', null, true)
+            || (bool) $input->hasParameterOption('--json', true)
+            || (bool) $input->hasParameterOption('--pretty-json', true);
 
         if (! $noLogo) {
             $output->writeln(self::LOGO);

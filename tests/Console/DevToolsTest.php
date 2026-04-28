@@ -63,6 +63,7 @@ use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -268,6 +269,96 @@ final class DevToolsTest extends TestCase
 
         $this->invokeDoRun($input, $output);
 
+        self::assertStringNotContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillNotRenderLogoWhenJsonOptionIsProvided(): void
+    {
+        $command = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('standards');
+            }
+
+            protected function configure(): void
+            {
+                $this->addOption(name: 'json', mode: InputOption::VALUE_NONE, description: 'Emit structured JSON output.');
+                $this->setCode(static fn(InputInterface $input, OutputInterface $output): int => Command::SUCCESS);
+            }
+        };
+
+        $this->commandLoader->has('standards')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('standards')
+            ->willReturn($command)
+            ->shouldBeCalledOnce();
+        $input = new ArrayInput([
+            'command' => 'standards',
+            '--json' => true,
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
+        self::assertStringNotContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillNotRenderLogoWhenPrettyJsonOptionIsProvided(): void
+    {
+        $command = new class extends Command {
+            public function __construct()
+            {
+                parent::__construct('standards');
+            }
+
+            protected function configure(): void
+            {
+                $this->addOption(name: 'pretty-json', mode: InputOption::VALUE_NONE, description: 'Emit pretty JSON output.');
+                $this->setCode(static fn(InputInterface $input, OutputInterface $output): int => Command::SUCCESS);
+            }
+        };
+
+        $this->commandLoader->has('standards')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('standards')
+            ->willReturn($command)
+            ->shouldBeCalledOnce();
+        $input = new ArrayInput([
+            'command' => 'standards',
+            '--pretty-json' => true,
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
         self::assertStringNotContainsString('_____', $output->fetch());
     }
 
