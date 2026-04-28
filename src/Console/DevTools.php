@@ -47,6 +47,8 @@ use function Safe\putenv;
  */
 final class DevTools extends Application
 {
+    private const string NO_LOGO_OPTION = 'no-logo';
+
     private const string LOGO = <<<'LOGO'
          ____             _____           _
         |  _ \  _____   _|_   _|__   ___ | |___
@@ -88,14 +90,13 @@ final class DevTools extends Application
     }
 
     /**
-     * Gets the help message for the DevTools application, including the ASCII logo.
+     * Gets the help message for the DevTools application.
      *
-     * @return string
      */
     #[Override]
     public function getHelp(): string
     {
-        return self::LOGO . "\n\n" . parent::getHelp();
+        return parent::getHelp();
     }
 
     /**
@@ -128,6 +129,12 @@ final class DevTools extends Application
             description: 'Store generated DevTools artifacts in the given directory.',
         ));
 
+        $definition->addOption(new InputOption(
+            name: self::NO_LOGO_OPTION,
+            mode: InputOption::VALUE_NONE,
+            description: 'Hide the startup ASCII logo.',
+        ));
+
         return $definition;
     }
 
@@ -142,6 +149,10 @@ final class DevTools extends Application
     #[Override]
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
+        if (! (bool) $input->getOption(self::NO_LOGO_OPTION)) {
+            $output->writeln(self::LOGO);
+        }
+
         try {
             $this->workingDirectorySwitcher->switchTo($this->getWorkingDirectoryOption($input));
             $this->configureWorkspaceDirectory($input);

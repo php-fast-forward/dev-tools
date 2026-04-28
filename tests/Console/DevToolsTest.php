@@ -62,8 +62,10 @@ use Symfony\Component\Console\Command\DumpCompletionCommand;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Output\BufferedOutput;
 
 use function Safe\putenv;
 
@@ -215,6 +217,58 @@ final class DevToolsTest extends TestCase
         self::assertTrue($definition->hasOption('workspace-dir'));
         self::assertSame('w', $definition->getOption('workspace-dir')->getShortcut());
         self::assertTrue($definition->hasOption('auto-update'));
+        self::assertTrue($definition->hasOption('no-logo'));
+        self::assertFalse($definition->getOption('no-logo')->acceptsValue());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillRenderLogoUnlessNoLogoOptionIsProvided(): void
+    {
+        $input = new ArrayInput([
+            'command' => 'list',
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldBeCalledOnce();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
+        self::assertStringContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillNotRenderLogoWhenNoLogoOptionIsSet(): void
+    {
+        $input = new ArrayInput([
+            '--no-logo' => true,
+            'command' => 'list',
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $this->invokeDoRun($input, $output);
+
+        self::assertStringNotContainsString('_____', $output->fetch());
     }
 
     /**
@@ -403,5 +457,18 @@ final class DevToolsTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod($this->devTools, 'configureWorkspaceDirectory');
         $reflectionMethod->invoke($this->devTools, $input);
+    }
+
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
+     * @return int
+     */
+    private function invokeDoRun(InputInterface $input, OutputInterface $output): int
+    {
+        $reflectionMethod = new ReflectionMethod($this->devTools, 'doRun');
+
+        return (int) $reflectionMethod->invoke($this->devTools, $input, $output);
     }
 }

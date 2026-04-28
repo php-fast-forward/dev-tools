@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Process;
 
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Process\Process;
 
 /**
@@ -31,6 +32,8 @@ use Symfony\Component\Process\Process;
  */
 final readonly class ProcessBuilder implements ProcessBuilderInterface
 {
+    private const string NO_LOGO_ARGUMENT = '--no-logo';
+
     /**
      * Creates a new immutable process builder instance.
      *
@@ -94,10 +97,60 @@ final readonly class ProcessBuilder implements ProcessBuilderInterface
      */
     public function build(string|array $command): Process
     {
+        if (\is_array($command)) {
+            $command = array_values($command);
+        }
+
         if (\is_string($command)) {
             $command = explode(' ', $command);
         }
 
+        if ($this->shouldAddLogoSuppressionArgument($command)) {
+            $command = $this->prependLogoSuppressionArgument($command);
+        }
+
         return new Process(command: [...$command, ...$this->arguments], timeout: 0);
+    }
+
+    /**
+     * @param list<string> $command
+     */
+    private function shouldAddLogoSuppressionArgument(array $command): bool
+    {
+        if (\in_array(self::NO_LOGO_ARGUMENT, $this->arguments, true)) {
+            return false;
+        }
+
+        if (0 === \count($command)) {
+            return false;
+        }
+
+        $binary = \str_replace('\\', '/', $command[0]);
+        $packageBinaryPath = \str_replace('\\', '/', DevToolsPathResolver::getBinaryPath());
+
+        return $binary === $packageBinaryPath
+            || \str_starts_with($binary, 'vendor/bin/dev-tools')
+            || \str_starts_with($binary, './vendor/bin/dev-tools')
+            || \str_starts_with($binary, 'bin/dev-tools')
+            || \str_starts_with($binary, './bin/dev-tools')
+            || \str_ends_with($binary, '/vendor/bin/dev-tools')
+            || \str_ends_with($binary, '/vendor/fast-forward/dev-tools/bin/dev-tools')
+            || \str_ends_with($binary, '/bin/dev-tools');
+    }
+
+    /**
+     * @param list<string> $command
+     *
+     * @return list<string>
+     */
+    private function prependLogoSuppressionArgument(array $command): array
+    {
+        if (0 === \count($command)) {
+            return $command;
+        }
+
+        $binary = \array_shift($command);
+
+        return [$binary, self::NO_LOGO_ARGUMENT, ...$command];
     }
 }

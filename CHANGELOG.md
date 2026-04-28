@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Hide DevTools logo in nested subprocesses by adding a new `--no-logo` global option for the top-level application and automatically attaching it to internal DevTools child processes, avoiding banner repetition in orchestrated command queues (#277)
+
 ### Added
 
 - Add a configurable DevTools generated artifact workspace through `--workspace-dir` and `FAST_FORWARD_WORKSPACE_DIR`, keeping explicit output/cache command options authoritative (#274)
