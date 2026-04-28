@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add a standalone DevTools `self-update` command plus global `--working-dir` and `--auto-update` binary options for local or global installations (#272)
+
 ## [1.23.0] - 2026-04-26
 
 ### Added

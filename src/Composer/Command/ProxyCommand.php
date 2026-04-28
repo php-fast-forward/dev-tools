@@ -31,14 +31,16 @@ final class ProxyCommand extends BaseCommand
 {
     /**
      * @param Command $command the Symfony command adapted for Composer plugin execution
+     * @param list<string>|null $aliases the optional alias list exposed to Composer
      */
     public function __construct(
         private readonly Command $command,
+        ?array $aliases = null,
     ) {
         parent::__construct($this->command->getName());
 
         $this
-            ->setAliases($this->command->getAliases())
+            ->setAliases($aliases ?? $this->command->getAliases())
             ->setDescription($this->command->getDescription())
             ->setHelp($this->command->getHelp())
             ->setDefinition(clone $this->command->getDefinition())

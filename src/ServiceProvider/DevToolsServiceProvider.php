@@ -83,6 +83,14 @@ use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
+use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
+use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
+use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
+use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
+use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
+use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Psr\Clock\SystemClock;
@@ -105,6 +113,7 @@ use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 
 use function DI\create;
+use function DI\factory;
 use function DI\get;
 
 /**
@@ -133,6 +142,12 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
                 ]),
             ProcessQueueInterface::class => get(ProcessQueue::class),
 
+            // Self-update
+            SelfUpdateRunnerInterface::class => get(ComposerSelfUpdateRunner::class),
+            VersionCheckerInterface::class => get(ComposerVersionChecker::class),
+            VersionCheckNotifierInterface::class => get(VersionCheckNotifier::class),
+            WorkingDirectorySwitcherInterface::class => get(WorkingDirectorySwitcher::class),
+
             // Filesystem
             FinderFactoryInterface::class => get(FinderFactory::class),
             FilesystemInterface::class => get(Filesystem::class),
@@ -150,10 +165,12 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             GitClientInterface::class => get(GitClient::class),
 
             // Symfony Components
-            FileLocatorInterface::class => create(FileLocator::class)->constructor([
-                WorkingProjectPathResolver::getProjectPath(),
-                DevToolsPathResolver::getPackagePath(),
-            ]),
+            FileLocatorInterface::class => factory(
+                static fn(): FileLocator => new FileLocator([
+                    WorkingProjectPathResolver::getProjectPath(),
+                    DevToolsPathResolver::getPackagePath(),
+                ])
+            ),
 
             // PSR
             LoggerInterface::class => get(OutputFormatLogger::class),

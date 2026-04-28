@@ -20,10 +20,26 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console;
 
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
+use FastForward\DevTools\Console\Command\SelfUpdateCommand;
 use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+use FastForward\DevTools\Process\ColorPreservingProcessEnvironmentConfigurator;
+use FastForward\DevTools\Process\CompositeProcessEnvironmentConfigurator;
+use FastForward\DevTools\Process\ProcessBuilder;
+use FastForward\DevTools\Process\ProcessQueue;
+use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
+use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
+use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
+use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
+use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
+use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
+use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -41,6 +57,7 @@ use Symfony\Component\Console\Command\DumpCompletionCommand;
 use Symfony\Component\Console\Command\HelpCommand;
 use Symfony\Component\Console\Command\ListCommand;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
+use Symfony\Component\Console\Input\InputInterface;
 
 #[CoversClass(DevTools::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -48,6 +65,18 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 #[UsesClass(FinderFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
+#[UsesClass(SelfUpdateCommand::class)]
+#[UsesClass(LogLevelOutputFormatter::class)]
+#[UsesClass(GithubActionOutput::class)]
+#[UsesClass(ColorPreservingProcessEnvironmentConfigurator::class)]
+#[UsesClass(CompositeProcessEnvironmentConfigurator::class)]
+#[UsesClass(ProcessBuilder::class)]
+#[UsesClass(ProcessQueue::class)]
+#[UsesClass(XdebugDisablingProcessEnvironmentConfigurator::class)]
+#[UsesClass(ComposerSelfUpdateRunner::class)]
+#[UsesClass(ComposerVersionChecker::class)]
+#[UsesClass(VersionCheckNotifier::class)]
+#[UsesClass(WorkingDirectorySwitcher::class)]
 final class DevToolsTest extends TestCase
 {
     use ProphecyTrait;
@@ -56,6 +85,26 @@ final class DevToolsTest extends TestCase
      * @var ObjectProphecy<CommandLoaderInterface>
      */
     private ObjectProphecy $commandLoader;
+
+    /**
+     * @var ObjectProphecy<WorkingDirectorySwitcherInterface>
+     */
+    private ObjectProphecy $workingDirectorySwitcher;
+
+    /**
+     * @var ObjectProphecy<VersionCheckNotifierInterface>
+     */
+    private ObjectProphecy $versionCheckNotifier;
+
+    /**
+     * @var ObjectProphecy<SelfUpdateRunnerInterface>
+     */
+    private ObjectProphecy $selfUpdateRunner;
+
+    /**
+     * @var ObjectProphecy<EnvironmentInterface>
+     */
+    private ObjectProphecy $environment;
 
     private DevTools $devTools;
 
@@ -70,7 +119,11 @@ final class DevToolsTest extends TestCase
             ->willReturn([]);
         $this->commandLoader->has(Argument::type('string'))
             ->willReturn(false);
-        $this->devTools = new DevTools($this->commandLoader->reveal());
+        $this->workingDirectorySwitcher = $this->prophesize(WorkingDirectorySwitcherInterface::class);
+        $this->versionCheckNotifier = $this->prophesize(VersionCheckNotifierInterface::class);
+        $this->selfUpdateRunner = $this->prophesize(SelfUpdateRunnerInterface::class);
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->devTools = $this->createDevTools();
     }
 
     /**
@@ -111,6 +164,19 @@ final class DevToolsTest extends TestCase
         self::assertSame('Fast Forward Dev Tools', $this->devTools->getName());
         self::assertTrue($this->devTools->has('custom'));
         self::assertSame($customCommand, $this->devTools->get('custom'));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function constructorWillRegisterGlobalRuntimeOptions(): void
+    {
+        $definition = $this->devTools->getDefinition();
+
+        self::assertTrue($definition->hasOption('working-dir'));
+        self::assertSame('d', $definition->getOption('working-dir')->getShortcut());
+        self::assertTrue($definition->hasOption('auto-update'));
     }
 
     /**
@@ -171,6 +237,48 @@ final class DevToolsTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function isSelfUpdateCommandWillUseSelfUpdateCommandAttributeNamesAndAliases(): void
+    {
+        foreach (['dev-tools:self-update', 'self-update', 'selfupdate'] as $commandName) {
+            $input = $this->prophesize(InputInterface::class);
+            $input->getFirstArgument()
+                ->willReturn($commandName);
+
+            self::assertTrue($this->invokeIsSelfUpdateCommand($input->reveal()));
+        }
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function isSelfUpdateCommandWillRejectOtherCommands(): void
+    {
+        $input = $this->prophesize(InputInterface::class);
+        $input->getFirstArgument()
+            ->willReturn('standards');
+
+        self::assertFalse($this->invokeIsSelfUpdateCommand($input->reveal()));
+    }
+
+    /**
+     * @return DevTools
+     */
+    private function createDevTools(): DevTools
+    {
+        return new DevTools(
+            $this->commandLoader->reveal(),
+            $this->workingDirectorySwitcher->reveal(),
+            $this->versionCheckNotifier->reveal(),
+            $this->selfUpdateRunner->reveal(),
+            $this->environment->reveal(),
+        );
+    }
+
+    /**
      * @param DevTools $devTools
      *
      * @return array<int, Command>
@@ -183,5 +291,17 @@ final class DevToolsTest extends TestCase
         $commands = $reflectionMethod->invoke($devTools);
 
         return $commands;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return bool
+     */
+    private function invokeIsSelfUpdateCommand(InputInterface $input): bool
+    {
+        $reflectionMethod = new ReflectionMethod($this->devTools, 'isSelfUpdateCommand');
+
+        return (bool) $reflectionMethod->invoke($this->devTools, $input);
     }
 }

@@ -21,11 +21,10 @@ namespace FastForward\DevTools\Composer;
 
 use Composer\Composer;
 use Composer\EventDispatcher\EventSubscriberInterface;
-use Composer\Script\Event;
 use Composer\IO\IOInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Plugin\Capable;
-use Composer\Plugin\PluginInterface;
+use Composer\Script\Event;
 use Composer\Script\ScriptEvents;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 
@@ -33,8 +32,10 @@ use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
  * Implements the lifecycle of the Composer dev-tools extension framework.
  * This plugin class MUST initialize and coordinate custom script registrations securely.
  */
-final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
+final class Plugin implements Capable, DevToolsPluginInterface, EventSubscriberInterface
 {
+    private ?Composer $composer = null;
+
     /**
      * Resolves the implemented Composer capabilities structure.
      *
@@ -85,6 +86,29 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
     }
 
     /**
+     * Detects whether a command name or alias is already registered in Composer's command surface.
+     *
+     * @param string|null $name the command name or alias being evaluated
+     */
+    public function isRegisteredCommand(?string $name): bool
+    {
+        return null !== $name && \in_array($name, $this->getReservedCommandNames(), true);
+    }
+
+    /**
+     * Returns command names and aliases that DevTools plugin commands MUST NOT override.
+     *
+     * @return list<string>
+     */
+    private function getReservedCommandNames(): array
+    {
+        return array_values(array_unique([
+            ...self::COMPOSER_COMMAND_NAMES,
+            ...$this->getRootScriptCommandNames(),
+        ]));
+    }
+
+    /**
      * Handles activation lifecycle events for the Composer session.
      *
      * This method MUST adhere to the standard Composer plugin activation protocol, even if no specific logic is required.
@@ -96,7 +120,7 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
      */
     public function activate(Composer $composer, IOInterface $io): void
     {
-        // No activation logic needed for this plugin
+        $this->composer = $composer;
     }
 
     /**
@@ -111,7 +135,7 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
      */
     public function deactivate(Composer $composer, IOInterface $io): void
     {
-        // No deactivation logic needed for this plugin
+        $this->composer = null;
     }
 
     /**
@@ -126,6 +150,30 @@ final class Plugin implements Capable, EventSubscriberInterface, PluginInterface
      */
     public function uninstall(Composer $composer, IOInterface $io): void
     {
-        // No uninstall logic needed for this plugin
+        $this->composer = null;
+    }
+
+    /**
+     * Returns custom Composer script command names from the active root package.
+     *
+     * @return list<string>
+     */
+    private function getRootScriptCommandNames(): array
+    {
+        if (! $this->composer instanceof Composer) {
+            return [];
+        }
+
+        $names = [];
+
+        foreach (array_keys($this->composer->getPackage()->getScripts()) as $script) {
+            if (\defined(ScriptEvents::class . '::' . str_replace('-', '_', strtoupper($script)))) {
+                continue;
+            }
+
+            $names[] = $script;
+        }
+
+        return $names;
     }
 }
