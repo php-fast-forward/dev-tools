@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\SelfUpdate;
 
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use Throwable;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -29,9 +30,11 @@ final readonly class VersionCheckNotifier implements VersionCheckNotifierInterfa
 {
     /**
      * @param VersionCheckerInterface $versionChecker the checker used to resolve latest release metadata
+     * @param EnvironmentInterface $environment the environment reader used to skip non-interactive CI checks
      */
     public function __construct(
         private VersionCheckerInterface $versionChecker,
+        private EnvironmentInterface $environment,
     ) {}
 
     /**
@@ -41,6 +44,10 @@ final readonly class VersionCheckNotifier implements VersionCheckNotifierInterfa
      */
     public function notify(OutputInterface $output): void
     {
+        if ($this->shouldSkipVersionCheck()) {
+            return;
+        }
+
         try {
             $result = $this->versionChecker->check();
         } catch (Throwable) {
@@ -56,5 +63,29 @@ final readonly class VersionCheckNotifier implements VersionCheckNotifierInterfa
             $result->getLatestVersion(),
             $result->getCurrentVersion(),
         ));
+    }
+
+    /**
+     * Returns whether DevTools SHOULD skip the best-effort version check.
+     */
+    private function shouldSkipVersionCheck(): bool
+    {
+        foreach (['FAST_FORWARD_SKIP_VERSION_CHECK', 'GITHUB_ACTIONS', 'CI'] as $name) {
+            if ($this->isTruthy($this->environment->get($name, ''))) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns whether an environment value represents an enabled flag.
+     *
+     * @param string|null $value the environment value to inspect
+     */
+    private function isTruthy(?string $value): bool
+    {
+        return \in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
     }
 }

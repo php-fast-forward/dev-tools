@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\SelfUpdate;
 
 use Prophecy\Argument;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckResult;
@@ -48,6 +49,11 @@ final class VersionCheckNotifierTest extends TestCase
      */
     private ObjectProphecy $output;
 
+    /**
+     * @var ObjectProphecy<EnvironmentInterface>
+     */
+    private ObjectProphecy $environment;
+
     private VersionCheckNotifier $notifier;
 
     /**
@@ -57,7 +63,8 @@ final class VersionCheckNotifierTest extends TestCase
     {
         $this->versionChecker = $this->prophesize(VersionCheckerInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->notifier = new VersionCheckNotifier($this->versionChecker->reveal());
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->notifier = new VersionCheckNotifier($this->versionChecker->reveal(), $this->environment->reveal());
     }
 
     /**
@@ -66,6 +73,7 @@ final class VersionCheckNotifierTest extends TestCase
     #[Test]
     public function notifyWillWriteWarningWhenDevToolsIsOutdated(): void
     {
+        $this->willRunVersionCheck();
         $this->versionChecker->check()
             ->willReturn(new VersionCheckResult('1.2.0', 'v1.3.0'));
         $this->output->writeln(
@@ -82,11 +90,61 @@ final class VersionCheckNotifierTest extends TestCase
     #[Test]
     public function notifyWillStaySilentWhenCheckFails(): void
     {
+        $this->willRunVersionCheck();
         $this->versionChecker->check()
             ->willThrow(new RuntimeException('network unavailable'));
         $this->output->writeln(Argument::any())
             ->shouldNotBeCalled();
 
         $this->notifier->notify($this->output->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function notifyWillStaySilentInCi(): void
+    {
+        $this->environment->get('FAST_FORWARD_SKIP_VERSION_CHECK', '')
+            ->willReturn('');
+        $this->environment->get('GITHUB_ACTIONS', '')
+            ->willReturn('');
+        $this->environment->get('CI', '')
+            ->willReturn('true');
+        $this->versionChecker->check()
+            ->shouldNotBeCalled();
+        $this->output->writeln(Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->notifier->notify($this->output->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function notifyWillStaySilentWhenVersionCheckIsDisabled(): void
+    {
+        $this->environment->get('FAST_FORWARD_SKIP_VERSION_CHECK', '')
+            ->willReturn('1');
+        $this->versionChecker->check()
+            ->shouldNotBeCalled();
+        $this->output->writeln(Argument::any())
+            ->shouldNotBeCalled();
+
+        $this->notifier->notify($this->output->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    private function willRunVersionCheck(): void
+    {
+        $this->environment->get('FAST_FORWARD_SKIP_VERSION_CHECK', '')
+            ->willReturn('');
+        $this->environment->get('GITHUB_ACTIONS', '')
+            ->willReturn('');
+        $this->environment->get('CI', '')
+            ->willReturn('');
     }
 }

@@ -56,3 +56,7 @@ metadata for the latest stable ``fast-forward/dev-tools`` release. If a newer
 stable version is available, DevTools prints a warning recommending
 ``dev-tools self-update``. This check is best-effort: network, Composer, or
 metadata failures are ignored so the requested command can continue normally.
+The check is skipped automatically in CI environments, including GitHub
+Actions, so freshly installed consumer workflows do not spend time querying
+release metadata. Set ``FAST_FORWARD_SKIP_VERSION_CHECK=1`` to disable the
+warning in other non-interactive contexts.
