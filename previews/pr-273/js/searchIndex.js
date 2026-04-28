@@ -556,11 +556,6 @@ Search.appendIndex(
             "summary": "Defines\u0020DevTools\u002Dspecific\u0020Composer\u0020plugin\u0020conventions.",
             "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface\u003A\u003AgetReservedCommandNames\u0028\u0029",
-            "name": "getReservedCommandNames",
-            "summary": "Returns\u0020command\u0020names\u0020and\u0020aliases\u0020that\u0020DevTools\u0020plugin\u0020commands\u0020MUST\u0020NOT\u0020override.",
-            "url": "classes/FastForward-DevTools-Composer-DevToolsPluginInterface.html#method_getReservedCommandNames"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\DevToolsPluginInterface\u003A\u003AisRegisteredCommand\u0028\u0029",
             "name": "isRegisteredCommand",
             "summary": "Detects\u0020whether\u0020a\u0020command\u0020name\u0020or\u0020alias\u0020is\u0020already\u0020registered\u0020in\u0020Composer\u0027s\u0020command\u0020surface.",
@@ -1131,15 +1126,15 @@ Search.appendIndex(
             "summary": "Handles\u0020the\u0020automated\u0020script\u0020installation.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_runSyncCommand"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003AgetReservedCommandNames\u0028\u0029",
-            "name": "getReservedCommandNames",
-            "summary": "Returns\u0020Composer\u0020command\u0020names\u0020that\u0020DevTools\u0020plugin\u0020commands\u0020MUST\u0020NOT\u0020override.",
-            "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_getReservedCommandNames"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003AisRegisteredCommand\u0028\u0029",
             "name": "isRegisteredCommand",
             "summary": "Detects\u0020whether\u0020a\u0020command\u0020name\u0020or\u0020alias\u0020is\u0020already\u0020registered\u0020in\u0020Composer\u0027s\u0020command\u0020surface.",
             "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_isRegisteredCommand"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003AgetReservedCommandNames\u0028\u0029",
+            "name": "getReservedCommandNames",
+            "summary": "Returns\u0020command\u0020names\u0020and\u0020aliases\u0020that\u0020DevTools\u0020plugin\u0020commands\u0020MUST\u0020NOT\u0020override.",
+            "url": "classes/FastForward-DevTools-Composer-Plugin.html#method_getReservedCommandNames"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Composer\\Plugin\u003A\u003Aactivate\u0028\u0029",
             "name": "activate",

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777399196">
-  <project timestamp="1777399196" name="Clover Coverage">
+<coverage generated="1777399443">
+  <project timestamp="1777399443" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -555,7 +555,7 @@
       </file>
     </package>
     <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/DevToolsPluginInterface.php">
-      <metrics loc="98" ncloc="71" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="91" ncloc="69" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <package name="FastForward\DevTools\Composer\Json">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Composer/Json/ComposerJson.php">
@@ -811,28 +811,28 @@
         <line num="83" type="stmt" count="1"/>
         <line num="84" type="stmt" count="1"/>
         <line num="85" type="stmt" count="1"/>
-        <line num="93" type="method" name="getReservedCommandNames" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="95" type="stmt" count="2"/>
-        <line num="96" type="stmt" count="2"/>
-        <line num="97" type="stmt" count="2"/>
-        <line num="98" type="stmt" count="2"/>
-        <line num="106" type="method" name="isRegisteredCommand" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="93" type="method" name="isRegisteredCommand" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="95" type="stmt" count="1"/>
+        <line num="103" type="method" name="getReservedCommandNames" visibility="private" complexity="1" crap="1" count="1"/>
+        <line num="105" type="stmt" count="1"/>
+        <line num="106" type="stmt" count="1"/>
+        <line num="107" type="stmt" count="1"/>
         <line num="108" type="stmt" count="1"/>
-        <line num="121" type="method" name="activate" visibility="public" complexity="1" crap="1" count="3"/>
-        <line num="123" type="stmt" count="3"/>
+        <line num="121" type="method" name="activate" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="123" type="stmt" count="2"/>
         <line num="136" type="method" name="deactivate" visibility="public" complexity="1" crap="1" count="1"/>
         <line num="138" type="stmt" count="1"/>
         <line num="151" type="method" name="uninstall" visibility="public" complexity="1" crap="1" count="1"/>
         <line num="153" type="stmt" count="1"/>
-        <line num="161" type="method" name="getRootScriptCommandNames" visibility="private" complexity="4" crap="4.03" count="2"/>
-        <line num="163" type="stmt" count="2"/>
+        <line num="161" type="method" name="getRootScriptCommandNames" visibility="private" complexity="4" crap="4.03" count="1"/>
+        <line num="163" type="stmt" count="1"/>
         <line num="164" type="stmt" count="0"/>
-        <line num="167" type="stmt" count="2"/>
-        <line num="169" type="stmt" count="2"/>
-        <line num="170" type="stmt" count="2"/>
+        <line num="167" type="stmt" count="1"/>
+        <line num="169" type="stmt" count="1"/>
+        <line num="170" type="stmt" count="1"/>
         <line num="171" type="stmt" count="1"/>
-        <line num="174" type="stmt" count="2"/>
-        <line num="177" type="stmt" count="2"/>
+        <line num="174" type="stmt" count="1"/>
+        <line num="177" type="stmt" count="1"/>
         <metrics loc="180" ncloc="91" classes="1" methods="9" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="27" coveredstatements="26" elements="36" coveredelements="34"/>
       </file>
     </package>
@@ -6103,6 +6103,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="149" loc="19922" ncloc="12103" classes="109" methods="499" coveredmethods="399" conditionals="0" coveredconditionals="0" statements="4735" coveredstatements="4348" elements="5234" coveredelements="4747"/>
+    <metrics files="149" loc="19915" ncloc="12101" classes="109" methods="499" coveredmethods="399" conditionals="0" coveredconditionals="0" statements="4735" coveredstatements="4348" elements="5234" coveredelements="4747"/>
   </project>
 </coverage>
