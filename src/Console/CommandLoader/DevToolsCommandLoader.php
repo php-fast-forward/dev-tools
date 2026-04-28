@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console\CommandLoader;
 
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
+use FastForward\DevTools\Reflection\ClassReflection;
 use Psr\Container\ContainerInterface;
-use ReflectionClass;
 use RuntimeException;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -81,25 +81,17 @@ final class DevToolsCommandLoader extends ContainerCommandLoader
 
         foreach ($commandsDirectory as $file) {
             $class = $namespace . $file->getBasename('.php');
-            $reflection = new ReflectionClass($class);
-            if (! $reflection->isInstantiable()) {
+            if (! ClassReflection::isInstantiableSubclassOf($class, Command::class)) {
                 continue;
             }
 
-            if (! $reflection->isSubclassOf(Command::class)) {
+            $arguments = ClassReflection::getAttributeArguments($class, AsCommand::class);
+
+            if (null === $arguments) {
                 continue;
             }
 
-            $attribute = $reflection->getAttributes(AsCommand::class)[0] ?? null;
-
-            if (null === $attribute) {
-                continue;
-            }
-
-            $arguments = $attribute->getArguments();
-            $commandName = $arguments['name'] ?? $arguments[0] ?? '';
-            $aliases = $arguments['aliases'] ?? $arguments[2] ?? [];
-            $commandNames = [$commandName, ...((array) $aliases)];
+            $commandNames = [$arguments['name'], ...((array) $arguments['aliases'])];
 
             foreach ($commandNames as $commandName) {
                 if (! \is_string($commandName)) {

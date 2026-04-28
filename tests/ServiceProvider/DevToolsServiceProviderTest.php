@@ -19,14 +19,24 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\ServiceProvider;
 
+use DI\Container;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
+use Interop\Container\ServiceProviderInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Interop\Container\ServiceProviderInterface;
+use Symfony\Component\Config\FileLocatorInterface;
+
+use function Safe\chdir;
+use function Safe\file_put_contents;
+use function Safe\getcwd;
+use function Safe\mkdir;
+use function Safe\rmdir;
+use function Safe\tempnam;
+use function Safe\unlink;
 
 #[CoversClass(DevToolsServiceProvider::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -35,12 +45,39 @@ final class DevToolsServiceProviderTest extends TestCase
 {
     private DevToolsServiceProvider $provider;
 
+    private string $originalWorkingDirectory;
+
+    private string $workspaceDirectory;
+
+    private string $workspaceResourcePath;
+
     /**
      * @return void
      */
     protected function setUp(): void
     {
         $this->provider = new DevToolsServiceProvider();
+        $this->originalWorkingDirectory = getcwd();
+        $this->workspaceDirectory = tempnam(sys_get_temp_dir(), 'dev-tools-service-provider-');
+        unlink($this->workspaceDirectory);
+        mkdir($this->workspaceDirectory);
+        $this->workspaceResourcePath = $this->workspaceDirectory . '/local-resource.txt';
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        chdir($this->originalWorkingDirectory);
+
+        if (file_exists($this->workspaceResourcePath)) {
+            unlink($this->workspaceResourcePath);
+        }
+
+        if (is_dir($this->workspaceDirectory)) {
+            rmdir($this->workspaceDirectory);
+        }
     }
 
     /**
@@ -71,5 +108,22 @@ final class DevToolsServiceProviderTest extends TestCase
 
         self::assertIsArray($factories);
         self::assertNotEmpty($factories);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function fileLocatorResolvesWorkingProjectPathWhenTheServiceIsRequested(): void
+    {
+        $container = new Container($this->provider->getFactories());
+        file_put_contents($this->workspaceResourcePath, 'fixture');
+
+        chdir($this->workspaceDirectory);
+
+        $fileLocator = $container->get(FileLocatorInterface::class);
+
+        self::assertInstanceOf(FileLocatorInterface::class, $fileLocator);
+        self::assertSame($this->workspaceResourcePath, $fileLocator->locate('local-resource.txt'));
     }
 }

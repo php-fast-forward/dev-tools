@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Command\ProxyCommand;
+use FastForward\DevTools\Composer\DevToolsPluginInterface;
 use FastForward\DevTools\Console\Command\FixtureWithoutAsCommand;
 use FastForward\DevTools\Console\DevTools;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -43,6 +44,8 @@ final class DevToolsCommandProviderTest extends TestCase
 
     private ObjectProphecy $devTools;
 
+    private ObjectProphecy $plugin;
+
     private DevToolsCommandProvider $commandProvider;
 
     /**
@@ -52,6 +55,7 @@ final class DevToolsCommandProviderTest extends TestCase
     {
         $this->container = $this->prophesize(ContainerInterface::class);
         $this->devTools = $this->prophesize(DevTools::class);
+        $this->plugin = $this->prophesize(DevToolsPluginInterface::class);
 
         $this->container->get(DevTools::class)
             ->willReturn($this->devTools->reveal())
@@ -60,7 +64,30 @@ final class DevToolsCommandProviderTest extends TestCase
         $this->devTools->all()
             ->willReturn([])->shouldBeCalledOnce();
 
-        $this->commandProvider = new DevToolsCommandProvider();
+        $this->plugin->isRegisteredCommand(null)
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('agents')
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('reports:tests')
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('tests')
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('phpunit')
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('dev-tools:standards')
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('standards')
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('dev-tools:self-update')
+            ->willReturn(false);
+        $this->plugin->isRegisteredCommand('self-update')
+            ->willReturn(true);
+        $this->plugin->isRegisteredCommand('install')
+            ->willReturn(true);
+
+        $this->commandProvider = new DevToolsCommandProvider([
+            'plugin' => $this->plugin->reveal(),
+        ]);
 
         $property = new ReflectionProperty(DevTools::class, 'container');
         $property->setValue(null, $this->container->reveal());
@@ -137,7 +164,7 @@ final class DevToolsCommandProviderTest extends TestCase
      * @return void
      */
     #[Test]
-    public function getCommandsWillPreserveAliasDefinitionsInProxyCommand(): void
+    public function getCommandsWillPreserveSafeAliasesThroughComposerPlugin(): void
     {
         $symfonyCommand = new FixtureWithoutAsCommand('dev-tools:standards');
         $symfonyCommand->setAliases(['standards']);
@@ -157,5 +184,52 @@ final class DevToolsCommandProviderTest extends TestCase
         self::assertInstanceOf(ProxyCommand::class, $proxyCommand);
         self::assertSame('dev-tools:standards', $proxyCommand->getName());
         self::assertSame(['standards'], $proxyCommand->getAliases());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommandsWillNotExposeSelfUpdateAliasToComposer(): void
+    {
+        $symfonyCommand = new FixtureWithoutAsCommand('dev-tools:self-update');
+        $symfonyCommand->setAliases(['self-update']);
+        $symfonyCommand->setDescription('Updates DevTools.');
+        $symfonyCommand->setHelp('');
+        $symfonyCommand->setHidden(false);
+
+        $this->devTools->all()
+            ->willReturn([
+                'dev-tools:self-update' => $symfonyCommand,
+                'self-update' => $symfonyCommand,
+            ])
+            ->shouldBeCalledOnce();
+
+        $proxyCommand = array_values($this->commandProvider->getCommands())[0];
+
+        self::assertInstanceOf(ProxyCommand::class, $proxyCommand);
+        self::assertSame('dev-tools:self-update', $proxyCommand->getName());
+        self::assertSame([], $proxyCommand->getAliases());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function getCommandsWillNotExposeCommandsOwnedByComposer(): void
+    {
+        $symfonyCommand = new FixtureWithoutAsCommand('install');
+        $symfonyCommand->setAliases([]);
+        $symfonyCommand->setDescription('Conflicting command.');
+        $symfonyCommand->setHelp('');
+        $symfonyCommand->setHidden(false);
+
+        $this->devTools->all()
+            ->willReturn([
+                'install' => $symfonyCommand,
+            ])
+            ->shouldBeCalledOnce();
+
+        self::assertSame([], $this->commandProvider->getCommands());
     }
 }

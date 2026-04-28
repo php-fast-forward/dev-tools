@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Command\SyncCommand;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
+use FastForward\DevTools\Reflection\ClassReflection;
 use RuntimeException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -39,6 +40,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 
 #[CoversClass(DevToolsCommandLoader::class)]
+#[UsesClass(ClassReflection::class)]
 #[UsesClass(AgentsCommand::class)]
 #[UsesClass(SyncCommand::class)]
 final class DevToolsCommandLoaderTest extends TestCase

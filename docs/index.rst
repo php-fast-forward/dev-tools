@@ -21,7 +21,7 @@ Documentation
 
    .. container:: col-lg-5 text-center
 
-      .. image:: _static/mascot.png
+      .. image:: _static/mascot-banner.png
          :alt: Fast Forward DevTools mascot
          :class: img-fluid w-100 rounded-4 shadow-sm border border-light-subtle bg-body-tertiary p-2
 

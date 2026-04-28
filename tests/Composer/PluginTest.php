@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Composer;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
+use Composer\Package\RootPackageInterface;
 use Composer\Plugin\Capability\CommandProvider;
 use Composer\Script\Event as ScriptEvent;
 use Composer\Util\Loop;
@@ -57,6 +58,11 @@ final class PluginTest extends TestCase
     private ObjectProphecy $io;
 
     /**
+     * @var ObjectProphecy<RootPackageInterface>
+     */
+    private ObjectProphecy $rootPackage;
+
+    /**
      * @return void
      */
     private string $tempComposerFile;
@@ -71,6 +77,11 @@ final class PluginTest extends TestCase
         $this->plugin = new Plugin();
         $this->composer = $this->prophesize(Composer::class);
         $this->io = $this->prophesize(IOInterface::class);
+        $this->rootPackage = $this->prophesize(RootPackageInterface::class);
+        $this->composer->getPackage()
+            ->willReturn($this->rootPackage->reveal());
+        $this->rootPackage->getScripts()
+            ->willReturn([]);
 
         $this->originalComposerEnv = (string) getenv('COMPOSER');
         $this->tempComposerFile = tempnam(sys_get_temp_dir(), 'composer_test');
@@ -135,6 +146,29 @@ final class PluginTest extends TestCase
     public function activateWillDoNothing(): void
     {
         self::assertNull($this->plugin->activate($this->composer->reveal(), $this->io->reveal()));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function isRegisteredCommandWillDetectReservedCommandNames(): void
+    {
+        $this->rootPackage->getScripts()
+            ->willReturn([
+                'custom-script' => [],
+                'post-install-cmd' => [],
+            ]);
+        $this->plugin->activate($this->composer->reveal(), $this->io->reveal());
+
+        self::assertTrue($this->plugin->isRegisteredCommand('install'));
+        self::assertTrue($this->plugin->isRegisteredCommand('i'));
+        self::assertTrue($this->plugin->isRegisteredCommand('self-update'));
+        self::assertTrue($this->plugin->isRegisteredCommand('selfupdate'));
+        self::assertTrue($this->plugin->isRegisteredCommand('custom-script'));
+        self::assertFalse($this->plugin->isRegisteredCommand('post-install-cmd'));
+        self::assertFalse($this->plugin->isRegisteredCommand('code-style'));
+        self::assertFalse($this->plugin->isRegisteredCommand(null));
     }
 
     /**

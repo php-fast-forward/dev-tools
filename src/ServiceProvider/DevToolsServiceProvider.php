@@ -45,6 +45,8 @@ use FastForward\DevTools\Console\Output\OutputCapabilityDetector;
 use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
 use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
@@ -83,6 +85,16 @@ use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
+use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
+use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateScopeResolver;
+use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
+use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
+use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
+use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
+use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
+use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Psr\Clock\SystemClock;
@@ -105,6 +117,7 @@ use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
 
 use function DI\create;
+use function DI\factory;
 use function DI\get;
 
 /**
@@ -123,6 +136,7 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
         return [
             // Process
             EnvironmentInterface::class => get(Environment::class),
+            RuntimeEnvironmentInterface::class => get(RuntimeEnvironment::class),
             ExtensionInterface::class => get(Extension::class),
             OutputCapabilityDetectorInterface::class => get(OutputCapabilityDetector::class),
             ProcessBuilderInterface::class => get(ProcessBuilder::class),
@@ -132,6 +146,13 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
                     get(XdebugDisablingProcessEnvironmentConfigurator::class),
                 ]),
             ProcessQueueInterface::class => get(ProcessQueue::class),
+
+            // Self-update
+            SelfUpdateRunnerInterface::class => get(ComposerSelfUpdateRunner::class),
+            SelfUpdateScopeResolverInterface::class => get(ComposerSelfUpdateScopeResolver::class),
+            VersionCheckerInterface::class => get(ComposerVersionChecker::class),
+            VersionCheckNotifierInterface::class => get(VersionCheckNotifier::class),
+            WorkingDirectorySwitcherInterface::class => get(WorkingDirectorySwitcher::class),
 
             // Filesystem
             FinderFactoryInterface::class => get(FinderFactory::class),
@@ -150,10 +171,12 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
             GitClientInterface::class => get(GitClient::class),
 
             // Symfony Components
-            FileLocatorInterface::class => create(FileLocator::class)->constructor([
-                WorkingProjectPathResolver::getProjectPath(),
-                DevToolsPathResolver::getPackagePath(),
-            ]),
+            FileLocatorInterface::class => factory(
+                static fn(): FileLocator => new FileLocator([
+                    WorkingProjectPathResolver::getProjectPath(),
+                    DevToolsPathResolver::getPackagePath(),
+                ])
+            ),
 
             // PSR
             LoggerInterface::class => get(OutputFormatLogger::class),
@@ -169,7 +192,7 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),
             GithubActionOutput::class => create(GithubActionOutput::class)->constructor(
                 get(ConsoleOutputInterface::class),
-                get(EnvironmentInterface::class)
+                get(RuntimeEnvironmentInterface::class)
             ),
             ContextProcessorInterface::class => create(CompositeContextProcessor::class)->constructor([
                 get(CommandInputProcessor::class),

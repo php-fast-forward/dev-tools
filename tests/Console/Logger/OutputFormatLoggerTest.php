@@ -27,7 +27,7 @@ use FastForward\DevTools\Console\Logger\Processor\CommandInputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
 use FastForward\DevTools\Console\Logger\Processor\CompositeContextProcessor;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
-use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -59,7 +59,7 @@ final class OutputFormatLoggerTest extends TestCase
     private ObjectProphecy $clock;
 
     /**
-     * @var ObjectProphecy<EnvironmentInterface>
+     * @var ObjectProphecy<RuntimeEnvironmentInterface>
      */
     private ObjectProphecy $environment;
 
@@ -83,9 +83,9 @@ final class OutputFormatLoggerTest extends TestCase
         $this->output = $this->prophesize(ConsoleOutputInterface::class);
         $this->errorOutput = $this->prophesize(OutputInterface::class);
         $this->clock = $this->prophesize(ClockInterface::class);
-        $this->environment = $this->prophesize(EnvironmentInterface::class);
-        $this->environment->get(Argument::type('string'), Argument::cetera())
-            ->willReturn(null);
+        $this->environment = $this->prophesize(RuntimeEnvironmentInterface::class);
+        $this->environment->isGithubActions()
+            ->willReturn(false);
 
         $this->output->getErrorOutput()
             ->willReturn($this->errorOutput->reveal());

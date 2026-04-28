@@ -20,6 +20,7 @@ Detailed documentation for each dev-tools command.
    agents
    skills
    sync
+   self-update
    funding
    codeowners
    gitignore
