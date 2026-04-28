@@ -28,6 +28,7 @@ use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ColorPreservingProcessEnvironmentConfigurator;
 use FastForward\DevTools\Process\CompositeProcessEnvironmentConfigurator;
@@ -64,8 +65,11 @@ use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function Safe\putenv;
+
 #[CoversClass(DevTools::class)]
 #[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(DevToolsCommandLoader::class)]
 #[UsesClass(FinderFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
@@ -121,6 +125,8 @@ final class DevToolsTest extends TestCase
 
     private DevTools $devTools;
 
+    private string|false $originalWorkspaceDirectoryEnv;
+
     /**
      * @return void
      */
@@ -137,7 +143,23 @@ final class DevToolsTest extends TestCase
         $this->selfUpdateRunner = $this->prophesize(SelfUpdateRunnerInterface::class);
         $this->selfUpdateScopeResolver = $this->prophesize(SelfUpdateScopeResolverInterface::class);
         $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->originalWorkspaceDirectoryEnv = getenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
         $this->devTools = $this->createDevTools();
+    }
+
+    /**
+     * @return void
+     */
+    #[Override]
+    protected function tearDown(): void
+    {
+        if (false === $this->originalWorkspaceDirectoryEnv) {
+            putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
+
+            return;
+        }
+
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=' . $this->originalWorkspaceDirectoryEnv);
     }
 
     /**
@@ -190,6 +212,8 @@ final class DevToolsTest extends TestCase
 
         self::assertTrue($definition->hasOption('working-dir'));
         self::assertSame('d', $definition->getOption('working-dir')->getShortcut());
+        self::assertTrue($definition->hasOption('workspace-dir'));
+        self::assertSame('w', $definition->getOption('workspace-dir')->getShortcut());
         self::assertTrue($definition->hasOption('auto-update'));
     }
 
@@ -302,6 +326,21 @@ final class DevToolsTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function configureWorkspaceDirectoryWillExposeWorkspaceDirectoryToManagedWorkspace(): void
+    {
+        $input = $this->prophesize(InputInterface::class);
+        $input->getParameterOption('--workspace-dir', null, true)
+            ->willReturn('.artifacts');
+
+        $this->invokeConfigureWorkspaceDirectory($input->reveal());
+
+        self::assertSame('.artifacts', ManagedWorkspace::getWorkspaceRoot());
+    }
+
+    /**
      * @return DevTools
      */
     private function createDevTools(): DevTools
@@ -353,5 +392,16 @@ final class DevToolsTest extends TestCase
     {
         $reflectionMethod = new ReflectionMethod($this->devTools, 'runAutoUpdateWhenRequested');
         $reflectionMethod->invoke($this->devTools, $input, $output);
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return void
+     */
+    private function invokeConfigureWorkspaceDirectory(InputInterface $input): void
+    {
+        $reflectionMethod = new ReflectionMethod($this->devTools, 'configureWorkspaceDirectory');
+        $reflectionMethod->invoke($this->devTools, $input);
     }
 }

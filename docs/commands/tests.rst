@@ -39,7 +39,8 @@ Options
    Path to the bootstrap file. Default: ``./vendor/autoload.php``.
 
 ``--cache-dir`` (optional)
-   Path to the PHPUnit cache directory. Default: ``.dev-tools/cache/phpunit``.
+   Path to the PHPUnit cache directory. Default: selected workspace cache
+   directory, usually ``.dev-tools/cache/phpunit``.
 
 ``--cache``
    Force PHPUnit result caching on for this run.

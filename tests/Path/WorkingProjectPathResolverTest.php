@@ -32,6 +32,7 @@ use function Safe\unlink;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
 use function Safe\mkdir;
+use function Safe\putenv;
 use function Safe\realpath;
 use function uniqid;
 
@@ -39,6 +40,14 @@ use function uniqid;
 #[UsesClass(ManagedWorkspace::class)]
 final class WorkingProjectPathResolverTest extends TestCase
 {
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
+    }
+
     /**
      * @return void
      */
@@ -58,6 +67,33 @@ final class WorkingProjectPathResolverTest extends TestCase
                 'repo/*/vendor/*',
                 'repo/**/vendor',
                 'repo/**/vendor/*',
+            ],
+            WorkingProjectPathResolver::getToolingExcludedDirectories('repo')
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillIncludeCustomRelativeWorkspaceInToolingSkipPatterns(): void
+    {
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
+
+        self::assertSame(
+            [
+                'repo/.dev-tools',
+                'repo/backup',
+                'repo/cache',
+                'repo/public',
+                'repo/resources',
+                'repo/tmp',
+                'repo/vendor',
+                'repo/*/vendor',
+                'repo/*/vendor/*',
+                'repo/**/vendor',
+                'repo/**/vendor/*',
+                'repo/.artifacts',
             ],
             WorkingProjectPathResolver::getToolingExcludedDirectories('repo')
         );
@@ -138,6 +174,32 @@ final class WorkingProjectPathResolverTest extends TestCase
                     realpath($fixtureDirectory) . '/src/Example.php',
                     realpath($fixtureDirectory) . '/tests/Fixtures/Example.php',
                 ],
+                WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory))
+            );
+        } finally {
+            self::cleanupFixtureDirectory($fixtureDirectory);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillIgnoreCustomWorkspaceWhenResolvingToolingSourcePaths(): void
+    {
+        $fixtureDirectory = \dirname(__DIR__, 2) . '/backup/dev-tools-path-resolver-' . uniqid();
+
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
+
+        mkdir($fixtureDirectory . '/src', recursive: true);
+        mkdir($fixtureDirectory . '/.artifacts/cache', recursive: true);
+
+        file_put_contents($fixtureDirectory . '/src/Example.php', '<?php');
+        file_put_contents($fixtureDirectory . '/.artifacts/cache/Cached.php', '<?php');
+
+        try {
+            self::assertSame(
+                [realpath($fixtureDirectory) . '/src/Example.php'],
                 WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory))
             );
         } finally {

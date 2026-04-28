@@ -40,7 +40,8 @@ create them on day one.
 Generated and Cache Directories
 -------------------------------
 
-- ``.dev-tools/`` contains generated documentation and report output.
+- ``.dev-tools/`` contains generated documentation and report output by
+  default.
 - ``.dev-tools/coverage/`` contains HTML coverage, Testdox, Clover, and raw
   coverage data.
 - ``.dev-tools/metrics/`` contains PhpMetrics HTML output plus the generated
@@ -55,6 +56,14 @@ Generated and Cache Directories
   ``.dev-tools/cache/rector``, and
   ``.dev-tools/cache/php-cs-fixer/.php-cs-fixer.cache`` store repository-local
   tool caches.
+
+The standalone binary accepts ``--workspace-dir`` to replace the generated
+artifact root used by those defaults. Composer executions can set
+``FAST_FORWARD_WORKSPACE_DIR`` for the same behavior. ``--working-dir`` still
+selects the project root, while ``--workspace-dir`` selects where generated
+artifacts and caches are written. Explicit command options such as
+``--target``, ``--coverage``, ``--metrics``, and ``--cache-dir`` override the
+workspace default.
 
 Local Versus Packaged Files
 ---------------------------

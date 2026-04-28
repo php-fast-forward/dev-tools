@@ -10,19 +10,25 @@ What the Command Runs
 
 ``reports`` executes the following steps:
 
-1. ``docs --target .dev-tools``
-2. ``tests --coverage .dev-tools/coverage --coverage-summary``
-3. ``metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml``
+1. ``docs`` with the selected workspace target
+2. ``tests --coverage`` with the selected workspace coverage target
+3. ``metrics --target`` with the selected workspace metrics target and JUnit
+   input from the selected workspace coverage directory
+
+With the default workspace, those steps resolve to ``docs --target .dev-tools``,
+``tests --coverage .dev-tools/coverage --coverage-summary``, and
+``metrics --target .dev-tools/metrics --junit .dev-tools/coverage/junit.xml``.
 
 Outputs
 -------
 
 After a successful run you should expect:
 
-- the documentation site rooted at ``.dev-tools/``;
+- the documentation site rooted at the selected workspace, usually
+  ``.dev-tools/``;
 - guide pages generated from the local ``docs/`` source;
-- coverage reports inside ``.dev-tools/coverage/``;
-- PhpMetrics output inside ``.dev-tools/metrics/``;
+- coverage reports inside the selected workspace ``coverage`` directory;
+- PhpMetrics output inside the selected workspace ``metrics`` directory;
 - ``.dev-tools/coverage/testdox.html`` and ``.dev-tools/coverage/clover.xml`` for
   human and CI consumption;
 - ``.dev-tools/metrics/report.json`` and ``.dev-tools/metrics/report-summary.json`` for

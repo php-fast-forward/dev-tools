@@ -28,7 +28,8 @@ Options
 
 ``--target, -t`` (optional)
    Path to the output directory for the generated HTML documentation.
-   Default: ``.dev-tools``.
+   Default: selected workspace directory, ``.dev-tools`` unless
+   ``--workspace-dir`` or ``FAST_FORWARD_WORKSPACE_DIR`` is configured.
 
 ``--source, -s`` (optional)
    Path to the source directory for the guide documentation.
@@ -40,7 +41,8 @@ Options
 
 ``--cache-dir`` (optional)
    Path to the cache directory for phpDocumentor.
-   Default: ``.dev-tools/cache/phpdoc``.
+   Default: selected workspace cache directory, usually
+   ``.dev-tools/cache/phpdoc``.
 
 ``--cache``
    Force phpDocumentor caching on for this run.

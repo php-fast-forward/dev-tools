@@ -37,7 +37,8 @@ Options
    Automatically fix PHPDoc issues. Without this option, runs in dry-run mode.
 
 ``--cache-dir`` (optional)
-   Path to the cache directory for PHP-CS-Fixer. Default: ``.dev-tools/cache/php-cs-fixer``.
+   Path to the cache directory for PHP-CS-Fixer. Default: selected workspace
+   cache directory, usually ``.dev-tools/cache/php-cs-fixer``.
 
 ``--cache``
    Force PHP-CS-Fixer caching on for this run.

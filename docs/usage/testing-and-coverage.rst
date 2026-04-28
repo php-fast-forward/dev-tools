@@ -15,7 +15,8 @@ When you run ``tests``, DevTools:
 - keeps PHPUnit result caching enabled by default;
 - treats ``--cache`` as an explicit force-on flag and ``--no-cache`` as an
   explicit force-off flag for the current run;
-- uses ``.dev-tools/cache/phpunit`` only when caching stays enabled;
+- uses the selected workspace ``cache/phpunit`` directory only when caching
+  stays enabled;
 - can generate HTML coverage, Testdox, Clover, and raw PHP coverage output
   when ``--coverage`` is provided.
 

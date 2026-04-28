@@ -26,12 +26,20 @@ options before the command name:
 .. code-block:: bash
 
    vendor/bin/dev-tools --working-dir=/path/to/project tests
+   vendor/bin/dev-tools --workspace-dir=.artifacts reports
    vendor/bin/dev-tools --auto-update tests
 
 ``--working-dir`` (or ``-d``) switches the process directory before resolving
 paths, managed files, or command defaults. This lets a globally installed
 binary operate on another project without first changing shell directories.
 Composer executions can use Composer's own ``--working-dir``/``-d`` option.
+
+``--workspace-dir`` (or ``-w``) changes where generated DevTools artifacts and
+caches are written when command-specific paths are omitted. It does not change
+the project root selected by ``--working-dir``. Composer plugin executions can use
+``FAST_FORWARD_WORKSPACE_DIR=.artifacts`` to apply the same workspace policy.
+Explicit command options such as ``--target``, ``--coverage``, ``--metrics``,
+and ``--cache-dir`` continue to take precedence over the workspace default.
 
 ``--auto-update`` runs the self-update flow before the requested command. The
 same behavior MAY be enabled with ``FAST_FORWARD_AUTO_UPDATE=1``. When the

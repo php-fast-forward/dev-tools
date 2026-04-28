@@ -33,12 +33,15 @@ Options
    Comma-separated directories that should be excluded from analysis.
 
    Default:
-   ``vendor,tmp,cache,spec,build,.dev-tools,backup,resources``.
+   ``vendor,tmp,cache,spec,build,.dev-tools,backup,resources`` plus a custom
+   relative workspace directory when ``--workspace-dir`` or
+   ``FAST_FORWARD_WORKSPACE_DIR`` selects one.
 
 ``--target=<directory>``
    Output directory for the generated metrics reports.
 
-   Default: ``.dev-tools/metrics``.
+   Default: selected workspace ``metrics`` directory, usually
+   ``.dev-tools/metrics``.
 
    The command writes:
 

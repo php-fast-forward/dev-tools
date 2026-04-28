@@ -39,6 +39,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+use function Safe\putenv;
+
 #[CoversClass(MetricsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesTrait(LogsCommandResults::class)]
@@ -98,9 +100,6 @@ final class MetricsCommandTest extends TestCase
             && str_starts_with((string) $command[1], '-derror_reporting=')
             && '-ddefault_socket_timeout=1' === $command[2]
             && 'vendor/bin/phpmetrics' === $command[3]))->willReturn($this->process->reveal());
-        $this->processQueue->add($this->process->reveal(), Argument::cetera())
-            ->shouldBeCalled();
-
         $this->command = new MetricsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
@@ -111,9 +110,18 @@ final class MetricsCommandTest extends TestCase
     /**
      * @return void
      */
+    protected function tearDown(): void
+    {
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
+    }
+
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
+        $this->expectProcessQueued();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::SUCCESS)
             ->shouldBeCalled();
@@ -137,6 +145,7 @@ final class MetricsCommandTest extends TestCase
     #[Test]
     public function executeWillReturnFailureWhenProcessQueueFails(): void
     {
+        $this->expectProcessQueued();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::FAILURE)
             ->shouldBeCalled();
@@ -159,6 +168,7 @@ final class MetricsCommandTest extends TestCase
     #[Test]
     public function executeWillRunPhpMetricsInQuietModeWhenJsonIsRequested(): void
     {
+        $this->expectProcessQueued();
         $this->input->getOption('json')
             ->willReturn(true);
         $this->input->getOption('pretty-json')
@@ -179,6 +189,7 @@ final class MetricsCommandTest extends TestCase
     #[Test]
     public function executeWillNotRunPhpMetricsInQuietModeWhenProgressIsRequested(): void
     {
+        $this->expectProcessQueued();
         $this->input->getOption('progress')
             ->willReturn(true);
         $this->processBuilder->withArgument('--quiet')
@@ -191,11 +202,42 @@ final class MetricsCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function configureWillExcludeCustomRelativeWorkspaceByDefault(): void
+    {
+        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
+
+        $command = new MetricsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->logger->reveal(),
+        );
+
+        self::assertSame(
+            'vendor,tmp,cache,spec,build,.dev-tools,backup,resources,.artifacts',
+            $command->getDefinition()
+                ->getOption('exclude')
+                ->getDefault()
+        );
+    }
+
+    /**
      * @return int
      */
     private function executeCommand(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))
             ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    private function expectProcessQueued(): void
+    {
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalled();
     }
 }

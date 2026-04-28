@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Add a configurable DevTools generated artifact workspace through `--workspace-dir` and `FAST_FORWARD_WORKSPACE_DIR`, keeping explicit output/cache command options authoritative (#274)
 - Add a standalone DevTools `self-update` command plus global `--working-dir` and `--auto-update` binary options for local or global installations (#272)
 
 ## [1.23.0] - 2026-04-26

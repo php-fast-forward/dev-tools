@@ -27,7 +27,8 @@ Options
 
 ``--cache-dir`` (optional)
    Path to the cache directory for phpDocumentor.
-   Default: ``.dev-tools/cache/phpdoc``.
+   Default: selected workspace cache directory, usually
+   ``.dev-tools/cache/phpdoc``.
 
 ``--cache``
    Force phpDocumentor caching on for this run.

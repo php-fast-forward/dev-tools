@@ -59,6 +59,9 @@ composer dev-tools:fix
 # Run the standalone binary from another project directory
 vendor/bin/dev-tools --working-dir=/path/to/project tests
 
+# Store generated reports and caches outside the default .dev-tools workspace
+vendor/bin/dev-tools --workspace-dir=.artifacts reports
+
 # Update the installed DevTools package
 vendor/bin/dev-tools self-update
 ```
@@ -124,6 +127,7 @@ composer wiki
 # Generate documentation frontpage and related reports
 composer reports
 composer reports --target=.dev-tools --coverage=.dev-tools/coverage
+FAST_FORWARD_WORKSPACE_DIR=.artifacts composer reports
 
 # Synchronize packaged agent skills into .agents/skills
 composer skills
@@ -295,6 +299,13 @@ skills they depend on.
 | `composer gitattributes` | Manages export-ignore rules in `.gitattributes`. |
 | `composer dev-tools:sync` | Updates scripts, CODEOWNERS, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, packaged skills, and packaged agents. |
 | `vendor/bin/dev-tools self-update` / `composer dev-tools:self-update` | Updates the local DevTools package, or the Composer global installation when the active binary is globally installed. |
+
+`--working-dir`/`-d` changes the project root used by the standalone binary.
+`--workspace-dir`/`-w` changes where generated DevTools artifacts and caches are
+written when command-specific paths are omitted. Composer executions can use
+`FAST_FORWARD_WORKSPACE_DIR=.artifacts composer reports` for the same workspace
+policy, while explicit options such as `--target`, `--coverage`, `--metrics`,
+and `--cache-dir` continue to take precedence.
 
 ## 🔌 Integration
 
