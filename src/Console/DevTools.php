@@ -47,8 +47,6 @@ use function Safe\putenv;
  */
 final class DevTools extends Application
 {
-    private const string NO_LOGO_OPTION = 'no-logo';
-
     private const string LOGO = <<<'LOGO'
          ____             _____           _
         |  _ \  _____   _|_   _|__   ___ | |___
@@ -56,6 +54,8 @@ final class DevTools extends Application
         | |_| |  __/\ V /  | | (_) | (_) | \__ \
         |____/ \___| \_/   |_|\___/ \___/|_|___/
         LOGO;
+
+    private const string NO_LOGO_OPTION = 'no-logo';
 
     /**
      * @var ContainerInterface holds the static container instance for global access within the DevTools context
@@ -90,16 +90,6 @@ final class DevTools extends Application
     }
 
     /**
-     * Gets the help message for the DevTools application.
-     *
-     */
-    #[Override]
-    public function getHelp(): string
-    {
-        return parent::getHelp();
-    }
-
-    /**
      * Returns the application-level input definition with DevTools runtime options.
      *
      * @return InputDefinition the global application input definition
@@ -130,7 +120,7 @@ final class DevTools extends Application
         ));
 
         $definition->addOption(new InputOption(
-            name: self::NO_LOGO_OPTION,
+            name: 'no-logo',
             mode: InputOption::VALUE_NONE,
             description: 'Hide the startup ASCII logo.',
         ));
@@ -149,7 +139,9 @@ final class DevTools extends Application
     #[Override]
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        if (! (bool) $input->getOption(self::NO_LOGO_OPTION)) {
+        $noLogo = (bool) $input->getParameterOption('--no-logo', null, true);
+
+        if (! $noLogo) {
             $output->writeln(self::LOGO);
         }
 
@@ -162,7 +154,7 @@ final class DevTools extends Application
             return Command::FAILURE;
         }
 
-        if (! $this->isSelfUpdateCommand($input)) {
+        if (! $noLogo && ! $this->isSelfUpdateCommand($input)) {
             $this->runAutoUpdateWhenRequested($input, $output);
             $this->versionCheckNotifier->notify($output);
         }

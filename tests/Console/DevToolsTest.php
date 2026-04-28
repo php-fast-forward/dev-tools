@@ -218,7 +218,7 @@ final class DevToolsTest extends TestCase
         self::assertSame('w', $definition->getOption('workspace-dir')->getShortcut());
         self::assertTrue($definition->hasOption('auto-update'));
         self::assertTrue($definition->hasOption('no-logo'));
-        self::assertFalse($definition->getOption('no-logo')->acceptsValue());
+        self::assertFalse($definition->getOption('no-logo')->acceptValue());
     }
 
     /**

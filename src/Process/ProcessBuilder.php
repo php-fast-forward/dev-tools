@@ -121,21 +121,14 @@ final readonly class ProcessBuilder implements ProcessBuilderInterface
             return false;
         }
 
-        if (0 === \count($command)) {
+        if ([] === $command) {
             return false;
         }
 
-        $binary = \str_replace('\\', '/', $command[0]);
-        $packageBinaryPath = \str_replace('\\', '/', DevToolsPathResolver::getBinaryPath());
+        $binary = str_replace('\\', '/', $command[0]);
+        $packageBinaryPath = str_replace('\\', '/', DevToolsPathResolver::getBinaryPath());
 
-        return $binary === $packageBinaryPath
-            || \str_starts_with($binary, 'vendor/bin/dev-tools')
-            || \str_starts_with($binary, './vendor/bin/dev-tools')
-            || \str_starts_with($binary, 'bin/dev-tools')
-            || \str_starts_with($binary, './bin/dev-tools')
-            || \str_ends_with($binary, '/vendor/bin/dev-tools')
-            || \str_ends_with($binary, '/vendor/fast-forward/dev-tools/bin/dev-tools')
-            || \str_ends_with($binary, '/bin/dev-tools');
+        return $binary === $packageBinaryPath;
     }
 
     /**
@@ -145,11 +138,11 @@ final readonly class ProcessBuilder implements ProcessBuilderInterface
      */
     private function prependLogoSuppressionArgument(array $command): array
     {
-        if (0 === \count($command)) {
+        if ([] === $command) {
             return $command;
         }
 
-        $binary = \array_shift($command);
+        $binary = array_shift($command);
 
         return [$binary, self::NO_LOGO_ARGUMENT, ...$command];
     }
