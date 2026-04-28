@@ -366,6 +366,52 @@ final class DevToolsTest extends TestCase
      * @return void
      */
     #[Test]
+    public function doRunWillNotRenderLogoForRawChangelogCommands(): void
+    {
+        foreach (['changelog:next-version', 'changelog:show'] as $commandName) {
+            $this->commandLoader->has($commandName)
+                ->willReturn(true)
+                ->shouldBeCalledOnce();
+            $this->commandLoader->get($commandName)
+                ->willReturn(
+                    new class($commandName) extends Command {
+                        public function __construct(string $name)
+                        {
+                            parent::__construct($name);
+                        }
+
+                        protected function execute(InputInterface $input, OutputInterface $output): int
+                        {
+                            return Command::SUCCESS;
+                        }
+                    },
+                )
+                ->shouldBeCalledOnce();
+
+            $input = new ArrayInput([
+                'command' => $commandName,
+            ]);
+
+            $output = new BufferedOutput();
+
+            $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+                ->willReturn('');
+            $this->workingDirectorySwitcher->switchTo(null)
+                ->shouldBeCalledOnce();
+            $this->versionCheckNotifier->notify($output)
+                ->shouldNotBeCalled();
+
+            $result = $this->invokeDoRun($input, $output);
+
+            self::assertSame(Command::SUCCESS, $result);
+            self::assertStringNotContainsString('_____', $output->fetch());
+        }
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function allWillReturnLoaderCommandsWithPreservedKeys(): void
     {
         $commands = [

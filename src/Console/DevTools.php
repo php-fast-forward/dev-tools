@@ -142,6 +142,7 @@ final class DevTools extends Application
         $noLogo = (bool) $input->getParameterOption('--no-logo', null, true)
             || (bool) $input->hasParameterOption('--json', true)
             || (bool) $input->hasParameterOption('--pretty-json', true);
+        $noLogo = $noLogo || $this->isRawOutputCommand($input);
 
         if (! $noLogo) {
             $output->writeln(self::LOGO);
@@ -251,6 +252,19 @@ final class DevTools extends Application
     private function isSelfUpdateCommand(InputInterface $input): bool
     {
         return \in_array($input->getFirstArgument(), SelfUpdateCommand::getCommandNames(), true);
+    }
+
+    /**
+     * Identifies commands that must keep CLI output unprefixed by logos.
+     *
+     * @param InputInterface $input
+     */
+    private function isRawOutputCommand(InputInterface $input): bool
+    {
+        return \in_array((string) $input->getFirstArgument(), [
+            'changelog:next-version',
+            'changelog:show',
+        ], true);
     }
 
     /**
