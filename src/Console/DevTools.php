@@ -58,6 +58,16 @@ final class DevTools extends Application
         LOGO;
 
     /**
+     * Commands that require raw output and therefore must not render the logo.
+     *
+     * @var list<string>
+     */
+    private const array RAW_OUTPUT_COMMANDS = [
+        'changelog:next-version',
+        'changelog:show',
+    ];
+
+    /**
      * @var ContainerInterface holds the static container instance for global access within the DevTools context
      */
     private static ?ContainerInterface $container = null;
@@ -139,11 +149,7 @@ final class DevTools extends Application
     #[Override]
     public function doRun(InputInterface $input, OutputInterface $output): int
     {
-        $noLogo = (bool) $input->getParameterOption('--no-logo', null, true)
-            || (bool) $input->hasParameterOption('--json', true)
-            || (bool) $input->hasParameterOption('--pretty-json', true);
-
-        if (! $noLogo) {
+        if ($this->shouldRenderLogo($input)) {
             $output->writeln(self::LOGO);
         }
 
@@ -156,7 +162,7 @@ final class DevTools extends Application
             return Command::FAILURE;
         }
 
-        if (! $noLogo && ! $this->isSelfUpdateCommand($input)) {
+        if ($this->shouldRenderLogo($input) && ! $this->isSelfUpdateCommand($input)) {
             $this->runAutoUpdateWhenRequested($input, $output);
             $this->versionCheckNotifier->notify($output);
         }
@@ -241,6 +247,40 @@ final class DevTools extends Application
         if (Command::SUCCESS !== $statusCode) {
             $output->writeln('<comment>DevTools auto-update failed; continuing with the requested command.</comment>');
         }
+    }
+
+    /**
+     * Determines whether the startup logo should be rendered for this invocation.
+     *
+     * @param InputInterface $input the application input
+     */
+    private function shouldRenderLogo(InputInterface $input): bool
+    {
+        if ((bool) $input->getParameterOption('--no-logo', null, true)) {
+            return false;
+        }
+
+        if ((bool) $input->hasParameterOption('--json', true) || (bool) $input->hasParameterOption('--pretty-json', true)) {
+            return false;
+        }
+
+        return ! $this->isRawOutputCommand($input);
+    }
+
+    /**
+     * Checks whether the current command is designed for raw output mode.
+     *
+     * @param InputInterface $input the application input
+     */
+    private function isRawOutputCommand(InputInterface $input): bool
+    {
+        $commandName = $input->getFirstArgument();
+
+        if (! is_string($commandName)) {
+            return false;
+        }
+
+        return \in_array($commandName, self::RAW_OUTPUT_COMMANDS, true);
     }
 
     /**
