@@ -30,6 +30,7 @@ use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -54,6 +55,7 @@ use function Safe\getcwd;
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class TestsCommandTest extends TestCase
 {
@@ -147,6 +149,9 @@ final class TestsCommandTest extends TestCase
             ) && str_contains(
                 $process->getCommandLine(),
                 '--bootstrap=' . $generatedBootstrapPath,
+            ) && str_contains(
+                $process->getCommandLine(),
+                DevToolsPathResolver::getPreferredToolBinaryPath('phpunit'),
             ) && str_contains($process->getCommandLine(), '--cache-result') && str_contains(
                 $process->getCommandLine(),
                 '--cache-directory=' . getcwd() . '/.dev-tools/cache/phpunit',

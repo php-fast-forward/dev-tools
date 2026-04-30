@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Keep global `dev-tools:sync` runs machine-independent by removing only deprecated DevTools-managed Composer GrumPHP default-path metadata while wiring packaged Git hooks to prefer a project-local `grumphp.yml` and otherwise use the active packaged DevTools config path resolved at sync time (#288)
+- Complete global runtime binary fallback support for phpdoc, phpunit, and phpmetrics commands (#297)
 
 ## [1.24.2] - 2026-04-30
 

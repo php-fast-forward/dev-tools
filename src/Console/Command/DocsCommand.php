@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use Twig\Environment;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -167,7 +168,7 @@ final class DocsCommand extends Command
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 
-        $phpdoc = $processBuilder->build('vendor/bin/phpdoc');
+        $phpdoc = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpdoc')]);
 
         $this->processQueue->add(process: $phpdoc, label: 'Generating API Docs with phpDocumentor');
 

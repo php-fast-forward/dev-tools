@@ -112,6 +112,9 @@ final class DevToolsPathResolverTest extends TestCase
      */
     #[Test]
     #[TestWith(['php-cs-fixer'])]
+    #[TestWith(['phpdoc'])]
+    #[TestWith(['phpmetrics'])]
+    #[TestWith(['phpunit'])]
     #[TestWith(['rector'])]
     #[TestWith(['ecs'])]
     #[TestWith(['jack'])]

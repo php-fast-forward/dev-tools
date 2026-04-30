@@ -23,9 +23,11 @@ use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\DocsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -43,7 +45,9 @@ use Symfony\Component\Process\Process;
 use Twig\Environment;
 
 #[CoversClass(DocsCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class DocsCommandTest extends TestCase
 {
@@ -133,7 +137,7 @@ final class DocsCommandTest extends TestCase
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()
         );
-        $this->processBuilder->build('vendor/bin/phpdoc')
+        $this->processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpdoc')])
             ->willReturn($this->process->reveal());
 
         $this->command = new DocsCommand(

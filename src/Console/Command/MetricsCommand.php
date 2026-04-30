@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -45,9 +46,9 @@ final class MetricsCommand extends Command
     use LogsCommandResults;
 
     /**
-     * @var string the bundled PhpMetrics binary path relative to the consumer root
+     * @var string the PhpMetrics binary name resolved through the runtime-aware tooling lookup
      */
-    private const string BINARY = 'vendor/bin/phpmetrics';
+    private const string BINARY = 'phpmetrics';
 
     /**
      * @var int the PHP error reporting mask that suppresses deprecations emitted by PhpMetrics internals
@@ -161,7 +162,7 @@ final class MetricsCommand extends Command
                     \PHP_BINARY,
                     '-derror_reporting=' . self::PHP_ERROR_REPORTING,
                     '-ddefault_socket_timeout=' . self::PHP_DEFAULT_SOCKET_TIMEOUT,
-                    self::BINARY,
+                    DevToolsPathResolver::getPreferredToolBinaryPath(self::BINARY),
                 ]),
             label: 'Generating Metrics with PhpMetrics',
         );
