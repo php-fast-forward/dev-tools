@@ -56,6 +56,11 @@ final class WikiCommand extends Command
     use LogsCommandResults;
 
     /**
+     * @var string the default phpDocumentor Markdown template path relative to the consumer project
+     */
+    private const string DEFAULT_TEMPLATE = 'vendor/saggre/phpdocumentor-markdown/themes/markdown';
+
+    /**
      * Creates a new WikiCommand instance.
      *
      * @param ComposerJsonInterface $composer the composer.json accessor
@@ -139,7 +144,7 @@ final class WikiCommand extends Command
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--visibility', 'public,protected')
-            ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
+            ->withArgument('--template', DevToolsPathResolver::getPreferredVendorPath(self::DEFAULT_TEMPLATE))
             ->withArgument('--title', $this->composer->getDescription())
             ->withArgument('--target', $target);
 

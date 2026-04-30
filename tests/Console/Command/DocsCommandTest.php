@@ -132,7 +132,14 @@ final class DocsCommandTest extends TestCase
             ]);
         $this->composer->getName()
             ->willReturn('fast-forward/dev-tools');
-        $this->renderer->render('phpdocumentor.xml', Argument::type('array'))->willReturn('<phpdocumentor />');
+        $this->renderer->render(
+            'phpdocumentor.xml',
+            Argument::that(
+                static fn(array $context): bool => DevToolsPathResolver::getPreferredVendorPath(
+                    'vendor/fast-forward/phpdoc-bootstrap-template'
+                ) === $context['template']
+            )
+        )->willReturn('<phpdocumentor />');
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()

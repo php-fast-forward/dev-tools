@@ -52,6 +52,10 @@ final class DevToolsPathResolverTest extends TestCase
             DevToolsPathResolver::getRuntimeToolBinaryPath('ecs')
         );
         self::assertSame(
+            \dirname(__DIR__, 2) . '/vendor/fast-forward/phpdoc-bootstrap-template',
+            DevToolsPathResolver::getRuntimeVendorPath('vendor/fast-forward/phpdoc-bootstrap-template')
+        );
+        self::assertSame(
             \dirname(__DIR__, 2) . '/resources/phpdocumentor.xml',
             DevToolsPathResolver::getResourcesPath('phpdocumentor.xml')
         );
@@ -93,7 +97,7 @@ final class DevToolsPathResolverTest extends TestCase
      * @return void
      */
     #[Test]
-    public function itWillResolveRuntimeAutoloadPathsForRepositoryAndDependencyInstalls(): void
+    public function itWillResolveRuntimeAutoloadAndVendorPathsForRepositoryAndDependencyInstalls(): void
     {
         self::assertSame(
             '/workspaces/dev-tools/vendor/autoload.php',
@@ -102,6 +106,13 @@ final class DevToolsPathResolverTest extends TestCase
         self::assertSame(
             '/workspaces/project/vendor/autoload.php',
             DevToolsPathResolver::getRuntimeAutoloadPath('/workspaces/project/vendor/fast-forward/dev-tools')
+        );
+        self::assertSame(
+            '/workspaces/project/vendor/saggre/phpdocumentor-markdown/themes/markdown',
+            DevToolsPathResolver::getRuntimeVendorPath(
+                'vendor/saggre/phpdocumentor-markdown/themes/markdown',
+                '/workspaces/project/vendor/fast-forward/dev-tools'
+            )
         );
     }
 
@@ -170,6 +181,52 @@ final class DevToolsPathResolverTest extends TestCase
             '/Users/example/.composer/vendor/bin/jack',
             DevToolsPathResolver::getPreferredToolBinaryPath(
                 'jack',
+                '/workspaces/project',
+                '/Users/example/.composer/vendor/fast-forward/dev-tools'
+            )
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillPreferProjectVendorPathsWhenTheyExist(): void
+    {
+        $projectPath = sys_get_temp_dir() . '/dev-tools-vendor-path-resolver-' . bin2hex(random_bytes(4));
+        $vendorPath = $projectPath . '/vendor/saggre/phpdocumentor-markdown/themes/markdown';
+
+        mkdir($vendorPath, 0o777, true);
+
+        try {
+            self::assertSame(
+                $vendorPath,
+                DevToolsPathResolver::getPreferredVendorPath(
+                    'vendor/saggre/phpdocumentor-markdown/themes/markdown',
+                    $projectPath,
+                    '/Users/example/.composer/vendor/fast-forward/dev-tools'
+                )
+            );
+        } finally {
+            rmdir($vendorPath);
+            rmdir($projectPath . '/vendor/saggre/phpdocumentor-markdown/themes');
+            rmdir($projectPath . '/vendor/saggre/phpdocumentor-markdown');
+            rmdir($projectPath . '/vendor/saggre');
+            rmdir($projectPath . '/vendor');
+            rmdir($projectPath);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillFallbackToRuntimeVendorPathsWhenTheProjectDoesNotProvideThem(): void
+    {
+        self::assertSame(
+            '/Users/example/.composer/vendor/fast-forward/phpdoc-bootstrap-template',
+            DevToolsPathResolver::getPreferredVendorPath(
+                'vendor/fast-forward/phpdoc-bootstrap-template',
                 '/workspaces/project',
                 '/Users/example/.composer/vendor/fast-forward/dev-tools'
             )

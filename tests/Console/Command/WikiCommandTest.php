@@ -131,6 +131,12 @@ final class WikiCommandTest extends TestCase
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
         $this->processBuilder->withArgument(
+            '--template',
+            DevToolsPathResolver::getPreferredVendorPath('vendor/saggre/phpdocumentor-markdown/themes/markdown')
+        )
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument(
             '--cache-folder',
             ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC)
         )
