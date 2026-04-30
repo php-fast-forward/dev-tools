@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep reusable-workflow retry automation from failing on unreadable child-job logs, while moving release-branch wiki publication to changelog-driven release refreshes that republish wiki content and reconcile the parent `.github/wiki` pointer from the authoritative released state (#309)
+
 ## [1.24.5] - 2026-04-30
 
 ### Fixed
