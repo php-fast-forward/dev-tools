@@ -120,13 +120,14 @@ jobs:
       - name: Explain release publish handling
         env:
           RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
+          SOURCE_BRANCH: ${{ github.event.pull_request.base.ref }}
         run: |
           {
             printf '## Wiki Publish Summary\n\n'
-            printf -- '- Publish branch: `master`\n'
+            printf -- '- Source branch: `%s`\n' "$SOURCE_BRANCH"
             printf -- '- Preview branch: `%s`\n' "${WIKI_PREVIEW_BRANCH}"
             printf -- '- Release branch: `%s`\n' "$RELEASE_BRANCH"
-            printf -- '- Action: skipped preview-branch publication because merged release branches are refreshed from the authoritative released state by `changelog.yml`.\n'
+            printf -- '- Action: skipped preview-branch publication because merged release branches are rebuilt from the `.github/wiki` pointer recorded on `%s` by `changelog.yml`.\n' "$SOURCE_BRANCH"
             printf -- '- Preview cleanup: `%s`\n' "${{ steps.cleanup_preview.outputs.deleted == 'true' && 'deleted immediately' || 'not present' }}"
           } >> "$GITHUB_STEP_SUMMARY"
 

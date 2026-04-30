@@ -9,26 +9,15 @@ publish_branch="${INPUT_PUBLISH_BRANCH:-master}"
 commit_message="${INPUT_COMMIT_MESSAGE:-Refresh wiki docs after merged release}"
 
 git -C "${target}" fetch origin "${publish_branch}"
-
-if ! git -C "${target}" switch -C "${publish_branch}" --track "origin/${publish_branch}" >/dev/null 2>&1; then
-    git -C "${target}" switch "${publish_branch}" >/dev/null 2>&1
-fi
-
-git -C "${target}" reset --hard "origin/${publish_branch}"
+git -C "${target}" reset --hard HEAD
 git -C "${target}" clean -fd
 
 dev-tools wiki --target="${target}"
 
 if [ -z "$(git -C "${target}" status --porcelain)" ]; then
-    pointer_changed="false"
-
-    if ! git diff --quiet -- "${target}"; then
-        pointer_changed="true"
-    fi
-
     {
         echo "published=false"
-        echo "pointer-changed=${pointer_changed}"
+        echo "pointer-changed=false"
         echo "publish-sha=$(git -C "${target}" rev-parse HEAD)"
     } >> "${GITHUB_OUTPUT}"
 
@@ -39,7 +28,7 @@ git -C "${target}" config user.name "${GIT_AUTHOR_NAME:-github-actions[bot]}"
 git -C "${target}" config user.email "${GIT_AUTHOR_EMAIL:-41898282+github-actions[bot]@users.noreply.github.com}"
 git -C "${target}" add -A
 git -C "${target}" commit -m "${commit_message}"
-git -C "${target}" push origin "HEAD:${publish_branch}"
+git -C "${target}" push --force-with-lease origin "HEAD:${publish_branch}"
 
 pointer_changed="false"
 
