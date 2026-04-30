@@ -25,6 +25,7 @@ use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitHooks\HookContentRenderer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -54,6 +55,7 @@ use function Safe\rmdir;
 
 #[CoversClass(GitHooksCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesClass(FileDiff::class)]
 #[UsesClass(HookContentRenderer::class)]
 #[UsesTrait(LogsCommandResults::class)]
@@ -230,7 +232,7 @@ final class GitHooksCommandTest extends TestCase
             Argument::that(
                 static fn(string $contents): bool => str_contains(
                     $contents,
-                    escapeshellarg(DevToolsPathResolver::getPackagePath('grumphp.yml'))
+                    escapeshellarg(DevToolsPathResolver::getPackagePathRelativeToProject('grumphp.yml', '/app'))
                 )
             ),
         )->shouldBeCalledOnce();

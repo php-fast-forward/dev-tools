@@ -89,6 +89,28 @@ final class DevToolsPathResolver
     }
 
     /**
+     * Returns a package-relative path rendered relative to the active project root.
+     *
+     * @param string $path the relative path under the package root
+     * @param string $projectPath an optional project root path; defaults to the working project root
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    public static function getPackagePathRelativeToProject(
+        string $path,
+        string $projectPath = '',
+        string $packagePath = '',
+    ): string {
+        if (Path::isAbsolute($path)) {
+            throw new InvalidArgumentException('The DevTools package path MUST be relative to the package root.');
+        }
+
+        $projectPath = Path::canonicalize(WorkingProjectPathResolver::getProjectPath($projectPath));
+        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
+
+        return Path::makeRelative(Path::join($packagePath, $path), $projectPath);
+    }
+
+    /**
      * Returns the active Composer autoload file for the current DevTools installation mode.
      *
      * When DevTools runs as a dependency, the runtime autoloader lives at the

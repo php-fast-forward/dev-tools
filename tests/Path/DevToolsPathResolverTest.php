@@ -46,6 +46,10 @@ final class DevToolsPathResolverTest extends TestCase
         self::assertSame(\dirname(__DIR__, 2), DevToolsPathResolver::getPackagePath());
         self::assertSame(\dirname(__DIR__, 2) . '/bin/dev-tools', DevToolsPathResolver::getBinaryPath());
         self::assertSame(\dirname(__DIR__, 2) . '/resources', DevToolsPathResolver::getResourcesPath());
+        self::assertSame(
+            'grumphp.yml',
+            DevToolsPathResolver::getPackagePathRelativeToProject('grumphp.yml', \dirname(__DIR__, 2))
+        );
         self::assertSame(\dirname(__DIR__, 2) . '/vendor/autoload.php', DevToolsPathResolver::getRuntimeAutoloadPath());
         self::assertSame(
             \dirname(__DIR__, 2) . '/vendor/bin/ecs',
@@ -112,6 +116,22 @@ final class DevToolsPathResolverTest extends TestCase
             DevToolsPathResolver::getRuntimeVendorPath(
                 'vendor/saggre/phpdocumentor-markdown/themes/markdown',
                 '/workspaces/project/vendor/fast-forward/dev-tools'
+            )
+        );
+        self::assertSame(
+            'vendor/fast-forward/dev-tools/grumphp.yml',
+            DevToolsPathResolver::getPackagePathRelativeToProject(
+                'grumphp.yml',
+                '/workspaces/project',
+                '/workspaces/project/vendor/fast-forward/dev-tools'
+            )
+        );
+        self::assertSame(
+            '../../Users/example/.composer/vendor/fast-forward/dev-tools/grumphp.yml',
+            DevToolsPathResolver::getPackagePathRelativeToProject(
+                'grumphp.yml',
+                '/workspaces/project',
+                '/Users/example/.composer/vendor/fast-forward/dev-tools'
             )
         );
     }
