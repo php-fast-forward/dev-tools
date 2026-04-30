@@ -38,9 +38,10 @@ resolve_dev_tools_runtime() {
     DEV_TOOLS_SOURCE_DIRECTORY="$(resolve_dev_tools_workspace_path "${source_directory_input}")"
     DEV_TOOLS_LOCAL_AUTOLOAD="${DEV_TOOLS_WORKSPACE_ROOT}/vendor/autoload.php"
     DEV_TOOLS_LOCAL_INSTALLED_BINARY="${DEV_TOOLS_WORKSPACE_ROOT}/vendor/bin/dev-tools"
+    DEV_TOOLS_LOCAL_INSTALLED_PACKAGE_ROOT="${DEV_TOOLS_WORKSPACE_ROOT}/vendor/fast-forward/dev-tools"
     DEV_TOOLS_LOCAL_REPOSITORY_BINARY="${DEV_TOOLS_WORKSPACE_ROOT}/bin/dev-tools"
 
-    if [ -x "${DEV_TOOLS_LOCAL_INSTALLED_BINARY}" ] && [ -f "${DEV_TOOLS_LOCAL_AUTOLOAD}" ]; then
+    if [ -x "${DEV_TOOLS_LOCAL_INSTALLED_BINARY}" ] && [ -f "${DEV_TOOLS_LOCAL_AUTOLOAD}" ] && workspace_is_dev_tools_repository "${DEV_TOOLS_LOCAL_INSTALLED_PACKAGE_ROOT}"; then
         DEV_TOOLS_RUNTIME_SOURCE='local'
         DEV_TOOLS_RUNTIME_BINARY="${DEV_TOOLS_LOCAL_INSTALLED_BINARY}"
         DEV_TOOLS_RUNTIME_AUTOLOAD="${DEV_TOOLS_LOCAL_AUTOLOAD}"

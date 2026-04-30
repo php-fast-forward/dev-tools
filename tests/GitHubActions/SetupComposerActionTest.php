@@ -177,10 +177,32 @@ final class SetupComposerActionTest extends TestCase
      * @return void
      */
     #[Test]
+    public function detectRuntimeWillIgnoreAnUnrelatedInstalledBinary(): void
+    {
+        $this->createInstalledRuntimeFiles($this->workspace, 'example/consumer');
+        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
+        $resolvedWorkspace = realpath($this->workspace);
+
+        $files = $this->createGitHubActionFiles();
+
+        $this->runActionScript('detect-dev-tools-runtime.sh', [
+            'GITHUB_OUTPUT' => $files['output'],
+        ]);
+
+        $outputs = $this->parseKeyValueFile($files['output']);
+
+        self::assertSame('workflow', $outputs['source']);
+        self::assertSame('true', $outputs['needs-fallback']);
+        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
+        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function exposeRuntimeWillPublishWrapperAndEnvironmentVariablesForTheWorkflowFallback(): void
     {
-        mkdir($this->workspace . '/.dev-tools-actions', 0o777, true);
-        file_put_contents($this->workspace . '/.dev-tools-actions/composer.json', "{}\n");
         $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
         $resolvedWorkspace = realpath($this->workspace);
 
@@ -217,17 +239,25 @@ final class SetupComposerActionTest extends TestCase
 
     /**
      * @param string $runtimeRoot
+     * @param string $packageName
      *
      * @return void
      */
-    private function createInstalledRuntimeFiles(string $runtimeRoot): void
-    {
+    private function createInstalledRuntimeFiles(
+        string $runtimeRoot,
+        string $packageName = 'fast-forward/dev-tools'
+    ): void {
         mkdir($runtimeRoot . '/vendor/bin', 0o777, true);
+        mkdir($runtimeRoot . '/vendor/' . $packageName, 0o777, true);
         file_put_contents(
             $runtimeRoot . '/vendor/bin/dev-tools',
             "#!/usr/bin/env bash\nprintf 'dev-tools:%s\\n' \"\$*\"\n",
         );
         chmod($runtimeRoot . '/vendor/bin/dev-tools', 0o755);
+        file_put_contents(
+            $runtimeRoot . '/vendor/' . $packageName . '/composer.json',
+            \sprintf("{\n    \"name\": \"%s\"\n}\n", $packageName)
+        );
         file_put_contents($runtimeRoot . '/vendor/autoload.php', "<?php\n");
     }
 
