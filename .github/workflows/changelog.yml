@@ -352,6 +352,13 @@ jobs:
                   pull: "--rebase --autostash"
                   push: true
 
+            - name: Dispatch tests for release wiki pointer commit
+              if: ${{ steps.refresh_release_wiki.outputs.pointer-changed == 'true' }}
+              env:
+                  GH_TOKEN: ${{ github.token }}
+                  BASE_REF: ${{ github.event.pull_request.base.ref }}
+              run: gh workflow run tests.yml --ref "${BASE_REF}" -f publish-required-statuses=true
+
             - uses: actions/checkout@v6
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v6
@@ -381,6 +388,7 @@ jobs:
                       - Release URL: ${{ steps.publish_release.outputs.url }}
                       - Wiki publish refresh: `${{ steps.refresh_release_wiki.outputs.published == 'true' && 'published' || 'unchanged' }}`
                       - Wiki pointer reconciliation: `${{ steps.refresh_release_wiki.outputs.pointer-changed == 'true' && 'updated' || 'unchanged' }}`
+                      - Required test dispatch: `${{ steps.refresh_release_wiki.outputs.pointer-changed == 'true' && 'requested' || 'not needed' }}`
                       - Project items released: `${{ steps.release_project_status.outputs.moved-count }}`
                       - Project items skipped: `${{ steps.release_project_status.outputs.skipped-count }}`
                       - Project source statuses: `${{ steps.release_project_status.outputs.source-statuses }}`
