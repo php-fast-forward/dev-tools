@@ -884,6 +884,15 @@
             <li class="success">Execute will return failure when update fails</li>
             <li class="success">Execute will update global installation when current binary is global</li>
         </ul>
+        <h2>Setup Composer Action (FastForward\DevTools\Tests\GitHubActions\SetupComposerAction)</h2>
+        <ul>
+            <li class="success">Detect runtime will prefer the consumer local installation</li>
+            <li class="success">Detect runtime will fallback to the workflow source when the consumer does not install dev tools</li>
+            <li class="success">Detect runtime will prefer the workspace root repository checkout</li>
+            <li class="success">Detect runtime will ignore an unrelated workspace repository binary</li>
+            <li class="success">Detect runtime will ignore an unrelated installed binary</li>
+            <li class="success">Expose runtime will publish wrapper and environment variables for the workflow fallback</li>
+        </ul>
         <h2>Skills Command (FastForward\DevTools\Tests\Console\Command\SkillsCommand)</h2>
         <ul>
             <li class="success">Execute will fail when packaged skills directory does not exist</li>

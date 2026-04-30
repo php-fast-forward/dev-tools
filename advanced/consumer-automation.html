@@ -3164,8 +3164,8 @@ implementation in this repository is increasingly composed from local actions in
     <tr>
             <td><code>.github/actions/php/*</code>
 </td>
-            <td>Shared PHP helpers such as workflow PHP-version resolution and Composer
-setup.</td>
+            <td>Shared PHP helpers such as workflow PHP-version resolution, Composer
+setup, and local-vs-workflow DevTools runtime bootstrap.</td>
     </tr>
     <tr>
             <td><code>.github/actions/changelog/*</code>
@@ -3251,8 +3251,9 @@ in consumer repositories.</td>
 
 <ul>
     <li class="dash"><code>.github/workflows/reports.yml</code>
- runs <code>composer dev-tools reports</code>
-.</li>
+ runs <code>dev-tools reports</code>
+ through the
+shared workflow bootstrap.</li>
 
     <li class="dash">The workflow delegates repeated GitHub Pages tasks to
 <code>.github/actions/github-pages/*</code>

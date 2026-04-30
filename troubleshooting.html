@@ -3224,6 +3224,21 @@ review the dependency diff:</p>
             <pre><code class="language-bash">composer update --lock
 git diff composer.lock</code></pre>
 
+            
+    <p>Reusable workflow consumers have one extra fallback path: the shared
+<code>setup-composer</code>
+ action first looks for a consumer-local
+<code>vendor/bin/dev-tools</code>
+ and otherwise exposes a <code>dev-tools</code>
+ wrapper backed
+by the checked-out <code>.dev-tools-actions</code>
+ source. If a workflow-only consumer
+fails before a <code>dev-tools</code>
+ command starts, confirm that the job ran the
+shared bootstrap and that the upstream <code>.dev-tools-actions</code>
+ checkout includes
+the DevTools package source needed for the fallback runtime.</p>
+
     </section>
 
             <section class="section " id="branch-protection-or-bot-commit-blocks">

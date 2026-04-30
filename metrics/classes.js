@@ -15235,7 +15235,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000008cb0000000000000000",
+        "name": "anonymous@0000000000000f370000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -15300,7 +15300,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000017350000000000000000",
+        "name": "anonymous@0000000000000e600000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -15551,8 +15551,8 @@ var classes = [
             "anonymous@0000000000001a780000000000000000",
             "Symfony\\Component\\Console\\Input\\ArrayInput",
             "Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "anonymous@00000000000008cb0000000000000000",
-            "anonymous@00000000000017350000000000000000",
+            "anonymous@0000000000000f370000000000000000",
+            "anonymous@0000000000000e600000000000000000",
             "ReflectionProperty",
             "FastForward\\DevTools\\Console\\DevTools",
             "FastForward\\DevTools\\Console\\DevTools",
@@ -17232,7 +17232,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000000b400000000000000000",
+        "name": "anonymous@00000000000002d10000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -17380,7 +17380,7 @@ var classes = [
         "externals": [
             "PHPUnit\\Framework\\TestCase",
             "FastForward\\DevTools\\Resource\\FileDiffer",
-            "anonymous@0000000000000b400000000000000000"
+            "anonymous@00000000000002d10000000000000000"
         ],
         "parents": [
             "PHPUnit\\Framework\\TestCase"
@@ -19360,6 +19360,159 @@ var classes = [
         "pageRank": 0,
         "afferentCoupling": 0,
         "efferentCoupling": 2,
+        "instability": 1,
+        "numberOfUnitTests": 0,
+        "violations": {}
+    },
+    {
+        "name": "FastForward\\DevTools\\Tests\\GitHubActions\\SetupComposerActionTest",
+        "interface": false,
+        "abstract": false,
+        "final": true,
+        "methods": [
+            {
+                "name": "setUp",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "tearDown",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "detectRuntimeWillPreferTheConsumerLocalInstallation",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "detectRuntimeWillFallbackToTheWorkflowSourceWhenTheConsumerDoesNotInstallDevTools",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "detectRuntimeWillPreferTheWorkspaceRootRepositoryCheckout",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "detectRuntimeWillIgnoreAnUnrelatedWorkspaceRepositoryBinary",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "detectRuntimeWillIgnoreAnUnrelatedInstalledBinary",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "exposeRuntimeWillPublishWrapperAndEnvironmentVariablesForTheWorkflowFallback",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "createInstalledRuntimeFiles",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "createRepositoryRuntimeFiles",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "createGitHubActionFiles",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "runActionScript",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "parseKeyValueFile",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 13,
+        "nbMethods": 13,
+        "nbMethodsPrivate": 7,
+        "nbMethodsPublic": 6,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 18,
+        "ccn": 6,
+        "ccnMethodMax": 4,
+        "externals": [
+            "PHPUnit\\Framework\\TestCase",
+            "RecursiveDirectoryIterator",
+            "RecursiveIteratorIterator",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process"
+        ],
+        "parents": [
+            "PHPUnit\\Framework\\TestCase"
+        ],
+        "implements": [],
+        "lcom": 1,
+        "length": 414,
+        "vocabulary": 84,
+        "volume": 2646.42,
+        "difficulty": 10.57,
+        "effort": 27971.65,
+        "level": 0.09,
+        "bugs": 0.88,
+        "time": 1554,
+        "intelligentContent": 250.38,
+        "number_operators": 80,
+        "number_operands": 334,
+        "number_operators_unique": 5,
+        "number_operands_unique": 79,
+        "cloc": 58,
+        "loc": 211,
+        "lloc": 153,
+        "mi": 63.86,
+        "mIwoC": 27.57,
+        "commentWeight": 36.29,
+        "kanDefect": 0.82,
+        "relativeStructuralComplexity": 121,
+        "relativeDataComplexity": 0.38,
+        "relativeSystemComplexity": 121.38,
+        "totalStructuralComplexity": 1573,
+        "totalDataComplexity": 4.92,
+        "totalSystemComplexity": 1577.92,
+        "package": "FastForward\\DevTools\\Tests\\GitHubActions\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 4,
         "instability": 1,
         "numberOfUnitTests": 0,
         "violations": {}
@@ -23172,7 +23325,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000002b150000000000000000",
+        "name": "anonymous@00000000000002c20000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -23335,7 +23488,7 @@ var classes = [
             "PHPUnit\\Framework\\TestCase",
             "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "RuntimeException",
-            "anonymous@0000000000002b150000000000000000",
+            "anonymous@00000000000002c20000000000000000",
             "SebastianBergmann\\CodeCoverage\\Filter",
             "SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",

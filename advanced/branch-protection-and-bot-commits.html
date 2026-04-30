@@ -3170,8 +3170,9 @@ Instead, each pull request receives a dedicated wiki branch.</p>
             
     
 <ol start="1" type="1">
-    <li value="1">runs <code>composer dev-tools wiki -- --target=.github/wiki</code>
-;</li>
+    <li value="1">runs <code>dev-tools wiki -- --target=.github/wiki</code>
+ through the shared
+workflow runtime bootstrap;</li>
 
     <li value="2">commits the generated wiki content to the wiki branch <code>pr-123</code>
 ;</li>
