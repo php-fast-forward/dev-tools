@@ -90,6 +90,26 @@ final class DevToolsPathResolver
     }
 
     /**
+     * Returns the active Composer autoload file for the current DevTools installation mode.
+     *
+     * When DevTools runs as a dependency, the runtime autoloader lives at the
+     * Composer vendor root. Repository checkouts instead use the package-local
+     * `vendor/autoload.php`.
+     *
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    public static function getRuntimeAutoloadPath(string $packagePath = ''): string
+    {
+        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
+
+        if (self::isInstalledAsDependency($packagePath)) {
+            return Path::canonicalize(Path::join($packagePath, '..', '..', 'autoload.php'));
+        }
+
+        return Path::join($packagePath, 'vendor', 'autoload.php');
+    }
+
+    /**
      * Detects whether the provided path belongs to an installed vendor copy of DevTools.
      *
      * @param string $packagePath an optional path within the package; defaults to the package root

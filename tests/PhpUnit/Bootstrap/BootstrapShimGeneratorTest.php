@@ -57,7 +57,7 @@ final class BootstrapShimGeneratorTest extends TestCase
         $projectBootstrap = '/repo/vendor/autoload.php';
         $cacheDirectory = '/repo/.dev-tools/cache/phpunit';
         $generatedBootstrapPath = '/repo/.dev-tools/cache/phpunit/bootstrap.php';
-        $devToolsAutoload = DevToolsPathResolver::getPackagePath('vendor/autoload.php');
+        $devToolsAutoload = DevToolsPathResolver::getRuntimeAutoloadPath();
         $exportedProjectBootstrap = var_export($projectBootstrap, true);
         $exportedDevToolsAutoload = var_export($devToolsAutoload, true);
         $expectedContent = <<<PHP

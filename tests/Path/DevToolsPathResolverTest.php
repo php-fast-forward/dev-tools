@@ -37,6 +37,7 @@ final class DevToolsPathResolverTest extends TestCase
         self::assertSame(\dirname(__DIR__, 2), DevToolsPathResolver::getPackagePath());
         self::assertSame(\dirname(__DIR__, 2) . '/bin/dev-tools', DevToolsPathResolver::getBinaryPath());
         self::assertSame(\dirname(__DIR__, 2) . '/resources', DevToolsPathResolver::getResourcesPath());
+        self::assertSame(\dirname(__DIR__, 2) . '/vendor/autoload.php', DevToolsPathResolver::getRuntimeAutoloadPath());
         self::assertSame(
             \dirname(__DIR__, 2) . '/resources/phpdocumentor.xml',
             DevToolsPathResolver::getResourcesPath('phpdocumentor.xml')
@@ -68,6 +69,22 @@ final class DevToolsPathResolverTest extends TestCase
         self::assertTrue(DevToolsPathResolver::isRepositoryCheckout('/workspaces/dev-tools/src'));
         self::assertFalse(
             DevToolsPathResolver::isRepositoryCheckout('/workspaces/project/vendor/fast-forward/dev-tools/src')
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function itWillResolveRuntimeAutoloadPathsForRepositoryAndDependencyInstalls(): void
+    {
+        self::assertSame(
+            '/workspaces/dev-tools/vendor/autoload.php',
+            DevToolsPathResolver::getRuntimeAutoloadPath('/workspaces/dev-tools')
+        );
+        self::assertSame(
+            '/workspaces/project/vendor/autoload.php',
+            DevToolsPathResolver::getRuntimeAutoloadPath('/workspaces/project/vendor/fast-forward/dev-tools')
         );
     }
 }

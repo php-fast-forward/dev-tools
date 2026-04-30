@@ -65,7 +65,7 @@ final readonly class BootstrapShimGenerator
      */
     private function render(string $projectBootstrap): string
     {
-        $devToolsAutoload = DevToolsPathResolver::getPackagePath('vendor/autoload.php');
+        $devToolsAutoload = DevToolsPathResolver::getRuntimeAutoloadPath();
 
         return <<<PHP
             <?php
