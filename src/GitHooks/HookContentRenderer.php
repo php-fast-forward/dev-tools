@@ -27,7 +27,7 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 final class HookContentRenderer
 {
     /**
-     * Placeholder replaced with the project-relative packaged GrumPHP config path.
+     * Placeholder replaced with the packaged GrumPHP config path rendered relative to the project when possible.
      */
     public const string MANAGED_GRUMPHP_CONFIG_PLACEHOLDER = '__DEV_TOOLS_GRUMPHP_CONFIG__';
 

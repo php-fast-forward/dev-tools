@@ -89,7 +89,11 @@ final class DevToolsPathResolver
     }
 
     /**
-     * Returns a package-relative path rendered relative to the active project root.
+     * Returns a packaged path rendered relative to the active project root when possible.
+     *
+     * When the project root and package root do not share a filesystem root,
+     * the packaged absolute path MUST be returned unchanged so globally
+     * installed DevTools can still point hooks at the packaged fallback file.
      *
      * @param string $path the relative path under the package root
      * @param string $projectPath an optional project root path; defaults to the working project root
@@ -106,8 +110,13 @@ final class DevToolsPathResolver
 
         $projectPath = Path::canonicalize(WorkingProjectPathResolver::getProjectPath($projectPath));
         $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
+        $packageFilePath = Path::canonicalize(Path::join($packagePath, $path));
 
-        return Path::makeRelative(Path::join($packagePath, $path), $projectPath);
+        try {
+            return Path::makeRelative($packageFilePath, $projectPath);
+        } catch (InvalidArgumentException) {
+            return $packageFilePath;
+        }
     }
 
     /**

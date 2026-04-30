@@ -134,6 +134,14 @@ final class DevToolsPathResolverTest extends TestCase
                 '/Users/example/.composer/vendor/fast-forward/dev-tools'
             )
         );
+        self::assertSame(
+            'C:/Users/example/.composer/vendor/fast-forward/dev-tools/grumphp.yml',
+            DevToolsPathResolver::getPackagePathRelativeToProject(
+                'grumphp.yml',
+                'D:/workspaces/project',
+                'C:/Users/example/.composer/vendor/fast-forward/dev-tools'
+            )
+        );
     }
 
     /**
