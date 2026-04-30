@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Composer(deps): Update rector/jack requirement from ^0.5 to ^1.0 (#320)
+
 ### Fixed
 
 - Keep release-preparation pull requests refreshing their wiki preview and parent `.github/wiki` pointer before merge, then publish merged release wikis from that preview branch so branch protection no longer requires direct post-merge pointer commits to `main` (#315)
