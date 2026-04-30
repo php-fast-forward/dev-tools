@@ -108,8 +108,6 @@ jobs:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                   path: .dev-tools-actions
-                  sparse-checkout: |
-                      .github/actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
@@ -133,7 +131,7 @@ jobs:
                   pull-request-title: ${{ env.PULL_REQUEST_TITLE }}
 
             - name: Verify changelog update
-              run: composer dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
+              run: dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
 
             - uses: ./.dev-tools-actions/.github/actions/summary/write
               with:
@@ -199,8 +197,6 @@ jobs:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                   path: .dev-tools-actions
-                  sparse-checkout: |
-                      .github/actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
@@ -221,7 +217,7 @@ jobs:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   release_date="$(date -u +%F)"
-                  composer dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
+                  dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
 
             - name: Render release notes preview
               uses: ./.dev-tools-actions/.github/actions/changelog/render-release-notes
@@ -308,8 +304,6 @@ jobs:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                   path: .dev-tools-actions
-                  sparse-checkout: |
-                      .github/actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer

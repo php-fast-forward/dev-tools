@@ -67,6 +67,14 @@ review the dependency diff:
     composer update --lock
     git diff composer.lock
 
+Reusable workflow consumers have one extra fallback path: the shared
+``setup-composer`` action first looks for a consumer-local
+``vendor/bin/dev-tools`` and otherwise exposes a ``dev-tools`` wrapper backed
+by the checked-out ``.dev-tools-actions`` source. If a workflow-only consumer
+fails before a ``dev-tools`` command starts, confirm that the job ran the
+shared bootstrap and that the upstream ``.dev-tools-actions`` checkout includes
+the DevTools package source needed for the fallback runtime.
+
 Branch Protection or Bot Commit Blocks
 --------------------------------------
 

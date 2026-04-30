@@ -30,7 +30,8 @@ Instead, each pull request receives a dedicated wiki branch.
 
 For pull request ``123`` the workflow:
 
-1. runs ``composer dev-tools wiki -- --target=.github/wiki``;
+1. runs ``dev-tools wiki -- --target=.github/wiki`` through the shared
+   workflow runtime bootstrap;
 2. commits the generated wiki content to the wiki branch ``pr-123``;
 3. updates the parent repository submodule pointer at ``.github/wiki``;
 4. commits that pointer update back to the pull request branch.

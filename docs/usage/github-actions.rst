@@ -22,10 +22,11 @@ The automation model now has three layers:
     ``php-fast-forward/dev-tools``.
 *   **Workflow action source checkout** inside the reusable workflows when they
     need local action implementations from ``.github/actions/``. The reusable
-    workflow performs a sparse checkout of that directory into a dedicated
-    ``.dev-tools-actions`` workspace path, which keeps the consumer
-    repository thin while still letting the reusable workflow resolve action
-    paths from the upstream ``php-fast-forward/dev-tools`` repository.
+    workflow checks out the upstream ``php-fast-forward/dev-tools`` source into
+    a dedicated ``.dev-tools-actions`` workspace path. Jobs that use the shared
+    PHP bootstrap can then prefer the consumer-local ``vendor/bin/dev-tools``
+    when it exists and otherwise install a deterministic fallback runtime from
+    that workflow-source checkout.
 
 Wrapper Workflows
 -----------------
@@ -58,6 +59,11 @@ The packaged wrappers currently include:
 
 For the protected-branch-safe preview and publish model, see
 :doc:`../advanced/branch-protection-and-bot-commits`.
+
+Workflow-only consumers do not need to declare ``fast-forward/dev-tools`` as a
+local Composer dependency. The shared ``setup-composer`` action prefers the
+consumer ``vendor/bin/dev-tools`` when it exists and otherwise exposes a
+``dev-tools`` wrapper backed by the checked-out ``.dev-tools-actions`` source.
 
 Fast Forward Reports
 --------------------
@@ -106,7 +112,8 @@ wrappers:
 *   **Pull Request Preview**: ``wiki.yml`` updates a dedicated preview branch
     in the wiki repository named ``pr-{number}``.
 *   **Preview Generation**: The preview workflow resolves the PHP version,
-    installs dependencies, runs ``composer dev-tools wiki -- --target=.github/wiki``,
+    installs dependencies, exposes the shared ``dev-tools`` runtime, runs
+    ``dev-tools wiki -- --target=.github/wiki``,
     commits the generated Markdown into the wiki submodule, and then updates
     the parent repository's submodule pointer when needed.
 *   **Preview Summary**: The preview workflow appends the preview branch name
@@ -165,7 +172,7 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   For same-repository Dependabot pull requests, creates and pushes a
         minimal ``Unreleased`` changelog entry derived from the pull request
         title when the branch has not added one yet.
-    *   Runs ``composer dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
+    *   Runs ``dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
     *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
     *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
     *   Publishes the aggregate changelog check for every active pull request.
@@ -181,7 +188,7 @@ wrapper in ``resources/github-actions/changelog.yml``.
     *   Resolves the next version from ``Unreleased`` unless a version input is provided.
     *   Promotes ``Unreleased`` into the selected version with the current UTC release date.
     *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
-        ``composer dev-tools changelog:show -- <version>``.
+        ``dev-tools changelog:show -- <version>``.
     *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
     *   Dispatches ``tests.yml`` for the release branch with required-status
         mirroring enabled, because release branches are written by the workflow
@@ -192,7 +199,7 @@ wrapper in ``resources/github-actions/changelog.yml``.
         to create pull requests and dispatch workflows.
 *   **Merged Release Pull Requests**:
     *   Detects merged branches that match the configured release branch prefix.
-    *   Renders the released changelog section with ``composer dev-tools changelog:show -- <version>``.
+    *   Renders the released changelog section with ``dev-tools changelog:show -- <version>``.
     *   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
     *   Appends a run summary with the published tag and release URL.
     *   Does **not** run for ordinary feature or fix pull requests merged into ``main``.

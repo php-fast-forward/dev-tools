@@ -29,8 +29,8 @@ implementation in this repository is increasingly composed from local actions in
      - Small consumer stubs that call the reusable workflows through
        ``workflow_call``.
    * - ``.github/actions/php/*``
-     - Shared PHP helpers such as workflow PHP-version resolution and Composer
-       setup.
+     - Shared PHP helpers such as workflow PHP-version resolution, Composer
+       setup, and local-vs-workflow DevTools runtime bootstrap.
    * - ``.github/actions/changelog/*``
      - Changelog-specific building blocks for release version resolution,
        release-notes rendering, and GitHub release publication.
@@ -70,7 +70,8 @@ implementation in this repository is increasingly composed from local actions in
 How GitHub Pages Publishing Works
 ---------------------------------
 
-- ``.github/workflows/reports.yml`` runs ``composer dev-tools reports``.
+- ``.github/workflows/reports.yml`` runs ``dev-tools reports`` through the
+  shared workflow bootstrap.
 - The workflow delegates repeated GitHub Pages tasks to
   ``.github/actions/github-pages/*`` instead of keeping that shell logic inline.
 - Pull requests publish previews under ``previews/pr-<number>/``.

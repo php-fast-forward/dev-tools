@@ -1,5 +1,5 @@
 name: Setup PHP and Composer Dependencies
-description: Setup PHP, warm Composer cache, mark safe directories, and install dependencies.
+description: Setup PHP, install Composer dependencies when available, and expose a deterministic DevTools runtime.
 
 inputs:
   php-version:
@@ -29,6 +29,21 @@ inputs:
     description: Additional newline-separated directories to mark as safe for git.
     required: false
     default: ''
+  dev-tools-source-directory:
+    description: Checked-out DevTools workflow source used to resolve the fallback runtime when the consumer does not install DevTools locally.
+    required: false
+    default: .dev-tools-actions
+
+outputs:
+  dev-tools-binary:
+    description: Absolute path to the resolved DevTools binary.
+    value: ${{ steps.expose-dev-tools.outputs.binary }}
+  dev-tools-autoload:
+    description: Absolute path to the runtime autoload file used by packaged workflow helpers.
+    value: ${{ steps.expose-dev-tools.outputs.autoload }}
+  dev-tools-source:
+    description: Runtime source selected for this job, either `local` or `workflow`.
+    value: ${{ steps.expose-dev-tools.outputs.source }}
 
 runs:
   using: composite
@@ -39,15 +54,6 @@ runs:
         php-version: ${{ inputs.php-version }}
         extensions: ${{ inputs.extensions }}
         coverage: ${{ inputs.coverage }}
-
-    - name: Cache Composer dependencies
-      uses: actions/cache@v5
-      with:
-        path: ${{ inputs.cache-dir }}
-        key: ${{ runner.os }}-composer-${{ inputs.php-version }}-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-composer-${{ inputs.php-version }}-
-          ${{ runner.os }}-composer-
 
     - name: Mark workspace as safe for git
       shell: bash
@@ -64,11 +70,48 @@ runs:
           done
         fi
 
-    - name: Install dependencies
+    - name: Detect consumer Composer manifest
+      id: consumer-composer
       shell: bash
+      run: |
+        if [ -f composer.json ]; then
+          echo "present=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "present=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Install consumer dependencies
+      if: steps.consumer-composer.outputs.present == 'true'
+      uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
       env:
         COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
         COMPOSER_CACHE_DIR: ${{ inputs.cache-dir }}
         COMPOSER_ROOT_VERSION: ${{ inputs.root-version }}
-        INPUT_INSTALL_OPTIONS: ${{ inputs.install-options }}
-      run: composer install ${INPUT_INSTALL_OPTIONS}
+      with:
+        composer-options: ${{ inputs.install-options }}
+
+    - name: Resolve DevTools runtime source
+      id: resolve-dev-tools
+      shell: bash
+      env:
+        INPUT_DEV_TOOLS_SOURCE_DIRECTORY: ${{ inputs.dev-tools-source-directory }}
+      run: ${{ github.action_path }}/detect-dev-tools-runtime.sh
+
+    - name: Install fallback DevTools runtime
+      if: steps.resolve-dev-tools.outputs.needs-fallback == 'true'
+      uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
+      env:
+        COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
+        COMPOSER_CACHE_DIR: ${{ inputs.cache-dir }}
+      with:
+        working-directory: ${{ inputs.dev-tools-source-directory }}
+        composer-options: --prefer-dist --no-plugins --no-scripts
+        require-lock-file: 'true'
+        custom-cache-suffix: dev-tools-runtime
+
+    - name: Expose DevTools runtime
+      id: expose-dev-tools
+      shell: bash
+      env:
+        INPUT_DEV_TOOLS_SOURCE_DIRECTORY: ${{ inputs.dev-tools-source-directory }}
+      run: ${{ github.action_path }}/expose-dev-tools-runtime.sh
