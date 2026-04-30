@@ -4256,6 +4256,11 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020packaged\u0020resources\u0020directory\u0020or\u0020a\u0020path\u0020under\u0020it.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getResourcesPath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetRuntimeAutoloadPath\u0028\u0029",
+            "name": "getRuntimeAutoloadPath",
+            "summary": "Returns\u0020the\u0020active\u0020Composer\u0020autoload\u0020file\u0020for\u0020the\u0020current\u0020DevTools\u0020installation\u0020mode.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getRuntimeAutoloadPath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AisInstalledAsDependency\u0028\u0029",
             "name": "isInstalledAsDependency",
             "summary": "Detects\u0020whether\u0020the\u0020provided\u0020path\u0020belongs\u0020to\u0020an\u0020installed\u0020vendor\u0020copy\u0020of\u0020DevTools.",
