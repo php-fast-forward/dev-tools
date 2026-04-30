@@ -40,8 +40,7 @@ final class DevToolsPathResolver
     /**
      * @var string the vendor install path fragment used when DevTools runs as a dependency
      */
-    private const string VENDOR_PACKAGE_PATH = \DIRECTORY_SEPARATOR . 'vendor' . \DIRECTORY_SEPARATOR
-        . 'fast-forward' . \DIRECTORY_SEPARATOR . 'dev-tools';
+    private const string VENDOR_PACKAGE_PATH = '/vendor/fast-forward/dev-tools';
 
     /**
      * Returns the DevTools package directory or a path under it.
@@ -116,7 +115,9 @@ final class DevToolsPathResolver
      */
     public static function isInstalledAsDependency(string $packagePath = ''): bool
     {
-        return str_contains('' === $packagePath ? self::getPackagePath() : $packagePath, self::VENDOR_PACKAGE_PATH);
+        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
+
+        return str_contains($packagePath, self::VENDOR_PACKAGE_PATH);
     }
 
     /**

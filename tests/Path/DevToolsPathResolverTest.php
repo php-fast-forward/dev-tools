@@ -66,6 +66,12 @@ final class DevToolsPathResolverTest extends TestCase
             DevToolsPathResolver::isInstalledAsDependency('/workspaces/project/vendor/fast-forward/dev-tools/src')
         );
         self::assertFalse(DevToolsPathResolver::isInstalledAsDependency('/workspaces/dev-tools/src'));
+
+        self::assertTrue(
+            DevToolsPathResolver::isInstalledAsDependency(
+                'C:/workspaces/project/vendor/fast-forward/dev-tools/src'
+            )
+        );
         self::assertTrue(DevToolsPathResolver::isRepositoryCheckout('/workspaces/dev-tools/src'));
         self::assertFalse(
             DevToolsPathResolver::isRepositoryCheckout('/workspaces/project/vendor/fast-forward/dev-tools/src')
