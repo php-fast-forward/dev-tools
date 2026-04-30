@@ -88,8 +88,35 @@ jobs:
     name: Skip Release Branch Wiki Publish
     if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, inputs.release-branch-prefix)
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    env:
+      WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
 
     steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v6
+        with:
+          token: ${{ github.token }}
+          ref: main
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Mark wiki workspace as safe for git
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
+
+      - name: Delete wiki preview branch
+        id: cleanup_preview
+        working-directory: .github/wiki
+        run: |
+          if git ls-remote --exit-code --heads origin "${WIKI_PREVIEW_BRANCH}" >/dev/null 2>&1; then
+            git push origin --delete "${WIKI_PREVIEW_BRANCH}"
+            echo "deleted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "deleted=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Explain release publish handling
         env:
           RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
@@ -97,8 +124,10 @@ jobs:
           {
             printf '## Wiki Publish Summary\n\n'
             printf -- '- Publish branch: `master`\n'
+            printf -- '- Preview branch: `%s`\n' "${WIKI_PREVIEW_BRANCH}"
             printf -- '- Release branch: `%s`\n' "$RELEASE_BRANCH"
             printf -- '- Action: skipped preview-branch publication because merged release branches are refreshed from the authoritative released state by `changelog.yml`.\n'
+            printf -- '- Preview cleanup: `%s`\n' "${{ steps.cleanup_preview.outputs.deleted == 'true' && 'deleted immediately' || 'not present' }}"
           } >> "$GITHUB_STEP_SUMMARY"
 
   cleanup_closed_preview:
