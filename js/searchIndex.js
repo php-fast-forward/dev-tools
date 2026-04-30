@@ -2571,6 +2571,11 @@ Search.appendIndex(
             "summary": "Safely\u0020constructs\u0020an\u0020absolute\u0020path\u0020tied\u0020to\u0020a\u0020defined\u0020capability\u0020option.",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolvePath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AresolveBootstrapPath\u0028\u0029",
+            "name": "resolveBootstrapPath",
+            "summary": "Creates\u0020the\u0020bootstrap\u0020shim\u0020path\u0020passed\u0020to\u0020PHPUnit.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolveBootstrapPath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AresolveMinimumCoverage\u0028\u0029",
             "name": "resolveMinimumCoverage",
             "summary": "",
@@ -2605,6 +2610,11 @@ Search.appendIndex(
             "name": "filesystem",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024bootstrapShimGenerator",
+            "name": "bootstrapShimGenerator",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_bootstrapShimGenerator"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024fileLocator",
             "name": "fileLocator",
@@ -4246,6 +4256,11 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020packaged\u0020resources\u0020directory\u0020or\u0020a\u0020path\u0020under\u0020it.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getResourcesPath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetRuntimeAutoloadPath\u0028\u0029",
+            "name": "getRuntimeAutoloadPath",
+            "summary": "Returns\u0020the\u0020active\u0020Composer\u0020autoload\u0020file\u0020for\u0020the\u0020current\u0020DevTools\u0020installation\u0020mode.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getRuntimeAutoloadPath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AisInstalledAsDependency\u0028\u0029",
             "name": "isInstalledAsDependency",
             "summary": "Detects\u0020whether\u0020the\u0020provided\u0020path\u0020belongs\u0020to\u0020an\u0020installed\u0020vendor\u0020copy\u0020of\u0020DevTools.",
@@ -4390,6 +4405,36 @@ Search.appendIndex(
             "name": "isLoaded",
             "summary": "Determines\u0020whether\u0020a\u0020PHP\u0020extension\u0020is\u0020loaded\u0020in\u0020the\u0020current\u0020runtime.",
             "url": "classes/FastForward-DevTools-Php-ExtensionInterface.html#method_isLoaded"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Bootstrap\\BootstrapShimGenerator",
+            "name": "BootstrapShimGenerator",
+            "summary": "Generates\u0020deterministic\u0020PHPUnit\u0020bootstrap\u0020shims\u0020for\u0020working\u002Ddirectory\u0020test\u0020runs.",
+            "url": "classes/FastForward-DevTools-PhpUnit-Bootstrap-BootstrapShimGenerator.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Bootstrap\\BootstrapShimGenerator\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-PhpUnit-Bootstrap-BootstrapShimGenerator.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Bootstrap\\BootstrapShimGenerator\u003A\u003Agenerate\u0028\u0029",
+            "name": "generate",
+            "summary": "Writes\u0020a\u0020deterministic\u0020bootstrap\u0020shim\u0020under\u0020the\u0020resolved\u0020cache\u0020directory.",
+            "url": "classes/FastForward-DevTools-PhpUnit-Bootstrap-BootstrapShimGenerator.html#method_generate"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Bootstrap\\BootstrapShimGenerator\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Renders\u0020the\u0020bootstrap\u0020shim\u0020contents.",
+            "url": "classes/FastForward-DevTools-PhpUnit-Bootstrap-BootstrapShimGenerator.html#method_render"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Bootstrap\\BootstrapShimGenerator\u003A\u003Aexport\u0028\u0029",
+            "name": "export",
+            "summary": "Escapes\u0020a\u0020runtime\u0020string\u0020as\u0020a\u0020valid\u0020PHP\u0020string\u0020literal.",
+            "url": "classes/FastForward-DevTools-PhpUnit-Bootstrap-BootstrapShimGenerator.html#method_export"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Bootstrap\\BootstrapShimGenerator\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-PhpUnit-Bootstrap-BootstrapShimGenerator.html#property_filesystem"
         },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummary",
             "name": "CoverageSummary",
@@ -5696,15 +5741,20 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-php.html"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage",
-            "name": "Coverage",
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Bootstrap",
+            "name": "Bootstrap",
             "summary": "",
-            "url": "namespaces/fastforward-devtools-phpunit-coverage.html"
+            "url": "namespaces/fastforward-devtools-phpunit-bootstrap.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit",
             "name": "PhpUnit",
             "summary": "",
             "url": "namespaces/fastforward-devtools-phpunit.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Coverage",
+            "name": "Coverage",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-phpunit-coverage.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\PhpUnit\\Event",
             "name": "Event",

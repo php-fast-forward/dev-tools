@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-28 22:25:24        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-30 01:21:27        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -346,7 +346,8 @@
             "FastForward\\DevTools\\SelfUpdate",
             "FastForward\\DevTools\\Reflection",
             "FastForward\\DevTools\\Funding",
-            "FastForward\\DevTools\\PhpUnit\\Coverage"
+            "FastForward\\DevTools\\PhpUnit\\Coverage",
+            "FastForward\\DevTools\\PhpUnit\\Bootstrap"
         ]
     },
     {
@@ -545,6 +546,15 @@
         "relations": [
             "global",
             "PHPUnit\\Framework"
+        ]
+    },
+    {
+        "name": "FastForward\\DevTools\\PhpUnit\\Bootstrap",
+        "size": 3000,
+        "relations": [
+            "FastForward\\DevTools\\Filesystem",
+            "Symfony\\Component\\Filesystem",
+            "FastForward\\DevTools\\Path"
         ]
     },
     {
@@ -989,6 +999,7 @@
             "FastForward\\DevTools\\Composer\\Json\\Schema",
             "Symfony\\Component\\Finder",
             "Symfony\\Component\\Filesystem\\Exception",
+            "FastForward\\DevTools\\PhpUnit\\Bootstrap",
             "FastForward\\DevTools\\PhpUnit\\Coverage"
         ]
     },
@@ -1378,6 +1389,15 @@
         "relations": [
             "PHPUnit\\Framework",
             "FastForward\\DevTools\\PhpUnit\\Runner\\Extension"
+        ]
+    },
+    {
+        "name": "FastForward\\DevTools\\Tests\\PhpUnit\\Bootstrap",
+        "size": 3000,
+        "relations": [
+            "PHPUnit\\Framework",
+            "FastForward\\DevTools\\PhpUnit\\Bootstrap",
+            "FastForward\\DevTools\\Path"
         ]
     },
     {
