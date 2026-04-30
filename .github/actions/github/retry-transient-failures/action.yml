@@ -1,0 +1,37 @@
+name: Retry Transient Workflow Failures
+description: Inspect failed workflow jobs for transient GitHub-side failures and request a rerun when every failed job matches the configured signatures.
+
+inputs:
+  run-id:
+    description: Workflow run identifier to inspect.
+    required: true
+  run-attempt:
+    description: Current workflow run attempt number.
+    required: true
+  workflow-name:
+    description: Human-readable workflow name for summaries.
+    required: true
+  max-run-attempts:
+    description: Maximum workflow run attempts before retry is skipped.
+    required: false
+    default: '2'
+
+outputs:
+  status:
+    description: Retry decision status.
+    value: ${{ steps.retry.outputs.status }}
+  summary:
+    description: Markdown summary for the retry decision.
+    value: ${{ steps.retry.outputs.summary }}
+
+runs:
+  using: composite
+  steps:
+    - id: retry
+      shell: bash
+      env:
+        INPUT_RUN_ID: ${{ inputs.run-id }}
+        INPUT_RUN_ATTEMPT: ${{ inputs.run-attempt }}
+        INPUT_WORKFLOW_NAME: ${{ inputs.workflow-name }}
+        INPUT_MAX_RUN_ATTEMPTS: ${{ inputs.max-run-attempts }}
+      run: ${{ github.action_path }}/run.sh

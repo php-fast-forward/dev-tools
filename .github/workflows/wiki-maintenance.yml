@@ -2,6 +2,12 @@ name: Maintain Wiki Publication
 
 on:
   workflow_call:
+    inputs:
+      release-branch-prefix:
+        description: Prefix used for release-preparation branches handled by changelog publication.
+        required: false
+        type: string
+        default: release/v
 
 permissions:
   contents: read
@@ -12,7 +18,7 @@ env:
 jobs:
   publish:
     name: Publish Wiki Master
-    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && !startsWith(github.event.pull_request.head.ref, inputs.release-branch-prefix)
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -77,6 +83,22 @@ jobs:
             - Expected preview SHA: `${{ steps.prepare_publish.outputs.expected-preview-sha }}`
             - Publish validation: completed
             - Preview cleanup: `${{ env.WIKI_PREVIEW_BRANCH }}` deleted
+
+  skip_release_publish:
+    name: Skip Release Branch Wiki Publish
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, inputs.release-branch-prefix)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Explain release publish handling
+        run: |
+          {
+            echo "## Wiki Publish Summary"
+            echo
+            echo "- Publish branch: \`master\`"
+            echo "- Release branch: \`${{ github.event.pull_request.head.ref }}\`"
+            echo "- Action: skipped preview-branch publication because merged release branches are refreshed from the authoritative released state by \`changelog.yml\`."
+          } >> "$GITHUB_STEP_SUMMARY"
 
   cleanup_closed_preview:
     name: Delete Closed PR Wiki Preview

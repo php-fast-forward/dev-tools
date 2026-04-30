@@ -298,6 +298,7 @@ jobs:
                   token: ${{ github.token }}
                   ref: ${{ github.event.pull_request.base.ref }}
                   fetch-depth: 0
+                  submodules: recursive
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v6
               with:
@@ -311,6 +312,8 @@ jobs:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
                   root-version: ${{ env.CHANGELOG_ROOT_VERSION }}
                   install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+                  safe-directories: |
+                      ${{ github.workspace }}/.github/wiki
 
             - name: Resolve merged release version
               id: version
@@ -331,6 +334,23 @@ jobs:
               with:
                   version: ${{ steps.version.outputs.value }}
                   target: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
+
+            - name: Refresh release wiki branch from merged main
+              id: refresh_release_wiki
+              uses: ./.dev-tools-actions/.github/actions/wiki/refresh-release-pointer
+              with:
+                  commit-message: Refresh wiki docs after release v${{ steps.version.outputs.value }}
+
+            - name: Commit release wiki submodule pointer
+              if: ${{ steps.refresh_release_wiki.outputs.pointer-changed == 'true' }}
+              id: release_wiki_pointer_commit
+              uses: EndBug/add-and-commit@v10
+              with:
+                  add: .github/wiki
+                  message: Refresh wiki submodule pointer after release v${{ steps.version.outputs.value }}
+                  default_author: github_actions
+                  pull: "--rebase --autostash"
+                  push: true
 
             - uses: actions/checkout@v6
             - name: Checkout dev-tools workflow action source
@@ -359,6 +379,8 @@ jobs:
                       - Published tag: `v${{ steps.version.outputs.value }}`
                       - Release operation: `${{ steps.publish_release.outputs.operation }}`
                       - Release URL: ${{ steps.publish_release.outputs.url }}
+                      - Wiki publish refresh: `${{ steps.refresh_release_wiki.outputs.published == 'true' && 'published' || 'unchanged' }}`
+                      - Wiki pointer reconciliation: `${{ steps.refresh_release_wiki.outputs.pointer-changed == 'true' && 'updated' || 'unchanged' }}`
                       - Project items released: `${{ steps.release_project_status.outputs.moved-count }}`
                       - Project items skipped: `${{ steps.release_project_status.outputs.skipped-count }}`
                       - Project source statuses: `${{ steps.release_project_status.outputs.source-statuses }}`
