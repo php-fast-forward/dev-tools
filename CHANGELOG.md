@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.2] - 2026-04-30
+
 ### Fixed
 
 - Prefer project-local tooling binaries when available and fall back to the active DevTools runtime for `php-cs-fixer`, Rector, ECS, Jack, and Composer Dependency Analyser during global `dev-tools` runs (#292)
@@ -380,7 +382,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.1...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.2...HEAD
+[1.24.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.1...v1.24.2
 [1.24.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.0...v1.24.1
 [1.24.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.23.0...v1.24.0
 [1.23.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.22.3...v1.23.0
