@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777511048">
-  <project timestamp="1777511048" name="Clover Coverage">
+<coverage generated="1777511811">
+  <project timestamp="1777511811" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -5189,30 +5189,31 @@
     <package name="FastForward\DevTools\Path">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Path/DevToolsPathResolver.php">
         <class name="FastForward\DevTools\Path\DevToolsPathResolver" namespace="FastForward\DevTools\Path">
-          <metrics complexity="12" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="12" elements="21" coveredelements="18"/>
+          <metrics complexity="12" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="13" elements="22" coveredelements="19"/>
         </class>
-        <line num="51" type="method" name="getPackagePath" visibility="public" complexity="3" crap="3" count="2"/>
-        <line num="53" type="stmt" count="2"/>
-        <line num="55" type="stmt" count="2"/>
-        <line num="56" type="stmt" count="1"/>
-        <line num="59" type="stmt" count="1"/>
-        <line num="65" type="method" name="getBinaryPath" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="67" type="stmt" count="1"/>
-        <line num="75" type="method" name="getBinaryCommand" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="77" type="stmt" count="0"/>
-        <line num="79" type="stmt" count="0"/>
-        <line num="87" type="method" name="getResourcesPath" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="89" type="stmt" count="1"/>
-        <line num="101" type="method" name="getRuntimeAutoloadPath" visibility="public" complexity="3" crap="3" count="2"/>
-        <line num="103" type="stmt" count="2"/>
-        <line num="105" type="stmt" count="2"/>
-        <line num="106" type="stmt" count="1"/>
-        <line num="109" type="stmt" count="2"/>
-        <line num="117" type="method" name="isInstalledAsDependency" visibility="public" complexity="2" crap="2" count="3"/>
-        <line num="119" type="stmt" count="3"/>
-        <line num="127" type="method" name="isRepositoryCheckout" visibility="public" complexity="1" crap="1" count="1"/>
-        <line num="129" type="stmt" count="1"/>
-        <metrics loc="132" ncloc="69" classes="1" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="14" coveredstatements="12" elements="21" coveredelements="18"/>
+        <line num="50" type="method" name="getPackagePath" visibility="public" complexity="3" crap="3" count="2"/>
+        <line num="52" type="stmt" count="2"/>
+        <line num="54" type="stmt" count="2"/>
+        <line num="55" type="stmt" count="1"/>
+        <line num="58" type="stmt" count="1"/>
+        <line num="64" type="method" name="getBinaryPath" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="66" type="stmt" count="1"/>
+        <line num="74" type="method" name="getBinaryCommand" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="76" type="stmt" count="0"/>
+        <line num="78" type="stmt" count="0"/>
+        <line num="86" type="method" name="getResourcesPath" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="88" type="stmt" count="1"/>
+        <line num="100" type="method" name="getRuntimeAutoloadPath" visibility="public" complexity="3" crap="3" count="2"/>
+        <line num="102" type="stmt" count="2"/>
+        <line num="104" type="stmt" count="2"/>
+        <line num="105" type="stmt" count="1"/>
+        <line num="108" type="stmt" count="2"/>
+        <line num="116" type="method" name="isInstalledAsDependency" visibility="public" complexity="2" crap="2" count="3"/>
+        <line num="118" type="stmt" count="3"/>
+        <line num="120" type="stmt" count="3"/>
+        <line num="128" type="method" name="isRepositoryCheckout" visibility="public" complexity="1" crap="1" count="1"/>
+        <line num="130" type="stmt" count="1"/>
+        <metrics loc="133" ncloc="70" classes="1" methods="7" coveredmethods="6" conditionals="0" coveredconditionals="0" statements="15" coveredstatements="13" elements="22" coveredelements="19"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Path/ManagedWorkspace.php">
         <class name="FastForward\DevTools\Path\ManagedWorkspace" namespace="FastForward\DevTools\Path">
@@ -6299,6 +6300,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="155" loc="20635" ncloc="12538" classes="113" methods="524" coveredmethods="422" conditionals="0" coveredconditionals="0" statements="4872" coveredstatements="4486" elements="5396" coveredelements="4908"/>
+    <metrics files="155" loc="20636" ncloc="12539" classes="113" methods="524" coveredmethods="422" conditionals="0" coveredconditionals="0" statements="4873" coveredstatements="4487" elements="5397" coveredelements="4909"/>
   </project>
 </coverage>
