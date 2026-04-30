@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.6] - 2026-04-30
+
 ### Fixed
 
 - Keep reusable-workflow retry automation from failing on unreadable child-job logs, while moving release-branch wiki publication to changelog-driven release refreshes that republish wiki content and reconcile the parent `.github/wiki` pointer from the authoritative released state (#309)
@@ -407,7 +409,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.5...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.6...HEAD
+[1.24.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.5...v1.24.6
 [1.24.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.4...v1.24.5
 [1.24.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.3...v1.24.4
 [1.24.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.2...v1.24.3
