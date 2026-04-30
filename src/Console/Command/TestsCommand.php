@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -62,6 +63,7 @@ final class TestsCommand extends Command
      * @param CoverageSummaryLoaderInterface $coverageSummaryLoader the loader used for `coverage-php` summaries
      * @param ComposerJsonInterface $composer the composer.json reader for autoload information
      * @param FilesystemInterface $filesystem the filesystem utility used for path resolution
+     * @param BootstrapShimGenerator $bootstrapShimGenerator the generator used to build the PHPUnit bootstrap shim
      * @param FileLocatorInterface $fileLocator the file locator used to resolve PHPUnit configuration
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
@@ -71,6 +73,7 @@ final class TestsCommand extends Command
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
+        private readonly BootstrapShimGenerator $bootstrapShimGenerator,
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
@@ -171,7 +174,7 @@ final class TestsCommand extends Command
 
         $processBuilder = $this->processBuilder
             ->withArgument('--configuration', $this->fileLocator->locate(self::CONFIG))
-            ->withArgument('--bootstrap', $this->resolvePath($input, 'bootstrap'))
+            ->withArgument('--bootstrap', $this->resolveBootstrapPath($input))
             ->withArgument('--display-deprecations')
             ->withArgument('--display-phpunit-deprecations')
             ->withArgument('--display-incomplete')
@@ -260,6 +263,21 @@ final class TestsCommand extends Command
     private function resolvePath(InputInterface $input, string $option): string
     {
         return $this->filesystem->getAbsolutePath($input->getOption($option));
+    }
+
+    /**
+     * Creates the bootstrap shim path passed to PHPUnit.
+     *
+     * @param InputInterface $input the raw parameter definitions
+     *
+     * @return string the generated bootstrap shim path
+     */
+    private function resolveBootstrapPath(InputInterface $input): string
+    {
+        return $this->bootstrapShimGenerator->generate(
+            $this->resolvePath($input, 'bootstrap'),
+            $this->resolvePath($input, 'cache-dir'),
+        );
     }
 
     /**

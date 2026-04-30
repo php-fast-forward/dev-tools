@@ -62,10 +62,7 @@ final class DevTools extends Application
      *
      * @var list<string>
      */
-    private const array RAW_OUTPUT_COMMANDS = [
-        'changelog:next-version',
-        'changelog:show',
-    ];
+    private const array RAW_OUTPUT_COMMANDS = ['changelog:next-version', 'changelog:show'];
 
     /**
      * @var ContainerInterface holds the static container instance for global access within the DevTools context
@@ -260,7 +257,7 @@ final class DevTools extends Application
             return false;
         }
 
-        if ((bool) $input->hasParameterOption('--json', true) || (bool) $input->hasParameterOption('--pretty-json', true)) {
+        if ($input->hasParameterOption('--json', true) || $input->hasParameterOption('--pretty-json', true)) {
             return false;
         }
 
@@ -276,7 +273,7 @@ final class DevTools extends Application
     {
         $commandName = $input->getFirstArgument();
 
-        if (! is_string($commandName)) {
+        if (! \is_string($commandName)) {
             return false;
         }
 

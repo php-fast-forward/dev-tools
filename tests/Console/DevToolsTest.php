@@ -285,9 +285,16 @@ final class DevToolsTest extends TestCase
                 parent::__construct('standards');
             }
 
+            /**
+             * @return void
+             */
             protected function configure(): void
             {
-                $this->addOption(name: 'json', mode: InputOption::VALUE_NONE, description: 'Emit structured JSON output.');
+                $this->addOption(
+                    name: 'json',
+                    mode: InputOption::VALUE_NONE,
+                    description: 'Emit structured JSON output.'
+                );
                 $this->setCode(static fn(InputInterface $input, OutputInterface $output): int => Command::SUCCESS);
             }
         };
@@ -330,9 +337,16 @@ final class DevToolsTest extends TestCase
                 parent::__construct('standards');
             }
 
+            /**
+             * @return void
+             */
             protected function configure(): void
             {
-                $this->addOption(name: 'pretty-json', mode: InputOption::VALUE_NONE, description: 'Emit pretty JSON output.');
+                $this->addOption(
+                    name: 'pretty-json',
+                    mode: InputOption::VALUE_NONE,
+                    description: 'Emit pretty JSON output.'
+                );
                 $this->setCode(static fn(InputInterface $input, OutputInterface $output): int => Command::SUCCESS);
             }
         };
