@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\GitHooks;
 
 use FastForward\DevTools\GitHooks\HookContentRenderer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -28,6 +29,7 @@ use PHPUnit\Framework\TestCase;
 
 #[CoversClass(HookContentRenderer::class)]
 #[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 final class HookContentRendererTest extends TestCase
 {
     /**
@@ -39,8 +41,13 @@ final class HookContentRendererTest extends TestCase
         $renderer = new HookContentRenderer();
 
         self::assertSame(
-            'DEVTOOLS_GRUMPHP_CONFIG=' . escapeshellarg(DevToolsPathResolver::getPackagePath('grumphp.yml')),
-            $renderer->render('DEVTOOLS_GRUMPHP_CONFIG=' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER),
+            'DEVTOOLS_GRUMPHP_CONFIG=' . escapeshellarg(
+                DevToolsPathResolver::getPackagePathRelativeToProject('grumphp.yml', '/workspaces/project')
+            ),
+            $renderer->render(
+                'DEVTOOLS_GRUMPHP_CONFIG=' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER,
+                '/workspaces/project'
+            ),
         );
     }
 }

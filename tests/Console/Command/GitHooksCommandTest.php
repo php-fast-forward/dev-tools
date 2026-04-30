@@ -25,6 +25,7 @@ use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitHooks\HookContentRenderer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -54,6 +55,7 @@ use function Safe\rmdir;
 
 #[CoversClass(GitHooksCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesClass(FileDiff::class)]
 #[UsesClass(HookContentRenderer::class)]
 #[UsesTrait(LogsCommandResults::class)]
@@ -114,6 +116,8 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn(false);
         $this->input->isInteractive()
             ->willReturn(false);
+        $this->filesystem->getAbsolutePath('.')
+            ->willReturn('/app');
         $this->filesystem->readFile(Argument::containingString('/post-merge'))
             ->willReturn('#!/bin/sh');
 
@@ -206,7 +210,7 @@ final class GitHooksCommandTest extends TestCase
         $this->input->getOption('source')
             ->willReturn('resources/git-hooks');
         $this->input->getOption('target')
-            ->willReturn('.git/hooks');
+            ->willReturn('.githooks');
         $this->input->getOption('no-overwrite')
             ->willReturn(false);
 
@@ -215,22 +219,22 @@ final class GitHooksCommandTest extends TestCase
         $this->finderFactory->create()
             ->willReturn(new Finder())
             ->shouldBeCalledOnce();
-        $this->filesystem->getAbsolutePath('.git/hooks')
-            ->willReturn('/app/.git/hooks');
-        $this->filesystem->exists('/app/.git/hooks/post-merge')
+        $this->filesystem->getAbsolutePath('.githooks')
+            ->willReturn('/app/.githooks');
+        $this->filesystem->exists('/app/.githooks/post-merge')
             ->willReturn(false);
-        $this->filesystem->exists('/app/.git/hooks/pre-commit')
+        $this->filesystem->exists('/app/.githooks/pre-commit')
             ->willReturn(false);
         $this->filesystem->readFile(Argument::containingString('/pre-commit'))
             ->willReturn("DEVTOOLS_GRUMPHP_CONFIG=__DEV_TOOLS_GRUMPHP_CONFIG__\n");
-        $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', false)
+        $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.githooks/post-merge', false)
             ->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
-            '/app/.git/hooks/pre-commit',
+            '/app/.githooks/pre-commit',
             Argument::that(
                 static fn(string $contents): bool => str_contains(
                     $contents,
-                    escapeshellarg(DevToolsPathResolver::getPackagePath('grumphp.yml'))
+                    escapeshellarg(DevToolsPathResolver::getPackagePathRelativeToProject('grumphp.yml', '/app'))
                 )
             ),
         )->shouldBeCalledOnce();

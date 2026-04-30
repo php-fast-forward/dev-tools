@@ -27,7 +27,7 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 final class HookContentRenderer
 {
     /**
-     * Placeholder replaced with the active packaged GrumPHP config path.
+     * Placeholder replaced with the packaged GrumPHP config path rendered relative to the project when possible.
      */
     public const string MANAGED_GRUMPHP_CONFIG_PLACEHOLDER = '__DEV_TOOLS_GRUMPHP_CONFIG__';
 
@@ -35,14 +35,15 @@ final class HookContentRenderer
      * Renders the hook contents for the active DevTools runtime.
      *
      * @param string $contents the packaged hook contents
+     * @param string $projectPath the consumer project root that will own the synchronized hook
      *
      * @return string the rendered hook contents
      */
-    public function render(string $contents): string
+    public function render(string $contents, string $projectPath = ''): string
     {
         return str_replace(
             self::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER,
-            escapeshellarg(DevToolsPathResolver::getPackagePath('grumphp.yml')),
+            escapeshellarg(DevToolsPathResolver::getPackagePathRelativeToProject('grumphp.yml', $projectPath)),
             $contents,
         );
     }

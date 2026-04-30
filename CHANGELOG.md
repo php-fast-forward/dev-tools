@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Render managed GrumPHP hook fallback paths relative to the consumer project so global `dev-tools:sync` installs keep local GrumPHP hook execution working (#305)
+
 ## [1.24.4] - 2026-04-30
 
 ### Fixed

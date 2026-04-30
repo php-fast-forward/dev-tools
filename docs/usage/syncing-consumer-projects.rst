@@ -53,8 +53,8 @@ What the Command Changes
      - Only when missing.
    * - ``.git/hooks/*``
      - Copies packaged hooks that prefer a local ``grumphp.yml`` override and
-       otherwise use the active packaged DevTools ``grumphp.yml`` path
-       resolved when sync installs them.
+       otherwise use a project-relative reference to the active packaged
+       DevTools ``grumphp.yml`` path resolved when sync installs them.
      - Replaced when drift is detected.
 
 When to Run It

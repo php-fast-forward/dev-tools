@@ -49,13 +49,7 @@ final class DevToolsPathResolver
      */
     public static function getPackagePath(string $path = ''): string
     {
-        $packageDirectory = \dirname(__DIR__, 2);
-
-        if ('' !== $path && Path::isAbsolute($path)) {
-            throw new InvalidArgumentException('The DevTools package path MUST be relative to the package root.');
-        }
-
-        return Path::join($packageDirectory, $path);
+        return self::resolvePackageRelativePath($path);
     }
 
     /**
@@ -89,6 +83,28 @@ final class DevToolsPathResolver
     }
 
     /**
+     * Returns a packaged path rendered relative to the active project root when possible.
+     *
+     * When the project root and package root do not share a filesystem root,
+     * the packaged absolute path MUST be returned unchanged so globally
+     * installed DevTools can still point hooks at the packaged fallback file.
+     *
+     * @param string $path the relative path under the package root
+     * @param string $projectPath an optional project root path; defaults to the working project root
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    public static function getPackagePathRelativeToProject(
+        string $path,
+        string $projectPath = '',
+        string $packagePath = '',
+    ): string {
+        return self::relativizePathFromProject(
+            self::resolvePackageRelativePath($path, $packagePath),
+            self::resolveProjectPath($projectPath),
+        );
+    }
+
+    /**
      * Returns the active Composer autoload file for the current DevTools installation mode.
      *
      * When DevTools runs as a dependency, the runtime autoloader lives at the
@@ -99,13 +115,7 @@ final class DevToolsPathResolver
      */
     public static function getRuntimeAutoloadPath(string $packagePath = ''): string
     {
-        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
-
-        if (self::isInstalledAsDependency($packagePath)) {
-            return Path::canonicalize(Path::join($packagePath, '..', '..', 'autoload.php'));
-        }
-
-        return Path::join($packagePath, 'vendor', 'autoload.php');
+        return Path::join(self::getRuntimeVendorRoot($packagePath), 'autoload.php');
     }
 
     /**
@@ -119,13 +129,7 @@ final class DevToolsPathResolver
      */
     public static function getRuntimeToolBinaryPath(string $binary, string $packagePath = ''): string
     {
-        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
-
-        if (self::isInstalledAsDependency($packagePath)) {
-            return Path::canonicalize(Path::join($packagePath, '..', '..', 'bin', $binary));
-        }
-
-        return Path::join($packagePath, 'vendor', 'bin', $binary);
+        return self::getRuntimeVendorPath(Path::join('bin', $binary), $packagePath);
     }
 
     /**
@@ -139,14 +143,7 @@ final class DevToolsPathResolver
      */
     public static function getRuntimeVendorPath(string $path, string $packagePath = ''): string
     {
-        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
-        $vendorPath = self::normalizeVendorRelativePath($path);
-
-        if (self::isInstalledAsDependency($packagePath)) {
-            return Path::canonicalize(Path::join($packagePath, '..', '..', $vendorPath));
-        }
-
-        return Path::join($packagePath, 'vendor', $vendorPath);
+        return Path::join(self::getRuntimeVendorRoot($packagePath), self::normalizeVendorRelativePath($path));
     }
 
     /**
@@ -165,14 +162,10 @@ final class DevToolsPathResolver
         string $projectPath = '',
         string $packagePath = '',
     ): string {
-        $projectPath = '' === $projectPath ? WorkingProjectPathResolver::getProjectPath() : $projectPath;
-        $projectBinaryPath = Path::join($projectPath, 'vendor', 'bin', $binary);
-
-        if (file_exists($projectBinaryPath)) {
-            return $projectBinaryPath;
-        }
-
-        return self::getRuntimeToolBinaryPath($binary, $packagePath);
+        return self::preferExistingPath(
+            self::getProjectVendorPath(Path::join('bin', $binary), $projectPath),
+            self::getRuntimeToolBinaryPath($binary, $packagePath),
+        );
     }
 
     /**
@@ -191,15 +184,10 @@ final class DevToolsPathResolver
         string $projectPath = '',
         string $packagePath = '',
     ): string {
-        $projectPath = '' === $projectPath ? WorkingProjectPathResolver::getProjectPath() : $projectPath;
-        $vendorPath = self::normalizeVendorRelativePath($path);
-        $projectVendorPath = Path::join($projectPath, 'vendor', $vendorPath);
-
-        if (file_exists($projectVendorPath)) {
-            return $projectVendorPath;
-        }
-
-        return self::getRuntimeVendorPath($vendorPath, $packagePath);
+        return self::preferExistingPath(
+            self::getProjectVendorPath($path, $projectPath),
+            self::getRuntimeVendorPath($path, $packagePath),
+        );
     }
 
     /**
@@ -209,9 +197,7 @@ final class DevToolsPathResolver
      */
     public static function isInstalledAsDependency(string $packagePath = ''): bool
     {
-        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
-
-        return str_contains($packagePath, self::VENDOR_PACKAGE_PATH);
+        return str_contains(self::resolvePackageRoot($packagePath), self::VENDOR_PACKAGE_PATH);
     }
 
     /**
@@ -238,5 +224,110 @@ final class DevToolsPathResolver
         }
 
         return $path;
+    }
+
+    /**
+     * Ensures packaged paths stay relative to the DevTools package root.
+     *
+     * @param string $path the package-relative path to validate
+     */
+    private static function assertRelativePackagePath(string $path): void
+    {
+        if ('' !== $path && Path::isAbsolute($path)) {
+            throw new InvalidArgumentException('The DevTools package path MUST be relative to the package root.');
+        }
+    }
+
+    /**
+     * Returns a canonical path under the DevTools package root.
+     *
+     * @param string $path the package-relative path to resolve
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    private static function resolvePackageRelativePath(string $path = '', string $packagePath = ''): string
+    {
+        self::assertRelativePackagePath($path);
+
+        return Path::canonicalize(Path::join(self::resolvePackageRoot($packagePath), $path));
+    }
+
+    /**
+     * Returns the canonical DevTools package root.
+     *
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    private static function resolvePackageRoot(string $packagePath = ''): string
+    {
+        return Path::canonicalize('' === $packagePath ? \dirname(__DIR__, 2) : $packagePath);
+    }
+
+    /**
+     * Returns the canonical working project root.
+     *
+     * @param string $projectPath an optional project root path; defaults to the working project root
+     */
+    private static function resolveProjectPath(string $projectPath = ''): string
+    {
+        return Path::canonicalize(WorkingProjectPathResolver::getProjectPath($projectPath));
+    }
+
+    /**
+     * Returns the active Composer vendor root for the current DevTools installation mode.
+     *
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    private static function getRuntimeVendorRoot(string $packagePath = ''): string
+    {
+        $packagePath = self::resolvePackageRoot($packagePath);
+
+        if (self::isInstalledAsDependency($packagePath)) {
+            return Path::canonicalize(Path::join($packagePath, '..', '..'));
+        }
+
+        return Path::join($packagePath, 'vendor');
+    }
+
+    /**
+     * Returns a vendor path under the active project root.
+     *
+     * @param string $path the vendor-relative path to resolve
+     * @param string $projectPath an optional project root path; defaults to the working project root
+     */
+    private static function getProjectVendorPath(string $path, string $projectPath = ''): string
+    {
+        return Path::join(self::resolveProjectPath($projectPath), 'vendor', self::normalizeVendorRelativePath($path));
+    }
+
+    /**
+     * Returns the preferred path when a project-local candidate exists.
+     *
+     * @param string $preferredPath the project-local candidate path
+     * @param string $fallbackPath the runtime fallback path
+     */
+    private static function preferExistingPath(string $preferredPath, string $fallbackPath): string
+    {
+        if (file_exists($preferredPath)) {
+            return $preferredPath;
+        }
+
+        return $fallbackPath;
+    }
+
+    /**
+     * Returns a path relative to the project root when possible.
+     *
+     * When paths do not share the same filesystem root, the original absolute
+     * path MUST be returned unchanged so callers still receive a usable path.
+     *
+     * @param string $path the absolute path to relativize
+     * @param string $projectPath the absolute project root used as base path
+     */
+    private static function relativizePathFromProject(string $path, string $projectPath): string
+    {
+        try {
+            return Path::makeRelative($path, $projectPath);
+        } catch (InvalidArgumentException) {
+            return $path;
+        }
     }
 }

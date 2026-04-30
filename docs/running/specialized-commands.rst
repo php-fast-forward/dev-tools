@@ -390,8 +390,8 @@ Important details:
   .gitignore;
 - it calls ``gitattributes`` to manage export-ignore rules in .gitattributes;
 - it refreshes packaged Git hooks that prefer a local ``grumphp.yml``
-  override and otherwise use the active packaged DevTools ``grumphp.yml``
-  path resolved when sync installs them;
+  override and otherwise use a project-relative reference to the active
+  packaged DevTools ``grumphp.yml`` path resolved when sync installs them;
 - it calls ``skills`` so ``.agents/skills`` contains links to the packaged
   skill set;
 - it calls ``agents`` so ``.agents/agents`` contains links to the packaged

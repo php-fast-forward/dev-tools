@@ -38,7 +38,8 @@ following steps:
    ``.editorconfig``, and ``.github/dependabot.yml``, and refreshes
    ``.gitignore``, ``.gitattributes``, the project license, and packaged Git
    hooks that prefer a project-local ``grumphp.yml`` override and otherwise
-   use the active packaged DevTools ``grumphp.yml`` path.
+   use a project-relative reference to the active packaged DevTools
+   ``grumphp.yml`` path.
 6. If ``.github/wiki`` is missing, ``dev-tools:sync`` adds it as a Git
    submodule that points to the repository wiki.
 7. ``dev-tools:sync`` runs ``gitignore`` to merge canonical ignore rules into
