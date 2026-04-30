@@ -90,14 +90,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: ./.dev-tools-actions/.github/actions/summary/write
-        with:
-          markdown: |
-            ## Wiki Publish Summary
-
-            - Publish branch: `master`
-            - Release branch: `${{ github.event.pull_request.head.ref }}`
-            - Action: skipped preview-branch publication because merged release branches are refreshed from the authoritative released state by `changelog.yml`.
+      - name: Explain release publish handling
+        env:
+          RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
+        run: |
+          {
+            printf '## Wiki Publish Summary\n\n'
+            printf -- '- Publish branch: `master`\n'
+            printf -- '- Release branch: `%s`\n' "$RELEASE_BRANCH"
+            printf -- '- Action: skipped preview-branch publication because merged release branches are refreshed from the authoritative released state by `changelog.yml`.\n'
+          } >> "$GITHUB_STEP_SUMMARY"
 
   cleanup_closed_preview:
     name: Delete Closed PR Wiki Preview
