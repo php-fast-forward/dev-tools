@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.3] - 2026-04-30
+
 ### Fixed
 
 - Keep global `dev-tools:sync` runs machine-independent by removing only deprecated DevTools-managed Composer GrumPHP default-path metadata while wiring packaged Git hooks to prefer a project-local `grumphp.yml` and otherwise use the active packaged DevTools config path resolved at sync time (#288)
@@ -387,7 +389,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.2...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.3...HEAD
+[1.24.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.2...v1.24.3
 [1.24.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.1...v1.24.2
 [1.24.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.0...v1.24.1
 [1.24.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.23.0...v1.24.0
