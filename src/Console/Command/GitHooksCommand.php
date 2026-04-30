@@ -130,8 +130,8 @@ final class GitHooksCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $sourcePath = $this->fileLocator->locate((string) $input->getOption('source'));
+        $projectPath = (string) $this->filesystem->getAbsolutePath('.');
         $targetPath = (string) $this->filesystem->getAbsolutePath((string) $input->getOption('target'));
-        $projectPath = Path::canonicalize(Path::join($targetPath, '..', '..'));
         $overwrite = ! $input->getOption('no-overwrite');
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
