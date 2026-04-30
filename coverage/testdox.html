@@ -833,6 +833,12 @@
             <li class="success">Execute will request json output and disable progress when json is requested</li>
             <li class="success">Execute will enable progress when requested</li>
         </ul>
+        <h2>Refresh Release Wiki Pointer Action (FastForward\DevTools\Tests\GitHubActions\RefreshReleaseWikiPointerAction)</h2>
+        <ul>
+            <li class="success">Refresh will publish the wiki branch and expose the parent pointer change</li>
+            <li class="success">Refresh will skip publication when the rendered wiki does not change</li>
+            <li class="success">Refresh will report pointer drift when the wiki remote advanced without new rendered changes</li>
+        </ul>
         <h2>Remove Empty Doc Block Rector (FastForward\DevTools\Tests\Rector\RemoveEmptyDocBlockRector)</h2>
         <ul>
             <li class="success">Get rule definition will return configured definition</li>
@@ -861,6 +867,11 @@
             <li class="success">Resolve with unknown license will return null</li>
             <li class="success">Resolve with missing license will return null</li>
             <li class="success">Resolve with empty license will return null</li>
+        </ul>
+        <h2>Retry Transient Failures Action (FastForward\DevTools\Tests\GitHubActions\RetryTransientFailuresAction)</h2>
+        <ul>
+            <li class="success">Action will skip gracefully when a failed job log cannot be downloaded</li>
+            <li class="success">Action will request a rerun when every failed job matches a transient signature</li>
         </ul>
         <h2>Runtime Environment (FastForward\DevTools\Tests\Environment\RuntimeEnvironment)</h2>
         <ul>

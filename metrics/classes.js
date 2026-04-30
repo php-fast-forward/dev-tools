@@ -9111,7 +9111,7 @@ var classes = [
         "totalDataComplexity": 5.43,
         "totalSystemComplexity": 149.43,
         "package": "FastForward\\DevTools\\Path\\",
-        "pageRank": 0.02,
+        "pageRank": 0.01,
         "afferentCoupling": 18,
         "efferentCoupling": 1,
         "instability": 0.05,
@@ -19365,6 +19365,130 @@ var classes = [
         "violations": {}
     },
     {
+        "name": "FastForward\\DevTools\\Tests\\GitHubActions\\RetryTransientFailuresActionTest",
+        "interface": false,
+        "abstract": false,
+        "final": true,
+        "methods": [
+            {
+                "name": "setUp",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "tearDown",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "actionWillSkipGracefullyWhenAFailedJobLogCannotBeDownloaded",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "actionWillRequestARerunWhenEveryFailedJobMatchesATransientSignature",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "writeJobsJson",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "writeLogFixture",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "createMockExecutables",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "runAction",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "parseGitHubOutputFile",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 9,
+        "nbMethods": 9,
+        "nbMethodsPrivate": 7,
+        "nbMethodsPublic": 2,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 17,
+        "ccn": 9,
+        "ccnMethodMax": 6,
+        "externals": [
+            "PHPUnit\\Framework\\TestCase",
+            "RecursiveDirectoryIterator",
+            "RecursiveIteratorIterator",
+            "Symfony\\Component\\Process\\Process"
+        ],
+        "parents": [
+            "PHPUnit\\Framework\\TestCase"
+        ],
+        "implements": [],
+        "lcom": 1,
+        "length": 241,
+        "vocabulary": 88,
+        "volume": 1556.72,
+        "difficulty": 11.79,
+        "effort": 18361.35,
+        "level": 0.08,
+        "bugs": 0.52,
+        "time": 1020,
+        "intelligentContent": 131.98,
+        "number_operators": 57,
+        "number_operands": 184,
+        "number_operators_unique": 10,
+        "number_operands_unique": 78,
+        "cloc": 41,
+        "loc": 205,
+        "lloc": 155,
+        "mi": 60.59,
+        "mIwoC": 28.66,
+        "commentWeight": 31.94,
+        "kanDefect": 0.89,
+        "relativeStructuralComplexity": 144,
+        "relativeDataComplexity": 0.35,
+        "relativeSystemComplexity": 144.35,
+        "totalStructuralComplexity": 1296,
+        "totalDataComplexity": 3.15,
+        "totalSystemComplexity": 1299.15,
+        "package": "FastForward\\DevTools\\Tests\\GitHubActions\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 4,
+        "instability": 1,
+        "numberOfUnitTests": 0,
+        "violations": {}
+    },
+    {
         "name": "FastForward\\DevTools\\Tests\\GitHubActions\\SetupComposerActionTest",
         "interface": false,
         "abstract": false,
@@ -19509,6 +19633,153 @@ var classes = [
         "totalStructuralComplexity": 1573,
         "totalDataComplexity": 4.92,
         "totalSystemComplexity": 1577.92,
+        "package": "FastForward\\DevTools\\Tests\\GitHubActions\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 4,
+        "instability": 1,
+        "numberOfUnitTests": 0,
+        "violations": {}
+    },
+    {
+        "name": "FastForward\\DevTools\\Tests\\GitHubActions\\RefreshReleaseWikiPointerActionTest",
+        "interface": false,
+        "abstract": false,
+        "final": true,
+        "methods": [
+            {
+                "name": "setUp",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "tearDown",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "refreshWillPublishTheWikiBranchAndExposeTheParentPointerChange",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "refreshWillSkipPublicationWhenTheRenderedWikiDoesNotChange",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "refreshWillReportPointerDriftWhenTheWikiRemoteAdvancedWithoutNewRenderedChanges",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "createWorkspaceWithWikiSubmodule",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "createMockDevToolsBinary",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "advanceWikiRemote",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "runAction",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "runProcess",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "getIsolatedEnvironment",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "parseKeyValueFile",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 12,
+        "nbMethods": 12,
+        "nbMethodsPrivate": 9,
+        "nbMethodsPublic": 3,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 18,
+        "ccn": 7,
+        "ccnMethodMax": 4,
+        "externals": [
+            "PHPUnit\\Framework\\TestCase",
+            "RecursiveDirectoryIterator",
+            "RecursiveIteratorIterator",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process"
+        ],
+        "parents": [
+            "PHPUnit\\Framework\\TestCase"
+        ],
+        "implements": [],
+        "lcom": 1,
+        "length": 375,
+        "vocabulary": 108,
+        "volume": 2533.08,
+        "difficulty": 7.72,
+        "effort": 19551.46,
+        "level": 0.13,
+        "bugs": 0.84,
+        "time": 1086,
+        "intelligentContent": 328.19,
+        "number_operators": 57,
+        "number_operands": 318,
+        "number_operators_unique": 5,
+        "number_operands_unique": 103,
+        "cloc": 53,
+        "loc": 188,
+        "lloc": 135,
+        "mi": 65.4,
+        "mIwoC": 28.76,
+        "commentWeight": 36.64,
+        "kanDefect": 0.89,
+        "relativeStructuralComplexity": 169,
+        "relativeDataComplexity": 0.47,
+        "relativeSystemComplexity": 169.47,
+        "totalStructuralComplexity": 2028,
+        "totalDataComplexity": 5.64,
+        "totalSystemComplexity": 2033.64,
         "package": "FastForward\\DevTools\\Tests\\GitHubActions\\",
         "pageRank": 0,
         "afferentCoupling": 0,
@@ -23325,7 +23596,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000002c20000000000000000",
+        "name": "anonymous@000000000000156d0000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -23488,7 +23759,7 @@ var classes = [
             "PHPUnit\\Framework\\TestCase",
             "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "RuntimeException",
-            "anonymous@00000000000002c20000000000000000",
+            "anonymous@000000000000156d0000000000000000",
             "SebastianBergmann\\CodeCoverage\\Filter",
             "SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",
