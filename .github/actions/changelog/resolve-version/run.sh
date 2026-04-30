@@ -5,7 +5,7 @@ if [ -n "${INPUT_VERSION}" ]; then
     version="${INPUT_VERSION}"
     source="input"
 else
-    version="$(composer dev-tools changelog:next-version -- --file="${INPUT_CHANGELOG_FILE}")"
+    version="$(dev-tools changelog:next-version --file="${INPUT_CHANGELOG_FILE}")"
     source="inferred"
 fi
 

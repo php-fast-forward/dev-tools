@@ -6,7 +6,7 @@ use FastForward\DevTools\Changelog\Conflict\UnreleasedChangelogConflictResolver;
 use FastForward\DevTools\Changelog\Parser\ChangelogParser;
 use FastForward\DevTools\Changelog\Renderer\MarkdownRenderer;
 
-$autoload = getenv('DEV_TOOLS_AUTO_RESOLVE_AUTOLOAD') ?: getcwd() . '/vendor/autoload.php';
+$autoload = getenv('DEV_TOOLS_AUTO_RESOLVE_AUTOLOAD') ?: getenv('DEV_TOOLS_AUTOLOAD') ?: getcwd() . '/vendor/autoload.php';
 
 if (! is_file($autoload)) {
     fwrite(STDERR, sprintf("Composer autoload file not found: %s\n", $autoload));

@@ -63,8 +63,6 @@ jobs:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && github.sha || 'main' }}
                   path: .dev-tools-actions
-                  sparse-checkout: |
-                      .github/actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer

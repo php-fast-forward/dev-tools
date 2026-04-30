@@ -92,8 +92,6 @@ jobs:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
-                sparse-checkout: |
-                  .github/actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
@@ -118,7 +116,7 @@ jobs:
             - name: Run PHPUnit tests
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer dev-tools tests -- --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
+              run: dev-tools tests --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
 
             - name: Publish required test status
               if: ${{ always() && inputs.publish-required-statuses }}
@@ -159,8 +157,6 @@ jobs:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
-                sparse-checkout: |
-                  .github/actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
@@ -172,7 +168,7 @@ jobs:
             - name: Run dependency health check
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || -1 }}
+              run: dev-tools dependencies --max-outdated=${{ inputs.max-outdated || -1 }}
 
     summarize:
         if: ${{ always() }}
