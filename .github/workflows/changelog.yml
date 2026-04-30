@@ -270,7 +270,7 @@ jobs:
               with:
                   php-version: ${{ needs.resolve_php.outputs.php-version }}
                   root-version: ${{ format('dev-{0}{1}', env.RELEASE_BRANCH_PREFIX, steps.version.outputs.value) }}
-                  install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+                  install-options: --prefer-dist --no-progress --no-interaction --no-scripts
                   safe-directories: |
                       ${{ github.workspace }}/.github/wiki
 
