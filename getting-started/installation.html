@@ -2445,10 +2445,54 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-githooks.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            GitHooks
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-gitignore.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             GitIgnore
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-grumphp.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            GrumPhp
         </a>
 
             </div>
@@ -3129,16 +3173,20 @@ update.</li>
 .</li>
 
     <li value="5"><code>dev-tools:sync</code>
- updates <code>extra.grumphp.config-default-path</code>
-,
-synchronizes funding metadata, copies automation assets such as workflow
-stubs, <code>.editorconfig</code>
+ removes deprecated DevTools-managed
+<code>extra.grumphp.config-default-path</code>
+ entries, synchronizes funding
+metadata, copies automation assets such as workflow stubs,
+<code>.editorconfig</code>
 , and <code>.github/dependabot.yml</code>
 , and refreshes
 <code>.gitignore</code>
 , <code>.gitattributes</code>
 , the project license, and packaged Git
-hooks.</li>
+hooks that prefer a project-local <code>grumphp.yml</code>
+ override and otherwise
+use the active packaged DevTools <code>grumphp.yml</code>
+ path.</li>
 
     <li value="6">If <code>.github/wiki</code>
  is missing, <code>dev-tools:sync</code>

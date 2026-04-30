@@ -2021,6 +2021,11 @@ Search.appendIndex(
             "summary": "Installs\u0020a\u0020single\u0020hook\u0020and\u0020rewrites\u0020drifted\u0020targets\u0020defensively.",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#method_installHook"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003AcompareRenderedHookContents\u0028\u0029",
+            "name": "compareRenderedHookContents",
+            "summary": "Compares\u0020rendered\u0020hook\u0020contents\u0020with\u0020an\u0020existing\u0020installed\u0020hook.",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#method_compareRenderedHookContents"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024filesystem",
             "name": "filesystem",
             "summary": "",
@@ -2035,6 +2040,11 @@ Search.appendIndex(
             "name": "finderFactory",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_finderFactory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024hookContentRenderer",
+            "name": "hookContentRenderer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-GitHooksCommand.html#property_hookContentRenderer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand\u003A\u003A\u0024fileDiffer",
             "name": "fileDiffer",
@@ -2715,6 +2725,11 @@ Search.appendIndex(
             "name": "fileLocator",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_fileLocator"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024managedConfigPathSynchronizer",
+            "name": "managedConfigPathSynchronizer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-UpdateComposerJsonCommand.html#property_managedConfigPathSynchronizer"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand\u003A\u003A\u0024fileDiffer",
             "name": "fileDiffer",
@@ -3956,6 +3971,21 @@ Search.appendIndex(
             "summary": "Writes\u0020the\u0020.gitattributes\u0020content\u0020to\u0020the\u0020specified\u0020filesystem\u0020path.",
             "url": "classes/FastForward-DevTools-GitAttributes-WriterInterface.html#method_write"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\GitHooks\\HookContentRenderer",
+            "name": "HookContentRenderer",
+            "summary": "Renders\u0020packaged\u0020Git\u0020hooks\u0020with\u0020runtime\u002Dspecific\u0020DevTools\u0020hook\u0020configuration\u0020paths.",
+            "url": "classes/FastForward-DevTools-GitHooks-HookContentRenderer.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GitHooks\\HookContentRenderer\u003A\u003Arender\u0028\u0029",
+            "name": "render",
+            "summary": "Renders\u0020the\u0020hook\u0020contents\u0020for\u0020the\u0020active\u0020DevTools\u0020runtime.",
+            "url": "classes/FastForward-DevTools-GitHooks-HookContentRenderer.html#method_render"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GitHooks\\HookContentRenderer\u003A\u003AMANAGED_GRUMPHP_CONFIG_PLACEHOLDER",
+            "name": "MANAGED_GRUMPHP_CONFIG_PLACEHOLDER",
+            "summary": "Placeholder\u0020replaced\u0020with\u0020the\u0020active\u0020packaged\u0020GrumPHP\u0020config\u0020path.",
+            "url": "classes/FastForward-DevTools-GitHooks-HookContentRenderer.html#constant_MANAGED_GRUMPHP_CONFIG_PLACEHOLDER"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Classifier",
             "name": "Classifier",
             "summary": "Classifies\u0020.gitignore\u0020entries\u0020as\u0020directory\u002Doriented\u0020or\u0020file\u002Doriented\u0020patterns.",
@@ -4140,6 +4170,31 @@ Search.appendIndex(
             "name": "write",
             "summary": "Writes\u0020the\u0020GitIgnore\u0020content\u0020to\u0020its\u0020associated\u0020filesystem\u0020path.",
             "url": "classes/FastForward-DevTools-GitIgnore-WriterInterface.html#method_write"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer",
+            "name": "ManagedConfigPathSynchronizer",
+            "summary": "Synchronizes\u0020deprecated\u0020DevTools\u002Dmanaged\u0020GrumPHP\u0020composer\u0020metadata\u0020without\u0020leaking\u0020package\u0020paths\u0020into\u0020consumers.",
+            "url": "classes/FastForward-DevTools-GrumPhp-ManagedConfigPathSynchronizer.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer\u003A\u003Asynchronize\u0028\u0029",
+            "name": "synchronize",
+            "summary": "Removes\u0020deprecated\u0020DevTools\u002Dmanaged\u0020GrumPHP\u0020config\u002Ddefault\u002Dpath\u0020entries\u0020while\u0020preserving\u0020consumer\u002Downed\u0020values.",
+            "url": "classes/FastForward-DevTools-GrumPhp-ManagedConfigPathSynchronizer.html#method_synchronize"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer\u003A\u003AisManagedConfigPath\u0028\u0029",
+            "name": "isManagedConfigPath",
+            "summary": "Reports\u0020whether\u0020a\u0020config\u002Ddefault\u002Dpath\u0020value\u0020is\u0020managed\u0020by\u0020DevTools.",
+            "url": "classes/FastForward-DevTools-GrumPhp-ManagedConfigPathSynchronizer.html#method_isManagedConfigPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer\u003A\u003Anormalize\u0028\u0029",
+            "name": "normalize",
+            "summary": "Normalizes\u0020a\u0020path\u0020for\u0020stable\u0020comparisons\u0020across\u0020platforms.",
+            "url": "classes/FastForward-DevTools-GrumPhp-ManagedConfigPathSynchronizer.html#method_normalize"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer\u003A\u003AMANAGED_CONFIG_SUFFIX",
+            "name": "MANAGED_CONFIG_SUFFIX",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-GrumPhp-ManagedConfigPathSynchronizer.html#constant_MANAGED_CONFIG_SUFFIX"
         },                {
             "fqsen": "\\FastForward\\DevTools\\License\\Generator",
             "name": "Generator",
@@ -5731,10 +5786,20 @@ Search.appendIndex(
             "summary": "",
             "url": "namespaces/fastforward-devtools-gitattributes.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\GitHooks",
+            "name": "GitHooks",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-githooks.html"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore",
             "name": "GitIgnore",
             "summary": "",
             "url": "namespaces/fastforward-devtools-gitignore.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GrumPhp",
+            "name": "GrumPhp",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-grumphp.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\License",
             "name": "License",

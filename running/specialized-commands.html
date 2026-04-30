@@ -2445,10 +2445,54 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-githooks.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            GitHooks
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-gitignore.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             GitIgnore
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-grumphp.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            GrumPhp
         </a>
 
             </div>
@@ -3772,9 +3816,9 @@ consumer bootstrap steps.</li>
 
 <ul>
     <li class="dash">it updates <code>composer.json</code>
- scripts and
-<code>extra.grumphp.config-default-path</code>
-;</li>
+ scripts and removes only deprecated
+DevTools-managed <code>extra.grumphp.config-default-path</code>
+ values;</li>
 
     <li class="dash">it calls <code>funding</code>
  so supported funding metadata stays aligned between
@@ -3801,6 +3845,12 @@ missing.</li>
 
     <li class="dash">it calls <code>gitattributes</code>
  to manage export-ignore rules in .gitattributes;</li>
+
+    <li class="dash">it refreshes packaged Git hooks that prefer a local <code>grumphp.yml</code>
+
+override and otherwise use the active packaged DevTools <code>grumphp.yml</code>
+
+path resolved when sync installs them;</li>
 
     <li class="dash">it calls <code>skills</code>
  so <code>.agents/skills</code>
@@ -4012,12 +4062,15 @@ permissions do not block replacements;</li>
     <li class="dash">adds <code>dev-tools:fix</code>
  script for automated fixing;</li>
 
-    <li class="dash">adds GrumPHP extra configuration pointing to packaged <code>grumphp.yml</code>
-;</li>
+    <li class="dash">removes only deprecated DevTools-managed
+<code>extra.grumphp.config-default-path</code>
+ values;</li>
 
     <li class="dash">if the target file does not exist, exits silently with code 0;</li>
 
-    <li class="dash">existing scripts with the same name are overwritten.</li>
+    <li class="dash">existing scripts with the same name are overwritten;</li>
+
+    <li class="dash">preserves consumer-owned GrumPHP settings.</li>
 
 </ul>
 

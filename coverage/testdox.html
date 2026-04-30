@@ -605,6 +605,7 @@
         <ul>
             <li class="success">Command will set expected name description and help</li>
             <li class="success">Execute will copy packaged hooks</li>
+            <li class="success">Execute will render managed grum php config into placeholder hooks</li>
             <li class="success">Execute will skip existing hooks when no overwrite is requested</li>
             <li class="success">Execute will return failure in check mode when hook would change</li>
             <li class="success">Execute will skip replacing hook when interactive confirmation is declined</li>
@@ -631,6 +632,10 @@
             <li class="success">Execute will return success in dry run mode when drift is detected</li>
             <li class="success">Execute will skip writing when interactive confirmation is declined</li>
         </ul>
+        <h2>Hook Content Renderer (FastForward\DevTools\Tests\GitHooks\HookContentRenderer)</h2>
+        <ul>
+            <li class="success">Render will replace the managed grum php config placeholder</li>
+        </ul>
         <h2>Joli Notif Execution Finished Subscriber (FastForward\DevTools\Tests\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber)</h2>
         <ul>
             <li class="success">Get title will report success when no issues were recorded</li>
@@ -652,6 +657,13 @@
             <li class="success">Constructor will enable decorated output and register expected styles</li>
             <li class="success">Format will apply the registered info style</li>
             <li class="success">Format will apply the registered alert style</li>
+        </ul>
+        <h2>Managed Config Path Synchronizer (FastForward\DevTools\Tests\GrumPhp\ManagedConfigPathSynchronizer)</h2>
+        <ul>
+            <li class="success">Synchronize will remove managed vendor config default paths</li>
+            <li class="success">Synchronize will remove current managed relative paths outside the project</li>
+            <li class="success">Synchronize will preserve consumer owned config default paths</li>
+            <li class="success">Synchronize will preserve non array legacy consumer configuration</li>
         </ul>
         <h2>Managed Workspace (FastForward\DevTools\Tests\Path\ManagedWorkspace)</h2>
         <ul>
@@ -731,6 +743,11 @@
             <li class="success">Synchronize will repair broken symlink</li>
             <li class="success">Synchronize will preserve existing non symlink directory</li>
             <li class="success">Synchronize will create links for top level files</li>
+        </ul>
+        <h2>Packaged Hooks (FastForward\DevTools\Tests\GitHooks\PackagedHooks)</h2>
+        <ul>
+            <li class="success">Packaged pre commit hook will prefer project config and fallback to the managed placeholder</li>
+            <li class="success">Packaged commit msg hook will prefer project config and fallback to the managed placeholder</li>
         </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>
@@ -916,7 +933,9 @@
         <h2>Update Composer Json Command (FastForward\DevTools\Tests\Console\Command\UpdateComposerJsonCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>
-            <li class="success">Execute will update composer json scripts and extra configuration</li>
+            <li class="success">Execute will update composer json scripts and managed metadata</li>
+            <li class="success">Execute will remove only managed grum php config default path</li>
+            <li class="success">Execute will preserve consumer owned grum php config default path</li>
             <li class="success">Execute will add readme metadata when readme exists and composer json does not declare readme</li>
             <li class="success">Execute will preserve existing readme metadata</li>
             <li class="success">Execute will skip readme metadata when readme does not exist</li>

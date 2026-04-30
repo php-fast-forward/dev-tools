@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-04-30 02:13:49        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-04-30 02:42:21        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -93,7 +93,7 @@
                             <path d="M0 0h24v24H0z" fill="none">
                             <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z">
                         </svg>
-                        Violations (79)
+                        Violations (81)
                     </a>
                 </li>
                                     <li>
@@ -287,6 +287,16 @@
         "relations": []
     },
     {
+        "name": "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\Symfony\\Component\\Filesystem\\Path",
+        "size": 3000,
+        "relations": []
+    },
+    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
         "size": 3000,
         "relations": [
@@ -448,11 +458,6 @@
     },
     {
         "name": "\\FastForward\\DevTools\\Git\\GitClientInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\Symfony\\Component\\Filesystem\\Path",
         "size": 3000,
         "relations": []
     },
@@ -658,6 +663,16 @@
     },
     {
         "name": "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\GitHooks\\HookContentRenderer",
+        "size": 3000,
+        "relations": []
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Resource\\FileDiff",
         "size": 3000,
         "relations": []
     },
@@ -883,11 +898,6 @@
     },
     {
         "name": "\\FastForward\\DevTools\\GitIgnore\\Reader",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Resource\\FileDiff",
         "size": 3000,
         "relations": []
     },
@@ -1470,6 +1480,14 @@
         "relations": []
     },
     {
+        "name": "\\FastForward\\DevTools\\Tests\\GrumPhp\\ManagedConfigPathSynchronizerTest",
+        "size": 3000,
+        "relations": [
+            "\\PHPUnit\\Framework\\TestCase",
+            "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer"
+        ]
+    },
+    {
         "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\ReportsCommandTest",
         "size": 3000,
         "relations": [
@@ -1534,6 +1552,7 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\Prophecy\\Argument",
+            "\\FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer",
             "\\FastForward\\DevTools\\Console\\Command\\UpdateComposerJsonCommand",
             "\\FastForward\\DevTools\\Resource\\FileDiff",
             "\\ReflectionMethod"
@@ -1714,8 +1733,10 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\Prophecy\\Argument",
+            "\\FastForward\\DevTools\\GitHooks\\HookContentRenderer",
             "\\FastForward\\DevTools\\Console\\Command\\GitHooksCommand",
             "\\Symfony\\Component\\Finder\\Finder",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver",
             "\\FastForward\\DevTools\\Resource\\FileDiff",
             "\\Symfony\\Component\\Filesystem\\Exception\\IOException",
             "\\ReflectionMethod"
@@ -1803,32 +1824,32 @@
         ]
     },
     {
-        "name": "\\anonymous@0000000000000a700000000000000000",
+        "name": "\\anonymous@000000000000243a0000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000000bf40000000000000000",
+        "name": "\\anonymous@00000000000011c00000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000001b4b0000000000000000",
+        "name": "\\anonymous@00000000000029da0000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000001cce0000000000000000",
+        "name": "\\anonymous@00000000000012b80000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@000000000000094e0000000000000000",
+        "name": "\\anonymous@0000000000000f5c0000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@000000000000076c0000000000000000",
+        "name": "\\anonymous@00000000000007c00000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -1838,14 +1859,14 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\Prophecy\\Argument",
-            "\\anonymous@0000000000000a700000000000000000",
+            "\\anonymous@000000000000243a0000000000000000",
             "\\Symfony\\Component\\Console\\Input\\ArrayInput",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "\\anonymous@0000000000000bf40000000000000000",
-            "\\anonymous@0000000000001b4b0000000000000000",
-            "\\anonymous@0000000000001cce0000000000000000",
-            "\\anonymous@000000000000094e0000000000000000",
-            "\\anonymous@000000000000076c0000000000000000",
+            "\\anonymous@00000000000011c00000000000000000",
+            "\\anonymous@00000000000029da0000000000000000",
+            "\\anonymous@00000000000012b80000000000000000",
+            "\\anonymous@0000000000000f5c0000000000000000",
+            "\\anonymous@00000000000007c00000000000000000",
             "\\ReflectionProperty",
             "\\FastForward\\DevTools\\Console\\DevTools",
             "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
@@ -1889,7 +1910,7 @@
         ]
     },
     {
-        "name": "\\anonymous@0000000000000d2d0000000000000000",
+        "name": "\\anonymous@0000000000000de90000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -1911,7 +1932,7 @@
             "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
             "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
             "\\Prophecy\\Argument",
-            "\\anonymous@0000000000000d2d0000000000000000",
+            "\\anonymous@0000000000000de90000000000000000",
             "\\stdClass",
             "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput"
         ]
@@ -2050,7 +2071,7 @@
         "relations": []
     },
     {
-        "name": "\\anonymous@00000000000013780000000000000000",
+        "name": "\\anonymous@00000000000012170000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2065,7 +2086,7 @@
         "relations": [
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\Resource\\FileDiffer",
-            "\\anonymous@00000000000013780000000000000000"
+            "\\anonymous@00000000000012170000000000000000"
         ]
     },
     {
@@ -2243,6 +2264,22 @@
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\Config\\ComposerDependencyAnalyserConfig",
             "\\ShipMonk\\ComposerDependencyAnalyser\\Config\\Configuration"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Tests\\GitHooks\\HookContentRendererTest",
+        "size": 3000,
+        "relations": [
+            "\\PHPUnit\\Framework\\TestCase",
+            "\\FastForward\\DevTools\\GitHooks\\HookContentRenderer",
+            "\\FastForward\\DevTools\\Path\\DevToolsPathResolver"
+        ]
+    },
+    {
+        "name": "\\FastForward\\DevTools\\Tests\\GitHooks\\PackagedHooksTest",
+        "size": 3000,
+        "relations": [
+            "\\PHPUnit\\Framework\\TestCase"
         ]
     },
     {
@@ -2618,7 +2655,7 @@
         ]
     },
     {
-        "name": "\\anonymous@0000000000001b270000000000000000",
+        "name": "\\anonymous@00000000000009e90000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2639,7 +2676,7 @@
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "\\RuntimeException",
-            "\\anonymous@0000000000001b270000000000000000",
+            "\\anonymous@00000000000009e90000000000000000",
             "\\SebastianBergmann\\CodeCoverage\\Filter",
             "\\SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "\\SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",
