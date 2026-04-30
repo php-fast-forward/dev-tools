@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.5] - 2026-04-30
+
 ### Fixed
 
 - Render managed GrumPHP hook fallback paths relative to the consumer project so global `dev-tools:sync` installs keep local GrumPHP hook execution working (#305)
@@ -400,7 +402,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.4...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.5...HEAD
+[1.24.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.4...v1.24.5
 [1.24.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.3...v1.24.4
 [1.24.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.2...v1.24.3
 [1.24.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.1...v1.24.2
