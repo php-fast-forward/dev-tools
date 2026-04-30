@@ -23,7 +23,6 @@ use Composer\InstalledVersions;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use JsonException;
-use Symfony\Component\Process\Process;
 
 use function Safe\preg_match;
 use function Safe\json_decode;
@@ -83,7 +82,9 @@ final readonly class ComposerVersionChecker implements VersionCheckerInterface
 
         $process->setTimeout(self::TIMEOUT_SECONDS);
 
-        if (Process::SUCCESS !== $process->run()) {
+        $process->run();
+
+        if (! $process->isSuccessful()) {
             return null;
         }
 

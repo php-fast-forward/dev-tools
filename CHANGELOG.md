@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Restore global DevTools new-version notifications by using a supported Symfony Process success check during release lookups (#300)
+
 ## [1.24.3] - 2026-04-30
 
 ### Fixed
