@@ -3362,7 +3362,7 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Returns a package-relative path rendered relative to the active project root.
+                Returns a packaged path rendered relative to the active project root when possible.
             </p>
             </div>
 
@@ -4236,11 +4236,11 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">98</span>
+    <span class="badge text-bg-light border">102</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Returns a package-relative path rendered relative to the active project root.</p>
+        <p class="lead text-body-secondary mb-0">Returns a packaged path rendered relative to the active project root when possible.</p>
     </div>
 
 
@@ -4267,6 +4267,23 @@
 
     
     
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>When the project root and package root do not share a filesystem root,
+the packaged absolute path MUST be returned unchanged so globally
+installed DevTools can still point hooks at the packaged fallback file.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
 
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
@@ -4437,7 +4454,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">185</span>
+    <span class="badge text-bg-light border">194</span>
 
     </aside>
         <div class="mb-4">
@@ -4655,7 +4672,7 @@ MUST fall back to the active DevTools runtime binary path.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">211</span>
+    <span class="badge text-bg-light border">220</span>
 
     </aside>
         <div class="mb-4">
@@ -5004,7 +5021,7 @@ back to the active DevTools runtime vendor path.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">122</span>
+    <span class="badge text-bg-light border">131</span>
 
     </aside>
         <div class="mb-4">
@@ -5152,7 +5169,7 @@ Composer vendor root. Repository checkouts instead use the package-local
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">142</span>
+    <span class="badge text-bg-light border">151</span>
 
     </aside>
         <div class="mb-4">
@@ -5333,7 +5350,7 @@ dependency installs resolve binaries from the active Composer vendor root.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">162</span>
+    <span class="badge text-bg-light border">171</span>
 
     </aside>
         <div class="mb-4">
@@ -5514,7 +5531,7 @@ dependency installs resolve binaries from the active Composer vendor root.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">232</span>
+    <span class="badge text-bg-light border">241</span>
 
     </aside>
         <div class="mb-4">
@@ -5645,7 +5662,7 @@ dependency installs resolve binaries from the active Composer vendor root.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">244</span>
+    <span class="badge text-bg-light border">253</span>
 
     </aside>
         <div class="mb-4">
@@ -5776,7 +5793,7 @@ dependency installs resolve binaries from the active Composer vendor root.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">254</span>
+    <span class="badge text-bg-light border">263</span>
 
     </aside>
         <div class="mb-4">

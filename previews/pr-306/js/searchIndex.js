@@ -3993,7 +3993,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitHooks\\HookContentRenderer\u003A\u003AMANAGED_GRUMPHP_CONFIG_PLACEHOLDER",
             "name": "MANAGED_GRUMPHP_CONFIG_PLACEHOLDER",
-            "summary": "Placeholder\u0020replaced\u0020with\u0020the\u0020project\u002Drelative\u0020packaged\u0020GrumPHP\u0020config\u0020path.",
+            "summary": "Placeholder\u0020replaced\u0020with\u0020the\u0020packaged\u0020GrumPHP\u0020config\u0020path\u0020rendered\u0020relative\u0020to\u0020the\u0020project\u0020when\u0020possible.",
             "url": "classes/FastForward-DevTools-GitHooks-HookContentRenderer.html#constant_MANAGED_GRUMPHP_CONFIG_PLACEHOLDER"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Classifier",
@@ -4323,7 +4323,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetPackagePathRelativeToProject\u0028\u0029",
             "name": "getPackagePathRelativeToProject",
-            "summary": "Returns\u0020a\u0020package\u002Drelative\u0020path\u0020rendered\u0020relative\u0020to\u0020the\u0020active\u0020project\u0020root.",
+            "summary": "Returns\u0020a\u0020packaged\u0020path\u0020rendered\u0020relative\u0020to\u0020the\u0020active\u0020project\u0020root\u0020when\u0020possible.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getPackagePathRelativeToProject"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetRuntimeAutoloadPath\u0028\u0029",
