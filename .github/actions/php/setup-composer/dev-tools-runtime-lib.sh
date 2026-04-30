@@ -12,6 +12,25 @@ resolve_dev_tools_workspace_path() {
     printf '%s/%s\n' "$(pwd)" "${input_path#./}"
 }
 
+workspace_is_dev_tools_repository() {
+    local workspace_root="${1:?Workspace root is required}"
+    local composer_json="${workspace_root}/composer.json"
+
+    if [ ! -f "${composer_json}" ]; then
+        return 1
+    fi
+
+    php -r '
+        $composer = json_decode((string) file_get_contents($argv[1]), true);
+
+        if (! is_array($composer)) {
+            exit(1);
+        }
+
+        exit(($composer["name"] ?? null) === "fast-forward/dev-tools" ? 0 : 1);
+    ' "${composer_json}"
+}
+
 resolve_dev_tools_runtime() {
     local source_directory_input="${INPUT_DEV_TOOLS_SOURCE_DIRECTORY:-.dev-tools-actions}"
 
@@ -29,7 +48,7 @@ resolve_dev_tools_runtime() {
         return 0
     fi
 
-    if [ -x "${DEV_TOOLS_LOCAL_REPOSITORY_BINARY}" ] && [ -f "${DEV_TOOLS_LOCAL_AUTOLOAD}" ]; then
+    if [ -x "${DEV_TOOLS_LOCAL_REPOSITORY_BINARY}" ] && [ -f "${DEV_TOOLS_LOCAL_AUTOLOAD}" ] && workspace_is_dev_tools_repository "${DEV_TOOLS_WORKSPACE_ROOT}"; then
         DEV_TOOLS_RUNTIME_SOURCE='local'
         DEV_TOOLS_RUNTIME_BINARY="${DEV_TOOLS_LOCAL_REPOSITORY_BINARY}"
         DEV_TOOLS_RUNTIME_AUTOLOAD="${DEV_TOOLS_LOCAL_AUTOLOAD}"
@@ -43,8 +62,8 @@ resolve_dev_tools_runtime() {
         return 1
     fi
 
-    if [ ! -f "${DEV_TOOLS_SOURCE_DIRECTORY}/composer.json" ]; then
-        echo "The DevTools workflow source directory does not contain composer.json: ${DEV_TOOLS_SOURCE_DIRECTORY}" >&2
+    if ! workspace_is_dev_tools_repository "${DEV_TOOLS_SOURCE_DIRECTORY}"; then
+        echo "The DevTools workflow source directory does not point to the fast-forward/dev-tools package: ${DEV_TOOLS_SOURCE_DIRECTORY}" >&2
         echo "Checkout the full php-fast-forward/dev-tools source into ${source_directory_input} before using this action." >&2
 
         return 1

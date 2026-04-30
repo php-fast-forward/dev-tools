@@ -89,7 +89,7 @@ jobs:
             - name: Generate reports
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.REPORTS_ROOT_VERSION }}
-              run: dev-tools reports -- --target="${REPORTS_TARGET}" --coverage="${REPORTS_TARGET}/coverage" --metrics="${REPORTS_TARGET}/metrics"
+              run: dev-tools reports --target="${REPORTS_TARGET}" --coverage="${REPORTS_TARGET}/coverage" --metrics="${REPORTS_TARGET}/metrics"
 
             - name: Fix permissions
               run: |

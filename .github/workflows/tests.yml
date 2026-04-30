@@ -116,7 +116,7 @@ jobs:
             - name: Run PHPUnit tests
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: dev-tools tests -- --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
+              run: dev-tools tests --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
 
             - name: Publish required test status
               if: ${{ always() && inputs.publish-required-statuses }}
@@ -168,7 +168,7 @@ jobs:
             - name: Run dependency health check
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: dev-tools dependencies -- --max-outdated=${{ inputs.max-outdated || -1 }}
+              run: dev-tools dependencies --max-outdated=${{ inputs.max-outdated || -1 }}
 
     summarize:
         if: ${{ always() }}

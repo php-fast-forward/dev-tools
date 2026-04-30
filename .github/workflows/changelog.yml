@@ -131,7 +131,7 @@ jobs:
                   pull-request-title: ${{ env.PULL_REQUEST_TITLE }}
 
             - name: Verify changelog update
-              run: dev-tools changelog:check -- --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
+              run: dev-tools changelog:check --file="${CHANGELOG_FILE}" --against="origin/${BASE_REF}"
 
             - uses: ./.dev-tools-actions/.github/actions/summary/write
               with:
@@ -217,7 +217,7 @@ jobs:
                   RELEASE_VERSION: ${{ steps.version.outputs.value }}
               run: |
                   release_date="$(date -u +%F)"
-                  dev-tools changelog:promote -- "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
+                  dev-tools changelog:promote "${RELEASE_VERSION}" --file="${CHANGELOG_FILE}" --date="${release_date}"
 
             - name: Render release notes preview
               uses: ./.dev-tools-actions/.github/actions/changelog/render-release-notes

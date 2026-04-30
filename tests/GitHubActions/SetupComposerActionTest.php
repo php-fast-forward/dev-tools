@@ -109,8 +109,7 @@ final class SetupComposerActionTest extends TestCase
     #[Test]
     public function detectRuntimeWillFallbackToTheWorkflowSourceWhenTheConsumerDoesNotInstallDevTools(): void
     {
-        mkdir($this->workspace . '/.dev-tools-actions', 0o777, true);
-        file_put_contents($this->workspace . '/.dev-tools-actions/composer.json', "{}\n");
+        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
         $resolvedWorkspace = realpath($this->workspace);
 
         $files = $this->createGitHubActionFiles();
@@ -148,6 +147,30 @@ final class SetupComposerActionTest extends TestCase
         self::assertSame('false', $outputs['needs-fallback']);
         self::assertSame($resolvedWorkspace . '/bin/dev-tools', $outputs['binary']);
         self::assertSame($resolvedWorkspace . '/vendor/autoload.php', $outputs['autoload']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function detectRuntimeWillIgnoreAnUnrelatedWorkspaceRepositoryBinary(): void
+    {
+        $this->createRepositoryRuntimeFiles($this->workspace, 'example/consumer');
+        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
+        $resolvedWorkspace = realpath($this->workspace);
+
+        $files = $this->createGitHubActionFiles();
+
+        $this->runActionScript('detect-dev-tools-runtime.sh', [
+            'GITHUB_OUTPUT' => $files['output'],
+        ]);
+
+        $outputs = $this->parseKeyValueFile($files['output']);
+
+        self::assertSame('workflow', $outputs['source']);
+        self::assertSame('true', $outputs['needs-fallback']);
+        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
+        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
     }
 
     /**
@@ -209,12 +232,15 @@ final class SetupComposerActionTest extends TestCase
     }
 
     /**
+     * @param string $packageName
      * @param string $runtimeRoot
      *
      * @return void
      */
-    private function createRepositoryRuntimeFiles(string $runtimeRoot): void
-    {
+    private function createRepositoryRuntimeFiles(
+        string $runtimeRoot,
+        string $packageName = 'fast-forward/dev-tools'
+    ): void {
         mkdir($runtimeRoot . '/bin', 0o777, true);
         mkdir($runtimeRoot . '/vendor', 0o777, true);
         file_put_contents(
@@ -222,6 +248,7 @@ final class SetupComposerActionTest extends TestCase
             "#!/usr/bin/env bash\nprintf 'dev-tools:%s\\n' \"\$*\"\n",
         );
         chmod($runtimeRoot . '/bin/dev-tools', 0o755);
+        file_put_contents($runtimeRoot . '/composer.json', \sprintf("{\n    \"name\": \"%s\"\n}\n", $packageName));
         file_put_contents($runtimeRoot . '/vendor/autoload.php', "<?php\n");
     }
 

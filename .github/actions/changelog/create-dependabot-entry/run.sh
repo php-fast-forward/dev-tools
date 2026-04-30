@@ -9,7 +9,7 @@ git switch -C "${INPUT_HEAD_REF}" "refs/remotes/origin/${INPUT_HEAD_REF}"
 git config user.name "github-actions[bot]"
 git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-if dev-tools changelog:check -- --file="${INPUT_CHANGELOG_FILE}" --against="origin/${INPUT_BASE_REF}" >/dev/null 2>&1; then
+if dev-tools changelog:check --file="${INPUT_CHANGELOG_FILE}" --against="origin/${INPUT_BASE_REF}" >/dev/null 2>&1; then
     {
         echo "created=false"
         echo "status=already-present"
@@ -19,7 +19,7 @@ if dev-tools changelog:check -- --file="${INPUT_CHANGELOG_FILE}" --against="orig
     exit 0
 fi
 
-dev-tools changelog:entry -- --type=changed --file="${INPUT_CHANGELOG_FILE}" "${entry_message}"
+dev-tools changelog:entry --type=changed --file="${INPUT_CHANGELOG_FILE}" "${entry_message}"
 git add "${INPUT_CHANGELOG_FILE}"
 
 if git diff --cached --quiet -- "${INPUT_CHANGELOG_FILE}"; then
@@ -35,7 +35,7 @@ fi
 git commit -m "Add changelog entry for Dependabot PR #${INPUT_PULL_REQUEST_NUMBER}"
 git push origin "HEAD:${INPUT_HEAD_REF}"
 
-if ! dev-tools changelog:check -- --file="${INPUT_CHANGELOG_FILE}" --against="origin/${INPUT_BASE_REF}" >/dev/null 2>&1; then
+if ! dev-tools changelog:check --file="${INPUT_CHANGELOG_FILE}" --against="origin/${INPUT_BASE_REF}" >/dev/null 2>&1; then
     {
         echo "created=false"
         echo "status=missing"
