@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use Twig\Environment;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -56,6 +57,11 @@ final class DocsCommand extends Command
     use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
+
+    /**
+     * @var string the default phpDocumentor template path relative to the consumer project
+     */
+    private const string DEFAULT_TEMPLATE = 'vendor/fast-forward/phpdoc-bootstrap-template';
 
     /**
      * Creates a new DocsCommand instance.
@@ -114,7 +120,7 @@ final class DocsCommand extends Command
                 name: 'template',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the template directory for the generated HTML documentation.',
-                default: 'vendor/fast-forward/phpdoc-bootstrap-template',
+                default: self::DEFAULT_TEMPLATE,
             );
     }
 
@@ -136,6 +142,11 @@ final class DocsCommand extends Command
         $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
         $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
+        $template = (string) $input->getOption('template');
+
+        if (self::DEFAULT_TEMPLATE === $template) {
+            $template = DevToolsPathResolver::getPreferredVendorPath(self::DEFAULT_TEMPLATE);
+        }
 
         $this->logger->info('Generating API documentation...', [
             'input' => $input,
@@ -150,7 +161,7 @@ final class DocsCommand extends Command
         $config = $this->createPhpDocumentorConfig(
             source: $source,
             target: $target,
-            template: $input->getOption('template'),
+            template: $template,
             cacheDir: $cacheEnabled ? $cacheDir : sys_get_temp_dir(),
         );
 
@@ -167,7 +178,7 @@ final class DocsCommand extends Command
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 
-        $phpdoc = $processBuilder->build('vendor/bin/phpdoc');
+        $phpdoc = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpdoc')]);
 
         $this->processQueue->add(process: $phpdoc, label: 'Generating API Docs with phpDocumentor');
 

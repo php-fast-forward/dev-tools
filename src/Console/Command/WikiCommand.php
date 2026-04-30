@@ -25,6 +25,7 @@ use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -53,6 +54,11 @@ final class WikiCommand extends Command
     use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
+
+    /**
+     * @var string the default phpDocumentor Markdown template path relative to the consumer project
+     */
+    private const string DEFAULT_TEMPLATE = 'vendor/saggre/phpdocumentor-markdown/themes/markdown';
 
     /**
      * Creates a new WikiCommand instance.
@@ -138,7 +144,7 @@ final class WikiCommand extends Command
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--visibility', 'public,protected')
-            ->withArgument('--template', 'vendor/saggre/phpdocumentor-markdown/themes/markdown')
+            ->withArgument('--template', DevToolsPathResolver::getPreferredVendorPath(self::DEFAULT_TEMPLATE))
             ->withArgument('--title', $this->composer->getDescription())
             ->withArgument('--target', $target);
 
@@ -157,7 +163,7 @@ final class WikiCommand extends Command
         }
 
         $this->processQueue->add(
-            process: $processBuilder->build('vendor/bin/phpdoc'),
+            process: $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpdoc')]),
             label: 'Generating Wiki with phpDocumentor',
         );
 

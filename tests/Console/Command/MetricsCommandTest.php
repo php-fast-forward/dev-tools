@@ -21,9 +21,11 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\MetricsCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -42,7 +44,9 @@ use Symfony\Component\Process\Process;
 use function Safe\putenv;
 
 #[CoversClass(MetricsCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class MetricsCommandTest extends TestCase
 {
@@ -99,7 +103,8 @@ final class MetricsCommandTest extends TestCase
         $this->processBuilder->build(Argument::that(static fn(array $command): bool => \PHP_BINARY === $command[0]
             && str_starts_with((string) $command[1], '-derror_reporting=')
             && '-ddefault_socket_timeout=1' === $command[2]
-            && 'vendor/bin/phpmetrics' === $command[3]))->willReturn($this->process->reveal());
+            && DevToolsPathResolver::getPreferredToolBinaryPath('phpmetrics') === $command[3]))
+            ->willReturn($this->process->reveal());
         $this->command = new MetricsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),

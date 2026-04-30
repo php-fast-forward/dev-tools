@@ -129,6 +129,27 @@ final class DevToolsPathResolver
     }
 
     /**
+     * Returns the active Composer vendor path for the current DevTools installation mode.
+     *
+     * Relative vendor paths MAY be passed either with or without a leading
+     * `vendor/` prefix.
+     *
+     * @param string $path the vendor-relative path to resolve
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    public static function getRuntimeVendorPath(string $path, string $packagePath = ''): string
+    {
+        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
+        $vendorPath = self::normalizeVendorRelativePath($path);
+
+        if (self::isInstalledAsDependency($packagePath)) {
+            return Path::canonicalize(Path::join($packagePath, '..', '..', $vendorPath));
+        }
+
+        return Path::join($packagePath, 'vendor', $vendorPath);
+    }
+
+    /**
      * Returns the preferred tooling binary path for the active project and DevTools runtime.
      *
      * Consumer projects SHOULD take precedence when they provide a local
@@ -155,6 +176,33 @@ final class DevToolsPathResolver
     }
 
     /**
+     * Returns the preferred Composer vendor path for the active project and DevTools runtime.
+     *
+     * Consumer projects SHOULD take precedence when they provide the requested
+     * vendor path locally. If the path is absent locally, the method MUST fall
+     * back to the active DevTools runtime vendor path.
+     *
+     * @param string $path the vendor-relative path to resolve
+     * @param string $projectPath an optional project root path; defaults to the working project root
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    public static function getPreferredVendorPath(
+        string $path,
+        string $projectPath = '',
+        string $packagePath = '',
+    ): string {
+        $projectPath = '' === $projectPath ? WorkingProjectPathResolver::getProjectPath() : $projectPath;
+        $vendorPath = self::normalizeVendorRelativePath($path);
+        $projectVendorPath = Path::join($projectPath, 'vendor', $vendorPath);
+
+        if (file_exists($projectVendorPath)) {
+            return $projectVendorPath;
+        }
+
+        return self::getRuntimeVendorPath($vendorPath, $packagePath);
+    }
+
+    /**
      * Detects whether the provided path belongs to an installed vendor copy of DevTools.
      *
      * @param string $packagePath an optional path within the package; defaults to the package root
@@ -174,5 +222,21 @@ final class DevToolsPathResolver
     public static function isRepositoryCheckout(string $packagePath = ''): bool
     {
         return ! self::isInstalledAsDependency($packagePath);
+    }
+
+    /**
+     * Normalizes a path relative to the Composer vendor root.
+     *
+     * @param string $path the vendor-relative path to normalize
+     */
+    private static function normalizeVendorRelativePath(string $path): string
+    {
+        $path = Path::canonicalize($path);
+
+        if (str_starts_with($path, 'vendor/')) {
+            return substr($path, 7);
+        }
+
+        return $path;
     }
 }

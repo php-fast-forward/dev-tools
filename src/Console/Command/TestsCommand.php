@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
@@ -209,7 +210,7 @@ final class TestsCommand extends Command
         $this->processQueue->add(
             process: $processBuilder
                 ->withArgument($input->getArgument('path'))
-                ->build('vendor/bin/phpunit'),
+                ->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpunit')]),
             label: 'Running PHPUnit Tests',
         );
 

@@ -24,9 +24,11 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\WikiCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -42,7 +44,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(WikiCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class WikiCommandTest extends TestCase
 {
@@ -107,7 +111,8 @@ final class WikiCommandTest extends TestCase
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()
         );
-        $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
+        $this->processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpdoc')])
+            ->willReturn($this->process->reveal());
 
         $this->command = new WikiCommand(
             $this->processBuilder->reveal(),
@@ -125,6 +130,12 @@ final class WikiCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
+        $this->processBuilder->withArgument(
+            '--template',
+            DevToolsPathResolver::getPreferredVendorPath('vendor/saggre/phpdocumentor-markdown/themes/markdown')
+        )
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processBuilder->withArgument(
             '--cache-folder',
             ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC)
