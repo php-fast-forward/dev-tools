@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
@@ -199,7 +200,9 @@ final class DependenciesCommand extends Command
         }
 
         $showShadowDependencies = (bool) $input->getOption('show-shadow-dependencies');
-        $process = $processBuilder->build('vendor/bin/composer-dependency-analyser');
+        $process = $processBuilder->build(
+            DevToolsPathResolver::getPreferredToolBinaryPath('composer-dependency-analyser')
+        );
         $process->setEnv([
             ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES => $showShadowDependencies ? '1' : '0',
         ]);
@@ -217,7 +220,7 @@ final class DependenciesCommand extends Command
      */
     private function getJackBreakpointCommand(InputInterface $input, int $maximumOutdated): Process
     {
-        $command = 'vendor/bin/jack breakpoint';
+        $command = DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' breakpoint';
 
         if ((bool) $input->getOption('dev')) {
             $command .= ' --dev';
@@ -239,7 +242,7 @@ final class DependenciesCommand extends Command
      */
     private function getOpenVersionsCommand(InputInterface $input): Process
     {
-        $command = 'vendor/bin/jack open-versions';
+        $command = DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' open-versions';
 
         if ((bool) $input->getOption('dev')) {
             $command .= ' --dev';
@@ -261,7 +264,7 @@ final class DependenciesCommand extends Command
      */
     private function getRaiseToInstalledCommand(InputInterface $input): Process
     {
-        $command = 'vendor/bin/jack raise-to-installed';
+        $command = DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' raise-to-installed';
 
         if ((bool) $input->getOption('dev')) {
             $command .= ' --dev';

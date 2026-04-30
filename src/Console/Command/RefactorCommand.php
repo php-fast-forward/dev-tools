@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -143,7 +144,7 @@ final class RefactorCommand extends Command
         }
 
         $this->processQueue->add(
-            process: $processBuilder->build('vendor/bin/rector'),
+            process: $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('rector')),
             label: 'Refactoring Code with Rector',
         );
 

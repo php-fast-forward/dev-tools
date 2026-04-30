@@ -28,9 +28,11 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\PhpDocCommand;
 use FastForward\DevTools\Console\Command\RefactorCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -53,6 +55,8 @@ use Twig\Environment;
 #[UsesClass(Author::class)]
 #[UsesClass(Support::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class PhpDocCommandTest extends TestCase
 {
@@ -176,6 +180,12 @@ final class PhpDocCommandTest extends TestCase
     public function executeWillCreateDocHeaderAndRunPhpDocProcesses(): void
     {
         $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalled();
+        $this->processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer') . ' fix')
+            ->willReturn($this->process->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('rector') . ' process')
+            ->willReturn($this->process->reveal())
+            ->shouldBeCalled();
         $this->processBuilder->withArgument('--using-cache=yes')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();

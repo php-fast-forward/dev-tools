@@ -23,6 +23,7 @@ use FastForward\DevTools\Console\Command\DependenciesCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
@@ -44,6 +45,7 @@ use Symfony\Component\Process\Process;
 
 #[CoversClass(DependenciesCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class DependenciesCommandTest extends TestCase
@@ -225,7 +227,9 @@ final class DependenciesCommandTest extends TestCase
         $processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
             ->willReturn($configuredProcessBuilder->reveal())
             ->shouldBeCalledOnce();
-        $configuredProcessBuilder->build('vendor/bin/composer-dependency-analyser')
+        $configuredProcessBuilder->build(
+            DevToolsPathResolver::getPreferredToolBinaryPath('composer-dependency-analyser')
+        )
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
         $process->setEnv([
@@ -234,6 +238,77 @@ final class DependenciesCommandTest extends TestCase
             ->shouldBeCalledOnce();
 
         (new ReflectionMethod($command, 'getComposerDependencyAnalyserCommand'))
+            ->invoke($command, $this->input->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function jackBreakpointProcessWillUseTheResolvedJackBinary(): void
+    {
+        $processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $process = $this->prophesize(Process::class);
+        $command = new DependenciesCommand(
+            $processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->fileLocator->reveal(),
+            $this->logger->reveal(),
+        );
+
+        $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' breakpoint --limit 5')
+            ->willReturn($process->reveal())
+            ->shouldBeCalledOnce();
+
+        (new ReflectionMethod($command, 'getJackBreakpointCommand'))
+            ->invoke($command, $this->input->reveal(), 5);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function openVersionsProcessWillUseTheResolvedJackBinary(): void
+    {
+        $processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $process = $this->prophesize(Process::class);
+        $command = new DependenciesCommand(
+            $processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->fileLocator->reveal(),
+            $this->logger->reveal(),
+        );
+
+        $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' open-versions --dry-run')
+            ->willReturn($process->reveal())
+            ->shouldBeCalledOnce();
+
+        (new ReflectionMethod($command, 'getOpenVersionsCommand'))
+            ->invoke($command, $this->input->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function raiseToInstalledProcessWillUseTheResolvedJackBinary(): void
+    {
+        $processBuilder = $this->prophesize(ProcessBuilderInterface::class);
+        $process = $this->prophesize(Process::class);
+        $command = new DependenciesCommand(
+            $processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->fileLocator->reveal(),
+            $this->logger->reveal(),
+        );
+
+        $processBuilder->build(
+            DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' raise-to-installed --dry-run'
+        )
+            ->willReturn($process->reveal())
+            ->shouldBeCalledOnce();
+
+        (new ReflectionMethod($command, 'getRaiseToInstalledCommand'))
             ->invoke($command, $this->input->reveal());
     }
 }
