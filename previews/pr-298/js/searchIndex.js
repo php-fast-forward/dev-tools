@@ -1771,6 +1771,11 @@ Search.appendIndex(
             "summary": "Creates\u0020a\u0020temporary\u0020phpDocumentor\u0020configuration\u0020for\u0020the\u0020current\u0020project.",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_createPhpDocumentorConfig"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003ADEFAULT_TEMPLATE",
+            "name": "DEFAULT_TEMPLATE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#constant_DEFAULT_TEMPLATE"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
             "summary": "",
@@ -2775,6 +2780,11 @@ Search.appendIndex(
             "name": "getGitRepositoryUrl",
             "summary": "Resolves\u0020the\u0020current\u0020repository\u0020remote\u0020origin\u0020URL.",
             "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#method_getGitRepositoryUrl"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003ADEFAULT_TEMPLATE",
+            "name": "DEFAULT_TEMPLATE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#constant_DEFAULT_TEMPLATE"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003A\u0024processBuilder",
             "name": "processBuilder",
@@ -4321,10 +4331,20 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020active\u0020Composer\u0020runtime\u0020binary\u0020path\u0020for\u0020the\u0020current\u0020DevTools\u0020installation\u0020mode.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getRuntimeToolBinaryPath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetRuntimeVendorPath\u0028\u0029",
+            "name": "getRuntimeVendorPath",
+            "summary": "Returns\u0020the\u0020active\u0020Composer\u0020vendor\u0020path\u0020for\u0020the\u0020current\u0020DevTools\u0020installation\u0020mode.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getRuntimeVendorPath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetPreferredToolBinaryPath\u0028\u0029",
             "name": "getPreferredToolBinaryPath",
             "summary": "Returns\u0020the\u0020preferred\u0020tooling\u0020binary\u0020path\u0020for\u0020the\u0020active\u0020project\u0020and\u0020DevTools\u0020runtime.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getPreferredToolBinaryPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetPreferredVendorPath\u0028\u0029",
+            "name": "getPreferredVendorPath",
+            "summary": "Returns\u0020the\u0020preferred\u0020Composer\u0020vendor\u0020path\u0020for\u0020the\u0020active\u0020project\u0020and\u0020DevTools\u0020runtime.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getPreferredVendorPath"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AisInstalledAsDependency\u0028\u0029",
             "name": "isInstalledAsDependency",
@@ -4335,6 +4355,11 @@ Search.appendIndex(
             "name": "isRepositoryCheckout",
             "summary": "Detects\u0020whether\u0020the\u0020provided\u0020path\u0020belongs\u0020to\u0020the\u0020DevTools\u0020repository\u0020checkout\u0020itself.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_isRepositoryCheckout"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AnormalizeVendorRelativePath\u0028\u0029",
+            "name": "normalizeVendorRelativePath",
+            "summary": "Normalizes\u0020a\u0020path\u0020relative\u0020to\u0020the\u0020Composer\u0020vendor\u0020root.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_normalizeVendorRelativePath"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003ABINARY",
             "name": "BINARY",

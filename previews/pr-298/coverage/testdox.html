@@ -435,9 +435,11 @@
             <li class="success">It will expose canonical package paths</li>
             <li class="success">It will reject absolute package paths</li>
             <li class="success">It will detect whether dev tools runs from vendor or repository checkout</li>
-            <li class="success">It will resolve runtime autoload paths for repository and dependency installs</li>
+            <li class="success">It will resolve runtime autoload and vendor paths for repository and dependency installs</li>
             <li class="success">It will prefer project tool binaries when they exist</li>
             <li class="success">It will fallback to runtime tool binaries when the project does not provide them</li>
+            <li class="success">It will prefer project vendor paths when they exist</li>
+            <li class="success">It will fallback to runtime vendor paths when the project does not provide them</li>
         </ul>
         <h2>Dev Tools Service Provider (FastForward\DevTools\Tests\ServiceProvider\DevToolsServiceProvider)</h2>
         <ul>
