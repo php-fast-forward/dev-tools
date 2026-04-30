@@ -23,6 +23,7 @@ use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilder;
@@ -48,6 +49,7 @@ use Symfony\Component\Process\Process;
 use function Safe\getcwd;
 
 #[CoversClass(TestsCommand::class)]
+#[UsesClass(BootstrapShimGenerator::class)]
 #[UsesClass(CoverageSummary::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ProcessBuilder::class)]
@@ -93,6 +95,7 @@ final class TestsCommandTest extends TestCase
             $this->coverageSummaryLoader->reveal(),
             $this->composerJson->reveal(),
             $this->filesystem->reveal(),
+            new BootstrapShimGenerator($this->filesystem->reveal()),
             $this->fileLocator->reveal(),
             new ProcessBuilder(),
             $this->processQueue->reveal(),
@@ -112,6 +115,8 @@ final class TestsCommandTest extends TestCase
             ->willReturn(getcwd() . '/.dev-tools/coverage');
         $this->filesystem->getAbsolutePath('src/')
             ->willReturn(getcwd() . '/src');
+        $this->filesystem->dumpFile(Argument::cetera())
+            ->will(static function (): void {});
 
         foreach ($this->command->getDefinition()->getArguments() as $argument) {
             $this->input->getArgument($argument->getName())
@@ -133,10 +138,15 @@ final class TestsCommandTest extends TestCase
     #[Test]
     public function executeWillRunPhpUnitProcessWithConfigFile(): void
     {
+        $generatedBootstrapPath = getcwd() . '/.dev-tools/cache/phpunit/bootstrap.php';
+
         $this->processQueue->add(
             Argument::that(static fn(Process $process): bool => str_contains(
                 $process->getCommandLine(),
                 '--configuration=' . getcwd() . '/' . TestsCommand::CONFIG,
+            ) && str_contains(
+                $process->getCommandLine(),
+                '--bootstrap=' . $generatedBootstrapPath,
             ) && str_contains($process->getCommandLine(), '--cache-result') && str_contains(
                 $process->getCommandLine(),
                 '--cache-directory=' . getcwd() . '/.dev-tools/cache/phpunit',

@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep global `dev-tools tests` runs loading the packaged PHPUnit extension by generating a bootstrap shim that falls back to the active DevTools autoloader when the working directory does not install DevTools locally (#289)
+
 ## [1.24.0] - 2026-04-28
 
 ### Added
