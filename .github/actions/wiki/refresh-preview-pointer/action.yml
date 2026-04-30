@@ -1,0 +1,38 @@
+name: Refresh Wiki Preview Pointer
+description: Rebuild a wiki preview branch and expose whether the parent repo submodule pointer changed.
+
+inputs:
+  preview-branch:
+    description: Preview branch name in the wiki repository.
+    required: true
+  target:
+    description: Relative path to the wiki submodule checkout.
+    required: false
+    default: .github/wiki
+  commit-message:
+    description: Commit message to use when preview wiki content changes.
+    required: false
+    default: Refresh wiki preview
+
+outputs:
+  published:
+    description: Whether a new commit was created for the preview branch.
+    value: ${{ steps.refresh.outputs.published }}
+  pointer-changed:
+    description: Whether the parent repository submodule pointer changed.
+    value: ${{ steps.refresh.outputs.pointer-changed }}
+  preview-sha:
+    description: Final preview branch commit SHA after refresh.
+    value: ${{ steps.refresh.outputs.preview-sha }}
+
+runs:
+  using: composite
+  steps:
+    - id: refresh
+      name: Refresh preview pointer
+      shell: bash
+      env:
+        INPUT_COMMIT_MESSAGE: ${{ inputs.commit-message }}
+        INPUT_PREVIEW_BRANCH: ${{ inputs.preview-branch }}
+        INPUT_TARGET: ${{ inputs.target }}
+      run: ${{ github.action_path }}/run.sh

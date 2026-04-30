@@ -2,12 +2,6 @@ name: Maintain Wiki Publication
 
 on:
   workflow_call:
-    inputs:
-      release-branch-prefix:
-        description: Prefix used for release-preparation branches handled by changelog publication.
-        required: false
-        type: string
-        default: release/v
 
 permissions:
   contents: read
@@ -18,7 +12,7 @@ env:
 jobs:
   publish:
     name: Publish Wiki Master
-    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && !startsWith(github.event.pull_request.head.ref, inputs.release-branch-prefix)
+    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -83,53 +77,6 @@ jobs:
             - Expected preview SHA: `${{ steps.prepare_publish.outputs.expected-preview-sha }}`
             - Publish validation: completed
             - Preview cleanup: `${{ env.WIKI_PREVIEW_BRANCH }}` deleted
-
-  skip_release_publish:
-    name: Skip Release Branch Wiki Publish
-    if: github.event_name == 'pull_request_target' && github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main' && startsWith(github.event.pull_request.head.ref, inputs.release-branch-prefix)
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    env:
-      WIKI_PREVIEW_BRANCH: pr-${{ github.event.pull_request.number }}
-
-    steps:
-      - name: Checkout main branch
-        uses: actions/checkout@v6
-        with:
-          token: ${{ github.token }}
-          ref: main
-          submodules: recursive
-          fetch-depth: 0
-
-      - name: Mark wiki workspace as safe for git
-        run: git config --global --add safe.directory "$GITHUB_WORKSPACE/.github/wiki"
-
-      - name: Delete wiki preview branch
-        id: cleanup_preview
-        working-directory: .github/wiki
-        run: |
-          if git ls-remote --exit-code --heads origin "${WIKI_PREVIEW_BRANCH}" >/dev/null 2>&1; then
-            git push origin --delete "${WIKI_PREVIEW_BRANCH}"
-            echo "deleted=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "deleted=false" >> "$GITHUB_OUTPUT"
-          fi
-
-      - name: Explain release publish handling
-        env:
-          RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
-          SOURCE_BRANCH: ${{ github.event.pull_request.base.ref }}
-        run: |
-          {
-            printf '## Wiki Publish Summary\n\n'
-            printf -- '- Source branch: `%s`\n' "$SOURCE_BRANCH"
-            printf -- '- Preview branch: `%s`\n' "${WIKI_PREVIEW_BRANCH}"
-            printf -- '- Release branch: `%s`\n' "$RELEASE_BRANCH"
-            printf -- '- Action: skipped preview-branch publication because merged release branches are rebuilt from the `.github/wiki` pointer recorded on `%s` by `changelog.yml`.\n' "$SOURCE_BRANCH"
-            printf -- '- Preview cleanup: `%s`\n' "${{ steps.cleanup_preview.outputs.deleted == 'true' && 'deleted immediately' || 'not present' }}"
-          } >> "$GITHUB_STEP_SUMMARY"
 
   cleanup_closed_preview:
     name: Delete Closed PR Wiki Preview

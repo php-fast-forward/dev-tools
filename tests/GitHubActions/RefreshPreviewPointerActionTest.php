@@ -36,9 +36,11 @@ use function Safe\rmdir;
 use function Safe\unlink;
 
 #[CoversNothing]
-final class RefreshReleaseWikiPointerActionTest extends TestCase
+final class RefreshPreviewPointerActionTest extends TestCase
 {
-    private const string ACTION_PATH = __DIR__ . '/../../.github/actions/wiki/refresh-release-pointer';
+    private const string ACTION_PATH = __DIR__ . '/../../.github/actions/wiki/refresh-preview-pointer';
+
+    private const string PREVIEW_BRANCH = 'pr-123';
 
     private string $workspace;
 
@@ -47,7 +49,7 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->workspace = sys_get_temp_dir() . '/refresh-release-wiki-pointer-action-test-' . bin2hex(random_bytes(4));
+        $this->workspace = sys_get_temp_dir() . '/refresh-preview-pointer-action-test-' . bin2hex(random_bytes(4));
         mkdir($this->workspace, 0o777, true);
     }
 
@@ -83,71 +85,9 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
      * @return void
      */
     #[Test]
-    public function refreshWillPublishTheWikiBranchAndExposeTheParentPointerChange(): void
+    public function refreshWillPublishThePreviewBranchAndExposeTheParentPointerChange(): void
     {
         $workspace = $this->createWorkspaceWithWikiSubmodule();
-        $this->createMockDevToolsBinary(true);
-        $outputFile = $this->workspace . '/github-output';
-
-        $this->runAction($workspace, $outputFile);
-
-        $outputs = $this->parseKeyValueFile($outputFile);
-        $status = $this->runProcess(['git', 'status', '--short', '.github/wiki'], $workspace);
-
-        self::assertSame('true', $outputs['published']);
-        self::assertSame('true', $outputs['pointer-changed']);
-        self::assertStringContainsString('.github/wiki', $status->getOutput());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function refreshWillSkipPublicationWhenTheRenderedWikiDoesNotChange(): void
-    {
-        $workspace = $this->createWorkspaceWithWikiSubmodule();
-        $this->createMockDevToolsBinary(false);
-        $outputFile = $this->workspace . '/github-output';
-
-        $this->runAction($workspace, $outputFile);
-
-        $outputs = $this->parseKeyValueFile($outputFile);
-        $status = $this->runProcess(['git', 'status', '--short', '.github/wiki'], $workspace);
-
-        self::assertSame('false', $outputs['published']);
-        self::assertSame('false', $outputs['pointer-changed']);
-        self::assertSame('', trim($status->getOutput()));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function refreshWillIgnoreRemotePointerDriftWhenTheRenderedWikiDoesNotChange(): void
-    {
-        $workspace = $this->createWorkspaceWithWikiSubmodule();
-        $this->advanceWikiRemote();
-        $this->createMockDevToolsBinary(false);
-        $outputFile = $this->workspace . '/github-output';
-
-        $this->runAction($workspace, $outputFile);
-
-        $outputs = $this->parseKeyValueFile($outputFile);
-        $status = $this->runProcess(['git', 'status', '--short', '.github/wiki'], $workspace);
-
-        self::assertSame('false', $outputs['published']);
-        self::assertSame('false', $outputs['pointer-changed']);
-        self::assertSame('', trim($status->getOutput()));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function refreshWillRepublishFromTheCheckedInPointerWhenThePublishedWikiBranchAdvanced(): void
-    {
-        $workspace = $this->createWorkspaceWithWikiSubmodule();
-        $this->advanceWikiRemote();
         $this->createMockDevToolsBinary(true);
         $outputFile = $this->workspace . '/github-output';
 
@@ -156,13 +96,69 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
         $outputs = $this->parseKeyValueFile($outputFile);
         $status = $this->runProcess(['git', 'status', '--short', '.github/wiki'], $workspace);
         $remoteHead = $this->runProcess(
-            ['git', 'rev-parse', 'refs/heads/master'],
+            ['git', 'rev-parse', 'refs/heads/' . self::PREVIEW_BRANCH],
             $this->workspace . '/wiki-remote.git',
         );
 
         self::assertSame('true', $outputs['published']);
         self::assertSame('true', $outputs['pointer-changed']);
-        self::assertSame(trim($outputs['publish-sha']), trim($remoteHead->getOutput()));
+        self::assertSame(trim($outputs['preview-sha']), trim($remoteHead->getOutput()));
+        self::assertStringContainsString('.github/wiki', $status->getOutput());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function refreshWillSkipPublicationWhenThePreviewPointerIsAlreadyCurrent(): void
+    {
+        $workspace = $this->createWorkspaceWithWikiSubmodule();
+        $outputFile = $this->workspace . '/github-output';
+
+        $this->createMockDevToolsBinary(true);
+        $this->runAction($workspace, $outputFile);
+        $this->commitWorkspaceWikiPointer($workspace);
+
+        unlink($outputFile);
+        $this->createMockDevToolsBinary(false);
+        $this->runAction($workspace, $outputFile);
+
+        $outputs = $this->parseKeyValueFile($outputFile);
+        $status = $this->runProcess(['git', 'status', '--short', '.github/wiki'], $workspace);
+
+        self::assertSame('false', $outputs['published']);
+        self::assertSame('false', $outputs['pointer-changed']);
+        self::assertSame('', trim($status->getOutput()));
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function refreshWillExposePointerChangeWhenTheExistingPreviewBranchAdvanced(): void
+    {
+        $workspace = $this->createWorkspaceWithWikiSubmodule();
+        $outputFile = $this->workspace . '/github-output';
+
+        $this->createMockDevToolsBinary(true);
+        $this->runAction($workspace, $outputFile);
+        $this->commitWorkspaceWikiPointer($workspace);
+        $this->advancePreviewBranchRemote();
+
+        unlink($outputFile);
+        $this->createMockDevToolsBinary(false);
+        $this->runAction($workspace, $outputFile);
+
+        $outputs = $this->parseKeyValueFile($outputFile);
+        $status = $this->runProcess(['git', 'status', '--short', '.github/wiki'], $workspace);
+        $remoteHead = $this->runProcess(
+            ['git', 'rev-parse', 'refs/heads/' . self::PREVIEW_BRANCH],
+            $this->workspace . '/wiki-remote.git',
+        );
+
+        self::assertSame('false', $outputs['published']);
+        self::assertSame('true', $outputs['pointer-changed']);
+        self::assertSame(trim($outputs['preview-sha']), trim($remoteHead->getOutput()));
         self::assertStringContainsString('.github/wiki', $status->getOutput());
     }
 
@@ -223,11 +219,13 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
     {
         $binDirectory = $this->workspace . '/bin';
 
-        mkdir($binDirectory, 0o777, true);
+        if (! is_dir($binDirectory)) {
+            mkdir($binDirectory, 0o777, true);
+        }
 
         file_put_contents(
             $binDirectory . '/dev-tools',
-            "#!/usr/bin/env bash\nset -euo pipefail\nif [ \"\${1:-}\" != \"wiki\" ]; then\n  echo \"unexpected dev-tools arguments: \$*\" >&2\n  exit 1\nfi\nif [ \"{$shouldChange}\" = \"1\" ]; then\n  printf '# Release wiki refresh\\n' > \"\$PWD/.github/wiki/release-refresh.md\"\nfi\n",
+            "#!/usr/bin/env bash\nset -euo pipefail\nif [ \"\${1:-}\" != \"wiki\" ]; then\n  echo \"unexpected dev-tools arguments: \$*\" >&2\n  exit 1\nfi\nif [ \"{$shouldChange}\" = \"1\" ]; then\n  printf '# Preview wiki refresh\\n' > \"\$PWD/.github/wiki/preview-refresh.md\"\nfi\n",
         );
         chmod($binDirectory . '/dev-tools', 0o755);
     }
@@ -235,14 +233,27 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
     /**
      * @return void
      */
-    private function advanceWikiRemote(): void
+    private function advancePreviewBranchRemote(): void
     {
         $wikiSeed = $this->workspace . '/wiki-seed';
 
-        file_put_contents($wikiSeed . '/README.md', "# Wiki\n\nUpdated upstream.\n");
+        $this->runProcess(['git', 'fetch', 'origin', self::PREVIEW_BRANCH . ':' . self::PREVIEW_BRANCH], $wikiSeed);
+        $this->runProcess(['git', 'switch', self::PREVIEW_BRANCH], $wikiSeed);
+        file_put_contents($wikiSeed . '/README.md', "# Wiki\n\nUpdated preview upstream.\n");
         $this->runProcess(['git', 'add', 'README.md'], $wikiSeed);
-        $this->runProcess(['git', 'commit', '-m', 'Advance wiki remote'], $wikiSeed);
-        $this->runProcess(['git', 'push', 'origin', 'master'], $wikiSeed);
+        $this->runProcess(['git', 'commit', '-m', 'Advance wiki preview'], $wikiSeed);
+        $this->runProcess(['git', 'push', 'origin', self::PREVIEW_BRANCH], $wikiSeed);
+    }
+
+    /**
+     * @param string $workspace
+     *
+     * @return void
+     */
+    private function commitWorkspaceWikiPointer(string $workspace): void
+    {
+        $this->runProcess(['git', 'add', '.github/wiki'], $workspace);
+        $this->runProcess(['git', 'commit', '-m', 'Update wiki pointer'], $workspace);
     }
 
     /**
@@ -261,7 +272,8 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
                 'GIT_AUTHOR_NAME' => 'github-actions[bot]',
                 'GIT_AUTHOR_EMAIL' => '41898282+github-actions[bot]@users.noreply.github.com',
                 'GIT_ALLOW_PROTOCOL' => 'file:https:http',
-                'INPUT_COMMIT_MESSAGE' => 'Refresh wiki docs after release',
+                'INPUT_COMMIT_MESSAGE' => 'Update wiki docs for PR #123',
+                'INPUT_PREVIEW_BRANCH' => self::PREVIEW_BRANCH,
                 'PATH' => $this->workspace . '/bin:' . getenv('PATH'),
             ]),
         );

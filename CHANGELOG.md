@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Keep release-preparation pull requests refreshing their wiki preview and parent `.github/wiki` pointer before merge, then publish merged release wikis from that preview branch so branch protection no longer requires direct post-merge pointer commits to `main` (#315)
+
 ## [1.24.6] - 2026-04-30
 
 ### Fixed
