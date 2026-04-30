@@ -170,7 +170,7 @@ final class ReportsCommand extends Command
             $docsBuilder = $docsBuilder->withArgument('--pretty-json');
         }
 
-        $docs = $docsBuilder->build(DevToolsPathResolver::getBinaryCommand('docs'));
+        $docs = $docsBuilder->build([DevToolsPathResolver::getBinaryPath(), 'docs']);
 
         if (null !== $cacheArgument) {
             $coverageBuilder = $coverageBuilder->withArgument($cacheArgument);
@@ -192,7 +192,7 @@ final class ReportsCommand extends Command
             $coverageBuilder = $coverageBuilder->withArgument('--pretty-json');
         }
 
-        $coverage = $coverageBuilder->build(DevToolsPathResolver::getBinaryCommand('tests'));
+        $coverage = $coverageBuilder->build([DevToolsPathResolver::getBinaryPath(), 'tests']);
 
         if ($progress) {
             $metricsBuilder = $metricsBuilder->withArgument('--progress');
@@ -206,7 +206,7 @@ final class ReportsCommand extends Command
             $metricsBuilder = $metricsBuilder->withArgument('--pretty-json');
         }
 
-        $metrics = $metricsBuilder->build(DevToolsPathResolver::getBinaryCommand('metrics'));
+        $metrics = $metricsBuilder->build([DevToolsPathResolver::getBinaryPath(), 'metrics']);
 
         $this->processQueue->add(process: $docs, detached: true, label: 'Generating API Docs Report');
         $this->processQueue->add(process: $coverage, label: 'Generating Coverage Report');

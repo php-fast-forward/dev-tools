@@ -142,6 +142,21 @@ final class ProcessBuilderTest extends TestCase
      * @return void
      */
     #[Test]
+    public function buildWillInjectNoLogoArgumentForDevToolsCommandArrays(): void
+    {
+        $process = $this->builder
+            ->build([DevToolsPathResolver::getBinaryPath(), 'tests']);
+
+        self::assertSame(
+            "'" . DevToolsPathResolver::getBinaryPath() . "' '--no-logo' 'tests'",
+            $process->getCommandLine(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function buildWillKeepExistingNoLogoArgumentWhenProvidedInArguments(): void
     {
         $process = $this->builder

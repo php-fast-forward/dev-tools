@@ -109,6 +109,52 @@ final class DevToolsPathResolver
     }
 
     /**
+     * Returns the active Composer runtime binary path for the current DevTools installation mode.
+     *
+     * Repository checkouts use the package-local `vendor/bin/<binary>`, while
+     * dependency installs resolve binaries from the active Composer vendor root.
+     *
+     * @param string $binary the binary name relative to `vendor/bin`
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    public static function getRuntimeToolBinaryPath(string $binary, string $packagePath = ''): string
+    {
+        $packagePath = Path::canonicalize('' === $packagePath ? self::getPackagePath() : $packagePath);
+
+        if (self::isInstalledAsDependency($packagePath)) {
+            return Path::canonicalize(Path::join($packagePath, '..', '..', 'bin', $binary));
+        }
+
+        return Path::join($packagePath, 'vendor', 'bin', $binary);
+    }
+
+    /**
+     * Returns the preferred tooling binary path for the active project and DevTools runtime.
+     *
+     * Consumer projects SHOULD take precedence when they provide a local
+     * `vendor/bin/<binary>` entry. If the binary is absent locally, the method
+     * MUST fall back to the active DevTools runtime binary path.
+     *
+     * @param string $binary the binary name relative to `vendor/bin`
+     * @param string $projectPath an optional project root path; defaults to the working project root
+     * @param string $packagePath an optional package root path; defaults to the current package root
+     */
+    public static function getPreferredToolBinaryPath(
+        string $binary,
+        string $projectPath = '',
+        string $packagePath = '',
+    ): string {
+        $projectPath = '' === $projectPath ? WorkingProjectPathResolver::getProjectPath() : $projectPath;
+        $projectBinaryPath = Path::join($projectPath, 'vendor', 'bin', $binary);
+
+        if (file_exists($projectBinaryPath)) {
+            return $projectBinaryPath;
+        }
+
+        return self::getRuntimeToolBinaryPath($binary, $packagePath);
+    }
+
+    /**
      * Detects whether the provided path belongs to an installed vendor copy of DevTools.
      *
      * @param string $packagePath an optional path within the package; defaults to the package root

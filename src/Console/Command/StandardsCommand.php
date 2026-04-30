@@ -150,7 +150,7 @@ final class StandardsCommand extends Command
             }
 
             $this->processQueue->add(
-                process: $processBuilder->build(DevToolsPathResolver::getBinaryCommand($command)),
+                process: $processBuilder->build([DevToolsPathResolver::getBinaryPath(), $command]),
                 label: $this->getProcessLabel($command),
             );
         }

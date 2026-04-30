@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
@@ -199,7 +200,9 @@ final class DependenciesCommand extends Command
         }
 
         $showShadowDependencies = (bool) $input->getOption('show-shadow-dependencies');
-        $process = $processBuilder->build('vendor/bin/composer-dependency-analyser');
+        $process = $processBuilder->build(
+            [DevToolsPathResolver::getPreferredToolBinaryPath('composer-dependency-analyser')]
+        );
         $process->setEnv([
             ComposerDependencyAnalyserConfig::ENV_SHOW_SHADOW_DEPENDENCIES => $showShadowDependencies ? '1' : '0',
         ]);
@@ -217,17 +220,17 @@ final class DependenciesCommand extends Command
      */
     private function getJackBreakpointCommand(InputInterface $input, int $maximumOutdated): Process
     {
-        $command = 'vendor/bin/jack breakpoint';
+        $processBuilder = $this->processBuilder;
 
         if ((bool) $input->getOption('dev')) {
-            $command .= ' --dev';
+            $processBuilder = $processBuilder->withArgument('--dev');
         }
 
         if (! $this->shouldIgnoreOutdatedFailures($maximumOutdated)) {
-            $command .= ' --limit ' . $maximumOutdated;
+            $processBuilder = $processBuilder->withArgument('--limit', (string) $maximumOutdated);
         }
 
-        return $this->processBuilder->build($command);
+        return $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'breakpoint']);
     }
 
     /**
@@ -239,17 +242,17 @@ final class DependenciesCommand extends Command
      */
     private function getOpenVersionsCommand(InputInterface $input): Process
     {
-        $command = 'vendor/bin/jack open-versions';
+        $processBuilder = $this->processBuilder;
 
         if ((bool) $input->getOption('dev')) {
-            $command .= ' --dev';
+            $processBuilder = $processBuilder->withArgument('--dev');
         }
 
         if (! (bool) $input->getOption('upgrade')) {
-            $command .= ' --dry-run';
+            $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        return $this->processBuilder->build($command);
+        return $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'open-versions']);
     }
 
     /**
@@ -261,17 +264,17 @@ final class DependenciesCommand extends Command
      */
     private function getRaiseToInstalledCommand(InputInterface $input): Process
     {
-        $command = 'vendor/bin/jack raise-to-installed';
+        $processBuilder = $this->processBuilder;
 
         if ((bool) $input->getOption('dev')) {
-            $command .= ' --dev';
+            $processBuilder = $processBuilder->withArgument('--dev');
         }
 
         if (! (bool) $input->getOption('upgrade')) {
-            $command .= ' --dry-run';
+            $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        return $this->processBuilder->build($command);
+        return $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'raise-to-installed']);
     }
 
     /**

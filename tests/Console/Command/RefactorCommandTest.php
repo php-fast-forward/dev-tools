@@ -21,10 +21,13 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Console\Command\RefactorCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -39,6 +42,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 #[CoversClass(RefactorCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class RefactorCommandTest extends TestCase
 {
@@ -108,6 +113,9 @@ final class RefactorCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
+        $this->processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('rector'), 'process'])
+            ->willReturn($this->process->reveal())
+            ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(RefactorCommand::SUCCESS)
             ->shouldBeCalled();

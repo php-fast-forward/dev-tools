@@ -230,7 +230,7 @@ final class SyncCommand extends Command
             $processBuilder = $processBuilder->withArgument($argument);
         }
 
-        $process = $processBuilder->build(DevToolsPathResolver::getBinaryPath());
+        $process = $processBuilder->build([DevToolsPathResolver::getBinaryPath()]);
 
         $this->processQueue->add(process: $process, detached: $detached, label: 'Running DevTools Sync Hook');
     }

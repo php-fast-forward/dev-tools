@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Prefer project-local tooling binaries when available and fall back to the active DevTools runtime for `php-cs-fixer`, Rector, ECS, Jack, and Composer Dependency Analyser during global `dev-tools` runs (#292)
+
 ## [1.24.1] - 2026-04-30
 
 ### Fixed

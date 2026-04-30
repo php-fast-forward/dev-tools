@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Console\Command;
 
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Psr\Log\LoggerInterface;
@@ -148,7 +149,7 @@ final class CodeStyleCommand extends Command
             $processBuilder = $processBuilder->withArgument('--fix');
         }
 
-        $ecs = $processBuilder->build('vendor/bin/ecs');
+        $ecs = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('ecs')]);
 
         $this->processQueue->add(process: $composerUpdate, label: 'Refreshing Composer Lock');
         $this->processQueue->add(
