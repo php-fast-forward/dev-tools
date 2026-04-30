@@ -17,12 +17,21 @@ resolve_dev_tools_runtime() {
 
     DEV_TOOLS_WORKSPACE_ROOT="$(pwd)"
     DEV_TOOLS_SOURCE_DIRECTORY="$(resolve_dev_tools_workspace_path "${source_directory_input}")"
-    DEV_TOOLS_LOCAL_BINARY="${DEV_TOOLS_WORKSPACE_ROOT}/vendor/bin/dev-tools"
     DEV_TOOLS_LOCAL_AUTOLOAD="${DEV_TOOLS_WORKSPACE_ROOT}/vendor/autoload.php"
+    DEV_TOOLS_LOCAL_INSTALLED_BINARY="${DEV_TOOLS_WORKSPACE_ROOT}/vendor/bin/dev-tools"
+    DEV_TOOLS_LOCAL_REPOSITORY_BINARY="${DEV_TOOLS_WORKSPACE_ROOT}/bin/dev-tools"
 
-    if [ -x "${DEV_TOOLS_LOCAL_BINARY}" ] && [ -f "${DEV_TOOLS_LOCAL_AUTOLOAD}" ]; then
+    if [ -x "${DEV_TOOLS_LOCAL_INSTALLED_BINARY}" ] && [ -f "${DEV_TOOLS_LOCAL_AUTOLOAD}" ]; then
         DEV_TOOLS_RUNTIME_SOURCE='local'
-        DEV_TOOLS_RUNTIME_BINARY="${DEV_TOOLS_LOCAL_BINARY}"
+        DEV_TOOLS_RUNTIME_BINARY="${DEV_TOOLS_LOCAL_INSTALLED_BINARY}"
+        DEV_TOOLS_RUNTIME_AUTOLOAD="${DEV_TOOLS_LOCAL_AUTOLOAD}"
+
+        return 0
+    fi
+
+    if [ -x "${DEV_TOOLS_LOCAL_REPOSITORY_BINARY}" ] && [ -f "${DEV_TOOLS_LOCAL_AUTOLOAD}" ]; then
+        DEV_TOOLS_RUNTIME_SOURCE='local'
+        DEV_TOOLS_RUNTIME_BINARY="${DEV_TOOLS_LOCAL_REPOSITORY_BINARY}"
         DEV_TOOLS_RUNTIME_AUTOLOAD="${DEV_TOOLS_LOCAL_AUTOLOAD}"
 
         return 0
@@ -42,7 +51,7 @@ resolve_dev_tools_runtime() {
     fi
 
     DEV_TOOLS_RUNTIME_SOURCE='workflow'
-    DEV_TOOLS_RUNTIME_BINARY="${DEV_TOOLS_SOURCE_DIRECTORY}/vendor/bin/dev-tools"
+    DEV_TOOLS_RUNTIME_BINARY="${DEV_TOOLS_SOURCE_DIRECTORY}/bin/dev-tools"
     DEV_TOOLS_RUNTIME_AUTOLOAD="${DEV_TOOLS_SOURCE_DIRECTORY}/vendor/autoload.php"
 }
 

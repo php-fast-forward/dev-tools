@@ -86,7 +86,7 @@ final class SetupComposerActionTest extends TestCase
     #[Test]
     public function detectRuntimeWillPreferTheConsumerLocalInstallation(): void
     {
-        $this->createRuntimeFiles($this->workspace . '/vendor');
+        $this->createInstalledRuntimeFiles($this->workspace);
         $resolvedWorkspace = realpath($this->workspace);
 
         $files = $this->createGitHubActionFiles();
@@ -123,8 +123,31 @@ final class SetupComposerActionTest extends TestCase
 
         self::assertSame('workflow', $outputs['source']);
         self::assertSame('true', $outputs['needs-fallback']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/bin/dev-tools', $outputs['binary']);
+        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
         self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function detectRuntimeWillPreferTheWorkspaceRootRepositoryCheckout(): void
+    {
+        $this->createRepositoryRuntimeFiles($this->workspace);
+        $resolvedWorkspace = realpath($this->workspace);
+
+        $files = $this->createGitHubActionFiles();
+
+        $this->runActionScript('detect-dev-tools-runtime.sh', [
+            'GITHUB_OUTPUT' => $files['output'],
+        ]);
+
+        $outputs = $this->parseKeyValueFile($files['output']);
+
+        self::assertSame('local', $outputs['source']);
+        self::assertSame('false', $outputs['needs-fallback']);
+        self::assertSame($resolvedWorkspace . '/bin/dev-tools', $outputs['binary']);
+        self::assertSame($resolvedWorkspace . '/vendor/autoload.php', $outputs['autoload']);
     }
 
     /**
@@ -135,7 +158,7 @@ final class SetupComposerActionTest extends TestCase
     {
         mkdir($this->workspace . '/.dev-tools-actions', 0o777, true);
         file_put_contents($this->workspace . '/.dev-tools-actions/composer.json', "{}\n");
-        $this->createRuntimeFiles($this->workspace . '/.dev-tools-actions/vendor');
+        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
         $resolvedWorkspace = realpath($this->workspace);
 
         $files = $this->createGitHubActionFiles();
@@ -154,7 +177,7 @@ final class SetupComposerActionTest extends TestCase
         $pathEntries = array_filter(explode("\n", trim(file_get_contents($files['path']))));
 
         self::assertSame('workflow', $outputs['source']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/bin/dev-tools', $outputs['binary']);
+        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
         self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
         self::assertSame($outputs['binary'], $environment['DEV_TOOLS_BINARY']);
         self::assertSame($outputs['autoload'], $environment['DEV_TOOLS_AUTOLOAD']);
@@ -170,19 +193,36 @@ final class SetupComposerActionTest extends TestCase
     }
 
     /**
-     * @param string $runtimeVendorDirectory
+     * @param string $runtimeRoot
      *
      * @return void
      */
-    private function createRuntimeFiles(string $runtimeVendorDirectory): void
+    private function createInstalledRuntimeFiles(string $runtimeRoot): void
     {
-        mkdir($runtimeVendorDirectory . '/bin', 0o777, true);
+        mkdir($runtimeRoot . '/vendor/bin', 0o777, true);
         file_put_contents(
-            $runtimeVendorDirectory . '/bin/dev-tools',
+            $runtimeRoot . '/vendor/bin/dev-tools',
             "#!/usr/bin/env bash\nprintf 'dev-tools:%s\\n' \"\$*\"\n",
         );
-        chmod($runtimeVendorDirectory . '/bin/dev-tools', 0o755);
-        file_put_contents($runtimeVendorDirectory . '/autoload.php', "<?php\n");
+        chmod($runtimeRoot . '/vendor/bin/dev-tools', 0o755);
+        file_put_contents($runtimeRoot . '/vendor/autoload.php', "<?php\n");
+    }
+
+    /**
+     * @param string $runtimeRoot
+     *
+     * @return void
+     */
+    private function createRepositoryRuntimeFiles(string $runtimeRoot): void
+    {
+        mkdir($runtimeRoot . '/bin', 0o777, true);
+        mkdir($runtimeRoot . '/vendor', 0o777, true);
+        file_put_contents(
+            $runtimeRoot . '/bin/dev-tools',
+            "#!/usr/bin/env bash\nprintf 'dev-tools:%s\\n' \"\$*\"\n",
+        );
+        chmod($runtimeRoot . '/bin/dev-tools', 0o755);
+        file_put_contents($runtimeRoot . '/vendor/autoload.php', "<?php\n");
     }
 
     /**
