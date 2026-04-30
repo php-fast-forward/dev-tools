@@ -120,6 +120,27 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function refreshWillReportPointerDriftWhenTheWikiRemoteAdvancedWithoutNewRenderedChanges(): void
+    {
+        $workspace = $this->createWorkspaceWithWikiSubmodule();
+        $this->advanceWikiRemote();
+        $this->createMockDevToolsBinary(false);
+        $outputFile = $this->workspace . '/github-output';
+
+        $this->runAction($workspace, $outputFile);
+
+        $outputs = $this->parseKeyValueFile($outputFile);
+        $status = $this->runProcess(['git', 'status', '--short', '.github/wiki'], $workspace);
+
+        self::assertSame('false', $outputs['published']);
+        self::assertSame('true', $outputs['pointer-changed']);
+        self::assertStringContainsString('.github/wiki', $status->getOutput());
+    }
+
+    /**
      * @return string
      */
     private function createWorkspaceWithWikiSubmodule(): string
@@ -183,6 +204,19 @@ final class RefreshReleaseWikiPointerActionTest extends TestCase
             "#!/usr/bin/env bash\nset -euo pipefail\nif [ \"\${1:-}\" != \"wiki\" ]; then\n  echo \"unexpected dev-tools arguments: \$*\" >&2\n  exit 1\nfi\nif [ \"{$shouldChange}\" = \"1\" ]; then\n  printf '# Release wiki refresh\\n' > \"\$PWD/.github/wiki/release-refresh.md\"\nfi\n",
         );
         chmod($binDirectory . '/dev-tools', 0o755);
+    }
+
+    /**
+     * @return void
+     */
+    private function advanceWikiRemote(): void
+    {
+        $wikiSeed = $this->workspace . '/wiki-seed';
+
+        file_put_contents($wikiSeed . '/README.md', "# Wiki\n\nUpdated upstream.\n");
+        $this->runProcess(['git', 'add', 'README.md'], $wikiSeed);
+        $this->runProcess(['git', 'commit', '-m', 'Advance wiki remote'], $wikiSeed);
+        $this->runProcess(['git', 'push', 'origin', 'master'], $wikiSeed);
     }
 
     /**

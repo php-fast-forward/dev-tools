@@ -20,9 +20,15 @@ git -C "${target}" clean -fd
 dev-tools wiki --target="${target}"
 
 if [ -z "$(git -C "${target}" status --porcelain)" ]; then
+    pointer_changed="false"
+
+    if ! git diff --quiet -- "${target}"; then
+        pointer_changed="true"
+    fi
+
     {
         echo "published=false"
-        echo "pointer-changed=false"
+        echo "pointer-changed=${pointer_changed}"
         echo "publish-sha=$(git -C "${target}" rev-parse HEAD)"
     } >> "${GITHUB_OUTPUT}"
 
