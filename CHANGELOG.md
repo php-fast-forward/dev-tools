@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.24.7] - 2026-04-30
+
 ### Fixed
 
 - Keep release-preparation pull requests refreshing their wiki preview and parent `.github/wiki` pointer before merge, then publish merged release wikis from that preview branch so branch protection no longer requires direct post-merge pointer commits to `main` (#315)
@@ -413,7 +415,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.6...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.7...HEAD
+[1.24.7]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.6...v1.24.7
 [1.24.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.5...v1.24.6
 [1.24.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.4...v1.24.5
 [1.24.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.3...v1.24.4
