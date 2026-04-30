@@ -833,12 +833,11 @@
             <li class="success">Execute will request json output and disable progress when json is requested</li>
             <li class="success">Execute will enable progress when requested</li>
         </ul>
-        <h2>Refresh Release Wiki Pointer Action (FastForward\DevTools\Tests\GitHubActions\RefreshReleaseWikiPointerAction)</h2>
+        <h2>Refresh Preview Pointer Action (FastForward\DevTools\Tests\GitHubActions\RefreshPreviewPointerAction)</h2>
         <ul>
-            <li class="success">Refresh will publish the wiki branch and expose the parent pointer change</li>
-            <li class="success">Refresh will skip publication when the rendered wiki does not change</li>
-            <li class="success">Refresh will ignore remote pointer drift when the rendered wiki does not change</li>
-            <li class="success">Refresh will republish from the checked in pointer when the published wiki branch advanced</li>
+            <li class="success">Refresh will publish the preview branch and expose the parent pointer change</li>
+            <li class="success">Refresh will skip publication when the preview pointer is already current</li>
+            <li class="success">Refresh will expose pointer change when the existing preview branch advanced</li>
         </ul>
         <h2>Remove Empty Doc Block Rector (FastForward\DevTools\Tests\Rector\RemoveEmptyDocBlockRector)</h2>
         <ul>
