@@ -23,6 +23,8 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\GitHooks\HookContentRenderer;
+use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
@@ -35,6 +37,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use Symfony\Component\Filesystem\Path;
+use Throwable;
 
 /**
  * Installs packaged Git hooks for the consumer repository.
@@ -55,6 +58,7 @@ final class GitHooksCommand extends Command
      * @param FilesystemInterface $filesystem the filesystem used to copy hooks
      * @param FileLocatorInterface $fileLocator the locator used to find packaged hooks
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
+     * @param HookContentRenderer $hookContentRenderer renders packaged hooks with runtime-specific placeholders
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
@@ -63,6 +67,7 @@ final class GitHooksCommand extends Command
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
+        private readonly HookContentRenderer $hookContentRenderer,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
@@ -140,6 +145,9 @@ final class GitHooksCommand extends Command
         $installFailure = false;
 
         foreach ($files as $file) {
+            $sourcePath = $file->getRealPath();
+            $sourceContents = $this->filesystem->readFile($sourcePath);
+            $renderedSourceContents = $this->hookContentRenderer->render($sourceContents);
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
             if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($hookPath)) {
@@ -156,7 +164,9 @@ final class GitHooksCommand extends Command
             }
 
             if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($hookPath)) {
-                $comparison = $this->fileDiffer->diff($file->getRealPath(), $hookPath);
+                $comparison = $sourceContents === $renderedSourceContents
+                    ? $this->fileDiffer->diff($sourcePath, $hookPath)
+                    : $this->compareRenderedHookContents($sourcePath, $hookPath, $renderedSourceContents);
 
                 $this->logger->notice(
                     $comparison->getSummary(),
@@ -211,7 +221,13 @@ final class GitHooksCommand extends Command
                 }
             }
 
-            if (! $this->installHook($file->getRealPath(), $hookPath, $overwrite || $interactive, $input)) {
+            if (! $this->installHook(
+                $sourcePath,
+                $hookPath,
+                $overwrite || $interactive,
+                $input,
+                $sourceContents === $renderedSourceContents ? null : $renderedSourceContents,
+            )) {
                 $installFailure = true;
 
                 continue;
@@ -282,6 +298,7 @@ final class GitHooksCommand extends Command
      * @param string $hookPath the target repository hook path
      * @param bool $replaceExisting whether an existing hook SHOULD be removed first
      * @param InputInterface $input the originating command input
+     * @param string|null $renderedContents optional rendered hook contents that SHOULD be written instead of copied
      *
      * @return bool true when the hook was installed successfully
      */
@@ -289,14 +306,20 @@ final class GitHooksCommand extends Command
         string $sourcePath,
         string $hookPath,
         bool $replaceExisting,
-        InputInterface $input
+        InputInterface $input,
+        ?string $renderedContents = null,
     ): bool {
         try {
             if ($replaceExisting && $this->filesystem->exists($hookPath)) {
                 $this->filesystem->remove($hookPath);
             }
 
-            $this->filesystem->copy($sourcePath, $hookPath, false);
+            if (null === $renderedContents) {
+                $this->filesystem->copy($sourcePath, $hookPath, false);
+            } else {
+                $this->filesystem->dumpFile($hookPath, $renderedContents);
+            }
+
             $this->filesystem->chmod(files: $hookPath, mode: 0o755);
 
             return true;
@@ -315,5 +338,41 @@ final class GitHooksCommand extends Command
 
             return false;
         }
+    }
+
+    /**
+     * Compares rendered hook contents with an existing installed hook.
+     *
+     * @param string $sourcePath the packaged hook source path
+     * @param string $hookPath the target installed hook path
+     * @param string $renderedContents the rendered hook contents
+     *
+     * @return FileDiff the rendered comparison result
+     */
+    private function compareRenderedHookContents(
+        string $sourcePath,
+        string $hookPath,
+        string $renderedContents
+    ): FileDiff {
+        try {
+            $targetContents = $this->filesystem->readFile($hookPath);
+        } catch (Throwable) {
+            return new FileDiff(
+                FileDiff::STATUS_UNREADABLE,
+                \sprintf(
+                    'Target %s will be overwritten from %s, but the existing or source content could not be read.',
+                    $hookPath,
+                    $sourcePath,
+                ),
+            );
+        }
+
+        return $this->fileDiffer->diffContents(
+            $sourcePath,
+            $hookPath,
+            $renderedContents,
+            $targetContents,
+            \sprintf('Overwriting resource %s from %s.', $hookPath, $sourcePath),
+        );
     }
 }

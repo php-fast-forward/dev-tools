@@ -23,6 +23,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\GrumPhp\ManagedConfigPathSynchronizer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
@@ -35,11 +36,9 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Path;
 
 use function Safe\json_decode;
 use function Safe\json_encode;
-use function Safe\getcwd;
 
 /**
  * Updates composer.json with the Fast Forward dev-tools integration metadata.
@@ -60,6 +59,7 @@ final class UpdateComposerJsonCommand extends Command
      * @param ComposerJsonInterface $composer the composer.json metadata accessor
      * @param FilesystemInterface $filesystem the filesystem used to read and write composer.json
      * @param FileLocatorInterface $fileLocator the locator used to resolve packaged configuration files
+     * @param ManagedConfigPathSynchronizer $managedConfigPathSynchronizer synchronizes managed GrumPHP metadata
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
@@ -68,6 +68,7 @@ final class UpdateComposerJsonCommand extends Command
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileLocatorInterface $fileLocator,
+        private readonly ManagedConfigPathSynchronizer $managedConfigPathSynchronizer,
         private readonly FileDiffer $fileDiffer,
         private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
@@ -80,10 +81,7 @@ final class UpdateComposerJsonCommand extends Command
      */
     protected function configure(): void
     {
-        $this->setHelp(
-            'This command adds or updates composer.json scripts and GrumPHP extra configuration required by'
-            . ' dev-tools.'
-        );
+        $this->setHelp('This command adds or updates composer.json scripts and managed dev-tools metadata.');
 
         $this->addJsonOption()
             ->addOption(
@@ -244,15 +242,11 @@ final class UpdateComposerJsonCommand extends Command
             $extra = [];
         }
 
-        $grumphpConfig = DevToolsPathResolver::getPackagePath('grumphp.yml');
-        $grumphpExtra = $extra['grumphp'] ?? [];
-        if (! \is_array($grumphpExtra)) {
-            $grumphpExtra = [];
-        }
-
-        $grumphpExtra['config-default-path'] = Path::makeRelative($grumphpConfig, getcwd());
-        $extra['grumphp'] = $grumphpExtra;
-        $composerJsonData['extra'] = $extra;
+        $composerJsonData['extra'] = $this->managedConfigPathSynchronizer->synchronize(
+            $extra,
+            \dirname($file),
+            $this->fileLocator->locate('grumphp.yml', DevToolsPathResolver::getPackagePath())
+        );
 
         return json_encode(
             $composerJsonData,

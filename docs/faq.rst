@@ -11,8 +11,9 @@ Why did my ``composer.json`` change after installing the package?
 -----------------------------------------------------------------
 
 The Composer plugin runs ``dev-tools:sync`` after install and update.
-That command adds the ``dev-tools`` scripts and updates
-``extra.grumphp.config-default-path`` in the consumer project.
+That command adds the ``dev-tools`` scripts, removes deprecated
+DevTools-managed ``extra.grumphp.config-default-path`` values, and refreshes
+the packaged Git hooks.
 
 Do I always need to run ``dev-tools:sync`` manually?
 ----------------------------------------------------
