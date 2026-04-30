@@ -377,8 +377,8 @@ Synchronizes consumer-facing automation and defaults.
 
 Important details:
 
-- it updates ``composer.json`` scripts and
-  ``extra.grumphp.config-default-path``;
+- it updates ``composer.json`` scripts and removes only deprecated
+  DevTools-managed ``extra.grumphp.config-default-path`` values;
 - it calls ``funding`` so supported funding metadata stays aligned between
   ``composer.json`` and ``.github/FUNDING.yml``;
 - it copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``;
@@ -389,6 +389,9 @@ Important details:
 - it calls ``gitignore`` to merge the canonical .gitignore with the project's
   .gitignore;
 - it calls ``gitattributes`` to manage export-ignore rules in .gitattributes;
+- it refreshes packaged Git hooks that prefer a local ``grumphp.yml``
+  override and otherwise use the active packaged DevTools ``grumphp.yml``
+  path resolved when sync installs them;
 - it calls ``skills`` so ``.agents/skills`` contains links to the packaged
   skill set;
 - it calls ``agents`` so ``.agents/agents`` contains links to the packaged
@@ -502,6 +505,8 @@ Important details:
 
 - adds ``dev-tools`` script entrypoint to composer.json;
 - adds ``dev-tools:fix`` script for automated fixing;
-- adds GrumPHP extra configuration pointing to packaged ``grumphp.yml``;
+- removes only deprecated DevTools-managed
+  ``extra.grumphp.config-default-path`` values;
 - if the target file does not exist, exits silently with code 0;
-- existing scripts with the same name are overwritten.
+- existing scripts with the same name are overwritten;
+- preserves consumer-owned GrumPHP settings.

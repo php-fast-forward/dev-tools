@@ -11,7 +11,8 @@ dev-tools integration scripts and GrumPHP configuration:
 
 1. Adds the ``dev-tools`` script entrypoint
 2. Adds the ``dev-tools:fix`` script for automated fixing
-3. Adds GrumPHP extra configuration pointing to the packaged ``grumphp.yml``
+3. Removes deprecated DevTools-managed GrumPHP default-path metadata while
+   preserving consumer-owned settings
 
 Usage
 -----
@@ -64,7 +65,8 @@ Behavior
 
 - If the target composer.json does not exist, the command exits silently with code 0.
 - Existing scripts with the same name are overwritten.
-- The GrumPHP extra configuration is merged with existing configuration.
+- Consumer-owned GrumPHP settings are preserved, while only deprecated
+  DevTools-managed ``extra.grumphp.config-default-path`` values are removed.
 - ``--dry-run`` and ``--check`` render a diff against the managed
   ``composer.json`` result before deciding whether to write.
 

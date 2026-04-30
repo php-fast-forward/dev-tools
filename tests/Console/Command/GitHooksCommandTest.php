@@ -19,20 +19,20 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use FastForward\DevTools\Resource\FileDiff;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\GitHooksCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\GitHooks\HookContentRenderer;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -40,16 +40,22 @@ use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\Finder;
 
+use function is_file;
+use function Safe\glob;
 use function Safe\mkdir;
 use function Safe\file_put_contents;
 use function Safe\unlink;
 use function Safe\rmdir;
 
 #[CoversClass(GitHooksCommand::class)]
+#[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(FileDiff::class)]
+#[UsesClass(HookContentRenderer::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class GitHooksCommandTest extends TestCase
 {
@@ -108,11 +114,14 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn(false);
         $this->input->isInteractive()
             ->willReturn(false);
+        $this->filesystem->readFile(Argument::containingString('/post-merge'))
+            ->willReturn('#!/bin/sh');
 
         $this->command = new GitHooksCommand(
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
             $this->finderFactory->reveal(),
+            new HookContentRenderer(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
             $this->io->reveal(),
@@ -125,7 +134,12 @@ final class GitHooksCommandTest extends TestCase
     protected function tearDown(): void
     {
         if (is_dir($this->sourceDirectory)) {
-            unlink($this->sourceDirectory . '/post-merge');
+            foreach (glob($this->sourceDirectory . '/*') as $file) {
+                if (is_file($file)) {
+                    unlink($file);
+                }
+            }
+
             rmdir($this->sourceDirectory);
         }
     }
@@ -172,6 +186,58 @@ final class GitHooksCommandTest extends TestCase
             ->shouldBeCalledOnce();
         $this->logger->log('info', 'Installed {hook_name} hook.', Argument::type('array'))
             ->shouldBeCalledOnce();
+        $this->logger->log('info', 'Git hook synchronization completed successfully.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+
+        self::assertSame(GitHooksCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRenderManagedGrumPhpConfigIntoPlaceholderHooks(): void
+    {
+        file_put_contents(
+            $this->sourceDirectory . '/pre-commit',
+            "DEVTOOLS_GRUMPHP_CONFIG=__DEV_TOOLS_GRUMPHP_CONFIG__\n"
+        );
+
+        $this->input->getOption('source')
+            ->willReturn('resources/git-hooks');
+        $this->input->getOption('target')
+            ->willReturn('.git/hooks');
+        $this->input->getOption('no-overwrite')
+            ->willReturn(false);
+
+        $this->fileLocator->locate('resources/git-hooks')
+            ->willReturn($this->sourceDirectory);
+        $this->finderFactory->create()
+            ->willReturn(new Finder())
+            ->shouldBeCalledOnce();
+        $this->filesystem->getAbsolutePath('.git/hooks')
+            ->willReturn('/app/.git/hooks');
+        $this->filesystem->exists('/app/.git/hooks/post-merge')
+            ->willReturn(false);
+        $this->filesystem->exists('/app/.git/hooks/pre-commit')
+            ->willReturn(false);
+        $this->filesystem->readFile(Argument::containingString('/pre-commit'))
+            ->willReturn("DEVTOOLS_GRUMPHP_CONFIG=__DEV_TOOLS_GRUMPHP_CONFIG__\n");
+        $this->filesystem->copy(Argument::containingString('/post-merge'), '/app/.git/hooks/post-merge', false)
+            ->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(
+            '/app/.git/hooks/pre-commit',
+            Argument::that(
+                static fn(string $contents): bool => str_contains(
+                    $contents,
+                    escapeshellarg(DevToolsPathResolver::getPackagePath('grumphp.yml'))
+                )
+            ),
+        )->shouldBeCalledOnce();
+        $this->filesystem->chmod(Argument::type('string'), 0o755)
+            ->shouldBeCalledTimes(2);
+        $this->logger->log('info', 'Installed {hook_name} hook.', Argument::type('array'))
+            ->shouldBeCalledTimes(2);
         $this->logger->log('info', 'Git hook synchronization completed successfully.', Argument::type('array'))
             ->shouldBeCalledOnce();
 

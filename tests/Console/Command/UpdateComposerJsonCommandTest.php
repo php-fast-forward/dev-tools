@@ -19,19 +19,18 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Console\Command;
 
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\UpdateComposerJsonCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\GrumPhp\ManagedConfigPathSynchronizer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -39,12 +38,15 @@ use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 use function Safe\json_decode;
 
 #[CoversClass(UpdateComposerJsonCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(FileDiff::class)]
+#[UsesClass(ManagedConfigPathSynchronizer::class)]
 final class UpdateComposerJsonCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -96,11 +98,14 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->willReturn(false);
         $this->input->isInteractive()
             ->willReturn(false);
+        $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
+            ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
 
         $this->command = new UpdateComposerJsonCommand(
             $this->composer->reveal(),
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
+            new ManagedConfigPathSynchronizer(),
             $this->fileDiffer->reveal(),
             $this->logger->reveal(),
             $this->io->reveal(),
@@ -119,7 +124,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
             $this->command->getDescription()
         );
         self::assertSame(
-            'This command adds or updates composer.json scripts and GrumPHP extra configuration required by dev-tools.',
+            'This command adds or updates composer.json scripts and managed dev-tools metadata.',
             $this->command->getHelp()
         );
     }
@@ -128,7 +133,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillUpdateComposerJsonScriptsAndExtraConfiguration(): void
+    public function executeWillUpdateComposerJsonScriptsAndManagedMetadata(): void
     {
         $this->input->getOption('file')
             ->willReturn('/app/composer.json');
@@ -140,8 +145,6 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->willReturn('');
         $this->filesystem->exists('README.md', '/app')
             ->willReturn(false);
-        $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
-            ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
         $this->fileDiffer->diffContents(
             'generated dev-tools composer.json configuration',
             '/app/composer.json',
@@ -155,8 +158,85 @@ final class UpdateComposerJsonCommandTest extends TestCase
         ))->shouldBeCalledOnce();
         $this->filesystem->dumpFile(
             '/app/composer.json',
-            Argument::that(static fn(string $contents): bool => str_contains($contents, '"dev-tools"')
-                && str_contains($contents, '"grumphp"')),
+            Argument::that(static function (string $contents): bool {
+                $composerJson = json_decode($contents, true);
+
+                return 'dev-tools' === $composerJson['scripts']['dev-tools']
+                    && '@dev-tools --fix' === $composerJson['scripts']['dev-tools:fix']
+                    && ! isset($composerJson['extra']['grumphp']['config-default-path']);
+            }),
+        )->shouldBeCalledOnce();
+
+        self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRemoveOnlyManagedGrumPhpConfigDefaultPath(): void
+    {
+        $this->input->getOption('file')
+            ->willReturn('/app/composer.json');
+        $this->filesystem->exists('/app/composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('/app/composer.json')
+            ->willReturn(
+                '{"name":"example/package","extra":{"grumphp":{"config-default-path":"vendor/fast-forward/dev-tools/grumphp.yml","stop_on_failure":true}}}'
+            );
+        $this->composer->getReadme()
+            ->willReturn('');
+        $this->filesystem->exists('README.md', '/app')
+            ->willReturn(false);
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+            ))->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(
+            '/app/composer.json',
+            Argument::that(static function (string $contents): bool {
+                $composerJson = json_decode($contents, true);
+
+                return true === $composerJson['extra']['grumphp']['stop_on_failure']
+                    && ! isset($composerJson['extra']['grumphp']['config-default-path']);
+            }),
+        )->shouldBeCalledOnce();
+
+        self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillPreserveConsumerOwnedGrumPhpConfigDefaultPath(): void
+    {
+        $this->input->getOption('file')
+            ->willReturn('/app/composer.json');
+        $this->filesystem->exists('/app/composer.json')
+            ->willReturn(true);
+        $this->filesystem->readFile('/app/composer.json')
+            ->willReturn(
+                '{"name":"example/package","extra":{"grumphp":{"config-default-path":"tools/grumphp.yml","stop_on_failure":true}}}'
+            );
+        $this->composer->getReadme()
+            ->willReturn('');
+        $this->filesystem->exists('README.md', '/app')
+            ->willReturn(false);
+        $this->fileDiffer->diffContents(Argument::cetera())
+            ->willReturn(new FileDiff(
+                FileDiff::STATUS_CHANGED,
+                'Updating managed file /app/composer.json from generated dev-tools composer.json configuration.',
+            ))->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(
+            '/app/composer.json',
+            Argument::that(static function (string $contents): bool {
+                $composerJson = json_decode($contents, true);
+
+                return 'tools/grumphp.yml' === $composerJson['extra']['grumphp']['config-default-path']
+                    && true === $composerJson['extra']['grumphp']['stop_on_failure'];
+            }),
         )->shouldBeCalledOnce();
 
         self::assertSame(UpdateComposerJsonCommand::SUCCESS, $this->executeCommand());

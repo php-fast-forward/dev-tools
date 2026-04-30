@@ -22,7 +22,9 @@ What the Command Changes
      - Adds or updates ``dev-tools`` and ``dev-tools:fix``.
      - Updated in place.
    * - ``composer.json`` extra
-     - Sets ``extra.grumphp.config-default-path``.
+     - Removes only deprecated DevTools-managed
+       ``extra.grumphp.config-default-path`` values while preserving
+       consumer-owned GrumPHP settings.
      - Updated in place.
    * - ``.github/workflows/*.yml``
      - Copies thin wrapper workflows from ``resources/github-actions`` that
@@ -49,6 +51,11 @@ What the Command Changes
    * - ``.github/wiki``
      - Adds a Git submodule derived from ``git remote origin``.
      - Only when missing.
+   * - ``.git/hooks/*``
+     - Copies packaged hooks that prefer a local ``grumphp.yml`` override and
+       otherwise use the active packaged DevTools ``grumphp.yml`` path
+       resolved when sync installs them.
+     - Replaced when drift is detected.
 
 When to Run It
 --------------
