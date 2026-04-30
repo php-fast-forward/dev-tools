@@ -228,7 +228,7 @@ final class DependenciesCommandTest extends TestCase
             ->willReturn($configuredProcessBuilder->reveal())
             ->shouldBeCalledOnce();
         $configuredProcessBuilder->build(
-            DevToolsPathResolver::getPreferredToolBinaryPath('composer-dependency-analyser')
+            [DevToolsPathResolver::getPreferredToolBinaryPath('composer-dependency-analyser')]
         )
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
@@ -256,7 +256,10 @@ final class DependenciesCommandTest extends TestCase
             $this->logger->reveal(),
         );
 
-        $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' breakpoint --limit 5')
+        $processBuilder->withArgument('--limit', '5')
+            ->willReturn($processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'breakpoint'])
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
 
@@ -279,7 +282,10 @@ final class DependenciesCommandTest extends TestCase
             $this->logger->reveal(),
         );
 
-        $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' open-versions --dry-run')
+        $processBuilder->withArgument('--dry-run')
+            ->willReturn($processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'open-versions'])
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
 
@@ -302,9 +308,10 @@ final class DependenciesCommandTest extends TestCase
             $this->logger->reveal(),
         );
 
-        $processBuilder->build(
-            DevToolsPathResolver::getPreferredToolBinaryPath('jack') . ' raise-to-installed --dry-run'
-        )
+        $processBuilder->withArgument('--dry-run')
+            ->willReturn($processBuilder->reveal())
+            ->shouldBeCalledOnce();
+        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'raise-to-installed'])
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
 

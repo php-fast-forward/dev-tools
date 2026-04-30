@@ -125,7 +125,6 @@ final class RefactorCommand extends Command
         ]);
 
         $processBuilder = $this->processBuilder
-            ->withArgument('process')
             ->withArgument('--ansi')
             ->withArgument('--config')
             ->withArgument($this->fileLocator->locate(self::CONFIG));
@@ -144,7 +143,7 @@ final class RefactorCommand extends Command
         }
 
         $this->processQueue->add(
-            process: $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('rector')),
+            process: $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('rector'), 'process']),
             label: 'Refactoring Code with Rector',
         );
 

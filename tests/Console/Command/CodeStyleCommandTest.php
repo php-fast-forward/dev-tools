@@ -116,7 +116,7 @@ final class CodeStyleCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
-        $this->processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('ecs'))
+        $this->processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('ecs')])
             ->willReturn($this->process->reveal())
             ->shouldBeCalled();
         $this->processQueue->run(Argument::type('object'))

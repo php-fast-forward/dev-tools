@@ -180,10 +180,10 @@ final class PhpDocCommandTest extends TestCase
     public function executeWillCreateDocHeaderAndRunPhpDocProcesses(): void
     {
         $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalled();
-        $this->processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer') . ' fix')
+        $this->processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer'), 'fix'])
             ->willReturn($this->process->reveal())
             ->shouldBeCalled();
-        $this->processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('rector') . ' process')
+        $this->processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('rector'), 'process'])
             ->willReturn($this->process->reveal())
             ->shouldBeCalled();
         $this->processBuilder->withArgument('--using-cache=yes')

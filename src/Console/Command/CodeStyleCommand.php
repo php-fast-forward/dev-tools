@@ -149,7 +149,7 @@ final class CodeStyleCommand extends Command
             $processBuilder = $processBuilder->withArgument('--fix');
         }
 
-        $ecs = $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('ecs'));
+        $ecs = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('ecs')]);
 
         $this->processQueue->add(process: $composerUpdate, label: 'Refreshing Composer Lock');
         $this->processQueue->add(

@@ -186,7 +186,7 @@ final class PhpDocCommand extends Command
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        $phpCsFixer = $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer') . ' fix');
+        $phpCsFixer = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer'), 'fix']);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -207,7 +207,7 @@ final class PhpDocCommand extends Command
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        $rector = $processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('rector') . ' process');
+        $rector = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('rector'), 'process']);
 
         $this->processQueue->add(process: $phpCsFixer, label: 'Fixing PHPDoc File Headers with PHP-CS-Fixer');
         $this->processQueue->add(process: $rector, label: 'Adding Missing PHPDoc with Rector');

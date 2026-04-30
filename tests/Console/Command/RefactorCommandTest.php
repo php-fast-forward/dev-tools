@@ -113,7 +113,7 @@ final class RefactorCommandTest extends TestCase
     #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
-        $this->processBuilder->build(DevToolsPathResolver::getPreferredToolBinaryPath('rector'))
+        $this->processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('rector'), 'process'])
             ->willReturn($this->process->reveal())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
