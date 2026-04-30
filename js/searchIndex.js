@@ -4261,6 +4261,16 @@ Search.appendIndex(
             "summary": "Returns\u0020the\u0020active\u0020Composer\u0020autoload\u0020file\u0020for\u0020the\u0020current\u0020DevTools\u0020installation\u0020mode.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getRuntimeAutoloadPath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetRuntimeToolBinaryPath\u0028\u0029",
+            "name": "getRuntimeToolBinaryPath",
+            "summary": "Returns\u0020the\u0020active\u0020Composer\u0020runtime\u0020binary\u0020path\u0020for\u0020the\u0020current\u0020DevTools\u0020installation\u0020mode.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getRuntimeToolBinaryPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetPreferredToolBinaryPath\u0028\u0029",
+            "name": "getPreferredToolBinaryPath",
+            "summary": "Returns\u0020the\u0020preferred\u0020tooling\u0020binary\u0020path\u0020for\u0020the\u0020active\u0020project\u0020and\u0020DevTools\u0020runtime.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getPreferredToolBinaryPath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AisInstalledAsDependency\u0028\u0029",
             "name": "isInstalledAsDependency",
             "summary": "Detects\u0020whether\u0020the\u0020provided\u0020path\u0020belongs\u0020to\u0020an\u0020installed\u0020vendor\u0020copy\u0020of\u0020DevTools.",

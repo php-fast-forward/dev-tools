@@ -377,6 +377,9 @@
             <li class="success">Execute will ignore jack failures when max outdated is disabled</li>
             <li class="success">Composer dependency analyser process will hide shadow dependencies by default</li>
             <li class="success">Composer dependency analyser process can report shadow dependencies</li>
+            <li class="success">Jack breakpoint process will use the resolved jack binary</li>
+            <li class="success">Open versions process will use the resolved jack binary</li>
+            <li class="success">Raise to installed process will use the resolved jack binary</li>
         </ul>
         <h2>Dev Tools (FastForward\DevTools\Tests\Console\DevTools)</h2>
         <ul>
@@ -421,10 +424,17 @@
         </ul>
         <h2>Dev Tools Path Resolver (FastForward\DevTools\Tests\Path\DevToolsPathResolver)</h2>
         <ul>
+            <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #0</li>
+            <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #1</li>
+            <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #2</li>
+            <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #3</li>
+            <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #4</li>
             <li class="success">It will expose canonical package paths</li>
             <li class="success">It will reject absolute package paths</li>
             <li class="success">It will detect whether dev tools runs from vendor or repository checkout</li>
             <li class="success">It will resolve runtime autoload paths for repository and dependency installs</li>
+            <li class="success">It will prefer project tool binaries when they exist</li>
+            <li class="success">It will fallback to runtime tool binaries when the project does not provide them</li>
         </ul>
         <h2>Dev Tools Service Provider (FastForward\DevTools\Tests\ServiceProvider\DevToolsServiceProvider)</h2>
         <ul>
@@ -749,6 +759,7 @@
             <li class="success">With argument chaining will accumulate all arguments</li>
             <li class="success">Build will return process instance with arguments</li>
             <li class="success">Build will inject no logo argument for dev tools commands</li>
+            <li class="success">Build will inject no logo argument for dev tools command arrays</li>
             <li class="success">Build will keep existing no logo argument when provided in arguments</li>
             <li class="success">Build will not inject no logo argument for non dev tools commands</li>
         </ul>
