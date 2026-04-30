@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777513614">
-  <project timestamp="1777513614" name="Clover Coverage">
+<coverage generated="1777514533">
+  <project timestamp="1777514533" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -2873,7 +2873,7 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/RefactorCommand.php">
         <class name="FastForward\DevTools\Console\Command\RefactorCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="9" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="52" elements="55" coveredelements="55"/>
+          <metrics complexity="9" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="51" coveredstatements="51" elements="54" coveredelements="54"/>
         </class>
         <line num="63" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="4"/>
         <line num="69" type="stmt" count="4"/>
@@ -2910,27 +2910,26 @@
         <line num="128" type="stmt" count="4"/>
         <line num="129" type="stmt" count="4"/>
         <line num="130" type="stmt" count="4"/>
-        <line num="131" type="stmt" count="4"/>
-        <line num="133" type="stmt" count="4"/>
-        <line num="134" type="stmt" count="3"/>
-        <line num="137" type="stmt" count="4"/>
+        <line num="132" type="stmt" count="4"/>
+        <line num="133" type="stmt" count="3"/>
+        <line num="136" type="stmt" count="4"/>
+        <line num="137" type="stmt" count="1"/>
         <line num="138" type="stmt" count="1"/>
-        <line num="139" type="stmt" count="1"/>
+        <line num="141" type="stmt" count="4"/>
         <line num="142" type="stmt" count="4"/>
-        <line num="143" type="stmt" count="4"/>
+        <line num="145" type="stmt" count="4"/>
         <line num="146" type="stmt" count="4"/>
         <line num="147" type="stmt" count="4"/>
         <line num="148" type="stmt" count="4"/>
-        <line num="149" type="stmt" count="4"/>
-        <line num="151" type="stmt" count="4"/>
-        <line num="153" type="stmt" count="4"/>
+        <line num="150" type="stmt" count="4"/>
+        <line num="152" type="stmt" count="4"/>
+        <line num="153" type="stmt" count="3"/>
         <line num="154" type="stmt" count="3"/>
         <line num="155" type="stmt" count="3"/>
-        <line num="156" type="stmt" count="3"/>
+        <line num="158" type="stmt" count="1"/>
         <line num="159" type="stmt" count="1"/>
         <line num="160" type="stmt" count="1"/>
-        <line num="161" type="stmt" count="1"/>
-        <metrics loc="164" ncloc="116" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="52" coveredstatements="52" elements="55" coveredelements="55"/>
+        <metrics loc="163" ncloc="115" classes="1" methods="3" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="51" coveredstatements="51" elements="54" coveredelements="54"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/ReportsCommand.php">
         <class name="FastForward\DevTools\Console\Command\ReportsCommand" namespace="FastForward\DevTools\Console\Command">
@@ -5462,38 +5461,38 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Process/ProcessBuilder.php">
         <class name="FastForward\DevTools\Process\ProcessBuilder" namespace="FastForward\DevTools\Process">
-          <metrics complexity="13" methods="6" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="20" elements="29" coveredelements="23"/>
+          <metrics complexity="13" methods="6" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="21" elements="29" coveredelements="25"/>
         </class>
-        <line num="45" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="9"/>
-        <line num="47" type="stmt" count="9"/>
+        <line num="45" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="10"/>
+        <line num="47" type="stmt" count="10"/>
         <line num="64" type="method" name="withArgument" visibility="public" complexity="2" crap="2" count="5"/>
         <line num="66" type="stmt" count="5"/>
         <line num="67" type="stmt" count="3"/>
         <line num="70" type="stmt" count="5"/>
         <line num="81" type="method" name="getArguments" visibility="public" complexity="1" crap="1" count="3"/>
         <line num="83" type="stmt" count="3"/>
-        <line num="98" type="method" name="build" visibility="public" complexity="4" crap="4.05" count="5"/>
-        <line num="100" type="stmt" count="5"/>
-        <line num="101" type="stmt" count="0"/>
-        <line num="104" type="stmt" count="5"/>
+        <line num="98" type="method" name="build" visibility="public" complexity="4" crap="4" count="6"/>
+        <line num="100" type="stmt" count="6"/>
+        <line num="101" type="stmt" count="1"/>
+        <line num="104" type="stmt" count="6"/>
         <line num="105" type="stmt" count="5"/>
-        <line num="108" type="stmt" count="5"/>
-        <line num="109" type="stmt" count="1"/>
-        <line num="112" type="stmt" count="5"/>
-        <line num="118" type="method" name="shouldAddLogoSuppressionArgument" visibility="private" complexity="3" crap="3.03" count="5"/>
-        <line num="120" type="stmt" count="5"/>
+        <line num="108" type="stmt" count="6"/>
+        <line num="109" type="stmt" count="2"/>
+        <line num="112" type="stmt" count="6"/>
+        <line num="118" type="method" name="shouldAddLogoSuppressionArgument" visibility="private" complexity="3" crap="3.03" count="6"/>
+        <line num="120" type="stmt" count="6"/>
         <line num="121" type="stmt" count="1"/>
-        <line num="124" type="stmt" count="4"/>
+        <line num="124" type="stmt" count="5"/>
         <line num="125" type="stmt" count="0"/>
-        <line num="128" type="stmt" count="4"/>
-        <line num="129" type="stmt" count="4"/>
-        <line num="131" type="stmt" count="4"/>
-        <line num="139" type="method" name="prependLogoSuppressionArgument" visibility="private" complexity="2" crap="2.06" count="1"/>
-        <line num="141" type="stmt" count="1"/>
+        <line num="128" type="stmt" count="5"/>
+        <line num="129" type="stmt" count="5"/>
+        <line num="131" type="stmt" count="5"/>
+        <line num="139" type="method" name="prependLogoSuppressionArgument" visibility="private" complexity="2" crap="2.06" count="2"/>
+        <line num="141" type="stmt" count="2"/>
         <line num="142" type="stmt" count="0"/>
-        <line num="145" type="stmt" count="1"/>
-        <line num="147" type="stmt" count="1"/>
-        <metrics loc="150" ncloc="77" classes="1" methods="6" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="20" elements="29" coveredelements="23"/>
+        <line num="145" type="stmt" count="2"/>
+        <line num="147" type="stmt" count="2"/>
+        <metrics loc="150" ncloc="77" classes="1" methods="6" coveredmethods="4" conditionals="0" coveredconditionals="0" statements="23" coveredstatements="21" elements="29" coveredelements="25"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Process/ProcessQueue.php">
         <class name="FastForward\DevTools\Process\ProcessQueue" namespace="FastForward\DevTools\Process">
@@ -6313,6 +6312,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="155" loc="20688" ncloc="12571" classes="113" methods="526" coveredmethods="424" conditionals="0" coveredconditionals="0" statements="4884" coveredstatements="4498" elements="5410" coveredelements="4922"/>
+    <metrics files="155" loc="20687" ncloc="12570" classes="113" methods="526" coveredmethods="425" conditionals="0" coveredconditionals="0" statements="4883" coveredstatements="4498" elements="5409" coveredelements="4923"/>
   </project>
 </coverage>
