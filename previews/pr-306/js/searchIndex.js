@@ -4366,6 +4366,46 @@ Search.appendIndex(
             "summary": "Normalizes\u0020a\u0020path\u0020relative\u0020to\u0020the\u0020Composer\u0020vendor\u0020root.",
             "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_normalizeVendorRelativePath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AassertRelativePackagePath\u0028\u0029",
+            "name": "assertRelativePackagePath",
+            "summary": "Ensures\u0020packaged\u0020paths\u0020stay\u0020relative\u0020to\u0020the\u0020DevTools\u0020package\u0020root.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_assertRelativePackagePath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AresolvePackageRelativePath\u0028\u0029",
+            "name": "resolvePackageRelativePath",
+            "summary": "Returns\u0020a\u0020canonical\u0020path\u0020under\u0020the\u0020DevTools\u0020package\u0020root.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_resolvePackageRelativePath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AresolvePackageRoot\u0028\u0029",
+            "name": "resolvePackageRoot",
+            "summary": "Returns\u0020the\u0020canonical\u0020DevTools\u0020package\u0020root.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_resolvePackageRoot"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AresolveProjectPath\u0028\u0029",
+            "name": "resolveProjectPath",
+            "summary": "Returns\u0020the\u0020canonical\u0020working\u0020project\u0020root.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_resolveProjectPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetRuntimeVendorRoot\u0028\u0029",
+            "name": "getRuntimeVendorRoot",
+            "summary": "Returns\u0020the\u0020active\u0020Composer\u0020vendor\u0020root\u0020for\u0020the\u0020current\u0020DevTools\u0020installation\u0020mode.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getRuntimeVendorRoot"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003AgetProjectVendorPath\u0028\u0029",
+            "name": "getProjectVendorPath",
+            "summary": "Returns\u0020a\u0020vendor\u0020path\u0020under\u0020the\u0020active\u0020project\u0020root.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_getProjectVendorPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003ApreferExistingPath\u0028\u0029",
+            "name": "preferExistingPath",
+            "summary": "Returns\u0020the\u0020preferred\u0020path\u0020when\u0020a\u0020project\u002Dlocal\u0020candidate\u0020exists.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_preferExistingPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003ArelativizePathFromProject\u0028\u0029",
+            "name": "relativizePathFromProject",
+            "summary": "Returns\u0020a\u0020path\u0020relative\u0020to\u0020the\u0020project\u0020root\u0020when\u0020possible.",
+            "url": "classes/FastForward-DevTools-Path-DevToolsPathResolver.html#method_relativizePathFromProject"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Path\\DevToolsPathResolver\u003A\u003ABINARY",
             "name": "BINARY",
             "summary": "",
