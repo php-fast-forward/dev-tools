@@ -26,6 +26,7 @@ use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FinderFactory;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -127,6 +128,11 @@ final class DevToolsTest extends TestCase
      */
     private ObjectProphecy $environment;
 
+    /**
+     * @var ObjectProphecy<RuntimeEnvironmentInterface>
+     */
+    private ObjectProphecy $runtimeEnvironment;
+
     private DevTools $devTools;
 
     private string|false $originalWorkspaceDirectoryEnv;
@@ -147,6 +153,9 @@ final class DevToolsTest extends TestCase
         $this->selfUpdateRunner = $this->prophesize(SelfUpdateRunnerInterface::class);
         $this->selfUpdateScopeResolver = $this->prophesize(SelfUpdateScopeResolverInterface::class);
         $this->environment = $this->prophesize(EnvironmentInterface::class);
+        $this->runtimeEnvironment = $this->prophesize(RuntimeEnvironmentInterface::class);
+        $this->runtimeEnvironment->isAgentPresent()
+            ->willReturn(false);
         $this->originalWorkspaceDirectoryEnv = getenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
         $this->devTools = $this->createDevTools();
     }
@@ -270,6 +279,33 @@ final class DevToolsTest extends TestCase
 
         $this->invokeDoRun($input, $output);
 
+        self::assertStringNotContainsString('_____', $output->fetch());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function doRunWillNotRenderLogoWhenRunningInsideKnownAgentEnvironment(): void
+    {
+        $input = new ArrayInput([
+            'command' => 'list',
+        ]);
+
+        $output = new BufferedOutput();
+
+        $this->runtimeEnvironment->isAgentPresent()
+            ->willReturn(true);
+        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+            ->willReturn('');
+        $this->workingDirectorySwitcher->switchTo(null)
+            ->shouldBeCalledOnce();
+        $this->versionCheckNotifier->notify($output)
+            ->shouldNotBeCalled();
+
+        $result = $this->invokeDoRun($input, $output);
+
+        self::assertSame(Command::SUCCESS, $result);
         self::assertStringNotContainsString('_____', $output->fetch());
     }
 
@@ -556,6 +592,7 @@ final class DevToolsTest extends TestCase
             $this->selfUpdateRunner->reveal(),
             $this->selfUpdateScopeResolver->reveal(),
             $this->environment->reveal(),
+            $this->runtimeEnvironment->reveal(),
         );
     }
 

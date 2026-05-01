@@ -25,15 +25,21 @@ namespace FastForward\DevTools\Environment;
 final class Environment implements EnvironmentInterface
 {
     /**
-     * Reads an environment variable.
+     * Reads an environment variable or the current environment map.
      *
-     * @param string $name the environment variable name
-     * @param string|null $default the value returned when the variable is not defined
+     * @param string|null $name the environment variable name, or null to read the current environment map
+     * @param string|null $default the value returned when the named variable is not defined
      *
-     * @return string|null the variable value, or the default when it is not defined
+     * @return array<string, string>|string|null the environment map, variable value, or default fallback
      */
-    public function get(string $name, ?string $default = null): ?string
+    public function get(?string $name = null, ?string $default = null): array|string|null
     {
+        if (null === $name) {
+            $environment = getenv();
+
+            return \is_array($environment) ? $environment : [];
+        }
+
         $value = getenv($name);
 
         if (false === $value) {

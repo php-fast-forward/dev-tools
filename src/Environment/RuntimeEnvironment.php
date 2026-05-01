@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Environment;
 
+use Ergebnis\AgentDetector\Detector;
+
 /**
  * Resolves common runtime-environment flags used by DevTools integrations.
  */
@@ -26,9 +28,11 @@ final readonly class RuntimeEnvironment implements RuntimeEnvironmentInterface
 {
     /**
      * @param EnvironmentInterface $environment reads raw process environment variables
+     * @param Detector $agentDetector detects known AI-agent environment markers
      */
     public function __construct(
         private EnvironmentInterface $environment,
+        private Detector $agentDetector,
     ) {}
 
     /**
@@ -67,5 +71,19 @@ final readonly class RuntimeEnvironment implements RuntimeEnvironmentInterface
     public function isComposerTestRun(): bool
     {
         return $this->isEnabled('COMPOSER_TESTS_ARE_RUNNING');
+    }
+
+    /**
+     * Returns whether the current process exposes known AI-agent environment markers.
+     */
+    public function isAgentPresent(): bool
+    {
+        $environment = $this->environment->get();
+
+        if (! \is_array($environment)) {
+            return false;
+        }
+
+        return $this->agentDetector->isAgentPresent($environment);
     }
 }

@@ -75,6 +75,20 @@ final class EnvironmentTest extends TestCase
     /**
      * @return void
      */
+    #[Test]
+    public function getWithoutNameReturnsCurrentEnvironmentMap(): void
+    {
+        putenv('DEV_TOOLS_ENVIRONMENT_READER_TEST=enabled');
+
+        $environment = $this->environment->get();
+
+        self::assertIsArray($environment);
+        self::assertSame('enabled', $environment['DEV_TOOLS_ENVIRONMENT_READER_TEST']);
+    }
+
+    /**
+     * @return void
+     */
     protected function tearDown(): void
     {
         if (false === $this->previousValue) {
