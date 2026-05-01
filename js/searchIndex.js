@@ -1771,6 +1771,16 @@ Search.appendIndex(
             "summary": "Creates\u0020a\u0020temporary\u0020phpDocumentor\u0020configuration\u0020for\u0020the\u0020current\u0020project.",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_createPhpDocumentorConfig"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003AisDefaultGuideSource\u0028\u0029",
+            "name": "isDefaultGuideSource",
+            "summary": "Detects\u0020whether\u0020a\u0020source\u0020option\u0020still\u0020points\u0020at\u0020the\u0020default\u0020guide\u0020directory.",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_isDefaultGuideSource"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003AnormalizeProjectRelativePath\u0028\u0029",
+            "name": "normalizeProjectRelativePath",
+            "summary": "Normalizes\u0020a\u0020project\u002Drelative\u0020path\u0020for\u0020resilient\u0020default\u002Doption\u0020comparisons.",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_normalizeProjectRelativePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003ADEFAULT_TEMPLATE",
             "name": "DEFAULT_TEMPLATE",
             "summary": "",
@@ -1800,6 +1810,11 @@ Search.appendIndex(
             "name": "composer",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_composer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003A\u0024projectCapabilitiesResolver",
+            "name": "projectCapabilitiesResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#property_projectCapabilitiesResolver"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003A\u0024logger",
             "name": "logger",
@@ -2586,6 +2601,16 @@ Search.appendIndex(
             "summary": "Safely\u0020constructs\u0020an\u0020absolute\u0020path\u0020tied\u0020to\u0020a\u0020defined\u0020capability\u0020option.",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolvePath"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AisDefaultTestsPath\u0028\u0029",
+            "name": "isDefaultTestsPath",
+            "summary": "Detects\u0020whether\u0020a\u0020tests\u0020path\u0020option\u0020still\u0020points\u0020at\u0020the\u0020default\u0020project\u0020tests\u0020directory.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_isDefaultTestsPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AnormalizeProjectRelativePath\u0028\u0029",
+            "name": "normalizeProjectRelativePath",
+            "summary": "Normalizes\u0020a\u0020project\u002Drelative\u0020path\u0020for\u0020resilient\u0020default\u002Doption\u0020comparisons.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_normalizeProjectRelativePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AresolveBootstrapPath\u0028\u0029",
             "name": "resolveBootstrapPath",
             "summary": "Creates\u0020the\u0020bootstrap\u0020shim\u0020path\u0020passed\u0020to\u0020PHPUnit.",
@@ -2645,6 +2670,11 @@ Search.appendIndex(
             "name": "processQueue",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_processQueue"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024projectCapabilitiesResolver",
+            "name": "projectCapabilitiesResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_projectCapabilitiesResolver"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024logger",
             "name": "logger",
@@ -2771,6 +2801,16 @@ Search.appendIndex(
             "summary": "Executes\u0020the\u0020generation\u0020of\u0020the\u0020documentation\u0020files\u0020in\u0020Markdown\u0020format.",
             "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#method_execute"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003AisDefaultWikiTarget\u0028\u0029",
+            "name": "isDefaultWikiTarget",
+            "summary": "Detects\u0020whether\u0020a\u0020target\u0020option\u0020still\u0020points\u0020at\u0020the\u0020default\u0020wiki\u0020target\u0020path.",
+            "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#method_isDefaultWikiTarget"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003AnormalizeProjectRelativePath\u0028\u0029",
+            "name": "normalizeProjectRelativePath",
+            "summary": "Normalizes\u0020a\u0020project\u002Drelative\u0020path\u0020for\u0020resilient\u0020default\u002Doption\u0020comparisons.",
+            "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#method_normalizeProjectRelativePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003AinitializeWikiSubmodule\u0028\u0029",
             "name": "initializeWikiSubmodule",
             "summary": "Adds\u0020the\u0020repository\u0020wiki\u0020as\u0020a\u0020Git\u0020submodule\u0020when\u0020the\u0020target\u0020path\u0020is\u0020missing.",
@@ -2810,6 +2850,11 @@ Search.appendIndex(
             "name": "gitClient",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#property_gitClient"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003A\u0024projectCapabilitiesResolver",
+            "name": "projectCapabilitiesResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#property_projectCapabilitiesResolver"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003A\u0024logger",
             "name": "logger",
@@ -2935,6 +2980,11 @@ Search.appendIndex(
             "name": "environment",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024runtimeEnvironment",
+            "name": "runtimeEnvironment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_runtimeEnvironment"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter",
             "name": "LogLevelOutputFormatter",
@@ -3283,7 +3333,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\Environment\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "Reads\u0020an\u0020environment\u0020variable.",
+            "summary": "Reads\u0020an\u0020environment\u0020variable\u0020or\u0020the\u0020current\u0020environment\u0020map.",
             "url": "classes/FastForward-DevTools-Environment-Environment.html#method_get"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\EnvironmentInterface",
@@ -3293,7 +3343,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\EnvironmentInterface\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "Reads\u0020an\u0020environment\u0020variable.",
+            "summary": "Reads\u0020an\u0020environment\u0020variable\u0020or,\u0020when\u0020no\u0020name\u0020is\u0020provided,\u0020the\u0020current\u0020environment\u0020map.",
             "url": "classes/FastForward-DevTools-Environment-EnvironmentInterface.html#method_get"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment",
@@ -3326,10 +3376,20 @@ Search.appendIndex(
             "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
             "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isComposerTestRun"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisAgentPresent\u0028\u0029",
+            "name": "isAgentPresent",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020exposes\u0020known\u0020AI\u002Dagent\u0020environment\u0020markers.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isAgentPresent"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A\u0024environment",
             "name": "environment",
             "summary": "",
             "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A\u0024agentDetector",
+            "name": "agentDetector",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#property_agentDetector"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface",
             "name": "RuntimeEnvironmentInterface",
@@ -3355,6 +3415,11 @@ Search.appendIndex(
             "name": "isComposerTestRun",
             "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
             "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isComposerTestRun"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisAgentPresent\u0028\u0029",
+            "name": "isAgentPresent",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020exposes\u0020known\u0020AI\u002Dagent\u0020environment\u0020markers.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isAgentPresent"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
@@ -5076,6 +5141,161 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Process-XdebugDisablingProcessEnvironmentConfigurator.html#property_extension"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities",
+            "name": "ProjectCapabilities",
+            "summary": "Captures\u0020which\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020surfaces\u0020are\u0020available\u0020for\u0020the\u0020current\u0020repository.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020repository\u0020capability\u0020snapshot\u0020for\u0020reporting\u0020and\u0020documentation\u0020commands.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AgetApiDirectories\u0028\u0029",
+            "name": "getApiDirectories",
+            "summary": "Returns\u0020the\u0020project\u002Drelative\u0020directories\u0020that\u0020expose\u0020autoloaded\u0020PHP\u0020API\u0020source.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_getApiDirectories"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AgetDefaultPackageName\u0028\u0029",
+            "name": "getDefaultPackageName",
+            "summary": "Returns\u0020the\u0020default\u0020API\u0020package\u0020name\u0020when\u0020one\u0020can\u0020be\u0020derived\u0020from\u0020Composer\u0020namespaces.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_getDefaultPackageName"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024hasGuideDirectory",
+            "name": "hasGuideDirectory",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#property_hasGuideDirectory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024hasTestsPath",
+            "name": "hasTestsPath",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#property_hasTestsPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024hasWikiTarget",
+            "name": "hasWikiTarget",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#property_hasWikiTarget"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024hasPhpSourceFiles",
+            "name": "hasPhpSourceFiles",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#property_hasPhpSourceFiles"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateApiDocumentation\u0028\u0029",
+            "name": "canGenerateApiDocumentation",
+            "summary": "Detects\u0020whether\u0020the\u0020repository\u0020exposes\u0020autoloaded\u0020PHP\u0020API\u0020source.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateApiDocumentation"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateDocs\u0028\u0029",
+            "name": "canGenerateDocs",
+            "summary": "Detects\u0020whether\u0020the\u0020repository\u0020can\u0020generate\u0020guides,\u0020API\u0020documentation,\u0020or\u0020both.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateDocs"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateMetrics\u0028\u0029",
+            "name": "canGenerateMetrics",
+            "summary": "Detects\u0020whether\u0020metrics\u0020generation\u0020can\u0020analyse\u0020repository\u0020history\u0020and\u0020package\u0020metadata.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateMetrics"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateWiki\u0028\u0029",
+            "name": "canGenerateWiki",
+            "summary": "Detects\u0020whether\u0020wiki\u0020generation\u0020can\u0020render\u0020API\u0020documentation\u0020into\u0020the\u0020configured\u0020wiki\u0020target.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateWiki"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanRunTests\u0028\u0029",
+            "name": "canRunTests",
+            "summary": "Detects\u0020whether\u0020the\u0020repository\u0020has\u0020enough\u0020PHP\u0020surface\u0020to\u0020justify\u0020running\u0020tests.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canRunTests"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024apiDirectories",
+            "name": "apiDirectories",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#property_apiDirectories"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024defaultPackageName",
+            "name": "defaultPackageName",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#property_defaultPackageName"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver",
+            "name": "ProjectCapabilitiesResolver",
+            "summary": "Resolves\u0020which\u0020repository\u0020surfaces\u0020are\u0020available\u0020to\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020tooling.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003A__construct\u0028\u0029",
+            "name": "__construct",
+            "summary": "Creates\u0020a\u0020capability\u0020resolver\u0020backed\u0020by\u0020Composer\u0020autoload\u0020metadata\u0020and\u0020filesystem\u0020checks.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method___construct"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003Aresolve\u0028\u0029",
+            "name": "resolve",
+            "summary": "Resolves\u0020which\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020surfaces\u0020are\u0020available\u0020for\u0020the\u0020current\u0020repository.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolve"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveDefaultPackageName\u0028\u0029",
+            "name": "resolveDefaultPackageName",
+            "summary": "Resolves\u0020the\u0020default\u0020API\u0020package\u0020name\u0020from\u0020the\u0020first\u0020PSR\u002D4\u0020namespace\u0020entry\u0020when\u0020available.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveDefaultPackageName"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveApiDirectories\u0028\u0029",
+            "name": "resolveApiDirectories",
+            "summary": "Resolves\u0020project\u002Drelative\u0020API\u0020directories\u0020exposed\u0020by\u0020Composer\u0020autoload\u0020configuration.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveApiDirectories"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveRelativeApiDirectory\u0028\u0029",
+            "name": "resolveRelativeApiDirectory",
+            "summary": "Resolves\u0020a\u0020Composer\u0020autoload\u0020path\u0020into\u0020a\u0020project\u002Drelative\u0020API\u0020directory\u0020when\u0020it\u0020exists.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveRelativeApiDirectory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveHasPhpSourceFiles\u0028\u0029",
+            "name": "resolveHasPhpSourceFiles",
+            "summary": "Resolves\u0020whether\u0020Composer\u0020autoload\u0020metadata\u0020exposes\u0020testable\u0020PHP\u0020source\u0020for\u0020the\u0020repository.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveHasPhpSourceFiles"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AnormalizeAutoloadPaths\u0028\u0029",
+            "name": "normalizeAutoloadPaths",
+            "summary": "Flattens\u0020Composer\u0020autoload\u0020path\u0020definitions\u0020into\u0020a\u0020normalized\u0020list\u0020of\u0020non\u002Dempty\u0020paths.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_normalizeAutoloadPaths"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AAPI_AUTOLOAD_TYPES",
+            "name": "API_AUTOLOAD_TYPES",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#constant_API_AUTOLOAD_TYPES"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003A\u0024composer",
+            "name": "composer",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#property_composer"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003A\u0024filesystem",
+            "name": "filesystem",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#property_filesystem"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolverInterface",
+            "name": "ProjectCapabilitiesResolverInterface",
+            "summary": "Resolves\u0020the\u0020effective\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020capabilities\u0020of\u0020the\u0020current\u0020repository.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolverInterface.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolverInterface\u003A\u003Aresolve\u0028\u0029",
+            "name": "resolve",
+            "summary": "Resolves\u0020which\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020surfaces\u0020are\u0020available\u0020for\u0020the\u0020current\u0020repository.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolverInterface.html#method_resolve"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolverInterface\u003A\u003ADEFAULT_TESTS_PATH",
+            "name": "DEFAULT_TESTS_PATH",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolverInterface.html#constant_DEFAULT_TESTS_PATH"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolverInterface\u003A\u003ADEFAULT_GUIDE_DIRECTORY",
+            "name": "DEFAULT_GUIDE_DIRECTORY",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolverInterface.html#constant_DEFAULT_GUIDE_DIRECTORY"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolverInterface\u003A\u003ADEFAULT_WIKI_TARGET",
+            "name": "DEFAULT_WIKI_TARGET",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolverInterface.html#constant_DEFAULT_WIKI_TARGET"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Psr\\Clock\\SystemClock",
             "name": "SystemClock",
             "summary": "A\u0020clock\u0020implementation\u0020that\u0020returns\u0020the\u0020current\u0020system\u0020time.",
@@ -5925,6 +6145,11 @@ Search.appendIndex(
             "name": "Process",
             "summary": "",
             "url": "namespaces/fastforward-devtools-process.html"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project",
+            "name": "Project",
+            "summary": "",
+            "url": "namespaces/fastforward-devtools-project.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Psr\\Clock",
             "name": "Clock",

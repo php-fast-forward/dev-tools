@@ -2797,6 +2797,28 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-project.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Project
+        </a>
+
+            </div>
+
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-psr.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3236,12 +3258,12 @@
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Reads an environment variable.
+                Reads an environment variable or, when no name is provided, the current environment map.
             </p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                                &nbsp;: string|null    </span>
+                                &nbsp;: array&lt;string, string&gt;|string|null    </span>
 </div>
                         </div>
                                     </div>
@@ -3304,7 +3326,7 @@
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Reads an environment variable.</p>
+        <p class="lead text-body-secondary mb-0">Reads an environment variable or, when no name is provided, the current environment map.</p>
     </div>
 
 
@@ -3316,11 +3338,11 @@
     
     
     
-    <span class="text-primary fw-semibold">get</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
-                    string&nbsp;
-                </span><span class="text-primary">$name</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+    <span class="text-primary fw-semibold">get</span><span class="text-body-secondary">(</span><span><span class="text-body-secondary">[</span><span class="text-info-emphasis">
                     string|null&nbsp;
-                </span><span class="text-primary">$default</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
+                </span><span class="text-primary">$name</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span><span class="text-body-secondary">[</span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    string|null&nbsp;
+                </span><span class="text-primary">$default</span><span class="text-body-secondary"> = </span><span class="text-success-emphasis">null</span><span class="text-body-secondary">]</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">array&lt;string, string&gt;|string|null</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3344,9 +3366,11 @@
                             <span class="text-body-secondary">:</span>
 
                             <span class="badge text-bg-light border text-dark">
-                                string
+                                string|null
                             </span>
 
+                                                            <span class="text-body-secondary">=</span>
+                                <code class="text-success-emphasis mb-0">null</code>
                                                     </div>
 
                         <div>
@@ -3359,7 +3383,7 @@
                 </div>
 
                 <div>
-                    <p>the environment variable name</p>
+                    <p>the environment variable name, or null to read the current environment map</p>
 
                 </div>
             </div>
@@ -3393,7 +3417,7 @@
                 </div>
 
                 <div>
-                    <p>the value returned when the variable is not defined</p>
+                    <p>the value returned when the named variable is not defined</p>
 
                 </div>
             </div>
@@ -3419,7 +3443,7 @@
             <div class="card-body p-3">
                                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         <span class="badge text-bg-light border text-dark">
-                            string|null
+                            array&lt;string, string&gt;|string|null
                         </span>
                     </div>
                 
@@ -3433,7 +3457,7 @@
                 </div>
 
                 <div>
-                    <p>the variable value, or the default when it is not defined</p>
+                    <p>the environment map, variable value, or default fallback</p>
 
                 </div>
             </div>
