@@ -230,6 +230,48 @@ final class WikiCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillGenerateWhenCustomWikiTargetDoesNotExist(): void
+    {
+        $this->input->getOption('target')
+            ->willReturn('build/wiki');
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--target', 'build/wiki')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(WikiCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info('Generating wiki documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Wiki documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
+            Argument::cetera(),
+        )->shouldNotBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWillSkipWhenNoApiDirectoriesAreDetected(): void
     {
         $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())

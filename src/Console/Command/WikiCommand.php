@@ -133,6 +133,7 @@ final class WikiCommand extends Command
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
+        $isDefaultWikiTarget = ProjectCapabilitiesResolverInterface::DEFAULT_WIKI_TARGET === $target;
         $cacheEnabled = $this->isCacheEnabled($input);
 
         if ($input->getOption('init')) {
@@ -147,7 +148,7 @@ final class WikiCommand extends Command
 
         $projectCapabilities = $this->projectCapabilitiesResolver->resolve(wikiTarget: $target);
 
-        if (! $projectCapabilities->hasWikiTarget()) {
+        if ($isDefaultWikiTarget && ! $projectCapabilities->hasWikiTarget()) {
             return $this->success(
                 'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
                 $input,
