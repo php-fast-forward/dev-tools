@@ -25,8 +25,6 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
-use FastForward\DevTools\Project\ProjectCapabilities;
-use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -43,7 +41,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
-use function Safe\getcwd;
 use function Safe\putenv;
 
 #[CoversClass(MetricsCommand::class)]
@@ -59,8 +56,6 @@ final class MetricsCommandTest extends TestCase
     private ObjectProphecy $processBuilder;
 
     private ObjectProphecy $processQueue;
-
-    private ObjectProphecy $projectCapabilitiesResolver;
 
     private ObjectProphecy $logger;
 
@@ -79,7 +74,6 @@ final class MetricsCommandTest extends TestCase
     {
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
-        $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -112,19 +106,9 @@ final class MetricsCommandTest extends TestCase
             && '-ddefault_socket_timeout=1' === $command[2]
             && DevToolsPathResolver::getPreferredToolBinaryPath('phpmetrics') === $command[3]))
             ->willReturn($this->process->reveal());
-        $this->projectCapabilitiesResolver->resolve()
-            ->willReturn(new ProjectCapabilities(
-                [getcwd() . '/src'],
-                'FastForward\\DevTools',
-                false,
-                true,
-                false,
-                true,
-            ));
         $this->command = new MetricsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->projectCapabilitiesResolver->reveal(),
             $this->logger->reveal(),
         );
     }
@@ -234,7 +218,6 @@ final class MetricsCommandTest extends TestCase
         $command = new MetricsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->projectCapabilitiesResolver->reveal(),
             $this->logger->reveal(),
         );
 
@@ -268,18 +251,18 @@ final class MetricsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillSkipWhenNoTestsOrPhpSourceExist(): void
+    public function executeWillRunEvenWhenNoTestsOrPhpSourceExist(): void
     {
-        $this->projectCapabilitiesResolver->resolve()
-            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
-        $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
-        $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+        $this->expectProcessQueued();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(MetricsCommand::SUCCESS)
+            ->shouldBeCalled();
         $this->logger->info('Running code metrics analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
-            'warning',
-            'Skipping code metrics analysis because no tests directory or PHP source files were detected.',
+            'info',
+            'Code metrics analysis completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();

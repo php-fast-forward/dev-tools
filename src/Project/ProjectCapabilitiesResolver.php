@@ -21,7 +21,6 @@ namespace FastForward\DevTools\Project;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use FastForward\DevTools\Path\WorkingProjectPathResolver;
 
 use function array_key_first;
 use function array_values;
@@ -62,14 +61,15 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
         string $wikiTarget = ProjectCapabilitiesResolverInterface::DEFAULT_WIKI_TARGET,
     ): ProjectCapabilities {
         $psr4Autoload = $this->composer->getAutoload('psr-4');
+        $apiDirectories = $this->resolveApiDirectories();
 
         return new ProjectCapabilities(
-            $this->resolveApiDirectories(),
+            $apiDirectories,
             $this->resolveDefaultPackageName($psr4Autoload),
             $this->filesystem->exists($guideDirectory),
             $this->filesystem->exists($testsPath),
             $this->filesystem->exists($wikiTarget),
-            [] !== WorkingProjectPathResolver::getToolingSourcePaths(),
+            [] !== $apiDirectories,
         );
     }
 

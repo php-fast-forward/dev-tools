@@ -25,9 +25,7 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
-use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -79,13 +77,11 @@ final class MetricsCommand extends Command
     /**
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PhpMetrics process
      * @param ProcessQueueInterface $processQueue the queue used to execute the PhpMetrics process
-     * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
      * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -142,17 +138,6 @@ final class MetricsCommand extends Command
         $this->logger->info('Running code metrics analysis...', [
             'input' => $input,
         ]);
-
-        if (! $this->projectCapabilitiesResolver->resolve()->canGenerateMetrics()) {
-            return $this->success(
-                'Skipping code metrics analysis because no tests directory or PHP source files were detected.',
-                $input,
-                [
-                    'output' => $processOutput,
-                ],
-                LogLevel::WARNING,
-            );
-        }
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')

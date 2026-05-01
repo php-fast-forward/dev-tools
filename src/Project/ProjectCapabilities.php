@@ -32,7 +32,7 @@ final readonly class ProjectCapabilities
      * @param bool $hasGuideDirectory whether the configured guide directory exists
      * @param bool $hasTestsPath whether the configured tests path exists
      * @param bool $hasWikiTarget whether the configured wiki target exists
-     * @param bool $hasPhpSourceFiles whether the repository contains PHP source files outside generated/vendor areas
+     * @param bool $hasPhpSourceFiles whether the repository exposes autoloaded PHP source that can be tested
      */
     public function __construct(
         private array $apiDirectories,
@@ -84,7 +84,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * Detects whether the repository exposes PHP source files outside generated and vendor areas.
+     * Detects whether the repository exposes autoloaded PHP source that can be tested.
      */
     public function hasPhpSourceFiles(): bool
     {
@@ -108,11 +108,11 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * Detects whether metrics generation has PHP source or test inputs to analyse.
+     * Detects whether metrics generation can analyse repository history and package metadata.
      */
     public function canGenerateMetrics(): bool
     {
-        return $this->hasTestsPath || $this->hasPhpSourceFiles;
+        return true;
     }
 
     /**

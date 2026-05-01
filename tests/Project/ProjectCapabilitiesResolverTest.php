@@ -22,7 +22,6 @@ namespace FastForward\DevTools\Tests\Project;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
 use FastForward\DevTools\Path\ManagedWorkspace;
-use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Project\ProjectCapabilities;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -42,7 +41,6 @@ use function Safe\mkdir;
 #[UsesClass(Filesystem::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(ProjectCapabilities::class)]
-#[UsesClass(WorkingProjectPathResolver::class)]
 final class ProjectCapabilitiesResolverTest extends TestCase
 {
     use ProphecyTrait;
@@ -107,10 +105,32 @@ final class ProjectCapabilitiesResolverTest extends TestCase
         self::assertFalse($capabilities->canGenerateApiDocumentation());
         self::assertTrue($capabilities->canGenerateDocs());
         self::assertFalse($capabilities->canRunTests());
-        self::assertFalse($capabilities->canGenerateMetrics());
+        self::assertTrue($capabilities->canGenerateMetrics());
         self::assertFalse($capabilities->canGenerateWiki());
         self::assertSame([], $capabilities->getApiDirectories());
         self::assertNull($capabilities->getDefaultPackageName());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function resolveWillIgnoreToolingPhpFilesWhenDetectingTestablePhpSource(): void
+    {
+        file_put_contents($this->workspace . '/ecs.php', "<?php\n\nreturn [];\n");
+
+        $this->composer->getAutoload('psr-4')
+            ->willReturn([]);
+        $this->composer->getAutoload('psr-0')
+            ->willReturn([]);
+        $this->composer->getAutoload('classmap')
+            ->willReturn([]);
+
+        $capabilities = $this->resolver->resolve();
+
+        self::assertFalse($capabilities->hasPhpSourceFiles());
+        self::assertFalse($capabilities->canRunTests());
+        self::assertTrue($capabilities->canGenerateMetrics());
     }
 
     /**
