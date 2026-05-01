@@ -5098,22 +5098,22 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities",
             "name": "ProjectCapabilities",
-            "summary": "Describes\u0020the\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020surfaces\u0020exposed\u0020by\u0020the\u0020current\u0020repository.",
+            "summary": "Captures\u0020which\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020surfaces\u0020are\u0020available\u0020for\u0020the\u0020current\u0020repository.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Creates\u0020a\u0020repository\u0020capability\u0020snapshot\u0020for\u0020reporting\u0020and\u0020documentation\u0020commands.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method___construct"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AgetApiDirectories\u0028\u0029",
             "name": "getApiDirectories",
-            "summary": "",
+            "summary": "Returns\u0020the\u0020project\u002Drelative\u0020directories\u0020that\u0020expose\u0020autoloaded\u0020PHP\u0020API\u0020source.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_getApiDirectories"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AgetDefaultPackageName\u0028\u0029",
             "name": "getDefaultPackageName",
-            "summary": "",
+            "summary": "Returns\u0020the\u0020default\u0020API\u0020package\u0020name\u0020when\u0020one\u0020can\u0020be\u0020derived\u0020from\u0020Composer\u0020namespaces.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_getDefaultPackageName"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024hasGuideDirectory",
@@ -5138,27 +5138,27 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateApiDocumentation\u0028\u0029",
             "name": "canGenerateApiDocumentation",
-            "summary": "",
+            "summary": "Detects\u0020whether\u0020the\u0020repository\u0020exposes\u0020autoloaded\u0020PHP\u0020API\u0020source.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateApiDocumentation"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateDocs\u0028\u0029",
             "name": "canGenerateDocs",
-            "summary": "",
+            "summary": "Detects\u0020whether\u0020the\u0020repository\u0020can\u0020generate\u0020guides,\u0020API\u0020documentation,\u0020or\u0020both.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateDocs"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateMetrics\u0028\u0029",
             "name": "canGenerateMetrics",
-            "summary": "",
+            "summary": "Detects\u0020whether\u0020metrics\u0020generation\u0020has\u0020PHP\u0020source\u0020or\u0020test\u0020inputs\u0020to\u0020analyse.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateMetrics"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateWiki\u0028\u0029",
             "name": "canGenerateWiki",
-            "summary": "",
+            "summary": "Detects\u0020whether\u0020wiki\u0020generation\u0020can\u0020render\u0020API\u0020documentation\u0020into\u0020the\u0020configured\u0020wiki\u0020target.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateWiki"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanRunTests\u0028\u0029",
             "name": "canRunTests",
-            "summary": "",
+            "summary": "Detects\u0020whether\u0020the\u0020repository\u0020has\u0020enough\u0020PHP\u0020surface\u0020to\u0020justify\u0020running\u0020tests.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canRunTests"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003A\u0024apiDirectories",
@@ -5178,32 +5178,32 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "",
+            "summary": "Creates\u0020a\u0020capability\u0020resolver\u0020backed\u0020by\u0020Composer\u0020autoload\u0020metadata\u0020and\u0020filesystem\u0020checks.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method___construct"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003Aresolve\u0028\u0029",
             "name": "resolve",
-            "summary": "",
+            "summary": "Resolves\u0020which\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020surfaces\u0020are\u0020available\u0020for\u0020the\u0020current\u0020repository.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolve"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveDefaultPackageName\u0028\u0029",
             "name": "resolveDefaultPackageName",
-            "summary": "",
+            "summary": "Resolves\u0020the\u0020default\u0020API\u0020package\u0020name\u0020from\u0020the\u0020first\u0020PSR\u002D4\u0020namespace\u0020entry\u0020when\u0020available.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveDefaultPackageName"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveApiDirectories\u0028\u0029",
             "name": "resolveApiDirectories",
-            "summary": "",
+            "summary": "Resolves\u0020project\u002Drelative\u0020API\u0020directories\u0020exposed\u0020by\u0020Composer\u0020autoload\u0020configuration.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveApiDirectories"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveRelativeApiDirectory\u0028\u0029",
             "name": "resolveRelativeApiDirectory",
-            "summary": "",
+            "summary": "Resolves\u0020a\u0020Composer\u0020autoload\u0020path\u0020into\u0020a\u0020project\u002Drelative\u0020API\u0020directory\u0020when\u0020it\u0020exists.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveRelativeApiDirectory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AnormalizeAutoloadPaths\u0028\u0029",
             "name": "normalizeAutoloadPaths",
-            "summary": "",
+            "summary": "Flattens\u0020Composer\u0020autoload\u0020path\u0020definitions\u0020into\u0020a\u0020normalized\u0020list\u0020of\u0020non\u002Dempty\u0020paths.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_normalizeAutoloadPaths"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AAPI_AUTOLOAD_TYPES",
@@ -5228,7 +5228,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolverInterface\u003A\u003Aresolve\u0028\u0029",
             "name": "resolve",
-            "summary": "",
+            "summary": "Resolves\u0020which\u0020documentation,\u0020testing,\u0020and\u0020wiki\u0020surfaces\u0020are\u0020available\u0020for\u0020the\u0020current\u0020repository.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolverInterface.html#method_resolve"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolverInterface\u003A\u003ADEFAULT_TESTS_PATH",

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777620152">
-  <project timestamp="1777620152" name="Clover Coverage">
+<coverage generated="1777620901">
+  <project timestamp="1777620901" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -5847,89 +5847,89 @@
         <class name="FastForward\DevTools\Project\ProjectCapabilities" namespace="FastForward\DevTools\Project">
           <metrics complexity="16" methods="12" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="0" elements="24" coveredelements="0"/>
         </class>
-        <line num="35" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="42" type="stmt" count="0"/>
-        <line num="47" type="method" name="getApiDirectories" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="49" type="stmt" count="0"/>
-        <line num="55" type="method" name="getDefaultPackageName" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="57" type="stmt" count="0"/>
-        <line num="63" type="method" name="hasGuideDirectory" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="65" type="stmt" count="0"/>
-        <line num="71" type="method" name="hasTestsPath" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="73" type="stmt" count="0"/>
-        <line num="79" type="method" name="hasWikiTarget" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="81" type="stmt" count="0"/>
-        <line num="87" type="method" name="hasPhpSourceFiles" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="89" type="stmt" count="0"/>
-        <line num="95" type="method" name="canGenerateApiDocumentation" visibility="public" complexity="1" crap="2" count="0"/>
-        <line num="97" type="stmt" count="0"/>
-        <line num="103" type="method" name="canGenerateDocs" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="105" type="stmt" count="0"/>
-        <line num="111" type="method" name="canGenerateMetrics" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="113" type="stmt" count="0"/>
-        <line num="119" type="method" name="canGenerateWiki" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="121" type="stmt" count="0"/>
-        <line num="127" type="method" name="canRunTests" visibility="public" complexity="2" crap="6" count="0"/>
-        <line num="129" type="stmt" count="0"/>
-        <metrics loc="132" ncloc="74" classes="1" methods="12" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="0" elements="24" coveredelements="0"/>
+        <line num="37" type="method" name="__construct" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="44" type="stmt" count="0"/>
+        <line num="49" type="method" name="getApiDirectories" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="51" type="stmt" count="0"/>
+        <line num="57" type="method" name="getDefaultPackageName" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="59" type="stmt" count="0"/>
+        <line num="65" type="method" name="hasGuideDirectory" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="67" type="stmt" count="0"/>
+        <line num="73" type="method" name="hasTestsPath" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="75" type="stmt" count="0"/>
+        <line num="81" type="method" name="hasWikiTarget" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="83" type="stmt" count="0"/>
+        <line num="89" type="method" name="hasPhpSourceFiles" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="91" type="stmt" count="0"/>
+        <line num="97" type="method" name="canGenerateApiDocumentation" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="99" type="stmt" count="0"/>
+        <line num="105" type="method" name="canGenerateDocs" visibility="public" complexity="2" crap="6" count="0"/>
+        <line num="107" type="stmt" count="0"/>
+        <line num="113" type="method" name="canGenerateMetrics" visibility="public" complexity="2" crap="6" count="0"/>
+        <line num="115" type="stmt" count="0"/>
+        <line num="121" type="method" name="canGenerateWiki" visibility="public" complexity="2" crap="6" count="0"/>
+        <line num="123" type="stmt" count="0"/>
+        <line num="129" type="method" name="canRunTests" visibility="public" complexity="2" crap="6" count="0"/>
+        <line num="131" type="stmt" count="0"/>
+        <metrics loc="134" ncloc="74" classes="1" methods="12" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="12" coveredstatements="0" elements="24" coveredelements="0"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Project/ProjectCapabilitiesResolver.php">
         <class name="FastForward\DevTools\Project\ProjectCapabilitiesResolver" namespace="FastForward\DevTools\Project">
           <metrics complexity="20" methods="6" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="31" elements="48" coveredelements="34"/>
         </class>
-        <line num="45" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="48" type="stmt" count="2"/>
-        <line num="57" type="method" name="resolve" visibility="public" complexity="1" crap="1" count="2"/>
-        <line num="62" type="stmt" count="2"/>
+        <line num="47" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="50" type="stmt" count="2"/>
+        <line num="59" type="method" name="resolve" visibility="public" complexity="1" crap="1" count="2"/>
         <line num="64" type="stmt" count="2"/>
-        <line num="65" type="stmt" count="2"/>
         <line num="66" type="stmt" count="2"/>
         <line num="67" type="stmt" count="2"/>
         <line num="68" type="stmt" count="2"/>
         <line num="69" type="stmt" count="2"/>
         <line num="70" type="stmt" count="2"/>
         <line num="71" type="stmt" count="2"/>
-        <line num="77" type="method" name="resolveDefaultPackageName" visibility="private" complexity="3" crap="3" count="2"/>
-        <line num="79" type="stmt" count="2"/>
-        <line num="81" type="stmt" count="2"/>
-        <line num="82" type="stmt" count="1"/>
-        <line num="85" type="stmt" count="1"/>
-        <line num="91" type="method" name="resolveApiDirectories" visibility="private" complexity="4" crap="4.03" count="2"/>
-        <line num="93" type="stmt" count="2"/>
-        <line num="95" type="stmt" count="2"/>
-        <line num="96" type="stmt" count="2"/>
-        <line num="97" type="stmt" count="1"/>
-        <line num="99" type="stmt" count="1"/>
-        <line num="100" type="stmt" count="0"/>
+        <line num="72" type="stmt" count="2"/>
+        <line num="73" type="stmt" count="2"/>
+        <line num="81" type="method" name="resolveDefaultPackageName" visibility="private" complexity="3" crap="3" count="2"/>
+        <line num="83" type="stmt" count="2"/>
+        <line num="85" type="stmt" count="2"/>
+        <line num="86" type="stmt" count="1"/>
+        <line num="89" type="stmt" count="1"/>
+        <line num="97" type="method" name="resolveApiDirectories" visibility="private" complexity="4" crap="4.03" count="2"/>
+        <line num="99" type="stmt" count="2"/>
+        <line num="101" type="stmt" count="2"/>
+        <line num="102" type="stmt" count="2"/>
         <line num="103" type="stmt" count="1"/>
-        <line num="107" type="stmt" count="2"/>
-        <line num="115" type="method" name="resolveRelativeApiDirectory" visibility="private" complexity="3" crap="3.33" count="1"/>
-        <line num="117" type="stmt" count="1"/>
-        <line num="119" type="stmt" count="1"/>
-        <line num="120" type="stmt" count="0"/>
+        <line num="105" type="stmt" count="1"/>
+        <line num="106" type="stmt" count="0"/>
+        <line num="109" type="stmt" count="1"/>
+        <line num="113" type="stmt" count="2"/>
+        <line num="121" type="method" name="resolveRelativeApiDirectory" visibility="private" complexity="3" crap="3.33" count="1"/>
         <line num="123" type="stmt" count="1"/>
-        <line num="124" type="stmt" count="0"/>
-        <line num="127" type="stmt" count="1"/>
-        <line num="135" type="method" name="normalizeAutoloadPaths" visibility="private" complexity="8" crap="19.94" count="2"/>
-        <line num="137" type="stmt" count="2"/>
-        <line num="139" type="stmt" count="2"/>
-        <line num="140" type="stmt" count="1"/>
-        <line num="141" type="stmt" count="1"/>
-        <line num="143" type="stmt" count="1"/>
-        <line num="146" type="stmt" count="0"/>
-        <line num="147" type="stmt" count="0"/>
-        <line num="150" type="stmt" count="0"/>
-        <line num="151" type="stmt" count="0"/>
-        <line num="152" type="stmt" count="0"/>
+        <line num="125" type="stmt" count="1"/>
+        <line num="126" type="stmt" count="0"/>
+        <line num="129" type="stmt" count="1"/>
+        <line num="130" type="stmt" count="0"/>
+        <line num="133" type="stmt" count="1"/>
+        <line num="143" type="method" name="normalizeAutoloadPaths" visibility="private" complexity="8" crap="19.94" count="2"/>
+        <line num="145" type="stmt" count="2"/>
+        <line num="147" type="stmt" count="2"/>
+        <line num="148" type="stmt" count="1"/>
+        <line num="149" type="stmt" count="1"/>
+        <line num="151" type="stmt" count="1"/>
+        <line num="154" type="stmt" count="0"/>
         <line num="155" type="stmt" count="0"/>
-        <line num="156" type="stmt" count="0"/>
+        <line num="158" type="stmt" count="0"/>
         <line num="159" type="stmt" count="0"/>
-        <line num="163" type="stmt" count="2"/>
-        <metrics loc="166" ncloc="119" classes="1" methods="6" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="31" elements="48" coveredelements="34"/>
+        <line num="160" type="stmt" count="0"/>
+        <line num="163" type="stmt" count="0"/>
+        <line num="164" type="stmt" count="0"/>
+        <line num="167" type="stmt" count="0"/>
+        <line num="171" type="stmt" count="2"/>
+        <metrics loc="174" ncloc="119" classes="1" methods="6" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="42" coveredstatements="31" elements="48" coveredelements="34"/>
       </file>
     </package>
     <file name="/home/runner/work/dev-tools/dev-tools/src/Project/ProjectCapabilitiesResolverInterface.php">
-      <metrics loc="46" ncloc="22" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="55" ncloc="22" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <package name="FastForward\DevTools\Psr\Clock">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Psr/Clock/SystemClock.php">
@@ -6560,6 +6560,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="160" loc="21498" ncloc="13076" classes="117" methods="561" coveredmethods="444" conditionals="0" coveredconditionals="0" statements="5063" coveredstatements="4655" elements="5624" coveredelements="5099"/>
+    <metrics files="160" loc="21517" ncloc="13076" classes="117" methods="561" coveredmethods="444" conditionals="0" coveredconditionals="0" statements="5063" coveredstatements="4655" elements="5624" coveredelements="5099"/>
   </project>
 </coverage>

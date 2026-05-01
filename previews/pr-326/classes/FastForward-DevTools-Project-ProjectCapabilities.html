@@ -3222,7 +3222,7 @@
 
         <div class="mb-4">
                 <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Describes the documentation, testing, and wiki surfaces exposed by the current repository.</p>
+        <p class="lead text-body-secondary mb-0">Captures which documentation, testing, and wiki surfaces are available for the current repository.</p>
     </div>
 
 
@@ -3378,6 +3378,9 @@
             __construct()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Creates a repository capability snapshot for reporting and documentation commands.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3394,6 +3397,9 @@
             canGenerateApiDocumentation()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the repository exposes autoloaded PHP API source.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3410,6 +3416,9 @@
             canGenerateDocs()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the repository can generate guides, API documentation, or both.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3426,6 +3435,9 @@
             canGenerateMetrics()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether metrics generation has PHP source or test inputs to analyse.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3442,6 +3454,9 @@
             canGenerateWiki()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether wiki generation can render API documentation into the configured wiki target.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3458,6 +3473,9 @@
             canRunTests()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the repository has enough PHP surface to justify running tests.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3474,10 +3492,13 @@
             getApiDirectories()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Returns the project-relative directories that expose autoloaded PHP API source.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
-                                &nbsp;: array&lt;int, string&gt;    </span>
+                                &nbsp;: array&lt;string|int, mixed&gt;    </span>
 </div>
                         </div>
                                             <div class="list-group-item">
@@ -3490,6 +3511,9 @@
             getDefaultPackageName()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Returns the default API package name when one can be derived from Composer namespaces.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3506,6 +3530,9 @@
             hasGuideDirectory()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the configured guide directory exists.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3522,6 +3549,9 @@
             hasPhpSourceFiles()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the repository exposes PHP source files outside generated and vendor areas.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3538,6 +3568,9 @@
             hasTestsPath()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the configured tests directory exists.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3554,6 +3587,9 @@
             hasWikiTarget()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Detects whether the configured wiki target exists.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3627,7 +3663,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">36</span>
+    <span class="badge text-bg-light border">38</span>
 
     </aside>
     
@@ -3696,7 +3732,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">37</span>
+    <span class="badge text-bg-light border">39</span>
 
     </aside>
     
@@ -3765,7 +3801,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">38</span>
+    <span class="badge text-bg-light border">40</span>
 
     </aside>
     
@@ -3834,7 +3870,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">41</span>
+    <span class="badge text-bg-light border">43</span>
 
     </aside>
     
@@ -3903,7 +3939,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">39</span>
+    <span class="badge text-bg-light border">41</span>
 
     </aside>
     
@@ -3972,7 +4008,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">40</span>
+    <span class="badge text-bg-light border">42</span>
 
     </aside>
     
@@ -4065,10 +4101,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">35</span>
+    <span class="badge text-bg-light border">37</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Creates a repository capability snapshot for reporting and documentation commands.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4342,10 +4381,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">95</span>
+    <span class="badge text-bg-light border">97</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the repository exposes autoloaded PHP API source.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4423,10 +4465,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">103</span>
+    <span class="badge text-bg-light border">105</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the repository can generate guides, API documentation, or both.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4504,10 +4549,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">111</span>
+    <span class="badge text-bg-light border">113</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether metrics generation has PHP source or test inputs to analyse.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4585,10 +4633,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">119</span>
+    <span class="badge text-bg-light border">121</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether wiki generation can render API documentation into the configured wiki target.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4666,10 +4717,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">127</span>
+    <span class="badge text-bg-light border">129</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the repository has enough PHP surface to justify running tests.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4747,10 +4801,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">47</span>
+    <span class="badge text-bg-light border">49</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Returns the project-relative directories that expose autoloaded PHP API source.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4760,7 +4817,7 @@
     
     
     
-    <span class="text-primary fw-semibold">getApiDirectories</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">array&lt;int, string&gt;</span></code>
+    <span class="text-primary fw-semibold">getApiDirectories</span><span class="text-body-secondary">(</span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">array&lt;string|int, mixed&gt;</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -4784,7 +4841,7 @@
             <div class="card-body p-3">
                                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         <span class="badge text-bg-light border text-dark">
-                            array&lt;int, string&gt;
+                            array&lt;string|int, mixed&gt;
                         </span>
                     </div>
                 
@@ -4828,10 +4885,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">55</span>
+    <span class="badge text-bg-light border">57</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Returns the default API package name when one can be derived from Composer namespaces.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4909,10 +4969,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">63</span>
+    <span class="badge text-bg-light border">65</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the configured guide directory exists.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4990,10 +5053,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">87</span>
+    <span class="badge text-bg-light border">89</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the repository exposes PHP source files outside generated and vendor areas.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -5071,10 +5137,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">71</span>
+    <span class="badge text-bg-light border">73</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the configured tests directory exists.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -5152,10 +5221,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">79</span>
+    <span class="badge text-bg-light border">81</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Detects whether the configured wiki target exists.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">

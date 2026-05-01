@@ -3358,6 +3358,9 @@
             __construct()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Creates a capability resolver backed by Composer autoload metadata and filesystem checks.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3374,6 +3377,9 @@
             resolve()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Resolves which documentation, testing, and wiki surfaces are available for the current repository.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3390,6 +3396,9 @@
             normalizeAutoloadPaths()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Flattens Composer autoload path definitions into a normalized list of non-empty paths.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3406,6 +3415,9 @@
             resolveApiDirectories()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Resolves project-relative API directories exposed by Composer autoload configuration.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3422,6 +3434,9 @@
             resolveDefaultPackageName()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Resolves the default API package name from the first PSR-4 namespace entry when available.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3438,6 +3453,9 @@
             resolveRelativeApiDirectory()
         </a>
 
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Resolves a Composer autoload path into a project-relative API directory when it exists.
+            </p>
             </div>
 
     <span class="text-body-secondary small text-end">
@@ -3624,7 +3642,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">46</span>
+    <span class="badge text-bg-light border">48</span>
 
     </aside>
     
@@ -3693,7 +3711,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">47</span>
+    <span class="badge text-bg-light border">49</span>
 
     </aside>
     
@@ -3786,10 +3804,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">45</span>
+    <span class="badge text-bg-light border">47</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Creates a capability resolver backed by Composer autoload metadata and filesystem checks.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -3832,6 +3853,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the composer.json accessor for autoload metadata</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -3851,6 +3885,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the filesystem used to resolve project-relative paths</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -3899,10 +3946,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">57</span>
+    <span class="badge text-bg-light border">59</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Resolves which documentation, testing, and wiki surfaces are available for the current repository.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -3951,6 +4001,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the project-relative tests directory to inspect</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -3972,6 +4035,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the project-relative guide directory to inspect</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -3993,6 +4069,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the project-relative wiki output target to inspect</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -4058,10 +4147,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">135</span>
+    <span class="badge text-bg-light border">143</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Flattens Composer autoload path definitions into a normalized list of non-empty paths.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4104,6 +4196,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the Composer autoload section to normalize</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -4169,10 +4274,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">91</span>
+    <span class="badge text-bg-light border">97</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Resolves project-relative API directories exposed by Composer autoload configuration.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4250,10 +4358,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">77</span>
+    <span class="badge text-bg-light border">81</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Resolves the default API package name from the first PSR-4 namespace entry when available.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4296,6 +4407,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the PSR-4 autoload map from composer.json</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
@@ -4361,10 +4485,13 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">115</span>
+    <span class="badge text-bg-light border">121</span>
 
     </aside>
-    
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Resolves a Composer autoload path into a project-relative API directory when it exists.</p>
+    </div>
+
 
     <div class="mt-4">
         <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
@@ -4407,6 +4534,19 @@
 
                         <div>
                             
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the Composer autoload path candidate</p>
+
+                </div>
+            </div>
+            </section>
 
                         </div>
                     </div>
