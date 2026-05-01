@@ -64,7 +64,7 @@
         "psr/container": "^2.0",
         "psr/log": "^3.0",
         "pyrech/composer-changelogs": "^2.2",
-        "rector/jack": "^0.5",
+        "rector/jack": "^1.0",
         "rector/rector": "^2.4",
         "saggre/phpdocumentor-markdown": "^1.0",
         "sebastian/diff": "^7.0 || ^8.0",

@@ -9,11 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Composer(deps): Update rector/jack requirement from ^0.5 to ^1.0 (#320)
 - GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.1 to 3.0.2 (#319)
 
 ### Fixed
 
+- Keep release-preparation wiki preview refreshes installing Composer plugins so `phpdocumentor/shim` still exposes `phpdoc` when release pull request creation rebuilds `.github/wiki` (#318)
 - Keep release-preparation pull requests refreshing their wiki preview and parent `.github/wiki` pointer before merge, then publish merged release wikis from that preview branch so branch protection no longer requires direct post-merge pointer commits to `main` (#315)
+- Resolve predictable `.github/wiki` gitlink conflicts by staging the current-branch submodule pointer directly from the merge index, so auto-resolve automation no longer depends on `git add` for uninitialized submodule checkouts (#321)
 
 ## [1.24.6] - 2026-04-30
 

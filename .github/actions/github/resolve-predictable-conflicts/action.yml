@@ -20,4 +20,5 @@ runs:
         INPUT_BASE_REF: ${{ inputs.base-ref }}
         INPUT_PULL_REQUEST_NUMBER: ${{ inputs.pull-request-number }}
         DEV_TOOLS_CONFLICT_RESOLVER: ${{ github.action_path }}/resolve-changelog.php
+        DEV_TOOLS_GITLINK_RESOLVER: ${{ github.action_path }}/stage-unmerged-gitlink.sh
       run: ${{ github.action_path }}/run.sh

@@ -158,8 +158,8 @@ resolve_pull_request() {
     fi
 
     if grep -Fx --quiet -- ".github/wiki" <<< "${conflicts}"; then
-        git -C "${workdir}/repo" checkout --ours -- .github/wiki
-        git -C "${workdir}/repo" add .github/wiki
+        # Resolve the gitlink directly from the index so uninitialized submodules do not break staging.
+        "${DEV_TOOLS_GITLINK_RESOLVER}" "${workdir}/repo" ".github/wiki"
     fi
 
     if grep -Fx --quiet -- "CHANGELOG.md" <<< "${conflicts}"; then
