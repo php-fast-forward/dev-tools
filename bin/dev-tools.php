@@ -21,7 +21,7 @@ namespace FastForward\DevTools;
 
 use FastForward\DevTools\Console\DevTools;
 
-$autoloadCandidates = [\dirname(__DIR__) . '/vendor/autoload.php', \dirname(__DIR__, 4) . '/vendor/autoload.php'];
+$autoloadCandidates = [\dirname(__DIR__, 4) . '/vendor/autoload.php', \dirname(__DIR__) . '/vendor/autoload.php'];
 
 foreach ($autoloadCandidates as $autoloadCandidate) {
     if (is_file($autoloadCandidate)) {

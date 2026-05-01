@@ -89,12 +89,15 @@ final class TestsCommandTest extends TestCase
 
     private TestsCommand $command;
 
+    private string|false $agentEnvironment;
+
     /**
      * @return void
      */
     protected function setUp(): void
     {
         ContainerFactory::reset();
+        $this->agentEnvironment = getenv('AI_AGENT');
         $this->coverageSummaryLoader = $this->prophesize(CoverageSummaryLoaderInterface::class);
         $this->composerJson = $this->prophesize(ComposerJsonInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
@@ -168,6 +171,14 @@ final class TestsCommandTest extends TestCase
     protected function tearDown(): void
     {
         ContainerFactory::reset();
+
+        if (false === $this->agentEnvironment) {
+            putenv('AI_AGENT');
+
+            return;
+        }
+
+        putenv('AI_AGENT=' . $this->agentEnvironment);
     }
 
     /**
@@ -318,6 +329,37 @@ final class TestsCommandTest extends TestCase
                 && 5 === $context['output']['summary']['assertions']),
         )->shouldBeCalled();
         $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillPreserveAnInheritedAgentEnvironmentWhenForcingStructuredPhpUnitOutput(): void
+    {
+        putenv('AI_AGENT=existing-agent');
+
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+
+        $this->processQueue->add(
+            Argument::that(static fn(Process $process): bool => ! \array_key_exists('AI_AGENT', $process->getEnv())),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log(
+            'info',
+            'PHPUnit tests completed successfully.',
+            Argument::type('array'),
+        )->shouldBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }

@@ -21,7 +21,7 @@ namespace FastForward\DevTools\Console\Logger;
 
 use Stringable;
 use DateTimeInterface;
-use Ergebnis\AgentDetector\Detector;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Console\Logger\Processor\ContextProcessorInterface;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
 use Psr\Clock\ClockInterface;
@@ -58,7 +58,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
      * @param ArgvInput $input the CLI input instance used to inspect runtime options
      * @param ConsoleOutputInterface $output the console output instance used for writing log messages
      * @param ClockInterface $clock provides timestamps for rendered log entries
-     * @param Detector $agentDetector detects agent-oriented execution environments
+     * @param RuntimeEnvironmentInterface $runtimeEnvironment resolves runtime-specific output behavior
      * @param ContextProcessorInterface $contextProcessor expands command input and output metadata
      * @param GithubActionOutput $githubActionOutput emits GitHub Actions annotations when supported
      */
@@ -66,7 +66,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
         private ArgvInput $input,
         private ConsoleOutputInterface $output,
         private ClockInterface $clock,
-        private Detector $agentDetector,
+        private RuntimeEnvironmentInterface $runtimeEnvironment,
         private ContextProcessorInterface $contextProcessor,
         private GithubActionOutput $githubActionOutput,
     ) {}
@@ -179,7 +179,7 @@ final readonly class OutputFormatLogger implements LoggerInterface
             return true;
         }
 
-        return $this->agentDetector->isAgentPresent($_SERVER);
+        return $this->runtimeEnvironment->isAgentPresent() && ! $this->runtimeEnvironment->isComposerTestRun();
     }
 
     /**

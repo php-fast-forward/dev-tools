@@ -320,10 +320,15 @@ final class TestsCommand extends Command
     {
         $env = $process->getEnv();
 
-        if (\array_key_exists(self::AGENT_ENVIRONMENT_VARIABLE, $env)) {
+        if (\array_key_exists(self::AGENT_ENVIRONMENT_VARIABLE, $env) || false !== getenv(
+            self::AGENT_ENVIRONMENT_VARIABLE
+        )) {
             return;
         }
 
+        // Intentionally reuse the reporter's existing agent detection path for
+        // structured DevTools output instead of maintaining a separate
+        // integration that would need to mirror the plugin behavior.
         $env[self::AGENT_ENVIRONMENT_VARIABLE] = self::AGENT_ENVIRONMENT_VALUE;
         $process->setEnv($env);
     }
