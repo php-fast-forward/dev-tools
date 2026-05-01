@@ -2801,6 +2801,16 @@ Search.appendIndex(
             "summary": "Executes\u0020the\u0020generation\u0020of\u0020the\u0020documentation\u0020files\u0020in\u0020Markdown\u0020format.",
             "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#method_execute"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003AisDefaultWikiTarget\u0028\u0029",
+            "name": "isDefaultWikiTarget",
+            "summary": "Detects\u0020whether\u0020a\u0020target\u0020option\u0020still\u0020points\u0020at\u0020the\u0020default\u0020wiki\u0020target\u0020path.",
+            "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#method_isDefaultWikiTarget"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003AnormalizeProjectRelativePath\u0028\u0029",
+            "name": "normalizeProjectRelativePath",
+            "summary": "Normalizes\u0020a\u0020project\u002Drelative\u0020path\u0020for\u0020resilient\u0020default\u002Doption\u0020comparisons.",
+            "url": "classes/FastForward-DevTools-Console-Command-WikiCommand.html#method_normalizeProjectRelativePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\WikiCommand\u003A\u003AinitializeWikiSubmodule\u0028\u0029",
             "name": "initializeWikiSubmodule",
             "summary": "Adds\u0020the\u0020repository\u0020wiki\u0020as\u0020a\u0020Git\u0020submodule\u0020when\u0020the\u0020target\u0020path\u0020is\u0020missing.",
@@ -5235,6 +5245,11 @@ Search.appendIndex(
             "name": "resolveRelativeApiDirectory",
             "summary": "Resolves\u0020a\u0020Composer\u0020autoload\u0020path\u0020into\u0020a\u0020project\u002Drelative\u0020API\u0020directory\u0020when\u0020it\u0020exists.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveRelativeApiDirectory"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AresolveHasPhpSourceFiles\u0028\u0029",
+            "name": "resolveHasPhpSourceFiles",
+            "summary": "Resolves\u0020whether\u0020Composer\u0020autoload\u0020metadata\u0020exposes\u0020testable\u0020PHP\u0020source\u0020for\u0020the\u0020repository.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveHasPhpSourceFiles"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AnormalizeAutoloadPaths\u0028\u0029",
             "name": "normalizeAutoloadPaths",
