@@ -3246,6 +3246,11 @@ Search.appendIndex(
             "summary": "Decodes\u0020a\u0020buffered\u0020output\u0020string\u0020when\u0020it\u0020contains\u0020JSON\u0020content.",
             "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutput"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AdecodeStructuredOutputAfterTextPreamble\u0028\u0029",
+            "name": "decodeStructuredOutputAfterTextPreamble",
+            "summary": "Decodes\u0020structured\u0020output\u0020that\u0020is\u0020preceded\u0020by\u0020plain\u002Dtext\u0020warnings\u0020or\u0020banners.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutputAfterTextPreamble"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AdecodeJsonDocumentStream\u0028\u0029",
             "name": "decodeJsonDocumentStream",
             "summary": "Decodes\u0020a\u0020stream\u0020that\u0020contains\u0020multiple\u0020JSON\u0020documents\u0020separated\u0020by\u0020whitespace.",
@@ -3255,6 +3260,11 @@ Search.appendIndex(
             "name": "consumeJsonDocument",
             "summary": "Consumes\u0020a\u0020single\u0020top\u002Dlevel\u0020JSON\u0020document\u0020from\u0020a\u0020multi\u002Ddocument\u0020stream.",
             "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_consumeJsonDocument"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AfindNextJsonDocumentOffset\u0028\u0029",
+            "name": "findNextJsonDocumentOffset",
+            "summary": "Finds\u0020the\u0020offset\u0020of\u0020the\u0020next\u0020possible\u0020JSON\u0020document\u0020opening\u0020token.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_findNextJsonDocumentOffset"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AnormalizeStructuredPayload\u0028\u0029",
             "name": "normalizeStructuredPayload",
