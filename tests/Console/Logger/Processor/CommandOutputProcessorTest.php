@@ -162,6 +162,38 @@ final class CommandOutputProcessorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function processWillDiscardPlainTextPreambleBeforeStructuredJsonOutput(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "Warning: advisory text before JSON.\n"
+            . "{\"about\":\"PHP CS Fixer\"}\n"
+            . "{\"totals\":{\"changed_files\":0,\"errors\":0},\"changed_files\":[\"src/Foo.php\"]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            [
+                'about' => 'PHP CS Fixer',
+            ],
+            [
+                'totals' => [
+                    'changed_files' => 0,
+                    'errors' => 0,
+                ],
+                'changed_files' => [],
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function processWillExtractBufferedErrorOutputFromConsoleOutput(): void
     {
         $processor = new CommandOutputProcessor();

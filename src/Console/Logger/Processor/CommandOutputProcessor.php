@@ -108,7 +108,53 @@ final class CommandOutputProcessor implements ContextProcessorInterface
             return $decodedDocuments;
         }
 
+        $decodedStructuredOutput = $this->decodeStructuredOutputAfterTextPreamble($content);
+
+        if (null !== $decodedStructuredOutput) {
+            return $decodedStructuredOutput;
+        }
+
         return $content;
+    }
+
+    /**
+     * Decodes structured output that is preceded by plain-text warnings or banners.
+     *
+     * Some tooling emits advisory text before a valid JSON payload even when a
+     * machine-readable format is requested. When the suffix starting at the
+     * first valid JSON token is fully decodable, the textual preamble SHALL be
+     * ignored so parent command envelopes remain parseable.
+     *
+     * @param string $content the buffered output contents
+     *
+     * @return mixed the decoded JSON payload when a valid structured suffix exists
+     */
+    private function decodeStructuredOutputAfterTextPreamble(string $content): mixed
+    {
+        $offset = 0;
+
+        while (null !== ($offset = $this->findNextJsonDocumentOffset($content, $offset))) {
+            $structuredSuffix = trim(substr($content, $offset));
+
+            if ('' === $structuredSuffix) {
+                return null;
+            }
+
+            try {
+                return $this->normalizeStructuredPayload(json_decode($structuredSuffix, true));
+            } catch (JsonException) {
+            }
+
+            $decodedDocuments = $this->decodeJsonDocumentStream($structuredSuffix);
+
+            if (null !== $decodedDocuments) {
+                return $decodedDocuments;
+            }
+
+            ++$offset;
+        }
+
+        return null;
     }
 
     /**
@@ -214,6 +260,27 @@ final class CommandOutputProcessor implements ContextProcessorInterface
 
                     return substr($content, $start, $offset - $start);
                 }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Finds the offset of the next possible JSON document opening token.
+     *
+     * @param string $content the buffered output contents
+     * @param int $offset the offset from which scanning SHALL start
+     *
+     * @return ?int the offset of the next "{" or "[" token
+     */
+    private function findNextJsonDocumentOffset(string $content, int $offset): ?int
+    {
+        $length = \strlen($content);
+
+        for (; $offset < $length; ++$offset) {
+            if ('{' === $content[$offset] || '[' === $content[$offset]) {
+                return $offset;
             }
         }
 
