@@ -167,6 +167,8 @@ Behavior
   command stores that payload inside ``output`` while keeping the standard
   DevTools JSON envelope. ``--json`` and ``--pretty-json`` therefore expose
   the same structured result, with formatting as the only difference.
+- in structured mode, the command suppresses intermediary ``Running...`` log
+  records so the output stream contains a single final JSON document.
 - when structured capture is active but PHPUnit does not emit parseable JSON,
   the command preserves the raw subprocess text inside ``output.raw_output``
   instead of dropping it.

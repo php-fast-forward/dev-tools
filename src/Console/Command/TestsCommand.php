@@ -181,10 +181,12 @@ final class TestsCommand extends Command
         $processOutput = $structuredOutput ? new BufferedOutput() : $output;
         $cacheEnabled = $this->isCacheEnabled($input);
 
-        $this->getLogger()
-            ->info('Running PHPUnit tests...', [
-                'input' => $input,
-            ]);
+        if (! $structuredOutput) {
+            $this->getLogger()
+                ->info('Running PHPUnit tests...', [
+                    'input' => $input,
+                ]);
+        }
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
