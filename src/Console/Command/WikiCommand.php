@@ -179,7 +179,10 @@ final class WikiCommand extends Command
         }
 
         foreach ($projectCapabilities->getApiDirectories() as $path) {
-            $processBuilder = $processBuilder->withArgument('--directory', $path);
+            $processBuilder = $processBuilder->withArgument(
+                '--directory',
+                $this->filesystem->getAbsolutePath($path)
+            );
         }
 
         if (null !== $defaultPackageName = $projectCapabilities->getDefaultPackageName()) {

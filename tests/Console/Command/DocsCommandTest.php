@@ -133,14 +133,7 @@ final class DocsCommandTest extends TestCase
         $this->filesystem->exists('/repo/docs')
             ->willReturn(true);
         $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
-            ->willReturn(new ProjectCapabilities(
-                ['/repo/src'],
-                'FastForward\\DevTools',
-                true,
-                false,
-                false,
-                true,
-            ));
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', true, false, false, true));
         $this->composer->getAutoload('psr-4')
             ->willReturn([
                 'FastForward\\DevTools\\' => 'src/',
@@ -153,6 +146,7 @@ final class DocsCommandTest extends TestCase
                 static fn(array $context): bool => DevToolsPathResolver::getPreferredVendorPath(
                     'vendor/fast-forward/phpdoc-bootstrap-template'
                 ) === $context['template']
+                    && ['src/'] === $context['apiDirectories']
             )
         )
             ->willReturn('<phpdocumentor />');
@@ -208,14 +202,7 @@ final class DocsCommandTest extends TestCase
         $this->filesystem->getAbsolutePath('missing-guides')
             ->willReturn('/repo/missing-guides');
         $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
-            ->willReturn(new ProjectCapabilities(
-                ['/repo/src'],
-                'FastForward\\DevTools',
-                false,
-                false,
-                false,
-                true,
-            ));
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
         $this->logger->info('Generating API documentation...', Argument::that(

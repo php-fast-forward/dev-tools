@@ -94,21 +94,37 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
 
         foreach (self::API_AUTOLOAD_TYPES as $autoloadType) {
             foreach ($this->normalizeAutoloadPaths($this->composer->getAutoload($autoloadType)) as $path) {
-                $absolutePath = $this->filesystem->getAbsolutePath($path);
+                $relativePath = $this->resolveRelativeApiDirectory($path);
 
-                if (! \is_string($absolutePath)) {
+                if (null === $relativePath) {
                     continue;
                 }
 
-                if (! is_dir($absolutePath)) {
-                    continue;
-                }
-
-                $directories[$absolutePath] = $absolutePath;
+                $directories[$relativePath] = $relativePath;
             }
         }
 
         return array_values($directories);
+    }
+
+    /**
+     * @param string $path
+     *
+     * @return string|null
+     */
+    private function resolveRelativeApiDirectory(string $path): ?string
+    {
+        $absolutePath = $this->filesystem->getAbsolutePath($path);
+
+        if (! \is_string($absolutePath)) {
+            return null;
+        }
+
+        if (! is_dir($absolutePath)) {
+            return null;
+        }
+
+        return $this->filesystem->makePathRelative($absolutePath);
     }
 
     /**

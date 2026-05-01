@@ -102,14 +102,7 @@ final class WikiCommandTest extends TestCase
                 'FastForward\\DevTools\\' => 'src/',
             ]);
         $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
-            ->willReturn(new ProjectCapabilities(
-                [getcwd() . '/src'],
-                'FastForward\\DevTools',
-                false,
-                false,
-                true,
-                true,
-            ));
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, true, true));
         $this->input->getOption('target')
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
@@ -160,6 +153,12 @@ final class WikiCommandTest extends TestCase
         )
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
@@ -189,6 +188,12 @@ final class WikiCommandTest extends TestCase
             ->willReturn(true);
         $this->processBuilder->withArgument('--cache-folder', Argument::cetera())
             ->shouldNotBeCalled();
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())

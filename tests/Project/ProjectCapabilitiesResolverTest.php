@@ -37,7 +37,6 @@ use function Safe\chdir;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
 use function Safe\mkdir;
-use function Safe\realpath;
 
 #[CoversClass(ProjectCapabilitiesResolver::class)]
 #[UsesClass(Filesystem::class)]
@@ -149,7 +148,7 @@ final class ProjectCapabilitiesResolverTest extends TestCase
         self::assertTrue($capabilities->canRunTests());
         self::assertTrue($capabilities->canGenerateMetrics());
         self::assertTrue($capabilities->canGenerateWiki());
-        self::assertSame([realpath($this->workspace . '/src')], $capabilities->getApiDirectories());
+        self::assertSame(['src/'], $capabilities->getApiDirectories());
         self::assertSame('App', $capabilities->getDefaultPackageName());
     }
 }

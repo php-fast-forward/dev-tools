@@ -25,7 +25,7 @@ namespace FastForward\DevTools\Project;
 final readonly class ProjectCapabilities
 {
     /**
-     * @param list<string> $apiDirectories absolute directories that contain autoloaded PHP API source
+     * @param list<string> $apiDirectories project-relative directories that contain autoloaded PHP API source
      * @param string|null $defaultPackageName the default package name derived from Composer namespaces when available
      * @param bool $hasGuideDirectory whether the configured guide directory exists
      * @param bool $hasTestsPath whether the configured tests path exists
