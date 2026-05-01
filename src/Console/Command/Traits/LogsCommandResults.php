@@ -62,20 +62,6 @@ trait LogsCommandResults
     }
 
     /**
-     * Logs an informational command message at notice level.
-     *
-     * @param string $message the notice message
-     * @param InputInterface $input the originating command input
-     * @param array<string, mixed> $context optional extra log context
-     *
-     * @return void
-     */
-    private function notice(string $message, InputInterface $input, array $context = []): void
-    {
-        $this->log($message, $input, $context, LogLevel::NOTICE);
-    }
-
-    /**
      * Logs a successful command result and returns the success exit code.
      *
      * @param string $message the success message
