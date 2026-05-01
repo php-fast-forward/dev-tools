@@ -365,7 +365,10 @@ final class TestsCommand extends Command
         [$decoded, $supplementalOutput] = $this->decodeStructuredProcessOutput($rawOutput);
 
         if (\is_array($decoded)) {
-            $payload = $decoded;
+            $payload = [
+                ...$decoded,
+                'result' => $payload['result'],
+            ];
         }
 
         if (null !== $supplementalOutput) {

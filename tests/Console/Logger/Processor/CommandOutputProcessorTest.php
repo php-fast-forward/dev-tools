@@ -53,6 +53,59 @@ final class CommandOutputProcessorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function processWillDecodeSingleJsonBufferedOutput(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write("{\n    \"result\": \"success\",\n    \"summary\": {\n        \"tests\": 2\n    }\n}\n");
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'result' => 'success',
+            'summary' => [
+                'tests' => 2,
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function processWillDecodeMultipleJsonBufferedOutputsIntoAList(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "{\"message\":\"docs\"}\n{\"message\":\"tests\",\"context\":{\"output\":{\"result\":\"success\"}}}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            [
+                'message' => 'docs',
+            ],
+            [
+                'message' => 'tests',
+                'context' => [
+                    'output' => [
+                        'result' => 'success',
+                    ],
+                ],
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function processWillExtractBufferedErrorOutputFromConsoleOutput(): void
     {
         $processor = new CommandOutputProcessor();

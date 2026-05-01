@@ -38,6 +38,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Clock\ClockInterface;
 use Stringable;
 use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
@@ -262,6 +263,48 @@ final class OutputFormatLoggerTest extends TestCase
 
         $logger->info('Build {status}', [
             'status' => 'ready',
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function logWillEmbedDecodedStructuredCommandOutputInsteadOfEscapedJsonStrings(): void
+    {
+        $logger = new OutputFormatLogger(
+            new ArgvInput(['dev-tools', '--pretty-json']),
+            $this->output->reveal(),
+            $this->clock->reveal(),
+            new Detector(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            $this->createGithubActionOutput(),
+        );
+        $commandOutput = new BufferedOutput();
+        $commandOutput->write(
+            "{\"message\":\"docs\"}\n{\"message\":\"tests\",\"context\":{\"output\":{\"result\":\"success\"}}}\n"
+        );
+
+        $this->output->writeln(Argument::that(static function (string $payload): bool {
+            $decoded = json_decode($payload, true, 512, \JSON_THROW_ON_ERROR);
+
+            return [
+                [
+                    'message' => 'docs',
+                ],
+                [
+                    'message' => 'tests',
+                    'context' => [
+                        'output' => [
+                            'result' => 'success',
+                        ],
+                    ],
+                ],
+            ] === $decoded['context']['output'];
+        }))->shouldBeCalledOnce();
+
+        $logger->info('Reports ready.', [
+            'output' => $commandOutput,
         ]);
     }
 

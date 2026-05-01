@@ -397,6 +397,44 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillKeepTheExitCodeDerivedFailureResultAuthoritative(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+
+        $this->processQueue->add(
+            Argument::type(Process::class),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->will(static function (array $arguments): int {
+                $arguments[0]->write(
+                    "{\n    \"result\": \"success\",\n    \"summary\": {\n        \"assertions\": 5,\n        \"failures\": 1,\n        \"tests\": 2,\n        \"warnings\": 0\n    }\n}\n"
+                );
+
+                return TestsCommand::FAILURE;
+            })->shouldBeCalled();
+        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error(
+            'PHPUnit tests failed.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && isset($context['output'])
+                && 'failure' === $context['output']['result']
+                && 1 === $context['output']['summary']['failures']),
+        )->shouldBeCalled();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWillKeepRawPhpUnitOutputWhenStructuredSummaryCannotBeDecoded(): void
     {
         $this->input->getOption('json')
