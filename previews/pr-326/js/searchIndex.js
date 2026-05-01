@@ -2241,11 +2241,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_processQueue"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024projectCapabilitiesResolver",
-            "name": "projectCapabilitiesResolver",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-MetricsCommand.html#property_projectCapabilitiesResolver"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\MetricsCommand\u003A\u003A\u0024logger",
             "name": "logger",
             "summary": "",
@@ -2956,6 +2951,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#property_environment"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024runtimeEnvironment",
+            "name": "runtimeEnvironment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_runtimeEnvironment"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Formatter\\LogLevelOutputFormatter",
             "name": "LogLevelOutputFormatter",
             "summary": "Defines\u0020additional\u0020console\u0020styles\u0020for\u0020log\u0020level\u0020tags.",
@@ -3303,7 +3303,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\Environment\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "Reads\u0020an\u0020environment\u0020variable.",
+            "summary": "Reads\u0020an\u0020environment\u0020variable\u0020or\u0020the\u0020current\u0020environment\u0020map.",
             "url": "classes/FastForward-DevTools-Environment-Environment.html#method_get"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\EnvironmentInterface",
@@ -3313,7 +3313,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\EnvironmentInterface\u003A\u003Aget\u0028\u0029",
             "name": "get",
-            "summary": "Reads\u0020an\u0020environment\u0020variable.",
+            "summary": "Reads\u0020an\u0020environment\u0020variable\u0020or,\u0020when\u0020no\u0020name\u0020is\u0020provided,\u0020the\u0020current\u0020environment\u0020map.",
             "url": "classes/FastForward-DevTools-Environment-EnvironmentInterface.html#method_get"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment",
@@ -3346,10 +3346,20 @@ Search.appendIndex(
             "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
             "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isComposerTestRun"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003AisAgentPresent\u0028\u0029",
+            "name": "isAgentPresent",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020exposes\u0020known\u0020AI\u002Dagent\u0020environment\u0020markers.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#method_isAgentPresent"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A\u0024environment",
             "name": "environment",
             "summary": "",
             "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#property_environment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironment\u003A\u003A\u0024agentDetector",
+            "name": "agentDetector",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironment.html#property_agentDetector"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface",
             "name": "RuntimeEnvironmentInterface",
@@ -3375,6 +3385,11 @@ Search.appendIndex(
             "name": "isComposerTestRun",
             "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020suite\u0020runtime\u0020flag\u0020is\u0020enabled.",
             "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isComposerTestRun"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Environment\\RuntimeEnvironmentInterface\u003A\u003AisAgentPresent\u0028\u0029",
+            "name": "isAgentPresent",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020exposes\u0020known\u0020AI\u002Dagent\u0020environment\u0020markers.",
+            "url": "classes/FastForward-DevTools-Environment-RuntimeEnvironmentInterface.html#method_isAgentPresent"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Filesystem\\Filesystem",
             "name": "Filesystem",
@@ -5148,7 +5163,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateMetrics\u0028\u0029",
             "name": "canGenerateMetrics",
-            "summary": "Detects\u0020whether\u0020metrics\u0020generation\u0020has\u0020PHP\u0020source\u0020or\u0020test\u0020inputs\u0020to\u0020analyse.",
+            "summary": "Detects\u0020whether\u0020metrics\u0020generation\u0020can\u0020analyse\u0020repository\u0020history\u0020and\u0020package\u0020metadata.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilities.html#method_canGenerateMetrics"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilities\u003A\u003AcanGenerateWiki\u0028\u0029",
