@@ -1771,6 +1771,16 @@ Search.appendIndex(
             "summary": "Creates\u0020a\u0020temporary\u0020phpDocumentor\u0020configuration\u0020for\u0020the\u0020current\u0020project.",
             "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_createPhpDocumentorConfig"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003AisDefaultGuideSource\u0028\u0029",
+            "name": "isDefaultGuideSource",
+            "summary": "Detects\u0020whether\u0020a\u0020source\u0020option\u0020still\u0020points\u0020at\u0020the\u0020default\u0020guide\u0020directory.",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_isDefaultGuideSource"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003AnormalizeProjectRelativePath\u0028\u0029",
+            "name": "normalizeProjectRelativePath",
+            "summary": "Normalizes\u0020a\u0020project\u002Drelative\u0020path\u0020for\u0020resilient\u0020default\u002Doption\u0020comparisons.",
+            "url": "classes/FastForward-DevTools-Console-Command-DocsCommand.html#method_normalizeProjectRelativePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DocsCommand\u003A\u003ADEFAULT_TEMPLATE",
             "name": "DEFAULT_TEMPLATE",
             "summary": "",
@@ -2590,6 +2600,16 @@ Search.appendIndex(
             "name": "resolvePath",
             "summary": "Safely\u0020constructs\u0020an\u0020absolute\u0020path\u0020tied\u0020to\u0020a\u0020defined\u0020capability\u0020option.",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolvePath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AisDefaultTestsPath\u0028\u0029",
+            "name": "isDefaultTestsPath",
+            "summary": "Detects\u0020whether\u0020a\u0020tests\u0020path\u0020option\u0020still\u0020points\u0020at\u0020the\u0020default\u0020project\u0020tests\u0020directory.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_isDefaultTestsPath"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AnormalizeProjectRelativePath\u0028\u0029",
+            "name": "normalizeProjectRelativePath",
+            "summary": "Normalizes\u0020a\u0020project\u002Drelative\u0020path\u0020for\u0020resilient\u0020default\u002Doption\u0020comparisons.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_normalizeProjectRelativePath"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AresolveBootstrapPath\u0028\u0029",
             "name": "resolveBootstrapPath",
