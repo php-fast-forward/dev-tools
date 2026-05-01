@@ -40,6 +40,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
@@ -56,6 +57,7 @@ use Twig\Environment;
 final class DocsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -91,6 +93,7 @@ final class DocsCommandTest extends TestCase
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
         $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -165,7 +168,6 @@ final class DocsCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->composer->reveal(),
             $this->projectCapabilitiesResolver->reveal(),
-            $this->logger->reveal(),
         );
     }
 

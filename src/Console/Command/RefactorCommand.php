@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -58,13 +57,11 @@ final class RefactorCommand extends Command
      * @param FileLocatorInterface $fileLocator the file locator
      * @param ProcessBuilderInterface $processBuilder the process builder
      * @param ProcessQueueInterface $processQueue the process queue
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

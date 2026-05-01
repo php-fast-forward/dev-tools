@@ -33,6 +33,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\DevToolsPathResolver;
@@ -46,6 +47,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class StandardsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -67,6 +69,7 @@ final class StandardsCommandTest extends TestCase
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
 
@@ -94,7 +97,6 @@ final class StandardsCommandTest extends TestCase
         $this->command = new StandardsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
         );
     }
 

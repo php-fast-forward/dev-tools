@@ -41,6 +41,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -57,6 +58,7 @@ use function Safe\getcwd;
 final class WikiCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -92,6 +94,7 @@ final class WikiCommandTest extends TestCase
         $this->gitClient = $this->prophesize(GitClientInterface::class);
         $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -132,7 +135,6 @@ final class WikiCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->gitClient->reveal(),
             $this->projectCapabilitiesResolver->reveal(),
-            $this->logger->reveal(),
         );
     }
 

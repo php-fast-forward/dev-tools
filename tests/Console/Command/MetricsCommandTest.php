@@ -36,6 +36,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
@@ -53,6 +54,7 @@ use function Safe\putenv;
 final class MetricsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -76,6 +78,7 @@ final class MetricsCommandTest extends TestCase
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -110,7 +113,6 @@ final class MetricsCommandTest extends TestCase
         $this->command = new MetricsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -227,7 +229,6 @@ final class MetricsCommandTest extends TestCase
         $command = new MetricsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
         );
 
         self::assertSame(

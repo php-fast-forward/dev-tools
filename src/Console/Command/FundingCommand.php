@@ -28,7 +28,7 @@ use FastForward\DevTools\Funding\FundingYamlCodec;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -60,7 +60,6 @@ final class FundingCommand extends Command
      * @param FileDiffer $fileDiffer the differ used to summarize managed-file drift
      * @param ProcessBuilderInterface $processBuilder the process builder used to normalize composer.json after updates
      * @param ProcessQueueInterface $processQueue the process queue used to execute composer normalize
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
@@ -71,7 +70,6 @@ final class FundingCommand extends Command
         private readonly FileDiffer $fileDiffer,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -136,13 +134,14 @@ final class FundingCommand extends Command
         $this->log('Synchronizing funding metadata...', $input);
 
         if (! $this->filesystem->exists($composerFile)) {
-            $this->notice(
+            $this->log(
                 'Composer file {composer_file} does not exist. Skipping funding synchronization.',
                 $input,
                 [
                     'composer_file' => $composerFile,
                     'funding_file' => $fundingFile,
                 ],
+                LogLevel::NOTICE,
             );
 
             return $this->success(
@@ -152,7 +151,7 @@ final class FundingCommand extends Command
                     'composer_file' => $composerFile,
                     'funding_file' => $fundingFile,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
@@ -226,21 +225,22 @@ final class FundingCommand extends Command
             \sprintf('Updating managed file %s from generated funding metadata synchronization.', $composerFile),
         );
 
-        $this->notice($comparison->getSummary(), $input, [
+        $this->log($comparison->getSummary(), $input, [
             'composer_file' => $composerFile,
-        ]);
+        ], LogLevel::NOTICE);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->notice(
+                $this->log(
                     $consoleDiff,
                     $input,
                     [
                         'composer_file' => $composerFile,
                         'diff' => $comparison->getDiff(),
                     ],
+                    LogLevel::NOTICE,
                 );
             }
         }
@@ -273,14 +273,14 @@ final class FundingCommand extends Command
                 [
                     'composer_file' => $composerFile,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($composerFile)) {
-            $this->notice('Skipped updating {composer_file}.', $input, [
+            $this->log('Skipped updating {composer_file}.', $input, [
                 'composer_file' => $composerFile,
-            ]);
+            ], LogLevel::NOTICE);
 
             return $this->success(
                 'Funding synchronization was skipped for {composer_file}.',
@@ -288,7 +288,7 @@ final class FundingCommand extends Command
                 [
                     'composer_file' => $composerFile,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
@@ -339,12 +339,13 @@ final class FundingCommand extends Command
         OutputInterface $output,
     ): int {
         if (null === $updatedFundingContents && null === $currentFundingContents) {
-            $this->notice(
+            $this->log(
                 'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
                 $input,
                 [
                     'funding_file' => $fundingFile,
                 ],
+                LogLevel::NOTICE,
             );
 
             return $this->success(
@@ -353,7 +354,7 @@ final class FundingCommand extends Command
                 [
                     'funding_file' => $fundingFile,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
@@ -380,22 +381,22 @@ final class FundingCommand extends Command
                 : \sprintf('Updating managed file %s from generated funding metadata synchronization.', $fundingFile),
         );
 
-        $this->logger->notice($comparison->getSummary(), [
-            'input' => $input,
+        $this->log($comparison->getSummary(), $input, [
             'funding_file' => $fundingFile,
-        ]);
+        ], LogLevel::NOTICE);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->logger->notice(
+                $this->log(
                     $consoleDiff,
+                    $input,
                     [
-                        'input' => $input,
                         'funding_file' => $fundingFile,
                         'diff' => $comparison->getDiff(),
                     ],
+                    LogLevel::NOTICE,
                 );
             }
         }
@@ -428,14 +429,14 @@ final class FundingCommand extends Command
                 [
                     'funding_file' => $fundingFile,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteManagedFile($fundingFile)) {
-            $this->notice('Skipped updating {funding_file}.', $input, [
+            $this->log('Skipped updating {funding_file}.', $input, [
                 'funding_file' => $fundingFile,
-            ]);
+            ], LogLevel::NOTICE);
 
             return $this->success(
                 'Funding synchronization was skipped for {funding_file}.',
@@ -443,7 +444,7 @@ final class FundingCommand extends Command
                 [
                     'funding_file' => $fundingFile,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 

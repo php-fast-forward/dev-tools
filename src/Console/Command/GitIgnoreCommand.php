@@ -26,7 +26,6 @@ use FastForward\DevTools\GitIgnore\ReaderInterface;
 use FastForward\DevTools\GitIgnore\WriterInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -69,7 +68,6 @@ final class GitIgnoreCommand extends Command
      * @param WriterInterface|null $writer the writer component
      * @param FileLocatorInterface $fileLocator the file locator
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
@@ -78,7 +76,6 @@ final class GitIgnoreCommand extends Command
         private readonly WriterInterface $writer,
         private readonly FileLocatorInterface $fileLocator,
         private readonly FileDiffer $fileDiffer,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -138,9 +135,7 @@ final class GitIgnoreCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->logger->info('Merging .gitignore files...', [
-            'input' => $input,
-        ]);
+        $this->log('Merging .gitignore files...', $input);
 
         $sourcePath = $input->getOption('source');
         $targetPath = $input->getOption('target');
@@ -160,21 +155,22 @@ final class GitIgnoreCommand extends Command
             \sprintf('Updating managed file %s from generated .gitignore synchronization.', $merged->path()),
         );
 
-        $this->notice($comparison->getSummary(), $input, [
+        $this->log($comparison->getSummary(), $input, [
             'target_path' => $merged->path(),
-        ]);
+        ], LogLevel::NOTICE);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->notice(
+                $this->log(
                     $consoleDiff,
                     $input,
                     [
                         'target_path' => $merged->path(),
                         'diff' => $comparison->getDiff(),
                     ],
+                    LogLevel::NOTICE,
                 );
             }
         }

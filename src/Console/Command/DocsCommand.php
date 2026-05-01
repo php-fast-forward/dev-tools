@@ -31,7 +31,6 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Project\ProjectCapabilities;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -71,11 +70,10 @@ final class DocsCommand extends Command
      *
      * @param ProcessBuilderInterface $processBuilder the process builder for executing phpDocumentor
      * @param ProcessQueueInterface $processQueue the process queue for managing execution
-     * @param Environment $renderer
+     * @param Environment $renderer renders phpDocumentor configuration templates
      * @param FilesystemInterface $filesystem the filesystem for handling file operations
      * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -84,7 +82,6 @@ final class DocsCommand extends Command
         private readonly FilesystemInterface $filesystem,
         private readonly ComposerJsonInterface $composer,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -130,12 +127,10 @@ final class DocsCommand extends Command
     }
 
     /**
-     * Generates the HTML API documentation for the configured source tree.
+     * Generates API documentation for the configured project surface.
      *
-     * @param InputInterface $input the input details for the command
-     * @param OutputInterface $output the output mechanism for logging
-     *
-     * @return int the final execution status code
+     * @param InputInterface $input
+     * @param OutputInterface $output
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

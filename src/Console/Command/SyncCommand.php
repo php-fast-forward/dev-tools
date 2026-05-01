@@ -24,7 +24,7 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,12 +48,10 @@ final class SyncCommand extends Command
     /**
      * @param ProcessBuilderInterface $processBuilder
      * @param ProcessQueueInterface $processQueue
-     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

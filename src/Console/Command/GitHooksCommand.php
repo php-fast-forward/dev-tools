@@ -26,7 +26,7 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GitHooks\HookContentRenderer;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -60,7 +60,6 @@ final class GitHooksCommand extends Command
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for hook files
      * @param HookContentRenderer $hookContentRenderer renders packaged hooks with runtime-specific placeholders
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
@@ -69,7 +68,6 @@ final class GitHooksCommand extends Command
         private readonly FinderFactoryInterface $finderFactory,
         private readonly HookContentRenderer $hookContentRenderer,
         private readonly FileDiffer $fileDiffer,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -152,13 +150,14 @@ final class GitHooksCommand extends Command
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
             if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($hookPath)) {
-                $this->notice(
+                $this->log(
                     'Skipped existing {hook_name} hook.',
                     $input,
                     [
                         'hook_name' => $file->getFilename(),
                         'hook_path' => $hookPath,
                     ],
+                    LogLevel::NOTICE,
                 );
 
                 continue;
@@ -169,20 +168,21 @@ final class GitHooksCommand extends Command
                     ? $this->fileDiffer->diff($sourcePath, $hookPath)
                     : $this->compareRenderedHookContents($sourcePath, $hookPath, $renderedSourceContents);
 
-                $this->notice(
+                $this->log(
                     $comparison->getSummary(),
                     $input,
                     [
                         'hook_name' => $file->getFilename(),
                         'hook_path' => $hookPath,
                     ],
+                    LogLevel::NOTICE,
                 );
 
                 if ($comparison->isChanged()) {
                     $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
                     if (null !== $consoleDiff) {
-                        $this->notice(
+                        $this->log(
                             $consoleDiff,
                             $input,
                             [
@@ -190,6 +190,7 @@ final class GitHooksCommand extends Command
                                 'hook_path' => $hookPath,
                                 'diff' => $comparison->getDiff(),
                             ],
+                            LogLevel::NOTICE,
                         );
                     }
                 }
@@ -209,13 +210,14 @@ final class GitHooksCommand extends Command
                 }
 
                 if ($interactive && $input->isInteractive() && ! $this->shouldReplaceHook($hookPath)) {
-                    $this->notice(
+                    $this->log(
                         'Skipped replacing {hook_path}.',
                         $input,
                         [
                             'hook_name' => $file->getFilename(),
                             'hook_path' => $hookPath,
                         ],
+                        LogLevel::NOTICE,
                     );
 
                     continue;
@@ -325,16 +327,15 @@ final class GitHooksCommand extends Command
 
             return true;
         } catch (IOExceptionInterface $ioException) {
-            $this->logger->error(
+            $this->failure(
                 'Failed to install {hook_name} hook automatically. Remove or unlock {hook_path} and rerun git-hooks.',
+                $input,
                 [
-                    'input' => $input,
                     'hook_name' => $this->filesystem->getBasename($hookPath),
                     'hook_path' => $hookPath,
                     'error' => $ioException->getMessage(),
-                    'file' => $ioException->getPath() ?? $hookPath,
-                    'line' => null,
                 ],
+                $ioException->getPath() ?? $hookPath,
             );
 
             return false;

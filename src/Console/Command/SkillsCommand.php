@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,12 +64,10 @@ final class SkillsCommand extends Command
      * @param FilesystemInterface $filesystem filesystem used to resolve
      *                                        and manage the skills
      *                                        directory structure
-     * @param LoggerInterface $logger logger used for command feedback
      */
     public function __construct(
         private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

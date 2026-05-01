@@ -34,6 +34,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -48,6 +49,7 @@ use Symfony\Component\Process\Process;
 final class CodeStyleCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $fileLocator;
 
@@ -77,6 +79,7 @@ final class CodeStyleCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
 
         $this->input->getOption('fix')
             ->willReturn(false);
@@ -106,7 +109,6 @@ final class CodeStyleCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -122,7 +124,7 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->log('info', 'Running code style checks and fixes...', Argument::that(
+        $this->logger->info('Running code style checks and fixes...', Argument::that(
             fn(array $context): bool => $this->input->reveal() === $context['input']
         ))
             ->shouldBeCalled();
@@ -147,7 +149,7 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->log('info', 'Running code style checks and fixes...', Argument::that(
+        $this->logger->info('Running code style checks and fixes...', Argument::that(
             fn(array $context): bool => $this->input->reveal() === $context['input']
         ))
             ->shouldBeCalled();

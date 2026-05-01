@@ -54,11 +54,17 @@ trait LogsCommandResults
             return;
         }
 
-        $this->getLogger()
-            ->log($logLevel, $message, [
-                'input' => $input,
-                ...$context,
-            ]);
+        $context = [
+            'input' => $input,
+            ...$context,
+        ];
+
+        match ($logLevel) {
+            LogLevel::INFO => $this->getLogger()->info($message, $context),
+            LogLevel::NOTICE => $this->getLogger()->notice($message, $context),
+            LogLevel::WARNING => $this->getLogger()->warning($message, $context),
+            default => $this->getLogger()->log($logLevel, $message, $context),
+        };
     }
 
     /**

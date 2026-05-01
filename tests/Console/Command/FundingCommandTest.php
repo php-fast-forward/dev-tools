@@ -41,6 +41,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -59,6 +60,7 @@ use function Safe\json_decode;
 final class FundingCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $filesystem;
 
@@ -87,6 +89,11 @@ final class FundingCommandTest extends TestCase
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
@@ -94,6 +101,7 @@ final class FundingCommandTest extends TestCase
         $this->normalizeProcess = $this->prophesize(Process::class);
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
@@ -133,7 +141,6 @@ final class FundingCommandTest extends TestCase
             $this->fileDiffer->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }

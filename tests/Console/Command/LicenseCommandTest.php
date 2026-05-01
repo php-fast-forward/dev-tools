@@ -31,6 +31,7 @@ use FastForward\DevTools\License\Resolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -54,6 +55,7 @@ use function Safe\getcwd;
 final class LicenseCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     /**
      * @var ObjectProphecy<GeneratorInterface>
@@ -96,9 +98,15 @@ final class LicenseCommandTest extends TestCase
         $this->generator = $this->prophesize(GeneratorInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
@@ -121,7 +129,6 @@ final class LicenseCommandTest extends TestCase
             $this->generator->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }

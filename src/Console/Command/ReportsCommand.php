@@ -26,7 +26,6 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -35,8 +34,7 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Coordinates the generation of Fast Forward documentation frontpage and related reports.
- * This class MUST NOT be overridden and SHALL securely combine docs and testing commands.
+ * Coordinates documentation, coverage, and metrics report generation.
  */
 #[AsCommand(
     name: 'standards:reports',
@@ -54,18 +52,16 @@ final class ReportsCommand extends Command
      *
      * @param ProcessBuilderInterface $processBuilder the builder instance used to construct execution processes
      * @param ProcessQueueInterface $processQueue the execution queue mechanism for running sub-processes
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
 
     /**
-     * @return void
+     * Configures the report generation options.
      */
     protected function configure(): void
     {

@@ -30,7 +30,7 @@ use FastForward\DevTools\GitAttributes\MergerInterface;
 use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -77,7 +77,6 @@ final class GitAttributesCommand extends Command
      * @param FilesystemInterface $filesystem the filesystem component
      * @param ComposerJsonInterface $composer the composer.json accessor
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
@@ -90,7 +89,6 @@ final class GitAttributesCommand extends Command
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -152,12 +150,16 @@ final class GitAttributesCommand extends Command
         $entries = [...$existingFolders, ...$existingFiles];
 
         if ([] === $entries) {
-            $this->notice('No candidate paths found in repository. Skipping .gitattributes sync.', $input);
+            $this->log(
+                'No candidate paths found in repository. Skipping .gitattributes sync.',
+                $input,
+                logLevel: LogLevel::NOTICE,
+            );
 
             return $this->success(
                 'No .gitattributes synchronization changes were required.',
                 $input,
-                logLevel: 'notice',
+                logLevel: LogLevel::NOTICE,
             );
         }
 
@@ -173,21 +175,22 @@ final class GitAttributesCommand extends Command
             \sprintf('Updating managed file %s from generated .gitattributes synchronization.', $gitattributesPath),
         );
 
-        $this->notice($comparison->getSummary(), $input, [
+        $this->log($comparison->getSummary(), $input, [
             'gitattributes_path' => $gitattributesPath,
-        ]);
+        ], LogLevel::NOTICE);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->notice(
+                $this->log(
                     $consoleDiff,
                     $input,
                     [
                         'gitattributes_path' => $gitattributesPath,
                         'diff' => $comparison->getDiff(),
                     ],
+                    LogLevel::NOTICE,
                 );
             }
         }
@@ -214,17 +217,18 @@ final class GitAttributesCommand extends Command
                 [
                     'gitattributes_path' => $gitattributesPath,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteGitAttributes($gitattributesPath)) {
-            $this->notice(
+            $this->log(
                 'Skipped updating {gitattributes_path}.',
                 $input,
                 [
                     'gitattributes_path' => $gitattributesPath,
                 ],
+                LogLevel::NOTICE,
             );
 
             return $this->success(
@@ -233,7 +237,7 @@ final class GitAttributesCommand extends Command
                 [
                     'gitattributes_path' => $gitattributesPath,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 

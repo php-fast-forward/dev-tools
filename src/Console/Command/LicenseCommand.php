@@ -24,7 +24,7 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -55,14 +55,12 @@ final class LicenseCommand extends Command
      * @param GeneratorInterface $generator the generator component
      * @param FilesystemInterface $filesystem the filesystem component
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
         private readonly GeneratorInterface $generator,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -122,12 +120,13 @@ final class LicenseCommand extends Command
         $generatedContent = $this->generator->generateContent();
 
         if (null === $generatedContent) {
-            $this->notice(
+            $this->log(
                 'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
                 $input,
                 [
                     'target_path' => $targetPath,
                 ],
+                LogLevel::NOTICE,
             );
 
             return $this->success(
@@ -136,7 +135,7 @@ final class LicenseCommand extends Command
                 [
                     'target_path' => $targetPath,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
@@ -150,21 +149,22 @@ final class LicenseCommand extends Command
                 : \sprintf('Updating managed file %s from generated LICENSE content.', $targetPath),
         );
 
-        $this->notice($comparison->getSummary(), $input, [
+        $this->log($comparison->getSummary(), $input, [
             'target_path' => $targetPath,
-        ]);
+        ], LogLevel::NOTICE);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->notice(
+                $this->log(
                     $consoleDiff,
                     $input,
                     [
                         'target_path' => $targetPath,
                         'diff' => $comparison->getDiff(),
                     ],
+                    LogLevel::NOTICE,
                 );
             }
         }
@@ -197,14 +197,14 @@ final class LicenseCommand extends Command
                 [
                     'target_path' => $targetPath,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 
         if ($interactive && $input->isInteractive() && ! $this->shouldWriteLicense($targetPath)) {
-            $this->notice('Skipped updating {target_path}.', $input, [
+            $this->log('Skipped updating {target_path}.', $input, [
                 'target_path' => $targetPath,
-            ]);
+            ], LogLevel::NOTICE);
 
             return $this->success(
                 'LICENSE generation was skipped.',
@@ -212,7 +212,7 @@ final class LicenseCommand extends Command
                 [
                     'target_path' => $targetPath,
                 ],
-                'notice',
+                LogLevel::NOTICE,
             );
         }
 

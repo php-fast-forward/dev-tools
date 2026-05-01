@@ -34,6 +34,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,6 +49,7 @@ use function Safe\getcwd;
 final class AgentsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $synchronizer;
 
@@ -69,7 +71,13 @@ final class AgentsCommandTest extends TestCase
         $this->synchronizer = $this->prophesize(PackagedDirectorySynchronizer::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->filesystem->getAbsolutePath('.agents/agents')
             ->willReturn(getcwd() . '/.agents/agents');
@@ -77,7 +85,6 @@ final class AgentsCommandTest extends TestCase
         $this->command = new AgentsCommand(
             $this->synchronizer->reveal(),
             $this->filesystem->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -92,7 +99,9 @@ final class AgentsCommandTest extends TestCase
         $this->filesystem->exists($agentsPath)
             ->willReturn(false);
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->info('Starting agents synchronization...')
+        $this->logger->info('Starting agents synchronization...', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
         $this->logger->error(
             'No packaged .agents/agents found at: {packaged_agents_path}',
@@ -125,9 +134,13 @@ final class AgentsCommandTest extends TestCase
         $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting agents synchronization...')
+        $this->logger->info('Starting agents synchronization...', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
-        $this->logger->info('Created .agents/agents directory.')
+        $this->logger->info('Created .agents/agents directory.', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
         $this->logger->log(
             'info',
@@ -158,7 +171,9 @@ final class AgentsCommandTest extends TestCase
         $this->synchronizer->synchronize($agentsPath, $agentsPath, '.agents/agents')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting agents synchronization...')
+        $this->logger->info('Starting agents synchronization...', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
         $this->logger->error(
             'Agents synchronization failed.',

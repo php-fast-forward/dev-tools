@@ -25,6 +25,7 @@ use Symfony\Component\Console\Input\Input;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Throwable;
 
 /**
  * Expands command input instances into structured context entries.
@@ -113,7 +114,7 @@ final class CommandInputProcessor implements ContextProcessorInterface
         $arguments = [];
         $arrayParameters = $this->resolveArrayParameters($input);
 
-        foreach ($input->getArguments() as $name => $value) {
+        foreach ($this->resolveArguments($input) as $name => $value) {
             if (null === $value) {
                 continue;
             }
@@ -144,6 +145,20 @@ final class CommandInputProcessor implements ContextProcessorInterface
         }
 
         return $arguments;
+    }
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return array<string, mixed>
+     */
+    private function resolveArguments(InputInterface $input): array
+    {
+        try {
+            return $input->getArguments();
+        } catch (Throwable) {
+            return [];
+        }
     }
 
     /**

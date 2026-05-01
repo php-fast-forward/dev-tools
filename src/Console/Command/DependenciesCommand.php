@@ -26,7 +26,6 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -61,13 +60,11 @@ final class DependenciesCommand extends Command
      * @param ProcessBuilderInterface $processBuilder creates analyzer and upgrade processes
      * @param ProcessQueueInterface $processQueue executes queued processes
      * @param FileLocatorInterface $fileLocator resolves the dependency analyser configuration
-     * @param LoggerInterface $logger writes command feedback
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly FileLocatorInterface $fileLocator,
-        private readonly LoggerInterface $logger,
     ) {
         return parent::__construct();
     }

@@ -17,29 +17,41 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\Console\Command\Traits;
+namespace FastForward\DevTools\Tests\Container;
 
 use FastForward\DevTools\Container\ContainerFactory;
-use Psr\Log\LoggerInterface;
 
 /**
- * Resolves the logger expected by command result helper traits.
- *
- * The trait caches the shared logger lazily so consuming commands do not need
- * to carry constructor wiring for internal logging helpers.
+ * Resets the shared DevTools container around a test class lifecycle.
  */
-trait HasCommandLogger
+trait UsesContainerFactory
 {
     /**
-     * Caches the logger resolved for the consuming command.
+     * @return void
      */
-    private ?LoggerInterface $logger = null;
+    public static function setUpBeforeClass(): void
+    {
+        ContainerFactory::reset();
+    }
 
     /**
-     * Returns the logger configured for the consuming command.
+     * @return void
      */
-    public function getLogger(): LoggerInterface
+    public static function tearDownAfterClass(): void
     {
-        return $this->logger ??= ContainerFactory::get(LoggerInterface::class);
+        ContainerFactory::reset();
+    }
+
+    /**
+     * Overrides a shared container entry for the current test case.
+     *
+     * @param string $id
+     * @param mixed $value
+     *
+     * @return void
+     */
+    protected function setContainerEntry(string $id, mixed $value): void
+    {
+        ContainerFactory::set($id, $value);
     }
 }

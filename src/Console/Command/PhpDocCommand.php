@@ -29,7 +29,7 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Twig\Environment;
 use Throwable;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
@@ -82,7 +82,6 @@ final class PhpDocCommand extends Command
      * @param ComposerJsonInterface $composer
      * @param Environment $renderer
      * @param ClockInterface $clock
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -92,7 +91,6 @@ final class PhpDocCommand extends Command
         private readonly FilesystemInterface $filesystem,
         private readonly Environment $renderer,
         private readonly ClockInterface $clock,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

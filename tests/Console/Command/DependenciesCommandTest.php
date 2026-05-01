@@ -36,6 +36,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -51,6 +52,7 @@ use Symfony\Component\Process\Process;
 final class DependenciesCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processQueue;
 
@@ -74,6 +76,7 @@ final class DependenciesCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
 
         $this->fileLocator->locate('composer-dependency-analyser.php')
             ->willReturn('/app/composer-dependency-analyser.php');
@@ -102,7 +105,6 @@ final class DependenciesCommandTest extends TestCase
             new ProcessBuilder(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -247,7 +249,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
@@ -279,7 +280,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--limit', '5')
@@ -305,7 +305,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--dry-run')
@@ -331,7 +330,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--dry-run')

@@ -32,6 +32,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,6 +43,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ChangelogPromoteCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $filesystem;
 
@@ -66,7 +68,13 @@ final class ChangelogPromoteCommandTest extends TestCase
         $this->changelogManager = $this->prophesize(ChangelogManagerInterface::class);
         $this->clock = $this->prophesize(ClockInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
 
         $this->input->getOption('file')
@@ -84,7 +92,6 @@ final class ChangelogPromoteCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->changelogManager->reveal(),
             $this->clock->reveal(),
-            $this->logger->reveal(),
         );
     }
 

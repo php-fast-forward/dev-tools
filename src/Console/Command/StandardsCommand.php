@@ -26,7 +26,6 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -52,12 +51,10 @@ final class StandardsCommand extends Command
     /**
      * @param ProcessBuilderInterface $processBuilder
      * @param ProcessQueueInterface $processQueue
-     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

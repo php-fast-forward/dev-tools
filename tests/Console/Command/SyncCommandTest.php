@@ -33,6 +33,8 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,6 +47,7 @@ use Symfony\Component\Process\Process;
 final class SyncCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processQueue;
 
@@ -65,6 +68,7 @@ final class SyncCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
 
         $this->input->getOption(Argument::type('string'))->willReturn(false);
         $this->input->getOption('json')
@@ -75,7 +79,6 @@ final class SyncCommandTest extends TestCase
         $this->command = new SyncCommand(
             new ProcessBuilder(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
         );
     }
 

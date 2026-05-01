@@ -30,7 +30,6 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -71,7 +70,6 @@ final class WikiCommand extends Command
      * @param FilesystemInterface $filesystem the filesystem used to inspect the wiki target
      * @param GitClientInterface $gitClient
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -80,7 +78,6 @@ final class WikiCommand extends Command
         private readonly FilesystemInterface $filesystem,
         private readonly GitClientInterface $gitClient,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

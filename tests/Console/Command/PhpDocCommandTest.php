@@ -43,6 +43,8 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -61,6 +63,7 @@ use Twig\Environment;
 final class PhpDocCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -99,6 +102,7 @@ final class PhpDocCommandTest extends TestCase
         $this->renderer = $this->prophesize(Environment::class);
         $this->clock = $this->prophesize(ClockInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -169,7 +173,6 @@ final class PhpDocCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->renderer->reveal(),
             $this->clock->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -254,7 +257,10 @@ final class PhpDocCommandTest extends TestCase
         ))
             ->shouldBeCalled();
         $this->logger->warning(
-            'Skipping .docheader creation because the destination file could not be written.'
+            'Skipping .docheader creation because the destination file could not be written.',
+            Argument::that(
+                static fn(array $context): bool => $context['input'] instanceof InputInterface
+            ),
         )->shouldBeCalled();
         $this->logger->error(
             'PHPDoc checks failed.',

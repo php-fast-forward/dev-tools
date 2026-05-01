@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Command\ChangelogCheckCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesTrait;
@@ -40,6 +41,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class ChangelogCheckCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     /**
      * @var ObjectProphecy<UnreleasedEntryCheckerInterface>
@@ -67,7 +69,13 @@ final class ChangelogCheckCommandTest extends TestCase
         $this->checker = $this->prophesize(UnreleasedEntryCheckerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->input->getOption('against')
             ->willReturn(null);
@@ -78,7 +86,6 @@ final class ChangelogCheckCommandTest extends TestCase
         $this->command = new ChangelogCheckCommand(
             $this->filesystem->reveal(),
             $this->checker->reveal(),
-            $this->logger->reveal(),
         );
     }
 

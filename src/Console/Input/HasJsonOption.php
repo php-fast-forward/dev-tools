@@ -23,6 +23,7 @@ use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Throwable;
 
 /**
  * Provides the standard JSON output options used by DevTools commands.
@@ -58,7 +59,7 @@ trait HasJsonOption
             return true;
         }
 
-        if ((bool) $input->getOption('json')) {
+        if ($this->isOptionEnabled($input, 'json')) {
             return true;
         }
 
@@ -72,7 +73,7 @@ trait HasJsonOption
      */
     protected function isPrettyJsonOutput(InputInterface $input): bool
     {
-        return (bool) $input->getOption('pretty-json');
+        return $this->isOptionEnabled($input, 'pretty-json');
     }
 
     /**
@@ -111,5 +112,20 @@ trait HasJsonOption
         }
 
         return $this->runtimeEnvironment;
+    }
+
+    /**
+     * Determines whether a boolean input option was enabled.
+     *
+     * @param InputInterface $input
+     * @param string $option
+     */
+    private function isOptionEnabled(InputInterface $input, string $option): bool
+    {
+        try {
+            return (bool) $input->getOption($option);
+        } catch (Throwable) {
+            return false;
+        }
     }
 }

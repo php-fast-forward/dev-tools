@@ -23,7 +23,6 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -44,12 +43,10 @@ final class SelfUpdateCommand extends Command
     /**
      * @param SelfUpdateRunnerInterface $selfUpdateRunner the runner that executes Composer's update command
      * @param SelfUpdateScopeResolverInterface $scopeResolver resolves whether the active binary is globally installed
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly SelfUpdateRunnerInterface $selfUpdateRunner,
         private readonly SelfUpdateScopeResolverInterface $scopeResolver,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -100,8 +97,7 @@ final class SelfUpdateCommand extends Command
     {
         $global = $this->scopeResolver->isGlobalInstallation();
 
-        $this->logger->info('Updating DevTools installation...', [
-            'input' => $input,
+        $this->log('Updating DevTools installation...', $input, [
             'global' => $global,
         ]);
 

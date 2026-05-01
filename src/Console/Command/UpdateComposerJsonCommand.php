@@ -26,7 +26,6 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GrumPhp\ManagedConfigPathSynchronizer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -61,7 +60,6 @@ final class UpdateComposerJsonCommand extends Command
      * @param FileLocatorInterface $fileLocator the locator used to resolve packaged configuration files
      * @param ManagedConfigPathSynchronizer $managedConfigPathSynchronizer synchronizes managed GrumPHP metadata
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
@@ -70,7 +68,6 @@ final class UpdateComposerJsonCommand extends Command
         private readonly FileLocatorInterface $fileLocator,
         private readonly ManagedConfigPathSynchronizer $managedConfigPathSynchronizer,
         private readonly FileDiffer $fileDiffer,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -144,18 +141,18 @@ final class UpdateComposerJsonCommand extends Command
             \sprintf('Updating managed file %s from generated dev-tools composer.json configuration.', $file),
         );
 
-        $this->notice($comparison->getSummary(), $input, [
+        $this->log($comparison->getSummary(), $input, [
             'file' => $file,
-        ]);
+        ], LogLevel::NOTICE);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->notice($consoleDiff, $input, [
+                $this->log($consoleDiff, $input, [
                     'file' => $file,
                     'diff' => $comparison->getDiff(),
-                ]);
+                ], LogLevel::NOTICE);
             }
         }
 
