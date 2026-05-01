@@ -71,3 +71,8 @@ coverage metrics programmatically.
 
 These classes are especially relevant when a consumer project overrides the
 packaged ``phpunit.xml`` and wants to preserve the same runtime behavior.
+
+The packaged ``phpunit.xml`` also registers
+``Ergebnis\PHPUnit\AgentReporter\Extension`` so agent-driven PHPUnit runs can
+emit compact JSON summaries without changing the human-oriented default for
+normal terminal runs.
