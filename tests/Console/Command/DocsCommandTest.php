@@ -201,6 +201,40 @@ final class DocsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillFailWhenCustomGuideSourceDoesNotExist(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('missing-guides');
+        $this->filesystem->getAbsolutePath('missing-guides')
+            ->willReturn('/repo/missing-guides');
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(
+                ['/repo/src'],
+                'FastForward\\DevTools',
+                false,
+                false,
+                false,
+                true,
+            ));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Generating API documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->error(
+            'Source directory not found: {source}',
+            Argument::that(static fn(array $context): bool => '/repo/missing-guides' === $context['source']
+                && $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(DocsCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWillReturnSuccessWhenProcessQueueSucceeds(): void
     {
         $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')

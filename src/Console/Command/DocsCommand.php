@@ -144,13 +144,12 @@ final class DocsCommand extends Command
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
         $cacheEnabled = $this->isCacheEnabled($input);
 
-        $source = $this->filesystem->getAbsolutePath($input->getOption('source'));
+        $sourceOption = (string) $input->getOption('source');
+        $source = $this->filesystem->getAbsolutePath($sourceOption);
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
         $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
         $template = (string) $input->getOption('template');
-        $projectCapabilities = $this->projectCapabilitiesResolver->resolve(
-            guideDirectory: (string) $input->getOption('source'),
-        );
+        $projectCapabilities = $this->projectCapabilitiesResolver->resolve(guideDirectory: $sourceOption);
 
         if (self::DEFAULT_TEMPLATE === $template) {
             $template = DevToolsPathResolver::getPreferredVendorPath(self::DEFAULT_TEMPLATE);
@@ -159,6 +158,15 @@ final class DocsCommand extends Command
         $this->logger->info('Generating API documentation...', [
             'input' => $input,
         ]);
+
+        if (
+            ! $projectCapabilities->hasGuideDirectory()
+            && ProjectCapabilitiesResolverInterface::DEFAULT_GUIDE_DIRECTORY !== $sourceOption
+        ) {
+            return $this->failure('Source directory not found: {source}', $input, [
+                'source' => $source,
+            ]);
+        }
 
         if (! $projectCapabilities->canGenerateDocs()) {
             return $this->success(
