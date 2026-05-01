@@ -63,6 +63,10 @@ Important details:
 - ``--progress`` re-enables PHPUnit progress output in text mode;
 - ``--json`` and ``--pretty-json`` still suppress PHPUnit progress output
   automatically;
+- ``--pretty-json`` stays valid JSON and does not add ANSI color escapes;
+- in agent-driven runs, the command also captures PHPUnit output in structured
+  mode automatically and exposes a ``phpunit`` summary object when the bundled
+  agent reporter is active;
 - the packaged configuration registers the DevTools PHPUnit extension.
 
 ``dependencies``

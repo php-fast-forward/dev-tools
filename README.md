@@ -209,6 +209,12 @@ automatically when the runtime is detected as agent-driven. For
 prints raw values so release workflows can keep capturing semantic versions
 and piping rendered release notes directly into GitHub releases.
 
+`--pretty-json` intentionally remains valid JSON. DevTools does not inject ANSI
+escape sequences into that mode today because preserving a parseable payload
+takes precedence over terminal-only color. Where orchestrated tools can expose
+structured subprocess results safely, DevTools prefers adding stable fields to
+the JSON context rather than coloring otherwise strict JSON output.
+
 Progress output is disabled by default on the commands that support transient
 rendering, and `--progress` re-enables it for human-readable terminal runs.
 When `--json` or `--pretty-json` is active on commands that orchestrate other

@@ -71,7 +71,8 @@ Options
 ``--pretty-json``
    Emit the same structured payload with indentation for terminal inspection.
    This also suppresses PHPUnit progress output automatically so the JSON
-   payload is not polluted by transient progress rendering.
+   payload is not polluted by transient progress rendering. The output remains
+   valid JSON and intentionally does not include ANSI color escapes.
 
 Examples
 --------
@@ -160,5 +161,15 @@ Behavior
 - progress output is disabled by default.
 - ``--json`` and ``--pretty-json`` keep progress output disabled so the
   structured payload stays clean, even when ``--progress`` is provided.
+- in agent-driven runs outside the Composer test suite, the command also
+  switches to the same structured capture mode automatically so PHPUnit output
+  is buffered instead of interleaving with top-level DevTools log payloads.
+- when structured capture is active and PHPUnit emits agent-reporter JSON, the
+  command exposes a ``phpunit`` object in the log context with ``tool``,
+  ``label``, ``exit_code``, and the reported ``result`` / ``summary`` /
+  ``details`` fields.
+- when structured capture is active but PHPUnit does not emit parseable JSON,
+  the command preserves the raw subprocess text under
+  ``context.phpunit.raw_output`` instead of dropping it.
 - The command fails if minimum coverage is not met (when ``--min-coverage`` is set).
 - The packaged configuration registers the DevTools PHPUnit extension.

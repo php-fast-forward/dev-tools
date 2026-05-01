@@ -19,10 +19,12 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use JsonException;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
@@ -45,6 +47,8 @@ use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function is_numeric;
+use function Safe\json_decode;
+use function Safe\preg_match;
 
 /**
  * Facilitates the execution of the PHPUnit testing framework.
@@ -56,6 +60,8 @@ final class TestsCommand extends Command
     use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
+
+    private const string PROCESS_LABEL = 'Running PHPUnit Tests';
 
     /**
      * @var string identifies the local configuration file for PHPUnit processes
@@ -71,6 +77,7 @@ final class TestsCommand extends Command
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
+     * @param RuntimeEnvironmentInterface $runtimeEnvironment the runtime environment capability resolver
      * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
@@ -82,6 +89,7 @@ final class TestsCommand extends Command
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
+        private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -160,7 +168,8 @@ final class TestsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = $this->isJsonOutput($input);
+        $jsonOutput = $this->isJsonOutput($input)
+            || ($this->runtimeEnvironment->isAgentPresent() && ! $this->runtimeEnvironment->isComposerTestRun());
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $cacheEnabled = $this->isCacheEnabled($input);
 
@@ -236,25 +245,18 @@ final class TestsCommand extends Command
             process: $processBuilder
                 ->withArgument($input->getArgument('path'))
                 ->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpunit')]),
-            label: 'Running PHPUnit Tests',
+            label: self::PROCESS_LABEL,
         );
 
         $result = $this->processQueue->run($processOutput);
+        $processResultContext = $this->resolveProcessResultContext($processOutput, $result, $jsonOutput);
 
         if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
             if (self::SUCCESS === $result) {
-                return $this->success(
-                    'PHPUnit tests completed successfully.',
-                    $input,
-                    [
-                        'output' => $processOutput,
-                    ],
-                );
+                return $this->success('PHPUnit tests completed successfully.', $input, $processResultContext);
             }
 
-            return $this->failure('PHPUnit tests failed.', $input, [
-                'output' => $processOutput,
-            ]);
+            return $this->failure('PHPUnit tests failed.', $input, $processResultContext);
         }
 
         [$validationResult, $message, $coverageContext] = $this->validateMinimumCoverage(
@@ -263,16 +265,101 @@ final class TestsCommand extends Command
         );
 
         if (self::SUCCESS === $validationResult) {
-            return $this->success($message, $input, [
-                'output' => $processOutput,
-                ...$coverageContext,
-            ]);
+            return $this->success($message, $input, [...$processResultContext, ...$coverageContext]);
         }
 
-        return $this->failure($message, $input, [
-            'output' => $processOutput,
-            ...$coverageContext,
-        ]);
+        return $this->failure($message, $input, [...$processResultContext, ...$coverageContext]);
+    }
+
+    /**
+     * Builds structured context for the executed PHPUnit process.
+     *
+     * @param OutputInterface $processOutput the output sink used while the process ran
+     * @param int $exitCode the exit code returned by the process queue
+     * @param bool $structuredOutput whether the command captured subprocess output for structured logging
+     *
+     * @return array<string, array<string, mixed>|OutputInterface>
+     */
+    private function resolveProcessResultContext(
+        OutputInterface $processOutput,
+        int $exitCode,
+        bool $structuredOutput
+    ): array {
+        if (! $structuredOutput) {
+            return [
+                'output' => $processOutput,
+            ];
+        }
+
+        $context = [
+            'phpunit' => [
+                'tool' => 'phpunit',
+                'label' => self::PROCESS_LABEL,
+                'exit_code' => $exitCode,
+            ],
+        ];
+
+        if (! $processOutput instanceof BufferedOutput) {
+            return $context;
+        }
+
+        $rawOutput = trim($processOutput->fetch());
+
+        if ('' === $rawOutput) {
+            return $context;
+        }
+
+        [$decoded, $supplementalOutput] = $this->decodeStructuredProcessOutput($rawOutput);
+
+        if (! \is_array($decoded)) {
+            $context['phpunit']['raw_output'] = $supplementalOutput;
+
+            return $context;
+        }
+
+        $context['phpunit'] = [...$context['phpunit'], ...$decoded];
+
+        if (null !== $supplementalOutput) {
+            $context['phpunit']['raw_output'] = $supplementalOutput;
+        }
+
+        return $context;
+    }
+
+    /**
+     * Attempts to decode structured PHPUnit output while preserving any
+     * non-JSON prelude that was emitted before the final reporter payload.
+     *
+     * @param string $rawOutput the captured subprocess output
+     *
+     * @return array{array<string, mixed>|null, string|null} decoded payload and preserved supplemental output
+     */
+    private function decodeStructuredProcessOutput(string $rawOutput): array
+    {
+        try {
+            $decoded = json_decode($rawOutput, true);
+
+            return [\is_array($decoded) ? $decoded : null, null];
+        } catch (JsonException) {
+        }
+
+        if (1 !== preg_match('/^(?P<prefix>.*?)(?P<payload>\{\s*"result".*)$/s', $rawOutput, $matches)) {
+            return [null, $rawOutput];
+        }
+
+        try {
+            $decoded = json_decode($matches['payload'], true);
+        } catch (JsonException) {
+            return [null, $rawOutput];
+        }
+
+        if (! \is_array($decoded)) {
+            return [null, $rawOutput];
+        }
+
+        $prefix = trim($matches['prefix']);
+
+        return [$decoded, '' === $prefix ? null : $prefix];
     }
 
     /**

@@ -41,6 +41,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function Safe\json_decode;
 use function Safe\putenv;
 
 #[CoversClass(OutputFormatLogger::class)]
@@ -189,6 +190,32 @@ final class OutputFormatLoggerTest extends TestCase
      * @return void
      */
     #[Test]
+    public function logWillEmitParseableJsonWhenJsonOutputIsRequested(): void
+    {
+        $logger = new OutputFormatLogger(
+            new ArgvInput(['dev-tools', '--json']),
+            $this->output->reveal(),
+            $this->clock->reveal(),
+            new Detector(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            $this->createGithubActionOutput(),
+        );
+
+        $this->output->writeln(Argument::that(static function (string $payload): bool {
+            $decoded = json_decode($payload, true, 512, \JSON_THROW_ON_ERROR);
+
+            return 'info' === $decoded['level'] && 'Build {status}' === $decoded['message'];
+        }))->shouldBeCalledOnce();
+
+        $logger->info('Build {status}', [
+            'status' => 'ready',
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function logWillWritePrettyPrintedJsonWhenPrettyJsonOutputIsRequested(): void
     {
         $logger = new OutputFormatLogger(
@@ -209,6 +236,32 @@ final class OutputFormatLoggerTest extends TestCase
         $logger->info('Build {status}', [
             'status' => 'ready',
             'attempt' => 1,
+        ]);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function logWillEmitParseableJsonWhenPrettyJsonOutputIsRequested(): void
+    {
+        $logger = new OutputFormatLogger(
+            new ArgvInput(['dev-tools', '--pretty-json']),
+            $this->output->reveal(),
+            $this->clock->reveal(),
+            new Detector(),
+            new CompositeContextProcessor([new CommandInputProcessor(), new CommandOutputProcessor()]),
+            $this->createGithubActionOutput(),
+        );
+
+        $this->output->writeln(Argument::that(static function (string $payload): bool {
+            $decoded = json_decode($payload, true, 512, \JSON_THROW_ON_ERROR);
+
+            return 'info' === $decoded['level'] && 'Build {status}' === $decoded['message'];
+        }))->shouldBeCalledOnce();
+
+        $logger->info('Build {status}', [
+            'status' => 'ready',
         ]);
     }
 
