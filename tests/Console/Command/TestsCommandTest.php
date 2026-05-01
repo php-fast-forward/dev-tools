@@ -259,11 +259,7 @@ final class TestsCommandTest extends TestCase
             ->willReturn(false);
 
         $this->processQueue->add(
-            Argument::that(static fn(Process $process): bool => str_contains(
-                $process->getCommandLine(),
-                '--no-progress',
-            ) && ! str_contains($process->getCommandLine(), '--colors=always')
-                && 'fast-forward/dev-tools' === $process->getEnv()['AI_AGENT']),
+            Argument::that(fn(Process $process): bool => $this->usesStructuredPhpUnitExecution($process)),
             false,
             false,
             'Running PHPUnit Tests'
@@ -302,11 +298,7 @@ final class TestsCommandTest extends TestCase
             ->willReturn(false);
 
         $this->processQueue->add(
-            Argument::that(static fn(Process $process): bool => str_contains(
-                $process->getCommandLine(),
-                '--no-progress',
-            ) && ! str_contains($process->getCommandLine(), '--colors=always')
-                && 'fast-forward/dev-tools' === $process->getEnv()['AI_AGENT']),
+            Argument::that(fn(Process $process): bool => $this->usesStructuredPhpUnitExecution($process)),
             false,
             false,
             'Running PHPUnit Tests'
@@ -376,10 +368,7 @@ final class TestsCommandTest extends TestCase
             ->willReturn(true);
 
         $this->processQueue->add(
-            Argument::that(static fn(Process $process): bool => str_contains(
-                $process->getCommandLine(),
-                '--no-progress',
-            ) && 'fast-forward/dev-tools' === $process->getEnv()['AI_AGENT']),
+            Argument::that(fn(Process $process): bool => $this->usesStructuredPhpUnitExecution($process)),
             false,
             false,
             'Running PHPUnit Tests'
@@ -744,5 +733,29 @@ final class TestsCommandTest extends TestCase
     {
         return (new ReflectionMethod($this->command, 'execute'))
             ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+    }
+
+    /**
+     * @param Process $process
+     *
+     * @return bool
+     */
+    private function usesStructuredPhpUnitExecution(Process $process): bool
+    {
+        if (! str_contains($process->getCommandLine(), '--no-progress')) {
+            return false;
+        }
+
+        if (str_contains($process->getCommandLine(), '--colors=always')) {
+            return false;
+        }
+
+        $processEnvironment = $process->getEnv();
+
+        if (\array_key_exists('AI_AGENT', $processEnvironment)) {
+            return 'fast-forward/dev-tools' === $processEnvironment['AI_AGENT'];
+        }
+
+        return false !== getenv('AI_AGENT');
     }
 }

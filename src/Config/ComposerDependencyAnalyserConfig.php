@@ -53,6 +53,7 @@ final class ComposerDependencyAnalyserConfig
      * @var array<int, string>
      */
     public const array DEFAULT_PACKAGED_UNUSED_DEPENDENCIES = [
+        'ergebnis/phpunit-agent-reporter',
         'ergebnis/composer-normalize',
         'fakerphp/faker',
         'fast-forward/phpdoc-bootstrap-template',
