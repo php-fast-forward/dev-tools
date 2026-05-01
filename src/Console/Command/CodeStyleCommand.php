@@ -164,14 +164,14 @@ final class CodeStyleCommand extends Command
             return $this->success('Code style checks completed successfully.', $input, [
                 'fix' => $fix,
                 'config' => self::CONFIG,
-                'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                'output' => $processOutput,
             ]);
         }
 
         return $this->failure('Code style checks failed.', $input, [
             'fix' => $fix,
             'config' => self::CONFIG,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'output' => $processOutput,
         ]);
     }
 }

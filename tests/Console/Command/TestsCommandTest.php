@@ -439,7 +439,7 @@ final class TestsCommandTest extends TestCase
                 && isset($context['output'])
                 && 'success' === $context['output']['result']
                 && 5 === $context['output']['summary']['assertions']
-                && 'Generating code coverage report in PHP format ... done [00:00.002]' === $context['output']['raw_output']),
+                && ! isset($context['output']['raw_output'])),
         )->shouldBeCalled();
         $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 

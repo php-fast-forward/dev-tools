@@ -194,6 +194,33 @@ final class CommandOutputProcessorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function processWillDecodeTheFinalStructuredJsonAfterPlainTextToolOutput(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "composer-normalize warning before machine output.\n"
+            . "Another advisory line.\n"
+            . "{\"totals\":{\"changed_files\":0,\"errors\":0},\"changed_files\":[\"src/Foo.php\"]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'totals' => [
+                'changed_files' => 0,
+                'errors' => 0,
+            ],
+            'changed_files' => [],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function processWillExtractBufferedErrorOutputFromConsoleOutput(): void
     {
         $processor = new CommandOutputProcessor();

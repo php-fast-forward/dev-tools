@@ -129,12 +129,10 @@ final class CodeStyleCommandTest extends TestCase
         $this->logger->log(
             'info',
             'Code style checks completed successfully.',
-            [
-                'input' => $this->input->reveal(),
-                'fix' => false,
-                'config' => CodeStyleCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
+                && false === $context['fix']
+                && CodeStyleCommand::CONFIG === $context['config']
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());
@@ -155,14 +153,12 @@ final class CodeStyleCommandTest extends TestCase
             ->shouldBeCalled();
         $this->logger->error(
             'Code style checks failed.',
-            [
-                'input' => $this->input->reveal(),
-                'file' => null,
-                'line' => null,
-                'fix' => false,
-                'config' => CodeStyleCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
+                && null === $context['file']
+                && null === $context['line']
+                && false === $context['fix']
+                && CodeStyleCommand::CONFIG === $context['config']
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(CodeStyleCommand::FAILURE, $this->executeCommand());
@@ -190,7 +186,7 @@ final class CodeStyleCommandTest extends TestCase
             'info',
             'Code style checks completed successfully.',
             Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
-                && \is_string($context['process_output'])),
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());

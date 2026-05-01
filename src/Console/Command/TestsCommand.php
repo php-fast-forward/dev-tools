@@ -366,7 +366,7 @@ final class TestsCommand extends Command
             ];
         }
 
-        if (null !== $supplementalOutput) {
+        if (null !== $supplementalOutput && ! \is_array($decoded)) {
             $payload['raw_output'] = $supplementalOutput;
         }
 
