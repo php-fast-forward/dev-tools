@@ -19365,6 +19365,121 @@ var classes = [
         "violations": {}
     },
     {
+        "name": "FastForward\\DevTools\\Tests\\GitHubActions\\ResolvePredictableConflictsActionTest",
+        "interface": false,
+        "abstract": false,
+        "final": true,
+        "methods": [
+            {
+                "name": "setUp",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "tearDown",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "gitlinkResolverWillStageTheCurrentBranchPointerWithoutMaterializingTheSubmoduleCheckout",
+                "role": null,
+                "public": true,
+                "private": false,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "createRepositoryWithUnmergedWikiGitlinkConflict",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "runProcess",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "runProcessAllowingFailure",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            },
+            {
+                "name": "runProcessWithInput",
+                "role": null,
+                "public": false,
+                "private": true,
+                "_type": "Hal\\Metric\\FunctionMetric"
+            }
+        ],
+        "nbMethodsIncludingGettersSetters": 7,
+        "nbMethods": 7,
+        "nbMethodsPrivate": 6,
+        "nbMethodsPublic": 1,
+        "nbMethodsGetter": 0,
+        "nbMethodsSetters": 0,
+        "wmc": 10,
+        "ccn": 4,
+        "ccnMethodMax": 4,
+        "externals": [
+            "PHPUnit\\Framework\\TestCase",
+            "RecursiveDirectoryIterator",
+            "RecursiveIteratorIterator",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process",
+            "Symfony\\Component\\Process\\Process"
+        ],
+        "parents": [
+            "PHPUnit\\Framework\\TestCase"
+        ],
+        "implements": [],
+        "lcom": 2,
+        "length": 334,
+        "vocabulary": 88,
+        "volume": 2157.45,
+        "difficulty": 7.1,
+        "effort": 15307.62,
+        "level": 0.14,
+        "bugs": 0.72,
+        "time": 850,
+        "intelligentContent": 304.07,
+        "number_operators": 36,
+        "number_operands": 298,
+        "number_operators_unique": 4,
+        "number_operands_unique": 84,
+        "cloc": 34,
+        "loc": 134,
+        "lloc": 100,
+        "mi": 67.67,
+        "mIwoC": 32.49,
+        "commentWeight": 35.18,
+        "kanDefect": 0.52,
+        "relativeStructuralComplexity": 196,
+        "relativeDataComplexity": 0.4,
+        "relativeSystemComplexity": 196.4,
+        "totalStructuralComplexity": 1372,
+        "totalDataComplexity": 2.8,
+        "totalSystemComplexity": 1374.8,
+        "package": "FastForward\\DevTools\\Tests\\GitHubActions\\",
+        "pageRank": 0,
+        "afferentCoupling": 0,
+        "efferentCoupling": 4,
+        "instability": 1,
+        "numberOfUnitTests": 0,
+        "violations": {}
+    },
+    {
         "name": "FastForward\\DevTools\\Tests\\GitHubActions\\RefreshPreviewPointerActionTest",
         "interface": false,
         "abstract": false,
@@ -23669,7 +23784,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000000df50000000000000000",
+        "name": "anonymous@0000000000000c4c0000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -23832,7 +23947,7 @@ var classes = [
             "PHPUnit\\Framework\\TestCase",
             "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "RuntimeException",
-            "anonymous@0000000000000df50000000000000000",
+            "anonymous@0000000000000c4c0000000000000000",
             "SebastianBergmann\\CodeCoverage\\Filter",
             "SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",
