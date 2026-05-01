@@ -61,7 +61,17 @@ jobs:
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
           path: .dev-tools-actions
 
+      - name: Detect wiki repository
+        id: detect_wiki
+        run: |
+          if [ -e .github/wiki ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Setup PHP and install dependencies
+        if: steps.detect_wiki.outputs.exists == 'true'
         uses: ./.dev-tools-actions/.github/actions/php/setup-composer
         with:
           php-version: ${{ needs.resolve_php.outputs.php-version }}
@@ -70,6 +80,7 @@ jobs:
             ${{ github.workspace }}/.github/wiki
 
       - name: Refresh wiki preview pointer
+        if: steps.detect_wiki.outputs.exists == 'true'
         id: refresh_preview
         env:
           COMPOSER_ROOT_VERSION: dev-${{ github.event.pull_request.head.ref }}
@@ -79,7 +90,7 @@ jobs:
           commit-message: Update wiki docs for PR #${{ github.event.pull_request.number }}
 
       - name: Commit parent repo submodule pointer
-        if: steps.refresh_preview.outputs.pointer-changed == 'true'
+        if: steps.detect_wiki.outputs.exists == 'true' && steps.refresh_preview.outputs.pointer-changed == 'true'
         id: parent_commit
         uses: EndBug/add-and-commit@v10
         with:
@@ -90,7 +101,7 @@ jobs:
           push: true
 
       - name: Dispatch tests for wiki pointer commit
-        if: steps.refresh_preview.outputs.pointer-changed == 'true'
+        if: steps.detect_wiki.outputs.exists == 'true' && steps.refresh_preview.outputs.pointer-changed == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           HEAD_REF: ${{ github.event.pull_request.head.ref }}
@@ -102,7 +113,8 @@ jobs:
             ## Wiki Preview Summary
 
             - Preview branch: `${{ env.WIKI_PREVIEW_BRANCH }}`
-            - Preview refresh: `${{ steps.refresh_preview.outputs.published == 'true' && 'published' || 'unchanged' }}`
-            - Submodule pointer changed: `${{ steps.refresh_preview.outputs.pointer-changed }}`
-            - Parent repository pointer commit result: `${{ steps.refresh_preview.outputs.pointer-changed == 'true' && 'updated' || 'unchanged' }}`
-            - Tests dispatch result: `${{ steps.refresh_preview.outputs.pointer-changed == 'true' && 'requested' || 'not needed' }}`
+            - Wiki repository detected: `${{ steps.detect_wiki.outputs.exists }}`
+            - Preview refresh: `${{ steps.detect_wiki.outputs.exists == 'true' && (steps.refresh_preview.outputs.published == 'true' && 'published' || 'unchanged') || 'skipped' }}`
+            - Submodule pointer changed: `${{ steps.detect_wiki.outputs.exists == 'true' && steps.refresh_preview.outputs.pointer-changed || 'false' }}`
+            - Parent repository pointer commit result: `${{ steps.detect_wiki.outputs.exists == 'true' && (steps.refresh_preview.outputs.pointer-changed == 'true' && 'updated' || 'unchanged') || 'skipped' }}`
+            - Tests dispatch result: `${{ steps.detect_wiki.outputs.exists == 'true' && (steps.refresh_preview.outputs.pointer-changed == 'true' && 'requested' || 'not needed') || 'skipped' }}`

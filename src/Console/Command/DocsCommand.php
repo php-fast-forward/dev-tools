@@ -29,7 +29,10 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Project\ProjectCapabilities;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -71,6 +74,7 @@ final class DocsCommand extends Command
      * @param Environment $renderer
      * @param FilesystemInterface $filesystem the filesystem for handling file operations
      * @param ComposerJsonInterface $composer the composer.json handler for accessing project metadata
+     * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
      * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
@@ -79,6 +83,7 @@ final class DocsCommand extends Command
         private readonly Environment $renderer,
         private readonly FilesystemInterface $filesystem,
         private readonly ComposerJsonInterface $composer,
+        private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -114,7 +119,7 @@ final class DocsCommand extends Command
                 shortcut: 's',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the source directory for the generated HTML documentation.',
-                default: 'docs',
+                default: ProjectCapabilitiesResolverInterface::DEFAULT_GUIDE_DIRECTORY,
             )
             ->addOption(
                 name: 'template',
@@ -143,6 +148,9 @@ final class DocsCommand extends Command
         $target = $this->filesystem->getAbsolutePath($input->getOption('target'));
         $cacheDir = $this->filesystem->getAbsolutePath($input->getOption('cache-dir'));
         $template = (string) $input->getOption('template');
+        $projectCapabilities = $this->projectCapabilitiesResolver->resolve(
+            guideDirectory: (string) $input->getOption('source'),
+        );
 
         if (self::DEFAULT_TEMPLATE === $template) {
             $template = DevToolsPathResolver::getPreferredVendorPath(self::DEFAULT_TEMPLATE);
@@ -152,10 +160,13 @@ final class DocsCommand extends Command
             'input' => $input,
         ]);
 
-        if (! $this->filesystem->exists($source)) {
-            return $this->failure('Source directory not found: {source}', $input, [
-                'source' => $source,
-            ]);
+        if (! $projectCapabilities->canGenerateDocs()) {
+            return $this->success(
+                'Skipping API documentation generation because no guide source or autoloaded PHP API directories were detected.',
+                $input,
+                [],
+                LogLevel::WARNING,
+            );
         }
 
         $config = $this->createPhpDocumentorConfig(
@@ -163,6 +174,7 @@ final class DocsCommand extends Command
             target: $target,
             template: $template,
             cacheDir: $cacheEnabled ? $cacheDir : sys_get_temp_dir(),
+            projectCapabilities: $projectCapabilities,
         );
 
         $processBuilder = $this->processBuilder
@@ -202,6 +214,7 @@ final class DocsCommand extends Command
      * @param string $target the output directory for the generated documentation
      * @param string $template the phpDocumentor template name or path
      * @param string $cacheDir the cache directory for phpDocumentor
+     * @param ProjectCapabilities $projectCapabilities the resolved project capability snapshot
      *
      * @return string the absolute path to the generated configuration
      */
@@ -209,12 +222,13 @@ final class DocsCommand extends Command
         string $source,
         string $target,
         string $template,
-        string $cacheDir
+        string $cacheDir,
+        ProjectCapabilities $projectCapabilities,
     ): string {
         $workingDirectory = getcwd();
-        $autoload = $this->composer->getAutoload('psr-4');
-        $guidePath = $this->filesystem->makePathRelative($source);
-        $defaultPackageName = array_key_first($autoload) ?: '';
+        $guidePath = $projectCapabilities->hasGuideDirectory()
+            ? $this->filesystem->makePathRelative($source)
+            : null;
 
         $content = $this->renderer->render('phpdocumentor.xml', [
             'title' => $this->composer->getName(),
@@ -222,9 +236,9 @@ final class DocsCommand extends Command
             'target' => $target,
             'cacheDir' => $cacheDir,
             'workingDirectory' => $workingDirectory,
-            'paths' => $autoload,
+            'apiDirectories' => $projectCapabilities->getApiDirectories(),
             'guidePath' => $guidePath,
-            'defaultPackageName' => rtrim($defaultPackageName, '\\'),
+            'defaultPackageName' => $projectCapabilities->getDefaultPackageName(),
         ]);
 
         $this->filesystem->dumpFile(filename: 'phpdocumentor.xml', content: $content, path: $cacheDir);

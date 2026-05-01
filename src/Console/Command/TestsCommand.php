@@ -30,8 +30,10 @@ use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -68,6 +70,7 @@ final class TestsCommand extends Command
      * @param FileLocatorInterface $fileLocator the file locator used to resolve PHPUnit configuration
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
+     * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
      * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
@@ -78,6 +81,7 @@ final class TestsCommand extends Command
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -105,7 +109,7 @@ final class TestsCommand extends Command
                 name: 'path',
                 mode: InputArgument::OPTIONAL,
                 description: 'Path to the tests directory.',
-                default: './tests',
+                default: ProjectCapabilitiesResolverInterface::DEFAULT_TESTS_PATH,
             )
             ->addOption(
                 name: 'bootstrap',
@@ -171,6 +175,19 @@ final class TestsCommand extends Command
             return $this->failure($invalidArgumentException->getMessage(), $input, [
                 'output' => $processOutput,
             ]);
+        }
+
+        if (! $this->projectCapabilitiesResolver->resolve(
+            testsPath: (string) $input->getArgument('path'),
+        )->canRunTests()) {
+            return $this->success(
+                'Skipping PHPUnit tests because no tests directory or PHP source files were detected.',
+                $input,
+                [
+                    'output' => $processOutput,
+                ],
+                LogLevel::WARNING,
+            );
         }
 
         $processBuilder = $this->processBuilder

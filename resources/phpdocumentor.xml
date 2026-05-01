@@ -14,9 +14,10 @@
     </paths>
 
     <version number="latest">
+{% if apiDirectories is not empty %}
         <api>
             <source dsn="{{ workingDirectory }}">
-{% for path in paths %}
+{% for path in apiDirectories %}
                 <path>{{ path }}</path>
 {% endfor %}
             </source>
@@ -29,13 +30,18 @@
             <extensions>
                 <extension>php</extension>
             </extensions>
+{% if defaultPackageName %}
             <default-package-name>{{ defaultPackageName }}</default-package-name>
+{% endif %}
         </api>
+{% endif %}
+{% if guidePath %}
         <guide>
             <source dsn="{{ workingDirectory }}">
                 <path>{{ guidePath }}</path>
             </source>
             <output>.</output>
         </guide>
+{% endif %}
     </version>
 </phpdocumentor>
