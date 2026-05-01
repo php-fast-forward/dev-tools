@@ -3106,6 +3106,31 @@ Search.appendIndex(
             "summary": "Determines\u0020whether\u0020pretty\u0020JSON\u0020output\u0020was\u0020requested.",
             "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isPrettyJsonOutput"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AisImplicitJsonOutputEnabled\u0028\u0029",
+            "name": "isImplicitJsonOutputEnabled",
+            "summary": "Determines\u0020whether\u0020structured\u0020JSON\u0020output\u0020SHOULD\u0020be\u0020enabled\u0020implicitly.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isImplicitJsonOutputEnabled"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AresolveRuntimeEnvironment\u0028\u0029",
+            "name": "resolveRuntimeEnvironment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_resolveRuntimeEnvironment"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AisPhpUnitRuntime\u0028\u0029",
+            "name": "isPhpUnitRuntime",
+            "summary": "Returns\u0020whether\u0020the\u0020current\u0020process\u0020is\u0020executing\u0020inside\u0020PHPUnit.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isPhpUnitRuntime"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AisComposerTestRunEnvironmentEnabled\u0028\u0029",
+            "name": "isComposerTestRunEnvironmentEnabled",
+            "summary": "Returns\u0020whether\u0020the\u0020Composer\u0020test\u0020runtime\u0020flag\u0020is\u0020enabled.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_isComposerTestRunEnvironmentEnabled"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Input\\HasJsonOption\u003A\u003AresolveEnvironmentVariables\u0028\u0029",
+            "name": "resolveEnvironmentVariables",
+            "summary": "Returns\u0020environment\u0020variables\u0020suitable\u0020for\u0020lightweight\u0020agent\u0020detection.",
+            "url": "classes/FastForward-DevTools-Console-Input-HasJsonOption.html#method_resolveEnvironmentVariables"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
             "name": "OutputFormatLogger",
             "summary": "Formats\u0020PSR\u002D3\u0020log\u0020messages\u0020for\u0020the\u0020DevTools\u0020console\u0020runtime.",
