@@ -3362,25 +3362,34 @@ structured payload stays clean, even when <code>--progress</code>
  is provided.</li>
 
     <li class="dash">in agent-driven runs outside the Composer test suite, the command also
-switches to the same structured capture mode automatically so PHPUnit output
-is buffered instead of interleaving with top-level DevTools log payloads.</li>
+switches to the same structured capture mode automatically.</li>
 
     <li class="dash">when structured capture is active and PHPUnit emits agent-reporter JSON, the
-command exposes a <code>phpunit</code>
- object in the log context with <code>tool</code>
-,
-<code>label</code>
-, <code>exit_code</code>
-, and the reported <code>result</code>
- / <code>summary</code>
- /
-<code>details</code>
- fields.</li>
+command stores that payload inside <code>output</code>
+ while keeping the standard
+DevTools JSON envelope. <code>--json</code>
+ and <code>--pretty-json</code>
+ therefore expose
+the same structured result, with formatting as the only difference.</li>
 
     <li class="dash">when structured capture is active but PHPUnit does not emit parseable JSON,
-the command preserves the raw subprocess text under
-<code>context.phpunit.raw_output</code>
- instead of dropping it.</li>
+the command preserves the raw subprocess text inside <code>output.raw_output</code>
+
+instead of dropping it.</li>
+
+    <li class="dash">when coverage generation or other PHPUnit text appears before the final
+reporter payload, the command preserves that prelude in
+<code>output.raw_output</code>
+ while keeping the main JSON result parseable.</li>
+
+    <li class="dash">when <code>--min-coverage</code>
+ is used in structured mode, the command appends a
+<code>coverage</code>
+ object under <code>output</code>
+ and flips <code>output.result</code>
+ to
+<code>failure</code>
+ if the threshold is not met.</li>
 
     <li class="dash">The command fails if minimum coverage is not met (when <code>--min-coverage</code>
  is set).</li>

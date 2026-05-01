@@ -2601,6 +2601,21 @@ Search.appendIndex(
             "summary": "Builds\u0020structured\u0020context\u0020for\u0020the\u0020executed\u0020PHPUnit\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolveProcessResultContext"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AforceAgentReporter\u0028\u0029",
+            "name": "forceAgentReporter",
+            "summary": "Forces\u0020the\u0020PHPUnit\u0020subprocess\u0020to\u0020expose\u0020the\u0020agent\u0020reporter\u0020payload.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_forceAgentReporter"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AresolveStructuredProcessResultPayload\u0028\u0029",
+            "name": "resolveStructuredProcessResultPayload",
+            "summary": "Builds\u0020the\u0020structured\u0020payload\u0020that\u0020will\u0020be\u0020emitted\u0020for\u0020agent\u002Doriented\u0020runs.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolveStructuredProcessResultPayload"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AwithStructuredCoverageValidationContext\u0028\u0029",
+            "name": "withStructuredCoverageValidationContext",
+            "summary": "Appends\u0020minimum\u002Dcoverage\u0020validation\u0020data\u0020to\u0020the\u0020structured\u0020PHPUnit\u0020output\u0020payload.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_withStructuredCoverageValidationContext"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AdecodeStructuredProcessOutput\u0028\u0029",
             "name": "decodeStructuredProcessOutput",
             "summary": "Attempts\u0020to\u0020decode\u0020structured\u0020PHPUnit\u0020output\u0020while\u0020preserving\u0020any\nnon\u002DJSON\u0020prelude\u0020that\u0020was\u0020emitted\u0020before\u0020the\u0020final\u0020reporter\u0020payload.",
@@ -2640,6 +2655,16 @@ Search.appendIndex(
             "name": "validateMinimumCoverage",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_validateMinimumCoverage"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AAGENT_ENVIRONMENT_VARIABLE",
+            "name": "AGENT_ENVIRONMENT_VARIABLE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#constant_AGENT_ENVIRONMENT_VARIABLE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AAGENT_ENVIRONMENT_VALUE",
+            "name": "AGENT_ENVIRONMENT_VALUE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#constant_AGENT_ENVIRONMENT_VALUE"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003APROCESS_LABEL",
             "name": "PROCESS_LABEL",

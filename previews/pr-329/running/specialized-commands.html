@@ -3248,9 +3248,15 @@ automatically;</li>
  stays valid JSON and does not add ANSI color escapes;</li>
 
     <li class="dash">in agent-driven runs, the command also captures PHPUnit output in structured
-mode automatically and exposes a <code>phpunit</code>
- summary object when the bundled
-agent reporter is active;</li>
+mode automatically and stores the bundled PHPUnit agent-reporter payload in
+<code>output</code>
+. <code>--json</code>
+ and <code>--pretty-json</code>
+ therefore keep the same
+structured shape, with <code>raw_output</code>
+ preserved under <code>output</code>
+ when
+PHPUnit writes extra text before the final JSON;</li>
 
     <li class="dash">the packaged configuration registers the DevTools PHPUnit extension.</li>
 
