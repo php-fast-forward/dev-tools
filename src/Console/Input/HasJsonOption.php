@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Input;
 
+use Ergebnis\AgentDetector\Detector;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 
@@ -56,7 +58,11 @@ trait HasJsonOption
             return true;
         }
 
-        return (bool) $input->getOption('json');
+        if ((bool) $input->getOption('json')) {
+            return true;
+        }
+
+        return $this->isImplicitJsonOutputEnabled();
     }
 
     /**
@@ -67,5 +73,88 @@ trait HasJsonOption
     protected function isPrettyJsonOutput(InputInterface $input): bool
     {
         return (bool) $input->getOption('pretty-json');
+    }
+
+    /**
+     * Determines whether structured JSON output SHOULD be enabled implicitly.
+     *
+     * Commands MAY opt into runtime-environment-aware behavior by exposing a
+     * `$runtimeEnvironment` property. Commands that do not expose it SHALL fall
+     * back to lightweight agent detection based on process environment
+     * variables, except while the PHPUnit test runtime is active.
+     */
+    private function isImplicitJsonOutputEnabled(): bool
+    {
+        $runtimeEnvironment = $this->resolveRuntimeEnvironment();
+
+        if ($runtimeEnvironment instanceof RuntimeEnvironmentInterface) {
+            return $runtimeEnvironment->isAgentPresent() && ! $runtimeEnvironment->isComposerTestRun();
+        }
+
+        if ($this->isPhpUnitRuntime() || $this->isComposerTestRunEnvironmentEnabled()) {
+            return false;
+        }
+
+        return (new Detector())->isAgentPresent($this->resolveEnvironmentVariables());
+    }
+
+    /**
+     * @return ?RuntimeEnvironmentInterface
+     */
+    private function resolveRuntimeEnvironment(): ?RuntimeEnvironmentInterface
+    {
+        if (! property_exists($this, 'runtimeEnvironment')) {
+            return null;
+        }
+
+        if (! $this->runtimeEnvironment instanceof RuntimeEnvironmentInterface) {
+            return null;
+        }
+
+        return $this->runtimeEnvironment;
+    }
+
+    /**
+     * Returns whether the current process is executing inside PHPUnit.
+     */
+    private function isPhpUnitRuntime(): bool
+    {
+        return \defined('PHPUNIT_COMPOSER_INSTALL');
+    }
+
+    /**
+     * Returns whether the Composer test runtime flag is enabled.
+     */
+    private function isComposerTestRunEnvironmentEnabled(): bool
+    {
+        $value = $_SERVER['COMPOSER_TESTS_ARE_RUNNING'] ?? getenv('COMPOSER_TESTS_ARE_RUNNING');
+
+        if (false === $value || null === $value) {
+            return false;
+        }
+
+        return \in_array(strtolower((string) $value), ['1', 'true', 'yes', 'on'], true);
+    }
+
+    /**
+     * Returns environment variables suitable for lightweight agent detection.
+     *
+     * @return array<string, string>
+     */
+    private function resolveEnvironmentVariables(): array
+    {
+        $environmentVariables = [];
+
+        foreach ([$_SERVER, $_ENV] as $environment) {
+            foreach ($environment as $name => $value) {
+                if (! \is_string($name) || ! \is_string($value)) {
+                    continue;
+                }
+
+                $environmentVariables[$name] ??= $value;
+            }
+        }
+
+        return $environmentVariables;
     }
 }

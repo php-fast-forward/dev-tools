@@ -173,11 +173,7 @@ final class TestsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $explicitJsonOutput = (bool) $input->getOption('json');
-        $prettyJsonOutput = $this->isPrettyJsonOutput($input);
-        $structuredOutput = $prettyJsonOutput
-            || $explicitJsonOutput
-            || ($this->runtimeEnvironment->isAgentPresent() && ! $this->runtimeEnvironment->isComposerTestRun());
+        $structuredOutput = $this->isJsonOutput($input);
         $processOutput = $structuredOutput ? new BufferedOutput() : $output;
         $cacheEnabled = $this->isCacheEnabled($input);
 
