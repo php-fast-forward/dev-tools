@@ -24,18 +24,27 @@ namespace FastForward\DevTools\Project;
  */
 interface ProjectCapabilitiesResolverInterface
 {
+    /**
+     * @var string the default project-relative test directory checked by repository capability discovery
+     */
     public const string DEFAULT_TESTS_PATH = './tests';
 
+    /**
+     * @var string the default project-relative guide directory checked by repository capability discovery
+     */
     public const string DEFAULT_GUIDE_DIRECTORY = 'docs';
 
+    /**
+     * @var string the default project-relative wiki target used for generated API wiki output
+     */
     public const string DEFAULT_WIKI_TARGET = '.github/wiki';
 
     /**
-     * @param string $testsPath
-     * @param string $guideDirectory
-     * @param string $wikiTarget
+     * Resolves which documentation, testing, and wiki surfaces are available for the current repository.
      *
-     * @return ProjectCapabilities
+     * @param string $testsPath the project-relative tests directory to inspect
+     * @param string $guideDirectory the project-relative guide directory to inspect
+     * @param string $wikiTarget the project-relative wiki output target to inspect
      */
     public function resolve(
         string $testsPath = self::DEFAULT_TESTS_PATH,

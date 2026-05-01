@@ -20,11 +20,13 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Project;
 
 /**
- * Describes the documentation, testing, and wiki surfaces exposed by the current repository.
+ * Captures which documentation, testing, and wiki surfaces are available for the current repository.
  */
 final readonly class ProjectCapabilities
 {
     /**
+     * Creates a repository capability snapshot for reporting and documentation commands.
+     *
      * @param list<string> $apiDirectories project-relative directories that contain autoloaded PHP API source
      * @param string|null $defaultPackageName the default package name derived from Composer namespaces when available
      * @param bool $hasGuideDirectory whether the configured guide directory exists
@@ -42,7 +44,7 @@ final readonly class ProjectCapabilities
     ) {}
 
     /**
-     * @return list<string>
+     * Returns the project-relative directories that expose autoloaded PHP API source.
      */
     public function getApiDirectories(): array
     {
@@ -50,7 +52,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return string|null
+     * Returns the default API package name when one can be derived from Composer namespaces.
      */
     public function getDefaultPackageName(): ?string
     {
@@ -58,7 +60,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether the configured guide directory exists.
      */
     public function hasGuideDirectory(): bool
     {
@@ -66,7 +68,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether the configured tests directory exists.
      */
     public function hasTestsPath(): bool
     {
@@ -74,7 +76,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether the configured wiki target exists.
      */
     public function hasWikiTarget(): bool
     {
@@ -82,7 +84,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether the repository exposes PHP source files outside generated and vendor areas.
      */
     public function hasPhpSourceFiles(): bool
     {
@@ -90,7 +92,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether the repository exposes autoloaded PHP API source.
      */
     public function canGenerateApiDocumentation(): bool
     {
@@ -98,7 +100,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether the repository can generate guides, API documentation, or both.
      */
     public function canGenerateDocs(): bool
     {
@@ -106,7 +108,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether metrics generation has PHP source or test inputs to analyse.
      */
     public function canGenerateMetrics(): bool
     {
@@ -114,7 +116,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether wiki generation can render API documentation into the configured wiki target.
      */
     public function canGenerateWiki(): bool
     {
@@ -122,7 +124,7 @@ final readonly class ProjectCapabilities
     }
 
     /**
-     * @return bool
+     * Detects whether the repository has enough PHP surface to justify running tests.
      */
     public function canRunTests(): bool
     {

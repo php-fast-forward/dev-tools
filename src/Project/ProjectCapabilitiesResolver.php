@@ -39,8 +39,10 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
     private const array API_AUTOLOAD_TYPES = ['psr-4', 'psr-0', 'classmap'];
 
     /**
-     * @param ComposerJsonInterface $composer
-     * @param FilesystemInterface $filesystem
+     * Creates a capability resolver backed by Composer autoload metadata and filesystem checks.
+     *
+     * @param ComposerJsonInterface $composer the composer.json accessor for autoload metadata
+     * @param FilesystemInterface $filesystem the filesystem used to resolve project-relative paths
      */
     public function __construct(
         private ComposerJsonInterface $composer,
@@ -48,11 +50,11 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
     ) {}
 
     /**
-     * @param string $testsPath
-     * @param string $guideDirectory
-     * @param string $wikiTarget
+     * Resolves which documentation, testing, and wiki surfaces are available for the current repository.
      *
-     * @return ProjectCapabilities
+     * @param string $testsPath the project-relative tests directory to inspect
+     * @param string $guideDirectory the project-relative guide directory to inspect
+     * @param string $wikiTarget the project-relative wiki output target to inspect
      */
     public function resolve(
         string $testsPath = ProjectCapabilitiesResolverInterface::DEFAULT_TESTS_PATH,
@@ -72,7 +74,9 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
     }
 
     /**
-     * @param array<string, mixed> $psr4Autoload
+     * Resolves the default API package name from the first PSR-4 namespace entry when available.
+     *
+     * @param array<string, mixed> $psr4Autoload the PSR-4 autoload map from composer.json
      */
     private function resolveDefaultPackageName(array $psr4Autoload): ?string
     {
@@ -86,6 +90,8 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
     }
 
     /**
+     * Resolves project-relative API directories exposed by Composer autoload configuration.
+     *
      * @return list<string>
      */
     private function resolveApiDirectories(): array
@@ -108,9 +114,9 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
     }
 
     /**
-     * @param string $path
+     * Resolves a Composer autoload path into a project-relative API directory when it exists.
      *
-     * @return string|null
+     * @param string $path the Composer autoload path candidate
      */
     private function resolveRelativeApiDirectory(string $path): ?string
     {
@@ -128,7 +134,9 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
     }
 
     /**
-     * @param array<string, mixed> $autoload
+     * Flattens Composer autoload path definitions into a normalized list of non-empty paths.
+     *
+     * @param array<string, mixed> $autoload the Composer autoload section to normalize
      *
      * @return list<string>
      */
