@@ -33,6 +33,7 @@ use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -220,6 +221,33 @@ final class WikiCommandTest extends TestCase
             'warning',
             'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
             Argument::that(static fn(array $context): bool => '.github/wiki' === $context['target']
+                && $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    #[TestWith(['./.github/wiki'])]
+    #[TestWith(['.github/wiki/'])]
+    public function executeWillTreatEquivalentDefaultWikiTargetsAsDefault(string $target): void
+    {
+        $this->input->getOption('target')
+            ->willReturn($target);
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Generating wiki documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
+            Argument::that(static fn(array $context): bool => $target === $context['target']
                 && $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
 

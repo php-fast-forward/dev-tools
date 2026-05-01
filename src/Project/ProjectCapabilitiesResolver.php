@@ -25,7 +25,10 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use function array_key_first;
 use function array_values;
 use function is_dir;
+use function is_file;
 use function rtrim;
+use function str_ends_with;
+use function strtolower;
 
 /**
  * Resolves which repository surfaces are available to documentation, testing, and wiki tooling.
@@ -69,7 +72,7 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
             $this->filesystem->exists($guideDirectory),
             $this->filesystem->exists($testsPath),
             $this->filesystem->exists($wikiTarget),
-            [] !== $apiDirectories,
+            $this->resolveHasPhpSourceFiles($apiDirectories),
         );
     }
 
@@ -131,6 +134,34 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
         }
 
         return $this->filesystem->makePathRelative($absolutePath);
+    }
+
+    /**
+     * Resolves whether Composer autoload metadata exposes testable PHP source for the repository.
+     *
+     * @param list<string> $apiDirectories the resolved API directories exposed by Composer autoload metadata
+     */
+    private function resolveHasPhpSourceFiles(array $apiDirectories): bool
+    {
+        if ([] !== $apiDirectories) {
+            return true;
+        }
+
+        foreach (self::API_AUTOLOAD_TYPES as $autoloadType) {
+            foreach ($this->normalizeAutoloadPaths($this->composer->getAutoload($autoloadType)) as $path) {
+                $absolutePath = $this->filesystem->getAbsolutePath($path);
+
+                if (! \is_string($absolutePath)) {
+                    continue;
+                }
+
+                if (is_file($absolutePath) && str_ends_with(strtolower($absolutePath), '.php')) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

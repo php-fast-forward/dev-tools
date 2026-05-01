@@ -137,6 +137,29 @@ final class ProjectCapabilitiesResolverTest extends TestCase
      * @return void
      */
     #[Test]
+    public function resolveWillDetectPhpSourceFromFileBasedClassmapEntries(): void
+    {
+        mkdir($this->workspace . '/legacy', recursive: true);
+        file_put_contents($this->workspace . '/legacy/LegacyClass.php', "<?php\n\nfinal class LegacyClass {}\n");
+
+        $this->composer->getAutoload('psr-4')
+            ->willReturn([]);
+        $this->composer->getAutoload('psr-0')
+            ->willReturn([]);
+        $this->composer->getAutoload('classmap')
+            ->willReturn(['legacy/LegacyClass.php']);
+
+        $capabilities = $this->resolver->resolve();
+
+        self::assertTrue($capabilities->hasPhpSourceFiles());
+        self::assertTrue($capabilities->canRunTests());
+        self::assertFalse($capabilities->canGenerateApiDocumentation());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function resolveWillDetectPhpPackageCapabilities(): void
     {
         mkdir($this->workspace . '/src', recursive: true);

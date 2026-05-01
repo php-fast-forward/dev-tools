@@ -133,7 +133,7 @@ final class WikiCommand extends Command
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
-        $isDefaultWikiTarget = ProjectCapabilitiesResolverInterface::DEFAULT_WIKI_TARGET === $target;
+        $isDefaultWikiTarget = $this->isDefaultWikiTarget($target);
         $cacheEnabled = $this->isCacheEnabled($input);
 
         if ($input->getOption('init')) {
@@ -211,6 +211,38 @@ final class WikiCommand extends Command
             ],
             (string) $input->getOption('target'),
         );
+    }
+
+    /**
+     * Detects whether a target option still points at the default wiki target path.
+     *
+     * @param string $target the wiki target option received from the CLI
+     *
+     * @return bool true when the provided path is equivalent to the default wiki target
+     */
+    private function isDefaultWikiTarget(string $target): bool
+    {
+        return $this->normalizeProjectRelativePath($target) === $this->normalizeProjectRelativePath(
+            ProjectCapabilitiesResolverInterface::DEFAULT_WIKI_TARGET
+        );
+    }
+
+    /**
+     * Normalizes a project-relative path for resilient default-option comparisons.
+     *
+     * @param string $path the project-relative path to normalize
+     *
+     * @return string the normalized project-relative path
+     */
+    private function normalizeProjectRelativePath(string $path): string
+    {
+        $normalizedPath = str_replace('\\', '/', $path);
+
+        while (str_starts_with($normalizedPath, './')) {
+            $normalizedPath = substr($normalizedPath, 2);
+        }
+
+        return rtrim($normalizedPath, '/');
     }
 
     /**
