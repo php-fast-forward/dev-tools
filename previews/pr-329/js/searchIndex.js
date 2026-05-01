@@ -3256,6 +3256,11 @@ Search.appendIndex(
             "summary": "Consumes\u0020a\u0020single\u0020top\u002Dlevel\u0020JSON\u0020document\u0020from\u0020a\u0020multi\u002Ddocument\u0020stream.",
             "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_consumeJsonDocument"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AnormalizeStructuredPayload\u0028\u0029",
+            "name": "normalizeStructuredPayload",
+            "summary": "Normalizes\u0020decoded\u0020structured\u0020payloads\u0020produced\u0020by\u0020wrapped\u0020tooling.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_normalizeStructuredPayload"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
             "name": "CompositeContextProcessor",
             "summary": "Applies\u0020multiple\u0020context\u0020processors\u0020in\u0020sequence.",
