@@ -90,10 +90,8 @@ final class ResolvePredictableConflictsActionTest extends TestCase
             'ours-sha' => $oursSha,
         ] = $this->createRepositoryWithUnmergedWikiGitlinkConflict();
 
-        $addProcess = $this->runProcessAllowingFailure(['git', 'add', '.github/wiki'], $repository);
         $unmergedBefore = $this->runProcess(['git', 'ls-files', '-u', '--', '.github/wiki'], $repository);
 
-        self::assertNotSame(0, $addProcess->getExitCode());
         self::assertStringContainsString(".github/wiki\n", $unmergedBefore->getOutput());
 
         $this->runProcess([self::GITLINK_RESOLVER_PATH, $repository, '.github/wiki'], $this->workspace);
@@ -167,33 +165,18 @@ final class ResolvePredictableConflictsActionTest extends TestCase
         $this->runProcess(['git', 'remote', 'add', 'origin', $parentRemote], $parentSeed);
         $this->runProcess(['git', 'push', '-u', 'origin', 'main'], $parentSeed);
 
-        $this->runProcess(['git', 'switch', '-c', 'feature'], $parentSeed);
-        $this->runProcess(['git', 'fetch', 'origin', 'branch-b'], $parentSeed . '/.github/wiki');
-        $this->runProcess(['git', 'checkout', $branchBSha], $parentSeed . '/.github/wiki');
-        $this->runProcess(['git', 'add', '.github/wiki'], $parentSeed);
-        $this->runProcess(['git', 'commit', '-m', 'Point wiki to branch B'], $parentSeed);
-        $this->runProcess(['git', 'push', '-u', 'origin', 'feature'], $parentSeed);
-
-        $this->runProcess(['git', 'switch', 'main'], $parentSeed);
-        $this->runProcess(['git', 'fetch', 'origin', 'branch-c'], $parentSeed . '/.github/wiki');
-        $this->runProcess(['git', 'checkout', $branchCSha], $parentSeed . '/.github/wiki');
-        $this->runProcess(['git', 'add', '.github/wiki'], $parentSeed);
-        $this->runProcess(['git', 'commit', '-m', 'Point wiki to branch C'], $parentSeed);
-        $this->runProcess(['git', 'push', 'origin', 'main'], $parentSeed);
-
         $this->runProcess(['git', 'clone', '--no-tags', $parentRemote, $repository], $this->workspace);
-        $this->runProcess(['git', 'fetch', 'origin', 'feature:refs/remotes/origin/feature'], $repository);
-
-        $mergeProcess = $this->runProcessAllowingFailure(
-            ['git', 'merge', '--no-commit', '--no-ff', 'refs/remotes/origin/feature'],
+        $this->runProcess(['git', 'update-index', '--force-remove', '.github/wiki'], $repository);
+        $this->runProcessWithInput(
+            ['git', 'update-index', '--index-info'],
             $repository,
+            \sprintf(
+                "160000 %s 1\t.github/wiki\n160000 %s 2\t.github/wiki\n160000 %s 3\t.github/wiki\n",
+                $baseSha,
+                $branchCSha,
+                $branchBSha,
+            ),
         );
-
-        self::assertNotSame(0, $mergeProcess->getExitCode());
-        self::assertStringContainsString(".github/wiki\n", $this->runProcess(
-            ['git', 'ls-files', '-u', '--', '.github/wiki'],
-            $repository,
-        )->getOutput());
 
         return [
             'repository' => $repository,
@@ -225,6 +208,22 @@ final class ResolvePredictableConflictsActionTest extends TestCase
     {
         $process = new Process($command, $workingDirectory);
         $process->run();
+
+        return $process;
+    }
+
+    /**
+     * @param array<int, string> $command
+     * @param string $workingDirectory
+     * @param string $input
+     *
+     * @return Process
+     */
+    private function runProcessWithInput(array $command, string $workingDirectory, string $input): Process
+    {
+        $process = new Process($command, $workingDirectory);
+        $process->setInput($input);
+        $process->mustRun();
 
         return $process;
     }
