@@ -162,14 +162,19 @@ Behavior
 - ``--json`` and ``--pretty-json`` keep progress output disabled so the
   structured payload stays clean, even when ``--progress`` is provided.
 - in agent-driven runs outside the Composer test suite, the command also
-  switches to the same structured capture mode automatically so PHPUnit output
-  is buffered instead of interleaving with top-level DevTools log payloads.
+  switches to the same structured capture mode automatically.
 - when structured capture is active and PHPUnit emits agent-reporter JSON, the
-  command exposes a ``phpunit`` object in the log context with ``tool``,
-  ``label``, ``exit_code``, and the reported ``result`` / ``summary`` /
-  ``details`` fields.
+  command stores that payload inside ``output`` while keeping the standard
+  DevTools JSON envelope. ``--json`` and ``--pretty-json`` therefore expose
+  the same structured result, with formatting as the only difference.
 - when structured capture is active but PHPUnit does not emit parseable JSON,
-  the command preserves the raw subprocess text under
-  ``context.phpunit.raw_output`` instead of dropping it.
+  the command preserves the raw subprocess text inside ``output.raw_output``
+  instead of dropping it.
+- when coverage generation or other PHPUnit text appears before the final
+  reporter payload, the command preserves that prelude in
+  ``output.raw_output`` while keeping the main JSON result parseable.
+- when ``--min-coverage`` is used in structured mode, the command appends a
+  ``coverage`` object under ``output`` and flips ``output.result`` to
+  ``failure`` if the threshold is not met.
 - The command fails if minimum coverage is not met (when ``--min-coverage`` is set).
 - The packaged configuration registers the DevTools PHPUnit extension.

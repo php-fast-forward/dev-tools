@@ -240,42 +240,8 @@ final class TestsCommandTest extends TestCase
             Argument::that(static fn(Process $process): bool => str_contains(
                 $process->getCommandLine(),
                 '--no-progress',
-            ) && ! str_contains($process->getCommandLine(), '--colors=always')),
-            false,
-            false,
-            'Running PHPUnit Tests'
-        )->shouldBeCalled();
-        $this->processQueue->run(Argument::type(OutputInterface::class))
-            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
-            static fn(array $context): bool => $context['input'] instanceof InputInterface
-        ))
-            ->shouldBeCalled();
-        $this->logger->log(
-            'info',
-            'PHPUnit tests completed successfully.',
-            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
-        )->shouldBeCalled();
-
-        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function executeWillCaptureStructuredPhpUnitSummaryWhenAgentEnvironmentIsDetected(): void
-    {
-        $this->runtimeEnvironment->isAgentPresent()
-            ->willReturn(true);
-        $this->runtimeEnvironment->isComposerTestRun()
-            ->willReturn(false);
-
-        $this->processQueue->add(
-            Argument::that(static fn(Process $process): bool => str_contains(
-                $process->getCommandLine(),
-                '--no-progress',
-            ) && ! str_contains($process->getCommandLine(), '--colors=always')),
+            ) && ! str_contains($process->getCommandLine(), '--colors=always')
+                && 'fast-forward/dev-tools' === $process->getEnv()['AI_AGENT']),
             false,
             false,
             'Running PHPUnit Tests'
@@ -295,14 +261,100 @@ final class TestsCommandTest extends TestCase
             'info',
             'PHPUnit tests completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
-                && isset($context['phpunit'])
-                && 'phpunit' === $context['phpunit']['tool']
-                && 'Running PHPUnit Tests' === $context['phpunit']['label']
-                && TestsCommand::SUCCESS === $context['phpunit']['exit_code']
-                && 'success' === $context['phpunit']['result']
-                && 5 === $context['phpunit']['summary']['assertions']
-                && ! isset($context['output'])),
+                && isset($context['output'])
+                && 'success' === $context['output']['result']
+                && 5 === $context['output']['summary']['assertions']),
         )->shouldBeCalled();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillCaptureStructuredPhpUnitSummaryWhenAgentEnvironmentIsDetected(): void
+    {
+        $this->runtimeEnvironment->isAgentPresent()
+            ->willReturn(true);
+        $this->runtimeEnvironment->isComposerTestRun()
+            ->willReturn(false);
+
+        $this->processQueue->add(
+            Argument::that(static fn(Process $process): bool => str_contains(
+                $process->getCommandLine(),
+                '--no-progress',
+            ) && ! str_contains($process->getCommandLine(), '--colors=always')
+                && 'fast-forward/dev-tools' === $process->getEnv()['AI_AGENT']),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->will(static function (array $arguments): int {
+                $arguments[0]->write(
+                    "{\n    \"result\": \"success\",\n    \"summary\": {\n        \"assertions\": 5,\n        \"failures\": 0,\n        \"tests\": 2,\n        \"warnings\": 0\n    }\n}\n"
+                );
+
+                return TestsCommand::SUCCESS;
+            })->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'PHPUnit tests completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && isset($context['output'])
+                && 'success' === $context['output']['result']
+                && 5 === $context['output']['summary']['assertions']),
+        )->shouldBeCalled();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillKeepPrettyJsonInsideTheStandardCommandLogOutput(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(true);
+
+        $this->processQueue->add(
+            Argument::that(static fn(Process $process): bool => str_contains(
+                $process->getCommandLine(),
+                '--no-progress',
+            ) && 'fast-forward/dev-tools' === $process->getEnv()['AI_AGENT']),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->will(static function (array $arguments): int {
+                $arguments[0]->write(
+                    "{\n    \"result\": \"success\",\n    \"summary\": {\n        \"assertions\": 5,\n        \"failures\": 0,\n        \"tests\": 2,\n        \"warnings\": 0\n    }\n}\n"
+                );
+
+                return TestsCommand::SUCCESS;
+            })->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'PHPUnit tests completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && isset($context['output'])
+                && 'success' === $context['output']['result']
+                && 5 === $context['output']['summary']['assertions']),
+        )->shouldBeCalled();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -339,11 +391,12 @@ final class TestsCommandTest extends TestCase
             'info',
             'PHPUnit tests completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
-                && isset($context['phpunit'])
-                && 'success' === $context['phpunit']['result']
-                && 5 === $context['phpunit']['summary']['assertions']
-                && 'Generating code coverage report in PHP format ... done [00:00.002]' === $context['phpunit']['raw_output']),
+                && isset($context['output'])
+                && 'success' === $context['output']['result']
+                && 5 === $context['output']['summary']['assertions']
+                && 'Generating code coverage report in PHP format ... done [00:00.002]' === $context['output']['raw_output']),
         )->shouldBeCalled();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -365,26 +418,24 @@ final class TestsCommandTest extends TestCase
             false,
             'Running PHPUnit Tests'
         )->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
-            static fn(array $context): bool => $context['input'] instanceof InputInterface
-        ))->shouldBeCalled();
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->will(static function (array $arguments): int {
                 $arguments[0]->write("PHPUnit 12.5.24 by Sebastian Bergmann.\n\nOK (2 tests, 5 assertions)\n");
 
                 return TestsCommand::SUCCESS;
             })->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
         $this->logger->log(
             'info',
             'PHPUnit tests completed successfully.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
-                && isset($context['phpunit'])
-                && 'phpunit' === $context['phpunit']['tool']
-                && 'Running PHPUnit Tests' === $context['phpunit']['label']
-                && TestsCommand::SUCCESS === $context['phpunit']['exit_code']
-                && "PHPUnit 12.5.24 by Sebastian Bergmann.\n\nOK (2 tests, 5 assertions)" === $context['phpunit']['raw_output']
-                && ! isset($context['output'])),
+                && isset($context['output'])
+                && 'success' === $context['output']['result']
+                && "PHPUnit 12.5.24 by Sebastian Bergmann.\n\nOK (2 tests, 5 assertions)" === $context['output']['raw_output']),
         )->shouldBeCalled();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -519,6 +570,54 @@ final class TestsCommandTest extends TestCase
                 && 75 === $context['covered_lines']
                 && 100 === $context['total_lines']),
         )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillEmitStructuredCoverageFailurePayloadWhenMinimumCoverageIsNotMet(): void
+    {
+        $coverageReportPath = getcwd() . '/.dev-tools/cache/phpunit/coverage.php';
+
+        $this->runtimeEnvironment->isAgentPresent()
+            ->willReturn(true);
+        $this->runtimeEnvironment->isComposerTestRun()
+            ->willReturn(false);
+        $this->input->getOption('min-coverage')
+            ->willReturn('80');
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willReturn(new CoverageSummary(75, 100));
+        $this->processQueue->add(
+            Argument::type(Process::class),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->will(static function (array $arguments): int {
+                $arguments[0]->write(
+                    "{\n    \"result\": \"success\",\n    \"summary\": {\n        \"assertions\": 5,\n        \"failures\": 0,\n        \"tests\": 2,\n        \"warnings\": 0\n    }\n}\n"
+                );
+
+                return TestsCommand::SUCCESS;
+            })->shouldBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error(
+            'Minimum line coverage of 80.00% was not met. Current coverage: 75.00% (75/100 lines).',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && isset($context['output'])
+                && 'failure' === $context['output']['result']
+                && 80.0 === (float) $context['output']['coverage']['minimum']
+                && 75.0 === (float) $context['output']['coverage']['line_coverage']
+                && 'Minimum line coverage of 80.00% was not met. Current coverage: 75.00% (75/100 lines).' === $context['output']['message']),
+        )->shouldBeCalled();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
     }
