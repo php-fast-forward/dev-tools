@@ -75,6 +75,62 @@ final class CommandOutputProcessorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function processWillNormalizeRectorChangedFilesWhenNoFilesActuallyChanged(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "{\"totals\":{\"changed_files\":0,\"errors\":0},\"changed_files\":[\"src/Foo.php\",\"src/Bar.php\"]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'totals' => [
+                'changed_files' => 0,
+                'errors' => 0,
+            ],
+            'changed_files' => [],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function processWillNormalizeRectorChangedFilesUsingOnlyDiffEntries(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "{\"totals\":{\"changed_files\":1,\"errors\":0},\"changed_files\":[\"src/Foo.php\",\"src/Bar.php\"],\"file_diffs\":[{\"file\":\"src/Bar.php\",\"diff\":\"@@\"}]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'totals' => [
+                'changed_files' => 1,
+                'errors' => 0,
+            ],
+            'changed_files' => ['src/Bar.php'],
+            'file_diffs' => [
+                [
+                    'file' => 'src/Bar.php',
+                    'diff' => '@@',
+                ],
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function processWillDecodeMultipleJsonBufferedOutputsIntoAList(): void
     {
         $processor = new CommandOutputProcessor();

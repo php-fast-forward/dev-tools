@@ -98,7 +98,7 @@ final class CommandOutputProcessor implements ContextProcessorInterface
         }
 
         try {
-            return json_decode($trimmedContent, true);
+            return $this->normalizeStructuredPayload(json_decode($trimmedContent, true));
         } catch (JsonException) {
         }
 
@@ -140,7 +140,7 @@ final class CommandOutputProcessor implements ContextProcessorInterface
             }
 
             try {
-                $decodedDocuments[] = json_decode($document, true);
+                $decodedDocuments[] = $this->normalizeStructuredPayload(json_decode($document, true));
             } catch (JsonException) {
                 return null;
             }
@@ -218,5 +218,53 @@ final class CommandOutputProcessor implements ContextProcessorInterface
         }
 
         return null;
+    }
+
+    /**
+     * Normalizes decoded structured payloads produced by wrapped tooling.
+     *
+     * @param mixed $payload the decoded payload
+     *
+     * @return mixed the normalized payload
+     */
+    private function normalizeStructuredPayload(mixed $payload): mixed
+    {
+        if (! \is_array($payload)) {
+            return $payload;
+        }
+
+        if (! isset($payload['totals']) || ! \is_array($payload['totals'])) {
+            return $payload;
+        }
+
+        $changedFilesTotal = $payload['totals']['changed_files'] ?? null;
+
+        if (! \is_int($changedFilesTotal)) {
+            return $payload;
+        }
+
+        if (0 === $changedFilesTotal) {
+            $payload['changed_files'] = [];
+
+            return $payload;
+        }
+
+        if (! isset($payload['file_diffs']) || ! \is_array($payload['file_diffs'])) {
+            return $payload;
+        }
+
+        $changedFiles = [];
+
+        foreach ($payload['file_diffs'] as $fileDiff) {
+            if (! \is_array($fileDiff) || ! isset($fileDiff['file']) || ! \is_string($fileDiff['file'])) {
+                continue;
+            }
+
+            $changedFiles[$fileDiff['file']] = $fileDiff['file'];
+        }
+
+        $payload['changed_files'] = array_values($changedFiles);
+
+        return $payload;
     }
 }
