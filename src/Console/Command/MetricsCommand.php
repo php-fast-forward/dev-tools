@@ -135,7 +135,7 @@ final class MetricsCommand extends Command
         $exclude = (string) $input->getOption('exclude');
         $junit = $input->getOption('junit');
 
-        $this->intermediateInfo('Running code metrics analysis...', $input);
+        $this->log('Running code metrics analysis...', $input);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')

@@ -109,7 +109,7 @@ final class StandardsCommand extends Command
         $commands = [];
         $fix = (bool) $input->getOption('fix');
 
-        $this->intermediateInfo('Running code standards checks...', $input);
+        $this->log('Running code standards checks...', $input);
 
         foreach (['refactor', 'phpdoc', 'code-style', 'reports'] as $command) {
             $commands[] = $command;

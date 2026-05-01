@@ -152,7 +152,7 @@ final class PhpDocCommand extends Command
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
         $cacheEnabled = $this->isCacheEnabled($input);
 
-        $this->intermediateInfo('Checking and fixing PHPDocs...', $input);
+        $this->log('Checking and fixing PHPDocs...', $input);
 
         $this->ensureDocHeaderExists($input);
 
@@ -267,6 +267,6 @@ final class PhpDocCommand extends Command
             return;
         }
 
-        $this->intermediateInfo('Created .docheader from repository template.', $input);
+        $this->log('Created .docheader from repository template.', $input);
     }
 }

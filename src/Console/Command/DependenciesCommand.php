@@ -150,7 +150,7 @@ final class DependenciesCommand extends Command
             );
         }
 
-        $this->intermediateInfo('Running dependency analysis...', $input);
+        $this->log('Running dependency analysis...', $input);
 
         $this->processQueue->add(
             process: $this->getComposerDependencyAnalyserCommand($input),
