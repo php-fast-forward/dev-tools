@@ -3252,6 +3252,14 @@ It must contain a <code>SebastianBergmann\CodeCoverage\CodeCoverage</code>
 packaged <code>phpunit.xml</code>
  and wants to preserve the same runtime behavior.</p>
 
+            
+    <p>The packaged <code>phpunit.xml</code>
+ also registers
+<code>Ergebnis\PHPUnit\AgentReporter\Extension</code>
+ so agent-driven PHPUnit runs can
+emit compact JSON summaries without changing the human-oriented default for
+normal terminal runs.</p>
+
     </section>
 
     </section>

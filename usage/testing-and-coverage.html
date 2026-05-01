@@ -3212,19 +3212,21 @@ composer tests --no-cache --bootstrap=tests/bootstrap.php</code></pre>
 
     </section>
 
-            <section class="section " id="built-in-phpunit-extension">
-            <h2>Built-In PHPUnit Extension</h2>
+            <section class="section " id="built-in-phpunit-extensions">
+            <h2>Built-In PHPUnit Extensions</h2>
 
             
     <p>The packaged <code>phpunit.xml</code>
- registers
-<code>FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension</code>
-.</p>
+ registers:</p>
 
             
-    <p>That extension wires together:</p>
 
-            
+<ul>
+    <li class="dash">
+    <p><code>FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension</code>
+, which
+wires together:</p>
+
 
 <ul>
     <li class="dash"><code>FastForward\DevTools\PhpUnit\Event\TestSuite\ByPassfinalsStartedSubscriber</code>
@@ -3240,6 +3242,14 @@ events in memory;</li>
 ,
 which sends a desktop notification after the run when the local platform
 supports it.</li>
+
+</ul>
+</li>
+
+    <li class="dash"><code>Ergebnis\PHPUnit\AgentReporter\Extension</code>
+, which replaces PHPUnit&#039;s
+default verbose terminal output with a compact JSON summary when an agent
+runtime is detected.</li>
 
 </ul>
 

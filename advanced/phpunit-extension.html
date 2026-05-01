@@ -3140,6 +3140,8 @@
  is intentionally opinionated. Besides enabling
 strict PHPUnit flags, it registers
 <code>FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension</code>
+ and
+<code>Ergebnis\PHPUnit\AgentReporter\Extension</code>
 .</p>
 
             <section class="section " id="runtime-chain">
@@ -3165,6 +3167,10 @@ emitted during the run.</li>
 
 builds a summary notification and sends it when the run finishes.</li>
 
+    <li value="5"><code>Ergebnis\PHPUnit\AgentReporter\Extension</code>
+ replaces PHPUnit&#039;s normal
+output with a compact JSON report when an agent runtime is detected.</li>
+
 </ol>
 
     </section>
@@ -3181,6 +3187,9 @@ needs it;</li>
     <li class="dash">developers get a quick desktop summary without reading the full terminal
 scrollback;</li>
 
+    <li class="dash">agent-driven runs consume far less terminal context while still keeping
+failure details and PHPUnit exit semantics intact;</li>
+
     <li class="dash">event counts are available to the notification layer without adding ad-hoc
 test code.</li>
 
@@ -3195,9 +3204,9 @@ test code.</li>
             
     <p>If a consumer project replaces the packaged <code>phpunit.xml</code>
 , it also replaces
-this extension unless it re-registers it manually. That is usually fine, but
-it explains why notifications or BypassFinals behavior may disappear after a
-local override.</p>
+these extensions unless it re-registers them manually. That is usually fine,
+but it explains why notifications, BypassFinals behavior, or compact
+agent-oriented output may disappear after a local override.</p>
 
             
         
