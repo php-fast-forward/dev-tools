@@ -18,7 +18,7 @@ create them on day one.
      - Fallback Rector configuration.
    * - ``phpunit.xml``
      - ``tests``
-     - Registers ``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension``.
+     - Registers ``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension`` and ``Ergebnis\PHPUnit\AgentReporter\Extension``.
    * - ``.php-cs-fixer.dist.php``
      - ``phpdoc``
      - Controls header and PHPDoc fixer behavior.

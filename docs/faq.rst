@@ -70,8 +70,10 @@ Why did desktop notifications stop appearing after I customized PHPUnit?
 ------------------------------------------------------------------------
 
 If you replaced the packaged ``phpunit.xml``, you may also have removed
-``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension``. Re-add the
-extension if you want the notification behavior back.
+``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension`` and
+``Ergebnis\PHPUnit\AgentReporter\Extension``. Re-add them if you want the
+notification behavior, BypassFinals support, and compact agent-oriented output
+back.
 
 Is ``AddMissingClassPhpDocRector`` enabled by default?
 ------------------------------------------------------

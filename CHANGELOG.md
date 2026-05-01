@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Register ``ergebnis/phpunit-agent-reporter`` in the packaged ``phpunit.xml`` so AI agents receive compact PHPUnit JSON summaries without changing consumer overrides manually (#327)
 - Let `wiki`, `docs`, `tests`, `metrics`, and `reports` skip gracefully for guide-only repositories while keeping wiki/report workflows and published preview links aligned with the artifacts that were actually generated (#325)
 
 ## [1.25.0] - 2026-05-01

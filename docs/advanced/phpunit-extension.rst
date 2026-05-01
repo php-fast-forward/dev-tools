@@ -3,7 +3,8 @@ PHPUnit Extension
 
 The packaged ``phpunit.xml`` is intentionally opinionated. Besides enabling
 strict PHPUnit flags, it registers
-``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension``.
+``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension`` and
+``Ergebnis\PHPUnit\AgentReporter\Extension``.
 
 Runtime Chain
 -------------
@@ -16,6 +17,8 @@ Runtime Chain
    emitted during the run.
 4. ``FastForward\DevTools\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber``
    builds a summary notification and sends it when the run finishes.
+5. ``Ergebnis\PHPUnit\AgentReporter\Extension`` replaces PHPUnit's normal
+   output with a compact JSON report when an agent runtime is detected.
 
 Why This Helps Consumer Projects
 --------------------------------
@@ -24,6 +27,8 @@ Why This Helps Consumer Projects
   needs it;
 - developers get a quick desktop summary without reading the full terminal
   scrollback;
+- agent-driven runs consume far less terminal context while still keeping
+  failure details and PHPUnit exit semantics intact;
 - event counts are available to the notification layer without adding ad-hoc
   test code.
 
@@ -31,9 +36,9 @@ What to Remember When Overriding ``phpunit.xml``
 ------------------------------------------------
 
 If a consumer project replaces the packaged ``phpunit.xml``, it also replaces
-this extension unless it re-registers it manually. That is usually fine, but
-it explains why notifications or BypassFinals behavior may disappear after a
-local override.
+these extensions unless it re-registers them manually. That is usually fine,
+but it explains why notifications, BypassFinals behavior, or compact
+agent-oriented output may disappear after a local override.
 
 .. note::
 

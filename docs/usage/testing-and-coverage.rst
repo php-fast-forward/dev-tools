@@ -40,21 +40,24 @@ When ``--coverage=.dev-tools/coverage`` is used, PHPUnit writes:
 - ``.dev-tools/coverage/clover.xml``
 - ``.dev-tools/coverage/coverage.php``
 
-Built-In PHPUnit Extension
---------------------------
+Built-In PHPUnit Extensions
+---------------------------
 
-The packaged ``phpunit.xml`` registers
-``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension``.
+The packaged ``phpunit.xml`` registers:
 
-That extension wires together:
+- ``FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension``, which
+  wires together:
 
-- ``FastForward\DevTools\PhpUnit\Event\TestSuite\ByPassfinalsStartedSubscriber``,
-  which enables ``DG\BypassFinals`` when the suite starts;
-- ``FastForward\DevTools\PhpUnit\Event\EventTracer``, which records PHPUnit
-  events in memory;
-- ``FastForward\DevTools\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber``,
-  which sends a desktop notification after the run when the local platform
-  supports it.
+  - ``FastForward\DevTools\PhpUnit\Event\TestSuite\ByPassfinalsStartedSubscriber``,
+    which enables ``DG\BypassFinals`` when the suite starts;
+  - ``FastForward\DevTools\PhpUnit\Event\EventTracer``, which records PHPUnit
+    events in memory;
+  - ``FastForward\DevTools\PhpUnit\Event\TestSuite\JoliNotifExecutionFinishedSubscriber``,
+    which sends a desktop notification after the run when the local platform
+    supports it.
+- ``Ergebnis\PHPUnit\AgentReporter\Extension``, which replaces PHPUnit's
+  default verbose terminal output with a compact JSON summary when an agent
+  runtime is detected.
 
 Programmatic Coverage Access
 -----------------------------

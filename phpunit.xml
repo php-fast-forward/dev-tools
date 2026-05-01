@@ -10,6 +10,7 @@
          failOnRisky="true"
          failOnWarning="true">
     <extensions>
+        <bootstrap class="Ergebnis\PHPUnit\AgentReporter\Extension" />
         <bootstrap class="FastForward\DevTools\PhpUnit\Runner\Extension\DevToolsExtension" />
     </extensions>
 </phpunit>
