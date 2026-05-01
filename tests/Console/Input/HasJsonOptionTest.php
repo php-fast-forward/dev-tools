@@ -20,9 +20,11 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Input;
 
 use FastForward\DevTools\Console\Input\HasJsonOption;
+use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,6 +32,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use function Safe\putenv;
 
 #[CoversTrait(HasJsonOption::class)]
+#[UsesClass(ContainerFactory::class)]
 final class HasJsonOptionTest extends TestCase
 {
     use ProphecyTrait;
@@ -51,6 +54,7 @@ final class HasJsonOptionTest extends TestCase
      */
     protected function setUp(): void
     {
+        ContainerFactory::reset();
         $this->server = $_SERVER;
         $this->environment = $_ENV;
         $this->composerTestsAreRunning = getenv('COMPOSER_TESTS_ARE_RUNNING');
@@ -65,6 +69,7 @@ final class HasJsonOptionTest extends TestCase
      */
     protected function tearDown(): void
     {
+        ContainerFactory::reset();
         $_SERVER = $this->server;
         $_ENV = $this->environment;
 
@@ -98,10 +103,18 @@ final class HasJsonOptionTest extends TestCase
         $command = new class ($runtimeEnvironment->reveal()) {
             use HasJsonOption;
 
+            /**
+             * @param RuntimeEnvironmentInterface $runtimeEnvironment
+             */
             public function __construct(
                 private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
             ) {}
 
+            /**
+             * @param InputInterface $input
+             *
+             * @return bool
+             */
             public function isStructured(InputInterface $input): bool
             {
                 return $this->isJsonOutput($input);
@@ -128,6 +141,11 @@ final class HasJsonOptionTest extends TestCase
         $command = new class {
             use HasJsonOption;
 
+            /**
+             * @param InputInterface $input
+             *
+             * @return bool
+             */
             public function isStructured(InputInterface $input): bool
             {
                 return $this->isJsonOutput($input);

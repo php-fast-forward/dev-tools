@@ -24,25 +24,24 @@ use FastForward\DevTools\Composer\Command\ProxyCommand;
 use FastForward\DevTools\Composer\DevToolsPluginInterface;
 use FastForward\DevTools\Console\Command\FixtureWithoutAsCommand;
 use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Container\ContainerFactory;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use Psr\Container\ContainerInterface;
-use ReflectionProperty;
+use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
 
 #[CoversClass(DevToolsCommandProvider::class)]
+#[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevTools::class)]
 #[UsesClass(ProxyCommand::class)]
 final class DevToolsCommandProviderTest extends TestCase
 {
     use ProphecyTrait;
 
-    private ObjectProphecy $container;
-
-    private ObjectProphecy $devTools;
+    private ObjectProphecy $commandLoader;
 
     private ObjectProphecy $plugin;
 
@@ -53,16 +52,20 @@ final class DevToolsCommandProviderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->container = $this->prophesize(ContainerInterface::class);
-        $this->devTools = $this->prophesize(DevTools::class);
+        ContainerFactory::reset();
+        $this->commandLoader = $this->prophesize(CommandLoaderInterface::class);
         $this->plugin = $this->prophesize(DevToolsPluginInterface::class);
 
-        $this->container->get(DevTools::class)
-            ->willReturn($this->devTools->reveal())
-            ->shouldBeCalledOnce();
-
-        $this->devTools->all()
-            ->willReturn([])->shouldBeCalledOnce();
+        $this->commandLoader->getNames()
+            ->willReturn([]);
+        $this->commandLoader->has('help')
+            ->willReturn(false);
+        $this->commandLoader->has('list')
+            ->willReturn(false);
+        $this->commandLoader->has('complete')
+            ->willReturn(false);
+        $this->commandLoader->has('_complete')
+            ->willReturn(false);
 
         $this->plugin->isRegisteredCommand(null)
             ->willReturn(false);
@@ -89,8 +92,15 @@ final class DevToolsCommandProviderTest extends TestCase
             'plugin' => $this->plugin->reveal(),
         ]);
 
-        $property = new ReflectionProperty(DevTools::class, 'container');
-        $property->setValue(null, $this->container->reveal());
+        ContainerFactory::set(CommandLoaderInterface::class, $this->commandLoader->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        ContainerFactory::reset();
     }
 
     /**
@@ -117,10 +127,13 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->devTools->all()
-            ->willReturn([
-                'agents' => $symfonyCommand,
-            ])
+        $this->commandLoader->getNames()
+            ->willReturn(['agents']);
+        $this->commandLoader->has('agents')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('agents')
+            ->willReturn($symfonyCommand)
             ->shouldBeCalledOnce();
 
         $commands = array_values($this->commandProvider->getCommands());
@@ -144,12 +157,18 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->devTools->all()
-            ->willReturn([
-                'reports:tests' => $symfonyCommand,
-                'tests' => $symfonyCommand,
-            ])
+        $this->commandLoader->getNames()
+            ->willReturn(['reports:tests', 'tests']);
+        $this->commandLoader->has('reports:tests')
+            ->willReturn(true)
             ->shouldBeCalledOnce();
+        $this->commandLoader->has('tests')
+            ->shouldNotBeCalled();
+        $this->commandLoader->get('reports:tests')
+            ->willReturn($symfonyCommand)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('tests')
+            ->shouldNotBeCalled();
 
         $commands = array_values($this->commandProvider->getCommands());
         $proxyCommand = $commands[0];
@@ -172,12 +191,18 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->devTools->all()
-            ->willReturn([
-                'dev-tools:standards' => $symfonyCommand,
-                'standards' => $symfonyCommand,
-            ])
+        $this->commandLoader->getNames()
+            ->willReturn(['dev-tools:standards', 'standards']);
+        $this->commandLoader->has('dev-tools:standards')
+            ->willReturn(true)
             ->shouldBeCalledOnce();
+        $this->commandLoader->has('standards')
+            ->shouldNotBeCalled();
+        $this->commandLoader->get('dev-tools:standards')
+            ->willReturn($symfonyCommand)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('standards')
+            ->shouldNotBeCalled();
 
         $proxyCommand = array_values($this->commandProvider->getCommands())[0];
 
@@ -198,12 +223,18 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->devTools->all()
-            ->willReturn([
-                'dev-tools:self-update' => $symfonyCommand,
-                'self-update' => $symfonyCommand,
-            ])
+        $this->commandLoader->getNames()
+            ->willReturn(['dev-tools:self-update', 'self-update']);
+        $this->commandLoader->has('dev-tools:self-update')
+            ->willReturn(true)
             ->shouldBeCalledOnce();
+        $this->commandLoader->has('self-update')
+            ->shouldNotBeCalled();
+        $this->commandLoader->get('dev-tools:self-update')
+            ->willReturn($symfonyCommand)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('self-update')
+            ->shouldNotBeCalled();
 
         $proxyCommand = array_values($this->commandProvider->getCommands())[0];
 
@@ -224,10 +255,13 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->devTools->all()
-            ->willReturn([
-                'install' => $symfonyCommand,
-            ])
+        $this->commandLoader->getNames()
+            ->willReturn(['install']);
+        $this->commandLoader->has('install')
+            ->willReturn(true)
+            ->shouldBeCalledOnce();
+        $this->commandLoader->get('install')
+            ->willReturn($symfonyCommand)
             ->shouldBeCalledOnce();
 
         self::assertSame([], $this->commandProvider->getCommands());

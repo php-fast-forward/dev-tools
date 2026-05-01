@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
@@ -34,7 +33,6 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use InvalidArgumentException;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
@@ -82,8 +80,6 @@ final class TestsCommand extends Command
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
-     * @param RuntimeEnvironmentInterface $runtimeEnvironment the runtime environment capability resolver
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
@@ -94,8 +90,6 @@ final class TestsCommand extends Command
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
-        private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

@@ -159,6 +159,15 @@ final class RuntimeEnvironmentTest extends TestCase
      * @return void
      */
     #[Test]
+    public function isComposerTestRunWillReturnTrueDuringPhpUnitRuntime(): void
+    {
+        self::assertTrue($this->runtimeEnvironment->isComposerTestRun());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function isAgentPresentWillReturnWhetherKnownAgentVariablesExist(): void
     {
         $this->environment->get()

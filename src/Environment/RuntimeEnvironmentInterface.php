@@ -44,7 +44,7 @@ interface RuntimeEnvironmentInterface
     public function isCi(): bool;
 
     /**
-     * Returns whether the Composer test suite runtime flag is enabled.
+     * Returns whether the current process runs inside the Composer or PHPUnit test runtime.
      */
     public function isComposerTestRun(): bool;
 

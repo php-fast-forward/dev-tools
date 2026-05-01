@@ -66,10 +66,14 @@ final readonly class RuntimeEnvironment implements RuntimeEnvironmentInterface
     }
 
     /**
-     * Returns whether the Composer test suite runtime flag is enabled.
+     * Returns whether the current process runs inside the Composer or PHPUnit test runtime.
      */
     public function isComposerTestRun(): bool
     {
+        if (\defined('PHPUNIT_COMPOSER_INSTALL')) {
+            return true;
+        }
+
         return $this->isEnabled('COMPOSER_TESTS_ARE_RUNNING');
     }
 

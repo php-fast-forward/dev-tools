@@ -20,9 +20,9 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\ServiceProvider;
 
 use DI\Container;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
-use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Interop\Container\ServiceProviderInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;

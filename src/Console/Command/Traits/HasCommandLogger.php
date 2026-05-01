@@ -19,15 +19,16 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command\Traits;
 
+use FastForward\DevTools\Container\ContainerFactory;
 use LogicException;
 use Psr\Log\LoggerInterface;
 
 /**
  * Resolves the logger expected by command result helper traits.
  *
- * The consuming command is expected to expose an initialized `$logger`
- * property so reusable traits can log without coupling themselves to a
- * specific constructor signature.
+ * The consuming command MAY expose an initialized `$logger` property. When it
+ * does not, the trait SHALL resolve the shared logger from the DevTools
+ * container so reusable traits can stay decoupled from constructor wiring.
  */
 trait HasCommandLogger
 {
@@ -38,15 +39,11 @@ trait HasCommandLogger
      */
     public function getLogger(): LoggerInterface
     {
-        if (! property_exists($this, 'logger') || null === $this->logger) {
-            throw new LogicException(\sprintf(
-                'Commands using %s MUST expose an initialized $logger property with an instance of %s.',
-                LogsCommandResults::class,
-                LoggerInterface::class,
-            ));
+        if (property_exists($this, 'logger') && $this->logger instanceof LoggerInterface) {
+            return $this->logger;
         }
 
-        if (! $this->logger instanceof LoggerInterface) {
+        if (property_exists($this, 'logger') && null !== $this->logger) {
             throw new LogicException(\sprintf(
                 'Commands using %s MUST expose a %s instance on the $logger property.',
                 LogsCommandResults::class,
@@ -54,6 +51,16 @@ trait HasCommandLogger
             ));
         }
 
-        return $this->logger;
+        $logger = ContainerFactory::get(LoggerInterface::class);
+
+        if (! $logger instanceof LoggerInterface) {
+            throw new LogicException(\sprintf(
+                'Commands using %s MUST resolve a %s instance from the shared container.',
+                LogsCommandResults::class,
+                LoggerInterface::class,
+            ));
+        }
+
+        return $logger;
     }
 }

@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\TestsCommand;
+use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
@@ -55,6 +56,7 @@ use function Safe\getcwd;
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(BootstrapShimGenerator::class)]
 #[UsesClass(CoverageSummary::class)]
+#[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -92,6 +94,7 @@ final class TestsCommandTest extends TestCase
      */
     protected function setUp(): void
     {
+        ContainerFactory::reset();
         $this->coverageSummaryLoader = $this->prophesize(CoverageSummaryLoaderInterface::class);
         $this->composerJson = $this->prophesize(ComposerJsonInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
@@ -112,8 +115,6 @@ final class TestsCommandTest extends TestCase
             new ProcessBuilder(),
             $this->processQueue->reveal(),
             $this->projectCapabilitiesResolver->reveal(),
-            $this->runtimeEnvironment->reveal(),
-            $this->logger->reveal(),
         );
 
         $this->composerJson->getAutoload('psr-4')
@@ -133,6 +134,8 @@ final class TestsCommandTest extends TestCase
             ->willReturn(false);
         $this->runtimeEnvironment->isComposerTestRun()
             ->willReturn(true);
+        ContainerFactory::set(RuntimeEnvironmentInterface::class, $this->runtimeEnvironment->reveal());
+        ContainerFactory::set(LoggerInterface::class, $this->logger->reveal());
         $this->fileLocator->locate(TestsCommand::CONFIG)->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
         $this->filesystem->getAbsolutePath('./vendor/autoload.php')
             ->willReturn(getcwd() . '/vendor/autoload.php');
@@ -157,6 +160,14 @@ final class TestsCommandTest extends TestCase
 
         $this->input->getOption('no-cache')
             ->willReturn(false);
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        ContainerFactory::reset();
     }
 
     /**

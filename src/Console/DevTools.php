@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console;
 
 use FastForward\DevTools\Console\Command\SelfUpdateCommand;
+use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -27,8 +28,6 @@ use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
-use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
-use DI\Container;
 use Override;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
@@ -64,11 +63,6 @@ final class DevTools extends Application
      * @var list<string>
      */
     private const array RAW_OUTPUT_COMMANDS = ['changelog:next-version', 'changelog:show'];
-
-    /**
-     * @var ContainerInterface holds the static container instance for global access within the DevTools context
-     */
-    private static ?ContainerInterface $container = null;
 
     /**
      * Initializes the DevTools global context and dependency graph.
@@ -177,7 +171,7 @@ final class DevTools extends Application
      */
     public static function create(): self
     {
-        return self::getContainer()->get(self::class);
+        return ContainerFactory::get(self::class);
     }
 
     /**
@@ -185,12 +179,7 @@ final class DevTools extends Application
      */
     public static function getContainer(): ContainerInterface
     {
-        if (! self::$container instanceof ContainerInterface) {
-            $serviceProvider = new DevToolsServiceProvider();
-            self::$container = new Container($serviceProvider->getFactories());
-        }
-
-        return self::$container;
+        return ContainerFactory::create();
     }
 
     /**
