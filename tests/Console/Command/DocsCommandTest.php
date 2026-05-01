@@ -290,6 +290,38 @@ final class DocsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--cache-folder', '/repo/.dev-tools/cache/phpdoc')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(DocsCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->log(
+            'info',
+            'API documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWithNoCacheWillSkipPhpDocumentorCacheFolder(): void
     {
         $this->input->getOption('no-cache')

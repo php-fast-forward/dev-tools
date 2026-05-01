@@ -183,6 +183,51 @@ final class WikiCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument(
+            '--template',
+            DevToolsPathResolver::getPreferredVendorPath('vendor/saggre/phpdocumentor-markdown/themes/markdown')
+        )
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument(
+            '--cache-folder',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC)
+        )
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(WikiCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->log(
+            'info',
+            'Wiki documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWithNoCacheWillSkipPhpDocumentorCacheFolder(): void
     {
         $this->input->getOption('no-cache')

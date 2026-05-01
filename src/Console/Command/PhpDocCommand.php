@@ -152,11 +152,9 @@ final class PhpDocCommand extends Command
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
         $cacheEnabled = $this->isCacheEnabled($input);
 
-        $this->logger->info('Checking and fixing PHPDocs...', [
-            'input' => $input,
-        ]);
+        $this->intermediateInfo('Checking and fixing PHPDocs...', $input);
 
-        $this->ensureDocHeaderExists();
+        $this->ensureDocHeaderExists($input);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -231,9 +229,11 @@ final class PhpDocCommand extends Command
      * The method MUST query the local filesystem. If the file is missing, it SHOULD copy
      * the tool template into the root folder.
      *
+     * @param InputInterface $input the originating command input
+     *
      * @return void
      */
-    private function ensureDocHeaderExists(): void
+    private function ensureDocHeaderExists(InputInterface $input): void
     {
         $support = $this->composer->getSupport();
 
@@ -265,6 +265,6 @@ final class PhpDocCommand extends Command
             return;
         }
 
-        $this->logger->info('Created .docheader from repository template.');
+        $this->intermediateInfo('Created .docheader from repository template.', $input);
     }
 }

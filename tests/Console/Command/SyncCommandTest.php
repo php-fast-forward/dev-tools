@@ -164,10 +164,8 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting dev-tools synchronization...', Argument::that(
-            static fn(array $context): bool => $context['input'] instanceof InputInterface
-        ))
-            ->shouldBeCalled();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Dev-tools synchronization completed successfully.',

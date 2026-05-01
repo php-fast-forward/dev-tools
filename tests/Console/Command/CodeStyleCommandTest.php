@@ -122,7 +122,9 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running code style checks and fixes...')
+        $this->logger->info('Running code style checks and fixes...', Argument::that(
+            fn(array $context): bool => $this->input->reveal() === $context['input']
+        ))
             ->shouldBeCalled();
         $this->logger->log(
             'info',
@@ -147,7 +149,9 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Running code style checks and fixes...')
+        $this->logger->info('Running code style checks and fixes...', Argument::that(
+            fn(array $context): bool => $this->input->reveal() === $context['input']
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Code style checks failed.',
@@ -180,8 +184,8 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running code style checks and fixes...')
-            ->shouldBeCalled();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Code style checks completed successfully.',

@@ -201,7 +201,9 @@ final class PhpDocCommandTest extends TestCase
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->info('Created .docheader from repository template.')
+        $this->logger->info('Created .docheader from repository template.', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->log(
             'info',
@@ -289,6 +291,14 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->log(
+            'info',
+            'PHPDoc checks completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }

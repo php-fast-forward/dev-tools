@@ -140,11 +140,7 @@ final class WikiCommand extends Command
             return $this->initializeWikiSubmodule($input, $target, $processOutput);
         }
 
-        if (! $jsonOutput) {
-            $this->logger->info('Generating wiki documentation...', [
-                'input' => $input,
-            ]);
-        }
+        $this->intermediateInfo('Generating wiki documentation...', $input);
 
         $projectCapabilities = $this->projectCapabilitiesResolver->resolve(wikiTarget: $target);
 

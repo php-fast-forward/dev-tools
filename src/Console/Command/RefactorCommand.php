@@ -120,9 +120,7 @@ final class RefactorCommand extends Command
         $fix = (bool) $input->getOption('fix');
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
-        $this->logger->info('Running Rector for code refactoring...', [
-            'input' => $input,
-        ]);
+        $this->intermediateInfo('Running Rector for code refactoring...', $input);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')

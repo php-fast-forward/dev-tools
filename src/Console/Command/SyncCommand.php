@@ -112,9 +112,7 @@ final class SyncCommand extends Command
         ];
         $allowDetached = ! $dryRun && ! $check && ! $interactive;
 
-        $this->logger->info('Starting dev-tools synchronization...', [
-            'input' => $input,
-        ]);
+        $this->intermediateInfo('Starting dev-tools synchronization...', $input);
 
         $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);
         $this->queueDevToolsCommand(['funding', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);

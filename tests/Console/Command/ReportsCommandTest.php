@@ -152,10 +152,8 @@ final class ReportsCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(ReportsCommand::FAILURE)
             ->shouldBeCalledOnce();
-        $this->logger->info('Generating frontpage for Fast Forward documentation...', Argument::that(
-            static fn(array $context): bool => $context['input'] instanceof InputInterface
-        ))
-            ->shouldBeCalled();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
         $this->logger->error(
             'Documentation reports generation failed.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface

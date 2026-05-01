@@ -155,9 +155,7 @@ final class DocsCommand extends Command
             $template = DevToolsPathResolver::getPreferredVendorPath(self::DEFAULT_TEMPLATE);
         }
 
-        $this->logger->info('Generating API documentation...', [
-            'input' => $input,
-        ]);
+        $this->intermediateInfo('Generating API documentation...', $input);
 
         if (
             ! $projectCapabilities->hasGuideDirectory()

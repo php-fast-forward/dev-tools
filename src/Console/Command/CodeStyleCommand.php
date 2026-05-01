@@ -121,7 +121,7 @@ final class CodeStyleCommand extends Command
         $fix = (bool) $input->getOption('fix');
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
-        $this->logger->info('Running code style checks and fixes...');
+        $this->intermediateInfo('Running code style checks and fixes...', $input);
 
         $composerUpdate = $this->processBuilder
             ->withArgument('--lock')

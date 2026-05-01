@@ -35,6 +35,28 @@ trait LogsCommandResults
     use HasCommandLogger;
 
     /**
+     * Logs a non-terminal informational message unless structured JSON output is active.
+     *
+     * @param string $message the progress message
+     * @param InputInterface $input the originating command input
+     * @param array<string, mixed> $context optional extra log context
+     *
+     * @return void
+     */
+    private function intermediateInfo(string $message, InputInterface $input, array $context = []): void
+    {
+        if (method_exists($this, 'isJsonOutput') && $this->isJsonOutput($input)) {
+            return;
+        }
+
+        $this->getLogger()
+            ->info($message, [
+                'input' => $input,
+                ...$context,
+            ]);
+    }
+
+    /**
      * Logs an informational command message at notice level.
      *
      * @param string $message the notice message

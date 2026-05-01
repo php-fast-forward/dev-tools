@@ -129,9 +129,7 @@ final class ReportsCommand extends Command
         $coveragePath = (string) $input->getOption('coverage');
         $metricsPath = (string) $input->getOption('metrics');
 
-        $this->logger->info('Generating frontpage for Fast Forward documentation...', [
-            'input' => $input,
-        ]);
+        $this->intermediateInfo('Generating frontpage for Fast Forward documentation...', $input);
 
         $docsBuilder = $this->processBuilder
             ->withArgument('--target', $target);

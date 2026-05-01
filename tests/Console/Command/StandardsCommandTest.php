@@ -181,6 +181,37 @@ final class StandardsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument('--json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(StandardsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->log(
+            'info',
+            'Code standards checks completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
+        )->shouldBeCalled();
+
+        self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWithNoCacheWillForwardNoCacheOnlyToCacheAwareNestedCommands(): void
     {
         $this->input->getOption('no-cache')

@@ -150,11 +150,7 @@ final class DependenciesCommand extends Command
             );
         }
 
-        if (! $jsonOutput) {
-            $this->logger->info('Running dependency analysis...', [
-                'input' => $input,
-            ]);
-        }
+        $this->intermediateInfo('Running dependency analysis...', $input);
 
         $this->processQueue->add(
             process: $this->getComposerDependencyAnalyserCommand($input),

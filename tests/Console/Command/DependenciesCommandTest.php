@@ -178,6 +178,32 @@ final class DependenciesCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processQueue->add(Argument::type(Process::class), false, Argument::cetera())->shouldBeCalledTimes(4);
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(DependenciesCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->logger->info(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->log(
+            'info',
+            'Dependency analysis completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalledOnce();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function composerDependencyAnalyserProcessWillHideShadowDependenciesByDefault(): void
     {
         $this->input->getOption('show-shadow-dependencies')
