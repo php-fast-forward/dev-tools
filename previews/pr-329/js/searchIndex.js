@@ -2741,6 +2741,11 @@ Search.appendIndex(
             "summary": "Provides\u0020reusable\u0020helpers\u0020for\u0020logging\u0020command\u0020outcomes\u0020and\u0020returning\u0020exit\u0020codes.",
             "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003AintermediateInfo\u0028\u0029",
+            "name": "intermediateInfo",
+            "summary": "Logs\u0020a\u0020non\u002Dterminal\u0020informational\u0020message\u0020unless\u0020structured\u0020JSON\u0020output\u0020is\u0020active.",
+            "url": "classes/FastForward-DevTools-Console-Command-Traits-LogsCommandResults.html#method_intermediateInfo"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults\u003A\u003Anotice\u0028\u0029",
             "name": "notice",
             "summary": "Logs\u0020an\u0020informational\u0020command\u0020message\u0020at\u0020notice\u0020level.",
