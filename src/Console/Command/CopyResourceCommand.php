@@ -246,10 +246,10 @@ final class CopyResourceCommand extends Command
         if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($targetPath)) {
             $comparison = $this->fileDiffer->diff($sourcePath, $targetPath);
 
-            $this->logger->notice(
+            $this->notice(
                 $comparison->getSummary(),
+                $input,
                 [
-                    'input' => $input,
                     'source_path' => $sourcePath,
                     'target_path' => $targetPath,
                 ],

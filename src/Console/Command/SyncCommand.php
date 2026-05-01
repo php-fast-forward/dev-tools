@@ -160,11 +160,10 @@ final class SyncCommand extends Command
         );
 
         if ($dryRun || $check || $interactive) {
-            $this->logger->warning(
+            $this->log(
                 'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
-                [
-                    'input' => $input,
-                ],
+                $input,
+                logLevel: LogLevel::WARNING,
             );
         } else {
             $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput, $prettyJsonOutput);

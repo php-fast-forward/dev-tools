@@ -112,7 +112,7 @@ final class SkillsCommand extends Command
     {
         $packageSkillsPath = DevToolsPathResolver::getPackagePath(self::SKILLS_DIRECTORY);
         $skillsDir = $this->filesystem->getAbsolutePath(self::SKILLS_DIRECTORY);
-        $this->logger->info('Starting skills synchronization...');
+        $this->log('Starting skills synchronization...', $input);
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
             return $this->failure(
@@ -131,7 +131,7 @@ final class SkillsCommand extends Command
         if (! $this->filesystem->exists($skillsDir)) {
             $this->filesystem->mkdir($skillsDir);
             $directoryCreated = true;
-            $this->logger->info('Created .agents/skills directory.');
+            $this->log('Created .agents/skills directory.', $input);
         }
 
         $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::SKILLS_DIRECTORY);

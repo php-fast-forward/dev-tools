@@ -135,9 +135,7 @@ final class GitAttributesCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
-            'input' => $input,
-        ]);
+        $this->log('Synchronizing .gitattributes export-ignore rules...', $input);
         $dryRun = (bool) $input->getOption('dry-run');
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
@@ -175,22 +173,18 @@ final class GitAttributesCommand extends Command
             \sprintf('Updating managed file %s from generated .gitattributes synchronization.', $gitattributesPath),
         );
 
-        $this->logger->notice(
-            $comparison->getSummary(),
-            [
-                'input' => $input,
-                'gitattributes_path' => $gitattributesPath,
-            ],
-        );
+        $this->notice($comparison->getSummary(), $input, [
+            'gitattributes_path' => $gitattributesPath,
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->logger->notice(
+                $this->notice(
                     $consoleDiff,
+                    $input,
                     [
-                        'input' => $input,
                         'gitattributes_path' => $gitattributesPath,
                         'diff' => $comparison->getDiff(),
                     ],

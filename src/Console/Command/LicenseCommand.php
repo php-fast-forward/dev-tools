@@ -150,8 +150,7 @@ final class LicenseCommand extends Command
                 : \sprintf('Updating managed file %s from generated LICENSE content.', $targetPath),
         );
 
-        $this->logger->notice($comparison->getSummary(), [
-            'input' => $input,
+        $this->notice($comparison->getSummary(), $input, [
             'target_path' => $targetPath,
         ]);
 
@@ -159,10 +158,10 @@ final class LicenseCommand extends Command
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->logger->notice(
+                $this->notice(
                     $consoleDiff,
+                    $input,
                     [
-                        'input' => $input,
                         'target_path' => $targetPath,
                         'diff' => $comparison->getDiff(),
                     ],

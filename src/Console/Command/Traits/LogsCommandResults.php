@@ -35,6 +35,33 @@ trait LogsCommandResults
     use HasCommandLogger;
 
     /**
+     * Logs a non-terminal command message unless structured JSON output is active.
+     *
+     * @param string $message the progress message
+     * @param InputInterface $input the originating command input
+     * @param array<string, mixed> $context optional extra log context
+     * @param string $logLevel the PSR-3 log level used for the message
+     *
+     * @return void
+     */
+    private function log(
+        string $message,
+        InputInterface $input,
+        array $context = [],
+        string $logLevel = LogLevel::INFO,
+    ): void {
+        if (method_exists($this, 'isJsonOutput') && $this->isJsonOutput($input)) {
+            return;
+        }
+
+        $this->getLogger()
+            ->log($logLevel, $message, [
+                'input' => $input,
+                ...$context,
+            ]);
+    }
+
+    /**
      * Logs a non-terminal informational message unless structured JSON output is active.
      *
      * @param string $message the progress message
@@ -45,15 +72,7 @@ trait LogsCommandResults
      */
     private function intermediateInfo(string $message, InputInterface $input, array $context = []): void
     {
-        if (method_exists($this, 'isJsonOutput') && $this->isJsonOutput($input)) {
-            return;
-        }
-
-        $this->getLogger()
-            ->info($message, [
-                'input' => $input,
-                ...$context,
-            ]);
+        $this->log($message, $input, $context);
     }
 
     /**
@@ -67,11 +86,7 @@ trait LogsCommandResults
      */
     private function notice(string $message, InputInterface $input, array $context = []): void
     {
-        $this->getLogger()
-            ->notice($message, [
-                'input' => $input,
-                ...$context,
-            ]);
+        $this->log($message, $input, $context, LogLevel::NOTICE);
     }
 
     /**

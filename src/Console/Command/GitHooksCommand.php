@@ -169,10 +169,10 @@ final class GitHooksCommand extends Command
                     ? $this->fileDiffer->diff($sourcePath, $hookPath)
                     : $this->compareRenderedHookContents($sourcePath, $hookPath, $renderedSourceContents);
 
-                $this->logger->notice(
+                $this->notice(
                     $comparison->getSummary(),
+                    $input,
                     [
-                        'input' => $input,
                         'hook_name' => $file->getFilename(),
                         'hook_path' => $hookPath,
                     ],
@@ -182,10 +182,10 @@ final class GitHooksCommand extends Command
                     $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
                     if (null !== $consoleDiff) {
-                        $this->logger->notice(
+                        $this->notice(
                             $consoleDiff,
+                            $input,
                             [
-                                'input' => $input,
                                 'hook_name' => $file->getFilename(),
                                 'hook_path' => $hookPath,
                                 'diff' => $comparison->getDiff(),

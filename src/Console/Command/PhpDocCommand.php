@@ -258,8 +258,10 @@ final class PhpDocCommand extends Command
         try {
             $this->filesystem->dumpFile(self::FILENAME, $docHeader);
         } catch (Throwable) {
-            $this->logger->warning(
-                'Skipping .docheader creation because the destination file could not be written.'
+            $this->log(
+                'Skipping .docheader creation because the destination file could not be written.',
+                $input,
+                logLevel: LogLevel::WARNING,
             );
 
             return;

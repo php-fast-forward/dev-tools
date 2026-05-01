@@ -133,9 +133,7 @@ final class FundingCommand extends Command
         $check = (bool) $input->getOption('check');
         $interactive = (bool) $input->getOption('interactive');
 
-        $this->logger->info('Synchronizing funding metadata...', [
-            'input' => $input,
-        ]);
+        $this->log('Synchronizing funding metadata...', $input);
 
         if (! $this->filesystem->exists($composerFile)) {
             $this->notice(
@@ -228,22 +226,18 @@ final class FundingCommand extends Command
             \sprintf('Updating managed file %s from generated funding metadata synchronization.', $composerFile),
         );
 
-        $this->logger->notice(
-            $comparison->getSummary(),
-            [
-                'input' => $input,
-                'composer_file' => $composerFile,
-            ],
-        );
+        $this->notice($comparison->getSummary(), $input, [
+            'composer_file' => $composerFile,
+        ]);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->logger->notice(
+                $this->notice(
                     $consoleDiff,
+                    $input,
                     [
-                        'input' => $input,
                         'composer_file' => $composerFile,
                         'diff' => $comparison->getDiff(),
                     ],

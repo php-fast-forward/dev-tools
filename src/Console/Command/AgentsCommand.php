@@ -80,7 +80,7 @@ final class AgentsCommand extends Command
     {
         $packageAgentsPath = DevToolsPathResolver::getPackagePath(self::AGENTS_DIRECTORY);
         $agentsDir = $this->filesystem->getAbsolutePath(self::AGENTS_DIRECTORY);
-        $this->logger->info('Starting agents synchronization...');
+        $this->log('Starting agents synchronization...', $input);
 
         if (! $this->filesystem->exists($packageAgentsPath)) {
             return $this->failure(
@@ -99,7 +99,7 @@ final class AgentsCommand extends Command
         if (! $this->filesystem->exists($agentsDir)) {
             $this->filesystem->mkdir($agentsDir);
             $directoryCreated = true;
-            $this->logger->info('Created .agents/agents directory.');
+            $this->log('Created .agents/agents directory.', $input);
         }
 
         $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::AGENTS_DIRECTORY);
