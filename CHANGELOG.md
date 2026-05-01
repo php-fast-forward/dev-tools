@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Composer(deps): Update rector/jack requirement from ^0.5 to ^1.0 (#320)
+- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.1 to 3.0.2 (#319)
 
 ### Fixed
 
