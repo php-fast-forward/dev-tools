@@ -324,6 +324,35 @@ final class TestsCommandTest extends TestCase
      * @return void
      */
     #[Test]
+    public function executeWillFailWhenCustomTestsPathDoesNotExist(): void
+    {
+        $this->input->getArgument('path')
+            ->willReturn('missing-tests');
+        $this->filesystem->getAbsolutePath('missing-tests')
+            ->willReturn('/repo/missing-tests');
+        $this->projectCapabilitiesResolver->resolve(Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->run(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->error(
+            'Tests path not found: {path}',
+            Argument::that(static fn(array $context): bool => '/repo/missing-tests' === $context['path']
+                && $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function executeWithCoverageBelowMinimumWillReturnFailure(): void
     {
         $coverageReportPath = getcwd() . '/.dev-tools/cache/phpunit/coverage.php';

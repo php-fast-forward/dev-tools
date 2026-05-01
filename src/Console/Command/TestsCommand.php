@@ -177,9 +177,17 @@ final class TestsCommand extends Command
             ]);
         }
 
-        if (! $this->projectCapabilitiesResolver->resolve(
-            testsPath: (string) $input->getArgument('path'),
-        )->canRunTests()) {
+        $testsPath = (string) $input->getArgument('path');
+        $projectCapabilities = $this->projectCapabilitiesResolver->resolve(testsPath: $testsPath);
+
+        if (! $projectCapabilities->hasTestsPath() && ! $this->isDefaultTestsPath($testsPath)) {
+            return $this->failure('Tests path not found: {path}', $input, [
+                'output' => $processOutput,
+                'path' => $this->filesystem->getAbsolutePath($testsPath),
+            ]);
+        }
+
+        if (! $projectCapabilities->canRunTests()) {
             return $this->success(
                 'Skipping PHPUnit tests because no tests directory or PHP source files were detected.',
                 $input,
@@ -281,6 +289,38 @@ final class TestsCommand extends Command
     private function resolvePath(InputInterface $input, string $option): string
     {
         return $this->filesystem->getAbsolutePath($input->getOption($option));
+    }
+
+    /**
+     * Detects whether a tests path option still points at the default project tests directory.
+     *
+     * @param string $testsPath the tests path argument received from the CLI
+     *
+     * @return bool true when the provided path is equivalent to the default tests directory
+     */
+    private function isDefaultTestsPath(string $testsPath): bool
+    {
+        return $this->normalizeProjectRelativePath($testsPath) === $this->normalizeProjectRelativePath(
+            ProjectCapabilitiesResolverInterface::DEFAULT_TESTS_PATH
+        );
+    }
+
+    /**
+     * Normalizes a project-relative path for resilient default-option comparisons.
+     *
+     * @param string $path the project-relative path to normalize
+     *
+     * @return string the normalized project-relative path
+     */
+    private function normalizeProjectRelativePath(string $path): string
+    {
+        $normalizedPath = str_replace('\\', '/', $path);
+
+        while (str_starts_with($normalizedPath, './')) {
+            $normalizedPath = substr($normalizedPath, 2);
+        }
+
+        return rtrim($normalizedPath, '/');
     }
 
     /**

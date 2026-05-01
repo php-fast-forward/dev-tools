@@ -32,6 +32,7 @@ use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -216,6 +217,43 @@ final class DocsCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(DocsCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    #[TestWith(['./docs'])]
+    #[TestWith(['docs/'])]
+    public function executeWillTreatEquivalentDefaultGuideSourcesAsDefault(string $sourceOption): void
+    {
+        $this->input->getOption('source')
+            ->willReturn($sourceOption);
+        $this->filesystem->getAbsolutePath($sourceOption)
+            ->willReturn('/repo/docs');
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
+        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(DocsCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info('Generating API documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'API documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+        $this->logger->error(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
     }
 
     /**

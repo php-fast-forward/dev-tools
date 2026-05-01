@@ -161,7 +161,7 @@ final class DocsCommand extends Command
 
         if (
             ! $projectCapabilities->hasGuideDirectory()
-            && ProjectCapabilitiesResolverInterface::DEFAULT_GUIDE_DIRECTORY !== $sourceOption
+            && ! $this->isDefaultGuideSource($sourceOption)
         ) {
             return $this->failure('Source directory not found: {source}', $input, [
                 'source' => $source,
@@ -252,5 +252,37 @@ final class DocsCommand extends Command
         $this->filesystem->dumpFile(filename: 'phpdocumentor.xml', content: $content, path: $cacheDir);
 
         return $this->filesystem->getAbsolutePath('phpdocumentor.xml', $cacheDir);
+    }
+
+    /**
+     * Detects whether a source option still points at the default guide directory.
+     *
+     * @param string $sourceOption the guide source option received from the CLI
+     *
+     * @return bool true when the provided path is equivalent to the default guide directory
+     */
+    private function isDefaultGuideSource(string $sourceOption): bool
+    {
+        return $this->normalizeProjectRelativePath($sourceOption) === $this->normalizeProjectRelativePath(
+            ProjectCapabilitiesResolverInterface::DEFAULT_GUIDE_DIRECTORY
+        );
+    }
+
+    /**
+     * Normalizes a project-relative path for resilient default-option comparisons.
+     *
+     * @param string $path the project-relative path to normalize
+     *
+     * @return string the normalized project-relative path
+     */
+    private function normalizeProjectRelativePath(string $path): string
+    {
+        $normalizedPath = str_replace('\\', '/', $path);
+
+        while (str_starts_with($normalizedPath, './')) {
+            $normalizedPath = substr($normalizedPath, 2);
+        }
+
+        return rtrim($normalizedPath, '/');
     }
 }
