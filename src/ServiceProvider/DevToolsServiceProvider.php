@@ -85,6 +85,8 @@ use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
 use FastForward\DevTools\Process\ProcessQueue;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolver;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
 use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateScopeResolver;
 use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
@@ -160,6 +162,9 @@ final class DevToolsServiceProvider implements ServiceProviderInterface
 
             // Composer
             ComposerJsonInterface::class => get(ComposerJson::class),
+
+            // Project
+            ProjectCapabilitiesResolverInterface::class => get(ProjectCapabilitiesResolver::class),
 
             // Changelog
             ChangelogManagerInterface::class => get(ChangelogManager::class),

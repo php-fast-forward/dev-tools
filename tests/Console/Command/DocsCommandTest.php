@@ -27,9 +27,12 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Project\ProjectCapabilities;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -47,6 +50,7 @@ use Twig\Environment;
 #[CoversClass(DocsCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(ProjectCapabilities::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class DocsCommandTest extends TestCase
@@ -62,6 +66,8 @@ final class DocsCommandTest extends TestCase
     private ObjectProphecy $filesystem;
 
     private ObjectProphecy $composer;
+
+    private ObjectProphecy $projectCapabilitiesResolver;
 
     private ObjectProphecy $logger;
 
@@ -83,6 +89,7 @@ final class DocsCommandTest extends TestCase
         $this->renderer = $this->prophesize(Environment::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
+        $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -126,6 +133,8 @@ final class DocsCommandTest extends TestCase
             ->willReturn('docs');
         $this->filesystem->exists('/repo/docs')
             ->willReturn(true);
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', true, false, false, true));
         $this->composer->getAutoload('psr-4')
             ->willReturn([
                 'FastForward\\DevTools\\' => 'src/',
@@ -138,8 +147,10 @@ final class DocsCommandTest extends TestCase
                 static fn(array $context): bool => DevToolsPathResolver::getPreferredVendorPath(
                     'vendor/fast-forward/phpdoc-bootstrap-template'
                 ) === $context['template']
+                    && ['src/'] === $context['apiDirectories']
             )
-        )->willReturn('<phpdocumentor />');
+        )
+            ->willReturn('<phpdocumentor />');
         $this->processBuilder->withArgument(Argument::any())->willReturn($this->processBuilder->reveal());
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()
@@ -153,6 +164,7 @@ final class DocsCommandTest extends TestCase
             $this->renderer->reveal(),
             $this->filesystem->reveal(),
             $this->composer->reveal(),
+            $this->projectCapabilitiesResolver->reveal(),
             $this->logger->reveal(),
         );
     }
@@ -161,21 +173,87 @@ final class DocsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillFailWhenSourceDirectoryIsMissing(): void
+    public function executeWillSkipWhenGuideAndApiSourcesAreMissing(): void
     {
-        $this->filesystem->exists('/repo/docs')
-            ->willReturn(false);
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Generating API documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping API documentation generation because no guide source or autoloaded PHP API directories were detected.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillFailWhenCustomGuideSourceDoesNotExist(): void
+    {
+        $this->input->getOption('source')
+            ->willReturn('missing-guides');
+        $this->filesystem->getAbsolutePath('missing-guides')
+            ->willReturn('/repo/missing-guides');
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
         $this->logger->info('Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
         $this->logger->error(
             'Source directory not found: {source}',
-            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
-                && '/repo/docs' === $context['source']),
+            Argument::that(static fn(array $context): bool => '/repo/missing-guides' === $context['source']
+                && $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
 
         self::assertSame(DocsCommand::FAILURE, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    #[TestWith(['./docs'])]
+    #[TestWith(['docs/'])]
+    public function executeWillTreatEquivalentDefaultGuideSourcesAsDefault(string $sourceOption): void
+    {
+        $this->input->getOption('source')
+            ->willReturn($sourceOption);
+        $this->filesystem->getAbsolutePath($sourceOption)
+            ->willReturn('/repo/docs');
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
+        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(DocsCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info('Generating API documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'API documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+        $this->logger->error(Argument::cetera())
+            ->shouldNotBeCalled();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
     }
 
     /**
@@ -220,6 +298,35 @@ final class DocsCommandTest extends TestCase
             ->shouldBeCalled();
         $this->processBuilder->withArgument('--cache-folder', Argument::cetera())
             ->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(DocsCommand::SUCCESS)
+            ->shouldBeCalled();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillGenerateGuideOnlyDocumentationWhenNoApiSourceIsDetected(): void
+    {
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, true, false, false, false));
+        $this->renderer->render(
+            'phpdocumentor.xml',
+            Argument::that(
+                static fn(array $context): bool => [] === $context['apiDirectories']
+                    && 'docs' === $context['guidePath']
+                    && null === $context['defaultPackageName']
+            )
+        )
+            ->willReturn('<phpdocumentor />')
+            ->shouldBeCalled();
+        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')
+            ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())

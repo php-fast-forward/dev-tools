@@ -201,20 +201,6 @@ final class ResolvePredictableConflictsActionTest extends TestCase
     /**
      * @param array<int, string> $command
      * @param string $workingDirectory
-     *
-     * @return Process
-     */
-    private function runProcessAllowingFailure(array $command, string $workingDirectory): Process
-    {
-        $process = new Process($command, $workingDirectory);
-        $process->run();
-
-        return $process;
-    }
-
-    /**
-     * @param array<int, string> $command
-     * @param string $workingDirectory
      * @param string $input
      *
      * @return Process

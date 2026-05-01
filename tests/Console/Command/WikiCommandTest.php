@@ -28,9 +28,12 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Project\ProjectCapabilities;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -43,9 +46,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+use function Safe\getcwd;
+
 #[CoversClass(WikiCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(ProjectCapabilities::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class WikiCommandTest extends TestCase
@@ -61,6 +67,8 @@ final class WikiCommandTest extends TestCase
     private ObjectProphecy $filesystem;
 
     private ObjectProphecy $gitClient;
+
+    private ObjectProphecy $projectCapabilitiesResolver;
 
     private ObjectProphecy $logger;
 
@@ -82,6 +90,7 @@ final class WikiCommandTest extends TestCase
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->gitClient = $this->prophesize(GitClientInterface::class);
+        $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -93,6 +102,8 @@ final class WikiCommandTest extends TestCase
             ->willReturn([
                 'FastForward\\DevTools\\' => 'src/',
             ]);
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, true, true));
         $this->input->getOption('target')
             ->willReturn('.github/wiki');
         $this->input->getOption('cache-dir')
@@ -120,6 +131,7 @@ final class WikiCommandTest extends TestCase
             $this->composer->reveal(),
             $this->filesystem->reveal(),
             $this->gitClient->reveal(),
+            $this->projectCapabilitiesResolver->reveal(),
             $this->logger->reveal(),
         );
     }
@@ -140,6 +152,12 @@ final class WikiCommandTest extends TestCase
             '--cache-folder',
             ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC)
         )
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
             ->willReturn($this->processBuilder->reveal())
             ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal(), Argument::cetera())
@@ -171,11 +189,131 @@ final class WikiCommandTest extends TestCase
             ->willReturn(true);
         $this->processBuilder->withArgument('--cache-folder', Argument::cetera())
             ->shouldNotBeCalled();
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
         $this->processQueue->add($this->process->reveal(), Argument::cetera())
             ->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWhenWikiTargetDoesNotExist(): void
+    {
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Generating wiki documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
+            Argument::that(static fn(array $context): bool => '.github/wiki' === $context['target']
+                && $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    #[TestWith(['./.github/wiki'])]
+    #[TestWith(['.github/wiki/'])]
+    public function executeWillTreatEquivalentDefaultWikiTargetsAsDefault(string $target): void
+    {
+        $this->input->getOption('target')
+            ->willReturn($target);
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Generating wiki documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
+            Argument::that(static fn(array $context): bool => $target === $context['target']
+                && $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillGenerateWhenCustomWikiTargetDoesNotExist(): void
+    {
+        $this->input->getOption('target')
+            ->willReturn('build/wiki');
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--target', 'build/wiki')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(WikiCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info('Generating wiki documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Wiki documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
+            Argument::cetera(),
+        )->shouldNotBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWhenNoApiDirectoriesAreDetected(): void
+    {
+        $this->projectCapabilitiesResolver->resolve(Argument::any(), Argument::any(), Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, true, false));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Generating wiki documentation...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping wiki documentation generation because no autoloaded PHP API directories were detected.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+        )->shouldBeCalled();
 
         self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
     }

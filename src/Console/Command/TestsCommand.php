@@ -30,8 +30,10 @@ use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -68,6 +70,7 @@ final class TestsCommand extends Command
      * @param FileLocatorInterface $fileLocator the file locator used to resolve PHPUnit configuration
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
+     * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
      * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
@@ -78,6 +81,7 @@ final class TestsCommand extends Command
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -105,7 +109,7 @@ final class TestsCommand extends Command
                 name: 'path',
                 mode: InputArgument::OPTIONAL,
                 description: 'Path to the tests directory.',
-                default: './tests',
+                default: ProjectCapabilitiesResolverInterface::DEFAULT_TESTS_PATH,
             )
             ->addOption(
                 name: 'bootstrap',
@@ -171,6 +175,27 @@ final class TestsCommand extends Command
             return $this->failure($invalidArgumentException->getMessage(), $input, [
                 'output' => $processOutput,
             ]);
+        }
+
+        $testsPath = (string) $input->getArgument('path');
+        $projectCapabilities = $this->projectCapabilitiesResolver->resolve(testsPath: $testsPath);
+
+        if (! $projectCapabilities->hasTestsPath() && ! $this->isDefaultTestsPath($testsPath)) {
+            return $this->failure('Tests path not found: {path}', $input, [
+                'output' => $processOutput,
+                'path' => $this->filesystem->getAbsolutePath($testsPath),
+            ]);
+        }
+
+        if (! $projectCapabilities->canRunTests()) {
+            return $this->success(
+                'Skipping PHPUnit tests because no tests directory or PHP source files were detected.',
+                $input,
+                [
+                    'output' => $processOutput,
+                ],
+                LogLevel::WARNING,
+            );
         }
 
         $processBuilder = $this->processBuilder
@@ -264,6 +289,38 @@ final class TestsCommand extends Command
     private function resolvePath(InputInterface $input, string $option): string
     {
         return $this->filesystem->getAbsolutePath($input->getOption($option));
+    }
+
+    /**
+     * Detects whether a tests path option still points at the default project tests directory.
+     *
+     * @param string $testsPath the tests path argument received from the CLI
+     *
+     * @return bool true when the provided path is equivalent to the default tests directory
+     */
+    private function isDefaultTestsPath(string $testsPath): bool
+    {
+        return $this->normalizeProjectRelativePath($testsPath) === $this->normalizeProjectRelativePath(
+            ProjectCapabilitiesResolverInterface::DEFAULT_TESTS_PATH
+        );
+    }
+
+    /**
+     * Normalizes a project-relative path for resilient default-option comparisons.
+     *
+     * @param string $path the project-relative path to normalize
+     *
+     * @return string the normalized project-relative path
+     */
+    private function normalizeProjectRelativePath(string $path): string
+    {
+        $normalizedPath = str_replace('\\', '/', $path);
+
+        while (str_starts_with($normalizedPath, './')) {
+            $normalizedPath = substr($normalizedPath, 2);
+        }
+
+        return rtrim($normalizedPath, '/');
     }
 
     /**

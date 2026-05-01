@@ -29,7 +29,9 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -68,6 +70,7 @@ final class WikiCommand extends Command
      * @param ProcessQueueInterface $processQueue
      * @param FilesystemInterface $filesystem the filesystem used to inspect the wiki target
      * @param GitClientInterface $gitClient
+     * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
      * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
@@ -76,6 +79,7 @@ final class WikiCommand extends Command
         private readonly ComposerJsonInterface $composer,
         private readonly FilesystemInterface $filesystem,
         private readonly GitClientInterface $gitClient,
+        private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
         private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
@@ -104,7 +108,7 @@ final class WikiCommand extends Command
                 shortcut: 't',
                 mode: InputOption::VALUE_OPTIONAL,
                 description: 'Path to the output directory for the generated Markdown documentation.',
-                default: '.github/wiki'
+                default: ProjectCapabilitiesResolverInterface::DEFAULT_WIKI_TARGET,
             )
             ->addOption(
                 name: 'init',
@@ -129,6 +133,7 @@ final class WikiCommand extends Command
         $jsonOutput = $this->isJsonOutput($input);
         $processOutput = $jsonOutput ? new BufferedOutput() : $output;
         $target = (string) $input->getOption('target');
+        $isDefaultWikiTarget = $this->isDefaultWikiTarget($target);
         $cacheEnabled = $this->isCacheEnabled($input);
 
         if ($input->getOption('init')) {
@@ -139,6 +144,28 @@ final class WikiCommand extends Command
             $this->logger->info('Generating wiki documentation...', [
                 'input' => $input,
             ]);
+        }
+
+        $projectCapabilities = $this->projectCapabilitiesResolver->resolve(wikiTarget: $target);
+
+        if ($isDefaultWikiTarget && ! $projectCapabilities->hasWikiTarget()) {
+            return $this->success(
+                'Skipping wiki documentation generation because the wiki target does not exist at {target}.',
+                $input,
+                [
+                    'target' => $target,
+                ],
+                LogLevel::WARNING,
+            );
+        }
+
+        if (! $projectCapabilities->canGenerateApiDocumentation()) {
+            return $this->success(
+                'Skipping wiki documentation generation because no autoloaded PHP API directories were detected.',
+                $input,
+                [],
+                LogLevel::WARNING,
+            );
         }
 
         $processBuilder = $this->processBuilder
@@ -152,13 +179,14 @@ final class WikiCommand extends Command
             $processBuilder = $processBuilder->withArgument('--cache-folder', $input->getOption('cache-dir'));
         }
 
-        $psr4Namespaces = $this->composer->getAutoload('psr-4');
-
-        foreach ($psr4Namespaces as $path) {
-            $processBuilder = $processBuilder->withArgument('--directory', $path);
+        foreach ($projectCapabilities->getApiDirectories() as $path) {
+            $processBuilder = $processBuilder->withArgument(
+                '--directory',
+                $this->filesystem->getAbsolutePath($path)
+            );
         }
 
-        if ($defaultPackageName = array_key_first($psr4Namespaces)) {
+        if (null !== $defaultPackageName = $projectCapabilities->getDefaultPackageName()) {
             $processBuilder = $processBuilder->withArgument('--defaultpackagename', $defaultPackageName);
         }
 
@@ -183,6 +211,38 @@ final class WikiCommand extends Command
             ],
             (string) $input->getOption('target'),
         );
+    }
+
+    /**
+     * Detects whether a target option still points at the default wiki target path.
+     *
+     * @param string $target the wiki target option received from the CLI
+     *
+     * @return bool true when the provided path is equivalent to the default wiki target
+     */
+    private function isDefaultWikiTarget(string $target): bool
+    {
+        return $this->normalizeProjectRelativePath($target) === $this->normalizeProjectRelativePath(
+            ProjectCapabilitiesResolverInterface::DEFAULT_WIKI_TARGET
+        );
+    }
+
+    /**
+     * Normalizes a project-relative path for resilient default-option comparisons.
+     *
+     * @param string $path the project-relative path to normalize
+     *
+     * @return string the normalized project-relative path
+     */
+    private function normalizeProjectRelativePath(string $path): string
+    {
+        $normalizedPath = str_replace('\\', '/', $path);
+
+        while (str_starts_with($normalizedPath, './')) {
+            $normalizedPath = substr($normalizedPath, 2);
+        }
+
+        return rtrim($normalizedPath, '/');
     }
 
     /**

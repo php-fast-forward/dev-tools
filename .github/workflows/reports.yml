@@ -60,6 +60,11 @@ jobs:
         if: github.event_name != 'schedule' && !(github.event_name == 'workflow_dispatch' && inputs.cleanup-previews) && (github.event_name != 'pull_request' || github.event.action != 'closed')
         name: Generate Reports
         runs-on: ubuntu-latest
+        outputs:
+            any_generated: ${{ steps.detect_reports.outputs.any_generated }}
+            coverage_generated: ${{ steps.detect_reports.outputs.coverage_generated }}
+            docs_generated: ${{ steps.detect_reports.outputs.docs_generated }}
+            metrics_generated: ${{ steps.detect_reports.outputs.metrics_generated }}
         permissions:
             contents: write
 
@@ -102,6 +107,38 @@ jobs:
 
             - name: Remove repository-local caches from published output
               run: rm -rf "${REPORTS_TARGET}/cache"
+
+            - name: Detect generated report surfaces
+              id: detect_reports
+              run: |
+                docs_generated=false
+                coverage_generated=false
+                metrics_generated=false
+
+                if [ -f "${REPORTS_TARGET}/index.html" ]; then
+                  docs_generated=true
+                fi
+
+                if [ -f "${REPORTS_TARGET}/coverage/index.html" ]; then
+                  coverage_generated=true
+                fi
+
+                if [ -f "${REPORTS_TARGET}/metrics/index.html" ]; then
+                  metrics_generated=true
+                fi
+
+                any_generated=false
+
+                if [ "$docs_generated" = 'true' ] || [ "$coverage_generated" = 'true' ] || [ "$metrics_generated" = 'true' ]; then
+                  any_generated=true
+                fi
+
+                {
+                  echo "docs_generated=$docs_generated"
+                  echo "coverage_generated=$coverage_generated"
+                  echo "metrics_generated=$metrics_generated"
+                  echo "any_generated=$any_generated"
+                } >> "$GITHUB_OUTPUT"
 
             - name: Restore previews from gh-pages
               if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
@@ -157,14 +194,43 @@ jobs:
                 sparse-checkout: |
                   .github/actions
 
+            - name: Build deployment checks
+              id: build_checks
+              env:
+                COVERAGE_GENERATED: ${{ needs.reports.outputs.coverage_generated }}
+                DOCS_GENERATED: ${{ needs.reports.outputs.docs_generated }}
+                METRICS_GENERATED: ${{ needs.reports.outputs.metrics_generated }}
+              run: |
+                has_checks=false
+
+                {
+                  echo 'checks<<EOF'
+
+                  if [ "${DOCS_GENERATED}" = 'true' ]; then
+                    echo '/|Reports index'
+                    has_checks=true
+                  fi
+
+                  if [ "${COVERAGE_GENERATED}" = 'true' ]; then
+                    echo '/coverage/|Coverage report'
+                    has_checks=true
+                  fi
+
+                  if [ "${METRICS_GENERATED}" = 'true' ]; then
+                    echo '/metrics/|Metrics report'
+                    has_checks=true
+                  fi
+
+                  echo 'EOF'
+                  echo "has_checks=$has_checks"
+                } >> "$GITHUB_OUTPUT"
+
             - uses: ./.dev-tools-actions/.github/actions/github-pages/verify-deployment
+              if: steps.build_checks.outputs.has_checks == 'true'
               with:
                 base-url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}
                 title: Reports health check failed
-                checks: |
-                  /|Reports index
-                  /coverage/|Coverage report
-                  /metrics/|Metrics report
+                checks: ${{ steps.build_checks.outputs.checks }}
 
     verify_preview_reports:
         if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -183,14 +249,43 @@ jobs:
                 sparse-checkout: |
                   .github/actions
 
+            - name: Build preview deployment checks
+              id: build_checks
+              env:
+                COVERAGE_GENERATED: ${{ needs.reports.outputs.coverage_generated }}
+                DOCS_GENERATED: ${{ needs.reports.outputs.docs_generated }}
+                METRICS_GENERATED: ${{ needs.reports.outputs.metrics_generated }}
+              run: |
+                has_checks=false
+
+                {
+                  echo 'checks<<EOF'
+
+                  if [ "${DOCS_GENERATED}" = 'true' ]; then
+                    echo '/|Preview reports index'
+                    has_checks=true
+                  fi
+
+                  if [ "${COVERAGE_GENERATED}" = 'true' ]; then
+                    echo '/coverage/|Preview coverage report'
+                    has_checks=true
+                  fi
+
+                  if [ "${METRICS_GENERATED}" = 'true' ]; then
+                    echo '/metrics/|Preview metrics report'
+                    has_checks=true
+                  fi
+
+                  echo 'EOF'
+                  echo "has_checks=$has_checks"
+                } >> "$GITHUB_OUTPUT"
+
             - uses: ./.dev-tools-actions/.github/actions/github-pages/verify-deployment
+              if: steps.build_checks.outputs.has_checks == 'true'
               with:
                 base-url: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}
                 title: Preview health check failed
-                checks: |
-                  /|Preview reports index
-                  /coverage/|Preview coverage report
-                  /metrics/|Preview metrics report
+                checks: ${{ steps.build_checks.outputs.checks }}
 
     comment_preview:
         if: github.event_name == 'pull_request' && github.event.action != 'closed'
@@ -203,16 +298,45 @@ jobs:
             pull-requests: write
 
         steps:
+            - name: Build preview comment
+              id: build_comment
+              env:
+                COVERAGE_GENERATED: ${{ needs.reports.outputs.coverage_generated }}
+                DOCS_GENERATED: ${{ needs.reports.outputs.docs_generated }}
+                METRICS_GENERATED: ${{ needs.reports.outputs.metrics_generated }}
+              run: |
+                has_links=false
+
+                {
+                  echo 'message<<EOF'
+                  echo '🚀 Preview is available for this pull request.'
+                  echo
+
+                  if [ "${DOCS_GENERATED}" = 'true' ]; then
+                    echo "- Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/"
+                    has_links=true
+                  fi
+
+                  if [ "${COVERAGE_GENERATED}" = 'true' ]; then
+                    echo "- Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/"
+                    has_links=true
+                  fi
+
+                  if [ "${METRICS_GENERATED}" = 'true' ]; then
+                    echo "- Metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/metrics/"
+                    has_links=true
+                  fi
+
+                  echo 'EOF'
+                  echo "has_links=$has_links"
+                } >> "$GITHUB_OUTPUT"
+
             - name: Comment preview URLs on pull request
+              if: steps.build_comment.outputs.has_links == 'true'
               uses: marocchino/sticky-pull-request-comment@v3
               with:
                 header: pr-preview
-                message: |
-                  🚀 Preview is available for this pull request.
-
-                  - Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/
-                  - Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/
-                  - Metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/metrics/
+                message: ${{ steps.build_comment.outputs.message }}
 
     cleanup_preview:
         if: github.event_name == 'pull_request' && github.event.action == 'closed'
@@ -313,6 +437,9 @@ jobs:
 
             - id: build_summary
               env:
+                COVERAGE_GENERATED: ${{ needs.reports.outputs.coverage_generated }}
+                DOCS_GENERATED: ${{ needs.reports.outputs.docs_generated }}
+                METRICS_GENERATED: ${{ needs.reports.outputs.metrics_generated }}
                 TRIGGER_LABEL: ${{ github.event_name }}${{ github.event.action && format(':{0}', github.event.action) || '' }}
               run: |
                 {
@@ -329,16 +456,28 @@ jobs:
                   echo "- Trigger: \`${TRIGGER_LABEL}\`"
 
                   if [ "${{ github.event_name }}" = "push" ] || { [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ "${{ inputs.cleanup-previews }}" != "true" ]; }; then
-                    echo "- Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
-                    echo "- Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/coverage/"
-                    echo "- Metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/metrics/"
+                    if [ "${DOCS_GENERATED}" = 'true' ]; then
+                      echo "- Docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/"
+                    fi
+                    if [ "${COVERAGE_GENERATED}" = 'true' ]; then
+                      echo "- Coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/coverage/"
+                    fi
+                    if [ "${METRICS_GENERATED}" = 'true' ]; then
+                      echo "- Metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/metrics/"
+                    fi
                     echo "- Deployment verification: \`${{ needs.verify_main_reports.result }}\`"
                   fi
 
                   if [ "${{ github.event_name }}" = "pull_request" ] && [ "${{ github.event.action }}" != "closed" ]; then
-                    echo "- Preview docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/"
-                    echo "- Preview coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/"
-                    echo "- Preview metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/metrics/"
+                    if [ "${DOCS_GENERATED}" = 'true' ]; then
+                      echo "- Preview docs: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/"
+                    fi
+                    if [ "${COVERAGE_GENERATED}" = 'true' ]; then
+                      echo "- Preview coverage: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/coverage/"
+                    fi
+                    if [ "${METRICS_GENERATED}" = 'true' ]; then
+                      echo "- Preview metrics: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/previews/pr-${{ github.event.pull_request.number }}/metrics/"
+                    fi
                     echo "- Preview verification: \`${{ needs.verify_preview_reports.result }}\`"
                   fi
 

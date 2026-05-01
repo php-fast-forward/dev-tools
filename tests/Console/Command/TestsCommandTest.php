@@ -30,6 +30,8 @@ use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Project\ProjectCapabilities;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -55,6 +57,7 @@ use function Safe\getcwd;
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(ProjectCapabilities::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class TestsCommandTest extends TestCase
@@ -70,6 +73,8 @@ final class TestsCommandTest extends TestCase
     private ObjectProphecy $fileLocator;
 
     private ObjectProphecy $processQueue;
+
+    private ObjectProphecy $projectCapabilitiesResolver;
 
     private ObjectProphecy $logger;
 
@@ -89,6 +94,7 @@ final class TestsCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
@@ -101,6 +107,7 @@ final class TestsCommandTest extends TestCase
             $this->fileLocator->reveal(),
             new ProcessBuilder(),
             $this->processQueue->reveal(),
+            $this->projectCapabilitiesResolver->reveal(),
             $this->logger->reveal(),
         );
 
@@ -108,6 +115,15 @@ final class TestsCommandTest extends TestCase
             ->willReturn([
                 'FastForward\\DevTools\\' => 'src/',
             ]);
+        $this->projectCapabilitiesResolver->resolve(Argument::any())
+            ->willReturn(new ProjectCapabilities(
+                [getcwd() . '/src'],
+                'FastForward\\DevTools',
+                false,
+                true,
+                false,
+                true,
+            ));
         $this->fileLocator->locate(TestsCommand::CONFIG)->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
         $this->filesystem->getAbsolutePath('./vendor/autoload.php')
             ->willReturn(getcwd() . '/vendor/autoload.php');
@@ -275,6 +291,58 @@ final class TestsCommandTest extends TestCase
         $this->logger->error(
             'The --min-coverage option MUST be a numeric percentage.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWhenNoTestsDirectoryOrPhpSourceExists(): void
+    {
+        $this->projectCapabilitiesResolver->resolve(Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+        $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'warning',
+            'Skipping PHPUnit tests because no tests directory or PHP source files were detected.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillFailWhenCustomTestsPathDoesNotExist(): void
+    {
+        $this->input->getArgument('path')
+            ->willReturn('missing-tests');
+        $this->filesystem->getAbsolutePath('missing-tests')
+            ->willReturn('/repo/missing-tests');
+        $this->projectCapabilitiesResolver->resolve(Argument::any())
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processQueue->add(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->processQueue->run(Argument::cetera())
+            ->shouldNotBeCalled();
+        $this->logger->info('Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->error(
+            'Tests path not found: {path}',
+            Argument::that(static fn(array $context): bool => '/repo/missing-tests' === $context['path']
+                && $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 

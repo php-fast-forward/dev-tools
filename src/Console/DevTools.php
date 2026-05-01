@@ -20,8 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console;
 
 use FastForward\DevTools\Console\Command\SelfUpdateCommand;
-use Override;
 use FastForward\DevTools\Environment\EnvironmentInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
@@ -29,6 +29,7 @@ use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
 use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use DI\Container;
+use Override;
 use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -81,6 +82,7 @@ final class DevTools extends Application
      * @param SelfUpdateRunnerInterface $selfUpdateRunner runs explicit or automatic self-update flows
      * @param SelfUpdateScopeResolverInterface $selfUpdateScopeResolver resolves whether the active binary is global
      * @param EnvironmentInterface $environment reads environment flags for optional auto-update behavior
+     * @param RuntimeEnvironmentInterface $runtimeEnvironment resolves runtime environment capabilities
      */
     public function __construct(
         CommandLoaderInterface $commandLoader,
@@ -89,6 +91,7 @@ final class DevTools extends Application
         private readonly SelfUpdateRunnerInterface $selfUpdateRunner,
         private readonly SelfUpdateScopeResolverInterface $selfUpdateScopeResolver,
         private readonly EnvironmentInterface $environment,
+        private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
     ) {
         parent::__construct('Fast Forward Dev Tools');
 
@@ -253,6 +256,10 @@ final class DevTools extends Application
      */
     private function shouldRenderLogo(InputInterface $input): bool
     {
+        if ($this->runtimeEnvironment->isAgentPresent()) {
+            return false;
+        }
+
         if ((bool) $input->getParameterOption('--no-logo', null, true)) {
             return false;
         }

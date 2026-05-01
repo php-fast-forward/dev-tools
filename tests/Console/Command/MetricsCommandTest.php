@@ -26,6 +26,7 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+use FastForward\DevTools\Project\ProjectCapabilities;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -46,6 +47,7 @@ use function Safe\putenv;
 #[CoversClass(MetricsCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
+#[UsesClass(ProjectCapabilities::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class MetricsCommandTest extends TestCase
@@ -244,5 +246,28 @@ final class MetricsCommandTest extends TestCase
     {
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
             ->shouldBeCalled();
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRunEvenWhenNoTestsOrPhpSourceExist(): void
+    {
+        $this->expectProcessQueued();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(MetricsCommand::SUCCESS)
+            ->shouldBeCalled();
+        $this->logger->info('Running code metrics analysis...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Code metrics analysis completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(MetricsCommand::SUCCESS, $this->executeCommand());
     }
 }

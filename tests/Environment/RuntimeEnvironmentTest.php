@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Environment;
 
+use Ergebnis\AgentDetector\Detector;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -85,7 +86,7 @@ final class RuntimeEnvironmentTest extends TestCase
     protected function setUp(): void
     {
         $this->environment = $this->prophesize(EnvironmentInterface::class);
-        $this->runtimeEnvironment = new RuntimeEnvironment($this->environment->reveal());
+        $this->runtimeEnvironment = new RuntimeEnvironment($this->environment->reveal(), new Detector());
     }
 
     /**
@@ -152,5 +153,19 @@ final class RuntimeEnvironmentTest extends TestCase
             ->willReturn('true');
 
         self::assertTrue($this->runtimeEnvironment->isComposerTestRun());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function isAgentPresentWillReturnWhetherKnownAgentVariablesExist(): void
+    {
+        $this->environment->get()
+            ->willReturn([
+                'CODEX_SANDBOX' => '1',
+            ]);
+
+        self::assertTrue($this->runtimeEnvironment->isAgentPresent());
     }
 }

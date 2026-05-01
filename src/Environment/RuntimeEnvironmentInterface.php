@@ -47,4 +47,9 @@ interface RuntimeEnvironmentInterface
      * Returns whether the Composer test suite runtime flag is enabled.
      */
     public function isComposerTestRun(): bool;
+
+    /**
+     * Returns whether the current process exposes known AI-agent environment markers.
+     */
+    public function isAgentPresent(): bool;
 }
