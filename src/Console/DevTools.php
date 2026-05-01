@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Console;
 
 use FastForward\DevTools\Console\Command\SelfUpdateCommand;
-use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -29,7 +28,6 @@ use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
 use Override;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
@@ -162,24 +160,6 @@ final class DevTools extends Application
         }
 
         return parent::doRun($input, $output);
-    }
-
-    /**
-     * Create DevTools instance from container.
-     *
-     * @return DevTools
-     */
-    public static function create(): self
-    {
-        return ContainerFactory::get(self::class);
-    }
-
-    /**
-     * Retrieves the shared DevTools service container.
-     */
-    public static function getContainer(): ContainerInterface
-    {
-        return ContainerFactory::create();
     }
 
     /**

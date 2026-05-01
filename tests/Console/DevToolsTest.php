@@ -506,14 +506,14 @@ final class DevToolsTest extends TestCase
      * @return void
      */
     #[Test]
-    public function createWillReturnInstanceOfDevTools(): void
+    public function containerFactoryWillReturnASharedDevToolsInstance(): void
     {
         ContainerFactory::reset();
 
-        $devTools = DevTools::create();
+        $devTools = ContainerFactory::get(DevTools::class);
 
         self::assertInstanceOf(DevTools::class, $devTools);
-        self::assertSame($devTools, DevTools::create());
+        self::assertSame($devTools, ContainerFactory::get(DevTools::class));
     }
 
     /**

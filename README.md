@@ -335,8 +335,8 @@ authoring.
 - `Composer Plugin` - `FastForward\DevTools\Composer\Plugin` exposes the
   packaged command set to Composer and runs `dev-tools:sync` after install and
   update.
-- `DevTools Container` - `FastForward\DevTools\Console\DevTools::create()`
-  builds a shared container from `DevToolsServiceProvider`, which wires
+- `DevTools Container` - `FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Console\DevTools::class)`
+  resolves the shared application from `DevToolsServiceProvider`, which wires
   process execution, filesystem access, changelog services, Git helpers,
   diffing, reporting, and template loading.
 - `Generic Link Synchronization` -
