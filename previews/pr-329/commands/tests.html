@@ -3372,6 +3372,10 @@ DevTools JSON envelope. <code>--json</code>
  therefore expose
 the same structured result, with formatting as the only difference.</li>
 
+    <li class="dash">in structured mode, the command suppresses intermediary <code>Running...</code>
+ log
+records so the output stream contains a single final JSON document.</li>
+
     <li class="dash">when structured capture is active but PHPUnit does not emit parseable JSON,
 the command preserves the raw subprocess text inside <code>output.raw_output</code>
 
