@@ -255,6 +255,7 @@
             <li class="success">Execute will capture structured php unit summary when agent environment is detected</li>
             <li class="success">Execute will keep pretty json inside the standard command log output</li>
             <li class="success">Execute will capture structured php unit summary after coverage prelude when agent environment is detected</li>
+            <li class="success">Execute will keep the exit code derived failure result authoritative</li>
             <li class="success">Execute will keep raw php unit output when structured summary cannot be decoded</li>
             <li class="success">Execute will enable php unit progress when requested</li>
             <li class="success">Execute with invalid min coverage will return failure</li>
@@ -276,6 +277,8 @@
         <h2>Command Output Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CommandOutputProcessor)</h2>
         <ul>
             <li class="success">Process will replace buffered output with its contents</li>
+            <li class="success">Process will decode single json buffered output</li>
+            <li class="success">Process will decode multiple json buffered outputs into a list</li>
             <li class="success">Process will extract buffered error output from console output</li>
         </ul>
         <h2>Composer Dependency Analyser Config (FastForward\DevTools\Tests\Config\ComposerDependencyAnalyserConfig)</h2>
@@ -763,6 +766,7 @@
             <li class="success">Log will emit parseable json when json output is requested</li>
             <li class="success">Log will write pretty printed json when pretty json output is requested</li>
             <li class="success">Log will emit parseable json when pretty json output is requested</li>
+            <li class="success">Log will embed decoded structured command output instead of escaped json strings</li>
             <li class="success">Log will write structured json when agent environment is detected</li>
         </ul>
         <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>

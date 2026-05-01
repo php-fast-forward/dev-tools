@@ -3236,6 +3236,21 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_extractBufferedOutput"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AdecodeStructuredOutput\u0028\u0029",
+            "name": "decodeStructuredOutput",
+            "summary": "Decodes\u0020a\u0020buffered\u0020output\u0020string\u0020when\u0020it\u0020contains\u0020JSON\u0020content.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutput"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AdecodeJsonDocumentStream\u0028\u0029",
+            "name": "decodeJsonDocumentStream",
+            "summary": "Decodes\u0020a\u0020stream\u0020that\u0020contains\u0020multiple\u0020JSON\u0020documents\u0020separated\u0020by\u0020whitespace.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeJsonDocumentStream"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor\u003A\u003AconsumeJsonDocument\u0028\u0029",
+            "name": "consumeJsonDocument",
+            "summary": "Consumes\u0020a\u0020single\u0020top\u002Dlevel\u0020JSON\u0020document\u0020from\u0020a\u0020multi\u002Ddocument\u0020stream.",
+            "url": "classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_consumeJsonDocument"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
             "name": "CompositeContextProcessor",
             "summary": "Applies\u0020multiple\u0020context\u0020processors\u0020in\u0020sequence.",
