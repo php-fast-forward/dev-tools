@@ -116,7 +116,7 @@ final class StandardsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(StandardsCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running code standards checks...', Argument::that(
+        $this->logger->log('info', 'Running code standards checks...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -142,7 +142,7 @@ final class StandardsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(StandardsCommand::FAILURE)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running code standards checks...', Argument::that(
+        $this->logger->log('info', 'Running code standards checks...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -202,8 +202,6 @@ final class StandardsCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(StandardsCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Code standards checks completed successfully.',

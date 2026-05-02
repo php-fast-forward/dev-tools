@@ -189,7 +189,7 @@ final class DocsCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -216,7 +216,7 @@ final class DocsCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -250,7 +250,7 @@ final class DocsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(DocsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -282,7 +282,7 @@ final class DocsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(DocsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -316,8 +316,6 @@ final class DocsCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(DocsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'API documentation generated successfully.',

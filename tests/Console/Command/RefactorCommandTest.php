@@ -129,7 +129,7 @@ final class RefactorCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(RefactorCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running Rector for code refactoring...', Argument::that(
+        $this->logger->log('info', 'Running Rector for code refactoring...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -152,7 +152,7 @@ final class RefactorCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(RefactorCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Running Rector for code refactoring...', Argument::that(
+        $this->logger->log('info', 'Running Rector for code refactoring...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -184,8 +184,6 @@ final class RefactorCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(RefactorCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Code refactoring checks completed successfully.',

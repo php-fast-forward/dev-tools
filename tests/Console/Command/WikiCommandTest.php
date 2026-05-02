@@ -175,7 +175,7 @@ final class WikiCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -222,8 +222,6 @@ final class WikiCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Wiki documentation generated successfully.',
@@ -269,7 +267,7 @@ final class WikiCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
@@ -296,7 +294,7 @@ final class WikiCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
@@ -333,7 +331,7 @@ final class WikiCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
@@ -361,7 +359,7 @@ final class WikiCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, true, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(

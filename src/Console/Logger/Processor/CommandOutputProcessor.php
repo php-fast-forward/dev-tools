@@ -323,7 +323,15 @@ final class CommandOutputProcessor implements ContextProcessorInterface
         $changedFiles = [];
 
         foreach ($payload['file_diffs'] as $fileDiff) {
-            if (! \is_array($fileDiff) || ! isset($fileDiff['file']) || ! \is_string($fileDiff['file'])) {
+            if (! \is_array($fileDiff)) {
+                continue;
+            }
+
+            if (! isset($fileDiff['file'])) {
+                continue;
+            }
+
+            if (! \is_string($fileDiff['file'])) {
                 continue;
             }
 

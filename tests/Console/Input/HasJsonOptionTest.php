@@ -108,14 +108,14 @@ final class HasJsonOptionTest extends TestCase
         $input->getOption('json')
             ->willReturn(false);
 
-        $command = new class ($runtimeEnvironment->reveal()) {
+        $command = new readonly class ($runtimeEnvironment->reveal()) {
             use HasJsonOption;
 
             /**
              * @param RuntimeEnvironmentInterface $runtimeEnvironment
              */
             public function __construct(
-                private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
+                private RuntimeEnvironmentInterface $runtimeEnvironment,
             ) {}
 
             /**

@@ -126,7 +126,7 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running dependency analysis...', Argument::that(
+        $this->logger->log('info', 'Running dependency analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalledOnce();
@@ -170,7 +170,7 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running dependency analysis...', Argument::that(
+        $this->logger->log('info', 'Running dependency analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalledOnce();
@@ -198,8 +198,6 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Dependency analysis completed successfully.',

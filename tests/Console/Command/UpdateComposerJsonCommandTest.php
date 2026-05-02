@@ -102,8 +102,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('dry-run')
@@ -457,7 +457,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->fileDiffer->formatForConsole('@@ diff @@', false)
             ->willReturn('@@ diff @@')
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             '@@ diff @@',
             [
                 'input' => $this->input->reveal(),

@@ -23,6 +23,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\FundingCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Funding\ComposerFundingCodec;
 use FastForward\DevTools\Funding\FundingProfile;
@@ -61,6 +62,7 @@ use function Safe\json_decode;
 #[UsesClass(DevToolsEnvironment::class)]
 #[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(FundingCommand::class)]
+#[UsesClass(GithubActionOutput::class)]
 #[UsesClass(FileDiff::class)]
 #[UsesClass(ComposerFundingCodec::class)]
 #[UsesClass(FundingProfile::class)]
@@ -116,9 +118,9 @@ final class FundingCommandTest extends TestCase
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('composer-file')
             ->willReturn('composer.json');
@@ -363,11 +365,12 @@ final class FundingCommandTest extends TestCase
     {
         $this->filesystem->exists('composer.json')
             ->willReturn(false);
-        $this->logger->info('Synchronizing funding metadata...', [
+        $this->logger->log('info', 'Synchronizing funding metadata...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Composer file {composer_file} does not exist. Skipping funding synchronization.',
             [
                 'input' => $this->input->reveal(),
@@ -509,7 +512,7 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
-        $this->logger->notice('Skipped updating {composer_file}.', Argument::type('array'))
+        $this->logger->log('notice', 'Skipped updating {composer_file}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->logger->log(
             'notice',
@@ -664,7 +667,8 @@ final class FundingCommandTest extends TestCase
             $composerContents,
             'Updating managed file composer.json from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Composer unchanged'))->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
             [
                 'input' => $this->input->reveal(),

@@ -207,11 +207,11 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Checking and fixing PHPDocs...', Argument::that(
+        $this->logger->log('info', 'Checking and fixing PHPDocs...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->info('Created .docheader from repository template.', Argument::that(
+        $this->logger->log('info', 'Created .docheader from repository template.', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -259,11 +259,12 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Checking and fixing PHPDocs...', Argument::that(
+        $this->logger->log('info', 'Checking and fixing PHPDocs...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->warning(
+        $this->logger->log(
+            'warning',
             'Skipping .docheader creation because the destination file could not be written.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
@@ -302,8 +303,6 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'PHPDoc checks completed successfully.',

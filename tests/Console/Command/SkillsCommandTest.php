@@ -104,7 +104,7 @@ final class SkillsCommandTest extends TestCase
         $this->filesystem->exists($skillsPath)
             ->willReturn(false);
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->info('Starting skills synchronization...', [
+        $this->logger->log('info', 'Starting skills synchronization...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalledOnce();
@@ -139,11 +139,11 @@ final class SkillsCommandTest extends TestCase
         $this->synchronizer->synchronize($skillsPath, $skillsPath, '.agents/skills')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting skills synchronization...', [
+        $this->logger->log('info', 'Starting skills synchronization...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalledOnce();
-        $this->logger->info('Created .agents/skills directory.', [
+        $this->logger->log('info', 'Created .agents/skills directory.', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalledOnce();
@@ -176,7 +176,7 @@ final class SkillsCommandTest extends TestCase
         $this->synchronizer->synchronize($skillsPath, $skillsPath, '.agents/skills')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting skills synchronization...', [
+        $this->logger->log('info', 'Starting skills synchronization...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalledOnce();

@@ -99,7 +99,7 @@ final class SelfUpdateCommandTest extends TestCase
         $this->input->getOption('pretty-json')
             ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->logger->info(Argument::cetera())
+        $this->logger->log('info', Argument::cetera())
             ->will(static function (): void {});
         $this->logger->log(Argument::cetera())
             ->will(static function (): void {});

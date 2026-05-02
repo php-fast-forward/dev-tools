@@ -22,11 +22,12 @@ namespace FastForward\DevTools\Tests\Composer\Capability;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Command\ProxyCommand;
 use FastForward\DevTools\Composer\DevToolsPluginInterface;
+use FastForward\DevTools\Console\DevTools;
 use FastForward\DevTools\Console\Command\FixtureWithoutAsCommand;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Path\DevToolsPathResolver;
-use FastForward\DevTools\Console\Output\GithubActionOutput;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -91,9 +92,12 @@ final class DevToolsCommandProviderTest extends TestCase
             'plugin' => $this->plugin->reveal(),
         ]);
 
-        ContainerFactory::set('FastForward\DevTools\Console\DevTools', new class ($this->applicationState) {
+        ContainerFactory::set(DevTools::class, new readonly class ($this->applicationState) {
+            /**
+             * @param stdClass $state
+             */
             public function __construct(
-                private readonly stdClass $state,
+                private stdClass $state,
             ) {}
 
             /**

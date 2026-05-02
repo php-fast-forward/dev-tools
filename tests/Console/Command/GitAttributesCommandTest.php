@@ -160,9 +160,9 @@ final class GitAttributesCommandTest extends TestCase
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('dry-run')
             ->willReturn(false);
@@ -253,11 +253,12 @@ final class GitAttributesCommandTest extends TestCase
         $this->writer->write($gitattributesPath, "custom-entry\n/.github/ export-ignore")
             ->shouldBeCalledOnce();
 
-        $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
+        $this->logger->log('info', 'Synchronizing .gitattributes export-ignore rules...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
             Argument::type('array'),
         )->shouldBeCalled();
@@ -352,11 +353,12 @@ final class GitAttributesCommandTest extends TestCase
         $this->writer->write(Argument::cetera())
             ->shouldNotBeCalled();
 
-        $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
+        $this->logger->log('info', 'Synchronizing .gitattributes export-ignore rules...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'No candidate paths found in repository. Skipping .gitattributes sync.',
             [
                 'input' => $this->input->reveal(),
@@ -412,7 +414,7 @@ final class GitAttributesCommandTest extends TestCase
         $this->fileDiffer->formatForConsole('@@ diff @@', false)
             ->willReturn('@@ diff @@')
             ->shouldBeCalledOnce();
-        $this->logger->notice('@@ diff @@', Argument::type('array'))
+        $this->logger->log('notice', '@@ diff @@', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->logger->error('.gitattributes requires synchronization updates.', Argument::type('array'))
             ->shouldBeCalledOnce();
@@ -505,7 +507,7 @@ final class GitAttributesCommandTest extends TestCase
         $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice('Skipped updating {gitattributes_path}.', Argument::type('array'))
+        $this->logger->log('notice', 'Skipped updating {gitattributes_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->logger->log('notice', '.gitattributes synchronization was skipped.', Argument::type('array'))
             ->shouldBeCalledOnce();

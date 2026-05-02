@@ -139,7 +139,7 @@ final class MetricsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running code metrics analysis...', Argument::that(
+        $this->logger->log('info', 'Running code metrics analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -163,7 +163,7 @@ final class MetricsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Running code metrics analysis...', Argument::that(
+        $this->logger->log('info', 'Running code metrics analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -193,8 +193,6 @@ final class MetricsCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(MetricsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Code metrics analysis completed successfully.',
@@ -269,7 +267,7 @@ final class MetricsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(MetricsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running code metrics analysis...', Argument::that(
+        $this->logger->log('info', 'Running code metrics analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(

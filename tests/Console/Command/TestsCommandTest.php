@@ -55,6 +55,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
+use function Safe\putenv;
 
 #[UsesClass(DevToolsEnvironment::class)]
 #[UsesClass(RuntimeEnvironment::class)]
@@ -215,7 +216,7 @@ final class TestsCommandTest extends TestCase
         )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -278,7 +279,7 @@ final class TestsCommandTest extends TestCase
 
                 return TestsCommand::SUCCESS;
             })->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', Argument::cetera())->shouldBeCalled();
         $this->logger->log(
             'info',
             'PHPUnit tests completed successfully.',
@@ -317,7 +318,7 @@ final class TestsCommandTest extends TestCase
 
                 return TestsCommand::SUCCESS;
             })->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', Argument::cetera())->shouldBeCalled();
         $this->logger->log(
             'info',
             'PHPUnit tests completed successfully.',
@@ -352,7 +353,7 @@ final class TestsCommandTest extends TestCase
         )->shouldBeCalled();
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', Argument::cetera())->shouldBeCalled();
         $this->logger->log(
             'info',
             'PHPUnit tests completed successfully.',
@@ -387,7 +388,7 @@ final class TestsCommandTest extends TestCase
 
                 return TestsCommand::SUCCESS;
             })->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', Argument::cetera())->shouldBeCalled();
         $this->logger->log(
             'info',
             'PHPUnit tests completed successfully.',
@@ -426,7 +427,7 @@ final class TestsCommandTest extends TestCase
 
                 return TestsCommand::SUCCESS;
             })->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', Argument::cetera())->shouldBeCalled();
         $this->logger->log(
             'info',
             'PHPUnit tests completed successfully.',
@@ -466,7 +467,7 @@ final class TestsCommandTest extends TestCase
 
                 return TestsCommand::FAILURE;
             })->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log(Argument::cetera())->shouldNotBeCalled();
         $this->logger->error(
             'PHPUnit tests failed.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
@@ -502,7 +503,7 @@ final class TestsCommandTest extends TestCase
 
                 return TestsCommand::SUCCESS;
             })->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', Argument::cetera())->shouldBeCalled();
         $this->logger->log(
             'info',
             'PHPUnit tests completed successfully.',
@@ -549,7 +550,7 @@ final class TestsCommandTest extends TestCase
         $this->input->getOption('min-coverage')
             ->willReturn('invalid');
         $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -572,7 +573,7 @@ final class TestsCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
         $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
@@ -601,7 +602,7 @@ final class TestsCommandTest extends TestCase
             ->shouldNotBeCalled();
         $this->processQueue->run(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->error(
@@ -634,7 +635,7 @@ final class TestsCommandTest extends TestCase
         )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -680,7 +681,6 @@ final class TestsCommandTest extends TestCase
 
                 return TestsCommand::SUCCESS;
             })->shouldBeCalled();
-        $this->logger->info(Argument::cetera())->shouldNotBeCalled();
         $this->logger->log(Argument::cetera())->shouldNotBeCalled();
         $this->logger->error(
             'Minimum line coverage of 80.00% was not met. Current coverage: 75.00% (75/100 lines).',
@@ -716,7 +716,7 @@ final class TestsCommandTest extends TestCase
         )->shouldBeCalled();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
-        $this->logger->info('Running PHPUnit tests...', Argument::that(
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();

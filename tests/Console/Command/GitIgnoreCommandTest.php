@@ -146,8 +146,8 @@ final class GitIgnoreCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->gitIgnoreSource = $this->prophesize(GitIgnoreInterface::class);
         $this->gitIgnoreTarget = $this->prophesize(GitIgnoreInterface::class);
@@ -236,7 +236,7 @@ final class GitIgnoreCommandTest extends TestCase
         $this->writer->write($this->gitIgnoreMerged->reveal())
             ->shouldBeCalled();
 
-        $this->logger->info('Merging .gitignore files...', [
+        $this->logger->log('info', 'Merging .gitignore files...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();

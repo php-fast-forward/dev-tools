@@ -130,9 +130,9 @@ final class LicenseCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
 
         $this->command = new LicenseCommand(
@@ -189,7 +189,8 @@ final class LicenseCommandTest extends TestCase
         $this->filesystem->dumpFile($targetPath, 'MIT License content')
             ->shouldBeCalledOnce();
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Managed file ' . $targetPath . ' will be created from generated LICENSE content.',
             [
                 'input' => $this->input->reveal(),
@@ -238,7 +239,8 @@ final class LicenseCommandTest extends TestCase
             'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
         ))->shouldBeCalledOnce();
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
             [
                 'input' => $this->input->reveal(),
@@ -266,7 +268,8 @@ final class LicenseCommandTest extends TestCase
         $this->generator->generateContent()
             ->willReturn(null);
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
             [
                 'input' => $this->input->reveal(),
@@ -391,7 +394,8 @@ final class LicenseCommandTest extends TestCase
         $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped updating {target_path}.',
             [
                 'input' => $this->input->reveal(),

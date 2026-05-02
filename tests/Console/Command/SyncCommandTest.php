@@ -101,7 +101,7 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting dev-tools synchronization...', Argument::that(
+        $this->logger->log('info', 'Starting dev-tools synchronization...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -131,11 +131,12 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::FAILURE)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting dev-tools synchronization...', Argument::that(
+        $this->logger->log('info', 'Starting dev-tools synchronization...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->warning(
+        $this->logger->log(
+            'warning',
             'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
@@ -171,8 +172,6 @@ final class SyncCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info(Argument::cetera())
-            ->shouldNotBeCalled();
         $this->logger->log(
             'info',
             'Dev-tools synchronization completed successfully.',

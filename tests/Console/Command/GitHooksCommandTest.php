@@ -120,9 +120,9 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('dry-run')
             ->willReturn(false);
@@ -285,7 +285,8 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn('/app/.git/hooks');
         $this->filesystem->exists('/app/.git/hooks/post-merge')
             ->willReturn(true);
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped existing {hook_name} hook.',
             [
                 'input' => $this->input->reveal(),
@@ -334,7 +335,8 @@ final class GitHooksCommandTest extends TestCase
         $this->fileDiffer->formatForConsole("@@ -1 +1 @@\n-old\n+new", false)
             ->willReturn("@@ -1 +1 @@\n-old\n+new")
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Changed summary',
             [
                 'input' => $this->input->reveal(),
@@ -343,7 +345,8 @@ final class GitHooksCommandTest extends TestCase
             ],
         )
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             "@@ -1 +1 @@\n-old\n+new",
             [
                 'input' => $this->input->reveal(),
@@ -398,7 +401,8 @@ final class GitHooksCommandTest extends TestCase
         $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped replacing {hook_path}.',
             [
                 'input' => $this->input->reveal(),
