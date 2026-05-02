@@ -3180,7 +3180,7 @@
 <ol start="1" type="1">
     <li value="1">Install the package.</li>
 
-    <li value="2">Create a minimal guide directory.</li>
+    <li value="2">Create a guide directory if the repository will publish guides.</li>
 
     <li value="3">Synchronize shared automation, packaged skills, and packaged agents.</li>
 
@@ -3190,14 +3190,13 @@
 
 </ol>
 
-            <section class="section " id="create-the-minimum-guide">
-            <h2>Create the Minimum Guide</h2>
+            <section class="section " id="optional-guide-setup">
+            <h2>Optional Guide Setup</h2>
 
             
-    <p>The <code>docs</code>
- command fails early when <code>docs/</code>
- does not exist. A tiny
-starting page is enough for the first successful run.</p>
+    <p>If the repository will publish guides, a tiny starting page is enough for the
+first successful <code>docs</code>
+ run.</p>
 
             
     <p>Create the directory:</p>
@@ -3213,13 +3212,19 @@ starting page is enough for the first successful run.</p>
 
 Welcome to the project documentation.</code></pre>
 
+            
+    <p>Repositories that only ship PHP code can skip this step and still generate API
+documentation. Repositories that only ship guides can also use the same
+<code>docs</code>
+ command even without PSR-4 source paths.</p>
+
     </section>
 
             <section class="section " id="run-the-first-commands">
             <h2>Run the First Commands</h2>
 
             
-    <p>Once the package is installed and the guide directory exists, run:</p>
+    <p>Once the package is installed, run:</p>
 
             <pre><code class="language-bash">composer dev-tools:sync
 composer skills
@@ -3255,11 +3260,13 @@ repository.</li>
 
     <li class="dash"><code>composer tests</code>
  proves the packaged or local PHPUnit
-configuration can execute the current test suite.</li>
+configuration can execute the current test suite, or skip gracefully when
+the repository intentionally has no runnable PHPUnit surface yet.</li>
 
     <li class="dash"><code>composer docs</code>
  proves the PSR-4 source paths and the guide
-directory are usable by phpDocumentor.</li>
+directory are usable by phpDocumentor, whichever of those surfaces the
+repository actually provides.</li>
 
     <li class="dash"><code>composer dev-tools</code>
  proves the complete pipeline can run in the expected

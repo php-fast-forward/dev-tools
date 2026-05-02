@@ -3374,6 +3374,13 @@ report builds keep PHPUnit output concise.</li>
  subprocesses and suppresses transient
 progress output where those tools support it.</li>
 
+    <li class="dash">Nested <code>docs</code>
+ and <code>tests</code>
+ stages can now skip gracefully with warnings in
+guide-only or automation-only repositories, while <code>reports</code>
+ still returns a
+successful aggregate result for the stages that were actually generated.</li>
+
     <li class="dash">Passes <code>--junit &lt;coverage&gt;/junit.xml</code>
  to the metrics step.</li>
 

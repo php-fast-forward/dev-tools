@@ -3205,6 +3205,10 @@ explicit force-off flag for the current run;</li>
  directory only when caching
 stays enabled;</li>
 
+    <li class="dash">skips the command with a warning when the repository has no default
+<code>tests</code>
+ directory and no testable PHP source surface;</li>
+
     <li class="dash">can generate HTML coverage, Testdox, Clover, and raw PHP coverage output
 when <code>--coverage</code>
  is provided.</li>
@@ -3219,7 +3223,9 @@ when <code>--coverage</code>
             <pre><code class="language-bash">composer tests
 composer tests -- --filter=PluginTest
 composer tests --coverage=.dev-tools/coverage
-composer tests --no-cache --bootstrap=tests/bootstrap.php</code></pre>
+composer tests --no-cache --bootstrap=tests/bootstrap.php
+composer tests --json
+composer tests --pretty-json</code></pre>
 
     </section>
 
@@ -3290,6 +3296,12 @@ runtime is detected.</li>
 
 </ul>
 
+            
+    <p>When <code>tests</code>
+ itself runs in structured mode, DevTools also forces the
+reporter path for the PHPUnit subprocess so the nested payload remains compact
+and parseable for bots and agent workflows.</p>
+
     </section>
 
             <section class="section " id="programmatic-coverage-access">
@@ -3320,7 +3332,10 @@ $summary-&gt;percentageAsString(); // e.g., &quot;84.52%&quot;</code></pre>
     <p>Create your own <code>phpunit.xml</code>
  in the consumer project when you need a
 different bootstrap file, extra extensions, or alternative strictness flags.
-DevTools will prefer the local file automatically.</p>
+DevTools will prefer the local file automatically, but consumer projects that
+replace the packaged configuration must re-register both bundled extensions if
+they still want desktop notifications, BypassFinals support, and compact
+agent-oriented JSON output.</p>
 
             
         

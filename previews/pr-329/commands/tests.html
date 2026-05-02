@@ -3319,6 +3319,12 @@ valid JSON and intentionally does not include ANSI color escapes.</dd>
             <pre><code class="language-bash">composer tests --min-coverage=80</code></pre>
 
             
+    <p>Run with structured JSON output:</p>
+
+            <pre><code class="language-bash">composer tests --json
+composer tests --pretty-json</code></pre>
+
+            
     <p>Run without cache:</p>
 
             <pre><code class="language-bash">composer tests --no-cache</code></pre>
@@ -3372,6 +3378,13 @@ valid JSON and intentionally does not include ANSI color escapes.</dd>
     <li class="dash">Local <code>phpunit.xml</code>
  is preferred over the packaged default.</li>
 
+    <li class="dash">When the default <code>tests</code>
+ path is absent and the project exposes no
+testable PHP source files, the command exits successfully with a warning
+instead of failing the whole automation flow.</li>
+
+    <li class="dash">A custom explicit tests path that does not exist still fails fast.</li>
+
     <li class="dash">Coverage filters are automatically applied to all PSR-4 paths from composer.json.</li>
 
     <li class="dash">Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.</li>
@@ -3408,6 +3421,10 @@ DevTools JSON envelope. <code>--json</code>
  and <code>--pretty-json</code>
  therefore expose
 the same structured result, with formatting as the only difference.</li>
+
+    <li class="dash">the command forces the bundled PHPUnit agent-reporter extension for
+structured runs so the nested payload stays compact and stable even when the
+surrounding runtime would not normally look like an agent.</li>
 
     <li class="dash">in structured mode, the command suppresses intermediary <code>Running...</code>
  log

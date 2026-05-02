@@ -3208,6 +3208,11 @@ builds a summary notification and sends it when the run finishes.</li>
  replaces PHPUnit&#039;s normal
 output with a compact JSON report when an agent runtime is detected.</li>
 
+    <li value="6">In structured DevTools runs, <code>tests</code>
+ forces the same reporter path for
+the PHPUnit subprocess so the final nested payload remains deterministic
+even when the surrounding process would not naturally look agent-driven.</li>
+
 </ol>
 
     </section>
@@ -3226,6 +3231,10 @@ scrollback;</li>
 
     <li class="dash">agent-driven runs consume far less terminal context while still keeping
 failure details and PHPUnit exit semantics intact;</li>
+
+    <li class="dash">DevTools can preserve a single top-level JSON document while nesting the
+compact PHPUnit summary under <code>context.output</code>
+ for bot-friendly parsing;</li>
 
     <li class="dash">event counts are available to the notification layer without adding ad-hoc
 test code.</li>
