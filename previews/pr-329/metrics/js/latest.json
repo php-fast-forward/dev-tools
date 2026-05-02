@@ -15,7 +15,7 @@
         "afferentCoupling": 1.15,
         "efferentCoupling": 4.14,
         "difficulty": 6.62,
-        "mi": 91.13,
+        "mi": 91.14,
         "distance": 0.14,
         "incomingCDep": 3.19,
         "incomingPDep": 1.58,
@@ -24,10 +24,10 @@
         "classesPerPackage": 3.04
     },
     "sum": {
-        "loc": 24862,
-        "cloc": 9513,
-        "lloc": 15353,
-        "nbMethods": 1427,
+        "loc": 24857,
+        "cloc": 9512,
+        "lloc": 15349,
+        "nbMethods": 1426,
         "nbClasses": 257,
         "nbInterfaces": 41,
         "nbPackages": 98,
