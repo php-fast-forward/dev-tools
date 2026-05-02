@@ -34,6 +34,11 @@ use FastForward\DevTools\GitAttributes\ReaderInterface;
 use FastForward\DevTools\GitAttributes\WriterInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -42,18 +47,25 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(GitAttributesCommand::class)]
 #[UsesClass(FileDiff::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class GitAttributesCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     /**
      * @var ObjectProphecy<CandidateProviderInterface>
@@ -133,18 +145,24 @@ final class GitAttributesCommandTest extends TestCase
         $this->composerJson = $this->prophesize(ComposerJsonInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('dry-run')
             ->willReturn(false);
@@ -168,7 +186,6 @@ final class GitAttributesCommandTest extends TestCase
             $this->composerJson->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }
@@ -236,11 +253,12 @@ final class GitAttributesCommandTest extends TestCase
         $this->writer->write($gitattributesPath, "custom-entry\n/.github/ export-ignore")
             ->shouldBeCalledOnce();
 
-        $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
+        $this->logger->log('info', 'Synchronizing .gitattributes export-ignore rules...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Updating managed file ' . $gitattributesPath . ' from generated .gitattributes synchronization.',
             Argument::type('array'),
         )->shouldBeCalled();
@@ -335,11 +353,12 @@ final class GitAttributesCommandTest extends TestCase
         $this->writer->write(Argument::cetera())
             ->shouldNotBeCalled();
 
-        $this->logger->info('Synchronizing .gitattributes export-ignore rules...', [
+        $this->logger->log('info', 'Synchronizing .gitattributes export-ignore rules...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalled();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'No candidate paths found in repository. Skipping .gitattributes sync.',
             [
                 'input' => $this->input->reveal(),
@@ -395,7 +414,7 @@ final class GitAttributesCommandTest extends TestCase
         $this->fileDiffer->formatForConsole('@@ diff @@', false)
             ->willReturn('@@ diff @@')
             ->shouldBeCalledOnce();
-        $this->logger->notice('@@ diff @@', Argument::type('array'))
+        $this->logger->log('notice', '@@ diff @@', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->logger->error('.gitattributes requires synchronization updates.', Argument::type('array'))
             ->shouldBeCalledOnce();
@@ -488,7 +507,7 @@ final class GitAttributesCommandTest extends TestCase
         $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice('Skipped updating {gitattributes_path}.', Argument::type('array'))
+        $this->logger->log('notice', 'Skipped updating {gitattributes_path}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->logger->log('notice', '.gitattributes synchronization was skipped.', Argument::type('array'))
             ->shouldBeCalledOnce();

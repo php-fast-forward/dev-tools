@@ -71,7 +71,8 @@ Options
 ``--pretty-json``
    Emit the same structured payload with indentation for terminal inspection.
    This also suppresses PHPUnit progress output automatically so the JSON
-   payload is not polluted by transient progress rendering.
+   payload is not polluted by transient progress rendering. The output remains
+   valid JSON and intentionally does not include ANSI color escapes.
 
 Examples
 --------
@@ -112,6 +113,13 @@ Run with minimum coverage enforcement:
 
    composer tests --min-coverage=80
 
+Run with structured JSON output:
+
+.. code-block:: bash
+
+   composer tests --json
+   composer tests --pretty-json
+
 Run without cache:
 
 .. code-block:: bash
@@ -149,6 +157,10 @@ Behavior
 ---------
 
 - Local ``phpunit.xml`` is preferred over the packaged default.
+- When the default ``tests`` path is absent and the project exposes no
+  testable PHP source files, the command exits successfully with a warning
+  instead of failing the whole automation flow.
+- A custom explicit tests path that does not exist still fails fast.
 - Coverage filters are automatically applied to all PSR-4 paths from composer.json.
 - Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.
 - Cache stays enabled by default; omit both flags to keep the command default,
@@ -160,5 +172,25 @@ Behavior
 - progress output is disabled by default.
 - ``--json`` and ``--pretty-json`` keep progress output disabled so the
   structured payload stays clean, even when ``--progress`` is provided.
+- in agent-driven runs outside the Composer test suite, the command also
+  switches to the same structured capture mode automatically.
+- when structured capture is active and PHPUnit emits agent-reporter JSON, the
+  command stores that payload inside ``output`` while keeping the standard
+  DevTools JSON envelope. ``--json`` and ``--pretty-json`` therefore expose
+  the same structured result, with formatting as the only difference.
+- the command forces the bundled PHPUnit agent-reporter extension for
+  structured runs so the nested payload stays compact and stable even when the
+  surrounding runtime would not normally look like an agent.
+- in structured mode, the command suppresses intermediary ``Running...`` log
+  records so the output stream contains a single final JSON document.
+- when structured capture is active but PHPUnit does not emit parseable JSON,
+  the command preserves the raw subprocess text inside ``output.raw_output``
+  instead of dropping it.
+- when coverage generation or other PHPUnit text appears before the final
+  reporter payload, the command preserves that prelude in
+  ``output.raw_output`` while keeping the main JSON result parseable.
+- when ``--min-coverage`` is used in structured mode, the command appends a
+  ``coverage`` object under ``output`` and flips ``output.result`` to
+  ``failure`` if the threshold is not met.
 - The command fails if minimum coverage is not met (when ``--min-coverage`` is set).
 - The packaged configuration registers the DevTools PHPUnit extension.

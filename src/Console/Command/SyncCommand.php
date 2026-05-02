@@ -24,7 +24,7 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,12 +48,10 @@ final class SyncCommand extends Command
     /**
      * @param ProcessBuilderInterface $processBuilder
      * @param ProcessQueueInterface $processQueue
-     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -112,9 +110,7 @@ final class SyncCommand extends Command
         ];
         $allowDetached = ! $dryRun && ! $check && ! $interactive;
 
-        $this->logger->info('Starting dev-tools synchronization...', [
-            'input' => $input,
-        ]);
+        $this->log('Starting dev-tools synchronization...', $input);
 
         $this->queueDevToolsCommand(['update-composer-json', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);
         $this->queueDevToolsCommand(['funding', ...$modeArguments], false, $jsonOutput, $prettyJsonOutput);
@@ -162,11 +158,10 @@ final class SyncCommand extends Command
         );
 
         if ($dryRun || $check || $interactive) {
-            $this->logger->warning(
+            $this->log(
                 'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
-                [
-                    'input' => $input,
-                ],
+                $input,
+                logLevel: LogLevel::WARNING,
             );
         } else {
             $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput, $prettyJsonOutput);

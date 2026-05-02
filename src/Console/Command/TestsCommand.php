@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
+use JsonException;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -32,7 +33,6 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use InvalidArgumentException;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use RuntimeException;
 use Symfony\Component\Config\FileLocatorInterface;
@@ -43,8 +43,11 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Process\Process;
 
 use function is_numeric;
+use function Safe\json_decode;
+use function Safe\preg_match;
 
 /**
  * Facilitates the execution of the PHPUnit testing framework.
@@ -56,6 +59,12 @@ final class TestsCommand extends Command
     use HasCacheOption;
     use HasJsonOption;
     use LogsCommandResults;
+
+    private const string AGENT_ENVIRONMENT_VARIABLE = 'AI_AGENT';
+
+    private const string AGENT_ENVIRONMENT_VALUE = 'fast-forward/dev-tools';
+
+    private const string PROCESS_LABEL = 'Running PHPUnit Tests';
 
     /**
      * @var string identifies the local configuration file for PHPUnit processes
@@ -71,7 +80,6 @@ final class TestsCommand extends Command
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
@@ -82,7 +90,6 @@ final class TestsCommand extends Command
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -160,14 +167,11 @@ final class TestsCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $jsonOutput = $this->isJsonOutput($input);
-        $processOutput = $jsonOutput ? new BufferedOutput() : $output;
+        $structuredOutput = $this->isJsonOutput($input);
+        $processOutput = $structuredOutput ? new BufferedOutput() : $output;
         $cacheEnabled = $this->isCacheEnabled($input);
 
-        $this->getLogger()
-            ->info('Running PHPUnit tests...', [
-                'input' => $input,
-            ]);
+        $this->log('Running PHPUnit tests...', $input);
 
         try {
             $minimumCoverage = $this->resolveMinimumCoverage($input);
@@ -206,11 +210,11 @@ final class TestsCommand extends Command
             ->withArgument('--display-incomplete')
             ->withArgument('--display-skipped');
 
-        if (! $input->getOption('progress') || $jsonOutput) {
+        if (! $input->getOption('progress') || $structuredOutput) {
             $processBuilder = $processBuilder->withArgument('--no-progress');
         }
 
-        if (! $jsonOutput) {
+        if (! $structuredOutput) {
             $processBuilder = $processBuilder->withArgument('--colors=always');
         }
 
@@ -232,29 +236,25 @@ final class TestsCommand extends Command
             $processBuilder = $processBuilder->withArgument('--filter', $input->getOption('filter'));
         }
 
-        $this->processQueue->add(
-            process: $processBuilder
-                ->withArgument($input->getArgument('path'))
-                ->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpunit')]),
-            label: 'Running PHPUnit Tests',
-        );
+        $process = $processBuilder
+            ->withArgument($input->getArgument('path'))
+            ->build([DevToolsPathResolver::getPreferredToolBinaryPath('phpunit')]);
+
+        if ($structuredOutput) {
+            $this->forceAgentReporter($process);
+        }
+
+        $this->processQueue->add(process: $process, label: self::PROCESS_LABEL);
 
         $result = $this->processQueue->run($processOutput);
+        $processResultContext = $this->resolveProcessResultContext($processOutput, $result, $structuredOutput);
 
         if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
             if (self::SUCCESS === $result) {
-                return $this->success(
-                    'PHPUnit tests completed successfully.',
-                    $input,
-                    [
-                        'output' => $processOutput,
-                    ],
-                );
+                return $this->success('PHPUnit tests completed successfully.', $input, $processResultContext);
             }
 
-            return $this->failure('PHPUnit tests failed.', $input, [
-                'output' => $processOutput,
-            ]);
+            return $this->failure('PHPUnit tests failed.', $input, $processResultContext);
         }
 
         [$validationResult, $message, $coverageContext] = $this->validateMinimumCoverage(
@@ -262,17 +262,184 @@ final class TestsCommand extends Command
             $minimumCoverage,
         );
 
-        if (self::SUCCESS === $validationResult) {
-            return $this->success($message, $input, [
-                'output' => $processOutput,
-                ...$coverageContext,
-            ]);
+        if ($structuredOutput) {
+            $processResultContext = $this->withStructuredCoverageValidationContext(
+                $processResultContext,
+                $coverageContext,
+                $minimumCoverage,
+                $validationResult,
+                $message,
+            );
         }
 
-        return $this->failure($message, $input, [
+        if (self::SUCCESS === $validationResult) {
+            return $this->success($message, $input, [...$processResultContext, ...$coverageContext]);
+        }
+
+        return $this->failure($message, $input, [...$processResultContext, ...$coverageContext]);
+    }
+
+    /**
+     * Builds structured context for the executed PHPUnit process.
+     *
+     * @param OutputInterface $processOutput the output sink used while the process ran
+     * @param int $exitCode the exit code returned by the process queue
+     * @param bool $structuredOutput whether the command captured subprocess output for structured logging
+     *
+     * @return array<string, array<string, mixed>|OutputInterface>
+     */
+    private function resolveProcessResultContext(
+        OutputInterface $processOutput,
+        int $exitCode,
+        bool $structuredOutput,
+    ): array {
+        if ($structuredOutput) {
+            return [
+                'output' => $this->resolveStructuredProcessResultPayload($processOutput, $exitCode),
+            ];
+        }
+
+        return [
             'output' => $processOutput,
+        ];
+    }
+
+    /**
+     * Forces the PHPUnit subprocess to expose the agent reporter payload.
+     *
+     * @param Process $process the configured PHPUnit process
+     *
+     * @return void
+     */
+    private function forceAgentReporter(Process $process): void
+    {
+        $env = $process->getEnv();
+
+        if (\array_key_exists(self::AGENT_ENVIRONMENT_VARIABLE, $env) || false !== getenv(
+            self::AGENT_ENVIRONMENT_VARIABLE
+        )) {
+            return;
+        }
+
+        // Intentionally reuse the reporter's existing agent detection path for
+        // structured DevTools output instead of maintaining a separate
+        // integration that would need to mirror the plugin behavior.
+        $env[self::AGENT_ENVIRONMENT_VARIABLE] = self::AGENT_ENVIRONMENT_VALUE;
+        $process->setEnv($env);
+    }
+
+    /**
+     * Builds the structured payload that will be emitted for agent-oriented runs.
+     *
+     * @param OutputInterface $processOutput the output sink used while the process ran
+     * @param int $exitCode the exit code returned by the process queue
+     *
+     * @return array<string, mixed> the structured process payload
+     */
+    private function resolveStructuredProcessResultPayload(OutputInterface $processOutput, int $exitCode): array
+    {
+        $payload = [
+            'result' => self::SUCCESS === $exitCode ? 'success' : 'failure',
+        ];
+
+        if (! $processOutput instanceof BufferedOutput) {
+            return $payload;
+        }
+
+        $rawOutput = trim($processOutput->fetch());
+
+        if ('' === $rawOutput) {
+            return $payload;
+        }
+
+        [$decoded, $supplementalOutput] = $this->decodeStructuredProcessOutput($rawOutput);
+
+        if (\is_array($decoded)) {
+            $payload = [
+                ...$decoded,
+                'result' => $payload['result'],
+            ];
+        }
+
+        if (null !== $supplementalOutput) {
+            $payload['raw_output'] = $supplementalOutput;
+        }
+
+        return $payload;
+    }
+
+    /**
+     * Appends minimum-coverage validation data to the structured PHPUnit output payload.
+     *
+     * @param array<string, mixed> $context the command result context
+     * @param array<string, float|int|string|null> $coverageContext structured coverage metrics
+     * @param float $minimumCoverage the required coverage percentage
+     * @param int $validationResult the post-PHPUnit validation status
+     * @param string $message the validation message
+     *
+     * @return array<string, mixed> the enriched structured command context
+     */
+    private function withStructuredCoverageValidationContext(
+        array $context,
+        array $coverageContext,
+        float $minimumCoverage,
+        int $validationResult,
+        string $message,
+    ): array {
+        if (! isset($context['output']) || ! \is_array($context['output'])) {
+            return $context;
+        }
+
+        $payload = $context['output'];
+        $payload['coverage'] = [
             ...$coverageContext,
-        ]);
+            'minimum' => $minimumCoverage,
+        ];
+
+        if (self::SUCCESS !== $validationResult) {
+            $payload['message'] = $message;
+            $payload['result'] = 'failure';
+        }
+
+        $context['output'] = $payload;
+
+        return $context;
+    }
+
+    /**
+     * Attempts to decode structured PHPUnit output while preserving any
+     * non-JSON prelude that was emitted before the final reporter payload.
+     *
+     * @param string $rawOutput the captured subprocess output
+     *
+     * @return array{array<string, mixed>|null, string|null} decoded payload and preserved supplemental output
+     */
+    private function decodeStructuredProcessOutput(string $rawOutput): array
+    {
+        try {
+            $decoded = json_decode($rawOutput, true);
+
+            return [\is_array($decoded) ? $decoded : null, null];
+        } catch (JsonException) {
+        }
+
+        if (1 !== preg_match('/^(?P<prefix>.*?)(?P<payload>\{\s*"result".*)$/s', $rawOutput, $matches)) {
+            return [null, $rawOutput];
+        }
+
+        try {
+            $decoded = json_decode($matches['payload'], true);
+        } catch (JsonException) {
+            return [null, $rawOutput];
+        }
+
+        if (! \is_array($decoded)) {
+            return [null, $rawOutput];
+        }
+
+        $prefix = trim($matches['prefix']);
+
+        return [$decoded, '' === $prefix ? null : $prefix];
     }
 
     /**

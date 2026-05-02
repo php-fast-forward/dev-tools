@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -63,13 +62,11 @@ final class CodeStyleCommand extends Command
      * @param FileLocatorInterface $fileLocator locates the configuration file required by EasyCodingStandard
      * @param ProcessBuilderInterface $processBuilder builds the process instances used to execute Composer and ECS commands
      * @param ProcessQueueInterface $processQueue queues and executes the generated processes in the required order
-     * @param LoggerInterface $logger logs command feedback
      */
     public function __construct(
         private readonly FileLocatorInterface $fileLocator,
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -121,7 +118,7 @@ final class CodeStyleCommand extends Command
         $fix = (bool) $input->getOption('fix');
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
 
-        $this->logger->info('Running code style checks and fixes...');
+        $this->log('Running code style checks and fixes...', $input);
 
         $composerUpdate = $this->processBuilder
             ->withArgument('--lock')
@@ -164,14 +161,14 @@ final class CodeStyleCommand extends Command
             return $this->success('Code style checks completed successfully.', $input, [
                 'fix' => $fix,
                 'config' => self::CONFIG,
-                'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+                'output' => $processOutput,
             ]);
         }
 
         return $this->failure('Code style checks failed.', $input, [
             'fix' => $fix,
             'config' => self::CONFIG,
-            'process_output' => $processOutput instanceof BufferedOutput ? $processOutput->fetch() : null,
+            'output' => $processOutput,
         ]);
     }
 }

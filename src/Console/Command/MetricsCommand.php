@@ -25,7 +25,6 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -77,12 +76,10 @@ final class MetricsCommand extends Command
     /**
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PhpMetrics process
      * @param ProcessQueueInterface $processQueue the queue used to execute the PhpMetrics process
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -135,9 +132,7 @@ final class MetricsCommand extends Command
         $exclude = (string) $input->getOption('exclude');
         $junit = $input->getOption('junit');
 
-        $this->logger->info('Running code metrics analysis...', [
-            'input' => $input,
-        ]);
+        $this->log('Running code metrics analysis...', $input);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')

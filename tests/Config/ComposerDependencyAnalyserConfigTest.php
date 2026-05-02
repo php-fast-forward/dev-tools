@@ -113,6 +113,10 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
         );
         self::assertTrue(
             $configuration->getIgnoreList()
+                ->shouldIgnoreError(ErrorType::UNUSED_DEPENDENCY, null, 'ergebnis/phpunit-agent-reporter')
+        );
+        self::assertTrue(
+            $configuration->getIgnoreList()
                 ->shouldIgnoreError(ErrorType::UNUSED_DEPENDENCY, null, 'vendor/custom-package')
         );
     }
@@ -123,6 +127,10 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
     #[Test]
     public function itWillExposeReusablePackagedDependencyDefaults(): void
     {
+        self::assertContains(
+            'ergebnis/phpunit-agent-reporter',
+            ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_UNUSED_DEPENDENCIES,
+        );
         self::assertContains(
             'rector/jack',
             ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_UNUSED_DEPENDENCIES,

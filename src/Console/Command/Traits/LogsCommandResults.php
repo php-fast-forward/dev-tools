@@ -35,21 +35,32 @@ trait LogsCommandResults
     use HasCommandLogger;
 
     /**
-     * Logs an informational command message at notice level.
+     * Logs a non-terminal command message unless structured JSON output is active.
      *
-     * @param string $message the notice message
+     * @param string $message the progress message
      * @param InputInterface $input the originating command input
      * @param array<string, mixed> $context optional extra log context
+     * @param string $logLevel the PSR-3 log level used for the message
      *
      * @return void
      */
-    private function notice(string $message, InputInterface $input, array $context = []): void
-    {
+    private function log(
+        string $message,
+        InputInterface $input,
+        array $context = [],
+        string $logLevel = LogLevel::INFO,
+    ): void {
+        if (method_exists($this, 'isJsonOutput') && $this->isJsonOutput($input)) {
+            return;
+        }
+
+        $context = [
+            'input' => $input,
+            ...$context,
+        ];
+
         $this->getLogger()
-            ->notice($message, [
-                'input' => $input,
-                ...$context,
-            ]);
+            ->log($logLevel, $message, $context);
     }
 
     /**

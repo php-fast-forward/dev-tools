@@ -19,8 +19,11 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Input;
 
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Throwable;
 
 /**
  * Provides the standard JSON output options used by DevTools commands.
@@ -56,7 +59,11 @@ trait HasJsonOption
             return true;
         }
 
-        return (bool) $input->getOption('json');
+        if ($this->isOptionEnabled($input, 'json')) {
+            return true;
+        }
+
+        return $this->isImplicitJsonOutputEnabled();
     }
 
     /**
@@ -66,6 +73,59 @@ trait HasJsonOption
      */
     protected function isPrettyJsonOutput(InputInterface $input): bool
     {
-        return (bool) $input->getOption('pretty-json');
+        return $this->isOptionEnabled($input, 'pretty-json');
+    }
+
+    /**
+     * Determines whether structured JSON output SHOULD be enabled implicitly.
+     *
+     * Commands MAY opt into runtime-environment-aware behavior by exposing a
+     * `$runtimeEnvironment` property. Commands that do not expose it SHALL fall
+     * back to the shared runtime-environment service from the DevTools container.
+     */
+    private function isImplicitJsonOutputEnabled(): bool
+    {
+        $runtimeEnvironment = $this->resolveRuntimeEnvironment();
+
+        if (! $runtimeEnvironment instanceof RuntimeEnvironmentInterface) {
+            $runtimeEnvironment = ContainerFactory::get(RuntimeEnvironmentInterface::class);
+        }
+
+        if (! $runtimeEnvironment instanceof RuntimeEnvironmentInterface) {
+            return false;
+        }
+
+        return $runtimeEnvironment->isAgentPresent() && ! $runtimeEnvironment->isComposerTestRun();
+    }
+
+    /**
+     * @return ?RuntimeEnvironmentInterface
+     */
+    private function resolveRuntimeEnvironment(): ?RuntimeEnvironmentInterface
+    {
+        if (! property_exists($this, 'runtimeEnvironment')) {
+            return null;
+        }
+
+        if (! $this->runtimeEnvironment instanceof RuntimeEnvironmentInterface) {
+            return null;
+        }
+
+        return $this->runtimeEnvironment;
+    }
+
+    /**
+     * Determines whether a boolean input option was enabled.
+     *
+     * @param InputInterface $input
+     * @param string $option
+     */
+    private function isOptionEnabled(InputInterface $input, string $option): bool
+    {
+        try {
+            return (bool) $input->getOption($option);
+        } catch (Throwable) {
+            return false;
+        }
     }
 }

@@ -20,10 +20,18 @@ declare(strict_types=1);
 namespace FastForward\DevTools;
 
 use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Container\ContainerFactory;
 
-$projectVendorAutoload = \dirname(__DIR__, 4) . '/vendor/autoload.php';
-$pluginVendorAutoload = \dirname(__DIR__) . '/vendor/autoload.php';
+$autoloadCandidates = [\dirname(__DIR__, 4) . '/vendor/autoload.php', \dirname(__DIR__) . '/vendor/autoload.php'];
 
-require_once file_exists($projectVendorAutoload) ? $projectVendorAutoload : $pluginVendorAutoload;
+foreach ($autoloadCandidates as $autoloadCandidate) {
+    if (is_file($autoloadCandidate)) {
+        require_once $autoloadCandidate;
 
-DevTools::create()->run();
+        exit(ContainerFactory::get(DevTools::class)->run());
+    }
+}
+
+fprintf(\STDERR, "Could not locate Composer autoload.php for fast-forward/dev-tools.\n");
+
+exit(1);

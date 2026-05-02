@@ -29,7 +29,7 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
+use Psr\Log\LogLevel;
 use Twig\Environment;
 use Throwable;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
@@ -82,7 +82,6 @@ final class PhpDocCommand extends Command
      * @param ComposerJsonInterface $composer
      * @param Environment $renderer
      * @param ClockInterface $clock
-     * @param LoggerInterface $logger the output-aware logger
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
@@ -92,7 +91,6 @@ final class PhpDocCommand extends Command
         private readonly FilesystemInterface $filesystem,
         private readonly Environment $renderer,
         private readonly ClockInterface $clock,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -152,11 +150,9 @@ final class PhpDocCommand extends Command
         $progress = ! $jsonOutput && (bool) $input->getOption('progress');
         $cacheEnabled = $this->isCacheEnabled($input);
 
-        $this->logger->info('Checking and fixing PHPDocs...', [
-            'input' => $input,
-        ]);
+        $this->log('Checking and fixing PHPDocs...', $input);
 
-        $this->ensureDocHeaderExists();
+        $this->ensureDocHeaderExists($input);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -231,9 +227,11 @@ final class PhpDocCommand extends Command
      * The method MUST query the local filesystem. If the file is missing, it SHOULD copy
      * the tool template into the root folder.
      *
+     * @param InputInterface $input the originating command input
+     *
      * @return void
      */
-    private function ensureDocHeaderExists(): void
+    private function ensureDocHeaderExists(InputInterface $input): void
     {
         $support = $this->composer->getSupport();
 
@@ -258,13 +256,15 @@ final class PhpDocCommand extends Command
         try {
             $this->filesystem->dumpFile(self::FILENAME, $docHeader);
         } catch (Throwable) {
-            $this->logger->warning(
-                'Skipping .docheader creation because the destination file could not be written.'
+            $this->log(
+                'Skipping .docheader creation because the destination file could not be written.',
+                $input,
+                logLevel: LogLevel::WARNING,
             );
 
             return;
         }
 
-        $this->logger->info('Created .docheader from repository template.');
+        $this->log('Created .docheader from repository template.', $input);
     }
 }

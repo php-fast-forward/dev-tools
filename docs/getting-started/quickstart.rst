@@ -4,16 +4,16 @@ Quickstart
 This walkthrough is the fastest way to get a new library into a healthy state.
 
 1. Install the package.
-2. Create a minimal guide directory.
+2. Create a guide directory if the repository will publish guides.
 3. Synchronize shared automation, packaged skills, and packaged agents.
 4. Run the focused commands once.
 5. Run the full suite before opening a pull request.
 
-Create the Minimum Guide
-------------------------
+Optional Guide Setup
+--------------------
 
-The ``docs`` command fails early when ``docs/`` does not exist. A tiny
-starting page is enough for the first successful run.
+If the repository will publish guides, a tiny starting page is enough for the
+first successful ``docs`` run.
 
 Create the directory:
 
@@ -30,10 +30,14 @@ Create ``docs/index.rst`` with content such as:
 
    Welcome to the project documentation.
 
+Repositories that only ship PHP code can skip this step and still generate API
+documentation. Repositories that only ship guides can also use the same
+``docs`` command even without PSR-4 source paths.
+
 Run the First Commands
 ----------------------
 
-Once the package is installed and the guide directory exists, run:
+Once the package is installed, run:
 
 .. code-block:: bash
 
@@ -57,9 +61,11 @@ What Each Command Proves
   safely into ``.agents/agents`` without copying files into the consumer
   repository.
 - ``composer tests`` proves the packaged or local PHPUnit
-  configuration can execute the current test suite.
+  configuration can execute the current test suite, or skip gracefully when
+  the repository intentionally has no runnable PHPUnit surface yet.
 - ``composer docs`` proves the PSR-4 source paths and the guide
-  directory are usable by phpDocumentor.
+  directory are usable by phpDocumentor, whichever of those surfaces the
+  repository actually provides.
 - ``composer dev-tools`` proves the complete pipeline can run in the expected
   order.
 

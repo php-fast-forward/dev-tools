@@ -53,6 +53,174 @@ final class CommandOutputProcessorTest extends TestCase
      * @return void
      */
     #[Test]
+    public function processWillDecodeSingleJsonBufferedOutput(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write("{\n    \"result\": \"success\",\n    \"summary\": {\n        \"tests\": 2\n    }\n}\n");
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'result' => 'success',
+            'summary' => [
+                'tests' => 2,
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function processWillNormalizeRectorChangedFilesWhenNoFilesActuallyChanged(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "{\"totals\":{\"changed_files\":0,\"errors\":0},\"changed_files\":[\"src/Foo.php\",\"src/Bar.php\"]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'totals' => [
+                'changed_files' => 0,
+                'errors' => 0,
+            ],
+            'changed_files' => [],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function processWillNormalizeRectorChangedFilesUsingOnlyDiffEntries(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "{\"totals\":{\"changed_files\":1,\"errors\":0},\"changed_files\":[\"src/Foo.php\",\"src/Bar.php\"],\"file_diffs\":[{\"file\":\"src/Bar.php\",\"diff\":\"@@\"}]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'totals' => [
+                'changed_files' => 1,
+                'errors' => 0,
+            ],
+            'changed_files' => ['src/Bar.php'],
+            'file_diffs' => [
+                [
+                    'file' => 'src/Bar.php',
+                    'diff' => '@@',
+                ],
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function processWillDecodeMultipleJsonBufferedOutputsIntoAList(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "{\"message\":\"docs\"}\n{\"message\":\"tests\",\"context\":{\"output\":{\"result\":\"success\"}}}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            [
+                'message' => 'docs',
+            ],
+            [
+                'message' => 'tests',
+                'context' => [
+                    'output' => [
+                        'result' => 'success',
+                    ],
+                ],
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function processWillDiscardPlainTextPreambleBeforeStructuredJsonOutput(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "Warning: advisory text before JSON.\n"
+            . "{\"about\":\"PHP CS Fixer\"}\n"
+            . "{\"totals\":{\"changed_files\":0,\"errors\":0},\"changed_files\":[\"src/Foo.php\"]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            [
+                'about' => 'PHP CS Fixer',
+            ],
+            [
+                'totals' => [
+                    'changed_files' => 0,
+                    'errors' => 0,
+                ],
+                'changed_files' => [],
+            ],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function processWillDecodeTheFinalStructuredJsonAfterPlainTextToolOutput(): void
+    {
+        $processor = new CommandOutputProcessor();
+        $output = new BufferedOutput();
+        $output->write(
+            "composer-normalize warning before machine output.\n"
+            . "Another advisory line.\n"
+            . "{\"totals\":{\"changed_files\":0,\"errors\":0},\"changed_files\":[\"src/Foo.php\"]}\n"
+        );
+
+        $context = $processor->process([
+            'output' => $output,
+        ]);
+
+        self::assertSame([
+            'totals' => [
+                'changed_files' => 0,
+                'errors' => 0,
+            ],
+            'changed_files' => [],
+        ], $context['output']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function processWillExtractBufferedErrorOutputFromConsoleOutput(): void
     {
         $processor = new CommandOutputProcessor();

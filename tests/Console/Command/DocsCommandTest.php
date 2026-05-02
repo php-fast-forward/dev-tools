@@ -30,6 +30,10 @@ use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Project\ProjectCapabilities;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -40,6 +44,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
@@ -47,6 +52,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Twig\Environment;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(DocsCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -56,6 +65,7 @@ use Twig\Environment;
 final class DocsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -91,6 +101,7 @@ final class DocsCommandTest extends TestCase
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
         $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -165,7 +176,6 @@ final class DocsCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->composer->reveal(),
             $this->projectCapabilitiesResolver->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -179,7 +189,7 @@ final class DocsCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -206,7 +216,7 @@ final class DocsCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities(['src/'], 'FastForward\\DevTools', false, false, false, true));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -240,7 +250,7 @@ final class DocsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(DocsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -272,9 +282,39 @@ final class DocsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(DocsCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating API documentation...', Argument::that(
+        $this->logger->log('info', 'Generating API documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'API documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(DocsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->filesystem->dumpFile('phpdocumentor.xml', '<phpdocumentor />', '/repo/.dev-tools/cache/phpdoc')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--cache-folder', '/repo/.dev-tools/cache/phpdoc')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(DocsCommand::SUCCESS)
             ->shouldBeCalled();
         $this->logger->log(
             'info',

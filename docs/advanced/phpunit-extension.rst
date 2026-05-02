@@ -19,6 +19,9 @@ Runtime Chain
    builds a summary notification and sends it when the run finishes.
 5. ``Ergebnis\PHPUnit\AgentReporter\Extension`` replaces PHPUnit's normal
    output with a compact JSON report when an agent runtime is detected.
+6. In structured DevTools runs, ``tests`` forces the same reporter path for
+   the PHPUnit subprocess so the final nested payload remains deterministic
+   even when the surrounding process would not naturally look agent-driven.
 
 Why This Helps Consumer Projects
 --------------------------------
@@ -29,6 +32,8 @@ Why This Helps Consumer Projects
   scrollback;
 - agent-driven runs consume far less terminal context while still keeping
   failure details and PHPUnit exit semantics intact;
+- DevTools can preserve a single top-level JSON document while nesting the
+  compact PHPUnit summary under ``context.output`` for bot-friendly parsing;
 - event counts are available to the notification layer without adding ad-hoc
   test code.
 

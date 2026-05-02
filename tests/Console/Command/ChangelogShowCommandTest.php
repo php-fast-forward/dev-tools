@@ -23,24 +23,37 @@ use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogShowCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(ChangelogShowCommand::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ChangelogShowCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $changelogManager;
 
@@ -62,6 +75,7 @@ final class ChangelogShowCommandTest extends TestCase
         $this->changelogManager = $this->prophesize(ChangelogManagerInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
 
@@ -76,11 +90,7 @@ final class ChangelogShowCommandTest extends TestCase
         $this->filesystem->getAbsolutePath('CHANGELOG.md')
             ->willReturn('/repo/CHANGELOG.md');
 
-        $this->command = new ChangelogShowCommand(
-            $this->filesystem->reveal(),
-            $this->changelogManager->reveal(),
-            $this->logger->reveal(),
-        );
+        $this->command = new ChangelogShowCommand($this->filesystem->reveal(), $this->changelogManager->reveal());
     }
 
     /**

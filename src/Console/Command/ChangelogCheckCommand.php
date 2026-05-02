@@ -23,7 +23,6 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,12 +44,10 @@ final class ChangelogCheckCommand extends Command
     /**
      * @param FilesystemInterface $filesystem
      * @param UnreleasedEntryCheckerInterface $unreleasedEntryChecker
-     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly FilesystemInterface $filesystem,
         private readonly UnreleasedEntryCheckerInterface $unreleasedEntryChecker,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }

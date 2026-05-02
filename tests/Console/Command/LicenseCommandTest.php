@@ -31,6 +31,12 @@ use FastForward\DevTools\License\Resolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -45,6 +51,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(LicenseCommand::class)]
 #[UsesClass(FileDiff::class)]
 #[UsesClass(Resolver::class)]
@@ -54,6 +65,7 @@ use function Safe\getcwd;
 final class LicenseCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     /**
      * @var ObjectProphecy<GeneratorInterface>
@@ -96,9 +108,15 @@ final class LicenseCommandTest extends TestCase
         $this->generator = $this->prophesize(GeneratorInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
@@ -112,16 +130,15 @@ final class LicenseCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
 
         $this->command = new LicenseCommand(
             $this->generator->reveal(),
             $this->filesystem->reveal(),
             $this->fileDiffer->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }
@@ -172,7 +189,8 @@ final class LicenseCommandTest extends TestCase
         $this->filesystem->dumpFile($targetPath, 'MIT License content')
             ->shouldBeCalledOnce();
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Managed file ' . $targetPath . ' will be created from generated LICENSE content.',
             [
                 'input' => $this->input->reveal(),
@@ -221,7 +239,8 @@ final class LicenseCommandTest extends TestCase
             'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
         ))->shouldBeCalledOnce();
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Target ' . $targetPath . ' already matches source generated LICENSE content; overwrite skipped.',
             [
                 'input' => $this->input->reveal(),
@@ -249,7 +268,8 @@ final class LicenseCommandTest extends TestCase
         $this->generator->generateContent()
             ->willReturn(null);
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'No supported license found in composer.json or license is unsupported. Skipping LICENSE generation.',
             [
                 'input' => $this->input->reveal(),
@@ -374,7 +394,8 @@ final class LicenseCommandTest extends TestCase
         $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped updating {target_path}.',
             [
                 'input' => $this->input->reveal(),

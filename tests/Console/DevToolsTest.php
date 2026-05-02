@@ -24,6 +24,8 @@ use FastForward\DevTools\Console\Command\SelfUpdateCommand;
 use FastForward\DevTools\Console\DevTools;
 use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
@@ -46,7 +48,6 @@ use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
-use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
 use Override;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -57,7 +58,6 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Argument;
 use Prophecy\Prophecy\ObjectProphecy;
 use ReflectionMethod;
-use ReflectionProperty;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\CompleteCommand;
 use Symfony\Component\Console\Command\DumpCompletionCommand;
@@ -83,6 +83,7 @@ use function Safe\putenv;
 #[UsesClass(ClassReflection::class)]
 #[UsesClass(LogLevelOutputFormatter::class)]
 #[UsesClass(GithubActionOutput::class)]
+#[UsesClass(ContainerFactory::class)]
 #[UsesClass(RuntimeEnvironment::class)]
 #[UsesClass(ColorPreservingProcessEnvironmentConfigurator::class)]
 #[UsesClass(CompositeProcessEnvironmentConfigurator::class)]
@@ -143,6 +144,7 @@ final class DevToolsTest extends TestCase
     #[Override]
     protected function setUp(): void
     {
+        ContainerFactory::reset();
         $this->commandLoader = $this->prophesize(CommandLoaderInterface::class);
         $this->commandLoader->getNames()
             ->willReturn([]);
@@ -166,6 +168,7 @@ final class DevToolsTest extends TestCase
     #[Override]
     protected function tearDown(): void
     {
+        ContainerFactory::reset();
         if (false === $this->originalWorkspaceDirectoryEnv) {
             putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
 
@@ -503,15 +506,14 @@ final class DevToolsTest extends TestCase
      * @return void
      */
     #[Test]
-    public function createWillReturnInstanceOfDevTools(): void
+    public function containerFactoryWillReturnASharedDevToolsInstance(): void
     {
-        $reflectionProperty = new ReflectionProperty(DevTools::class, 'container');
-        $reflectionProperty->setValue(null, null);
+        ContainerFactory::reset();
 
-        $devTools = DevTools::create();
+        $devTools = ContainerFactory::get(DevTools::class);
 
         self::assertInstanceOf(DevTools::class, $devTools);
-        self::assertSame($devTools, DevTools::create());
+        self::assertSame($devTools, ContainerFactory::get(DevTools::class));
     }
 
     /**

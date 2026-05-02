@@ -23,6 +23,7 @@ use Composer\Plugin\Capability\CommandProvider;
 use FastForward\DevTools\Composer\Command\ProxyCommand;
 use FastForward\DevTools\Composer\DevToolsPluginInterface;
 use FastForward\DevTools\Console\DevTools;
+use FastForward\DevTools\Container\ContainerFactory;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -54,7 +55,7 @@ final readonly class DevToolsCommandProvider implements CommandProvider
     {
         $commands = [];
 
-        foreach (DevTools::create()->all() as $registeredName => $command) {
+        foreach (ContainerFactory::get(DevTools::class)->all() as $registeredName => $command) {
             /**
              * Composer plugin registrations must be canonicalized to one command per Symfony command.
              * The application exposes alias keys in `all()`, but Composer interprets each entry as

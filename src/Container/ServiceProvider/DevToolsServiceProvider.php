@@ -17,22 +17,20 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools\ServiceProvider;
+namespace FastForward\DevTools\Container\ServiceProvider;
 
 use Composer\Plugin\Capability\CommandProvider;
+use FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker;
+use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Changelog\Manager\ChangelogManager;
 use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Changelog\Parser\ChangelogParser;
 use FastForward\DevTools\Changelog\Parser\ChangelogParserInterface;
+use FastForward\DevTools\Changelog\Renderer\MarkdownRenderer;
+use FastForward\DevTools\Changelog\Renderer\MarkdownRendererInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
-use FastForward\DevTools\Git\GitClient;
-use FastForward\DevTools\Git\GitClientInterface;
-use FastForward\DevTools\Changelog\Renderer\MarkdownRenderer;
-use FastForward\DevTools\Changelog\Renderer\MarkdownRendererInterface;
-use FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker;
-use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
 use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
 use FastForward\DevTools\Console\Logger\OutputFormatLogger;
@@ -47,10 +45,12 @@ use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
-use FastForward\DevTools\Filesystem\FinderFactory;
-use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\Filesystem;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Filesystem\FinderFactory;
+use FastForward\DevTools\Filesystem\FinderFactoryInterface;
+use FastForward\DevTools\Git\GitClient;
+use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\GitAttributes\CandidateProvider;
 use FastForward\DevTools\GitAttributes\CandidateProviderInterface;
 use FastForward\DevTools\GitAttributes\ExistenceChecker;
@@ -73,6 +73,8 @@ use FastForward\DevTools\License\Generator;
 use FastForward\DevTools\License\GeneratorInterface;
 use FastForward\DevTools\License\Resolver;
 use FastForward\DevTools\License\ResolverInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Php\Extension;
 use FastForward\DevTools\Php\ExtensionInterface;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoader;
@@ -87,6 +89,9 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Process\XdebugDisablingProcessEnvironmentConfigurator;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolver;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
+use FastForward\DevTools\Psr\Clock\SystemClock;
+use FastForward\DevTools\Resource\DifferInterface;
+use FastForward\DevTools\Resource\UnifiedDiffer;
 use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateRunner;
 use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateScopeResolver;
 use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
@@ -97,11 +102,6 @@ use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
-use FastForward\DevTools\Path\DevToolsPathResolver;
-use FastForward\DevTools\Path\WorkingProjectPathResolver;
-use FastForward\DevTools\Psr\Clock\SystemClock;
-use FastForward\DevTools\Resource\DifferInterface;
-use FastForward\DevTools\Resource\UnifiedDiffer;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -123,12 +123,9 @@ use function DI\factory;
 use function DI\get;
 
 /**
- * DevToolsServiceProvider registers the services provided by this package.
- *
- * This class implements the ServiceProviderInterface from the PHP-Interop container package,
- * allowing it to be used with any compatible dependency injection container.
+ * Registers the services exposed by the DevTools container.
  */
-final class DevToolsServiceProvider implements ServiceProviderInterface
+class DevToolsServiceProvider implements ServiceProviderInterface
 {
     /**
      * @return array

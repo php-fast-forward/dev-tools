@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -65,12 +64,10 @@ final class SkillsCommand extends Command
      * @param FilesystemInterface $filesystem filesystem used to resolve
      *                                        and manage the skills
      *                                        directory structure
-     * @param LoggerInterface $logger logger used for command feedback
      */
     public function __construct(
         private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -112,7 +109,7 @@ final class SkillsCommand extends Command
     {
         $packageSkillsPath = DevToolsPathResolver::getPackagePath(self::SKILLS_DIRECTORY);
         $skillsDir = $this->filesystem->getAbsolutePath(self::SKILLS_DIRECTORY);
-        $this->logger->info('Starting skills synchronization...');
+        $this->log('Starting skills synchronization...', $input);
 
         if (! $this->filesystem->exists($packageSkillsPath)) {
             return $this->failure(
@@ -131,7 +128,7 @@ final class SkillsCommand extends Command
         if (! $this->filesystem->exists($skillsDir)) {
             $this->filesystem->mkdir($skillsDir);
             $directoryCreated = true;
-            $this->logger->info('Created .agents/skills directory.');
+            $this->log('Created .agents/skills directory.', $input);
         }
 
         $result = $this->synchronizer->synchronize($skillsDir, $packageSkillsPath, self::SKILLS_DIRECTORY);

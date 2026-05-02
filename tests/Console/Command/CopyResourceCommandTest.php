@@ -26,6 +26,11 @@ use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -34,6 +39,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
@@ -45,11 +51,17 @@ use function Safe\file_put_contents;
 use function Safe\unlink;
 use function Safe\rmdir;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(CopyResourceCommand::class)]
 #[UsesClass(FileDiff::class)]
 final class CopyResourceCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $filesystem;
 
@@ -84,9 +96,15 @@ final class CopyResourceCommandTest extends TestCase
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
@@ -101,15 +119,14 @@ final class CopyResourceCommandTest extends TestCase
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->will(static fn(array $arguments): ?string => $arguments[0]);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->command = new CopyResourceCommand(
             $this->filesystem->reveal(),
             $this->fileLocator->reveal(),
             $this->finderFactory->reveal(),
             $this->fileDiffer->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }
@@ -256,11 +273,13 @@ final class CopyResourceCommandTest extends TestCase
             ))
             ->shouldBeCalledOnce();
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Overwriting resource /project/.editorconfig from /package/.editorconfig.',
             Argument::type('array'),
         )->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             "--- Current: /project/.editorconfig\n+++ Source: /package/.editorconfig\n@@ -1 +1 @@\n-old\n+new",
             Argument::type('array'),
         )->shouldBeCalledOnce();
@@ -299,7 +318,8 @@ final class CopyResourceCommandTest extends TestCase
             ))
             ->shouldBeCalledOnce();
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Target /project/.editorconfig already matches source /package/.editorconfig; overwrite skipped.',
             Argument::type('array'),
         )->shouldBeCalledOnce();
@@ -338,7 +358,8 @@ final class CopyResourceCommandTest extends TestCase
             ))
             ->shouldBeCalledOnce();
 
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Target /project/.editorconfig will be overwritten from /package/.editorconfig, but a text diff is unavailable for binary content.',
             Argument::type('array'),
         )->shouldBeCalledOnce();
@@ -374,9 +395,9 @@ final class CopyResourceCommandTest extends TestCase
         $this->fileDiffer->diff('/package/.editorconfig', '/project/.editorconfig')
             ->willReturn(new FileDiff(FileDiff::STATUS_CHANGED, 'Changed summary', "@@ -1 +1 @@\n-old\n+new"))
             ->shouldBeCalledOnce();
-        $this->logger->notice('Changed summary', Argument::type('array'))
+        $this->logger->log('notice', 'Changed summary', Argument::type('array'))
             ->shouldBeCalledOnce();
-        $this->logger->notice("@@ -1 +1 @@\n-old\n+new", Argument::type('array'))
+        $this->logger->log('notice', "@@ -1 +1 @@\n-old\n+new", Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
 

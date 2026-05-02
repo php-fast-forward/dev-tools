@@ -25,6 +25,11 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Reflection\ClassReflection;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -33,16 +38,23 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(SelfUpdateCommand::class)]
 #[UsesClass(ClassReflection::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class SelfUpdateCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     /**
      * @var ObjectProphecy<SelfUpdateRunnerInterface>
@@ -79,9 +91,15 @@ final class SelfUpdateCommandTest extends TestCase
         $this->selfUpdateRunner = $this->prophesize(SelfUpdateRunnerInterface::class);
         $this->scopeResolver = $this->prophesize(SelfUpdateScopeResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
-        $this->logger->info(Argument::cetera())
+        $this->logger->log('info', Argument::cetera())
             ->will(static function (): void {});
         $this->logger->log(Argument::cetera())
             ->will(static function (): void {});

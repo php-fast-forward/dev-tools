@@ -90,6 +90,10 @@ Behavior
 ---------
 
 - Default output directory is ``.github/wiki``.
+- When the default target does not exist yet and ``--init`` is not requested,
+  the command skips with a controlled warning instead of failing.
+- Repositories without PHP API surface also skip wiki generation with a
+  warning, because the current wiki renderer only emits API pages.
 - Cache stays enabled by default; omit both flags to keep the command default,
   pass ``--cache`` to force it on, and pass ``--no-cache`` to force it off.
 - When ``--cache-dir`` is omitted, phpDocumentor keeps its default cache

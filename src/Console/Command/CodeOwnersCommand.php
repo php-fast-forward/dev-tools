@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\CodeOwners\CodeOwnersGenerator;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -53,14 +52,12 @@ final class CodeOwnersCommand extends Command
      * @param CodeOwnersGenerator $generator the generator used to infer and render CODEOWNERS contents
      * @param FilesystemInterface $filesystem the filesystem used to read and write the target file
      * @param FileDiffer $fileDiffer the differ used to report managed-file drift
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the SymfonyStyle instance for interactive prompts
      */
     public function __construct(
         private readonly CodeOwnersGenerator $generator,
         private readonly FilesystemInterface $filesystem,
         private readonly FileDiffer $fileDiffer,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -153,21 +150,22 @@ final class CodeOwnersCommand extends Command
                 : \sprintf('Updating managed file %s from generated CODEOWNERS content.', $targetPath),
         );
 
-        $this->notice($comparison->getSummary(), $input, [
+        $this->log($comparison->getSummary(), $input, [
             'target_path' => $targetPath,
-        ]);
+        ], LogLevel::NOTICE);
 
         if ($comparison->isChanged()) {
             $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
             if (null !== $consoleDiff) {
-                $this->notice(
+                $this->log(
                     $consoleDiff,
                     $input,
                     [
                         'target_path' => $targetPath,
                         'diff' => $comparison->getDiff(),
                     ],
+                    LogLevel::NOTICE,
                 );
             }
         }

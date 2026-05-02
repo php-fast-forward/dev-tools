@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
-use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -48,12 +47,10 @@ final class AgentsCommand extends Command
     /**
      * @param PackagedDirectorySynchronizer $synchronizer
      * @param FilesystemInterface $filesystem
-     * @param LoggerInterface $logger
      */
     public function __construct(
         private readonly PackagedDirectorySynchronizer $synchronizer,
         private readonly FilesystemInterface $filesystem,
-        private readonly LoggerInterface $logger,
     ) {
         parent::__construct();
     }
@@ -80,7 +77,7 @@ final class AgentsCommand extends Command
     {
         $packageAgentsPath = DevToolsPathResolver::getPackagePath(self::AGENTS_DIRECTORY);
         $agentsDir = $this->filesystem->getAbsolutePath(self::AGENTS_DIRECTORY);
-        $this->logger->info('Starting agents synchronization...');
+        $this->log('Starting agents synchronization...', $input);
 
         if (! $this->filesystem->exists($packageAgentsPath)) {
             return $this->failure(
@@ -99,7 +96,7 @@ final class AgentsCommand extends Command
         if (! $this->filesystem->exists($agentsDir)) {
             $this->filesystem->mkdir($agentsDir);
             $directoryCreated = true;
-            $this->logger->info('Created .agents/agents directory.');
+            $this->log('Created .agents/agents directory.', $input);
         }
 
         $result = $this->synchronizer->synchronize($agentsDir, $packageAgentsPath, self::AGENTS_DIRECTORY);

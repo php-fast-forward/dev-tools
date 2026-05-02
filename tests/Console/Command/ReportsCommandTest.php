@@ -26,6 +26,10 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -35,12 +39,17 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(ReportsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -48,6 +57,7 @@ use Symfony\Component\Process\Process;
 final class ReportsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -71,6 +81,7 @@ final class ReportsCommandTest extends TestCase
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -107,11 +118,7 @@ final class ReportsCommandTest extends TestCase
         );
         $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
 
-        $this->command = new ReportsCommand(
-            $this->processBuilder->reveal(),
-            $this->processQueue->reveal(),
-            $this->logger->reveal(),
-        );
+        $this->command = new ReportsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
     }
 
     /**
@@ -124,7 +131,7 @@ final class ReportsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ReportsCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Generating frontpage for Fast Forward documentation...', Argument::that(
+        $this->logger->log('info', 'Generating frontpage for Fast Forward documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -152,10 +159,6 @@ final class ReportsCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(ReportsCommand::FAILURE)
             ->shouldBeCalledOnce();
-        $this->logger->info('Generating frontpage for Fast Forward documentation...', Argument::that(
-            static fn(array $context): bool => $context['input'] instanceof InputInterface
-        ))
-            ->shouldBeCalled();
         $this->logger->error(
             'Documentation reports generation failed.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface

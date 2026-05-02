@@ -19,41 +19,27 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command\Traits;
 
-use LogicException;
+use FastForward\DevTools\Container\ContainerFactory;
 use Psr\Log\LoggerInterface;
 
 /**
  * Resolves the logger expected by command result helper traits.
  *
- * The consuming command is expected to expose an initialized `$logger`
- * property so reusable traits can log without coupling themselves to a
- * specific constructor signature.
+ * The trait caches the shared logger lazily so consuming commands do not need
+ * to carry constructor wiring for internal logging helpers.
  */
 trait HasCommandLogger
 {
     /**
-     * Returns the logger configured on the consuming command.
-     *
-     * @throws LogicException when the consuming command does not expose a valid logger property
+     * Caches the logger resolved for the consuming command.
+     */
+    private ?LoggerInterface $logger = null;
+
+    /**
+     * Returns the logger configured for the consuming command.
      */
     public function getLogger(): LoggerInterface
     {
-        if (! property_exists($this, 'logger') || null === $this->logger) {
-            throw new LogicException(\sprintf(
-                'Commands using %s MUST expose an initialized $logger property with an instance of %s.',
-                LogsCommandResults::class,
-                LoggerInterface::class,
-            ));
-        }
-
-        if (! $this->logger instanceof LoggerInterface) {
-            throw new LogicException(\sprintf(
-                'Commands using %s MUST expose a %s instance on the $logger property.',
-                LogsCommandResults::class,
-                LoggerInterface::class,
-            ));
-        }
-
-        return $this->logger;
+        return $this->logger ??= ContainerFactory::get(LoggerInterface::class);
     }
 }

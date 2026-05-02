@@ -25,6 +25,10 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -34,12 +38,17 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(SkillsCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(PackagedDirectorySynchronizer::class)]
@@ -48,6 +57,7 @@ use function Safe\getcwd;
 final class SkillsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $synchronizer;
 
@@ -69,16 +79,18 @@ final class SkillsCommandTest extends TestCase
         $this->synchronizer = $this->prophesize(PackagedDirectorySynchronizer::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->filesystem->getAbsolutePath('.agents/skills')
             ->willReturn(getcwd() . '/.agents/skills');
 
-        $this->command = new SkillsCommand(
-            $this->synchronizer->reveal(),
-            $this->filesystem->reveal(),
-            $this->logger->reveal(),
-        );
+        $this->command = new SkillsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
     }
 
     /**
@@ -92,7 +104,9 @@ final class SkillsCommandTest extends TestCase
         $this->filesystem->exists($skillsPath)
             ->willReturn(false);
         $this->synchronizer->synchronize(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->info('Starting skills synchronization...')
+        $this->logger->log('info', 'Starting skills synchronization...', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
         $this->logger->error(
             'No packaged skills found at: {packaged_skills_path}',
@@ -125,9 +139,13 @@ final class SkillsCommandTest extends TestCase
         $this->synchronizer->synchronize($skillsPath, $skillsPath, '.agents/skills')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting skills synchronization...')
+        $this->logger->log('info', 'Starting skills synchronization...', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
-        $this->logger->info('Created .agents/skills directory.')
+        $this->logger->log('info', 'Created .agents/skills directory.', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
         $this->logger->log(
             'info',
@@ -158,7 +176,9 @@ final class SkillsCommandTest extends TestCase
         $this->synchronizer->synchronize($skillsPath, $skillsPath, '.agents/skills')
             ->willReturn($result)
             ->shouldBeCalledOnce();
-        $this->logger->info('Starting skills synchronization...')
+        $this->logger->log('info', 'Starting skills synchronization...', [
+            'input' => $this->input->reveal(),
+        ])
             ->shouldBeCalledOnce();
         $this->logger->error(
             'Skills synchronization failed.',

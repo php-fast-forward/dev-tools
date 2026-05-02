@@ -25,6 +25,10 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -34,6 +38,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -41,6 +46,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(CodeStyleCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
@@ -48,6 +57,7 @@ use Symfony\Component\Process\Process;
 final class CodeStyleCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $fileLocator;
 
@@ -77,6 +87,7 @@ final class CodeStyleCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
 
         $this->input->getOption('fix')
             ->willReturn(false);
@@ -106,7 +117,6 @@ final class CodeStyleCommandTest extends TestCase
             $this->fileLocator->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -122,17 +132,17 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running code style checks and fixes...')
+        $this->logger->log('info', 'Running code style checks and fixes...', Argument::that(
+            fn(array $context): bool => $this->input->reveal() === $context['input']
+        ))
             ->shouldBeCalled();
         $this->logger->log(
             'info',
             'Code style checks completed successfully.',
-            [
-                'input' => $this->input->reveal(),
-                'fix' => false,
-                'config' => CodeStyleCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
+                && false === $context['fix']
+                && CodeStyleCommand::CONFIG === $context['config']
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());
@@ -147,18 +157,18 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Running code style checks and fixes...')
+        $this->logger->log('info', 'Running code style checks and fixes...', Argument::that(
+            fn(array $context): bool => $this->input->reveal() === $context['input']
+        ))
             ->shouldBeCalled();
         $this->logger->error(
             'Code style checks failed.',
-            [
-                'input' => $this->input->reveal(),
-                'file' => null,
-                'line' => null,
-                'fix' => false,
-                'config' => CodeStyleCommand::CONFIG,
-                'process_output' => null,
-            ],
+            Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
+                && null === $context['file']
+                && null === $context['line']
+                && false === $context['fix']
+                && CodeStyleCommand::CONFIG === $context['config']
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(CodeStyleCommand::FAILURE, $this->executeCommand());
@@ -180,13 +190,11 @@ final class CodeStyleCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(CodeStyleCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Running code style checks and fixes...')
-            ->shouldBeCalled();
         $this->logger->log(
             'info',
             'Code style checks completed successfully.',
             Argument::that(fn(array $context): bool => $this->input->reveal() === $context['input']
-                && \is_string($context['process_output'])),
+                && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
 
         self::assertSame(CodeStyleCommand::SUCCESS, $this->executeCommand());

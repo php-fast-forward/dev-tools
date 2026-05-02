@@ -28,12 +28,17 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -53,6 +58,10 @@ use function Safe\file_put_contents;
 use function Safe\unlink;
 use function Safe\rmdir;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(GitHooksCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
@@ -62,6 +71,7 @@ use function Safe\rmdir;
 final class GitHooksCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $filesystem;
 
@@ -96,17 +106,23 @@ final class GitHooksCommandTest extends TestCase
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->finderFactory = $this->prophesize(FinderFactoryInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('dry-run')
             ->willReturn(false);
@@ -127,7 +143,6 @@ final class GitHooksCommandTest extends TestCase
             $this->finderFactory->reveal(),
             new HookContentRenderer(),
             $this->fileDiffer->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }
@@ -270,7 +285,8 @@ final class GitHooksCommandTest extends TestCase
             ->willReturn('/app/.git/hooks');
         $this->filesystem->exists('/app/.git/hooks/post-merge')
             ->willReturn(true);
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped existing {hook_name} hook.',
             [
                 'input' => $this->input->reveal(),
@@ -319,7 +335,8 @@ final class GitHooksCommandTest extends TestCase
         $this->fileDiffer->formatForConsole("@@ -1 +1 @@\n-old\n+new", false)
             ->willReturn("@@ -1 +1 @@\n-old\n+new")
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Changed summary',
             [
                 'input' => $this->input->reveal(),
@@ -328,7 +345,8 @@ final class GitHooksCommandTest extends TestCase
             ],
         )
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             "@@ -1 +1 @@\n-old\n+new",
             [
                 'input' => $this->input->reveal(),
@@ -383,7 +401,8 @@ final class GitHooksCommandTest extends TestCase
         $this->io->askQuestion(Argument::type(ConfirmationQuestion::class))
             ->willReturn(false)
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Skipped replacing {hook_path}.',
             [
                 'input' => $this->input->reveal(),

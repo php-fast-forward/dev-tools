@@ -24,7 +24,6 @@ use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Filesystem\FinderFactoryInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Resource\FileDiffer;
-use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -56,7 +55,6 @@ final class CopyResourceCommand extends Command
      * @param FileLocatorInterface $fileLocator the locator used to resolve source resources
      * @param FinderFactoryInterface $finderFactory the factory used to create finders for directory resources
      * @param FileDiffer $fileDiffer the service used to summarize overwrite changes
-     * @param LoggerInterface $logger the output-aware logger
      * @param SymfonyStyle $io the input/output service used to interact with the user
      */
     public function __construct(
@@ -64,7 +62,6 @@ final class CopyResourceCommand extends Command
         private readonly FileLocatorInterface $fileLocator,
         private readonly FinderFactoryInterface $finderFactory,
         private readonly FileDiffer $fileDiffer,
-        private readonly LoggerInterface $logger,
         private readonly SymfonyStyle $io,
     ) {
         parent::__construct();
@@ -162,11 +159,11 @@ final class CopyResourceCommand extends Command
      * @param string $sourcePath the resolved source directory
      * @param string $targetPath the resolved target directory
      * @param bool $overwrite whether existing files MAY be overwritten
+     * @param bool $dryRun whether the command is previewing changes only
+     * @param bool $check whether the command SHOULD fail on detected drift
+     * @param bool $interactive whether the command SHOULD prompt before overwriting drifted files
+     * @param InputInterface $input the originating command input
      * @param OutputInterface $output the output used to report copy results
-     * @param bool $dryRun
-     * @param bool $check
-     * @param bool $interactive
-     * @param InputInterface $input
      *
      * @return int the command status code
      */
@@ -213,11 +210,11 @@ final class CopyResourceCommand extends Command
      * @param string $sourcePath the resolved source file
      * @param string $targetPath the resolved target file
      * @param bool $overwrite whether an existing target file MAY be overwritten
+     * @param bool $dryRun whether the command is previewing changes only
+     * @param bool $check whether the command SHOULD fail on detected drift
+     * @param bool $interactive whether the command SHOULD prompt before overwriting drifted files
+     * @param InputInterface $input the originating command input
      * @param OutputInterface $output the output used to report copy results
-     * @param bool $dryRun
-     * @param bool $check
-     * @param bool $interactive
-     * @param InputInterface $input
      *
      * @return int the command status code
      */
@@ -246,20 +243,21 @@ final class CopyResourceCommand extends Command
         if (($overwrite || $dryRun || $check || $interactive) && $this->filesystem->exists($targetPath)) {
             $comparison = $this->fileDiffer->diff($sourcePath, $targetPath);
 
-            $this->logger->notice(
+            $this->log(
                 $comparison->getSummary(),
+                $input,
                 [
-                    'input' => $input,
                     'source_path' => $sourcePath,
                     'target_path' => $targetPath,
                 ],
+                LogLevel::NOTICE,
             );
 
             if ($comparison->isChanged()) {
                 $consoleDiff = $this->fileDiffer->formatForConsole($comparison->getDiff(), $output->isDecorated());
 
                 if (null !== $consoleDiff) {
-                    $this->notice(
+                    $this->log(
                         $consoleDiff,
                         $input,
                         [
@@ -267,6 +265,7 @@ final class CopyResourceCommand extends Command
                             'target_path' => $targetPath,
                             'diff' => $comparison->getDiff(),
                         ],
+                        LogLevel::NOTICE,
                     );
                 }
             }

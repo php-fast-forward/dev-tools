@@ -24,6 +24,10 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\StandardsCommand;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -33,12 +37,17 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(StandardsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -46,6 +55,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 final class StandardsCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -67,6 +77,7 @@ final class StandardsCommandTest extends TestCase
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
 
@@ -91,11 +102,7 @@ final class StandardsCommandTest extends TestCase
         $this->processBuilder->build(Argument::any())
             ->willReturn($this->prophesize(Process::class)->reveal());
 
-        $this->command = new StandardsCommand(
-            $this->processBuilder->reveal(),
-            $this->processQueue->reveal(),
-            $this->logger->reveal(),
-        );
+        $this->command = new StandardsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
     }
 
     /**
@@ -109,7 +116,7 @@ final class StandardsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(StandardsCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running code standards checks...', Argument::that(
+        $this->logger->log('info', 'Running code standards checks...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -135,7 +142,7 @@ final class StandardsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(StandardsCommand::FAILURE)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running code standards checks...', Argument::that(
+        $this->logger->log('info', 'Running code standards checks...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
@@ -173,6 +180,35 @@ final class StandardsCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(StandardsCommand::SUCCESS)
             ->shouldBeCalledOnce();
+
+        self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument('--json')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalledTimes(4);
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(StandardsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'Code standards checks completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
+        )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
     }

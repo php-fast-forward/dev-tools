@@ -33,6 +33,10 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -43,6 +47,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -51,6 +56,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Twig\Environment;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(PhpDocCommand::class)]
 #[UsesClass(Author::class)]
 #[UsesClass(Support::class)]
@@ -61,6 +70,7 @@ use Twig\Environment;
 final class PhpDocCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -99,6 +109,7 @@ final class PhpDocCommandTest extends TestCase
         $this->renderer = $this->prophesize(Environment::class);
         $this->clock = $this->prophesize(ClockInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -169,7 +180,6 @@ final class PhpDocCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->renderer->reveal(),
             $this->clock->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -197,11 +207,13 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Checking and fixing PHPDocs...', Argument::that(
+        $this->logger->log('info', 'Checking and fixing PHPDocs...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->info('Created .docheader from repository template.')
+        $this->logger->log('info', 'Created .docheader from repository template.', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
             ->shouldBeCalled();
         $this->logger->log(
             'info',
@@ -247,12 +259,14 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(PhpDocCommand::FAILURE)
             ->shouldBeCalled();
-        $this->logger->info('Checking and fixing PHPDocs...', Argument::that(
+        $this->logger->log('info', 'Checking and fixing PHPDocs...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalled();
-        $this->logger->warning(
-            'Skipping .docheader creation because the destination file could not be written.'
+        $this->logger->log(
+            'warning',
+            'Skipping .docheader creation because the destination file could not be written.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
         $this->logger->error(
             'PHPDoc checks failed.',
@@ -289,6 +303,12 @@ final class PhpDocCommandTest extends TestCase
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn(PhpDocCommand::SUCCESS)
             ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'PHPDoc checks completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }

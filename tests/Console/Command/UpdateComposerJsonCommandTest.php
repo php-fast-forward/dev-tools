@@ -26,11 +26,16 @@ use FastForward\DevTools\GrumPhp\ManagedConfigPathSynchronizer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
@@ -43,6 +48,10 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 use function Safe\json_decode;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(UpdateComposerJsonCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(FileDiff::class)]
@@ -50,6 +59,7 @@ use function Safe\json_decode;
 final class UpdateComposerJsonCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $filesystem;
 
@@ -78,16 +88,22 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->output->isDecorated()
             ->willReturn(false);
         $this->fileDiffer->formatForConsole(Argument::cetera())
             ->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('dry-run')
@@ -107,7 +123,6 @@ final class UpdateComposerJsonCommandTest extends TestCase
             $this->fileLocator->reveal(),
             new ManagedConfigPathSynchronizer(),
             $this->fileDiffer->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }
@@ -442,7 +457,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->fileDiffer->formatForConsole('@@ diff @@', false)
             ->willReturn('@@ diff @@')
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             '@@ diff @@',
             [
                 'input' => $this->input->reveal(),

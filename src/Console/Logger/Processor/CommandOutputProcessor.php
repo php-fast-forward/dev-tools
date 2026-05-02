@@ -19,12 +19,18 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Logger\Processor;
 
+use JsonException;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+use function Safe\json_decode;
+
 /**
  * Converts buffered command output objects into serializable context entries.
+ *
+ * JSON payloads are decoded eagerly so parent command envelopes can expose
+ * nested structured output without re-encoding it as an escaped string.
  */
 final class CommandOutputProcessor implements ContextProcessorInterface
 {
@@ -63,14 +69,277 @@ final class CommandOutputProcessor implements ContextProcessorInterface
     /**
      * @param OutputInterface $output
      *
-     * @return ?string
+     * @return mixed
      */
-    private function extractBufferedOutput(OutputInterface $output): ?string
+    private function extractBufferedOutput(OutputInterface $output): mixed
     {
         if (! $output instanceof BufferedOutput) {
             return null;
         }
 
-        return $output->fetch();
+        $content = $output->fetch();
+
+        return $this->decodeStructuredOutput($content);
+    }
+
+    /**
+     * Decodes a buffered output string when it contains JSON content.
+     *
+     * @param string $content the buffered output contents
+     *
+     * @return mixed the decoded JSON payload or the original string
+     */
+    private function decodeStructuredOutput(string $content): mixed
+    {
+        $trimmedContent = trim($content);
+
+        if ('' === $trimmedContent) {
+            return $content;
+        }
+
+        try {
+            return $this->normalizeStructuredPayload(json_decode($trimmedContent, true));
+        } catch (JsonException) {
+        }
+
+        $decodedDocuments = $this->decodeJsonDocumentStream($trimmedContent);
+
+        if (null !== $decodedDocuments) {
+            return $decodedDocuments;
+        }
+
+        $decodedStructuredOutput = $this->decodeStructuredOutputAfterTextPreamble($content);
+
+        if (null !== $decodedStructuredOutput) {
+            return $decodedStructuredOutput;
+        }
+
+        return $content;
+    }
+
+    /**
+     * Decodes structured output that is preceded by plain-text warnings or banners.
+     *
+     * Some tooling emits advisory text before a valid JSON payload even when a
+     * machine-readable format is requested. When the suffix starting at the
+     * first valid JSON token is fully decodable, the textual preamble SHALL be
+     * ignored so parent command envelopes remain parseable.
+     *
+     * @param string $content the buffered output contents
+     *
+     * @return mixed the decoded JSON payload when a valid structured suffix exists
+     */
+    private function decodeStructuredOutputAfterTextPreamble(string $content): mixed
+    {
+        $offset = 0;
+
+        while (null !== ($offset = $this->findNextJsonDocumentOffset($content, $offset))) {
+            $structuredSuffix = trim(substr($content, $offset));
+
+            if ('' === $structuredSuffix) {
+                return null;
+            }
+
+            try {
+                return $this->normalizeStructuredPayload(json_decode($structuredSuffix, true));
+            } catch (JsonException) {
+            }
+
+            $decodedDocuments = $this->decodeJsonDocumentStream($structuredSuffix);
+
+            if (null !== $decodedDocuments) {
+                return $decodedDocuments;
+            }
+
+            ++$offset;
+        }
+
+        return null;
+    }
+
+    /**
+     * Decodes a stream that contains multiple JSON documents separated by whitespace.
+     *
+     * @param string $content the buffered output contents
+     *
+     * @return ?list<mixed> the decoded JSON documents when the stream is valid
+     */
+    private function decodeJsonDocumentStream(string $content): ?array
+    {
+        $decodedDocuments = [];
+        $offset = 0;
+        $length = \strlen($content);
+
+        while ($offset < $length) {
+            while ($offset < $length && ctype_space($content[$offset])) {
+                ++$offset;
+            }
+
+            if ($offset >= $length) {
+                break;
+            }
+
+            $document = $this->consumeJsonDocument($content, $offset);
+
+            if (null === $document) {
+                return null;
+            }
+
+            try {
+                $decodedDocuments[] = $this->normalizeStructuredPayload(json_decode($document, true));
+            } catch (JsonException) {
+                return null;
+            }
+        }
+
+        return \count($decodedDocuments) > 1 ? $decodedDocuments : null;
+    }
+
+    /**
+     * Consumes a single top-level JSON document from a multi-document stream.
+     *
+     * @param string $content the buffered output contents
+     * @param int $offset the current stream offset, advanced past the document on success
+     *
+     * @return ?string the extracted JSON document
+     */
+    private function consumeJsonDocument(string $content, int &$offset): ?string
+    {
+        $length = \strlen($content);
+        $start = $offset;
+        $openingToken = $content[$offset];
+
+        if ('{' !== $openingToken && '[' !== $openingToken) {
+            return null;
+        }
+
+        $depth = 0;
+        $inString = false;
+        $escaping = false;
+
+        for (; $offset < $length; ++$offset) {
+            $character = $content[$offset];
+
+            if ($inString) {
+                if ($escaping) {
+                    $escaping = false;
+
+                    continue;
+                }
+
+                if ('\\' === $character) {
+                    $escaping = true;
+
+                    continue;
+                }
+
+                if ('"' === $character) {
+                    $inString = false;
+                }
+
+                continue;
+            }
+
+            if ('"' === $character) {
+                $inString = true;
+
+                continue;
+            }
+
+            if ('{' === $character || '[' === $character) {
+                ++$depth;
+
+                continue;
+            }
+
+            if ('}' === $character || ']' === $character) {
+                --$depth;
+
+                if (0 === $depth) {
+                    ++$offset;
+
+                    return substr($content, $start, $offset - $start);
+                }
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Finds the offset of the next possible JSON document opening token.
+     *
+     * @param string $content the buffered output contents
+     * @param int $offset the offset from which scanning SHALL start
+     *
+     * @return ?int the offset of the next "{" or "[" token
+     */
+    private function findNextJsonDocumentOffset(string $content, int $offset): ?int
+    {
+        $length = \strlen($content);
+
+        for (; $offset < $length; ++$offset) {
+            if ('{' === $content[$offset] || '[' === $content[$offset]) {
+                return $offset;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Normalizes decoded structured payloads produced by wrapped tooling.
+     *
+     * @param mixed $payload the decoded payload
+     *
+     * @return mixed the normalized payload
+     */
+    private function normalizeStructuredPayload(mixed $payload): mixed
+    {
+        if (! \is_array($payload)) {
+            return $payload;
+        }
+
+        if (! isset($payload['totals']) || ! \is_array($payload['totals'])) {
+            return $payload;
+        }
+
+        $changedFilesTotal = $payload['totals']['changed_files'] ?? null;
+
+        if (! \is_int($changedFilesTotal)) {
+            return $payload;
+        }
+
+        if (0 === $changedFilesTotal) {
+            $payload['changed_files'] = [];
+
+            return $payload;
+        }
+
+        if (! isset($payload['file_diffs']) || ! \is_array($payload['file_diffs'])) {
+            return $payload;
+        }
+
+        $changedFiles = [];
+
+        foreach ($payload['file_diffs'] as $fileDiff) {
+            if (! \is_array($fileDiff)) {
+                continue;
+            }
+
+            if (! isset($fileDiff['file'])) {
+                continue;
+            }
+
+            if (! \is_string($fileDiff['file'])) {
+                continue;
+            }
+
+            $changedFiles[$fileDiff['file']] = $fileDiff['file'];
+        }
+
+        $payload['changed_files'] = array_values($changedFiles);
+
+        return $payload;
     }
 }

@@ -10,8 +10,9 @@ Local Command Lifecycle
 1. ``bin/dev-tools`` loads ``bin/dev-tools.php``.
 2. ``bin/dev-tools.php`` prefers the consumer ``vendor/autoload.php`` and
    falls back to the package autoloader.
-3. ``FastForward\DevTools\Console\DevTools::create()`` builds a shared
-   container from ``FastForward\DevTools\ServiceProvider\DevToolsServiceProvider``.
+3. ``FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Console\DevTools::class)``
+   resolves the shared application container from
+   ``FastForward\DevTools\ServiceProvider\DevToolsServiceProvider``.
 4. ``FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader``
    lazily discovers ``#[AsCommand]`` classes and resolves them from that
    container.
@@ -61,7 +62,7 @@ Dependency Injection
 --------------------
 
 ``DevToolsServiceProvider`` builds the shared application container used by
-``DevTools::create()``. Most commands receive collaborators through
+``ContainerFactory::get(DevTools::class)``. Most commands receive collaborators through
 constructor injection once resolved by that container, while command discovery
 itself stays lazy through ``DevToolsCommandLoader``.
 

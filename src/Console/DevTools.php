@@ -27,10 +27,7 @@ use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
-use FastForward\DevTools\ServiceProvider\DevToolsServiceProvider;
-use DI\Container;
 use Override;
-use Psr\Container\ContainerInterface;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\CommandLoader\CommandLoaderInterface;
@@ -64,11 +61,6 @@ final class DevTools extends Application
      * @var list<string>
      */
     private const array RAW_OUTPUT_COMMANDS = ['changelog:next-version', 'changelog:show'];
-
-    /**
-     * @var ContainerInterface holds the static container instance for global access within the DevTools context
-     */
-    private static ?ContainerInterface $container = null;
 
     /**
      * Initializes the DevTools global context and dependency graph.
@@ -168,29 +160,6 @@ final class DevTools extends Application
         }
 
         return parent::doRun($input, $output);
-    }
-
-    /**
-     * Create DevTools instance from container.
-     *
-     * @return DevTools
-     */
-    public static function create(): self
-    {
-        return self::getContainer()->get(self::class);
-    }
-
-    /**
-     * Retrieves the shared DevTools service container.
-     */
-    public static function getContainer(): ContainerInterface
-    {
-        if (! self::$container instanceof ContainerInterface) {
-            $serviceProvider = new DevToolsServiceProvider();
-            self::$container = new Container($serviceProvider->getFactories());
-        }
-
-        return self::$container;
     }
 
     /**

@@ -31,6 +31,10 @@ use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Project\ProjectCapabilities;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -41,6 +45,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -48,6 +53,10 @@ use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(WikiCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -57,6 +66,7 @@ use function Safe\getcwd;
 final class WikiCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processBuilder;
 
@@ -92,6 +102,7 @@ final class WikiCommandTest extends TestCase
         $this->gitClient = $this->prophesize(GitClientInterface::class);
         $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
@@ -132,7 +143,6 @@ final class WikiCommandTest extends TestCase
             $this->filesystem->reveal(),
             $this->gitClient->reveal(),
             $this->projectCapabilitiesResolver->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -165,9 +175,52 @@ final class WikiCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
+            ->shouldBeCalled();
+        $this->logger->log(
+            'info',
+            'Wiki documentation generated successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalled();
+
+        self::assertSame(WikiCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processBuilder->withArgument(
+            '--template',
+            DevToolsPathResolver::getPreferredVendorPath('vendor/saggre/phpdocumentor-markdown/themes/markdown')
+        )
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument(
+            '--cache-folder',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC)
+        )
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->filesystem->getAbsolutePath('src/')
+            ->willReturn(getcwd() . '/src')
+            ->shouldBeCalled();
+        $this->processBuilder->withArgument('--directory', getcwd() . '/src')
+            ->willReturn($this->processBuilder->reveal())
+            ->shouldBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())
+            ->shouldBeCalled();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
         $this->logger->log(
             'info',
@@ -214,7 +267,7 @@ final class WikiCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
@@ -241,7 +294,7 @@ final class WikiCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
@@ -278,7 +331,7 @@ final class WikiCommandTest extends TestCase
         $this->processQueue->run($this->output->reveal())
             ->willReturn(WikiCommand::SUCCESS)
             ->shouldBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(
@@ -306,7 +359,7 @@ final class WikiCommandTest extends TestCase
             ->willReturn(new ProjectCapabilities([], null, false, false, true, false));
         $this->processQueue->add(Argument::cetera())
             ->shouldNotBeCalled();
-        $this->logger->info('Generating wiki documentation...', Argument::that(
+        $this->logger->log('info', 'Generating wiki documentation...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))->shouldBeCalled();
         $this->logger->log(

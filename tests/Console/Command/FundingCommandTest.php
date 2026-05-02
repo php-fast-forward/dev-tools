@@ -23,6 +23,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use FastForward\DevTools\Console\Command\FundingCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Funding\ComposerFundingCodec;
 use FastForward\DevTools\Funding\FundingProfile;
@@ -32,6 +33,11 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Resource\FileDiff;
 use FastForward\DevTools\Resource\FileDiffer;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -41,6 +47,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -49,7 +56,13 @@ use Symfony\Component\Yaml\Yaml;
 
 use function Safe\json_decode;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(FundingCommand::class)]
+#[UsesClass(GithubActionOutput::class)]
 #[UsesClass(FileDiff::class)]
 #[UsesClass(ComposerFundingCodec::class)]
 #[UsesClass(FundingProfile::class)]
@@ -59,6 +72,7 @@ use function Safe\json_decode;
 final class FundingCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $filesystem;
 
@@ -87,6 +101,11 @@ final class FundingCommandTest extends TestCase
     {
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->input = $this->prophesize(InputInterface::class);
+
+        $this->input->getOption('json')
+            ->willReturn(false);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileDiffer = $this->prophesize(FileDiffer::class);
         $this->processBuilder = $this->prophesize(ProcessBuilderInterface::class);
@@ -94,13 +113,14 @@ final class FundingCommandTest extends TestCase
         $this->normalizeProcess = $this->prophesize(Process::class);
         $this->io = $this->prophesize(SymfonyStyle::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
         $this->output->isDecorated()
             ->willReturn(false);
         $this->output->writeln(Argument::any());
         $this->fileDiffer->formatForConsole(Argument::cetera())->willReturn(null);
-        $this->logger->info(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('info', Argument::cetera())->will(static function (): void {});
         $this->logger->log(Argument::cetera())->will(static function (): void {});
-        $this->logger->notice(Argument::cetera())->will(static function (): void {});
+        $this->logger->log('notice', Argument::cetera())->will(static function (): void {});
         $this->logger->error(Argument::cetera())->will(static function (): void {});
         $this->input->getOption('composer-file')
             ->willReturn('composer.json');
@@ -133,7 +153,6 @@ final class FundingCommandTest extends TestCase
             $this->fileDiffer->reveal(),
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
-            $this->logger->reveal(),
             $this->io->reveal(),
         );
     }
@@ -346,11 +365,12 @@ final class FundingCommandTest extends TestCase
     {
         $this->filesystem->exists('composer.json')
             ->willReturn(false);
-        $this->logger->info('Synchronizing funding metadata...', [
+        $this->logger->log('info', 'Synchronizing funding metadata...', [
             'input' => $this->input->reveal(),
         ])
             ->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'Composer file {composer_file} does not exist. Skipping funding synchronization.',
             [
                 'input' => $this->input->reveal(),
@@ -492,7 +512,7 @@ final class FundingCommandTest extends TestCase
             $fundingYaml,
             'Updating managed file .github/FUNDING.yml from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Funding unchanged'))->shouldBeCalledOnce();
-        $this->logger->notice('Skipped updating {composer_file}.', Argument::type('array'))
+        $this->logger->log('notice', 'Skipped updating {composer_file}.', Argument::type('array'))
             ->shouldBeCalledOnce();
         $this->logger->log(
             'notice',
@@ -647,7 +667,8 @@ final class FundingCommandTest extends TestCase
             $composerContents,
             'Updating managed file composer.json from generated funding metadata synchronization.',
         )->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Composer unchanged'))->shouldBeCalledOnce();
-        $this->logger->notice(
+        $this->logger->log(
+            'notice',
             'No supported funding metadata found. Skipping .github/FUNDING.yml synchronization.',
             [
                 'input' => $this->input->reveal(),

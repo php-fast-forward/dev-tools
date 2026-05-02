@@ -27,6 +27,10 @@ use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -36,6 +40,7 @@ use Prophecy\Argument;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
+use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
@@ -43,6 +48,10 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(DependenciesCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
@@ -51,6 +60,7 @@ use Symfony\Component\Process\Process;
 final class DependenciesCommandTest extends TestCase
 {
     use ProphecyTrait;
+    use UsesContainerFactory;
 
     private ObjectProphecy $processQueue;
 
@@ -74,6 +84,7 @@ final class DependenciesCommandTest extends TestCase
         $this->output = $this->prophesize(OutputInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
+        $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
 
         $this->fileLocator->locate('composer-dependency-analyser.php')
             ->willReturn('/app/composer-dependency-analyser.php');
@@ -102,7 +113,6 @@ final class DependenciesCommandTest extends TestCase
             new ProcessBuilder(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
     }
 
@@ -116,7 +126,7 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running dependency analysis...', Argument::that(
+        $this->logger->log('info', 'Running dependency analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
             ->shouldBeCalledOnce();
@@ -160,9 +170,33 @@ final class DependenciesCommandTest extends TestCase
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
-        $this->logger->info('Running dependency analysis...', Argument::that(
+        $this->logger->log('info', 'Running dependency analysis...', Argument::that(
             static fn(array $context): bool => $context['input'] instanceof InputInterface
         ))
+            ->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'Dependency analysis completed successfully.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface),
+        )->shouldBeCalledOnce();
+
+        self::assertSame(DependenciesCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSuppressProgressLogWhenJsonIsRequested(): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->input->getOption('pretty-json')
+            ->willReturn(false);
+        $this->processQueue->add(Argument::type(Process::class), false, Argument::cetera())->shouldBeCalledTimes(4);
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn(DependenciesCommand::SUCCESS)
             ->shouldBeCalledOnce();
         $this->logger->log(
             'info',
@@ -221,7 +255,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--config', '/app/composer-dependency-analyser.php')
@@ -253,7 +286,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--limit', '5')
@@ -279,7 +311,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--dry-run')
@@ -305,7 +336,6 @@ final class DependenciesCommandTest extends TestCase
             $processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->fileLocator->reveal(),
-            $this->logger->reveal(),
         );
 
         $processBuilder->withArgument('--dry-run')
