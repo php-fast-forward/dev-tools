@@ -24,6 +24,8 @@ use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use PHPUnit\Framework\Attributes\AfterClass;
+use PHPUnit\Framework\Attributes\BeforeClass;
 use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
@@ -39,15 +41,9 @@ trait UsesContainerFactory
     /**
      * @return void
      */
-    public static function setUpBeforeClass(): void
-    {
-        ContainerFactory::reset();
-    }
-
-    /**
-     * @return void
-     */
-    public static function tearDownAfterClass(): void
+    #[BeforeClass]
+    #[AfterClass]
+    public static function resetSharedContainer(): void
     {
         ContainerFactory::reset();
     }
