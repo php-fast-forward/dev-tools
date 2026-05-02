@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.1] - 2026-05-02
+
 ### Fixed
 
 - Keep structured DevTools command output parseable and agent-friendly by exposing the PHPUnit agent-reporter payload under nested `output`, suppressing intermediary progress logs in JSON modes, and normalizing orchestrated subprocess payloads before the final JSON envelope is emitted (#248)
@@ -428,7 +430,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.0...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.1...HEAD
+[1.25.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.0...v1.25.1
 [1.25.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.6...v1.25.0
 [1.24.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.5...v1.24.6
 [1.24.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.4...v1.24.5
