@@ -27,6 +27,10 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Project\ProjectCapabilities;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -45,6 +49,10 @@ use Symfony\Component\Process\Process;
 
 use function Safe\putenv;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(MetricsCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -110,10 +118,7 @@ final class MetricsCommandTest extends TestCase
             && '-ddefault_socket_timeout=1' === $command[2]
             && DevToolsPathResolver::getPreferredToolBinaryPath('phpmetrics') === $command[3]))
             ->willReturn($this->process->reveal());
-        $this->command = new MetricsCommand(
-            $this->processBuilder->reveal(),
-            $this->processQueue->reveal(),
-        );
+        $this->command = new MetricsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
     }
 
     /**
@@ -226,10 +231,7 @@ final class MetricsCommandTest extends TestCase
     {
         putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
 
-        $command = new MetricsCommand(
-            $this->processBuilder->reveal(),
-            $this->processQueue->reveal(),
-        );
+        $command = new MetricsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
 
         self::assertSame(
             'vendor,tmp,cache,spec,build,.dev-tools,backup,resources,.artifacts',

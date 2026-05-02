@@ -26,6 +26,7 @@ use FastForward\DevTools\Console\Command\FixtureWithoutAsCommand;
 use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -34,6 +35,7 @@ use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use stdClass;
 
+#[UsesClass(GithubActionOutput::class)]
 #[CoversClass(DevToolsCommandProvider::class)]
 #[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -92,8 +94,7 @@ final class DevToolsCommandProviderTest extends TestCase
         ContainerFactory::set('FastForward\DevTools\Console\DevTools', new class ($this->applicationState) {
             public function __construct(
                 private readonly stdClass $state,
-            ) {
-            }
+            ) {}
 
             /**
              * @return array<string, FixtureWithoutAsCommand>
@@ -137,7 +138,9 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->applicationCommands = ['agents' => $symfonyCommand];
+        $this->applicationCommands = [
+            'agents' => $symfonyCommand,
+        ];
 
         $commands = array_values($this->commandProvider->getCommands());
         $command = $commands[0];
@@ -234,7 +237,9 @@ final class DevToolsCommandProviderTest extends TestCase
         $symfonyCommand->setHelp('');
         $symfonyCommand->setHidden(false);
 
-        $this->applicationCommands = ['install' => $symfonyCommand];
+        $this->applicationCommands = [
+            'install' => $symfonyCommand,
+        ];
 
         self::assertSame([], $this->commandProvider->getCommands());
     }

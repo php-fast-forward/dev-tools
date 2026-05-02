@@ -23,8 +23,14 @@ use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
 use FastForward\DevTools\Console\Command\ChangelogShowCommand;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
@@ -37,6 +43,11 @@ use RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(ChangelogShowCommand::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class ChangelogShowCommandTest extends TestCase
@@ -79,10 +90,7 @@ final class ChangelogShowCommandTest extends TestCase
         $this->filesystem->getAbsolutePath('CHANGELOG.md')
             ->willReturn('/repo/CHANGELOG.md');
 
-        $this->command = new ChangelogShowCommand(
-            $this->filesystem->reveal(),
-            $this->changelogManager->reveal(),
-        );
+        $this->command = new ChangelogShowCommand($this->filesystem->reveal(), $this->changelogManager->reveal());
     }
 
     /**

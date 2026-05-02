@@ -24,6 +24,10 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\StandardsCommand;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -40,6 +44,10 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(StandardsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -94,10 +102,7 @@ final class StandardsCommandTest extends TestCase
         $this->processBuilder->build(Argument::any())
             ->willReturn($this->prophesize(Process::class)->reveal());
 
-        $this->command = new StandardsCommand(
-            $this->processBuilder->reveal(),
-            $this->processQueue->reveal(),
-        );
+        $this->command = new StandardsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
     }
 
     /**

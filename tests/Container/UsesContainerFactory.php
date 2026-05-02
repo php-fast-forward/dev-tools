@@ -20,10 +20,20 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Container;
 
 use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use PHPUnit\Framework\Attributes\UsesClass;
 
 /**
  * Resets the shared DevTools container around a test class lifecycle.
  */
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(Environment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 trait UsesContainerFactory
 {
     /**

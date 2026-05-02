@@ -21,7 +21,11 @@ namespace FastForward\DevTools\Tests\Console\Input;
 
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
+use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -33,6 +37,10 @@ use function Safe\putenv;
 
 #[CoversTrait(HasJsonOption::class)]
 #[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 final class HasJsonOptionTest extends TestCase
 {
     use ProphecyTrait;

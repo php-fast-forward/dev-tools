@@ -36,6 +36,8 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Project\ProjectCapabilities;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -54,6 +56,8 @@ use Symfony\Component\Process\Process;
 
 use function Safe\getcwd;
 
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(BootstrapShimGenerator::class)]
 #[UsesClass(CoverageSummary::class)]
@@ -430,7 +434,7 @@ final class TestsCommandTest extends TestCase
                 && isset($context['output'])
                 && 'success' === $context['output']['result']
                 && 5 === $context['output']['summary']['assertions']
-                && "Generating code coverage report in PHP format ... done [00:00.002]" === $context['output']['raw_output']),
+                && 'Generating code coverage report in PHP format ... done [00:00.002]' === $context['output']['raw_output']),
         )->shouldBeCalled();
         $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 

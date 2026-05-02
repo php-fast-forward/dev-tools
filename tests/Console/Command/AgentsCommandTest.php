@@ -25,6 +25,10 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Sync\PackagedDirectorySynchronizer;
 use FastForward\DevTools\Sync\SynchronizeResult;
+use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
+use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -41,6 +45,10 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 use function Safe\getcwd;
 
+#[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
+#[UsesClass(DevToolsEnvironment::class)]
+#[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(AgentsCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(PackagedDirectorySynchronizer::class)]
@@ -82,10 +90,7 @@ final class AgentsCommandTest extends TestCase
         $this->filesystem->getAbsolutePath('.agents/agents')
             ->willReturn(getcwd() . '/.agents/agents');
 
-        $this->command = new AgentsCommand(
-            $this->synchronizer->reveal(),
-            $this->filesystem->reveal(),
-        );
+        $this->command = new AgentsCommand($this->synchronizer->reveal(), $this->filesystem->reveal());
     }
 
     /**

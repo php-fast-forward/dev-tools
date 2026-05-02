@@ -21,6 +21,8 @@ namespace FastForward\DevTools\Tests\Container;
 
 use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -28,6 +30,8 @@ use PHPUnit\Framework\TestCase;
 use stdClass;
 use Symfony\Component\Config\FileLocatorInterface;
 
+#[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[CoversClass(ContainerFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
 final class ContainerFactoryTest extends TestCase
