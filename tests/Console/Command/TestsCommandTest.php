@@ -23,6 +23,7 @@ use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Container\ContainerFactory;
+use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
@@ -57,6 +58,7 @@ use function Safe\getcwd;
 #[UsesClass(BootstrapShimGenerator::class)]
 #[UsesClass(CoverageSummary::class)]
 #[UsesClass(ContainerFactory::class)]
+#[UsesClass(DevToolsServiceProvider::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ProcessBuilder::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -428,7 +430,7 @@ final class TestsCommandTest extends TestCase
                 && isset($context['output'])
                 && 'success' === $context['output']['result']
                 && 5 === $context['output']['summary']['assertions']
-                && ! isset($context['output']['raw_output'])),
+                && "Generating code coverage report in PHP format ... done [00:00.002]" === $context['output']['raw_output']),
         )->shouldBeCalled();
         $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 
