@@ -34,7 +34,6 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
-use stdClass;
 
 #[UsesClass(GithubActionOutput::class)]
 #[CoversClass(DevToolsCommandProvider::class)]
@@ -49,11 +48,14 @@ final class DevToolsCommandProviderTest extends TestCase
     private ObjectProphecy $plugin;
 
     /**
+     * @var ObjectProphecy<DevTools>
+     */
+    private ObjectProphecy $devTools;
+
+    /**
      * @var array<string, FixtureWithoutAsCommand>
      */
     private array $applicationCommands = [];
-
-    private stdClass $applicationState;
 
     private DevToolsCommandProvider $commandProvider;
 
@@ -63,9 +65,8 @@ final class DevToolsCommandProviderTest extends TestCase
     protected function setUp(): void
     {
         ContainerFactory::reset();
-        $this->applicationState = new stdClass();
-        $this->applicationState->commands = &$this->applicationCommands;
         $this->plugin = $this->prophesize(DevToolsPluginInterface::class);
+        $this->devTools = $this->prophesize(DevTools::class);
 
         $this->plugin->isRegisteredCommand(null)
             ->willReturn(false);
@@ -92,22 +93,10 @@ final class DevToolsCommandProviderTest extends TestCase
             'plugin' => $this->plugin->reveal(),
         ]);
 
-        ContainerFactory::set(DevTools::class, new readonly class ($this->applicationState) {
-            /**
-             * @param stdClass $state
-             */
-            public function __construct(
-                private stdClass $state,
-            ) {}
-
-            /**
-             * @return array<string, FixtureWithoutAsCommand>
-             */
-            public function all(): array
-            {
-                return $this->state->commands;
-            }
-        });
+        $testCase = $this;
+        $this->devTools->all()
+            ->will(static fn(): array => $testCase->applicationCommands);
+        ContainerFactory::set(DevTools::class, $this->devTools->reveal());
     }
 
     /**
