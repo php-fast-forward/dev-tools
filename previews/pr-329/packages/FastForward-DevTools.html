@@ -2334,6 +2334,65 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-container.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Container
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-container-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-container-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-container-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-container-serviceprovider.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            ServiceProvider
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-environment.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3681,7 +3740,7 @@ composer.json file.</p>
                             <a href="classes/FastForward-DevTools-Console-Command-ReportsCommand.html" class="fw-semibold text-decoration-none">
                                 <a href="classes/FastForward-DevTools-Console-Command-ReportsCommand.html"><abbr title="\FastForward\DevTools\Console\Command\ReportsCommand">ReportsCommand</abbr></a>
                             </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">Coordinates the generation of Fast Forward documentation frontpage and related reports.</p>
+                                                            <p class="text-body-secondary mb-0 mt-1">Coordinates documentation, coverage, and metrics report generation.</p>
                                                     </div>
                                             <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Console-Command-SelfUpdateCommand.html" class="fw-semibold text-decoration-none">
@@ -3780,6 +3839,18 @@ and integrates with a PSR-11 compatible container to lazily instantiate commands
                                 <a href="classes/FastForward-DevTools-Console-Output-OutputCapabilityDetector.html"><abbr title="\FastForward\DevTools\Console\Output\OutputCapabilityDetector">OutputCapabilityDetector</abbr></a>
                             </a>
                                                             <p class="text-body-secondary mb-0 mt-1">Detects ANSI-friendly output by decoration state or TTY-backed streams.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Container-ContainerFactory.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Container-ContainerFactory.html"><abbr title="\FastForward\DevTools\Container\ContainerFactory">ContainerFactory</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Builds and caches the shared DevTools dependency injection container.</p>
+                                                    </div>
+                                            <div class="list-group-item">
+                            <a href="classes/FastForward-DevTools-Container-ServiceProvider-DevToolsServiceProvider.html" class="fw-semibold text-decoration-none">
+                                <a href="classes/FastForward-DevTools-Container-ServiceProvider-DevToolsServiceProvider.html"><abbr title="\FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider">DevToolsServiceProvider</abbr></a>
+                            </a>
+                                                            <p class="text-body-secondary mb-0 mt-1">Registers the services exposed by the DevTools container.</p>
                                                     </div>
                                             <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Environment-Environment.html" class="fw-semibold text-decoration-none">
@@ -4122,7 +4193,7 @@ optional failure suppression.</p>
                             <a href="classes/FastForward-DevTools-ServiceProvider-DevToolsServiceProvider.html" class="fw-semibold text-decoration-none">
                                 <a href="classes/FastForward-DevTools-ServiceProvider-DevToolsServiceProvider.html"><abbr title="\FastForward\DevTools\ServiceProvider\DevToolsServiceProvider">DevToolsServiceProvider</abbr></a>
                             </a>
-                                                            <p class="text-body-secondary mb-0 mt-1">DevToolsServiceProvider registers the services provided by this package.</p>
+                                                            <p class="text-body-secondary mb-0 mt-1">Registers the services exposed by the DevTools container.</p>
                                                     </div>
                                             <div class="list-group-item">
                             <a href="classes/FastForward-DevTools-Sync-PackagedDirectorySynchronizer.html" class="fw-semibold text-decoration-none">
