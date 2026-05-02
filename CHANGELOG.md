@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- Keep `tests` JSON output parseable by exposing the PHPUnit agent-reporter payload under `output` in structured runs, including a raw-output fallback when PHPUnit writes extra text before the final JSON (#248)
+- Keep structured DevTools command output parseable and agent-friendly by exposing the PHPUnit agent-reporter payload under nested `output`, suppressing intermediary progress logs in JSON modes, and normalizing orchestrated subprocess payloads before the final JSON envelope is emitted (#248)
 - Register ``ergebnis/phpunit-agent-reporter`` in the packaged ``phpunit.xml`` so AI agents receive compact PHPUnit JSON summaries without changing consumer overrides manually (#327)
 - Let `wiki`, `docs`, `tests`, `metrics`, and `reports` skip gracefully for guide-only repositories while keeping wiki/report workflows and published preview links aligned with the artifacts that were actually generated (#325)
 
