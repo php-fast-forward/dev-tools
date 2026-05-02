@@ -17,6 +17,8 @@ When you run ``tests``, DevTools:
   explicit force-off flag for the current run;
 - uses the selected workspace ``cache/phpunit`` directory only when caching
   stays enabled;
+- skips the command with a warning when the repository has no default
+  ``tests`` directory and no testable PHP source surface;
 - can generate HTML coverage, Testdox, Clover, and raw PHP coverage output
   when ``--coverage`` is provided.
 
@@ -29,6 +31,8 @@ Useful Examples
    composer tests -- --filter=PluginTest
    composer tests --coverage=.dev-tools/coverage
    composer tests --no-cache --bootstrap=tests/bootstrap.php
+   composer tests --json
+   composer tests --pretty-json
 
 Coverage Outputs
 ----------------
@@ -59,6 +63,10 @@ The packaged ``phpunit.xml`` registers:
   default verbose terminal output with a compact JSON summary when an agent
   runtime is detected.
 
+When ``tests`` itself runs in structured mode, DevTools also forces the
+reporter path for the PHPUnit subprocess so the nested payload remains compact
+and parseable for bots and agent workflows.
+
 Programmatic Coverage Access
 -----------------------------
 
@@ -83,7 +91,10 @@ When to Override Locally
 
 Create your own ``phpunit.xml`` in the consumer project when you need a
 different bootstrap file, extra extensions, or alternative strictness flags.
-DevTools will prefer the local file automatically.
+DevTools will prefer the local file automatically, but consumer projects that
+replace the packaged configuration must re-register both bundled extensions if
+they still want desktop notifications, BypassFinals support, and compact
+agent-oriented JSON output.
 
 .. note::
 

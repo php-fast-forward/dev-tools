@@ -113,6 +113,13 @@ Run with minimum coverage enforcement:
 
    composer tests --min-coverage=80
 
+Run with structured JSON output:
+
+.. code-block:: bash
+
+   composer tests --json
+   composer tests --pretty-json
+
 Run without cache:
 
 .. code-block:: bash
@@ -150,6 +157,10 @@ Behavior
 ---------
 
 - Local ``phpunit.xml`` is preferred over the packaged default.
+- When the default ``tests`` path is absent and the project exposes no
+  testable PHP source files, the command exits successfully with a warning
+  instead of failing the whole automation flow.
+- A custom explicit tests path that does not exist still fails fast.
 - Coverage filters are automatically applied to all PSR-4 paths from composer.json.
 - Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.
 - Cache stays enabled by default; omit both flags to keep the command default,
@@ -167,6 +178,9 @@ Behavior
   command stores that payload inside ``output`` while keeping the standard
   DevTools JSON envelope. ``--json`` and ``--pretty-json`` therefore expose
   the same structured result, with formatting as the only difference.
+- the command forces the bundled PHPUnit agent-reporter extension for
+  structured runs so the nested payload stays compact and stable even when the
+  surrounding runtime would not normally look like an agent.
 - in structured mode, the command suppresses intermediary ``Running...`` log
   records so the output stream contains a single final JSON document.
 - when structured capture is active but PHPUnit does not emit parseable JSON,

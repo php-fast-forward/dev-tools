@@ -123,6 +123,9 @@ Behavior
 - When ``--json`` or ``--pretty-json`` is active, it forwards JSON mode to the
   ``docs``, ``tests``, and ``metrics`` subprocesses and suppresses transient
   progress output where those tools support it.
+- Nested ``docs`` and ``tests`` stages can now skip gracefully with warnings in
+  guide-only or automation-only repositories, while ``reports`` still returns a
+  successful aggregate result for the stages that were actually generated.
 - Passes ``--junit <coverage>/junit.xml`` to the metrics step.
 - Used by the ``standards`` command as the final phase.
 - This is the reporting stage used by GitHub Pages.

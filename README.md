@@ -35,6 +35,8 @@ across Fast Forward libraries.
 - Synchronizes packaged skills and project-agent prompts into consumer
   `.agents/skills` and `.agents/agents` directories using safe link-based
   updates
+- Supports guide-only and automation-only repositories by skipping PHPUnit or
+  wiki generation gracefully when no runnable PHP surface exists
 - Works both as a Composer plugin and as a local binary
 - Preserves local overrides through consumer-first configuration resolution
 
@@ -71,6 +73,8 @@ You can also run individual commands for specific development tasks:
 ```bash
 # Run PHPUnit tests
 composer dev-tools tests
+composer dev-tools tests --json
+composer dev-tools tests --pretty-json
 
 # Analyze missing, unused, misplaced, and outdated Composer dependencies
 composer dependencies
@@ -120,6 +124,7 @@ composer phpdoc
 
 # Generate HTML API documentation using phpDocumentor
 composer docs
+composer docs --source=docs/user-guide
 
 # Generate Markdown documentation for the wiki
 composer wiki
@@ -180,6 +185,14 @@ The `metrics` command ships with `phpmetrics/phpmetrics` as a direct
 dependency of `fast-forward/dev-tools`, so consumer repositories can generate
 metrics reports without extra setup.
 
+Guide-only repositories and workflow-only repositories can still use the
+packaged command surface. When no runnable PHPUnit surface exists, `tests`
+returns a controlled warning instead of failing. When a repository ships
+guides without PSR-4 source paths, `docs` builds the guide site without trying
+to synthesize API pages. When `.github/wiki` is absent and no wiki has been
+initialized yet, `wiki` now skips generation with a warning instead of failing
+the whole automation run.
+
 The changelog commands manage Keep a Changelog 1.1.0 files without requiring
 extra tooling in the consumer repository. `changelog:entry` bootstraps a
 missing changelog file on first use, `changelog:check` enforces meaningful
@@ -214,6 +227,14 @@ escape sequences into that mode today because preserving a parseable payload
 takes precedence over terminal-only color. Where orchestrated tools can expose
 structured subprocess results safely, DevTools prefers adding stable fields to
 the JSON context rather than coloring otherwise strict JSON output.
+
+For the `tests` command, structured runs now capture the bundled PHPUnit
+agent-reporter payload inside `context.output` while preserving the normal
+DevTools JSON envelope. That means the top-level command still emits one final
+document, and consumers can inspect stable nested keys such as
+`context.output.result`, `context.output.summary`, optional
+`context.output.details`, and `context.output.coverage` when minimum-coverage
+validation is active.
 
 Progress output is disabled by default on the commands that support transient
 rendering, and `--progress` re-enables it for human-readable terminal runs.

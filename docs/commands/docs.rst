@@ -103,9 +103,14 @@ Exit Codes
 Behavior
 ---------
 
-- ``docs/`` must exist unless you pass another ``--source`` directory.
+- The default ``docs`` source directory is optional. When it is absent, the
+  command still generates API pages if PSR-4 source paths are available.
+- A custom explicit ``--source`` path must exist; otherwise the command fails
+  fast.
 - API pages are built from the PSR-4 paths declared in ``composer.json``.
 - Guide pages are built from the selected source directory.
+- Repositories without PSR-4 source paths can still generate a guides-only
+  site from the selected source directory.
 - Cache stays enabled by default; omit both flags to keep the command default,
   pass ``--cache`` to force it on, and pass ``--no-cache`` to force it off.
 - When ``--cache-dir`` is omitted, phpDocumentor keeps its default cache
