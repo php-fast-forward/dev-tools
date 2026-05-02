@@ -252,11 +252,18 @@
             <li class="success">Execute will run php unit process with config file</li>
             <li class="success">Execute with no cache will disable php unit result cache</li>
             <li class="success">Execute will disable php unit progress when json is requested</li>
+            <li class="success">Execute will capture structured php unit summary when agent environment is detected</li>
+            <li class="success">Execute will preserve an inherited agent environment when forcing structured php unit output</li>
+            <li class="success">Execute will keep pretty json inside the standard command log output</li>
+            <li class="success">Execute will capture structured php unit summary after coverage prelude when agent environment is detected</li>
+            <li class="success">Execute will keep the exit code derived failure result authoritative</li>
+            <li class="success">Execute will keep raw php unit output when structured summary cannot be decoded</li>
             <li class="success">Execute will enable php unit progress when requested</li>
             <li class="success">Execute with invalid min coverage will return failure</li>
             <li class="success">Execute will skip when no tests directory or php source exists</li>
             <li class="success">Execute will fail when custom tests path does not exist</li>
             <li class="success">Execute with coverage below minimum will return failure</li>
+            <li class="success">Execute will emit structured coverage failure payload when minimum coverage is not met</li>
             <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
         </ul>
         <h2>Command Attribute Compatibility (FastForward\DevTools\Tests\Console\Command\CommandAttributeCompatibility)</h2>
@@ -271,6 +278,12 @@
         <h2>Command Output Processor (FastForward\DevTools\Tests\Console\Logger\Processor\CommandOutputProcessor)</h2>
         <ul>
             <li class="success">Process will replace buffered output with its contents</li>
+            <li class="success">Process will decode single json buffered output</li>
+            <li class="success">Process will normalize rector changed files when no files actually changed</li>
+            <li class="success">Process will normalize rector changed files using only diff entries</li>
+            <li class="success">Process will decode multiple json buffered outputs into a list</li>
+            <li class="success">Process will discard plain text preamble before structured json output</li>
+            <li class="success">Process will decode the final structured json after plain text tool output</li>
             <li class="success">Process will extract buffered error output from console output</li>
         </ul>
         <h2>Composer Dependency Analyser Config (FastForward\DevTools\Tests\Config\ComposerDependencyAnalyserConfig)</h2>
@@ -350,6 +363,13 @@
         <ul>
             <li class="success">Configure delegates to every configurator</li>
         </ul>
+        <h2>Container Factory (FastForward\DevTools\Tests\Container\ContainerFactory)</h2>
+        <ul>
+            <li class="success">Create will return the shared container instance</li>
+            <li class="success">Get will resolve services from the shared container</li>
+            <li class="success">Has will return whether the shared container can resolve a service</li>
+            <li class="success">Set will override shared container entries</li>
+        </ul>
         <h2>Copy Resource Command (FastForward\DevTools\Tests\Console\Command\CopyResourceCommand)</h2>
         <ul>
             <li class="success">Command will set expected name description and help</li>
@@ -386,6 +406,7 @@
             <li class="success">Execute will return success when preview and analyzers succeed</li>
             <li class="success">Execute will fail when max outdated is not numeric</li>
             <li class="success">Execute will ignore jack failures when max outdated is disabled</li>
+            <li class="success">Execute will suppress progress log when json is requested</li>
             <li class="success">Composer dependency analyser process will hide shadow dependencies by default</li>
             <li class="success">Composer dependency analyser process can report shadow dependencies</li>
             <li class="success">Jack breakpoint process will use the resolved jack binary</li>
@@ -405,7 +426,7 @@
             <li class="success">Do run will not render logo when json option is provided</li>
             <li class="success">Do run will not render logo when pretty json option is provided</li>
             <li class="success">All will return loader commands with preserved keys</li>
-            <li class="success">Create will return instance of dev tools</li>
+            <li class="success">Container factory will return a shared dev tools instance</li>
             <li class="success">Is self update command will use self update command attribute names and aliases</li>
             <li class="success">Is self update command will reject other commands</li>
             <li class="success">Run auto update when requested will update global installation when current binary is global</li>
@@ -467,6 +488,7 @@
             <li class="success">Execute will skip when guide and api sources are missing</li>
             <li class="success">Execute will fail when custom guide source does not exist</li>
             <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute will suppress progress log when json is requested</li>
             <li class="success">Execute with no cache will skip php documentor cache folder</li>
             <li class="success">Execute will generate guide only documentation when no api source is detected</li>
         </ul>
@@ -654,6 +676,11 @@
             <li class="success">Execute will return success in dry run mode when drift is detected</li>
             <li class="success">Execute will skip writing when interactive confirmation is declined</li>
         </ul>
+        <h2>Has Json Option (FastForward\DevTools\Tests\Console\Input\HasJsonOption)</h2>
+        <ul>
+            <li class="success">Is json output will use runtime environment when available</li>
+            <li class="success">Is json output will ignore fallback agent detection during php unit runs</li>
+        </ul>
         <h2>Hook Content Renderer (FastForward\DevTools\Tests\GitHooks\HookContentRenderer)</h2>
         <ul>
             <li class="success">Render will replace the managed grum php config placeholder</li>
@@ -755,8 +782,12 @@
             <li class="success">Log will write interpolated info messages to standard output</li>
             <li class="success">Log will write error messages to error output</li>
             <li class="success">Log will write structured json when json output is requested</li>
+            <li class="success">Log will emit parseable json when json output is requested</li>
             <li class="success">Log will write pretty printed json when pretty json output is requested</li>
+            <li class="success">Log will emit parseable json when pretty json output is requested</li>
+            <li class="success">Log will embed decoded structured command output instead of escaped json strings</li>
             <li class="success">Log will write structured json when agent environment is detected</li>
+            <li class="success">Log will keep plain text output when agent environment is detected during composer tests</li>
         </ul>
         <h2>Packaged Directory Synchronizer (FastForward\DevTools\Tests\Sync\PackagedDirectorySynchronizer)</h2>
         <ul>
@@ -917,6 +948,7 @@
             <li class="success">Is ci will return true when github actions is enabled</li>
             <li class="success">Is ci will return true when generic ci is enabled</li>
             <li class="success">Is composer test run will return whether composer tests flag is enabled</li>
+            <li class="success">Is composer test run will return true during php unit runtime</li>
             <li class="success">Is agent present will return whether known agent variables exist</li>
         </ul>
         <h2>Self Update Command (FastForward\DevTools\Tests\Console\Command\SelfUpdateCommand)</h2>
@@ -946,6 +978,7 @@
             <li class="success">Execute will run suite sequentially</li>
             <li class="success">Execute will return failure when any command fails</li>
             <li class="success">Execute with cache will forward cache only to cache aware nested commands</li>
+            <li class="success">Execute will suppress progress log when json is requested</li>
             <li class="success">Execute with no cache will forward no cache only to cache aware nested commands</li>
         </ul>
         <h2>Support (FastForward\DevTools\Tests\Composer\Json\Schema\Support)</h2>
@@ -1023,6 +1056,7 @@
             <li class="success">Execute will treat equivalent default wiki targets as default with data set #0</li>
             <li class="success">Execute will treat equivalent default wiki targets as default with data set #1</li>
             <li class="success">Execute will return success when process queue succeeds</li>
+            <li class="success">Execute will suppress progress log when json is requested</li>
             <li class="success">Execute with no cache will skip php documentor cache folder</li>
             <li class="success">Execute will skip when wiki target does not exist</li>
             <li class="success">Execute will generate when custom wiki target does not exist</li>

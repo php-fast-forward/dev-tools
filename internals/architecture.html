@@ -2335,6 +2335,65 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-container.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Container
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-container-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-container-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-container-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-container-serviceprovider.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            ServiceProvider
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-environment.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2967,28 +3026,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-serviceprovider.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            ServiceProvider
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-sync.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3154,9 +3191,10 @@ consumer repository synchronization.</p>
  and
 falls back to the package autoloader.</li>
 
-    <li value="3"><code>FastForward\DevTools\Console\DevTools::create()</code>
- builds a shared
-container from <code>FastForward\DevTools\ServiceProvider\DevToolsServiceProvider</code>
+    <li value="3"><code>FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Console\DevTools::class)</code>
+
+resolves the shared application container from
+<code>FastForward\DevTools\ServiceProvider\DevToolsServiceProvider</code>
 .</li>
 
     <li value="4"><code>FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader</code>
@@ -3276,7 +3314,7 @@ documentation build with PHPUnit coverage generation.</li>
             
     <p><code>DevToolsServiceProvider</code>
  builds the shared application container used by
-<code>DevTools::create()</code>
+<code>ContainerFactory::get(DevTools::class)</code>
 . Most commands receive collaborators through
 constructor injection once resolved by that container, while command discovery
 itself stays lazy through <code>DevToolsCommandLoader</code>

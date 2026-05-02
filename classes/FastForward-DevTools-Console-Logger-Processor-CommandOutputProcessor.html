@@ -2334,6 +2334,65 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-container.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Container
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-container-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-container-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-container-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-container-serviceprovider.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            ServiceProvider
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-environment.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2966,28 +3025,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-serviceprovider.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            ServiceProvider
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-sync.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3227,7 +3264,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">29</span>
+    <span class="badge text-bg-light border">35</span>
 
     </aside>
         </div>
@@ -3239,6 +3276,22 @@
 
 
 
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>JSON payloads are decoded eagerly so parent command envelopes can expose
+nested structured output without re-encoding it as an escaped string.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
 
 
 
@@ -3311,6 +3364,82 @@
     <div class="flex-grow-1">
         <a
             class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_consumeJsonDocument"
+        >
+            consumeJsonDocument()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Consumes a single top-level JSON document from a multi-document stream.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: string|null    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeJsonDocumentStream"
+        >
+            decodeJsonDocumentStream()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Decodes a stream that contains multiple JSON documents separated by whitespace.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: array&lt;int, mixed&gt;|null    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutput"
+        >
+            decodeStructuredOutput()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Decodes a buffered output string when it contains JSON content.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: mixed    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutputAfterTextPreamble"
+        >
+            decodeStructuredOutputAfterTextPreamble()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Decodes structured output that is preceded by plain-text warnings or banners.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: mixed    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
             href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_extractBufferedOutput"
         >
             extractBufferedOutput()
@@ -3319,7 +3448,45 @@
             </div>
 
     <span class="text-body-secondary small text-end">
-                                &nbsp;: string|null    </span>
+                                &nbsp;: mixed    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_findNextJsonDocumentOffset"
+        >
+            findNextJsonDocumentOffset()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Finds the offset of the next possible JSON document opening token.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: int|null    </span>
+</div>
+                        </div>
+                                            <div class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-start gap-3">
+    <div class="flex-grow-1">
+        <a
+            class="text-decoration-none fw-semibold text-primary"
+            href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_normalizeStructuredPayload"
+        >
+            normalizeStructuredPayload()
+        </a>
+
+                    <p class="text-body-secondary mb-0 small mt-1">
+                Normalizes decoded structured payloads produced by wrapped tooling.
+            </p>
+            </div>
+
+    <span class="text-body-secondary small text-end">
+                                &nbsp;: mixed    </span>
 </div>
                         </div>
                                     </div>
@@ -3389,7 +3556,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">36</span>
+    <span class="badge text-bg-light border">42</span>
 
     </aside>
     
@@ -3467,6 +3634,624 @@
 </article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
     <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
         <div>
+            <h4 class="h5 mb-2" id="method_consumeJsonDocument">
+                <span class="text-primary">consumeJsonDocument()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_consumeJsonDocument"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-logger-processor-commandoutputprocessor.html"><abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php">CommandOutputProcessor.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">206</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Consumes a single top-level JSON document from a multi-document stream.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">consumeJsonDocument</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$content</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    int&nbsp;
+                </span><span class="text-body-secondary">&amp;</span><span class="text-primary">$offset</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$content</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the buffered output contents</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$offset</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                int
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the current stream offset, advanced past the document on success</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            string|null
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the extracted JSON document</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_decodeJsonDocumentStream">
+                <span class="text-primary">decodeJsonDocumentStream()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeJsonDocumentStream"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-logger-processor-commandoutputprocessor.html"><abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php">CommandOutputProcessor.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">167</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Decodes a stream that contains multiple JSON documents separated by whitespace.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">decodeJsonDocumentStream</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$content</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">array&lt;int, mixed&gt;|null</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$content</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the buffered output contents</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+                        <span class="badge text-bg-light border text-dark">
+                            array&lt;int, mixed&gt;|null
+                        </span>
+                    </div>
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the decoded JSON documents when the stream is valid</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_decodeStructuredOutput">
+                <span class="text-primary">decodeStructuredOutput()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutput"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-logger-processor-commandoutputprocessor.html"><abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php">CommandOutputProcessor.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">92</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Decodes a buffered output string when it contains JSON content.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">decodeStructuredOutput</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$content</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$content</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the buffered output contents</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the decoded JSON payload or the original string</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_decodeStructuredOutputAfterTextPreamble">
+                <span class="text-primary">decodeStructuredOutputAfterTextPreamble()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutputAfterTextPreamble"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-logger-processor-commandoutputprocessor.html"><abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php">CommandOutputProcessor.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">132</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Decodes structured output that is preceded by plain-text warnings or banners.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">decodeStructuredOutputAfterTextPreamble</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$content</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+    <section class="mt-2">
+                    <div class="card border-0 bg-body-tertiary shadow-sm">
+                <div class="card-body p-3">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <i class="fas fa-align-left text-primary"></i>
+                        <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                    </div>
+
+                    <div>
+                        <p>Some tooling emits advisory text before a valid JSON payload even when a
+machine-readable format is requested. When the suffix starting at the
+first valid JSON token is fully decodable, the textual preamble SHALL be
+ignored so parent command envelopes remain parseable.</p>
+
+                    </div>
+                </div>
+            </div>
+            </section>
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$content</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the buffered output contents</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the decoded JSON payload when a valid structured suffix exists</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
             <h4 class="h5 mb-2" id="method_extractBufferedOutput">
                 <span class="text-primary">extractBufferedOutput()</span>
                 <a
@@ -3500,7 +4285,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">68</span>
+    <span class="badge text-bg-light border">74</span>
 
     </aside>
     
@@ -3514,7 +4299,7 @@
     
     
     <span class="text-primary fw-semibold">extractBufferedOutput</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis"><abbr title="\Symfony\Component\Console\Output\OutputInterface">OutputInterface</abbr>&nbsp;
-                </span><span class="text-primary">$output</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">string|null</span></code>
+                </span><span class="text-primary">$output</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
     </div>
 
     <div class="mt-3 d-flex flex-wrap gap-2">
@@ -3556,6 +4341,150 @@
 
         
     
+    
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_findNextJsonDocumentOffset">
+                <span class="text-primary">findNextJsonDocumentOffset()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_findNextJsonDocumentOffset"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-logger-processor-commandoutputprocessor.html"><abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php">CommandOutputProcessor.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">277</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Finds the offset of the next possible JSON document opening token.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">findNextJsonDocumentOffset</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    string&nbsp;
+                </span><span class="text-primary">$content</span></span><span><span class="text-body-secondary">, </span><span class="text-info-emphasis">
+                    int&nbsp;
+                </span><span class="text-primary">$offset</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">int|null</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$content</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                string
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the buffered output contents</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$offset</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                int
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the offset from which scanning SHALL start</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
         <section class="mt-4">
         <div class="d-flex align-items-center gap-2 mb-3">
             <i class="fas fa-reply text-success"></i>
@@ -3566,10 +4495,166 @@
             <div class="card-body p-3">
                                     <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
                         <span class="badge text-bg-light border text-dark">
-                            string|null
+                            int|null
                         </span>
                     </div>
                 
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the offset of the next &quot;{&quot; or &quot;[&quot; token</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
+                            </div>
+        </div>
+    </section>
+
+</article>                            <article class="border rounded-4 p-4 bg-body shadow-sm">
+    <div class="d-flex flex-wrap align-items-start justify-content-between gap-3 mb-3">
+        <div>
+            <h4 class="h5 mb-2" id="method_normalizeStructuredPayload">
+                <span class="text-primary">normalizeStructuredPayload()</span>
+                <a
+    href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_normalizeStructuredPayload"
+    class="ms-2 text-decoration-none text-body-secondary"
+    aria-label="Permalink"
+    title="Permalink"
+>
+    <i class="fas fa-link small"></i>
+</a>
+            </h4>
+
+            <div class="d-flex flex-wrap gap-2">
+                <span class="badge text-bg-light border text-dark">Private</span>
+
+                
+                
+                
+                            </div>
+        </div>
+    </div>
+
+    <aside class="d-flex flex-wrap align-items-center gap-2 mb-4 text-body-secondary small">
+    <i class="fas fa-map-marker-alt text-danger"></i>
+
+    <span>Defined in</span>
+
+    <abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php" class="text-decoration-none mb-0">
+        <a href="files/src-console-logger-processor-commandoutputprocessor.html"><abbr title="src/Console/Logger/Processor/CommandOutputProcessor.php">CommandOutputProcessor.php</abbr></a>
+    </abbr>
+
+    <span class="text-body-tertiary">:</span>
+
+    <span class="badge text-bg-light border">297</span>
+
+    </aside>
+        <div class="mb-4">
+        <p class="lead text-body-secondary mb-0">Normalizes decoded structured payloads produced by wrapped tooling.</p>
+    </div>
+
+
+    <div class="mt-4">
+        <code class="d-inline-flex flex-wrap align-items-center gap-2 px-3 py-2 rounded-3 bg-body-tertiary border">
+    <span class="badge text-bg-light border text-dark">private</span>
+
+    
+    
+    
+    
+    <span class="text-primary fw-semibold">normalizeStructuredPayload</span><span class="text-body-secondary">(</span><span><span class="text-info-emphasis">
+                    mixed&nbsp;
+                </span><span class="text-primary">$payload</span></span><span class="text-body-secondary">)</span><span class="text-body-secondary"> : </span><span class="text-info-emphasis">mixed</span></code>
+    </div>
+
+    <div class="mt-3 d-flex flex-wrap gap-2">
+            </div>
+
+    
+    
+
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-sliders-h text-info"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Parameters</h5>
+        </div>
+
+        <div class="d-grid gap-3">
+                            <div class="card border-0 bg-body-tertiary shadow-sm">
+                    <div class="card-body p-3">
+                        <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                            <code class="text-primary fw-semibold mb-0">$payload</code>
+
+                            <span class="text-body-secondary">:</span>
+
+                            <span class="badge text-bg-light border text-dark">
+                                mixed
+                            </span>
+
+                                                    </div>
+
+                        <div>
+                            
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the decoded payload</p>
+
+                </div>
+            </div>
+            </section>
+
+                        </div>
+                    </div>
+                </div>
+                    </div>
+    </section>
+
+    
+
+        
+    
+        <section class="mt-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fas fa-reply text-success"></i>
+            <h5 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Return values</h5>
+        </div>
+
+        <div class="card border-0 bg-body-tertiary shadow-sm">
+            <div class="card-body p-3">
+                
+                                    <div>
+                        
+    <section class="mt-2">
+                    <div>
+                <div class="d-flex align-items-center gap-2 mb-3">
+                    <i class="fas fa-align-left text-primary"></i>
+                    <h3 class="h6 text-uppercase text-body-secondary fw-semibold mb-0">Description</h3>
+                </div>
+
+                <div>
+                    <p>the normalized payload</p>
+
+                </div>
+            </div>
+            </section>
+
+                    </div>
                             </div>
         </div>
     </section>
@@ -3723,9 +4808,45 @@
                                                             </a>
                                                     <a
                                 class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_consumeJsonDocument"
+                            >
+                                <span class="text-truncate">consumeJsonDocument()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeJsonDocumentStream"
+                            >
+                                <span class="text-truncate">decodeJsonDocumentStream()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutput"
+                            >
+                                <span class="text-truncate">decodeStructuredOutput()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_decodeStructuredOutputAfterTextPreamble"
+                            >
+                                <span class="text-truncate">decodeStructuredOutputAfterTextPreamble()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
                                 href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_extractBufferedOutput"
                             >
                                 <span class="text-truncate">extractBufferedOutput()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_findNextJsonDocumentOffset"
+                            >
+                                <span class="text-truncate">findNextJsonDocumentOffset()</span>
+                                                            </a>
+                                                    <a
+                                class="list-group-item list-group-item-action px-0 py-2 border-0 bg-transparent d-flex align-items-center justify-content-between gap-2"
+                                href="classes/FastForward-DevTools-Console-Logger-Processor-CommandOutputProcessor.html#method_normalizeStructuredPayload"
+                            >
+                                <span class="text-truncate">normalizeStructuredPayload()</span>
                                                             </a>
                                             </div>
                 </div>

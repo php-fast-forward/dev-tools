@@ -2335,6 +2335,65 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-container.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Container
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-container-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-container-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-container-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-container-serviceprovider.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            ServiceProvider
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-environment.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2967,28 +3026,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-serviceprovider.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            ServiceProvider
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-sync.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3280,14 +3317,21 @@ output.</dd>
             
 
 <ul>
-    <li class="dash"><code>docs/</code>
- must exist unless you pass another <code>--source</code>
- directory.</li>
+    <li class="dash">The default <code>docs</code>
+ source directory is optional. When it is absent, the
+command still generates API pages if PSR-4 source paths are available.</li>
+
+    <li class="dash">A custom explicit <code>--source</code>
+ path must exist; otherwise the command fails
+fast.</li>
 
     <li class="dash">API pages are built from the PSR-4 paths declared in <code>composer.json</code>
 .</li>
 
     <li class="dash">Guide pages are built from the selected source directory.</li>
+
+    <li class="dash">Repositories without PSR-4 source paths can still generate a guides-only
+site from the selected source directory.</li>
 
     <li class="dash">Cache stays enabled by default; omit both flags to keep the command default,
 pass <code>--cache</code>

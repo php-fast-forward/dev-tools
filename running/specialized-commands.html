@@ -2335,6 +2335,65 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-container.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Container
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-container-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-container-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-container-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-container-serviceprovider.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            ServiceProvider
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-environment.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2967,28 +3026,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-serviceprovider.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            ServiceProvider
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-sync.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3243,6 +3280,20 @@ forces it off for a single run;</li>
  and <code>--pretty-json</code>
  still suppress PHPUnit progress output
 automatically;</li>
+
+    <li class="dash"><code>--pretty-json</code>
+ stays valid JSON and does not add ANSI color escapes;</li>
+
+    <li class="dash">in agent-driven runs, the command also captures PHPUnit output in structured
+mode automatically and stores the bundled PHPUnit agent-reporter payload in
+<code>output</code>
+. <code>--json</code>
+ and <code>--pretty-json</code>
+ therefore keep the same
+structured shape, with <code>raw_output</code>
+ preserved under <code>output</code>
+ when
+PHPUnit writes extra text before the final JSON;</li>
 
     <li class="dash">the packaged configuration registers the DevTools PHPUnit extension.</li>
 

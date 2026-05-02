@@ -2335,6 +2335,65 @@
         
     <div class="d-flex align-items-center">
         <a
+            href="namespaces/fastforward-devtools-container.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            Container
+        </a>
+
+                    <button
+                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#sidebar-namespaces-fastforward-devtools-container-html"
+                aria-expanded="false"
+                aria-controls="sidebar-namespaces-fastforward-devtools-container-html"
+            >
+                <i class="fas fa-chevron-down small"></i>
+            </button>
+            </div>
+
+            <div id="sidebar-namespaces-fastforward-devtools-container-html" class="collapse">
+            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
+                                                    <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
+            href="namespaces/fastforward-devtools-container-serviceprovider.html"
+            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+        >
+            ServiceProvider
+        </a>
+
+            </div>
+
+    </li>
+                        
+            </ul>
+        </div>
+    </li>
+                            <li class="nav-item">
+    
+    
+    
+    
+    
+    
+            
+    
+    
+        
+    <div class="d-flex align-items-center">
+        <a
             href="namespaces/fastforward-devtools-environment.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -2967,28 +3026,6 @@
         
     <div class="d-flex align-items-center">
         <a
-            href="namespaces/fastforward-devtools-serviceprovider.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            ServiceProvider
-        </a>
-
-            </div>
-
-    </li>
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
             href="namespaces/fastforward-devtools-sync.html"
             class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
@@ -3242,7 +3279,8 @@ output.</dd>
         
         <dd>Emit the same structured payload with indentation for terminal inspection.
 This also suppresses PHPUnit progress output automatically so the JSON
-payload is not polluted by transient progress rendering.</dd>
+payload is not polluted by transient progress rendering. The output remains
+valid JSON and intentionally does not include ANSI color escapes.</dd>
             </dl>
 
     </section>
@@ -3279,6 +3317,12 @@ payload is not polluted by transient progress rendering.</dd>
     <p>Run with minimum coverage enforcement:</p>
 
             <pre><code class="language-bash">composer tests --min-coverage=80</code></pre>
+
+            
+    <p>Run with structured JSON output:</p>
+
+            <pre><code class="language-bash">composer tests --json
+composer tests --pretty-json</code></pre>
 
             
     <p>Run without cache:</p>
@@ -3334,6 +3378,13 @@ payload is not polluted by transient progress rendering.</dd>
     <li class="dash">Local <code>phpunit.xml</code>
  is preferred over the packaged default.</li>
 
+    <li class="dash">When the default <code>tests</code>
+ path is absent and the project exposes no
+testable PHP source files, the command exits successfully with a warning
+instead of failing the whole automation flow.</li>
+
+    <li class="dash">A custom explicit tests path that does not exist still fails fast.</li>
+
     <li class="dash">Coverage filters are automatically applied to all PSR-4 paths from composer.json.</li>
 
     <li class="dash">Multiple coverage formats are generated: HTML, Testdox HTML, Clover XML, and PHP.</li>
@@ -3359,6 +3410,44 @@ only when coverage text output is generated.</li>
  keep progress output disabled so the
 structured payload stays clean, even when <code>--progress</code>
  is provided.</li>
+
+    <li class="dash">in agent-driven runs outside the Composer test suite, the command also
+switches to the same structured capture mode automatically.</li>
+
+    <li class="dash">when structured capture is active and PHPUnit emits agent-reporter JSON, the
+command stores that payload inside <code>output</code>
+ while keeping the standard
+DevTools JSON envelope. <code>--json</code>
+ and <code>--pretty-json</code>
+ therefore expose
+the same structured result, with formatting as the only difference.</li>
+
+    <li class="dash">the command forces the bundled PHPUnit agent-reporter extension for
+structured runs so the nested payload stays compact and stable even when the
+surrounding runtime would not normally look like an agent.</li>
+
+    <li class="dash">in structured mode, the command suppresses intermediary <code>Running...</code>
+ log
+records so the output stream contains a single final JSON document.</li>
+
+    <li class="dash">when structured capture is active but PHPUnit does not emit parseable JSON,
+the command preserves the raw subprocess text inside <code>output.raw_output</code>
+
+instead of dropping it.</li>
+
+    <li class="dash">when coverage generation or other PHPUnit text appears before the final
+reporter payload, the command preserves that prelude in
+<code>output.raw_output</code>
+ while keeping the main JSON result parseable.</li>
+
+    <li class="dash">when <code>--min-coverage</code>
+ is used in structured mode, the command appends a
+<code>coverage</code>
+ object under <code>output</code>
+ and flips <code>output.result</code>
+ to
+<code>failure</code>
+ if the threshold is not met.</li>
 
     <li class="dash">The command fails if minimum coverage is not met (when <code>--min-coverage</code>
  is set).</li>
