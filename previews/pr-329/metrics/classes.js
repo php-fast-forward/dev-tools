@@ -1,62 +1,5 @@
 var classes = [
     {
-        "name": "FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
-        "interface": false,
-        "abstract": false,
-        "final": true,
-        "methods": [],
-        "nbMethodsIncludingGettersSetters": 0,
-        "nbMethods": 0,
-        "nbMethodsPrivate": 0,
-        "nbMethodsPublic": 0,
-        "nbMethodsGetter": 0,
-        "nbMethodsSetters": 0,
-        "wmc": 0,
-        "ccn": 1,
-        "ccnMethodMax": 0,
-        "externals": [
-            "FastForward\\DevTools\\Container\\ServiceProvider\\DevToolsServiceProvider"
-        ],
-        "parents": [
-            "FastForward\\DevTools\\Container\\ServiceProvider\\DevToolsServiceProvider"
-        ],
-        "implements": [],
-        "lcom": 0,
-        "length": 0,
-        "vocabulary": 0,
-        "volume": 0,
-        "difficulty": 0,
-        "effort": 0,
-        "level": 0,
-        "bugs": 0,
-        "time": 0,
-        "intelligentContent": 0,
-        "number_operators": 0,
-        "number_operands": 0,
-        "number_operators_unique": 0,
-        "number_operands_unique": 0,
-        "cloc": 3,
-        "loc": 7,
-        "lloc": 4,
-        "mi": 213.45,
-        "mIwoC": 171,
-        "commentWeight": 42.45,
-        "kanDefect": 0.15,
-        "relativeStructuralComplexity": 0,
-        "relativeDataComplexity": 0,
-        "relativeSystemComplexity": 0,
-        "totalStructuralComplexity": 0,
-        "totalDataComplexity": 0,
-        "totalSystemComplexity": 0,
-        "package": "FastForward\\DevTools\\ServiceProvider\\",
-        "pageRank": 0,
-        "afferentCoupling": 0,
-        "efferentCoupling": 1,
-        "instability": 1,
-        "numberOfUnitTests": 0,
-        "violations": {}
-    },
-    {
         "name": "FastForward\\DevTools\\GrumPhp\\ManagedConfigPathSynchronizer",
         "interface": false,
         "abstract": false,
@@ -6283,7 +6226,7 @@ var classes = [
         "totalDataComplexity": 120,
         "totalSystemComplexity": 120,
         "package": "FastForward\\DevTools\\Composer\\Json\\Schema\\",
-        "pageRank": 0,
+        "pageRank": 0.01,
         "afferentCoupling": 4,
         "efferentCoupling": 1,
         "instability": 0.2,
@@ -9206,7 +9149,7 @@ var classes = [
         "totalDataComplexity": 5.43,
         "totalSystemComplexity": 149.43,
         "package": "FastForward\\DevTools\\Path\\",
-        "pageRank": 0.02,
+        "pageRank": 0.01,
         "afferentCoupling": 18,
         "efferentCoupling": 1,
         "instability": 0.05,
@@ -9514,9 +9457,9 @@ var classes = [
         "totalSystemComplexity": 72.57,
         "package": "FastForward\\DevTools\\Container\\ServiceProvider\\",
         "pageRank": 0.01,
-        "afferentCoupling": 3,
+        "afferentCoupling": 2,
         "efferentCoupling": 4,
-        "instability": 0.57,
+        "instability": 0.67,
         "numberOfUnitTests": 1,
         "violations": {}
     },
@@ -15769,7 +15712,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000002a9d0000000000000000",
+        "name": "anonymous@0000000000002a9b0000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -15834,7 +15777,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000030250000000000000000",
+        "name": "anonymous@00000000000030230000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -15906,7 +15849,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000030c60000000000000000",
+        "name": "anonymous@00000000000030c40000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -15978,7 +15921,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000006810000000000000000",
+        "name": "anonymous@0000000000001a960000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -16043,7 +15986,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000001d210000000000000000",
+        "name": "anonymous@0000000000001d050000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -16108,7 +16051,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000001c690000000000000000",
+        "name": "anonymous@00000000000017ed0000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -16354,24 +16297,24 @@ var classes = [
             "FastForward\\DevTools\\Container\\ContainerFactory",
             "Prophecy\\Argument",
             "FastForward\\DevTools\\Container\\ContainerFactory",
-            "anonymous@0000000000002a9d0000000000000000",
+            "anonymous@0000000000002a9b0000000000000000",
             "Symfony\\Component\\Console\\Input\\ArrayInput",
             "Symfony\\Component\\Console\\Output\\BufferedOutput",
             "Symfony\\Component\\Console\\Input\\ArrayInput",
             "Symfony\\Component\\Console\\Output\\BufferedOutput",
             "Symfony\\Component\\Console\\Input\\ArrayInput",
             "Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "anonymous@00000000000030250000000000000000",
+            "anonymous@00000000000030230000000000000000",
             "Symfony\\Component\\Console\\Input\\ArrayInput",
             "Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "anonymous@00000000000030c60000000000000000",
+            "anonymous@00000000000030c40000000000000000",
             "Symfony\\Component\\Console\\Input\\ArrayInput",
             "Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "anonymous@00000000000006810000000000000000",
+            "anonymous@0000000000001a960000000000000000",
             "Symfony\\Component\\Console\\Input\\ArrayInput",
             "Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "anonymous@0000000000001d210000000000000000",
-            "anonymous@0000000000001c690000000000000000",
+            "anonymous@0000000000001d050000000000000000",
+            "anonymous@00000000000017ed0000000000000000",
             "FastForward\\DevTools\\Container\\ContainerFactory",
             "FastForward\\DevTools\\Container\\ContainerFactory",
             "FastForward\\DevTools\\Container\\ContainerFactory",
@@ -16711,7 +16654,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000002a1f0000000000000000",
+        "name": "anonymous@0000000000002a1d0000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -16878,7 +16821,7 @@ var classes = [
             "FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
             "Prophecy\\Argument",
             "DateTimeImmutable",
-            "anonymous@0000000000002a1f0000000000000000",
+            "anonymous@0000000000002a1d0000000000000000",
             "Symfony\\Component\\Console\\Input\\ArgvInput",
             "FastForward\\DevTools\\Console\\Logger\\Processor\\CommandInputProcessor",
             "FastForward\\DevTools\\Console\\Logger\\Processor\\CommandOutputProcessor",
@@ -17139,7 +17082,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@000000000000252c0000000000000000",
+        "name": "anonymous@000000000000252a0000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -17210,7 +17153,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000005030000000000000000",
+        "name": "anonymous@00000000000007470000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -17320,8 +17263,8 @@ var classes = [
             "PHPUnit\\Framework\\TestCase",
             "FastForward\\DevTools\\Container\\ContainerFactory",
             "FastForward\\DevTools\\Container\\ContainerFactory",
-            "anonymous@000000000000252c0000000000000000",
-            "anonymous@00000000000005030000000000000000"
+            "anonymous@000000000000252a0000000000000000",
+            "anonymous@00000000000007470000000000000000"
         ],
         "parents": [
             "PHPUnit\\Framework\\TestCase"
@@ -18370,7 +18313,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@0000000000002f020000000000000000",
+        "name": "anonymous@0000000000002f000000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -18518,7 +18461,7 @@ var classes = [
         "externals": [
             "PHPUnit\\Framework\\TestCase",
             "FastForward\\DevTools\\Resource\\FileDiffer",
-            "anonymous@0000000000002f020000000000000000"
+            "anonymous@0000000000002f000000000000000000"
         ],
         "parents": [
             "PHPUnit\\Framework\\TestCase"
@@ -19801,7 +19744,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000015990000000000000000",
+        "name": "anonymous@00000000000015970000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -19947,7 +19890,7 @@ var classes = [
             "FastForward\\DevTools\\Container\\ContainerFactory",
             "stdClass",
             "FastForward\\DevTools\\Composer\\Capability\\DevToolsCommandProvider",
-            "anonymous@00000000000015990000000000000000",
+            "anonymous@00000000000015970000000000000000",
             "FastForward\\DevTools\\Container\\ContainerFactory",
             "FastForward\\DevTools\\Container\\ContainerFactory",
             "FastForward\\DevTools\\Console\\Command\\FixtureWithoutAsCommand",
@@ -25368,7 +25311,7 @@ var classes = [
         "violations": {}
     },
     {
-        "name": "anonymous@00000000000017bb0000000000000000",
+        "name": "anonymous@00000000000017b90000000000000000",
         "interface": false,
         "abstract": false,
         "final": false,
@@ -25531,7 +25474,7 @@ var classes = [
             "PHPUnit\\Framework\\TestCase",
             "FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "RuntimeException",
-            "anonymous@00000000000017bb0000000000000000",
+            "anonymous@00000000000017b90000000000000000",
             "SebastianBergmann\\CodeCoverage\\Filter",
             "SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",

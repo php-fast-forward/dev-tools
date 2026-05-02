@@ -5761,11 +5761,6 @@ Search.appendIndex(
             "summary": "Switches\u0020to\u0020the\u0020provided\u0020working\u0020directory\u0020when\u0020one\u0020is\u0020configured.",
             "url": "classes/FastForward-DevTools-SelfUpdate-WorkingDirectorySwitcherInterface.html#method_switchTo"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\ServiceProvider\\DevToolsServiceProvider",
-            "name": "DevToolsServiceProvider",
-            "summary": "Registers\u0020the\u0020services\u0020exposed\u0020by\u0020the\u0020DevTools\u0020container.",
-            "url": "classes/FastForward-DevTools-ServiceProvider-DevToolsServiceProvider.html"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer",
             "name": "PackagedDirectorySynchronizer",
             "summary": "Synchronizes\u0020one\u0020packaged\u0020directory\u0020of\u0020symlinked\u0020entries\u0020into\u0020a\u0020consumer\u0020repository.",
@@ -6165,11 +6160,6 @@ Search.appendIndex(
             "name": "SelfUpdate",
             "summary": "",
             "url": "namespaces/fastforward-devtools-selfupdate.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\ServiceProvider",
-            "name": "ServiceProvider",
-            "summary": "",
-            "url": "namespaces/fastforward-devtools-serviceprovider.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Sync",
             "name": "Sync",
