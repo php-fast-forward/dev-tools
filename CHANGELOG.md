@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.3] - 2026-05-11
+
 ### Fixed
 
 - Improve self-update global/local scope detection by normalizing Composer home candidates with realpath fallback handling and `XDG_CONFIG_HOME` support, to avoid global installs accidentally running as local updates in symlinked or alternate Composer home environments (#335).
@@ -441,7 +443,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.2...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.3...HEAD
+[1.25.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.2...v1.25.3
 [1.25.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.1...v1.25.2
 [1.25.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.0...v1.25.1
 [1.25.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.6...v1.25.0
