@@ -22,6 +22,9 @@ namespace FastForward\DevTools\SelfUpdate;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Filesystem\Path;
+use Throwable;
+
+use function Safe\realpath;
 
 /**
  * Detects Composer global DevTools installations from known Composer home paths.
@@ -44,10 +47,10 @@ final readonly class ComposerSelfUpdateScopeResolver implements SelfUpdateScopeR
      */
     public function isGlobalInstallation(): bool
     {
-        $packagePath = Path::canonicalize($this->packagePath ?? DevToolsPathResolver::getPackagePath());
+        $packagePath = $this->normalizePath($this->packagePath ?? DevToolsPathResolver::getPackagePath());
 
         foreach ($this->getComposerHomeCandidates() as $composerHome) {
-            $globalPackagePath = Path::canonicalize(Path::join($composerHome, self::PACKAGE_PATH));
+            $globalPackagePath = $this->normalizePath(Path::join($composerHome, self::PACKAGE_PATH));
 
             if ($packagePath === $globalPackagePath || str_starts_with(
                 $packagePath,
@@ -95,5 +98,19 @@ final readonly class ComposerSelfUpdateScopeResolver implements SelfUpdateScopeR
         }
 
         return array_values(array_unique($candidates));
+    }
+
+    /**
+     * Safely canonicalizes a path, resolving symlinks when available.
+     *
+     * @param string $path
+     */
+    private function normalizePath(string $path): string
+    {
+        try {
+            return Path::canonicalize(realpath($path));
+        } catch (Throwable) {
+            return Path::canonicalize($path);
+        }
     }
 }
