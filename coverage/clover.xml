@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1777749720">
-  <project timestamp="1777749720" name="Clover Coverage">
+<coverage generated="1778529588">
+  <project timestamp="1778529588" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -871,23 +871,24 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Config/ECSConfig.php">
         <class name="FastForward\DevTools\Config\ECSConfig" namespace="FastForward\DevTools\Config">
-          <metrics complexity="5" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="29" elements="33" coveredelements="31"/>
+          <metrics complexity="5" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="28" elements="32" coveredelements="30"/>
         </class>
-        <line num="105" type="method" name="configure" visibility="public" complexity="2" crap="2.01" count="1"/>
+        <line num="104" type="method" name="configure" visibility="public" complexity="2" crap="2.01" count="1"/>
+        <line num="106" type="stmt" count="1"/>
         <line num="107" type="stmt" count="1"/>
-        <line num="108" type="stmt" count="1"/>
+        <line num="109" type="stmt" count="1"/>
         <line num="110" type="stmt" count="1"/>
-        <line num="111" type="stmt" count="1"/>
-        <line num="113" type="stmt" count="1"/>
-        <line num="114" type="stmt" count="0"/>
-        <line num="117" type="stmt" count="1"/>
-        <line num="126" type="method" name="applyDefaultPathsAndSkips" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="112" type="stmt" count="1"/>
+        <line num="113" type="stmt" count="0"/>
+        <line num="116" type="stmt" count="1"/>
+        <line num="125" type="method" name="applyDefaultPathsAndSkips" visibility="public" complexity="1" crap="1" count="2"/>
+        <line num="129" type="stmt" count="2"/>
         <line num="130" type="stmt" count="2"/>
-        <line num="131" type="stmt" count="2"/>
+        <line num="132" type="stmt" count="2"/>
         <line num="133" type="stmt" count="2"/>
         <line num="134" type="stmt" count="2"/>
-        <line num="135" type="stmt" count="2"/>
-        <line num="143" type="method" name="applyDefaultRulesAndSets" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="142" type="method" name="applyDefaultRulesAndSets" visibility="public" complexity="2" crap="2" count="1"/>
+        <line num="144" type="stmt" count="1"/>
         <line num="145" type="stmt" count="1"/>
         <line num="146" type="stmt" count="1"/>
         <line num="147" type="stmt" count="1"/>
@@ -901,12 +902,10 @@
         <line num="155" type="stmt" count="1"/>
         <line num="156" type="stmt" count="1"/>
         <line num="157" type="stmt" count="1"/>
-        <line num="158" type="stmt" count="1"/>
         <line num="159" type="stmt" count="1"/>
-        <line num="161" type="stmt" count="1"/>
-        <line num="162" type="stmt" count="1"/>
-        <line num="165" type="stmt" count="1"/>
-        <metrics loc="168" ncloc="112" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="30" coveredstatements="29" elements="33" coveredelements="31"/>
+        <line num="160" type="stmt" count="1"/>
+        <line num="163" type="stmt" count="1"/>
+        <metrics loc="166" ncloc="110" classes="1" methods="3" coveredmethods="2" conditionals="0" coveredconditionals="0" statements="29" coveredstatements="28" elements="32" coveredelements="30"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Config/RectorConfig.php">
         <class name="FastForward\DevTools\Config\RectorConfig" namespace="FastForward\DevTools\Config">
@@ -6777,6 +6776,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="161" loc="22161" ncloc="13535" classes="118" methods="587" coveredmethods="458" conditionals="0" coveredconditionals="0" statements="5246" coveredstatements="4822" elements="5833" coveredelements="5280"/>
+    <metrics files="161" loc="22159" ncloc="13533" classes="118" methods="587" coveredmethods="458" conditionals="0" coveredconditionals="0" statements="5245" coveredstatements="4821" elements="5832" coveredelements="5279"/>
   </project>
 </coverage>
