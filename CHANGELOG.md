@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.4] - 2026-05-11
+
 ### Fixed
 
 - Show DevTools version metadata in CLI application output so `list` and `--version` expose the installed package version from `Application` metadata (#339).
@@ -447,7 +449,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.3...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.4...HEAD
+[1.25.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.3...v1.25.4
 [1.25.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.2...v1.25.3
 [1.25.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.1...v1.25.2
 [1.25.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.0...v1.25.1
