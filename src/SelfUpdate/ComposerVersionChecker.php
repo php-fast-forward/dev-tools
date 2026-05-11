@@ -72,6 +72,11 @@ final readonly class ComposerVersionChecker implements VersionCheckerInterface
 
     /**
      * Returns the installed DevTools version without running external Composer commands.
+     *
+     * This method MUST return the package version when composer metadata is
+     * available.
+     * It MUST return `VERSION_UNKNOWN` when metadata is unavailable or on
+     * resolution errors.
      */
     public function getCurrentVersion(): string
     {

@@ -34,6 +34,7 @@ interface VersionCheckerInterface
      *
      * The method MUST return a safe version string even when installed metadata
      * is unavailable.
+     * It MAY be a fallback value.
      */
     public function getCurrentVersion(): string;
 }

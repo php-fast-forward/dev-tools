@@ -97,12 +97,13 @@ final class DevTools extends Application
     /**
      * Resolves the running DevTools version for command metadata.
      *
-     * This method MUST return the resolved package version used by command
-     * metadata.
-     * It MUST delegate this resolution to the version checker and SHOULD NOT
-     * expose null as a fallback.
+     * The method MUST return the current package version from
+     * `VersionCheckerInterface`.
+     * It MUST return the fallback value supplied by the checker when metadata is
+     * not available.
+     * Callers SHOULD pass the returned value directly to the Symfony application.
      *
-     * @return string the current package version
+     * @return string the package version for command metadata
      */
     private function resolveVersion(): string
     {
