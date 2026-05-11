@@ -2871,6 +2871,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#property_selfUpdateScopeResolver"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024versionChecker",
+            "name": "versionChecker",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#property_versionChecker"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024environment",
             "name": "environment",
             "summary": "",
@@ -5616,6 +5621,11 @@ Search.appendIndex(
             "summary": "Returns\u0020version\u0020information\u0020when\u0020it\u0020can\u0020be\u0020resolved\u0020without\u0020blocking\u0020command\u0020execution.",
             "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method_check"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AgetCurrentVersion\u0028\u0029",
+            "name": "getCurrentVersion",
+            "summary": "Returns\u0020the\u0020installed\u0020DevTools\u0020version\u0020without\u0020running\u0020external\u0020Composer\u0020commands.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method_getCurrentVersion"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AresolveLatestStableVersion\u0028\u0029",
             "name": "resolveLatestStableVersion",
             "summary": "Resolves\u0020the\u0020latest\u0020stable\u0020DevTools\u0020version\u0020available\u0020to\u0020Composer.",
@@ -5625,6 +5635,11 @@ Search.appendIndex(
             "name": "PACKAGE",
             "summary": "",
             "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#constant_PACKAGE"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AVERSION_UNKNOWN",
+            "name": "VERSION_UNKNOWN",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#constant_VERSION_UNKNOWN"
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003ATIMEOUT_SECONDS",
             "name": "TIMEOUT_SECONDS",
@@ -5665,6 +5680,11 @@ Search.appendIndex(
             "name": "check",
             "summary": "Returns\u0020version\u0020information\u0020when\u0020it\u0020can\u0020be\u0020resolved\u0020without\u0020blocking\u0020command\u0020execution.",
             "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html#method_check"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckerInterface\u003A\u003AgetCurrentVersion\u0028\u0029",
+            "name": "getCurrentVersion",
+            "summary": "Returns\u0020the\u0020resolved\u0020DevTools\u0020version\u0020for\u0020display\u0020and\u0020internal\u0020comparison.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html#method_getCurrentVersion"
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier",
             "name": "VersionCheckNotifier",
