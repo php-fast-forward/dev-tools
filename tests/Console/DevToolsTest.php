@@ -163,7 +163,7 @@ final class DevToolsTest extends TestCase
         $this->versionChecker = $this->prophesize(VersionCheckerInterface::class);
         $this->environment = $this->prophesize(EnvironmentInterface::class);
         $this->runtimeEnvironment = $this->prophesize(RuntimeEnvironmentInterface::class);
-        $this->versionChecker->resolveCurrentVersion()
+        $this->versionChecker->getCurrentVersion()
             ->willReturn('1.2.3');
         $this->runtimeEnvironment->isAgentPresent()
             ->willReturn(false);

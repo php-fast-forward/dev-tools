@@ -34,5 +34,5 @@ interface VersionCheckerInterface
      *
      * @return string|null the version string for display and fallback logic
      */
-    public function resolveCurrentVersion(): ?string;
+    public function getCurrentVersion(): ?string;
 }

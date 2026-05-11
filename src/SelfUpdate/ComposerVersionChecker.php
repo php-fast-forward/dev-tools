@@ -52,7 +52,7 @@ final readonly class ComposerVersionChecker implements VersionCheckerInterface
             return null;
         }
 
-        $currentVersion = $this->resolveCurrentVersion();
+        $currentVersion = $this->getCurrentVersion();
 
         if (null === $currentVersion) {
             return null;
@@ -70,7 +70,7 @@ final readonly class ComposerVersionChecker implements VersionCheckerInterface
     /**
      * Returns the installed DevTools version without running external Composer commands.
      */
-    public function resolveCurrentVersion(): ?string
+    public function getCurrentVersion(): ?string
     {
         return InstalledVersions::getPrettyVersion(self::PACKAGE)
             ?? InstalledVersions::getVersion(self::PACKAGE);

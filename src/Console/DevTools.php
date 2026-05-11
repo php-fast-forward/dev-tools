@@ -103,7 +103,7 @@ final class DevTools extends Application
      */
     private function resolveVersion(): string
     {
-        return $this->versionChecker->resolveCurrentVersion() ?? self::VERSION_UNKNOWN;
+        return $this->versionChecker->getCurrentVersion() ?? self::VERSION_UNKNOWN;
     }
 
     /**
