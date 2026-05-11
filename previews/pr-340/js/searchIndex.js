@@ -2846,11 +2846,6 @@ Search.appendIndex(
             "summary": "Interprets\u0020environment\u0020values\u0020that\u0020enable\u0020auto\u002Dupdate.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_isTruthyAutoUpdateMode"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AVERSION_UNKNOWN",
-            "name": "VERSION_UNKNOWN",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-DevTools.html#constant_VERSION_UNKNOWN"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ALOGO",
             "name": "LOGO",
             "summary": "",
@@ -5646,6 +5641,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#constant_PACKAGE"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AVERSION_UNKNOWN",
+            "name": "VERSION_UNKNOWN",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#constant_VERSION_UNKNOWN"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003ATIMEOUT_SECONDS",
             "name": "TIMEOUT_SECONDS",
             "summary": "",
@@ -5688,7 +5688,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckerInterface\u003A\u003AgetCurrentVersion\u0028\u0029",
             "name": "getCurrentVersion",
-            "summary": "Returns\u0020the\u0020currently\u0020installed\u0020DevTools\u0020version\u0020when\u0020available.",
+            "summary": "Returns\u0020the\u0020resolved\u0020DevTools\u0020version\u0020for\u0020display\u0020and\u0020internal\u0020comparison.",
             "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html#method_getCurrentVersion"
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier",
