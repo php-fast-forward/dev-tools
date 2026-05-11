@@ -2796,11 +2796,6 @@ Search.appendIndex(
             "summary": "Initializes\u0020the\u0020DevTools\u0020global\u0020context\u0020and\u0020dependency\u0020graph.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method___construct"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AresolveVersion\u0028\u0029",
-            "name": "resolveVersion",
-            "summary": "Resolves\u0020the\u0020running\u0020DevTools\u0020version\u0020for\u0020command\u0020metadata.",
-            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_resolveVersion"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AgetDefaultInputDefinition\u0028\u0029",
             "name": "getDefaultInputDefinition",
             "summary": "Returns\u0020the\u0020application\u002Dlevel\u0020input\u0020definition\u0020with\u0020DevTools\u0020runtime\u0020options.",
