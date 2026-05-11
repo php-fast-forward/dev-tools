@@ -26,8 +26,8 @@ use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
-use Composer\InstalledVersions;
 use Override;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -46,8 +46,6 @@ use function Safe\putenv;
  */
 final class DevTools extends Application
 {
-    private const string PACKAGE = 'fast-forward/dev-tools';
-
     private const string VERSION_UNKNOWN = '0.0.0';
 
     private const string LOGO = <<<'LOGO'
@@ -78,6 +76,7 @@ final class DevTools extends Application
      * @param VersionCheckNotifierInterface $versionCheckNotifier emits non-blocking version freshness warnings
      * @param SelfUpdateRunnerInterface $selfUpdateRunner runs explicit or automatic self-update flows
      * @param SelfUpdateScopeResolverInterface $selfUpdateScopeResolver resolves whether the active binary is global
+     * @param VersionCheckerInterface $versionChecker resolves the installed DevTools version for metadata output
      * @param EnvironmentInterface $environment reads environment flags for optional auto-update behavior
      * @param RuntimeEnvironmentInterface $runtimeEnvironment resolves runtime environment capabilities
      */
@@ -87,6 +86,7 @@ final class DevTools extends Application
         private readonly VersionCheckNotifierInterface $versionCheckNotifier,
         private readonly SelfUpdateRunnerInterface $selfUpdateRunner,
         private readonly SelfUpdateScopeResolverInterface $selfUpdateScopeResolver,
+        private readonly VersionCheckerInterface $versionChecker,
         private readonly EnvironmentInterface $environment,
         private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
     ) {
@@ -103,9 +103,7 @@ final class DevTools extends Application
      */
     private function resolveVersion(): string
     {
-        return InstalledVersions::getPrettyVersion(self::PACKAGE)
-            ?? InstalledVersions::getVersion(self::PACKAGE)
-            ?? self::VERSION_UNKNOWN;
+        return $this->versionChecker->resolveCurrentVersion() ?? self::VERSION_UNKNOWN;
     }
 
     /**
