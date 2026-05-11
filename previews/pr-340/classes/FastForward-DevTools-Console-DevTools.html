@@ -4813,7 +4813,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">159</span>
+    <span class="badge text-bg-light border">160</span>
 
     </aside>
         <div class="mb-4">
@@ -5015,7 +5015,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">117</span>
+    <span class="badge text-bg-light border">118</span>
 
     </aside>
         <div class="mb-4">
@@ -5142,7 +5142,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">200</span>
+    <span class="badge text-bg-light border">201</span>
 
     </aside>
         <div class="mb-4">
@@ -5251,7 +5251,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">188</span>
+    <span class="badge text-bg-light border">189</span>
 
     </aside>
         <div class="mb-4">
@@ -5377,7 +5377,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">266</span>
+    <span class="badge text-bg-light border">267</span>
 
     </aside>
         <div class="mb-4">
@@ -5503,7 +5503,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">282</span>
+    <span class="badge text-bg-light border">283</span>
 
     </aside>
         <div class="mb-4">
@@ -5629,7 +5629,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">292</span>
+    <span class="badge text-bg-light border">293</span>
 
     </aside>
         <div class="mb-4">
@@ -5756,7 +5756,7 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">107</span>
+    <span class="badge text-bg-light border">108</span>
 
     </aside>
         <div class="mb-4">
@@ -5789,10 +5789,11 @@ It SHALL instruct the runner to treat the <code class="prettyprint">standards</c
                     </div>
 
                     <div>
-                        <p>This method MUST return the resolved package version used by command
-metadata.
-It MUST delegate this resolution to the version checker and SHOULD NOT
-expose null as a fallback.</p>
+                        <p>The method MUST return the current package version from
+<code class="prettyprint">VersionCheckerInterface</code>.
+It MUST return the fallback value supplied by the checker when metadata is
+not available.
+Callers SHOULD pass the returned value directly to the Symfony application.</p>
 
                     </div>
                 </div>
@@ -5828,7 +5829,7 @@ expose null as a fallback.</p>
                 </div>
 
                 <div>
-                    <p>the current package version</p>
+                    <p>the package version for command metadata</p>
 
                 </div>
             </div>
@@ -5875,7 +5876,7 @@ expose null as a fallback.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">217</span>
+    <span class="badge text-bg-light border">218</span>
 
     </aside>
         <div class="mb-4">
@@ -6017,7 +6018,7 @@ expose null as a fallback.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">244</span>
+    <span class="badge text-bg-light border">245</span>
 
     </aside>
         <div class="mb-4">
