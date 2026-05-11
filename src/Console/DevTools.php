@@ -27,6 +27,7 @@ use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
+use Composer\InstalledVersions;
 use Override;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
@@ -45,6 +46,10 @@ use function Safe\putenv;
  */
 final class DevTools extends Application
 {
+    private const string PACKAGE = 'fast-forward/dev-tools';
+
+    private const string VERSION_UNKNOWN = '0.0.0';
+
     private const string LOGO = <<<'LOGO'
          ____             _____           _
         |  _ \  _____   _|_   _|__   ___ | |___
@@ -85,10 +90,22 @@ final class DevTools extends Application
         private readonly EnvironmentInterface $environment,
         private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
     ) {
-        parent::__construct('Fast Forward Dev Tools');
+        parent::__construct('Fast Forward Dev Tools', $this->resolveVersion());
 
         $this->setDefaultCommand('dev-tools:standards');
         $this->setCommandLoader($commandLoader);
+    }
+
+    /**
+     * Resolves the running DevTools version for command metadata.
+     *
+     * @return string the current package version or a safe fallback
+     */
+    private function resolveVersion(): string
+    {
+        return InstalledVersions::getPrettyVersion(self::PACKAGE)
+            ?? InstalledVersions::getVersion(self::PACKAGE)
+            ?? self::VERSION_UNKNOWN;
     }
 
     /**

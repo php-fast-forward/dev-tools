@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Show DevTools version metadata in CLI application output so `list` and `--version` expose the installed package version from `Application` metadata (#339).
+
 ## [1.25.3] - 2026-05-11
 
 ### Fixed

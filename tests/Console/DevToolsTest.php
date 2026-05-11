@@ -214,6 +214,7 @@ final class DevToolsTest extends TestCase
             ->willReturn($customCommand);
 
         self::assertSame('Fast Forward Dev Tools', $this->devTools->getName());
+        self::assertMatchesRegularExpression('/\\S+/', $this->devTools->getVersion());
         self::assertTrue($this->devTools->has('custom'));
         self::assertSame($customCommand, $this->devTools->get('custom'));
     }
