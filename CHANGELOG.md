@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Improve self-update global/local scope detection by normalizing Composer home candidates with realpath fallback handling and `XDG_CONFIG_HOME` support, to avoid global installs accidentally running as local updates in symlinked or alternate Composer home environments (#335).
+
 ## [1.25.2] - 2026-05-11
 
 ### Fixed

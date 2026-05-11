@@ -57,6 +57,8 @@ final class ComposerSelfUpdateScopeResolverTest extends TestCase
             ->willReturn(null);
         $this->environment->get('APPDATA')
             ->willReturn(null);
+        $this->environment->get('XDG_CONFIG_HOME')
+            ->willReturn(null);
         $resolver = new ComposerSelfUpdateScopeResolver(
             $this->environment->reveal(),
             '/home/felipe/.composer/vendor/fast-forward/dev-tools',
@@ -76,6 +78,8 @@ final class ComposerSelfUpdateScopeResolverTest extends TestCase
         $this->environment->get('HOME')
             ->willReturn('/Users/felipe');
         $this->environment->get('APPDATA')
+            ->willReturn(null);
+        $this->environment->get('XDG_CONFIG_HOME')
             ->willReturn(null);
         $resolver = new ComposerSelfUpdateScopeResolver(
             $this->environment->reveal(),
@@ -97,11 +101,35 @@ final class ComposerSelfUpdateScopeResolverTest extends TestCase
             ->willReturn('/home/felipe');
         $this->environment->get('APPDATA')
             ->willReturn(null);
+        $this->environment->get('XDG_CONFIG_HOME')
+            ->willReturn(null);
         $resolver = new ComposerSelfUpdateScopeResolver(
             $this->environment->reveal(),
             '/home/felipe/project/vendor/fast-forward/dev-tools',
         );
 
         self::assertFalse($resolver->isGlobalInstallation());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function isGlobalInstallationWillReturnTrueWhenPackageLivesUnderXdgComposerHome(): void
+    {
+        $this->environment->get('COMPOSER_HOME')
+            ->willReturn(null);
+        $this->environment->get('HOME')
+            ->willReturn(null);
+        $this->environment->get('APPDATA')
+            ->willReturn(null);
+        $this->environment->get('XDG_CONFIG_HOME')
+            ->willReturn('/tmp/xdg');
+        $resolver = new ComposerSelfUpdateScopeResolver(
+            $this->environment->reveal(),
+            '/tmp/xdg/composer/vendor/fast-forward/dev-tools',
+        );
+
+        self::assertTrue($resolver->isGlobalInstallation());
     }
 }
