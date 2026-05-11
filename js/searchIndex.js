@@ -5581,6 +5581,11 @@ Search.appendIndex(
             "summary": "Returns\u0020candidate\u0020Composer\u0020home\u0020directories\u0020for\u0020supported\u0020platforms.",
             "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method_getComposerHomeCandidates"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003AnormalizePath\u0028\u0029",
+            "name": "normalizePath",
+            "summary": "Safely\u0020canonicalizes\u0020a\u0020path,\u0020resolving\u0020symlinks\u0020when\u0020available.",
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerSelfUpdateScopeResolver.html#method_normalizePath"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerSelfUpdateScopeResolver\u003A\u003APACKAGE_PATH",
             "name": "PACKAGE_PATH",
             "summary": "",
