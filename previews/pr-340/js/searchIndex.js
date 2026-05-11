@@ -5631,10 +5631,10 @@ Search.appendIndex(
             "summary": "Returns\u0020version\u0020information\u0020when\u0020it\u0020can\u0020be\u0020resolved\u0020without\u0020blocking\u0020command\u0020execution.",
             "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method_check"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AresolveCurrentVersion\u0028\u0029",
-            "name": "resolveCurrentVersion",
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AgetCurrentVersion\u0028\u0029",
+            "name": "getCurrentVersion",
             "summary": "Returns\u0020the\u0020installed\u0020DevTools\u0020version\u0020without\u0020running\u0020external\u0020Composer\u0020commands.",
-            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method_resolveCurrentVersion"
+            "url": "classes/FastForward-DevTools-SelfUpdate-ComposerVersionChecker.html#method_getCurrentVersion"
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\ComposerVersionChecker\u003A\u003AresolveLatestStableVersion\u0028\u0029",
             "name": "resolveLatestStableVersion",
@@ -5686,10 +5686,10 @@ Search.appendIndex(
             "summary": "Returns\u0020version\u0020information\u0020when\u0020it\u0020can\u0020be\u0020resolved\u0020without\u0020blocking\u0020command\u0020execution.",
             "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html#method_check"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckerInterface\u003A\u003AresolveCurrentVersion\u0028\u0029",
-            "name": "resolveCurrentVersion",
+            "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckerInterface\u003A\u003AgetCurrentVersion\u0028\u0029",
+            "name": "getCurrentVersion",
             "summary": "Returns\u0020the\u0020currently\u0020installed\u0020DevTools\u0020version\u0020when\u0020available.",
-            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html#method_resolveCurrentVersion"
+            "url": "classes/FastForward-DevTools-SelfUpdate-VersionCheckerInterface.html#method_getCurrentVersion"
         },                {
             "fqsen": "\\FastForward\\DevTools\\SelfUpdate\\VersionCheckNotifier",
             "name": "VersionCheckNotifier",

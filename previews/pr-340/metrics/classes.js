@@ -6534,7 +6534,7 @@ var classes = [
                 "_type": "Hal\\Metric\\FunctionMetric"
             },
             {
-                "name": "resolveCurrentVersion",
+                "name": "getCurrentVersion",
                 "role": null,
                 "public": true,
                 "private": false,

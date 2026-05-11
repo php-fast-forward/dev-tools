@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1778532932">
-  <project timestamp="1778532932" name="Clover Coverage">
+<coverage generated="1778533769">
+  <project timestamp="1778533769" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -6594,7 +6594,7 @@
         <line num="63" type="stmt" count="0"/>
         <line num="64" type="stmt" count="0"/>
         <line num="67" type="stmt" count="0"/>
-        <line num="73" type="method" name="resolveCurrentVersion" visibility="public" complexity="1" crap="2" count="0"/>
+        <line num="73" type="method" name="getCurrentVersion" visibility="public" complexity="1" crap="2" count="0"/>
         <line num="75" type="stmt" count="0"/>
         <line num="76" type="stmt" count="0"/>
         <line num="82" type="method" name="resolveLatestStableVersion" visibility="private" complexity="8" crap="9.00" count="2"/>
