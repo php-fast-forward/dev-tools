@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Resolve global-install fallback for GrumPHP hook execution by using `vendor/bin/grumphp`, then `vendor/bin/grumphp.phar`, then `grumphp` in PATH, keeping local override precedence for managed project hooks unchanged (#296)
+- Remove deprecated ECS `strict` prepared set from `ECSConfig` to avoid deprecation failures during structured changelog validation and pre-commit hooks (#296)
+
 ## [1.25.1] - 2026-05-02
 
 ### Fixed
