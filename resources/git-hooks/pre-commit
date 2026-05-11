@@ -24,8 +24,18 @@ elif [ -f "${DEVTOOLS_GRUMPHP_CONFIG}" ]; then
 fi
 
 # Run GrumPHP
-if [ -n "${GRUMPHP_CONFIG_FILE}" ]; then
-  printf "%s\n" "${DIFF}" | exec 'vendor/bin/grumphp.phar' '--config' "${GRUMPHP_CONFIG_FILE}" 'git:pre-commit' '--skip-success-output'
+if [ -x "vendor/bin/grumphp" ]; then
+  GRUMPHP_COMMAND='vendor/bin/grumphp'
+elif [ -x "vendor/bin/grumphp.phar" ]; then
+  GRUMPHP_COMMAND='vendor/bin/grumphp.phar'
+else
+  GRUMPHP_COMMAND='grumphp'
 fi
 
-printf "%s\n" "${DIFF}" | exec 'vendor/bin/grumphp.phar' 'git:pre-commit' '--skip-success-output'
+if [ -n "${GRUMPHP_COMMAND}" ]; then
+  if [ -n "${GRUMPHP_CONFIG_FILE}" ]; then
+    printf "%s\n" "${DIFF}" | exec "${GRUMPHP_COMMAND}" '--config' "${GRUMPHP_CONFIG_FILE}" 'git:pre-commit' '--skip-success-output'
+  fi
+
+  printf "%s\n" "${DIFF}" | exec "${GRUMPHP_COMMAND}" 'git:pre-commit' '--skip-success-output'
+fi
