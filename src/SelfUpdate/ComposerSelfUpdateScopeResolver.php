@@ -74,6 +74,12 @@ final readonly class ComposerSelfUpdateScopeResolver implements SelfUpdateScopeR
             $candidates[] = $composerHome;
         }
 
+        $xdgConfigHome = $this->environment->get('XDG_CONFIG_HOME');
+
+        if (null !== $xdgConfigHome && '' !== $xdgConfigHome) {
+            $candidates[] = Path::join($xdgConfigHome, 'composer');
+        }
+
         $home = $this->environment->get('HOME');
 
         if (null !== $home && '' !== $home) {
