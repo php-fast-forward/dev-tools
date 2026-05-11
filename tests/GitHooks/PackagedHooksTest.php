@@ -42,6 +42,9 @@ final class PackagedHooksTest extends TestCase
             'DEVTOOLS_GRUMPHP_CONFIG=' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER,
             $contents,
         );
+        self::assertStringContainsString('if [ -x "vendor/bin/grumphp" ]; then', $contents);
+        self::assertStringContainsString("GRUMPHP_COMMAND='vendor/bin/grumphp'", $contents);
+        self::assertStringContainsString('printf "%s\n" "${DIFF}" | exec "${GRUMPHP_COMMAND}"', $contents);
         self::assertStringContainsString("'--config' \"\${GRUMPHP_CONFIG_FILE}\" 'git:pre-commit'", $contents);
     }
 
@@ -58,6 +61,9 @@ final class PackagedHooksTest extends TestCase
             'DEVTOOLS_GRUMPHP_CONFIG=' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER,
             $contents,
         );
+        self::assertStringContainsString('if [ -x "vendor/bin/grumphp" ]; then', $contents);
+        self::assertStringContainsString("GRUMPHP_COMMAND='vendor/bin/grumphp'", $contents);
+        self::assertStringContainsString('printf "%s\n" "${DIFF}" | exec "${GRUMPHP_COMMAND}"', $contents);
         self::assertStringContainsString("'--config' \"\${GRUMPHP_CONFIG_FILE}\" 'git:commit-msg'", $contents);
     }
 }

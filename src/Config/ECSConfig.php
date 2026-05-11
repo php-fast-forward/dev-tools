@@ -58,13 +58,12 @@ final class ECSConfig
     ];
 
     /**
-     * @var array{psr12: bool, common: bool, symplify: bool, strict: bool, cleanCode: bool} the prepared ECS sets applied by default
+     * @var array{psr12: bool, common: bool, symplify: bool, cleanCode: bool} the prepared ECS sets applied by default
      */
     public const array DEFAULT_PREPARED_SETS = [
         'psr12' => true,
         'common' => true,
         'symplify' => true,
-        'strict' => true,
         'cleanCode' => true,
     ];
 
@@ -154,7 +153,6 @@ final class ECSConfig
                 psr12: self::DEFAULT_PREPARED_SETS['psr12'],
                 common: self::DEFAULT_PREPARED_SETS['common'],
                 symplify: self::DEFAULT_PREPARED_SETS['symplify'],
-                strict: self::DEFAULT_PREPARED_SETS['strict'],
                 cleanCode: self::DEFAULT_PREPARED_SETS['cleanCode'],
             );
 
