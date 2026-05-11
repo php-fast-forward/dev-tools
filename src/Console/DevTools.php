@@ -88,26 +88,10 @@ final class DevTools extends Application
         private readonly EnvironmentInterface $environment,
         private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
     ) {
-        parent::__construct('Fast Forward Dev Tools', $this->resolveVersion());
+        parent::__construct('Fast Forward Dev Tools', $this->versionChecker->getCurrentVersion());
 
         $this->setDefaultCommand('dev-tools:standards');
         $this->setCommandLoader($commandLoader);
-    }
-
-    /**
-     * Resolves the running DevTools version for command metadata.
-     *
-     * The method MUST return the current package version from
-     * `VersionCheckerInterface`.
-     * It MUST return the fallback value supplied by the checker when metadata is
-     * not available.
-     * Callers SHOULD pass the returned value directly to the Symfony application.
-     *
-     * @return string the package version for command metadata
-     */
-    private function resolveVersion(): string
-    {
-        return $this->versionChecker->getCurrentVersion();
     }
 
     /**
