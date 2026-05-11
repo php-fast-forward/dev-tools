@@ -30,9 +30,10 @@ interface VersionCheckerInterface
     public function check(): ?VersionCheckResult;
 
     /**
-     * Returns the currently installed DevTools version when available.
+     * Returns the resolved DevTools version for display and internal comparison.
      *
-     * @return string|null the version string for display and fallback logic
+     * The method MUST return a safe version string even when installed metadata
+     * is unavailable.
      */
-    public function getCurrentVersion(): ?string;
+    public function getCurrentVersion(): string;
 }

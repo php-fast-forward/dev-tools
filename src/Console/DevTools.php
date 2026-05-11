@@ -46,8 +46,6 @@ use function Safe\putenv;
  */
 final class DevTools extends Application
 {
-    private const string VERSION_UNKNOWN = '0.0.0';
-
     private const string LOGO = <<<'LOGO'
          ____             _____           _
         |  _ \  _____   _|_   _|__   ___ | |___
@@ -99,11 +97,16 @@ final class DevTools extends Application
     /**
      * Resolves the running DevTools version for command metadata.
      *
-     * @return string the current package version or a safe fallback
+     * This method MUST return the resolved package version used by command
+     * metadata.
+     * It MUST delegate this resolution to the version checker and SHOULD NOT
+     * expose null as a fallback.
+     *
+     * @return string the current package version
      */
     private function resolveVersion(): string
     {
-        return $this->versionChecker->getCurrentVersion() ?? self::VERSION_UNKNOWN;
+        return $this->versionChecker->getCurrentVersion();
     }
 
     /**
