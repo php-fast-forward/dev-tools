@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.2] - 2026-05-11
+
 ### Fixed
 
 - Resolve global-install fallback for GrumPHP hook execution by using `vendor/bin/grumphp`, then `vendor/bin/grumphp.phar`, then `grumphp` in PATH, keeping local override precedence for managed project hooks unchanged (#296)
@@ -435,7 +437,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.1...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.2...HEAD
+[1.25.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.1...v1.25.2
 [1.25.1]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.0...v1.25.1
 [1.25.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.6...v1.25.0
 [1.24.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.24.5...v1.24.6
