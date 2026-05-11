@@ -26,6 +26,7 @@ use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
 use Override;
 use Symfony\Component\Console\Application;
@@ -73,6 +74,7 @@ final class DevTools extends Application
      * @param VersionCheckNotifierInterface $versionCheckNotifier emits non-blocking version freshness warnings
      * @param SelfUpdateRunnerInterface $selfUpdateRunner runs explicit or automatic self-update flows
      * @param SelfUpdateScopeResolverInterface $selfUpdateScopeResolver resolves whether the active binary is global
+     * @param VersionCheckerInterface $versionChecker resolves the installed DevTools version for metadata output
      * @param EnvironmentInterface $environment reads environment flags for optional auto-update behavior
      * @param RuntimeEnvironmentInterface $runtimeEnvironment resolves runtime environment capabilities
      */
@@ -82,10 +84,11 @@ final class DevTools extends Application
         private readonly VersionCheckNotifierInterface $versionCheckNotifier,
         private readonly SelfUpdateRunnerInterface $selfUpdateRunner,
         private readonly SelfUpdateScopeResolverInterface $selfUpdateScopeResolver,
+        private readonly VersionCheckerInterface $versionChecker,
         private readonly EnvironmentInterface $environment,
         private readonly RuntimeEnvironmentInterface $runtimeEnvironment,
     ) {
-        parent::__construct('Fast Forward Dev Tools');
+        parent::__construct('Fast Forward Dev Tools', $this->versionChecker->getCurrentVersion());
 
         $this->setDefaultCommand('dev-tools:standards');
         $this->setCommandLoader($commandLoader);

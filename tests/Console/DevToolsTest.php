@@ -44,6 +44,7 @@ use FastForward\DevTools\SelfUpdate\ComposerSelfUpdateScopeResolver;
 use FastForward\DevTools\SelfUpdate\ComposerVersionChecker;
 use FastForward\DevTools\SelfUpdate\SelfUpdateRunnerInterface;
 use FastForward\DevTools\SelfUpdate\SelfUpdateScopeResolverInterface;
+use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
@@ -125,6 +126,11 @@ final class DevToolsTest extends TestCase
     private ObjectProphecy $selfUpdateScopeResolver;
 
     /**
+     * @var ObjectProphecy<VersionCheckerInterface>
+     */
+    private ObjectProphecy $versionChecker;
+
+    /**
      * @var ObjectProphecy<EnvironmentInterface>
      */
     private ObjectProphecy $environment;
@@ -154,8 +160,11 @@ final class DevToolsTest extends TestCase
         $this->versionCheckNotifier = $this->prophesize(VersionCheckNotifierInterface::class);
         $this->selfUpdateRunner = $this->prophesize(SelfUpdateRunnerInterface::class);
         $this->selfUpdateScopeResolver = $this->prophesize(SelfUpdateScopeResolverInterface::class);
+        $this->versionChecker = $this->prophesize(VersionCheckerInterface::class);
         $this->environment = $this->prophesize(EnvironmentInterface::class);
         $this->runtimeEnvironment = $this->prophesize(RuntimeEnvironmentInterface::class);
+        $this->versionChecker->getCurrentVersion()
+            ->willReturn('1.2.3');
         $this->runtimeEnvironment->isAgentPresent()
             ->willReturn(false);
         $this->originalWorkspaceDirectoryEnv = getenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
@@ -214,6 +223,7 @@ final class DevToolsTest extends TestCase
             ->willReturn($customCommand);
 
         self::assertSame('Fast Forward Dev Tools', $this->devTools->getName());
+        self::assertSame('1.2.3', $this->devTools->getVersion());
         self::assertTrue($this->devTools->has('custom'));
         self::assertSame($customCommand, $this->devTools->get('custom'));
     }
@@ -593,6 +603,7 @@ final class DevToolsTest extends TestCase
             $this->versionCheckNotifier->reveal(),
             $this->selfUpdateRunner->reveal(),
             $this->selfUpdateScopeResolver->reveal(),
+            $this->versionChecker->reveal(),
             $this->environment->reveal(),
             $this->runtimeEnvironment->reveal(),
         );

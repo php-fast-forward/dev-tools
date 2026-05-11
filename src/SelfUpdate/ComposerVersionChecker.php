@@ -23,6 +23,7 @@ use Composer\InstalledVersions;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use JsonException;
+use Throwable;
 
 use function Safe\preg_match;
 use function Safe\json_decode;
@@ -33,6 +34,8 @@ use function Safe\json_decode;
 final readonly class ComposerVersionChecker implements VersionCheckerInterface
 {
     private const string PACKAGE = 'fast-forward/dev-tools';
+
+    private const string VERSION_UNKNOWN = '0.0.0';
 
     private const int TIMEOUT_SECONDS = 5;
 
@@ -52,10 +55,9 @@ final readonly class ComposerVersionChecker implements VersionCheckerInterface
             return null;
         }
 
-        $currentVersion = InstalledVersions::getPrettyVersion(self::PACKAGE)
-            ?? InstalledVersions::getVersion(self::PACKAGE);
+        $currentVersion = $this->getCurrentVersion();
 
-        if (null === $currentVersion) {
+        if (self::VERSION_UNKNOWN === $currentVersion) {
             return null;
         }
 
@@ -66,6 +68,29 @@ final readonly class ComposerVersionChecker implements VersionCheckerInterface
         }
 
         return new VersionCheckResult($currentVersion, $latestVersion);
+    }
+
+    /**
+     * Returns the installed DevTools version without running external Composer commands.
+     *
+     * This method MUST return the package version when composer metadata is
+     * available.
+     * It MUST return `VERSION_UNKNOWN` when metadata is unavailable or on
+     * resolution errors.
+     */
+    public function getCurrentVersion(): string
+    {
+        if (! InstalledVersions::isInstalled(self::PACKAGE)) {
+            return self::VERSION_UNKNOWN;
+        }
+
+        try {
+            return InstalledVersions::getPrettyVersion(self::PACKAGE)
+                ?? InstalledVersions::getVersion(self::PACKAGE)
+                ?? self::VERSION_UNKNOWN;
+        } catch (Throwable) {
+            return self::VERSION_UNKNOWN;
+        }
     }
 
     /**
