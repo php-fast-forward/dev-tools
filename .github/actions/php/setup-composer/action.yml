@@ -106,7 +106,7 @@ runs:
       with:
         working-directory: ${{ inputs.dev-tools-source-directory }}
         composer-options: --prefer-dist --no-plugins --no-scripts
-        require-lock-file: 'true'
+        require-lock-file: 'false'
         custom-cache-suffix: dev-tools-runtime
 
     - name: Expose DevTools runtime
