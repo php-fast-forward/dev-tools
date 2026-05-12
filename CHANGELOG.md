@@ -7,12 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Relax workflow fallback Composer install so .dev-tools-actions bootstrap does not require composer.lock when provisioning DevTools runtime in shared GitHub Actions contexts (#342).
+
 ## [1.25.4] - 2026-05-11
 
 ### Fixed
 
 - Show DevTools version metadata in CLI application output so `list` and `--version` expose the installed package version from `Application` metadata (#339).
-- Relax workflow fallback Composer install so `.dev-tools-actions` bootstrap does not require `composer.lock` when provisioning DevTools runtime in shared GitHub Actions contexts (#342).
 
 ## [1.25.3] - 2026-05-11
 
