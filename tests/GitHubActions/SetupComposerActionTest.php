@@ -107,6 +107,19 @@ final class SetupComposerActionTest extends TestCase
      * @return void
      */
     #[Test]
+    public function fallbackInstallShouldNotRequireComposerLockFile(): void
+    {
+        $actionFile = self::ACTION_PATH . '/action.yml';
+        $actionContents = file_get_contents($actionFile);
+
+        self::assertStringContainsString("require-lock-file: 'false'", $actionContents);
+        self::assertStringNotContainsString("require-lock-file: 'true'", $actionContents);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function detectRuntimeWillFallbackToTheWorkflowSourceWhenTheConsumerDoesNotInstallDevTools(): void
     {
         $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
