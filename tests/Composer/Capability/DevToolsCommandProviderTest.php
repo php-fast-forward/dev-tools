@@ -28,6 +28,7 @@ use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use Symfony\Component\Console\Application;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -48,7 +49,7 @@ final class DevToolsCommandProviderTest extends TestCase
     private ObjectProphecy $plugin;
 
     /**
-     * @var ObjectProphecy<DevTools>
+     * @var ObjectProphecy<stdClass>
      */
     private ObjectProphecy $devTools;
 
@@ -66,7 +67,7 @@ final class DevToolsCommandProviderTest extends TestCase
     {
         ContainerFactory::reset();
         $this->plugin = $this->prophesize(DevToolsPluginInterface::class);
-        $this->devTools = $this->prophesize(DevTools::class);
+        $this->devTools = $this->prophesize(Application::class);
 
         $this->plugin->isRegisteredCommand(null)
             ->willReturn(false);

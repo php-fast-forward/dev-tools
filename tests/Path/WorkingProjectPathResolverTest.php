@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Path;
 
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
@@ -26,6 +27,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 use function Safe\scandir;
 use function Safe\rmdir;
@@ -33,7 +35,6 @@ use function Safe\unlink;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
 use function Safe\mkdir;
-use function Safe\putenv;
 use function Safe\realpath;
 use function uniqid;
 
@@ -42,13 +43,7 @@ use function uniqid;
 #[UsesClass(ManagedWorkspace::class)]
 final class WorkingProjectPathResolverTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
-    }
+    use ProphecyTrait;
 
     /**
      * @return void
@@ -56,6 +51,8 @@ final class WorkingProjectPathResolverTest extends TestCase
     #[Test]
     public function itWillExposeCanonicalRepositoryRootPaths(): void
     {
+        $environment = $this->createEnvironment();
+
         self::assertSame(
             [
                 'repo/.dev-tools',
@@ -70,7 +67,7 @@ final class WorkingProjectPathResolverTest extends TestCase
                 'repo/**/vendor',
                 'repo/**/vendor/*',
             ],
-            WorkingProjectPathResolver::getToolingExcludedDirectories('repo')
+            WorkingProjectPathResolver::getToolingExcludedDirectories('repo', $environment),
         );
     }
 
@@ -80,7 +77,7 @@ final class WorkingProjectPathResolverTest extends TestCase
     #[Test]
     public function itWillIncludeCustomRelativeWorkspaceInToolingSkipPatterns(): void
     {
-        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
+        $environment = $this->createEnvironment('.artifacts');
 
         self::assertSame(
             [
@@ -97,7 +94,7 @@ final class WorkingProjectPathResolverTest extends TestCase
                 'repo/**/vendor/*',
                 'repo/.artifacts',
             ],
-            WorkingProjectPathResolver::getToolingExcludedDirectories('repo')
+            WorkingProjectPathResolver::getToolingExcludedDirectories('repo', $environment),
         );
     }
 
@@ -107,6 +104,8 @@ final class WorkingProjectPathResolverTest extends TestCase
     #[Test]
     public function itWillNormalizePathSeparatorsWhenJoiningProjectPaths(): void
     {
+        $environment = $this->createEnvironment();
+
         self::assertSame(
             [
                 'tmp/.dev-tools',
@@ -121,7 +120,7 @@ final class WorkingProjectPathResolverTest extends TestCase
                 'tmp/**/vendor',
                 'tmp/**/vendor/*',
             ],
-            WorkingProjectPathResolver::getToolingExcludedDirectories('tmp/')
+            WorkingProjectPathResolver::getToolingExcludedDirectories('tmp/', $environment),
         );
     }
 
@@ -131,6 +130,8 @@ final class WorkingProjectPathResolverTest extends TestCase
     #[Test]
     public function itWillExposeRelativeToolingSkipPatternsByDefault(): void
     {
+        $environment = $this->createEnvironment();
+
         self::assertSame(
             [
                 '.dev-tools',
@@ -145,7 +146,7 @@ final class WorkingProjectPathResolverTest extends TestCase
                 '**/vendor',
                 '**/vendor/*',
             ],
-            WorkingProjectPathResolver::getToolingExcludedDirectories()
+            WorkingProjectPathResolver::getToolingExcludedDirectories(environment: $environment),
         );
     }
 
@@ -176,7 +177,10 @@ final class WorkingProjectPathResolverTest extends TestCase
                     realpath($fixtureDirectory) . '/src/Example.php',
                     realpath($fixtureDirectory) . '/tests/Fixtures/Example.php',
                 ],
-                WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory))
+                WorkingProjectPathResolver::getToolingSourcePaths(
+                    realpath($fixtureDirectory),
+                    $this->createEnvironment()
+                ),
             );
         } finally {
             self::cleanupFixtureDirectory($fixtureDirectory);
@@ -190,8 +194,7 @@ final class WorkingProjectPathResolverTest extends TestCase
     public function itWillIgnoreCustomWorkspaceWhenResolvingToolingSourcePaths(): void
     {
         $fixtureDirectory = \dirname(__DIR__, 2) . '/backup/dev-tools-path-resolver-' . uniqid();
-
-        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
+        $environment = $this->createEnvironment('.artifacts');
 
         mkdir($fixtureDirectory . '/src', recursive: true);
         mkdir($fixtureDirectory . '/.artifacts/cache', recursive: true);
@@ -202,11 +205,26 @@ final class WorkingProjectPathResolverTest extends TestCase
         try {
             self::assertSame(
                 [realpath($fixtureDirectory) . '/src/Example.php'],
-                WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory))
+                WorkingProjectPathResolver::getToolingSourcePaths(realpath($fixtureDirectory), $environment)
             );
         } finally {
             self::cleanupFixtureDirectory($fixtureDirectory);
         }
+    }
+
+    /**
+     * @param string|null $value
+     *
+     * @return EnvironmentInterface
+     */
+    private function createEnvironment(?string $value = null): EnvironmentInterface
+    {
+        $environment = $this->prophesize(EnvironmentInterface::class);
+
+        $environment->get(ManagedWorkspace::ENV_WORKSPACE_DIR)
+            ->willReturn($value);
+
+        return $environment->reveal();
     }
 
     /**

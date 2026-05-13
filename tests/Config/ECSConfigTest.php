@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Config;
 
 use FastForward\DevTools\Config\ECSConfig;
+use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PhpCsFixer\Fixer\Import\GlobalNamespaceImportFixer;
@@ -37,6 +38,7 @@ use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
 use function Safe\getcwd;
 
 #[CoversClass(ECSConfig::class)]
+#[UsesClass(Environment::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 final class ECSConfigTest extends TestCase

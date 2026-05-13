@@ -27,6 +27,7 @@ use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -197,7 +198,7 @@ final class ReportsCommand extends Command
             $this->log(
                 'Skipping coverage report because no tests directory or PHP source files were detected.',
                 $input,
-                logLevel: 'warning',
+                logLevel: LogLevel::WARNING,
             );
         }
 

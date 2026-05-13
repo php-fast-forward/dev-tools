@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use Symfony\Component\Console\Output\BufferedOutput;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\ReportsCommand;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -31,6 +32,7 @@ use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Project\ProjectCapabilities;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolver;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -53,11 +55,12 @@ use Symfony\Component\Process\Process;
 #[UsesClass(DevToolsEnvironment::class)]
 #[UsesClass(RuntimeEnvironment::class)]
 #[UsesClass(ProjectCapabilities::class)]
-#[UsesClass(ProjectCapabilitiesResolverInterface::class)]
+#[UsesClass(ProjectCapabilitiesResolver::class)]
 #[CoversClass(ReportsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
+#[UsesClass(GithubActionOutput::class)]
 final class ReportsCommandTest extends TestCase
 {
     use ProphecyTrait;
@@ -304,13 +307,10 @@ final class ReportsCommandTest extends TestCase
      */
     private function createProjectCapabilities(bool $canRunTests): ProjectCapabilities
     {
-        return new ProjectCapabilities(
-            apiDirectories: [],
-            defaultPackageName: null,
-            hasGuideDirectory: false,
-            hasTestsPath: $canRunTests,
-            hasWikiTarget: false,
-            hasPhpSourceFiles: $canRunTests,
-        );
+        $projectCapabilities = $this->prophesize(ProjectCapabilities::class);
+        $projectCapabilities->canRunTests()
+            ->willReturn($canRunTests);
+
+        return $projectCapabilities->reveal();
     }
 }

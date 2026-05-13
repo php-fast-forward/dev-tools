@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Path;
 
+use FastForward\DevTools\Environment\Environment;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use Symfony\Component\Filesystem\Path;
 
 /**
@@ -80,10 +82,14 @@ final class ManagedWorkspace
      *
      * @param string $path the optional relative segment to append under the managed output root
      * @param string $baseDir the optional repository root used to resolve the managed workspace path
+     * @param EnvironmentInterface|null $environment explicit environment reader used to resolve FAST_FORWARD_WORKSPACE_DIR
      */
-    public static function getOutputDirectory(string $path = '', string $baseDir = ''): string
-    {
-        $baseDir = self::getWorkspaceRoot($baseDir);
+    public static function getOutputDirectory(
+        string $path = '',
+        string $baseDir = '',
+        ?EnvironmentInterface $environment = null,
+    ): string {
+        $baseDir = self::getWorkspaceRoot(baseDir: $baseDir, environment: $environment);
 
         return '' === $path
             ? $baseDir
@@ -99,10 +105,14 @@ final class ManagedWorkspace
      *
      * @param string $path the optional relative cache segment to append under the managed cache root
      * @param string $baseDir the optional repository root used to resolve the managed cache path
+     * @param EnvironmentInterface|null $environment explicit environment reader used to resolve FAST_FORWARD_WORKSPACE_DIR
      */
-    public static function getCacheDirectory(string $path = '', string $baseDir = ''): string
-    {
-        $baseDir = self::getOutputDirectory(self::CACHE_ROOT, $baseDir);
+    public static function getCacheDirectory(
+        string $path = '',
+        string $baseDir = '',
+        ?EnvironmentInterface $environment = null,
+    ): string {
+        $baseDir = self::getOutputDirectory(path: self::CACHE_ROOT, baseDir: $baseDir, environment: $environment);
 
         return '' === $path
             ? $baseDir
@@ -117,12 +127,17 @@ final class ManagedWorkspace
      * under that base directory while absolute workspaces are used as-is.
      *
      * @param string $baseDir the optional repository root used to resolve a relative workspace
+     * @param EnvironmentInterface|null $environment explicit environment reader used to resolve FAST_FORWARD_WORKSPACE_DIR
      */
-    public static function getWorkspaceRoot(string $baseDir = ''): string
-    {
-        $workspaceRoot = getenv(self::ENV_WORKSPACE_DIR);
+    public static function getWorkspaceRoot(
+        string $baseDir = '',
+        ?EnvironmentInterface $environment = null,
+    ): string {
+        $environment ??= new Environment();
 
-        if (false === $workspaceRoot || '' === $workspaceRoot) {
+        $workspaceRoot = $environment->get(self::ENV_WORKSPACE_DIR);
+
+        if (null === $workspaceRoot || '' === $workspaceRoot) {
             $workspaceRoot = self::WORKSPACE_ROOT;
         }
 
@@ -138,17 +153,25 @@ final class ManagedWorkspace
      * should skip generated artifacts during source scans.
      *
      * @param string $baseDir the optional repository root used to relativize absolute workspace paths
+     * @param EnvironmentInterface|null $environment explicit environment reader used for tests
      */
-    public static function getProjectRelativeWorkspaceRoot(string $baseDir = ''): ?string
-    {
-        $workspaceRoot = self::getWorkspaceRoot();
+    public static function getProjectRelativeWorkspaceRoot(
+        string $baseDir = '',
+        ?EnvironmentInterface $environment = null,
+    ): ?string {
+        $environment ??= new Environment();
+        $workspaceRoot = $environment->get(self::ENV_WORKSPACE_DIR);
 
-        if (! Path::isAbsolute($workspaceRoot)) {
-            return $workspaceRoot;
+        if (null === $workspaceRoot || '' === $workspaceRoot) {
+            $workspaceRoot = self::WORKSPACE_ROOT;
         }
 
         if ('' === $baseDir) {
-            return null;
+            return Path::isAbsolute($workspaceRoot) ? null : $workspaceRoot;
+        }
+
+        if (! Path::isAbsolute($workspaceRoot)) {
+            return $workspaceRoot;
         }
 
         $baseDir = Path::canonicalize($baseDir);

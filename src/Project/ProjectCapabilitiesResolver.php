@@ -21,6 +21,9 @@ namespace FastForward\DevTools\Project;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 use function array_key_first;
 use function array_values;
@@ -143,8 +146,16 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
      */
     private function resolveHasPhpSourceFiles(array $apiDirectories): bool
     {
-        if ([] !== $apiDirectories) {
-            return true;
+        foreach ($apiDirectories as $path) {
+            $absolutePath = $this->filesystem->getAbsolutePath($path);
+
+            if (! \is_string($absolutePath)) {
+                continue;
+            }
+
+            if ($this->hasPhpSourceFileInDirectory($absolutePath)) {
+                return true;
+            }
         }
 
         foreach (self::API_AUTOLOAD_TYPES as $autoloadType) {
@@ -155,9 +166,41 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
                     continue;
                 }
 
-                if (is_file($absolutePath) && str_ends_with(strtolower($absolutePath), '.php')) {
+                if ($this->hasPhpSourceFileInDirectory($absolutePath)) {
                     return true;
                 }
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Detects whether a Composer autoload path points to a PHP source file or contains one recursively.
+     *
+     * @param string $path an absolute composer autoload path
+     */
+    private function hasPhpSourceFileInDirectory(string $path): bool
+    {
+        if (is_file($path)) {
+            return str_ends_with(strtolower($path), '.php');
+        }
+
+        if (! is_dir($path)) {
+            return false;
+        }
+
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path, FilesystemIterator::SKIP_DOTS),
+        );
+
+        foreach ($iterator as $file) {
+            if (! $file->isFile()) {
+                continue;
+            }
+
+            if (str_ends_with(strtolower((string) $file->getFilename()), '.php')) {
+                return true;
             }
         }
 

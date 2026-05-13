@@ -137,6 +137,29 @@ final class ProjectCapabilitiesResolverTest extends TestCase
      * @return void
      */
     #[Test]
+    public function resolveWillNotDetectPhpSourceFromEmptyAutoloadDirectories(): void
+    {
+        mkdir($this->workspace . '/src', recursive: true);
+
+        $this->composer->getAutoload('psr-4')
+            ->willReturn([
+                'App\\' => 'src/',
+            ]);
+        $this->composer->getAutoload('psr-0')
+            ->willReturn([]);
+        $this->composer->getAutoload('classmap')
+            ->willReturn([]);
+
+        $capabilities = $this->resolver->resolve();
+
+        self::assertFalse($capabilities->hasPhpSourceFiles());
+        self::assertFalse($capabilities->canRunTests());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function resolveWillDetectPhpSourceFromFileBasedClassmapEntries(): void
     {
         mkdir($this->workspace . '/legacy', recursive: true);

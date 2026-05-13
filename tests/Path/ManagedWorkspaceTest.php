@@ -19,23 +19,17 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Path;
 
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-
-use function Safe\putenv;
+use Prophecy\PhpUnit\ProphecyTrait;
 
 #[CoversClass(ManagedWorkspace::class)]
 final class ManagedWorkspaceTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
-    }
+    use ProphecyTrait;
 
     /**
      * @return void
@@ -43,24 +37,41 @@ final class ManagedWorkspaceTest extends TestCase
     #[Test]
     public function itWillExposeCanonicalRepositoryManagedPaths(): void
     {
-        self::assertSame('.dev-tools', ManagedWorkspace::getOutputDirectory());
-        self::assertSame('.dev-tools/coverage', ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE));
-        self::assertSame('.dev-tools/metrics', ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS));
+        $environment = $this->createEnvironment();
+
+        self::assertSame('.dev-tools', ManagedWorkspace::getOutputDirectory(environment: $environment));
+        self::assertSame(
+            '.dev-tools/coverage',
+            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE, environment: $environment),
+        );
+        self::assertSame(
+            '.dev-tools/metrics',
+            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS, environment: $environment),
+        );
         self::assertSame(
             'tmp/.dev-tools/metrics',
-            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS, 'tmp')
+            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS, 'tmp', $environment)
         );
-        self::assertSame('.dev-tools/cache', ManagedWorkspace::getCacheDirectory());
-        self::assertSame('.dev-tools/cache/phpdoc', ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC));
-        self::assertSame('.dev-tools/cache/phpunit', ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT));
-        self::assertSame('.dev-tools/cache/rector', ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR));
+        self::assertSame('.dev-tools/cache', ManagedWorkspace::getCacheDirectory(environment: $environment));
+        self::assertSame(
+            '.dev-tools/cache/phpdoc',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPDOC, environment: $environment)
+        );
+        self::assertSame(
+            '.dev-tools/cache/phpunit',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT, environment: $environment)
+        );
+        self::assertSame(
+            '.dev-tools/cache/rector',
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, environment: $environment)
+        );
         self::assertSame(
             '.dev-tools/cache/php-cs-fixer',
-            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER)
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHP_CS_FIXER, environment: $environment)
         );
         self::assertSame(
             'tmp/.dev-tools/cache/rector',
-            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, 'tmp')
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, 'tmp', $environment)
         );
     }
 
@@ -70,8 +81,16 @@ final class ManagedWorkspaceTest extends TestCase
     #[Test]
     public function itWillNormalizePathSeparatorsWhenJoiningManagedPaths(): void
     {
-        self::assertSame('tmp/.dev-tools/metrics', ManagedWorkspace::getOutputDirectory('/metrics', 'tmp/'));
-        self::assertSame('tmp/.dev-tools/cache/phpunit', ManagedWorkspace::getCacheDirectory('/phpunit', 'tmp/'));
+        $environment = $this->createEnvironment();
+
+        self::assertSame(
+            'tmp/.dev-tools/metrics',
+            ManagedWorkspace::getOutputDirectory('/metrics', 'tmp/', $environment)
+        );
+        self::assertSame(
+            'tmp/.dev-tools/cache/phpunit',
+            ManagedWorkspace::getCacheDirectory('/phpunit', 'tmp/', $environment),
+        );
     }
 
     /**
@@ -80,13 +99,16 @@ final class ManagedWorkspaceTest extends TestCase
     #[Test]
     public function itWillUseConfiguredRelativeWorkspaceRoot(): void
     {
-        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=.artifacts');
+        $environment = $this->createEnvironment('.artifacts');
 
-        self::assertSame('.artifacts', ManagedWorkspace::getWorkspaceRoot());
-        self::assertSame('.artifacts/coverage', ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE));
+        self::assertSame('.artifacts', ManagedWorkspace::getWorkspaceRoot(environment: $environment));
+        self::assertSame(
+            '.artifacts/coverage',
+            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::COVERAGE, '', $environment),
+        );
         self::assertSame(
             'tmp/.artifacts/cache/phpunit',
-            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT, 'tmp')
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::PHPUNIT, 'tmp', $environment),
         );
     }
 
@@ -96,16 +118,31 @@ final class ManagedWorkspaceTest extends TestCase
     #[Test]
     public function itWillUseConfiguredAbsoluteWorkspaceRoot(): void
     {
-        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=/tmp/dev-tools-artifacts');
+        $environment = $this->createEnvironment('/tmp/dev-tools-artifacts');
 
-        self::assertSame('/tmp/dev-tools-artifacts', ManagedWorkspace::getWorkspaceRoot());
+        self::assertSame('/tmp/dev-tools-artifacts', ManagedWorkspace::getWorkspaceRoot(environment: $environment));
         self::assertSame(
             '/tmp/dev-tools-artifacts/metrics',
-            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS, 'tmp')
+            ManagedWorkspace::getOutputDirectory(ManagedWorkspace::METRICS, 'tmp', $environment),
         );
         self::assertSame(
             '/tmp/dev-tools-artifacts/cache/rector',
-            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, 'tmp')
+            ManagedWorkspace::getCacheDirectory(ManagedWorkspace::RECTOR, 'tmp', $environment),
         );
+    }
+
+    /**
+     * @param string|null $value
+     *
+     * @return EnvironmentInterface
+     */
+    private function createEnvironment(?string $value = null): EnvironmentInterface
+    {
+        $environment = $this->prophesize(EnvironmentInterface::class);
+
+        $environment->get(ManagedWorkspace::ENV_WORKSPACE_DIR)
+            ->willReturn($value);
+
+        return $environment->reveal();
     }
 }

@@ -29,9 +29,19 @@ use function Safe\putenv;
 #[CoversClass(Environment::class)]
 final class EnvironmentTest extends TestCase
 {
+    private const string ENV_READER_TEST = 'DEV_TOOLS_ENVIRONMENT_READER_TEST';
+
     private Environment $environment;
 
-    private string|false $previousValue;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $originalServerEnv;
+
+    /**
+     * @var array<string, mixed>
+     */
+    private array $originalEnv;
 
     /**
      * @return void
@@ -39,8 +49,12 @@ final class EnvironmentTest extends TestCase
     protected function setUp(): void
     {
         $this->environment = new Environment();
-        $this->previousValue = getenv('DEV_TOOLS_ENVIRONMENT_READER_TEST');
-        putenv('DEV_TOOLS_ENVIRONMENT_READER_TEST');
+        $this->originalServerEnv = $_SERVER;
+        $this->originalEnv = $_ENV;
+
+        unset($_SERVER[self::ENV_READER_TEST]);
+        unset($_ENV[self::ENV_READER_TEST]);
+        putenv(self::ENV_READER_TEST);
     }
 
     /**
@@ -49,7 +63,7 @@ final class EnvironmentTest extends TestCase
     #[Test]
     public function getReturnsNullForMissingEnvironmentVariable(): void
     {
-        self::assertNull($this->environment->get('DEV_TOOLS_ENVIRONMENT_READER_TEST'));
+        self::assertNull($this->environment->get(self::ENV_READER_TEST));
     }
 
     /**
@@ -58,7 +72,7 @@ final class EnvironmentTest extends TestCase
     #[Test]
     public function getReturnsDefaultForMissingEnvironmentVariable(): void
     {
-        self::assertSame('fallback', $this->environment->get('DEV_TOOLS_ENVIRONMENT_READER_TEST', 'fallback'));
+        self::assertSame('fallback', $this->environment->get(self::ENV_READER_TEST, 'fallback'));
     }
 
     /**
@@ -67,9 +81,11 @@ final class EnvironmentTest extends TestCase
     #[Test]
     public function getReturnsEnvironmentVariableValue(): void
     {
-        putenv('DEV_TOOLS_ENVIRONMENT_READER_TEST=enabled');
+        putenv(self::ENV_READER_TEST . '=enabled');
+        $_ENV[self::ENV_READER_TEST] = 'enabled';
+        $_SERVER[self::ENV_READER_TEST] = 'enabled';
 
-        self::assertSame('enabled', $this->environment->get('DEV_TOOLS_ENVIRONMENT_READER_TEST'));
+        self::assertSame('enabled', $this->environment->get(self::ENV_READER_TEST));
     }
 
     /**
@@ -78,12 +94,14 @@ final class EnvironmentTest extends TestCase
     #[Test]
     public function getWithoutNameReturnsCurrentEnvironmentMap(): void
     {
-        putenv('DEV_TOOLS_ENVIRONMENT_READER_TEST=enabled');
+        putenv(self::ENV_READER_TEST . '=enabled');
+        $_ENV[self::ENV_READER_TEST] = 'enabled';
+        $_SERVER[self::ENV_READER_TEST] = 'enabled';
 
         $environment = $this->environment->get();
 
         self::assertIsArray($environment);
-        self::assertSame('enabled', $environment['DEV_TOOLS_ENVIRONMENT_READER_TEST']);
+        self::assertSame('enabled', $environment[self::ENV_READER_TEST]);
     }
 
     /**
@@ -91,12 +109,13 @@ final class EnvironmentTest extends TestCase
      */
     protected function tearDown(): void
     {
-        if (false === $this->previousValue) {
-            putenv('DEV_TOOLS_ENVIRONMENT_READER_TEST');
-
-            return;
+        if (\array_key_exists(self::ENV_READER_TEST, $this->originalEnv)) {
+            putenv(self::ENV_READER_TEST . '=' . $this->originalEnv[self::ENV_READER_TEST]);
+        } else {
+            putenv(self::ENV_READER_TEST);
         }
 
-        putenv('DEV_TOOLS_ENVIRONMENT_READER_TEST=' . $this->previousValue);
+        $_SERVER = $this->originalServerEnv;
+        $_ENV = $this->originalEnv;
     }
 }

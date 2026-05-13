@@ -46,6 +46,8 @@ use function Safe\putenv;
  */
 final class DevTools extends Application
 {
+    public const string ENV_AUTO_UPDATE = 'FAST_FORWARD_AUTO_UPDATE';
+
     private const string LOGO = <<<'LOGO'
          ____             _____           _
         |  _ \  _____   _|_   _|__   ___ | |___
@@ -201,7 +203,7 @@ final class DevTools extends Application
      */
     private function runAutoUpdateWhenRequested(InputInterface $input, OutputInterface $output): void
     {
-        $autoUpdateMode = $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '');
+        $autoUpdateMode = $this->environment->get(self::ENV_AUTO_UPDATE, '');
 
         if (! $input->hasParameterOption('--auto-update', true) && ! $this->isTruthyAutoUpdateMode($autoUpdateMode)) {
             return;
