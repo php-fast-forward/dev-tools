@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.5] - 2026-05-13
+
 ### Fixed
 
 - Relax workflow fallback Composer install so .dev-tools-actions bootstrap does not require composer.lock when provisioning DevTools runtime in shared GitHub Actions contexts (#342).
@@ -454,7 +456,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.4...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.5...HEAD
+[1.25.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.4...v1.25.5
 [1.25.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.3...v1.25.4
 [1.25.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.2...v1.25.3
 [1.25.2]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.1...v1.25.2
