@@ -20,75 +20,17 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Input;
 
 use FastForward\DevTools\Console\Input\HasJsonOption;
-use FastForward\DevTools\Container\ContainerFactory;
-use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
-use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
-use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
-use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Input\InputInterface;
 
-use function Safe\putenv;
-
 #[CoversTrait(HasJsonOption::class)]
-#[UsesClass(ContainerFactory::class)]
-#[UsesClass(DevToolsPathResolver::class)]
-#[UsesClass(DevToolsServiceProvider::class)]
-#[UsesClass(DevToolsEnvironment::class)]
-#[UsesClass(RuntimeEnvironment::class)]
 final class HasJsonOptionTest extends TestCase
 {
     use ProphecyTrait;
-
-    /**
-     * @var array<string, mixed>
-     */
-    private array $server;
-
-    /**
-     * @var array<string, mixed>
-     */
-    private array $environment;
-
-    private string|false $composerTestsAreRunning;
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
-    {
-        ContainerFactory::reset();
-        $this->server = $_SERVER;
-        $this->environment = $_ENV;
-        $this->composerTestsAreRunning = getenv('COMPOSER_TESTS_ARE_RUNNING');
-
-        $_SERVER = [];
-        $_ENV = [];
-        putenv('COMPOSER_TESTS_ARE_RUNNING');
-    }
-
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        ContainerFactory::reset();
-        $_SERVER = $this->server;
-        $_ENV = $this->environment;
-
-        if (false === $this->composerTestsAreRunning) {
-            putenv('COMPOSER_TESTS_ARE_RUNNING');
-
-            return;
-        }
-
-        putenv('COMPOSER_TESTS_ARE_RUNNING=' . $this->composerTestsAreRunning);
-    }
 
     /**
      * @return void
@@ -108,26 +50,7 @@ final class HasJsonOptionTest extends TestCase
         $input->getOption('json')
             ->willReturn(false);
 
-        $command = new readonly class ($runtimeEnvironment->reveal()) {
-            use HasJsonOption;
-
-            /**
-             * @param RuntimeEnvironmentInterface $runtimeEnvironment
-             */
-            public function __construct(
-                private RuntimeEnvironmentInterface $runtimeEnvironment,
-            ) {}
-
-            /**
-             * @param InputInterface $input
-             *
-             * @return bool
-             */
-            public function isStructured(InputInterface $input): bool
-            {
-                return $this->isJsonOutput($input);
-            }
-        };
+        $command = new HasJsonOptionAwareCommand($runtimeEnvironment->reveal());
 
         self::assertTrue($command->isStructured($input->reveal()));
     }
@@ -136,9 +59,13 @@ final class HasJsonOptionTest extends TestCase
      * @return void
      */
     #[Test]
-    public function isJsonOutputWillIgnoreFallbackAgentDetectionDuringPhpUnitRuns(): void
+    public function isJsonOutputWillIgnoreAgentOutputDuringComposerRuns(): void
     {
-        $_SERVER['CODEX_CI'] = '1';
+        $runtimeEnvironment = $this->prophesize(RuntimeEnvironmentInterface::class);
+        $runtimeEnvironment->isAgentPresent()
+            ->willReturn(true);
+        $runtimeEnvironment->isComposerTestRun()
+            ->willReturn(true);
 
         $input = $this->prophesize(InputInterface::class);
         $input->getOption('pretty-json')
@@ -146,20 +73,33 @@ final class HasJsonOptionTest extends TestCase
         $input->getOption('json')
             ->willReturn(false);
 
-        $command = new class {
-            use HasJsonOption;
-
-            /**
-             * @param InputInterface $input
-             *
-             * @return bool
-             */
-            public function isStructured(InputInterface $input): bool
-            {
-                return $this->isJsonOutput($input);
-            }
-        };
+        $command = new HasJsonOptionAwareCommand($runtimeEnvironment->reveal());
 
         self::assertFalse($command->isStructured($input->reveal()));
+    }
+}
+
+/**
+ * @internal
+ */
+final readonly class HasJsonOptionAwareCommand
+{
+    use HasJsonOption;
+
+    /**
+     * @param RuntimeEnvironmentInterface $runtimeEnvironment
+     */
+    public function __construct(
+        private RuntimeEnvironmentInterface $runtimeEnvironment,
+    ) {}
+
+    /**
+     * @param InputInterface $input
+     *
+     * @return bool
+     */
+    public function isStructured(InputInterface $input): bool
+    {
+        return $this->isJsonOutput($input);
     }
 }

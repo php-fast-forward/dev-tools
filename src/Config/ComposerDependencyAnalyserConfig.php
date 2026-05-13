@@ -19,6 +19,8 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Config;
 
+use FastForward\DevTools\Environment\Environment;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use ShipMonk\ComposerDependencyAnalyser\Config\Configuration;
 use ShipMonk\ComposerDependencyAnalyser\Config\ErrorType;
@@ -86,14 +88,18 @@ final class ComposerDependencyAnalyserConfig
      * Creates the default Composer Dependency Analyser configuration.
      *
      * @param callable|null $customize optional callback to customize the configuration
+     * @param EnvironmentInterface|null $environment optional environment reader used to resolve overrides
      *
      * @return Configuration the configured analyser configuration
      */
-    public static function configure(?callable $customize = null): Configuration
-    {
+    public static function configure(
+        ?callable $customize = null,
+        ?EnvironmentInterface $environment = null,
+    ): Configuration {
+        $environment ??= new Environment();
         $configuration = new Configuration();
 
-        if (! self::shouldShowShadowDependencies()) {
+        if (! self::shouldShowShadowDependencies($environment)) {
             self::applyIgnoresShadowDependencies($configuration);
         }
 
@@ -128,11 +134,15 @@ final class ComposerDependencyAnalyserConfig
     /**
      * Determines whether shadow dependency reports SHOULD remain visible.
      *
+     * @param EnvironmentInterface|null $environment optional environment reader used to resolve overrides
+     *
      * @return bool
      */
-    public static function shouldShowShadowDependencies(): bool
+    public static function shouldShowShadowDependencies(?EnvironmentInterface $environment = null): bool
     {
-        return '1' === getenv(self::ENV_SHOW_SHADOW_DEPENDENCIES);
+        $environment ??= new Environment();
+
+        return '1' === $environment->get(self::ENV_SHOW_SHADOW_DEPENDENCIES);
     }
 
     /**

@@ -20,14 +20,17 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Logger\Processor;
 
 use FastForward\DevTools\Console\Logger\Processor\CommandOutputProcessor;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 
 #[CoversClass(CommandOutputProcessor::class)]
+#[UsesClass(GithubActionOutput::class)]
 final class CommandOutputProcessorTest extends TestCase
 {
     use ProphecyTrait;

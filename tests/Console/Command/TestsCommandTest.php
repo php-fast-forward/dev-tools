@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
@@ -54,8 +55,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 
+use function Safe\mkdir;
+use function Safe\rmdir;
 use function Safe\getcwd;
-use function Safe\putenv;
 
 #[UsesClass(DevToolsEnvironment::class)]
 #[UsesClass(RuntimeEnvironment::class)]
@@ -74,6 +76,12 @@ final class TestsCommandTest extends TestCase
 {
     use ProphecyTrait;
 
+    private const string AGENT_ENVIRONMENT_VARIABLE = TestsCommand::AGENT_ENVIRONMENT_VARIABLE;
+
+    private const string AGENT_ENVIRONMENT_VALUE = TestsCommand::AGENT_ENVIRONMENT_VALUE;
+
+    private const string ENV_MINIMUM_COVERAGE = TestsCommand::ENV_MINIMUM_COVERAGE;
+
     private ObjectProphecy $coverageSummaryLoader;
 
     private ObjectProphecy $composerJson;
@@ -83,6 +91,8 @@ final class TestsCommandTest extends TestCase
     private ObjectProphecy $fileLocator;
 
     private ObjectProphecy $processQueue;
+
+    private ObjectProphecy $environment;
 
     private ObjectProphecy $projectCapabilitiesResolver;
 
@@ -96,20 +106,18 @@ final class TestsCommandTest extends TestCase
 
     private TestsCommand $command;
 
-    private string|false $agentEnvironment;
-
     /**
      * @return void
      */
     protected function setUp(): void
     {
         ContainerFactory::reset();
-        $this->agentEnvironment = getenv('AI_AGENT');
         $this->coverageSummaryLoader = $this->prophesize(CoverageSummaryLoaderInterface::class);
         $this->composerJson = $this->prophesize(ComposerJsonInterface::class);
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
         $this->fileLocator = $this->prophesize(FileLocatorInterface::class);
         $this->processQueue = $this->prophesize(ProcessQueueInterface::class);
+        $this->environment = $this->prophesize(EnvironmentInterface::class);
         $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
         $this->runtimeEnvironment = $this->prophesize(RuntimeEnvironmentInterface::class);
         $this->logger = $this->prophesize(LoggerInterface::class);
@@ -125,6 +133,7 @@ final class TestsCommandTest extends TestCase
             new ProcessBuilder(),
             $this->processQueue->reveal(),
             $this->projectCapabilitiesResolver->reveal(),
+            $this->environment->reveal(),
         );
 
         $this->composerJson->getAutoload('psr-4')
@@ -140,10 +149,15 @@ final class TestsCommandTest extends TestCase
                 false,
                 true,
             ));
+
         $this->runtimeEnvironment->isAgentPresent()
             ->willReturn(false);
         $this->runtimeEnvironment->isComposerTestRun()
             ->willReturn(true);
+        $this->environment->get(self::AGENT_ENVIRONMENT_VARIABLE)
+            ->willReturn(null);
+        $this->environment->get(self::ENV_MINIMUM_COVERAGE)
+            ->willReturn(null);
         ContainerFactory::set(RuntimeEnvironmentInterface::class, $this->runtimeEnvironment->reveal());
         ContainerFactory::set(LoggerInterface::class, $this->logger->reveal());
         $this->fileLocator->locate(TestsCommand::CONFIG)->willReturn(getcwd() . '/' . TestsCommand::CONFIG);
@@ -178,14 +192,6 @@ final class TestsCommandTest extends TestCase
     protected function tearDown(): void
     {
         ContainerFactory::reset();
-
-        if (false === $this->agentEnvironment) {
-            putenv('AI_AGENT');
-
-            return;
-        }
-
-        putenv('AI_AGENT=' . $this->agentEnvironment);
     }
 
     /**
@@ -338,7 +344,8 @@ final class TestsCommandTest extends TestCase
     #[Test]
     public function executeWillPreserveAnInheritedAgentEnvironmentWhenForcingStructuredPhpUnitOutput(): void
     {
-        putenv('AI_AGENT=existing-agent');
+        $this->environment->get(self::AGENT_ENVIRONMENT_VARIABLE)
+            ->willReturn('existing-agent');
 
         $this->input->getOption('json')
             ->willReturn(true);
@@ -346,7 +353,10 @@ final class TestsCommandTest extends TestCase
             ->willReturn(false);
 
         $this->processQueue->add(
-            Argument::that(static fn(Process $process): bool => ! \array_key_exists('AI_AGENT', $process->getEnv())),
+            Argument::that(static fn(Process $process): bool => ! \array_key_exists(
+                self::AGENT_ENVIRONMENT_VARIABLE,
+                $process->getEnv(),
+            )),
             false,
             false,
             'Running PHPUnit Tests'
@@ -578,10 +588,106 @@ final class TestsCommandTest extends TestCase
         ))->shouldBeCalled();
         $this->logger->log(
             'warning',
-            'Skipping PHPUnit tests because no tests directory or PHP source files were detected.',
+            'Skipping PHPUnit tests because no Composer-autoloaded PHP source files were detected.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipWhenTestsDirectoryExistsButNoPhpSourceFilesAreDetected(): void
+    {
+        $testsDirectory = getcwd() . '/.dev-tools-empty-tests-' . uniqid('', true);
+        mkdir($testsDirectory);
+
+        try {
+            $this->input->getArgument('path')
+                ->willReturn($testsDirectory);
+            $this->projectCapabilitiesResolver->resolve(Argument::any())
+                ->willReturn(new ProjectCapabilities([], null, false, true, false, false));
+            $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+            $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+            $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
+                static fn(array $context): bool => $context['input'] instanceof InputInterface
+            ))->shouldBeCalled();
+            $this->logger->log(
+                'warning',
+                'Skipping PHPUnit tests because no Composer-autoloaded PHP source files were detected.',
+                Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                    && $context['output'] instanceof OutputInterface),
+            )->shouldBeCalled();
+
+            self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
+        } finally {
+            rmdir($testsDirectory);
+        }
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillUseMinimumCoverageFromEnvironmentWhenNotProvided(): void
+    {
+        $coverageReportPath = getcwd() . '/.dev-tools/cache/phpunit/coverage.php';
+
+        $this->environment->get(self::ENV_MINIMUM_COVERAGE)
+            ->willReturn('80');
+        $this->coverageSummaryLoader->load($coverageReportPath)
+            ->willReturn(new CoverageSummary(75, 100));
+        $this->processQueue->add(
+            Argument::type(Process::class),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->error(
+            'Minimum line coverage of 80.00% was not met. Current coverage: 75.00% (75/100 lines).',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface
+                && 75.0 === $context['line_coverage']
+                && 75 === $context['covered_lines']
+                && 100 === $context['total_lines']),
+        )->shouldBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillIgnoreBlankMinimumCoverageEnvironmentValue(): void
+    {
+        $this->environment->get(self::ENV_MINIMUM_COVERAGE)
+            ->willReturn('  ');
+        $this->processQueue->add(
+            Argument::type(Process::class),
+            false,
+            false,
+            'Running PHPUnit Tests'
+        )->shouldBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(TestsCommand::SUCCESS)->shouldBeCalled();
+        $this->logger->log('info', 'Running PHPUnit tests...', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+        ))
+            ->shouldBeCalled();
+        $this->logger->log('info', 'PHPUnit tests completed successfully.', Argument::that(
+            static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && $context['output'] instanceof OutputInterface,
+        ))->shouldBeCalled();
 
         self::assertSame(TestsCommand::SUCCESS, $this->invokeExecute());
     }
@@ -758,10 +864,10 @@ final class TestsCommandTest extends TestCase
 
         $processEnvironment = $process->getEnv();
 
-        if (\array_key_exists('AI_AGENT', $processEnvironment)) {
-            return 'fast-forward/dev-tools' === $processEnvironment['AI_AGENT'];
+        if (\array_key_exists(self::AGENT_ENVIRONMENT_VARIABLE, $processEnvironment)) {
+            return self::AGENT_ENVIRONMENT_VALUE === $processEnvironment[self::AGENT_ENVIRONMENT_VARIABLE];
         }
 
-        return false !== getenv('AI_AGENT');
+        return self::AGENT_ENVIRONMENT_VALUE === $this->environment->get(self::AGENT_ENVIRONMENT_VARIABLE);
     }
 }

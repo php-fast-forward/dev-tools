@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Relax workflow fallback Composer install so .dev-tools-actions bootstrap does not require composer.lock when provisioning DevTools runtime in shared GitHub Actions contexts (#342).
+- Skip coverage report generation in reports command when no test surface is detectable (no default tests directory and no testable PHP source), while still generating docs and metrics.
 
 ## [1.25.4] - 2026-05-11
 

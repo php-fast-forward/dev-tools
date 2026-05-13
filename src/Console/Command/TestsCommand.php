@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
@@ -60,9 +61,9 @@ final class TestsCommand extends Command
     use HasJsonOption;
     use LogsCommandResults;
 
-    private const string AGENT_ENVIRONMENT_VARIABLE = 'AI_AGENT';
+    public const string AGENT_ENVIRONMENT_VARIABLE = 'AI_AGENT';
 
-    private const string AGENT_ENVIRONMENT_VALUE = 'fast-forward/dev-tools';
+    public const string AGENT_ENVIRONMENT_VALUE = 'fast-forward/dev-tools';
 
     private const string PROCESS_LABEL = 'Running PHPUnit Tests';
 
@@ -70,6 +71,8 @@ final class TestsCommand extends Command
      * @var string identifies the local configuration file for PHPUnit processes
      */
     public const string CONFIG = 'phpunit.xml';
+
+    public const string ENV_MINIMUM_COVERAGE = 'FAST_FORWARD_MIN_COVERAGE';
 
     /**
      * @param CoverageSummaryLoaderInterface $coverageSummaryLoader the loader used for `coverage-php` summaries
@@ -80,6 +83,7 @@ final class TestsCommand extends Command
      * @param ProcessBuilderInterface $processBuilder the builder used to assemble the PHPUnit process
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
+     * @param EnvironmentInterface $environment the environment resolver for CLI-scoped flags
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
@@ -90,6 +94,7 @@ final class TestsCommand extends Command
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
+        private readonly EnvironmentInterface $environment,
     ) {
         parent::__construct();
     }
@@ -193,7 +198,7 @@ final class TestsCommand extends Command
 
         if (! $projectCapabilities->canRunTests()) {
             return $this->success(
-                'Skipping PHPUnit tests because no tests directory or PHP source files were detected.',
+                'Skipping PHPUnit tests because no Composer-autoloaded PHP source files were detected.',
                 $input,
                 [
                     'output' => $processOutput,
@@ -249,12 +254,12 @@ final class TestsCommand extends Command
         $result = $this->processQueue->run($processOutput);
         $processResultContext = $this->resolveProcessResultContext($processOutput, $result, $structuredOutput);
 
-        if (self::SUCCESS !== $result || null === $minimumCoverage || null === $coverageReportPath) {
-            if (self::SUCCESS === $result) {
-                return $this->success('PHPUnit tests completed successfully.', $input, $processResultContext);
-            }
-
+        if (self::SUCCESS !== $result) {
             return $this->failure('PHPUnit tests failed.', $input, $processResultContext);
+        }
+
+        if (null === $minimumCoverage || null === $coverageReportPath) {
+            return $this->success('PHPUnit tests completed successfully.', $input, $processResultContext);
         }
 
         [$validationResult, $message, $coverageContext] = $this->validateMinimumCoverage(
@@ -314,10 +319,9 @@ final class TestsCommand extends Command
     private function forceAgentReporter(Process $process): void
     {
         $env = $process->getEnv();
+        $parentAgentEnvironment = $this->environment->get(self::AGENT_ENVIRONMENT_VARIABLE);
 
-        if (\array_key_exists(self::AGENT_ENVIRONMENT_VARIABLE, $env) || false !== getenv(
-            self::AGENT_ENVIRONMENT_VARIABLE
-        )) {
+        if (\array_key_exists(self::AGENT_ENVIRONMENT_VARIABLE, $env) || null !== $parentAgentEnvironment) {
             return;
         }
 
@@ -515,8 +519,14 @@ final class TestsCommand extends Command
         $minimumCoverage = $input->getOption('min-coverage');
 
         if (null === $minimumCoverage) {
+            $minimumCoverage = $this->resolveMinimumCoverageFromEnvironment();
+        }
+
+        if (false === $minimumCoverage || '' === trim((string) $minimumCoverage)) {
             return null;
         }
+
+        $minimumCoverage = trim((string) $minimumCoverage);
 
         if (! is_numeric($minimumCoverage)) {
             throw new InvalidArgumentException('The --min-coverage option MUST be a numeric percentage.');
@@ -529,6 +539,16 @@ final class TestsCommand extends Command
         }
 
         return $minimumCoverage;
+    }
+
+    /**
+     * Resolves minimum-coverage value from injected environment abstraction.
+     *
+     * @return string|false|null the configured coverage threshold or a falsey fallback
+     */
+    private function resolveMinimumCoverageFromEnvironment(): ?string
+    {
+        return $this->environment->get(self::ENV_MINIMUM_COVERAGE);
     }
 
     /**

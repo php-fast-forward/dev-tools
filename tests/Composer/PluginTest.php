@@ -34,12 +34,6 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 
-use function Safe\tempnam;
-use function Safe\file_put_contents;
-use function Safe\json_encode;
-use function Safe\putenv;
-use function Safe\unlink;
-
 #[CoversClass(Plugin::class)]
 final class PluginTest extends TestCase
 {
@@ -65,13 +59,6 @@ final class PluginTest extends TestCase
     /**
      * @return void
      */
-    private string $tempComposerFile;
-
-    private string $originalComposerEnv;
-
-    /**
-     * @return void
-     */
     protected function setUp(): void
     {
         $this->plugin = new Plugin();
@@ -82,32 +69,6 @@ final class PluginTest extends TestCase
             ->willReturn($this->rootPackage->reveal());
         $this->rootPackage->getScripts()
             ->willReturn([]);
-
-        $this->originalComposerEnv = (string) getenv('COMPOSER');
-        $this->tempComposerFile = tempnam(sys_get_temp_dir(), 'composer_test');
-        // O nome do pacote precisa ser fast-forward/dev-tools para que o método installScripts execute a lógica
-        file_put_contents($this->tempComposerFile, json_encode([
-            'name' => 'fast-forward/dev-tools',
-            'scripts' => (object) [],
-        ]));
-
-        putenv('COMPOSER=' . $this->tempComposerFile);
-        $_ENV['COMPOSER'] = $this->tempComposerFile;
-        $_SERVER['COMPOSER'] = $this->tempComposerFile;
-    }
-
-    /**
-     * @return void
-     */
-    protected function tearDown(): void
-    {
-        if (file_exists($this->tempComposerFile)) {
-            unlink($this->tempComposerFile);
-        }
-
-        putenv('COMPOSER=' . $this->originalComposerEnv);
-        $_ENV['COMPOSER'] = $this->originalComposerEnv;
-        $_SERVER['COMPOSER'] = $this->originalComposerEnv;
     }
 
     /**

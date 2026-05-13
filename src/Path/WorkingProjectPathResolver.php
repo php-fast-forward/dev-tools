@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Path;
 
+use FastForward\DevTools\Environment\EnvironmentInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Path;
 
@@ -64,14 +65,17 @@ final class WorkingProjectPathResolver
      * Returns the project directories that static-analysis and coding-style tooling SHOULD skip.
      *
      * @param string $baseDir the optional repository base directory used to materialize absolute paths
+     * @param EnvironmentInterface|null $environment explicit environment reader used to resolve FAST_FORWARD_WORKSPACE_DIR
      *
      * @return list<string>
      */
-    public static function getToolingExcludedDirectories(string $baseDir = ''): array
-    {
+    public static function getToolingExcludedDirectories(
+        string $baseDir = '',
+        ?EnvironmentInterface $environment = null,
+    ): array {
         $directories = [];
 
-        foreach (self::getToolingExcludedDirectoryNames($baseDir) as $excludedDirectory) {
+        foreach (self::getToolingExcludedDirectoryNames($baseDir, $environment) as $excludedDirectory) {
             $directories[] = Path::join($baseDir, $excludedDirectory);
         }
 
@@ -82,13 +86,16 @@ final class WorkingProjectPathResolver
      * Returns PHP source files that tooling SHOULD inspect without traversing generated directories.
      *
      * @param string $baseDir the optional repository base directory used to materialize absolute paths
+     * @param EnvironmentInterface|null $environment explicit environment reader used to resolve FAST_FORWARD_WORKSPACE_DIR
      *
      * @return list<string>
      */
-    public static function getToolingSourcePaths(string $baseDir = ''): array
-    {
+    public static function getToolingSourcePaths(
+        string $baseDir = '',
+        ?EnvironmentInterface $environment = null,
+    ): array {
         $workingDirectory = '' === $baseDir ? getcwd() : $baseDir;
-        $excludedDirectories = self::getToolingExcludedDirectoryNames($workingDirectory);
+        $excludedDirectories = self::getToolingExcludedDirectoryNames($workingDirectory, $environment);
         $finder = Finder::create()
             ->files()
             ->name('*.php')
@@ -115,13 +122,19 @@ final class WorkingProjectPathResolver
      * Returns repository-relative directories ignored by tooling.
      *
      * @param string $baseDir the optional repository base directory used to relativize a custom workspace
+     * @param EnvironmentInterface|null $environment explicit environment reader used to resolve FAST_FORWARD_WORKSPACE_DIR
      *
      * @return list<string>
      */
-    private static function getToolingExcludedDirectoryNames(string $baseDir = ''): array
-    {
+    private static function getToolingExcludedDirectoryNames(
+        string $baseDir = '',
+        ?EnvironmentInterface $environment = null,
+    ): array {
         $directories = self::TOOLING_EXCLUDED_DIRECTORIES;
-        $workspaceRoot = ManagedWorkspace::getProjectRelativeWorkspaceRoot($baseDir);
+        $workspaceRoot = ManagedWorkspace::getProjectRelativeWorkspaceRoot(
+            baseDir: $baseDir,
+            environment: $environment
+        );
 
         if (null !== $workspaceRoot && ! \in_array($workspaceRoot, $directories, true)) {
             $directories[] = $workspaceRoot;

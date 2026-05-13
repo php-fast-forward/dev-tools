@@ -128,6 +128,6 @@ final readonly class ProjectCapabilities
      */
     public function canRunTests(): bool
     {
-        return $this->hasTestsPath || $this->hasPhpSourceFiles;
+        return $this->hasPhpSourceFiles;
     }
 }

@@ -26,6 +26,7 @@ use FastForward\DevTools\Console\Formatter\LogLevelOutputFormatter;
 use FastForward\DevTools\Console\Output\GithubActionOutput;
 use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
+use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
@@ -71,8 +72,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-use function Safe\putenv;
-
 #[CoversClass(DevTools::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -96,9 +95,12 @@ use function Safe\putenv;
 #[UsesClass(ComposerVersionChecker::class)]
 #[UsesClass(VersionCheckNotifier::class)]
 #[UsesClass(WorkingDirectorySwitcher::class)]
+#[UsesClass(Environment::class)]
 final class DevToolsTest extends TestCase
 {
     use ProphecyTrait;
+
+    private const string AUTO_UPDATE_ENVIRONMENT_VARIABLE = DevTools::ENV_AUTO_UPDATE;
 
     /**
      * @var ObjectProphecy<CommandLoaderInterface>
@@ -142,7 +144,15 @@ final class DevToolsTest extends TestCase
 
     private DevTools $devTools;
 
-    private string|false $originalWorkspaceDirectoryEnv;
+    /**
+     * @var array<string, mixed>
+     */
+    private array $originalServerEnv;
+
+    /**
+     * @var array<string, mixed>
+     */
+    private array $originalEnv;
 
     /**
      * @return void
@@ -167,7 +177,8 @@ final class DevToolsTest extends TestCase
             ->willReturn('1.2.3');
         $this->runtimeEnvironment->isAgentPresent()
             ->willReturn(false);
-        $this->originalWorkspaceDirectoryEnv = getenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
+        $this->originalServerEnv = $_SERVER;
+        $this->originalEnv = $_ENV;
         $this->devTools = $this->createDevTools();
     }
 
@@ -178,13 +189,8 @@ final class DevToolsTest extends TestCase
     protected function tearDown(): void
     {
         ContainerFactory::reset();
-        if (false === $this->originalWorkspaceDirectoryEnv) {
-            putenv(ManagedWorkspace::ENV_WORKSPACE_DIR);
-
-            return;
-        }
-
-        putenv(ManagedWorkspace::ENV_WORKSPACE_DIR . '=' . $this->originalWorkspaceDirectoryEnv);
+        $_SERVER = $this->originalServerEnv;
+        $_ENV = $this->originalEnv;
     }
 
     /**
@@ -257,7 +263,7 @@ final class DevToolsTest extends TestCase
 
         $output = new BufferedOutput();
 
-        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+        $this->environment->get(self::AUTO_UPDATE_ENVIRONMENT_VARIABLE, '')
             ->willReturn('');
         $this->workingDirectorySwitcher->switchTo(null)
             ->shouldBeCalledOnce();
@@ -283,7 +289,7 @@ final class DevToolsTest extends TestCase
 
         $output = new BufferedOutput();
 
-        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+        $this->environment->get(self::AUTO_UPDATE_ENVIRONMENT_VARIABLE, '')
             ->willReturn('');
         $this->workingDirectorySwitcher->switchTo(null)
             ->shouldBeCalledOnce();
@@ -309,7 +315,7 @@ final class DevToolsTest extends TestCase
 
         $this->runtimeEnvironment->isAgentPresent()
             ->willReturn(true);
-        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+        $this->environment->get(self::AUTO_UPDATE_ENVIRONMENT_VARIABLE, '')
             ->willReturn('');
         $this->workingDirectorySwitcher->switchTo(null)
             ->shouldBeCalledOnce();
@@ -361,7 +367,7 @@ final class DevToolsTest extends TestCase
 
         $output = new BufferedOutput();
 
-        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+        $this->environment->get(self::AUTO_UPDATE_ENVIRONMENT_VARIABLE, '')
             ->willReturn('');
         $this->workingDirectorySwitcher->switchTo(null)
             ->shouldBeCalledOnce();
@@ -413,7 +419,7 @@ final class DevToolsTest extends TestCase
 
         $output = new BufferedOutput();
 
-        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+        $this->environment->get(self::AUTO_UPDATE_ENVIRONMENT_VARIABLE, '')
             ->willReturn('');
         $this->workingDirectorySwitcher->switchTo(null)
             ->shouldBeCalledOnce();
@@ -457,7 +463,7 @@ final class DevToolsTest extends TestCase
 
         $output = new BufferedOutput();
 
-        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+        $this->environment->get(self::AUTO_UPDATE_ENVIRONMENT_VARIABLE, '')
             ->willReturn('');
         $this->workingDirectorySwitcher->switchTo(null)
             ->shouldBeCalledOnce();
@@ -564,7 +570,7 @@ final class DevToolsTest extends TestCase
         $output = $this->prophesize(OutputInterface::class);
         $input->hasParameterOption('--auto-update', true)
             ->willReturn(true);
-        $this->environment->get('FAST_FORWARD_AUTO_UPDATE', '')
+        $this->environment->get(self::AUTO_UPDATE_ENVIRONMENT_VARIABLE, '')
             ->willReturn('');
         $this->selfUpdateScopeResolver->isGlobalInstallation()
             ->willReturn(true);

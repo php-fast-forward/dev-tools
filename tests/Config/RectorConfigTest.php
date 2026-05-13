@@ -25,6 +25,7 @@ use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
+use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use ReflectionProperty;
@@ -40,6 +41,7 @@ use Rector\Config\RectorConfig as RectorConfigInterface;
 use function Safe\getcwd;
 
 #[CoversClass(RectorConfig::class)]
+#[UsesClass(Environment::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 final class RectorConfigTest extends TestCase
