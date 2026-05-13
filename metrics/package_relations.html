@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-05-12 01:51:51        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-05-13 18:35:40        , with PHPMetrics v2.9.1 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -307,6 +307,7 @@
         "relations": [
             "Symfony\\Component\\Console\\Command",
             "FastForward\\DevTools\\Process",
+            "FastForward\\DevTools\\Project",
             "FastForward\\DevTools\\Path",
             "Symfony\\Component\\Console\\Input",
             "Symfony\\Component\\Console\\Output",
@@ -320,7 +321,6 @@
             "FastForward\\DevTools\\Changelog\\Manager",
             "FastForward\\DevTools\\Changelog\\Checker",
             "FastForward\\DevTools\\Git",
-            "FastForward\\DevTools\\Project",
             "Symfony\\Component\\Filesystem",
             "Symfony\\Component\\Config",
             "FastForward\\DevTools\\Sync",
@@ -337,6 +337,7 @@
             "FastForward\\DevTools\\Funding",
             "FastForward\\DevTools\\PhpUnit\\Coverage",
             "FastForward\\DevTools\\PhpUnit\\Bootstrap",
+            "FastForward\\DevTools\\Environment",
             "FastForward\\DevTools\\GitHooks"
         ]
     },
@@ -361,12 +362,22 @@
         ]
     },
     {
+        "name": "FastForward\\DevTools\\Project",
+        "size": 3000,
+        "relations": [
+            "FastForward\\DevTools\\Composer\\Json",
+            "FastForward\\DevTools\\Filesystem",
+            "global"
+        ]
+    },
+    {
         "name": "FastForward\\DevTools\\Path",
         "size": 3000,
         "relations": [
             "Symfony\\Component\\Filesystem",
             "global",
-            "Symfony\\Component\\Finder"
+            "Symfony\\Component\\Finder",
+            "FastForward\\DevTools\\Environment"
         ]
     },
     {
@@ -458,14 +469,6 @@
             "Symfony\\Component\\Filesystem",
             "Symfony\\Component\\Process",
             "global"
-        ]
-    },
-    {
-        "name": "FastForward\\DevTools\\Project",
-        "size": 3000,
-        "relations": [
-            "FastForward\\DevTools\\Composer\\Json",
-            "FastForward\\DevTools\\Filesystem"
         ]
     },
     {
@@ -570,6 +573,13 @@
         ]
     },
     {
+        "name": "FastForward\\DevTools\\Environment",
+        "size": 3000,
+        "relations": [
+            "Ergebnis\\AgentDetector"
+        ]
+    },
+    {
         "name": "FastForward\\DevTools\\GitHooks",
         "size": 3000,
         "relations": [
@@ -596,13 +606,6 @@
             "FastForward\\DevTools\\Environment",
             "FastForward\\DevTools\\Console\\Logger\\Processor",
             "FastForward\\DevTools\\Console\\Output"
-        ]
-    },
-    {
-        "name": "FastForward\\DevTools\\Environment",
-        "size": 3000,
-        "relations": [
-            "Ergebnis\\AgentDetector"
         ]
     },
     {
@@ -741,6 +744,7 @@
             "Symplify\\EasyCodingStandard\\Configuration",
             "FastForward\\DevTools\\Path",
             "ShipMonk\\ComposerDependencyAnalyser\\Config",
+            "FastForward\\DevTools\\Environment",
             "Rector\\Php\\PhpVersionResolver",
             "Rector\\Configuration",
             "Rector\\Config",
@@ -1032,13 +1036,13 @@
             "Prophecy",
             "FastForward\\DevTools\\Console\\Command",
             "global",
+            "FastForward\\DevTools\\Project",
             "FastForward\\DevTools\\Sync",
             "FastForward\\DevTools\\Resource",
             "FastForward\\DevTools\\GrumPhp",
             "FastForward\\DevTools\\Process",
             "FastForward\\DevTools\\Funding",
             "Symfony\\Component\\Yaml",
-            "FastForward\\DevTools\\Project",
             "FastForward\\DevTools\\Composer\\Json\\Schema",
             "Symfony\\Component\\Finder",
             "FastForward\\DevTools\\GitHooks",
@@ -1120,10 +1124,9 @@
         "name": "FastForward\\DevTools\\Tests\\Console\\Input",
         "size": 3000,
         "relations": [
-            "FastForward\\DevTools\\Environment",
-            "Symfony\\Component\\Console\\Input",
             "PHPUnit\\Framework",
-            "FastForward\\DevTools\\Container"
+            "FastForward\\DevTools\\Environment",
+            "Symfony\\Component\\Console\\Input"
         ]
     },
     {
@@ -1225,7 +1228,8 @@
             "FastForward\\DevTools\\Path",
             "Rector\\Configuration\\Parameter",
             "global",
-            "ShipMonk\\ComposerDependencyAnalyser\\Config"
+            "ShipMonk\\ComposerDependencyAnalyser\\Config",
+            "FastForward\\DevTools\\Environment"
         ]
     },
     {
@@ -1379,7 +1383,8 @@
         "size": 3000,
         "relations": [
             "PHPUnit\\Framework",
-            "FastForward\\DevTools\\Path"
+            "FastForward\\DevTools\\Path",
+            "FastForward\\DevTools\\Environment"
         ]
     },
     {

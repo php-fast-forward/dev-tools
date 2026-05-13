@@ -247,25 +247,6 @@
             <li class="success">Configure does nothing when color is not requested</li>
             <li class="success">Configure honors parent force color for plain output</li>
         </ul>
-        <h2>Command (FastForward\DevTools\Tests\Console\Command\Command)</h2>
-        <ul>
-            <li class="success">Execute will run php unit process with config file</li>
-            <li class="success">Execute with no cache will disable php unit result cache</li>
-            <li class="success">Execute will disable php unit progress when json is requested</li>
-            <li class="success">Execute will capture structured php unit summary when agent environment is detected</li>
-            <li class="success">Execute will preserve an inherited agent environment when forcing structured php unit output</li>
-            <li class="success">Execute will keep pretty json inside the standard command log output</li>
-            <li class="success">Execute will capture structured php unit summary after coverage prelude when agent environment is detected</li>
-            <li class="success">Execute will keep the exit code derived failure result authoritative</li>
-            <li class="success">Execute will keep raw php unit output when structured summary cannot be decoded</li>
-            <li class="success">Execute will enable php unit progress when requested</li>
-            <li class="success">Execute with invalid min coverage will return failure</li>
-            <li class="success">Execute will skip when no tests directory or php source exists</li>
-            <li class="success">Execute will fail when custom tests path does not exist</li>
-            <li class="success">Execute with coverage below minimum will return failure</li>
-            <li class="success">Execute will emit structured coverage failure payload when minimum coverage is not met</li>
-            <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
-        </ul>
         <h2>Command Attribute Compatibility (FastForward\DevTools\Tests\Console\Command\CommandAttributeCompatibility)</h2>
         <ul>
             <li class="success">As command attributes will not use the help named parameter</li>
@@ -680,7 +661,7 @@
         <h2>Has Json Option (FastForward\DevTools\Tests\Console\Input\HasJsonOption)</h2>
         <ul>
             <li class="success">Is json output will use runtime environment when available</li>
-            <li class="success">Is json output will ignore fallback agent detection during php unit runs</li>
+            <li class="success">Is json output will ignore agent output during composer runs</li>
         </ul>
         <h2>Hook Content Renderer (FastForward\DevTools\Tests\GitHooks\HookContentRenderer)</h2>
         <ul>
@@ -856,6 +837,7 @@
         <ul>
             <li class="success">Resolve will detect guide only repository capabilities</li>
             <li class="success">Resolve will ignore tooling php files when detecting testable php source</li>
+            <li class="success">Resolve will not detect php source from empty autoload directories</li>
             <li class="success">Resolve will detect php source from file based classmap entries</li>
             <li class="success">Resolve will detect php package capabilities</li>
         </ul>
@@ -911,6 +893,7 @@
             <li class="success">Execute will forward progress to nested commands when requested</li>
             <li class="success">Execute with cache will forward cache only to docs and tests</li>
             <li class="success">Execute with no cache will forward no cache only to docs and tests</li>
+            <li class="success">Execute will skip coverage report when no tests available</li>
         </ul>
         <h2>Reports Workflow (FastForward\DevTools\Tests\GitHubActions\ReportsWorkflow)</h2>
         <ul>
@@ -1004,6 +987,28 @@
         <h2>System Clock (FastForward\DevTools\Tests\Psr\Clock\SystemClock)</h2>
         <ul>
             <li class="success">Now will return current date time immutable</li>
+        </ul>
+        <h2>Tests Command (FastForward\DevTools\Tests\Console\Command\TestsCommand)</h2>
+        <ul>
+            <li class="success">Execute will run php unit process with config file</li>
+            <li class="success">Execute with no cache will disable php unit result cache</li>
+            <li class="success">Execute will disable php unit progress when json is requested</li>
+            <li class="success">Execute will capture structured php unit summary when agent environment is detected</li>
+            <li class="success">Execute will preserve an inherited agent environment when forcing structured php unit output</li>
+            <li class="success">Execute will keep pretty json inside the standard command log output</li>
+            <li class="success">Execute will capture structured php unit summary after coverage prelude when agent environment is detected</li>
+            <li class="success">Execute will keep the exit code derived failure result authoritative</li>
+            <li class="success">Execute will keep raw php unit output when structured summary cannot be decoded</li>
+            <li class="success">Execute will enable php unit progress when requested</li>
+            <li class="success">Execute with invalid min coverage will return failure</li>
+            <li class="success">Execute will skip when no tests directory or php source exists</li>
+            <li class="success">Execute will skip when tests directory exists but no php source files are detected</li>
+            <li class="success">Execute will use minimum coverage from environment when not provided</li>
+            <li class="success">Execute will ignore blank minimum coverage environment value</li>
+            <li class="success">Execute will fail when custom tests path does not exist</li>
+            <li class="success">Execute with coverage below minimum will return failure</li>
+            <li class="success">Execute will emit structured coverage failure payload when minimum coverage is not met</li>
+            <li class="success">Execute will return failure when coverage summary cannot be loaded</li>
         </ul>
         <h2>Unified Differ (FastForward\DevTools\Tests\Resource\UnifiedDiffer)</h2>
         <ul>

@@ -2316,6 +2316,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-ReportsCommand.html#property_processQueue"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ReportsCommand\u003A\u003A\u0024projectCapabilitiesResolver",
+            "name": "projectCapabilitiesResolver",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-ReportsCommand.html#property_projectCapabilitiesResolver"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\SelfUpdateCommand",
             "name": "SelfUpdateCommand",
             "summary": "Updates\u0020the\u0020installed\u0020DevTools\u0020package\u0020through\u0020Composer.",
@@ -2526,6 +2531,11 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolveMinimumCoverage"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AresolveMinimumCoverageFromEnvironment\u0028\u0029",
+            "name": "resolveMinimumCoverageFromEnvironment",
+            "summary": "Resolves\u0020minimum\u002Dcoverage\u0020value\u0020from\u0020injected\u0020environment\u0020abstraction.",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#method_resolveMinimumCoverageFromEnvironment"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AconfigureCoverageArguments\u0028\u0029",
             "name": "configureCoverageArguments",
             "summary": "",
@@ -2555,6 +2565,11 @@ Search.appendIndex(
             "name": "CONFIG",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#constant_CONFIG"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003AENV_MINIMUM_COVERAGE",
+            "name": "ENV_MINIMUM_COVERAGE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#constant_ENV_MINIMUM_COVERAGE"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024coverageSummaryLoader",
             "name": "coverageSummaryLoader",
@@ -2595,6 +2610,11 @@ Search.appendIndex(
             "name": "projectCapabilitiesResolver",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_projectCapabilitiesResolver"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\TestsCommand\u003A\u003A\u0024environment",
+            "name": "environment",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-Command-TestsCommand.html#property_environment"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\Traits\\HasCommandLogger",
             "name": "HasCommandLogger",
@@ -2840,6 +2860,11 @@ Search.appendIndex(
             "name": "isTruthyAutoUpdateMode",
             "summary": "Interprets\u0020environment\u0020values\u0020that\u0020enable\u0020auto\u002Dupdate.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_isTruthyAutoUpdateMode"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AENV_AUTO_UPDATE",
+            "name": "ENV_AUTO_UPDATE",
+            "summary": "",
+            "url": "classes/FastForward-DevTools-Console-DevTools.html#constant_ENV_AUTO_UPDATE"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ALOGO",
             "name": "LOGO",
@@ -5240,6 +5265,11 @@ Search.appendIndex(
             "name": "resolveHasPhpSourceFiles",
             "summary": "Resolves\u0020whether\u0020Composer\u0020autoload\u0020metadata\u0020exposes\u0020testable\u0020PHP\u0020source\u0020for\u0020the\u0020repository.",
             "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_resolveHasPhpSourceFiles"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AhasPhpSourceFileInDirectory\u0028\u0029",
+            "name": "hasPhpSourceFileInDirectory",
+            "summary": "Detects\u0020whether\u0020a\u0020Composer\u0020autoload\u0020path\u0020points\u0020to\u0020a\u0020PHP\u0020source\u0020file\u0020or\u0020contains\u0020one\u0020recursively.",
+            "url": "classes/FastForward-DevTools-Project-ProjectCapabilitiesResolver.html#method_hasPhpSourceFileInDirectory"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Project\\ProjectCapabilitiesResolver\u003A\u003AnormalizeAutoloadPaths\u0028\u0029",
             "name": "normalizeAutoloadPaths",
