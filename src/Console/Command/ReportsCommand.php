@@ -23,6 +23,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -52,10 +53,12 @@ final class ReportsCommand extends Command
      *
      * @param ProcessBuilderInterface $processBuilder the builder instance used to construct execution processes
      * @param ProcessQueueInterface $processQueue the execution queue mechanism for running sub-processes
+     * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the resolver for project capability detection
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
     ) {
         parent::__construct();
     }
@@ -105,8 +108,8 @@ final class ReportsCommand extends Command
     /**
      * Executes the generation logic for diverse reports.
      *
-     * The method MUST run the underlying `docs` and `tests` commands. It SHALL process
-     * and generate the frontpage output file successfully.
+     * The method MUST run the underlying `docs` command and, when applicable,
+     * the `tests` command for coverage generation.
      *
      * @param InputInterface $input the structured inputs holding specific arguments
      * @param OutputInterface $output the designated output interface
@@ -186,7 +189,17 @@ final class ReportsCommand extends Command
             $coverageBuilder = $coverageBuilder->withArgument('--pretty-json');
         }
 
-        $coverage = $coverageBuilder->build([DevToolsPathResolver::getBinaryPath(), 'tests']);
+        $projectCapabilities = $this->projectCapabilitiesResolver->resolve();
+        if ($projectCapabilities->canRunTests()) {
+            $coverage = $coverageBuilder->build([DevToolsPathResolver::getBinaryPath(), 'tests']);
+            $this->processQueue->add(process: $coverage, label: 'Generating Coverage Report');
+        } else {
+            $this->log(
+                'Skipping coverage report because no tests directory or PHP source files were detected.',
+                $input,
+                logLevel: 'warning',
+            );
+        }
 
         if ($progress) {
             $metricsBuilder = $metricsBuilder->withArgument('--progress');
@@ -203,7 +216,6 @@ final class ReportsCommand extends Command
         $metrics = $metricsBuilder->build([DevToolsPathResolver::getBinaryPath(), 'metrics']);
 
         $this->processQueue->add(process: $docs, detached: true, label: 'Generating API Docs Report');
-        $this->processQueue->add(process: $coverage, label: 'Generating Coverage Report');
         $this->processQueue->add(process: $metrics, label: 'Generating Metrics Report');
 
         $result = $this->processQueue->run($processOutput);

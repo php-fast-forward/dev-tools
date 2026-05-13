@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Path;
 
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -37,6 +38,7 @@ use function Safe\realpath;
 use function uniqid;
 
 #[CoversClass(WorkingProjectPathResolver::class)]
+#[UsesClass(GithubActionOutput::class)]
 #[UsesClass(ManagedWorkspace::class)]
 final class WorkingProjectPathResolverTest extends TestCase
 {

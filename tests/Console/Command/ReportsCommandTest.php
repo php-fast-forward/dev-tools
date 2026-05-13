@@ -30,6 +30,8 @@ use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
+use FastForward\DevTools\Project\ProjectCapabilities;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -50,6 +52,8 @@ use Symfony\Component\Process\Process;
 #[UsesClass(DevToolsServiceProvider::class)]
 #[UsesClass(DevToolsEnvironment::class)]
 #[UsesClass(RuntimeEnvironment::class)]
+#[UsesClass(ProjectCapabilities::class)]
+#[UsesClass(ProjectCapabilitiesResolverInterface::class)]
 #[CoversClass(ReportsCommand::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -71,6 +75,8 @@ final class ReportsCommandTest extends TestCase
 
     private ObjectProphecy $process;
 
+    private ObjectProphecy $projectCapabilitiesResolver;
+
     private ReportsCommand $command;
 
     /**
@@ -85,6 +91,7 @@ final class ReportsCommandTest extends TestCase
         $this->input = $this->prophesize(InputInterface::class);
         $this->output = $this->prophesize(OutputInterface::class);
         $this->process = $this->prophesize(Process::class);
+        $this->projectCapabilitiesResolver = $this->prophesize(ProjectCapabilitiesResolverInterface::class);
 
         $this->input->getOption('target')
             ->willReturn(ManagedWorkspace::getOutputDirectory());
@@ -117,8 +124,14 @@ final class ReportsCommandTest extends TestCase
             $this->processBuilder->reveal()
         );
         $this->processBuilder->build(Argument::any())->willReturn($this->process->reveal());
+        $this->projectCapabilitiesResolver->resolve()
+            ->willReturn($this->createProjectCapabilities(canRunTests: true));
 
-        $this->command = new ReportsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
+        $this->command = new ReportsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->projectCapabilitiesResolver->reveal(),
+        );
     }
 
     /**
@@ -238,11 +251,66 @@ final class ReportsCommandTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillSkipCoverageReportWhenNoTestsAvailable(): void
+    {
+        $this->projectCapabilitiesResolver->resolve()
+            ->willReturn($this->createProjectCapabilities(canRunTests: false))
+            ->shouldBeCalledTimes(1);
+
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
+            ->shouldBeCalledTimes(2);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(ReportsCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+
+        $this->logger->log(
+            'info',
+            'Generating frontpage for Fast Forward documentation...',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+        )->shouldBeCalledOnce();
+        $this->logger->log(
+            'warning',
+            'Skipping coverage report because no tests directory or PHP source files were detected.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+        )->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'Documentation reports generated successfully.',
+            Argument::that(
+                static fn(array $context): bool => $context['input'] instanceof InputInterface
+                    && $context['output'] instanceof OutputInterface,
+            ),
+        )->shouldBeCalledOnce();
+
+        self::assertSame(ReportsCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
      * @return int
      */
     private function executeCommand(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))
             ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+    }
+
+    /**
+     * @param bool $canRunTests
+     *
+     * @return ProjectCapabilities
+     */
+    private function createProjectCapabilities(bool $canRunTests): ProjectCapabilities
+    {
+        return new ProjectCapabilities(
+            apiDirectories: [],
+            defaultPackageName: null,
+            hasGuideDirectory: false,
+            hasTestsPath: $canRunTests,
+            hasWikiTarget: false,
+            hasPhpSourceFiles: $canRunTests,
+        );
     }
 }
