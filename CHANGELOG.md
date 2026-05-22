@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.25.6] - 2026-05-22
+
 ### Fixed
 
 - Sync workflow metadata and managed-asset references requested during agents workflow validation review, including predictable action dispatch condition and label-sync permission updates, plus managed submodule/wiki pointer alignment (#347).
@@ -460,7 +462,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.5...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.6...HEAD
+[1.25.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.5...v1.25.6
 [1.25.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.4...v1.25.5
 [1.25.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.3...v1.25.4
 [1.25.3]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.2...v1.25.3
