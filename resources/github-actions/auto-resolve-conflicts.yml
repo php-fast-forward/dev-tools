@@ -2,7 +2,8 @@ name: "Fast Forward Predictable Conflict Resolution"
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
     types:
       - opened

@@ -13,3 +13,5 @@
 /README.md             export-ignore
 /SECURITY.md           export-ignore
 /SUPPORT.md            export-ignore
+
+.github/workflows/*.lock.yml linguist-generated=true merge=ours

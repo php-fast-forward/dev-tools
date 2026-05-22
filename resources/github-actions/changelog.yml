@@ -36,6 +36,7 @@ permissions:
 
 jobs:
   changelog:
+    if: ${{ github.event_name != 'pull_request_target' || github.event.pull_request.merged == true }}
     uses: php-fast-forward/dev-tools/.github/workflows/changelog.yml@main
     with:
       changelog-file: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
