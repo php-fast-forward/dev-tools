@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Sync workflow metadata and managed-asset references requested during agents workflow validation review, including predictable action dispatch condition and label-sync permission updates, plus managed submodule/wiki pointer alignment (#347).
+
 ## [1.25.5] - 2026-05-13
 
 ### Fixed
