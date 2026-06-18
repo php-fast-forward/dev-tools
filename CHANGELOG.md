@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.2 to 3.0.3 (#355)
+
 ## [1.25.6] - 2026-05-22
 
 ### Fixed
