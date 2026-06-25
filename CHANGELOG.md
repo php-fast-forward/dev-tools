@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Composer(deps): Update ergebnis/phpunit-agent-reporter requirement from ^0.3 to ^1.0 (#356)
+
 ## [1.25.6] - 2026-05-22
 
 ### Fixed
