@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.2 to 3.0.3 (#355)
 - Composer(deps): Update ergebnis/phpunit-agent-reporter requirement from ^0.3 to ^1.0 (#356)
 
 ## [1.25.6] - 2026-05-22
