@@ -27,9 +27,9 @@ jobs:
     outputs:
       project_number: ${{ steps.resolve.outputs.project-number }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -55,9 +55,9 @@ jobs:
     if: github.event_name == 'issues' && needs.resolve-project.outputs.project_number != ''
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -76,9 +76,9 @@ jobs:
     if: github.event_name == 'pull_request_target' && needs.resolve-project.outputs.project_number != ''
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -96,9 +96,9 @@ jobs:
       linked_issue_status: ${{ steps.compute.outputs.linked-issue-status }}
       pull_request_status: ${{ steps.compute.outputs.pull-request-status }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -128,9 +128,9 @@ jobs:
     if: github.event_name == 'pull_request_review' && needs.resolve-project.outputs.project_number != ''
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}

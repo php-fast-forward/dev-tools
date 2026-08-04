@@ -24,14 +24,14 @@ jobs:
 
     steps:
       - name: Checkout main branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ github.token }}
           ref: main
           submodules: recursive
           fetch-depth: 0
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -105,14 +105,14 @@ jobs:
 
     steps:
       - name: Checkout main branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ github.token }}
           ref: main
           submodules: recursive
           fetch-depth: 0
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -158,14 +158,14 @@ jobs:
 
     steps:
       - name: Checkout main branch
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           token: ${{ github.token }}
           ref: main
           submodules: recursive
           fetch-depth: 0
       - name: Checkout dev-tools workflow action source
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: php-fast-forward/dev-tools
           ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}

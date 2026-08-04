@@ -61,9 +61,9 @@ jobs:
             test-matrix: ${{ steps.resolve.outputs.test-matrix }}
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -85,9 +85,9 @@ jobs:
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -150,9 +150,9 @@ jobs:
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -179,9 +179,9 @@ jobs:
             - dependency-health
         runs-on: ubuntu-latest
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
