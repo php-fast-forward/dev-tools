@@ -184,14 +184,6 @@
         <ul>
             <li class="success">Prepare release pull request will keep composer plugins enabled for wiki preview refresh</li>
         </ul>
-        <h2>Class Reflection (FastForward\DevTools\Tests\Reflection\ClassReflection)</h2>
-        <ul>
-            <li class="success">Is instantiable subclass of will return true for matching class</li>
-            <li class="success">Is instantiable subclass of will return false for non matching class</li>
-            <li class="success">Get attribute arguments will return arguments for matching attribute</li>
-            <li class="success">Get attribute arguments will return null when attribute does not exist</li>
-            <li class="success">Get attribute arguments will normalize positional arguments</li>
-        </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
             <li class="success">Classify with trailing slash returns directory</li>
@@ -209,6 +201,14 @@
             <li class="success">Is directory with file pattern returns false</li>
             <li class="success">Is file with file pattern returns true</li>
             <li class="success">Is file with directory pattern returns false</li>
+        </ul>
+        <h2>Class Reflection (FastForward\DevTools\Tests\Reflection\ClassReflection)</h2>
+        <ul>
+            <li class="success">Is instantiable subclass of will return true for matching class</li>
+            <li class="success">Is instantiable subclass of will return false for non matching class</li>
+            <li class="success">Get attribute arguments will return arguments for matching attribute</li>
+            <li class="success">Get attribute arguments will return null when attribute does not exist</li>
+            <li class="success">Get attribute arguments will normalize positional arguments</li>
         </ul>
         <h2>Code Owners Command (FastForward\DevTools\Tests\Console\Command\CodeOwnersCommand)</h2>
         <ul>
@@ -397,8 +397,6 @@
         </ul>
         <h2>Dev Tools (FastForward\DevTools\Tests\Console\DevTools)</h2>
         <ul>
-            <li class="success">Do run will not render logo when raw output command is requested with data set #0</li>
-            <li class="success">Do run will not render logo when raw output command is requested with data set #1</li>
             <li class="success">Get default commands will return framework defaults only</li>
             <li class="success">Constructor will set application name and expose loader commands</li>
             <li class="success">Constructor will register global runtime options</li>
@@ -407,6 +405,8 @@
             <li class="success">Do run will not render logo when running inside known agent environment</li>
             <li class="success">Do run will not render logo when json option is provided</li>
             <li class="success">Do run will not render logo when pretty json option is provided</li>
+            <li class="success">Do run will not render logo when raw output command is requested with data set #0</li>
+            <li class="success">Do run will not render logo when raw output command is requested with data set #1</li>
             <li class="success">All will return loader commands with preserved keys</li>
             <li class="success">Container factory will return a shared dev tools instance</li>
             <li class="success">Is self update command will use self update command attribute names and aliases</li>
@@ -439,6 +439,10 @@
         </ul>
         <h2>Dev Tools Path Resolver (FastForward\DevTools\Tests\Path\DevToolsPathResolver)</h2>
         <ul>
+            <li class="success">It will expose canonical package paths</li>
+            <li class="success">It will reject absolute package paths</li>
+            <li class="success">It will detect whether dev tools runs from vendor or repository checkout</li>
+            <li class="success">It will resolve runtime autoload and vendor paths for repository and dependency installs</li>
             <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #0</li>
             <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #1</li>
             <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #2</li>
@@ -447,10 +451,6 @@
             <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #5</li>
             <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #6</li>
             <li class="success">It will resolve runtime tool binary paths for repository and dependency installs with data set #7</li>
-            <li class="success">It will expose canonical package paths</li>
-            <li class="success">It will reject absolute package paths</li>
-            <li class="success">It will detect whether dev tools runs from vendor or repository checkout</li>
-            <li class="success">It will resolve runtime autoload and vendor paths for repository and dependency installs</li>
             <li class="success">It will prefer project tool binaries when they exist</li>
             <li class="success">It will fallback to runtime tool binaries when the project does not provide them</li>
             <li class="success">It will prefer project vendor paths when they exist</li>
@@ -465,10 +465,10 @@
         </ul>
         <h2>Docs Command (FastForward\DevTools\Tests\Console\Command\DocsCommand)</h2>
         <ul>
-            <li class="success">Execute will treat equivalent default guide sources as default with data set #0</li>
-            <li class="success">Execute will treat equivalent default guide sources as default with data set #1</li>
             <li class="success">Execute will skip when guide and api sources are missing</li>
             <li class="success">Execute will fail when custom guide source does not exist</li>
+            <li class="success">Execute will treat equivalent default guide sources as default with data set #0</li>
+            <li class="success">Execute will treat equivalent default guide sources as default with data set #1</li>
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will suppress progress log when json is requested</li>
             <li class="success">Execute with no cache will skip php documentor cache folder</li>
@@ -476,7 +476,7 @@
         </ul>
         <h2>ECSConfig (FastForward\DevTools\Tests\Config\ECSConfig)</h2>
         <ul>
-            <li class="success">Configure will return e c s config builder</li>
+            <li class="defect">Configure will return e c s config builder</li>
             <li class="success">It will expose reusable default skipped rules</li>
             <li class="success">Apply default paths and skips will keep working with a builder</li>
         </ul>
@@ -1060,12 +1060,12 @@
         </ul>
         <h2>Wiki Command (FastForward\DevTools\Tests\Console\Command\WikiCommand)</h2>
         <ul>
-            <li class="success">Execute will treat equivalent default wiki targets as default with data set #0</li>
-            <li class="success">Execute will treat equivalent default wiki targets as default with data set #1</li>
             <li class="success">Execute will return success when process queue succeeds</li>
             <li class="success">Execute will suppress progress log when json is requested</li>
             <li class="success">Execute with no cache will skip php documentor cache folder</li>
             <li class="success">Execute will skip when wiki target does not exist</li>
+            <li class="success">Execute will treat equivalent default wiki targets as default with data set #0</li>
+            <li class="success">Execute will treat equivalent default wiki targets as default with data set #1</li>
             <li class="success">Execute will generate when custom wiki target does not exist</li>
             <li class="success">Execute will skip when no api directories are detected</li>
             <li class="success">Execute with init will skip existing wiki submodule</li>
