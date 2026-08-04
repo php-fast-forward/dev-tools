@@ -71,9 +71,9 @@ jobs:
             php-version: ${{ steps.resolve.outputs.php-version }}
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -99,11 +99,11 @@ jobs:
             PULL_REQUEST_TITLE: ${{ github.event.pull_request.title }}
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
                   fetch-depth: 0
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -186,13 +186,13 @@ jobs:
             CHANGELOG_ROOT_VERSION: ${{ format('dev-{0}', github.event.repository.default_branch) }}
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
                   token: ${{ github.token }}
                   ref: ${{ github.event.repository.default_branch }}
                   fetch-depth: 0
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -249,7 +249,7 @@ jobs:
 
             - name: Checkout release branch
               if: ${{ steps.create_pr.outputs.pull-request-number != '' }}
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   token: ${{ github.token }}
                   ref: ${{ env.RELEASE_BRANCH_PREFIX }}${{ steps.version.outputs.value }}
@@ -258,7 +258,7 @@ jobs:
 
             - name: Checkout dev-tools workflow action source
               if: ${{ steps.create_pr.outputs.pull-request-number != '' }}
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -300,9 +300,9 @@ jobs:
                   RELEASE_BRANCH: ${{ env.RELEASE_BRANCH_PREFIX }}${{ steps.version.outputs.value }}
               run: gh workflow run tests.yml --ref "${RELEASE_BRANCH}" -f publish-required-statuses=true
 
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -341,13 +341,13 @@ jobs:
             CHANGELOG_ROOT_VERSION: ${{ format('dev-{0}', github.event.repository.default_branch) }}
 
         steps:
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
               with:
                   token: ${{ github.token }}
                   ref: ${{ github.event.pull_request.base.ref }}
                   fetch-depth: 0
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
@@ -380,9 +380,9 @@ jobs:
                   version: ${{ steps.version.outputs.value }}
                   target: ${{ github.event.pull_request.merge_commit_sha || github.sha }}
 
-            - uses: actions/checkout@v6
+            - uses: actions/checkout@v7
             - name: Checkout dev-tools workflow action source
-              uses: actions/checkout@v6
+              uses: actions/checkout@v7
               with:
                   repository: php-fast-forward/dev-tools
                   ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
