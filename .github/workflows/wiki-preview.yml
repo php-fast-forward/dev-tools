@@ -92,7 +92,7 @@ jobs:
       - name: Commit parent repo submodule pointer
         if: steps.detect_wiki.outputs.exists == 'true' && steps.refresh_preview.outputs.pointer-changed == 'true'
         id: parent_commit
-        uses: EndBug/add-and-commit@v10
+        uses: EndBug/add-and-commit@v11
         with:
           add: .github/wiki
           message: "Update wiki submodule pointer for PR #${{ github.event.pull_request.number }}"
