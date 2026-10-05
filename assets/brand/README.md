@@ -1,22 +1,22 @@
-# Dash artwork
+# DevTools Dash banner
 
-`dash.png` is a byte-identical copy of the approved mature developer Dash reference.
+The contextual illustration lives at `docs/_static/mascot-banner.png` and is
+shared by the repository README and Sphinx documentation homepage. Dash works
+at a multi-monitor bench coordinating tests, refactoring, and documentation.
 
-- Source repository: [php-fast-forward/.github](https://github.com/php-fast-forward/.github).
-- Source commit: `e1d43e2af51bcb7aa0b48613830a18d5fa5d4536`.
-- Master ID: `dash-developer-welcome`.
-- Master path: `assets/mascot/dash-developer-welcome.png`.
-- SHA-256: `38b2c5bb87c94326bcab6463f74fc785414d8539e9175e088b5a5c797a466e09`.
+- Generated on: 2026-10-05.
+- Asset SHA-256: `b8b569a5cfd84474f3d2d9a6d411bdf0aa00a6188c2e5c0734b1f9ce173c13ec`.
+- Format: PNG, 1536 × 1024 pixels.
+- Identity source: [php-fast-forward/.github](https://github.com/php-fast-forward/.github),
+  commit `654e4a463533f1d8b8223369b3b0bbc1a4a0badf`.
+- Identity guidance: `DESIGN.md`, `STYLE.md`, `SOUL.md`, and `skills/dash-art/SKILL.md`.
+- Generation receipt: [prompt, reference hashes, and authorization](../../docs/_static/mascot-banner.receipt.json).
 
-On 2026-10-05, the maintainer explicitly requested copying and displaying Dash
-in the README of all organization repositories with published code and opening
-public pull requests. This authorization covers the checked-in image and
-public README display for this rollout. It does not establish a third-party
-or artwork-source license, or authorize general reuse.
+The maintainer explicitly requested contextual Dash images in the public
+READMEs of organization repositories and authorized public pull requests for
+this rollout. This authorization covers the checked-in banner and public
+README display. It does not establish a third-party or artwork-source
+license, or authorize general reuse; the PHP package's MIT license does not
+establish the illustration's license.
 
-Follow the source repository's `DESIGN.md`, `STYLE.md`, `SOUL.md`, and
-`skills/dash-art/SKILL.md` when preparing new artwork. Preserve the canonical
-master; changes belong in the source identity kit before adoption here.
-
-Artwork licensing is tracked in the source asset catalog. The PHP package's
-MIT license does not establish the illustration's license.
+Both `docs/` and `assets/brand/` are excluded from package archives.

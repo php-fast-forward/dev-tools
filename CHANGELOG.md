@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Align the public README with the approved developer Dash, document the maintainer-authorized artwork rollout, and exclude README-only brand assets from package archives (#360).
+- Refresh the README and documentation with contextual Dash artwork for the DevTools quality pipeline, document the authorized rollout, and keep brand assets out of package archives (#360).
 - GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.2 to 3.0.3 (#355)
 - Composer(deps): Update ergebnis/phpunit-agent-reporter requirement from ^0.3 to ^1.0 (#356)
 - GitHub Actions(deps): Bump actions/checkout from 6 to 7 (#354)
