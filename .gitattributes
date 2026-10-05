@@ -2,6 +2,7 @@
 /.github/              export-ignore
 /.vscode/              export-ignore
 /docs/                 export-ignore
+/assets/brand/         export-ignore
 /tests/                export-ignore
 /.gitattributes        export-ignore
 /.gitmodules           export-ignore
