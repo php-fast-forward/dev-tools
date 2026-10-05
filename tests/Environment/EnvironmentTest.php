@@ -23,7 +23,6 @@ use FastForward\DevTools\Environment\Environment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-
 use function Safe\putenv;
 
 #[CoversClass(Environment::class)]

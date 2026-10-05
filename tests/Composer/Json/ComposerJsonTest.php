@@ -32,7 +32,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use UnderflowException;
-
 use function Safe\file_put_contents;
 use function Safe\json_encode;
 use function Safe\tempnam;

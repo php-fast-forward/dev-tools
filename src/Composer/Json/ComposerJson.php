@@ -29,7 +29,6 @@ use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use UnderflowException;
-
 use function Safe\file_get_contents;
 use function Safe\json_decode;
 

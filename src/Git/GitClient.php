@@ -24,7 +24,6 @@ use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use RuntimeException;
 use Symfony\Component\Filesystem\Path;
-
 use function rtrim;
 use function str_starts_with;
 use function trim;

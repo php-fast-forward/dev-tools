@@ -27,7 +27,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-
 use function Safe\file_put_contents;
 use function Safe\mkdir;
 use function Safe\rmdir;
@@ -156,7 +155,7 @@ final class DevToolsPathResolverTest extends TestCase
     #[TestWith(['phpunit'])]
     #[TestWith(['rector'])]
     #[TestWith(['ecs'])]
-    #[TestWith(['jack'])]
+    #[TestWith(['swiss-knife'])]
     #[TestWith(['composer-dependency-analyser'])]
     public function itWillResolveRuntimeToolBinaryPathsForRepositoryAndDependencyInstalls(string $binary): void
     {
@@ -206,9 +205,9 @@ final class DevToolsPathResolverTest extends TestCase
     public function itWillFallbackToRuntimeToolBinariesWhenTheProjectDoesNotProvideThem(): void
     {
         self::assertSame(
-            '/Users/example/.composer/vendor/bin/jack',
+            '/Users/example/.composer/vendor/bin/swiss-knife',
             DevToolsPathResolver::getPreferredToolBinaryPath(
-                'jack',
+                'swiss-knife',
                 '/workspaces/project',
                 '/Users/example/.composer/vendor/fast-forward/dev-tools'
             )

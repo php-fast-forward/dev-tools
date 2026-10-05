@@ -24,6 +24,7 @@ use Ergebnis\Rector\Rules\Faker\GeneratorPropertyFetchToMethodCallRector;
 use FastForward\DevTools\Rector\RemoveEmptyDocBlockRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveMixedDocblockOverruledByNativeTypeRector;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -37,7 +38,7 @@ use PHPUnit\Framework\TestCase;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Config\RectorConfig as RectorConfigInterface;
-
+use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
 use function Safe\getcwd;
 
 #[CoversClass(RectorConfig::class)]
@@ -114,6 +115,7 @@ final class RectorConfigTest extends TestCase
                 ...WorkingProjectPathResolver::getToolingExcludedDirectories(),
                 RemoveUselessReturnTagRector::class,
                 RemoveUselessParamTagRector::class,
+                RemoveMixedDocblockOverruledByNativeTypeRector::class,
             ],
             SimpleParameterProvider::provideArrayParameter(Option::SKIP),
         );
@@ -132,6 +134,10 @@ final class RectorConfigTest extends TestCase
             SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES),
         );
         self::assertNotEmpty(SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_SETS));
+        self::assertContains(
+            LongArrayToShortArrayRector::class,
+            SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES),
+        );
     }
 
     /**
@@ -161,7 +167,11 @@ final class RectorConfigTest extends TestCase
             RectorConfig::DEFAULT_RULES
         );
         self::assertSame(
-            [RemoveUselessReturnTagRector::class, RemoveUselessParamTagRector::class],
+            [
+                RemoveUselessReturnTagRector::class,
+                RemoveUselessParamTagRector::class,
+                RemoveMixedDocblockOverruledByNativeTypeRector::class,
+            ],
             RectorConfig::DEFAULT_SKIPPED_RULES
         );
     }

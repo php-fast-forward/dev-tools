@@ -10,7 +10,7 @@ The ``dependencies`` command (alias: ``deps``) analyzes missing, unused,
 misplaced, and overly outdated Composer dependencies using two tools:
 
 - ``composer-dependency-analyser`` - detects missing, unused, and misplaced packages
-- ``jack breakpoint`` - fails when too many outdated packages accumulate
+- ``swiss-knife breakpoint`` - fails when too many outdated packages accumulate
 
 These analyzers ship as direct dependencies of ``fast-forward/dev-tools``, so
 consumer repositories do not need extra setup before running the command.
@@ -30,26 +30,28 @@ Options
 -------
 
 ``--max-outdated=<count>`` (optional)
-   Maximum number of outdated packages allowed by ``jack breakpoint``.
+   Maximum number of outdated packages allowed by ``swiss-knife breakpoint``.
 
    Default: ``5`` when you run the command directly.
 
    Use ``-1`` to keep the outdated dependency report in the output while
-   ignoring Jack failures in the final command status.
+   ignoring Rector Swiss Knife failures in the final command status.
 
 ``--upgrade`` (optional)
-   Applies the Jack upgrade workflow before the analyzers:
+   Applies the Rector Swiss Knife upgrade workflow before the analyzers:
 
-   - ``vendor/bin/jack raise-to-installed``
-   - ``vendor/bin/jack open-versions``
+   - ``vendor/bin/swiss-knife raise-to-installed``
+   - ``vendor/bin/swiss-knife open-versions``
    - ``composer update -W``
    - ``composer normalize``
 
-   Without ``--upgrade``, the command runs the Jack workflow in preview mode
+   Without ``--upgrade``, the command runs the Rector Swiss Knife workflow in preview mode
    before the analyzers.
 
 ``--dev`` (optional)
-   Prioritizes dev dependencies where Jack supports it.
+   Limits ``open-versions`` and ``breakpoint`` to dev dependencies.
+   ``raise-to-installed`` always considers both ``require`` and ``require-dev``
+   because Rector Swiss Knife does not support ``--dev`` for that subcommand.
 
 ``--dump-usage=<package>`` (optional)
    Asks ``composer-dependency-analyser`` to dump usages for the given package
@@ -134,14 +136,14 @@ Exit Codes
    * - 0
      - Success. No missing, unused, misplaced, or excessive outdated dependencies.
    * - 1
-     - Failure. A dependency analyzer or Jack reported findings or errors.
+     - Failure. A dependency analyzer or Rector Swiss Knife reported findings or errors.
 
 Behavior
 --------
 
-- Always previews or applies ``jack raise-to-installed`` first and then
-  ``jack open-versions`` before running the analyzers.
-- Runs ``composer-dependency-analyser`` and ``jack breakpoint`` after the Jack
+- Always previews or applies ``swiss-knife raise-to-installed`` first and then
+  ``swiss-knife open-versions`` before running the analyzers.
+- Runs ``composer-dependency-analyser`` and ``swiss-knife breakpoint`` after the Rector Swiss Knife
   preview or upgrade phase.
 - ``composer-dependency-analyser`` is configured with:
   - ``--config composer-dependency-analyser.php`` (resolved through the package
@@ -153,11 +155,11 @@ Behavior
     is passed to the DevTools command
   - the ``FAST_FORWARD_DEV_TOOLS_SHOW_SHADOW_DEPENDENCIES`` process environment
     flag, which is enabled when ``--show-shadow-dependencies`` is passed
-- ``jack breakpoint`` maps ``--max-outdated`` to Jack's ``--limit`` option.
-- ``--max-outdated=-1`` keeps ``jack breakpoint`` in the workflow for reporting,
+- ``swiss-knife breakpoint`` maps ``--max-outdated`` to Rector Swiss Knife's ``--limit`` option.
+- ``--max-outdated=-1`` keeps ``swiss-knife breakpoint`` in the workflow for reporting,
   but its failure is ignored so only missing or unused dependency findings fail
   the command.
-- ``--upgrade`` applies Jack's ``raise-to-installed`` and ``open-versions``
+- ``--upgrade`` applies Rector Swiss Knife's ``raise-to-installed`` and ``open-versions``
   commands before ``composer update -W`` and ``composer normalize``.
 - the packaged ``tests.yml`` workflow uses ``--max-outdated=-1`` by default so
   dependency health remains a required CI job while outdated-package counts are

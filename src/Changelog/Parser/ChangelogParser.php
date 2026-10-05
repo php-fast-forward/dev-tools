@@ -22,7 +22,6 @@ namespace FastForward\DevTools\Changelog\Parser;
 use FastForward\DevTools\Changelog\Document\ChangelogDocument;
 use FastForward\DevTools\Changelog\Document\ChangelogRelease;
 use FastForward\DevTools\Changelog\Entry\ChangelogEntryType;
-
 use function Safe\preg_match;
 use function Safe\preg_match_all;
 use function Safe\preg_split;

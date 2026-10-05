@@ -64,7 +64,7 @@ final class ComposerDependencyAnalyserConfig
         'phpmetrics/phpmetrics',
         'phpro/grumphp-shim',
         'pyrech/composer-changelogs',
-        'rector/jack',
+        'rector/swiss-knife',
         'saggre/phpdocumentor-markdown',
         'symfony/var-dumper',
     ];

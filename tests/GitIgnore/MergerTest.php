@@ -72,8 +72,6 @@ final class MergerTest extends TestCase
 
     /**
      * @param string $entries
-     *
-     * @return self
      */
     private function withDirectoryClassification(string ...$entries): self
     {
@@ -87,8 +85,6 @@ final class MergerTest extends TestCase
 
     /**
      * @param string $entries
-     *
-     * @return self
      */
     private function withFileClassification(string ...$entries): self
     {

@@ -45,7 +45,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-
 use function is_numeric;
 use function Safe\json_decode;
 use function Safe\preg_match;
@@ -518,9 +517,7 @@ final class TestsCommand extends Command
     {
         $minimumCoverage = $input->getOption('min-coverage');
 
-        if (null === $minimumCoverage) {
-            $minimumCoverage = $this->resolveMinimumCoverageFromEnvironment();
-        }
+        $minimumCoverage ??= $this->resolveMinimumCoverageFromEnvironment();
 
         if (false === $minimumCoverage || '' === trim((string) $minimumCoverage)) {
             return null;
