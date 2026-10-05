@@ -4,6 +4,10 @@ The contextual illustration lives at `docs/_static/mascot-banner.png` and is
 shared by the repository README and Sphinx documentation homepage. Dash works
 at a multi-monitor bench coordinating tests, refactoring, and documentation.
 
+The README embeds an immutable GitHub-hosted URL at commit
+`55cf343e08f2c2b63600897723678cbaa11f2c35`, so it also renders where documentation
+assets are excluded from package archives. Sphinx retains its local image path.
+
 - Generated on: 2026-10-05.
 - Asset SHA-256: `b8b569a5cfd84474f3d2d9a6d411bdf0aa00a6188c2e5c0734b1f9ce173c13ec`.
 - Format: PNG, 1536 × 1024 pixels.

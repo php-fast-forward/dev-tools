@@ -14,7 +14,7 @@ across Fast Forward libraries.
 [![GitHub Sponsors](https://img.shields.io/github/sponsors/php-fast-forward?logo=githubsponsors&logoColor=white&color=EC4899)](https://github.com/sponsors/php-fast-forward)
 
 <p align="center">
-  <img src="docs/_static/mascot-banner.png" alt="Dash coordinating tests, refactoring, and documentation at a multi-monitor DevTools workstation" width="840">
+  <img src="https://raw.githubusercontent.com/php-fast-forward/dev-tools/55cf343e08f2c2b63600897723678cbaa11f2c35/docs/_static/mascot-banner.png" alt="Dash coordinating tests, refactoring, and documentation at a multi-monitor DevTools workstation" width="840">
 </p>
 
 ## ✨ Features
