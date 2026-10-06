@@ -22,7 +22,6 @@ namespace FastForward\DevTools\Path;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Filesystem\Path;
-
 use function Safe\getcwd;
 
 /**

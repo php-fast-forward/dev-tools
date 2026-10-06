@@ -23,7 +23,6 @@ use FastForward\DevTools\GitHooks\HookContentRenderer;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-
 use function Safe\file_get_contents;
 
 #[CoversNothing]

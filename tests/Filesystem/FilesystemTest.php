@@ -24,7 +24,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Path;
-
 use function Safe\chdir;
 use function Safe\fileperms;
 use function Safe\file_put_contents;

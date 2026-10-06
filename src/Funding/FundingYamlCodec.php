@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Funding;
 
 use Symfony\Component\Yaml\Yaml;
-
 use function array_filter;
 use function array_values;
 use function trim;

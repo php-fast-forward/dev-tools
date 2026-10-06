@@ -27,7 +27,6 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use Symfony\Component\Process\Process;
-
 use function Safe\chmod;
 use function Safe\file_get_contents;
 use function Safe\file_put_contents;

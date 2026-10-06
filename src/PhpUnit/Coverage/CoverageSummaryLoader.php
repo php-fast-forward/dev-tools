@@ -21,7 +21,6 @@ namespace FastForward\DevTools\PhpUnit\Coverage;
 
 use RuntimeException;
 use SebastianBergmann\CodeCoverage\CodeCoverage;
-
 use function is_file;
 
 /**

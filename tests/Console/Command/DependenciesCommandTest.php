@@ -33,6 +33,7 @@ use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -161,7 +162,7 @@ final class DependenciesCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillIgnoreJackFailuresWhenMaxOutdatedIsDisabled(): void
+    public function executeWillIgnoreSwissKnifeFailuresWhenMaxOutdatedIsDisabled(): void
     {
         $this->input->getOption('max-outdated')
             ->willReturn('-1');
@@ -233,6 +234,62 @@ final class DependenciesCommandTest extends TestCase
     }
 
     /**
+     * @param string $method
+     * @param bool $dev
+     * @param bool $upgrade
+     *
+     * @return void
+     */
+    #[Test]
+    #[TestWith(['getOpenVersionsCommand', false, false])]
+    #[TestWith(['getOpenVersionsCommand', true, false])]
+    #[TestWith(['getOpenVersionsCommand', false, true])]
+    #[TestWith(['getOpenVersionsCommand', true, true])]
+    #[TestWith(['getRaiseToInstalledCommand', false, false])]
+    #[TestWith(['getRaiseToInstalledCommand', true, false])]
+    #[TestWith(['getRaiseToInstalledCommand', false, true])]
+    #[TestWith(['getRaiseToInstalledCommand', true, true])]
+    public function upgradeProcessesWillPreservePreviewAndDevOptions(string $method, bool $dev, bool $upgrade): void
+    {
+        $this->input->getOption('dev')
+            ->willReturn($dev);
+        $this->input->getOption('upgrade')
+            ->willReturn($upgrade);
+
+        $process = (new ReflectionMethod($this->command, $method))
+            ->invoke($this->command, $this->input->reveal());
+
+        self::assertSame(
+            $dev && 'getOpenVersionsCommand' === $method,
+            str_contains($process->getCommandLine(), '--dev')
+        );
+        self::assertSame(! $upgrade, str_contains($process->getCommandLine(), '--dry-run'));
+    }
+
+    /**
+     * @param bool $dev
+     * @param int $maximumOutdated
+     *
+     * @return void
+     */
+    #[Test]
+    #[TestWith([false, 5])]
+    #[TestWith([true, 5])]
+    #[TestWith([false, -1])]
+    #[TestWith([true, -1])]
+    public function breakpointProcessWillPreserveThresholdAndDevOptions(bool $dev, int $maximumOutdated): void
+    {
+        $this->input->getOption('dev')
+            ->willReturn($dev);
+
+        $process = (new ReflectionMethod($this->command, 'getSwissKnifeBreakpointCommand'))
+            ->invoke($this->command, $this->input->reveal(), $maximumOutdated);
+
+        self::assertSame($dev, str_contains($process->getCommandLine(), '--dev'));
+        self::assertSame(-1 !== $maximumOutdated, str_contains($process->getCommandLine(), '--limit'));
+    }
+
+    /**
      * @return int
      */
     private function executeCommand(): int
@@ -278,7 +335,7 @@ final class DependenciesCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function jackBreakpointProcessWillUseTheResolvedJackBinary(): void
+    public function swissKnifeBreakpointProcessWillUseTheResolvedSwissKnifeBinary(): void
     {
         $processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $process = $this->prophesize(Process::class);
@@ -291,11 +348,11 @@ final class DependenciesCommandTest extends TestCase
         $processBuilder->withArgument('--limit', '5')
             ->willReturn($processBuilder->reveal())
             ->shouldBeCalledOnce();
-        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'breakpoint'])
+        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('swiss-knife'), 'breakpoint'])
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
 
-        (new ReflectionMethod($command, 'getJackBreakpointCommand'))
+        (new ReflectionMethod($command, 'getSwissKnifeBreakpointCommand'))
             ->invoke($command, $this->input->reveal(), 5);
     }
 
@@ -303,7 +360,7 @@ final class DependenciesCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function openVersionsProcessWillUseTheResolvedJackBinary(): void
+    public function openVersionsProcessWillUseTheResolvedSwissKnifeBinary(): void
     {
         $processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $process = $this->prophesize(Process::class);
@@ -316,7 +373,7 @@ final class DependenciesCommandTest extends TestCase
         $processBuilder->withArgument('--dry-run')
             ->willReturn($processBuilder->reveal())
             ->shouldBeCalledOnce();
-        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'open-versions'])
+        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('swiss-knife'), 'open-versions'])
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
 
@@ -328,7 +385,7 @@ final class DependenciesCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function raiseToInstalledProcessWillUseTheResolvedJackBinary(): void
+    public function raiseToInstalledProcessWillUseTheResolvedSwissKnifeBinary(): void
     {
         $processBuilder = $this->prophesize(ProcessBuilderInterface::class);
         $process = $this->prophesize(Process::class);
@@ -341,7 +398,7 @@ final class DependenciesCommandTest extends TestCase
         $processBuilder->withArgument('--dry-run')
             ->willReturn($processBuilder->reveal())
             ->shouldBeCalledOnce();
-        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'raise-to-installed'])
+        $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('swiss-knife'), 'raise-to-installed'])
             ->willReturn($process->reveal())
             ->shouldBeCalledOnce();
 

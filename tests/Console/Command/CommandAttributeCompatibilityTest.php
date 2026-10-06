@@ -22,7 +22,6 @@ namespace FastForward\DevTools\Tests\Console\Command;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-
 use function Safe\glob;
 use function Safe\preg_match_all;
 use function Safe\file_get_contents;

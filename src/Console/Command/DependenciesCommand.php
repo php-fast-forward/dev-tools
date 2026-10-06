@@ -34,7 +34,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-
 use function is_numeric;
 
 /**
@@ -75,7 +74,7 @@ final class DependenciesCommand extends Command
     protected function configure(): void
     {
         $this->setHelp(
-            'This command runs composer-dependency-analyser and Jack to report missing, unused, misplaced, and'
+            'This command runs composer-dependency-analyser and Rector Swiss Knife to report missing, unused, misplaced, and'
             . ' outdated Composer dependencies.'
         );
 
@@ -83,18 +82,18 @@ final class DependenciesCommand extends Command
             ->addOption(
                 name: 'max-outdated',
                 mode: InputOption::VALUE_REQUIRED,
-                description: 'Maximum number of outdated packages allowed by jack breakpoint. Use -1 to keep the report but ignore Jack failures.',
+                description: 'Maximum number of outdated packages allowed by swiss-knife breakpoint. Use -1 to keep the report but ignore Rector Swiss Knife failures.',
                 default: '5',
             )
             ->addOption(
                 name: 'dev',
                 mode: InputOption::VALUE_NONE,
-                description: 'Prioritize dev dependencies where Jack supports it.',
+                description: 'Prioritize dev dependencies where Rector Swiss Knife supports it.',
             )
             ->addOption(
                 name: 'upgrade',
                 mode: InputOption::VALUE_NONE,
-                description: 'Apply Jack dependency upgrades before executing the dependency analyzers.',
+                description: 'Apply Rector Swiss Knife dependency upgrades before executing the dependency analyzers.',
             )
             ->addOption(
                 name: 'dump-usage',
@@ -129,11 +128,11 @@ final class DependenciesCommand extends Command
 
         $this->processQueue->add(
             process: $this->getRaiseToInstalledCommand($input),
-            label: 'Raising Dependency Constraints with Jack',
+            label: 'Raising Dependency Constraints with Rector Swiss Knife',
         );
         $this->processQueue->add(
             process: $this->getOpenVersionsCommand($input),
-            label: 'Opening Dependency Constraints with Jack',
+            label: 'Opening Dependency Constraints with Rector Swiss Knife',
         );
 
         if ($input->getOption('upgrade')) {
@@ -154,9 +153,9 @@ final class DependenciesCommand extends Command
             label: 'Analyzing Dependencies with Composer Dependency Analyser',
         );
         $this->processQueue->add(
-            process: $this->getJackBreakpointCommand($input, $maximumOutdated),
+            process: $this->getSwissKnifeBreakpointCommand($input, $maximumOutdated),
             ignoreFailure: $this->shouldIgnoreOutdatedFailures($maximumOutdated),
-            label: 'Checking Outdated Dependencies with Jack',
+            label: 'Checking Outdated Dependencies with Rector Swiss Knife',
         );
 
         $result = $this->processQueue->run($processOutput);
@@ -204,14 +203,14 @@ final class DependenciesCommand extends Command
     }
 
     /**
-     * Builds the Jack breakpoint process.
+     * Builds the Rector Swiss Knife breakpoint process.
      *
      * @param InputInterface $input the runtime command input
-     * @param int $maximumOutdated the maximum number of outdated packages accepted by Jack
+     * @param int $maximumOutdated the maximum number of outdated packages accepted by Rector Swiss Knife
      *
-     * @return Process the configured Jack breakpoint process
+     * @return Process the configured Rector Swiss Knife breakpoint process
      */
-    private function getJackBreakpointCommand(InputInterface $input, int $maximumOutdated): Process
+    private function getSwissKnifeBreakpointCommand(InputInterface $input, int $maximumOutdated): Process
     {
         $processBuilder = $this->processBuilder;
 
@@ -223,15 +222,15 @@ final class DependenciesCommand extends Command
             $processBuilder = $processBuilder->withArgument('--limit', (string) $maximumOutdated);
         }
 
-        return $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'breakpoint']);
+        return $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('swiss-knife'), 'breakpoint']);
     }
 
     /**
-     * Builds the Jack open-versions process.
+     * Builds the Rector Swiss Knife open-versions process.
      *
      * @param InputInterface $input the runtime command input
      *
-     * @return Process the configured Jack open-versions process
+     * @return Process the configured Rector Swiss Knife open-versions process
      */
     private function getOpenVersionsCommand(InputInterface $input): Process
     {
@@ -245,29 +244,29 @@ final class DependenciesCommand extends Command
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        return $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'open-versions']);
+        return $processBuilder->build(
+            [DevToolsPathResolver::getPreferredToolBinaryPath('swiss-knife'), 'open-versions']
+        );
     }
 
     /**
-     * Builds the Jack raise-to-installed process.
+     * Builds the Rector Swiss Knife raise-to-installed process.
      *
      * @param InputInterface $input the runtime command input
      *
-     * @return Process the configured Jack raise-to-installed process
+     * @return Process the configured Rector Swiss Knife raise-to-installed process
      */
     private function getRaiseToInstalledCommand(InputInterface $input): Process
     {
         $processBuilder = $this->processBuilder;
 
-        if ((bool) $input->getOption('dev')) {
-            $processBuilder = $processBuilder->withArgument('--dev');
-        }
-
         if (! (bool) $input->getOption('upgrade')) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
-        return $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('jack'), 'raise-to-installed']);
+        return $processBuilder->build(
+            [DevToolsPathResolver::getPreferredToolBinaryPath('swiss-knife'), 'raise-to-installed']
+        );
     }
 
     /**
@@ -321,7 +320,7 @@ final class DependenciesCommand extends Command
     }
 
     /**
-     * Determines whether Jack outdated failures SHOULD be ignored for the given threshold.
+     * Determines whether Rector Swiss Knife outdated failures SHOULD be ignored for the given threshold.
      *
      * @param int $maximumOutdated the validated outdated threshold option
      *

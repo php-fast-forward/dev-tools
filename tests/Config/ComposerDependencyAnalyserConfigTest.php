@@ -99,7 +99,7 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
         );
         self::assertTrue(
             $configuration->getIgnoreList()
-                ->shouldIgnoreError(ErrorType::UNUSED_DEPENDENCY, null, 'rector/jack')
+                ->shouldIgnoreError(ErrorType::UNUSED_DEPENDENCY, null, 'rector/swiss-knife')
         );
         self::assertTrue(
             $configuration->getIgnoreList()
@@ -122,7 +122,7 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
             ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_UNUSED_DEPENDENCIES,
         );
         self::assertContains(
-            'rector/jack',
+            'rector/swiss-knife',
             ComposerDependencyAnalyserConfig::DEFAULT_PACKAGED_UNUSED_DEPENDENCIES,
         );
         self::assertContains(

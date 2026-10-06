@@ -27,15 +27,37 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
 use Symfony\Component\Process\Process;
-
 use function Safe\file_put_contents;
+use function Safe\file_get_contents;
 use function Safe\mkdir;
+use function Safe\putenv;
 use function Safe\rmdir;
 use function Safe\unlink;
 
 #[CoversNothing]
 final class ResolvePredictableConflictsActionTest extends TestCase
 {
+    private const array GIT_ENVIRONMENT = [
+        'GIT_ALTERNATE_OBJECT_DIRECTORIES' => false,
+        'GIT_CONFIG' => false,
+        'GIT_CONFIG_PARAMETERS' => false,
+        'GIT_CONFIG_COUNT' => false,
+        'GIT_OBJECT_DIRECTORY' => false,
+        'GIT_DIR' => false,
+        'GIT_WORK_TREE' => false,
+        'GIT_IMPLICIT_WORK_TREE' => false,
+        'GIT_GRAFT_FILE' => false,
+        'GIT_INDEX_FILE' => false,
+        'GIT_NO_REPLACE_OBJECTS' => false,
+        'GIT_REPLACE_REF_BASE' => false,
+        'GIT_PREFIX' => false,
+        'GIT_SHALLOW_FILE' => false,
+        'GIT_COMMON_DIR' => false,
+        'GIT_INTERNAL_SUPER_PREFIX' => false,
+        'GIT_CONFIG_GLOBAL' => '/dev/null',
+        'GIT_CONFIG_NOSYSTEM' => '1',
+    ];
+
     private const string GITLINK_RESOLVER_PATH = __DIR__ . '/../../.github/actions/github/resolve-predictable-conflicts/stage-unmerged-gitlink.sh';
 
     private string $workspace;
@@ -101,6 +123,40 @@ final class ResolvePredictableConflictsActionTest extends TestCase
 
         self::assertSame('', trim($unmergedAfter->getOutput()));
         self::assertSame(\sprintf("160000 %s 0\t.github/wiki\n", $oursSha), $indexEntry->getOutput());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function fixtureProcessesWillIgnoreInheritedGitRepositoryEnvironment(): void
+    {
+        $foreignIndex = $this->workspace . '/foreign-index';
+        $foreignEnvironment = [
+            'GIT_INDEX_FILE' => $foreignIndex,
+            'GIT_DIR' => $this->workspace . '/foreign-git-directory',
+            'GIT_WORK_TREE' => $this->workspace . '/foreign-worktree',
+            'GIT_COMMON_DIR' => $this->workspace . '/foreign-common-directory',
+            'GIT_OBJECT_DIRECTORY' => $this->workspace . '/foreign-objects',
+        ];
+        $originalEnvironment = [];
+        file_put_contents($foreignIndex, 'Foreign index MUST remain unchanged.');
+
+        foreach ($foreignEnvironment as $name => $value) {
+            $originalEnvironment[$name] = getenv($name);
+            putenv($name . '=' . $value);
+        }
+
+        try {
+            $this->gitlinkResolverWillStageTheCurrentBranchPointerWithoutMaterializingTheSubmoduleCheckout();
+
+            self::assertSame('Foreign index MUST remain unchanged.', file_get_contents($foreignIndex));
+            self::assertSame($foreignIndex, getenv('GIT_INDEX_FILE'));
+        } finally {
+            foreach ($originalEnvironment as $name => $value) {
+                putenv(false === $value ? $name : $name . '=' . $value);
+            }
+        }
     }
 
     /**
@@ -192,7 +248,7 @@ final class ResolvePredictableConflictsActionTest extends TestCase
      */
     private function runProcess(array $command, string $workingDirectory): Process
     {
-        $process = new Process($command, $workingDirectory);
+        $process = new Process($command, $workingDirectory, self::GIT_ENVIRONMENT);
         $process->mustRun();
 
         return $process;
@@ -207,7 +263,7 @@ final class ResolvePredictableConflictsActionTest extends TestCase
      */
     private function runProcessWithInput(array $command, string $workingDirectory, string $input): Process
     {
-        $process = new Process($command, $workingDirectory);
+        $process = new Process($command, $workingDirectory, self::GIT_ENVIRONMENT);
         $process->setInput($input);
         $process->mustRun();
 

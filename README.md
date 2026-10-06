@@ -173,7 +173,7 @@ composer dev-tools:sync
 ```
 
 The `dependencies` command ships with
-`shipmonk/composer-dependency-analyser` and `rector/jack` as direct
+`shipmonk/composer-dependency-analyser` and `rector/swiss-knife` as direct
 dependencies of `fast-forward/dev-tools`, so it works without extra
 installation in the consumer project.
 
@@ -316,7 +316,7 @@ skills they depend on.
 |---------|---------|
 | `composer dev-tools` | Runs the full `standards` pipeline. |
 | `composer tests` | Runs PHPUnit with local-or-packaged configuration. |
-| `composer dependencies` | Previews Jack dependency updates, then reports missing, unused, misplaced, and outdated Composer dependencies. |
+| `composer dependencies` | Previews Rector Swiss Knife dependency updates, then reports missing, unused, misplaced, and outdated Composer dependencies. |
 | `composer metrics` | Runs PhpMetrics for the current project and generates requested report artifacts. |
 | `composer changelog:entry` | Adds one categorized changelog entry to `Unreleased` or a published release section. |
 | `composer changelog:check` | Verifies that a changelog file contains meaningful `Unreleased` notes, optionally against a git base reference. |

@@ -19,6 +19,7 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\Config;
 
+use Composer\InstalledVersions;
 use FastForward\DevTools\Config\ECSConfig;
 use FastForward\DevTools\Environment\Environment;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -29,12 +30,17 @@ use PhpCsFixer\Fixer\Phpdoc\NoEmptyPhpdocFixer;
 use PhpCsFixer\Fixer\Phpdoc\NoSuperfluousPhpdocTagsFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocNoEmptyReturnFixer;
 use PhpCsFixer\Fixer\Phpdoc\PhpdocToCommentFixer;
+use PhpCsFixer\Fixer\Phpdoc\PhpdocAlignFixer;
+use PhpCsFixer\Fixer\PhpUnit\PhpUnitTestCaseStaticMethodCallsFixer;
+use PhpCsFixer\Fixer\StringNotation\SingleQuoteFixer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+use ReflectionProperty;
 use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
-
+use Symplify\EasyCodingStandard\Config\ECSConfig as ECSConfigInterface;
+use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use function Safe\getcwd;
 
 #[CoversClass(ECSConfig::class)]
@@ -52,6 +58,39 @@ final class ECSConfigTest extends TestCase
         $result = ECSConfig::configure();
 
         self::assertInstanceOf(ECSConfigBuilder::class, $result);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function configureWillLoadPresetsAndPreserveConsumerRuleCustomization(): void
+    {
+        require_once InstalledVersions::getInstallPath('symplify/easy-coding-standard')
+            . '/vendor/squizlabs/php_codesniffer/autoload.php';
+
+        $builder = ECSConfig::configure(static function (ECSConfigBuilder $config): void {
+            $config->withRules([SingleQuoteFixer::class]);
+            $config->withConfiguredRule(PhpdocAlignFixer::class, [
+                'align' => 'vertical',
+            ]);
+        });
+        $config = new ECSConfigInterface();
+
+        $builder($config);
+
+        $alignFixer = $config->make(PhpdocAlignFixer::class);
+        $staticCallsFixer = $config->make(PhpUnitTestCaseStaticMethodCallsFixer::class);
+
+        self::assertSame(
+            'vertical',
+            (new ReflectionProperty($alignFixer, 'configuration'))->getValue($alignFixer)['align']
+        );
+        self::assertSame(
+            'self',
+            (new ReflectionProperty($staticCallsFixer, 'configuration'))->getValue($staticCallsFixer)['call_type'],
+        );
+        self::assertInstanceOf(ArrayListItemNewlineFixer::class, $config->make(ArrayListItemNewlineFixer::class));
     }
 
     /**

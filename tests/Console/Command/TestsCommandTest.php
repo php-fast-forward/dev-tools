@@ -54,7 +54,6 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-
 use function Safe\mkdir;
 use function Safe\rmdir;
 use function Safe\getcwd;
