@@ -25,7 +25,6 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Git\GitClientInterface;
 use FastForward\DevTools\Changelog\Parser\ChangelogParserInterface;
 use Throwable;
-
 use function array_diff;
 use function array_values;
 

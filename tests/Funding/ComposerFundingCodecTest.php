@@ -25,7 +25,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-
 use function Safe\json_decode;
 
 #[CoversClass(ComposerFundingCodec::class)]

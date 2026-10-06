@@ -30,7 +30,6 @@ use Psr\Log\LoggerTrait;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
-
 use function Safe\json_encode;
 
 /**

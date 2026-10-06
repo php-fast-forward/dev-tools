@@ -24,7 +24,6 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
-
 use function array_key_first;
 use function array_values;
 use function is_dir;

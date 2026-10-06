@@ -86,8 +86,6 @@ final class CommandInputProcessor implements ContextProcessorInterface
      * @param array<string, mixed> $context
      * @param array<string, mixed> $arguments
      * @param InputInterface $input
-     *
-     * @return string|null
      */
     private function inferCommandName(array $context, InputInterface $input, array $arguments): ?string
     {
@@ -126,7 +124,10 @@ final class CommandInputProcessor implements ContextProcessorInterface
 
                 $providedValues = array_values(array_filter(
                     $value,
-                    fn(mixed $item): bool => \is_scalar($item) && $input->hasParameterOption((string) $item, true),
+                    static fn(mixed $item): bool => \is_scalar($item) && $input->hasParameterOption(
+                        (string) $item,
+                        true
+                    ),
                 ));
 
                 if ([] !== $providedValues) {
@@ -191,8 +192,6 @@ final class CommandInputProcessor implements ContextProcessorInterface
 
     /**
      * @param InputInterface $input
-     *
-     * @return InputDefinition|null
      */
     private function resolveDefinition(InputInterface $input): ?InputDefinition
     {

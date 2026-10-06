@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GitHub Actions(deps): Bump actions/checkout from 6 to 7 (#354)
 - GitHub Actions(deps): Bump EndBug/add-and-commit from 10 to 11 (#358)
 
+### Fixed
+
+- Restore tests, reports, and dependency checks after ECS and Rector API changes, and replace the abandoned rector/jack dependency checker with Rector Swiss Knife.
+
 ## [1.25.6] - 2026-05-22
 
 ### Fixed

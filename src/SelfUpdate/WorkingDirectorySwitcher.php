@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\SelfUpdate;
 
 use InvalidArgumentException;
-
 use function Safe\chdir;
 use function Safe\realpath;
 

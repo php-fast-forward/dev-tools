@@ -38,7 +38,7 @@ QA and Refactoring
      - Powers the PHPDoc fixer phase.
    * - ``shipmonk/composer-dependency-analyser``
      - Reports missing, unused, and misplaced Composer dependencies in ``dependencies``.
-   * - ``rector/jack``
+   * - ``rector/swiss-knife``
      - Previews or applies dependency version updates and enforces the
        outdated dependency threshold.
    * - ``thecodingmachine/safe``

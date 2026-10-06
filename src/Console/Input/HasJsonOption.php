@@ -32,8 +32,6 @@ trait HasJsonOption
 {
     /**
      * Adds the standard JSON output options to the current command.
-     *
-     * @return static
      */
     protected function addJsonOption(): static
     {

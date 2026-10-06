@@ -23,7 +23,6 @@ use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Filesystem\Path;
 use Throwable;
-
 use function Safe\realpath;
 
 /**

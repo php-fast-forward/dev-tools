@@ -29,7 +29,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocatorInterface;
-
 use function Safe\chdir;
 use function Safe\file_put_contents;
 use function Safe\getcwd;

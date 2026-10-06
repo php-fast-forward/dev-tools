@@ -38,7 +38,6 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
 use Symfony\Component\Process\Process;
-
 use function Safe\preg_replace;
 
 #[CoversClass(ProcessQueue::class)]
@@ -407,11 +406,11 @@ final class ProcessQueueTest extends TestCase
         $capturedCallback = null;
 
         $process = $this->prophesize(Process::class);
-        $process->run(Argument::that(function ($callback) use (&$capturedCallback): bool {
+        $process->run(Argument::that(static function ($callback) use (&$capturedCallback): bool {
             $capturedCallback = $callback;
 
             return $callback instanceof Closure;
-        }))->will(function () use (&$capturedCallback): int {
+        }))->will(static function () use (&$capturedCallback): int {
             $capturedCallback(Process::OUT, 'stdout output');
             $capturedCallback(Process::ERR, 'stderr output');
 
@@ -450,7 +449,7 @@ final class ProcessQueueTest extends TestCase
             ->willReturn('first-command');
         $firstProcess->getWorkingDirectory()
             ->willReturn('/tmp');
-        $firstProcess->start(Argument::that(function ($callback) use (&$capturedFirstCallback): bool {
+        $firstProcess->start(Argument::that(static function ($callback) use (&$capturedFirstCallback): bool {
             $capturedFirstCallback = $callback;
 
             return $callback instanceof Closure;
@@ -458,7 +457,7 @@ final class ProcessQueueTest extends TestCase
         $firstProcess->isRunning()
             ->willReturn(false);
         $firstProcess->wait()
-            ->will(function () use (&$capturedFirstCallback): int {
+            ->will(static function () use (&$capturedFirstCallback): int {
                 $capturedFirstCallback(Process::OUT, 'first output');
 
                 return ProcessQueueInterface::SUCCESS;
@@ -469,7 +468,7 @@ final class ProcessQueueTest extends TestCase
             ->willReturn('second-command');
         $secondProcess->getWorkingDirectory()
             ->willReturn('/tmp');
-        $secondProcess->start(Argument::that(function ($callback) use (&$capturedSecondCallback): bool {
+        $secondProcess->start(Argument::that(static function ($callback) use (&$capturedSecondCallback): bool {
             $capturedSecondCallback = $callback;
 
             return $callback instanceof Closure;
@@ -477,7 +476,7 @@ final class ProcessQueueTest extends TestCase
         $secondProcess->isRunning()
             ->willReturn(true, false);
         $secondProcess->wait()
-            ->will(function () use (&$capturedSecondCallback): int {
+            ->will(static function () use (&$capturedSecondCallback): int {
                 $capturedSecondCallback(Process::OUT, 'second output');
 
                 return ProcessQueueInterface::SUCCESS;

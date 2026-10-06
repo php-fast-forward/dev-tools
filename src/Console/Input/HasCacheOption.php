@@ -34,8 +34,6 @@ trait HasCacheOption
      * Adds the standard cache control option to the current command.
      *
      * @param string $description the cache option description
-     *
-     * @return static
      */
     protected function addCacheOption(string $description): static
     {
@@ -51,8 +49,6 @@ trait HasCacheOption
      *
      * @param string $description the cache directory option description
      * @param string $default the command-specific default cache directory
-     *
-     * @return static
      */
     protected function addCacheDirOption(string $description, string $default): static
     {

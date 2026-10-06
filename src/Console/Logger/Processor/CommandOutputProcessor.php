@@ -23,7 +23,6 @@ use JsonException;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-
 use function Safe\json_decode;
 
 /**
@@ -68,8 +67,6 @@ final class CommandOutputProcessor implements ContextProcessorInterface
 
     /**
      * @param OutputInterface $output
-     *
-     * @return mixed
      */
     private function extractBufferedOutput(OutputInterface $output): mixed
     {

@@ -17,21 +17,6 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
-namespace FastForward\DevTools;
+use FastForward\DevTools\Config\ECSConfig;
 
-use FastForward\DevTools\Console\DevTools;
-use FastForward\DevTools\Container\ContainerFactory;
-
-$autoloadCandidates = [\dirname(__DIR__, 4) . '/vendor/autoload.php', __DIR__ . '/../vendor/autoload.php'];
-
-foreach ($autoloadCandidates as $autoloadCandidate) {
-    if (is_file($autoloadCandidate)) {
-        require_once $autoloadCandidate;
-
-        exit(ContainerFactory::get(DevTools::class)->run());
-    }
-}
-
-fprintf(\STDERR, "Could not locate Composer autoload.php for fast-forward/dev-tools.\n");
-
-exit(1);
+return ECSConfig::applyPhpCsFixerSets(...);

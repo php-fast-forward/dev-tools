@@ -27,11 +27,9 @@ use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use Rector\Config\RectorConfig as RectorConfigInterface;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveMixedDocblockOverruledByNativeTypeRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
-use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
-use Rector\Configuration\PhpLevelSetResolver;
 use Rector\Set\ValueObject\SetList;
-
 use function Safe\getcwd;
 
 /**
@@ -79,6 +77,7 @@ final class RectorConfig
     public const array DEFAULT_SKIPPED_RULES = [
         RemoveUselessReturnTagRector::class,
         RemoveUselessParamTagRector::class,
+        RemoveMixedDocblockOverruledByNativeTypeRector::class,
     ];
 
     /**
@@ -108,10 +107,8 @@ final class RectorConfig
             $rectorConfig->parallel(600);
             $rectorConfig->rules(self::DEFAULT_RULES);
 
-            $projectPhpVersion = ComposerJsonPhpVersionResolver::resolveFromCwdOrFail();
-            $phpLevelSets = PhpLevelSetResolver::resolveFromPhpVersion($projectPhpVersion);
-
-            $rectorConfig->sets($phpLevelSets);
+            $phpSets = RectorConfigInterface::configure()->withPhpSets();
+            $phpSets($rectorConfig);
 
             self::applySafeMigrationSet($rectorConfig);
 

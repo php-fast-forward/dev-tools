@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Resource;
 
 use SebastianBergmann\Diff\Differ;
-
 use function trim;
 
 /**

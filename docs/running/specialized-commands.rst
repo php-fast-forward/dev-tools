@@ -88,7 +88,7 @@ Analyzes missing, unused, misplaced, and outdated Composer dependencies.
 
 Important details:
 
-- it ships ``shipmonk/composer-dependency-analyser`` and ``rector/jack`` as
+- it ships ``shipmonk/composer-dependency-analyser`` and ``rector/swiss-knife`` as
   direct dependencies of ``fast-forward/dev-tools``;
 - it uses ``composer-dependency-analyser`` for missing, unused, and misplaced
   dependency checks, with a packaged config that consumer repositories can
@@ -99,16 +99,16 @@ Important details:
   audits; without it, DevTools hides intentional Fast Forward dependency-group
   shadows so CI does not fail on ecosystem or meta packages that deliberately
   install related dependencies for consumers;
-- it uses ``jack breakpoint --limit=<max-outdated>`` to fail when too many
+- it uses ``swiss-knife breakpoint --limit=<max-outdated>`` to fail when too many
   outdated dependencies accumulate;
-- ``--max-outdated=-1`` keeps the Jack outdated report in the output but
-  ignores Jack's failure so only dependency-analyser findings fail the command;
+- ``--max-outdated=-1`` keeps the Rector Swiss Knife outdated report in the output but
+  ignores Rector Swiss Knife's failure so only dependency-analyser findings fail the command;
 - the packaged ``tests.yml`` workflow uses ``--max-outdated=-1`` by default,
   so dependency health stays required in CI while outdated-package counts are
   reported without failing the workflow on their own;
-- it previews ``jack raise-to-installed`` and ``jack open-versions`` before
+- it previews ``swiss-knife raise-to-installed`` and ``swiss-knife open-versions`` before
   the analyzers;
-- ``--upgrade`` runs ``jack raise-to-installed``, ``jack open-versions``,
+- ``--upgrade`` runs ``swiss-knife raise-to-installed``, ``swiss-knife open-versions``,
   ``composer update -W``, and ``composer normalize`` before the analyzers;
 - it returns a non-zero exit code when missing, unused, misplaced, or too many
   outdated dependencies are found.

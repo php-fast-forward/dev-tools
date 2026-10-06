@@ -106,8 +106,6 @@ final class JoliNotifExecutionFinishedSubscriberTest extends TestCase
     /**
      * @param object $subject
      * @param string $method
-     *
-     * @return mixed
      */
     private function invokePrivateMethod(object $subject, string $method): mixed
     {

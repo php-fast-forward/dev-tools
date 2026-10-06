@@ -20,7 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\GitAttributes;
 
 use FastForward\DevTools\Filesystem\FilesystemInterface;
-
 use function Safe\preg_split;
 
 /**
@@ -173,8 +172,6 @@ final readonly class Writer implements WriterInterface
      * Locates the first non-escaped whitespace separator in a line.
      *
      * @param string $line the line to inspect
-     *
-     * @return int|null
      */
     private function firstUnescapedWhitespacePosition(string $line): ?int
     {
