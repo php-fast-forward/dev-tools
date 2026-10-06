@@ -387,13 +387,25 @@
         <ul>
             <li class="success">Execute will return success when preview and analyzers succeed</li>
             <li class="success">Execute will fail when max outdated is not numeric</li>
-            <li class="success">Execute will ignore jack failures when max outdated is disabled</li>
+            <li class="success">Execute will ignore swiss knife failures when max outdated is disabled</li>
             <li class="success">Execute will suppress progress log when json is requested</li>
             <li class="success">Composer dependency analyser process will hide shadow dependencies by default</li>
             <li class="success">Composer dependency analyser process can report shadow dependencies</li>
-            <li class="success">Jack breakpoint process will use the resolved jack binary</li>
-            <li class="success">Open versions process will use the resolved jack binary</li>
-            <li class="success">Raise to installed process will use the resolved jack binary</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #0</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #1</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #2</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #3</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #4</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #5</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #6</li>
+            <li class="success">Upgrade processes will preserve preview and dev options with data set #7</li>
+            <li class="success">Breakpoint process will preserve threshold and dev options with data set #0</li>
+            <li class="success">Breakpoint process will preserve threshold and dev options with data set #1</li>
+            <li class="success">Breakpoint process will preserve threshold and dev options with data set #2</li>
+            <li class="success">Breakpoint process will preserve threshold and dev options with data set #3</li>
+            <li class="success">Swiss knife breakpoint process will use the resolved swiss knife binary</li>
+            <li class="success">Open versions process will use the resolved swiss knife binary</li>
+            <li class="success">Raise to installed process will use the resolved swiss knife binary</li>
         </ul>
         <h2>Dev Tools (FastForward\DevTools\Tests\Console\DevTools)</h2>
         <ul>
@@ -476,7 +488,8 @@
         </ul>
         <h2>ECSConfig (FastForward\DevTools\Tests\Config\ECSConfig)</h2>
         <ul>
-            <li class="defect">Configure will return e c s config builder</li>
+            <li class="success">Configure will return e c s config builder</li>
+            <li class="success">Configure will load presets and preserve consumer rule customization</li>
             <li class="success">It will expose reusable default skipped rules</li>
             <li class="success">Apply default paths and skips will keep working with a builder</li>
         </ul>
@@ -904,6 +917,7 @@
         <h2>Resolve Predictable Conflicts Action (FastForward\DevTools\Tests\GitHubActions\ResolvePredictableConflictsAction)</h2>
         <ul>
             <li class="success">Gitlink resolver will stage the current branch pointer without materializing the submodule checkout</li>
+            <li class="success">Fixture processes will ignore inherited git repository environment</li>
         </ul>
         <h2>Resolver (FastForward\DevTools\Tests\License\Resolver)</h2>
         <ul>

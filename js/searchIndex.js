@@ -1221,6 +1221,11 @@ Search.appendIndex(
             "summary": "Applies\u0020the\u0020default\u0020ECS\u0020sets,\u0020root\u0020files,\u0020and\u0020configured\u0020rules\u0020to\u0020an\u0020ECS\u0020builder.",
             "url": "classes/FastForward-DevTools-Config-ECSConfig.html#method_applyDefaultRulesAndSets"
         },                {
+            "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003AapplyPhpCsFixerSets\u0028\u0029",
+            "name": "applyPhpCsFixerSets",
+            "summary": "Registers\u0020PHP\u002DCS\u002DFixer\u0020presets\u0020and\u0020the\u0020legacy\u0020Symplify\u0020set\u0020without\u0020deprecated\u0020ECS\u0020APIs.",
+            "url": "classes/FastForward-DevTools-Config-ECSConfig.html#method_applyPhpCsFixerSets"
+        },                {
             "fqsen": "\\FastForward\\DevTools\\Config\\ECSConfig\u003A\u003ADEFAULT_PHP_CS_FIXER_SETS",
             "name": "DEFAULT_PHP_CS_FIXER_SETS",
             "summary": "",
@@ -1636,19 +1641,19 @@ Search.appendIndex(
             "summary": "Builds\u0020the\u0020Composer\u0020Dependency\u0020Analyser\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getComposerDependencyAnalyserCommand"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetJackBreakpointCommand\u0028\u0029",
-            "name": "getJackBreakpointCommand",
-            "summary": "Builds\u0020the\u0020Jack\u0020breakpoint\u0020process.",
-            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getJackBreakpointCommand"
+            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetSwissKnifeBreakpointCommand\u0028\u0029",
+            "name": "getSwissKnifeBreakpointCommand",
+            "summary": "Builds\u0020the\u0020Rector\u0020Swiss\u0020Knife\u0020breakpoint\u0020process.",
+            "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getSwissKnifeBreakpointCommand"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetOpenVersionsCommand\u0028\u0029",
             "name": "getOpenVersionsCommand",
-            "summary": "Builds\u0020the\u0020Jack\u0020open\u002Dversions\u0020process.",
+            "summary": "Builds\u0020the\u0020Rector\u0020Swiss\u0020Knife\u0020open\u002Dversions\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getOpenVersionsCommand"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetRaiseToInstalledCommand\u0028\u0029",
             "name": "getRaiseToInstalledCommand",
-            "summary": "Builds\u0020the\u0020Jack\u0020raise\u002Dto\u002Dinstalled\u0020process.",
+            "summary": "Builds\u0020the\u0020Rector\u0020Swiss\u0020Knife\u0020raise\u002Dto\u002Dinstalled\u0020process.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_getRaiseToInstalledCommand"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AgetComposerUpdateCommand\u0028\u0029",
@@ -1668,7 +1673,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AshouldIgnoreOutdatedFailures\u0028\u0029",
             "name": "shouldIgnoreOutdatedFailures",
-            "summary": "Determines\u0020whether\u0020Jack\u0020outdated\u0020failures\u0020SHOULD\u0020be\u0020ignored\u0020for\u0020the\u0020given\u0020threshold.",
+            "summary": "Determines\u0020whether\u0020Rector\u0020Swiss\u0020Knife\u0020outdated\u0020failures\u0020SHOULD\u0020be\u0020ignored\u0020for\u0020the\u0020given\u0020threshold.",
             "url": "classes/FastForward-DevTools-Console-Command-DependenciesCommand.html#method_shouldIgnoreOutdatedFailures"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\DependenciesCommand\u003A\u003AANALYSER_CONFIG",

@@ -3323,7 +3323,7 @@ composer dependencies --upgrade --dev</code></pre>
 
 <ul>
     <li class="dash">it ships <code>shipmonk/composer-dependency-analyser</code>
- and <code>rector/jack</code>
+ and <code>rector/swiss-knife</code>
  as
 direct dependencies of <code>fast-forward/dev-tools</code>
 ;</li>
@@ -3344,13 +3344,13 @@ audits; without it, DevTools hides intentional Fast Forward dependency-group
 shadows so CI does not fail on ecosystem or meta packages that deliberately
 install related dependencies for consumers;</li>
 
-    <li class="dash">it uses <code>jack breakpoint --limit=&lt;max-outdated&gt;</code>
+    <li class="dash">it uses <code>swiss-knife breakpoint --limit=&lt;max-outdated&gt;</code>
  to fail when too many
 outdated dependencies accumulate;</li>
 
     <li class="dash"><code>--max-outdated=-1</code>
- keeps the Jack outdated report in the output but
-ignores Jack&#039;s failure so only dependency-analyser findings fail the command;</li>
+ keeps the Rector Swiss Knife outdated report in the output but
+ignores Rector Swiss Knife&#039;s failure so only dependency-analyser findings fail the command;</li>
 
     <li class="dash">the packaged <code>tests.yml</code>
  workflow uses <code>--max-outdated=-1</code>
@@ -3358,14 +3358,14 @@ ignores Jack&#039;s failure so only dependency-analyser findings fail the comman
 so dependency health stays required in CI while outdated-package counts are
 reported without failing the workflow on their own;</li>
 
-    <li class="dash">it previews <code>jack raise-to-installed</code>
- and <code>jack open-versions</code>
+    <li class="dash">it previews <code>swiss-knife raise-to-installed</code>
+ and <code>swiss-knife open-versions</code>
  before
 the analyzers;</li>
 
     <li class="dash"><code>--upgrade</code>
- runs <code>jack raise-to-installed</code>
-, <code>jack open-versions</code>
+ runs <code>swiss-knife raise-to-installed</code>
+, <code>swiss-knife open-versions</code>
 ,
 <code>composer update -W</code>
 , and <code>composer normalize</code>
