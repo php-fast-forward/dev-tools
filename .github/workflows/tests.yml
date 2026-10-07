@@ -42,7 +42,7 @@ on:
 
 permissions:
     contents: read
-    statuses: write
+    statuses: none
 
 concurrency:
     group: ${{ github.event_name == 'pull_request' && format('tests-pr-{0}', github.event.pull_request.number) || format('tests-{0}', github.ref) }}
@@ -55,6 +55,9 @@ jobs:
     resolve_php:
         name: Resolve PHP Version
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
         outputs:
             php-version: ${{ steps.resolve.outputs.php-version }}
             php-version-source: ${{ steps.resolve.outputs.php-version-source }}
@@ -62,9 +65,12 @@ jobs:
 
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -79,6 +85,9 @@ jobs:
         needs: resolve_php
         name: Run Tests
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
         strategy:
             fail-fast: false
             matrix: ${{ fromJson(needs.resolve_php.outputs.test-matrix) }}
@@ -86,9 +95,12 @@ jobs:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -118,42 +130,23 @@ jobs:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: dev-tools tests --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
 
-            - name: Publish required test status
-              if: ${{ always() && inputs.publish-required-statuses }}
-              env:
-                GH_TOKEN: ${{ github.token }}
-                TARGET_SHA: ${{ github.sha }}
-                TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                TEST_CONTEXT: Run Tests (${{ matrix.php-version }})
-                TEST_RESULT: ${{ job.status }}
-              run: |
-                if [ "${TEST_RESULT}" = "success" ]; then
-                  state="success"
-                  description="Workflow-dispatched PHPUnit job passed."
-                else
-                  state="failure"
-                  description="Workflow-dispatched PHPUnit job result: ${TEST_RESULT}."
-                fi
-
-                gh api \
-                  --method POST \
-                  "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
-                  -f state="${state}" \
-                  -f context="${TEST_CONTEXT}" \
-                  -f description="${description}" \
-                  -f target_url="${TARGET_URL}"
-
     dependency-health:
         needs: resolve_php
         name: Dependency Health
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -187,11 +180,17 @@ jobs:
             - tests
             - dependency-health
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -212,25 +211,52 @@ jobs:
                   - Dependency health result: `${{ needs.dependency-health.result }}`
 
     publish_required_statuses:
-        if: ${{ always() && inputs.publish-required-statuses }}
+        if: ${{ always() && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' }}
         name: Publish Required Test Statuses
         needs:
             - resolve_php
+            - tests
         runs-on: ubuntu-latest
+        permissions:
+            statuses: write
         steps:
-            - name: Publish pending required test statuses
+            - name: Publish completed required test statuses
+              shell: bash
               env:
                 GH_TOKEN: ${{ github.token }}
                 TARGET_SHA: ${{ github.sha }}
                 TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
                 TEST_MATRIX: ${{ needs.resolve_php.outputs.test-matrix }}
+                TEST_RESULT: ${{ needs.tests.result }}
               run: |
-                php -r "foreach (json_decode(getenv('TEST_MATRIX'), true, 512, JSON_THROW_ON_ERROR)['php-version'] as \$version) { echo \$version, PHP_EOL; }" | while IFS= read -r php_version; do
+                if [ "${TEST_RESULT}" = "success" ]; then
+                  state="success"
+                  description="All PHPUnit matrix jobs passed."
+                else
+                  state="failure"
+                  description="Aggregated PHPUnit matrix result: ${TEST_RESULT}."
+                fi
+
+                # PHP evaluates these variables; Bash must leave them literal.
+                # shellcheck disable=SC2016
+                php -r '
+                  $matrix = json_decode(getenv("TEST_MATRIX"), true, 512, JSON_THROW_ON_ERROR);
+                  $versions = $matrix["php-version"] ?? null;
+                  if (!is_array($versions) || $versions === []) {
+                    throw new RuntimeException("A non-empty PHP test matrix is required.");
+                  }
+                  foreach ($versions as $version) {
+                    if (!is_string($version) || preg_match("/\A[0-9]+\.[0-9]+\z/", $version) !== 1) {
+                      throw new RuntimeException("Unsupported PHP test matrix entry.");
+                    }
+                  }
+                  echo implode(PHP_EOL, $versions), PHP_EOL;
+                ' | while IFS= read -r php_version; do
                   gh api \
                     --method POST \
                     "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
-                    -f state="pending" \
+                    -f state="${state}" \
                     -f context="Run Tests (${php_version})" \
-                    -f description="Workflow-dispatched PHPUnit job is pending." \
+                    -f description="${description}" \
                     -f target_url="${TARGET_URL}"
                 done
