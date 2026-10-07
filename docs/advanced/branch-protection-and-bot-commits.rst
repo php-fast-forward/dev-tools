@@ -111,9 +111,15 @@ required ``Run Tests`` matrix checks. Because manually dispatched workflow check
 runs are not always treated as pull-request required checks, that dispatched
 test run enables a separate status publisher after the complete test matrix
 finishes. This publisher does not check out repository files or execute consumer
-code. It reads the latest GitHub job metadata for that exact run and publishes
-each PHP version's own completed result under its required-check name, such as
+code. It reads all GitHub job attempts for that exact run, selects the newest
+attempt for each PHP version, and publishes that version's completed result
+under its required-check name, such as
 ``Run Tests (8.3)``, ``Run Tests (8.4)``, and ``Run Tests (8.5)``.
+
+When only failed jobs are rerun, successful versions can remain in an earlier
+attempt. The publisher retains those completed results and replaces only the
+versions that have a newer attempt. An incomplete or ambiguous newest attempt
+fails publication rather than falling back to an older successful result.
 
 The workflow does not publish pending commit statuses. Required contexts can
 therefore remain absent or awaiting a result while the matrix runs. A missing,

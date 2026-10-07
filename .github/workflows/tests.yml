@@ -236,7 +236,7 @@ jobs:
               run: |
                 export TEST_JOBS_FILE="${RUNNER_TEMP}/required-test-jobs.json"
                 gh api --paginate --slurp \
-                  "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?filter=latest&per_page=100" > "$TEST_JOBS_FILE"
+                  "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?filter=all&per_page=100" > "$TEST_JOBS_FILE"
 
                 # PHP evaluates these variables; Bash must leave them literal.
                 # shellcheck disable=SC2016
@@ -269,15 +269,25 @@ jobs:
                       return is_string($job["name"] ?? null)
                         && ($job["name"] === $name || str_ends_with($job["name"], " / " . $name));
                     }));
-                    if (count($matches) !== 1) {
-                      throw new RuntimeException("Missing or ambiguous workflow job for " . $version);
+                    if ($matches === []) {
+                      throw new RuntimeException("Missing workflow job for " . $version);
                     }
-                    $job = $matches[0];
-                    if ((string) ($job["run_id"] ?? "") !== getenv("GITHUB_RUN_ID")
-                      || ($job["status"] ?? null) !== "completed"
+                    foreach ($matches as $candidate) {
+                      if ((string) ($candidate["run_id"] ?? "") !== getenv("GITHUB_RUN_ID")
+                        || !is_int($candidate["run_attempt"] ?? null) || $candidate["run_attempt"] < 1) {
+                        throw new RuntimeException("Invalid workflow job attempt for " . $version);
+                      }
+                    }
+                    $latestAttempt = max(array_column($matches, "run_attempt"));
+                    $latest = array_values(array_filter($matches, static fn ($job) => $job["run_attempt"] === $latestAttempt));
+                    if (count($latest) !== 1) {
+                      throw new RuntimeException("Ambiguous latest workflow job for " . $version);
+                    }
+                    $job = $latest[0];
+                    if (($job["status"] ?? null) !== "completed"
                       || !is_string($job["conclusion"] ?? null) || $job["conclusion"] === ""
                       || preg_match("/\A[a-z_]+\z/", $job["conclusion"]) !== 1) {
-                      throw new RuntimeException("Incomplete or mismatched workflow job for " . $version);
+                      throw new RuntimeException("Incomplete latest workflow job for " . $version);
                     }
                     $results[] = $version . "\t" . ($job["conclusion"] === "success" ? "success" : "failure")
                       . "\t" . $job["conclusion"];
