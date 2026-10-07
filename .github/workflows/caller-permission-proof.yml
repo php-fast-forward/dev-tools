@@ -6,7 +6,7 @@ on:
       - codex/ci-caller-permission-proof
 
 permissions:
-  actions: none
+  actions: read
   contents: read
   statuses: write
 
