@@ -105,7 +105,7 @@ jobs:
             - name: Composer Audit
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer audit
+              run: composer --no-plugins audit
 
             - name: Resolve minimum coverage
               id: minimum-coverage
@@ -164,6 +164,15 @@ jobs:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
                 root-version: ${{ env.TESTS_ROOT_VERSION }}
                 install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+
+            - name: Keep nested Composer checks plugin-free
+              run: |
+                composer_original_binary="$(command -v composer)"
+                composer_shim_directory="${RUNNER_TEMP}/composer-without-plugins"
+                mkdir -p "${composer_shim_directory}"
+                install -m 0755 .dev-tools-actions/.github/actions/php/setup-composer/composer-without-plugins.php "${composer_shim_directory}/composer"
+                echo "FAST_FORWARD_CI_COMPOSER_BINARY=${composer_original_binary}" >> "$GITHUB_ENV"
+                echo "${composer_shim_directory}" >> "$GITHUB_PATH"
 
             - name: Run dependency health check
               env:
