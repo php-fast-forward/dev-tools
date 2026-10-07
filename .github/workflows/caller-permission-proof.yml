@@ -1,0 +1,17 @@
+name: Legacy Caller Permission Ceiling Proof
+
+on:
+  push:
+    branches:
+      - codex/ci-caller-permission-proof
+
+permissions:
+  actions: none
+  contents: read
+  statuses: write
+
+jobs:
+  legacy-caller:
+    uses: php-fast-forward/dev-tools/.github/workflows/tests.yml@ede3b44e8d06acd6924275540f52cca44768d6fd
+    with:
+      publish-required-statuses: false
