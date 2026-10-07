@@ -14,7 +14,7 @@ on:
                 type: string
                 default: '-1'
             publish-required-statuses:
-                description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
+                description: Mirror per-version checks from public workflow job metadata using an isolated publisher.
                 required: false
                 type: boolean
                 default: false
@@ -31,7 +31,7 @@ on:
                 type: string
                 default: '-1'
             publish-required-statuses:
-                description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
+                description: Mirror per-version checks from public workflow job metadata using an isolated publisher.
                 required: false
                 type: boolean
                 default: false
@@ -218,6 +218,8 @@ jobs:
             - tests
         runs-on: ubuntu-latest
         permissions:
+            # Public job metadata needs no additional token scope. Private mirroring
+            # requires actions: read here and in the caller permissions maximum.
             statuses: write
         steps:
             - name: Publish completed required test statuses
@@ -227,15 +229,10 @@ jobs:
                 TARGET_SHA: ${{ github.sha }}
                 TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
                 TEST_MATRIX: ${{ needs.resolve_php.outputs.test-matrix }}
-                TEST_RESULT: ${{ needs.tests.result }}
               run: |
-                if [ "${TEST_RESULT}" = "success" ]; then
-                  state="success"
-                  description="All PHPUnit matrix jobs passed."
-                else
-                  state="failure"
-                  description="Aggregated PHPUnit matrix result: ${TEST_RESULT}."
-                fi
+                export TEST_JOBS_FILE="${RUNNER_TEMP}/required-test-jobs.json"
+                gh api --paginate --slurp \
+                  "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?filter=latest&per_page=100" > "$TEST_JOBS_FILE"
 
                 # PHP evaluates these variables; Bash must leave them literal.
                 # shellcheck disable=SC2016
@@ -250,13 +247,44 @@ jobs:
                       throw new RuntimeException("Unsupported PHP test matrix entry.");
                     }
                   }
-                  echo implode(PHP_EOL, $versions), PHP_EOL;
-                ' | while IFS= read -r php_version; do
+                  if (count($versions) !== count(array_unique($versions))) {
+                    throw new RuntimeException("Duplicate PHP test matrix entry.");
+                  }
+                  $pages = json_decode(file_get_contents(getenv("TEST_JOBS_FILE")), true, 512, JSON_THROW_ON_ERROR);
+                  $jobs = [];
+                  foreach ($pages as $page) {
+                    if (!is_array($page["jobs"] ?? null)) {
+                      throw new RuntimeException("Malformed workflow jobs response.");
+                    }
+                    $jobs = array_merge($jobs, $page["jobs"]);
+                  }
+                  $results = [];
+                  foreach ($versions as $version) {
+                    $name = "Run Tests (" . $version . ")";
+                    $matches = array_values(array_filter($jobs, static function ($job) use ($name) {
+                      return is_string($job["name"] ?? null)
+                        && ($job["name"] === $name || str_ends_with($job["name"], " / " . $name));
+                    }));
+                    if (count($matches) !== 1) {
+                      throw new RuntimeException("Missing or ambiguous workflow job for " . $version);
+                    }
+                    $job = $matches[0];
+                    if ((string) ($job["run_id"] ?? "") !== getenv("GITHUB_RUN_ID")
+                      || ($job["status"] ?? null) !== "completed"
+                      || !is_string($job["conclusion"] ?? null) || $job["conclusion"] === ""
+                      || preg_match("/\A[a-z_]+\z/", $job["conclusion"]) !== 1) {
+                      throw new RuntimeException("Incomplete or mismatched workflow job for " . $version);
+                    }
+                    $results[] = $version . "\t" . ($job["conclusion"] === "success" ? "success" : "failure")
+                      . "\t" . $job["conclusion"];
+                  }
+                  echo implode(PHP_EOL, $results), PHP_EOL;
+                ' | while IFS=$'\t' read -r php_version state conclusion; do
                   gh api \
                     --method POST \
                     "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
                     -f state="${state}" \
                     -f context="Run Tests (${php_version})" \
-                    -f description="${description}" \
+                    -f description="PHP ${php_version} matrix job result: ${conclusion}." \
                     -f target_url="${TARGET_URL}"
                 done
