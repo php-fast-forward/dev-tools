@@ -109,12 +109,34 @@ a parent-repository pointer update, it explicitly dispatches ``tests.yml`` for
 the pull request head branch so the newest bot-authored commit receives the
 required ``Run Tests`` matrix checks. Because manually dispatched workflow check
 runs are not always treated as pull-request required checks, that dispatched
-test run first publishes pending commit statuses for the resolved PHP matrix and
-then lets each matrix job publish its own final status. The status contexts use
-the same required-check names, such as ``Run Tests (8.3)``, ``Run Tests (8.4)``,
-and ``Run Tests (8.5)``. Test workflow concurrency cancels older in-progress
-runs for the same pull request so the newest commit owns the required check
-contexts.
+test run enables a separate status publisher after the complete test matrix
+finishes. This publisher does not check out repository files or execute consumer
+code. It reads the latest GitHub job metadata for that exact run and publishes
+each PHP version's own completed result under its required-check name, such as
+``Run Tests (8.3)``, ``Run Tests (8.4)``, and ``Run Tests (8.5)``.
+
+The workflow does not publish pending commit statuses. Required contexts can
+therefore remain absent or awaiting a result while the matrix runs. A missing,
+ambiguous, incomplete or wrong-run job result makes the publisher fail before
+posting any statuses. When investigating a blocked check, inspect the isolated
+publisher's result and the corresponding matrix job rather than expecting an
+early pending status or publication from the test job itself. Test workflow
+concurrency cancels older in-progress runs for the same pull request so the
+newest commit owns the required check contexts.
+
+Jobs that execute checked-out code have read-only contents access and no status
+write permission; all checkouts disable credential persistence. Only the
+isolated publisher can write commit statuses, and publication is skipped for
+Dependabot.
+
+Status mirroring is opt-in and defaults to disabled. The isolated publisher has
+``actions: read`` to access job metadata in public or private repositories and
+``statuses: write`` to submit the completed results. Reusable-workflow callers
+must include both permissions in their maximum permission set, even when
+mirroring is disabled: GitHub checks the reusable workflow's permission ceiling
+before evaluating its individual job conditions. The packaged test wrapper
+declares this maximum; jobs that execute consumer code explicitly reduce both
+Actions and status permissions to ``none``.
 
 The predictable-conflict workflow MAY also refresh pull request branches when
 the only conflicts are ``.github/wiki`` pointer drift and/or ``CHANGELOG.md``
@@ -155,10 +177,11 @@ The reusable workflows default to read-only repository access and grant write
 permissions at the job level when generated content must be pushed or pull
 requests must be updated.
 
-``tests.yml`` needs ``contents: read`` because it checks out code, installs
-dependencies, and runs PHPUnit. It also declares ``statuses: write`` so
-workflow-dispatched test runs can mirror required matrix contexts onto
-bot-authored wiki pointer commits.
+The code-executing jobs in ``tests.yml`` need only ``contents: read`` to check
+out code, install dependencies and run PHPUnit. Its separate status publisher
+has ``actions: read`` and ``statuses: write`` so workflow-dispatched test runs
+can mirror each required matrix context onto bot-authored wiki pointer commits.
+The publisher does not check out code or run consumer scripts.
 
 ``reports.yml`` keeps ``contents: write`` on jobs that publish or clean
 ``gh-pages`` content. The pull request preview comment runs as a separate job

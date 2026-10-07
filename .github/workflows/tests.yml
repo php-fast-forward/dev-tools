@@ -14,7 +14,7 @@ on:
                 type: string
                 default: '-1'
             publish-required-statuses:
-                description: Mirror per-version checks from public workflow job metadata using an isolated publisher.
+                description: Mirror per-version checks from workflow job metadata using an isolated publisher.
                 required: false
                 type: boolean
                 default: false
@@ -31,7 +31,7 @@ on:
                 type: string
                 default: '-1'
             publish-required-statuses:
-                description: Mirror per-version checks from public workflow job metadata using an isolated publisher.
+                description: Mirror per-version checks from workflow job metadata using an isolated publisher.
                 required: false
                 type: boolean
                 default: false
@@ -43,6 +43,7 @@ on:
 permissions:
     contents: read
     statuses: none
+    actions: none
 
 concurrency:
     group: ${{ github.event_name == 'pull_request' && format('tests-pr-{0}', github.event.pull_request.number) || format('tests-{0}', github.ref) }}
@@ -58,6 +59,7 @@ jobs:
         permissions:
             contents: read
             statuses: none
+            actions: none
         outputs:
             php-version: ${{ steps.resolve.outputs.php-version }}
             php-version-source: ${{ steps.resolve.outputs.php-version-source }}
@@ -88,6 +90,7 @@ jobs:
         permissions:
             contents: read
             statuses: none
+            actions: none
         strategy:
             fail-fast: false
             matrix: ${{ fromJson(needs.resolve_php.outputs.test-matrix) }}
@@ -137,6 +140,7 @@ jobs:
         permissions:
             contents: read
             statuses: none
+            actions: none
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
@@ -183,6 +187,7 @@ jobs:
         permissions:
             contents: read
             statuses: none
+            actions: none
         steps:
             - uses: actions/checkout@v7
               with:
@@ -218,8 +223,7 @@ jobs:
             - tests
         runs-on: ubuntu-latest
         permissions:
-            # Public job metadata needs no additional token scope. Private mirroring
-            # requires actions: read here and in the caller permissions maximum.
+            actions: read
             statuses: write
         steps:
             - name: Publish completed required test statuses

@@ -21,6 +21,7 @@ on:
         default: false
 
 permissions:
+  actions: read
   contents: read
   statuses: write
 
