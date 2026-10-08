@@ -3255,6 +3255,9 @@ secrets: inherit</code></pre>
     <li><code>tests.yml</code>
 </li>
 
+    <li><code>test-statuses.yml</code>
+ for protected Dependabot push results</li>
+
     <li><code>reports.yml</code>
 </li>
 
@@ -3295,6 +3298,52 @@ consumer <code>vendor/bin/dev-tools</code>
 <code>dev-tools</code>
  wrapper backed by the checked-out <code>.dev-tools-actions</code>
  source.</p>
+
+    </section>
+
+            <section class="section " id="dependabot-required-test-statuses">
+            <h2>Dependabot Required Test Statuses</h2>
+
+            
+    <p>The standalone packaged <code>test-statuses.yml</code>
+ workflow mirrors the three
+<code>Run Tests (8.3)</code>
+, <code>Run Tests (8.4)</code>
+, and <code>Run Tests (8.5)</code>
+
+contexts required by consumers that still protect the unqualified names.
+It runs from the default branch after a same-repository Dependabot
+<code>push</code>
+ completes the <code>Fast Forward Test Suite</code>
+ workflow.</p>
+
+            
+    <p>The publisher does not check out source, install dependencies, retrieve
+artifacts or caches, or run caller code. Its own job alone receives
+<code>actions: read</code>
+ and <code>statuses: write</code>
+. It verifies the source
+repository, SHA, workflow ID/path/name, actor, event and attempt through
+the Run API, then validates all three jobs before publishing their actual
+conclusions. Partial retries retain the latest attempt for each version;
+stale completion events and superseded runs publish nothing.</p>
+
+            
+    <p>The target is the source push&#039;s verified <code>head_sha</code>
+, never the
+publisher&#039;s <code>github.sha</code>
+, which points to the default branch.
+Pull-request runs are deliberately excluded because they can test a
+different merge commit; Dependabot&#039;s push run supplies this bridge.
+Fork pull requests are outside this workflow&#039;s scope.</p>
+
+            
+    <p>This bridge becomes active only after its file is merged into the default
+branch. Copy it only to consumers with this workflow name, job prefix
+<code>tests / Run Tests (...)</code>
+ and three-version matrix, or explicitly
+adjust and verify those contracts. Consumers protecting the native
+qualified GitHub Actions checks do not need the additional aliases.</p>
 
     </section>
 
