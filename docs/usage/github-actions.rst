@@ -48,6 +48,7 @@ This approach ensures that all libraries in the ecosystem benefit from infrastru
 The packaged wrappers currently include:
 
 *   ``tests.yml``
+*   ``test-statuses.yml`` for protected Dependabot push results
 *   ``reports.yml``
 *   ``review.yml``
 *   ``changelog.yml``
@@ -64,6 +65,35 @@ Workflow-only consumers do not need to declare ``fast-forward/dev-tools`` as a
 local Composer dependency. The shared ``setup-composer`` action prefers the
 consumer ``vendor/bin/dev-tools`` when it exists and otherwise exposes a
 ``dev-tools`` wrapper backed by the checked-out ``.dev-tools-actions`` source.
+
+Dependabot Required Test Statuses
+--------------------------------
+
+The standalone packaged ``test-statuses.yml`` workflow mirrors the three
+``Run Tests (8.3)``, ``Run Tests (8.4)``, and ``Run Tests (8.5)``
+contexts required by consumers that still protect the unqualified names.
+It runs from the default branch after a same-repository Dependabot
+``push`` completes the ``Fast Forward Test Suite`` workflow.
+
+The publisher does not check out source, install dependencies, retrieve
+artifacts or caches, or run caller code. Its own job alone receives
+``actions: read`` and ``statuses: write``. It verifies the source
+repository, SHA, workflow ID/path/name, actor, event and attempt through
+the Run API, then validates all three jobs before publishing their actual
+conclusions. Partial retries retain the latest attempt for each version;
+stale completion events and superseded runs publish nothing.
+
+The target is the source push's verified ``head_sha``, never the
+publisher's ``github.sha``, which points to the default branch.
+Pull-request runs are deliberately excluded because they can test a
+different merge commit; Dependabot's push run supplies this bridge.
+Fork pull requests are outside this workflow's scope.
+
+This bridge becomes active only after its file is merged into the default
+branch. Copy it only to consumers with this workflow name, job prefix
+``tests / Run Tests (...)`` and three-version matrix, or explicitly
+adjust and verify those contracts. Consumers protecting the native
+qualified GitHub Actions checks do not need the additional aliases.
 
 Fast Forward Reports
 --------------------

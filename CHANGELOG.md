@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Restore required per-version statuses for same-repository Dependabot pushes through a checkout-free completion workflow using verified GitHub run and job metadata.
 - Keep Composer audit and nested dependency-health checks plugin-free after CI installs without plugins, so consumer allowlists do not block vulnerability or dependency analysis.
 - Isolate completed per-version status publication from repository-controlled test jobs, preserve access to private GitHub job metadata, and disable persisted checkout credentials in the reusable test workflow.
 - Restore tests, reports, and dependency checks after ECS and Rector API changes, and replace the abandoned rector/jack dependency checker with Rector Swiss Knife.
