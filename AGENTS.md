@@ -161,7 +161,10 @@ Release and publishing behavior is driven primarily through
 `wiki-preview.yml`, `wiki-maintenance.yml`, `auto-assign.yml`, and
 `label-sync.yml`, with reusable local workflow building blocks grouped under
 `.github/actions/` and packaged consumer workflow wrappers living under
-`resources/github-actions/`. Packaged skills live under `.agents/skills/`
+`resources/github-actions/`. Contract-specific templates in
+`resources/github-actions-optional/` require explicit adoption and are not
+installed by `dev-tools:sync`; read each companion guide before copying one
+into a consumer repository. Packaged skills live under `.agents/skills/`
 alongside mirrored project-agent prompts under `.agents/agents/`.
 
 **Package Details:**
@@ -198,6 +201,7 @@ composer dev-tools
 - `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `review.yml`, `wiki.yml`, `wiki-preview.yml`, `wiki-maintenance.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
 - `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `summary`, `wiki`, `changelog`, and `label-sync`
 - `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
+- [resources/github-actions-optional/test-statuses.md](resources/github-actions-optional/test-statuses.md): explicit opt-in guide for Dependabot status aliases; verify source workflow identity, PHP matrix and protection contexts before adopting the checkout-free template
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
 - `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
 - `.agents/skills/`: packaged procedural skills shipped to consumer repositories

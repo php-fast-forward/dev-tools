@@ -14,7 +14,7 @@ on:
                 type: string
                 default: '-1'
             publish-required-statuses:
-                description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
+                description: Mirror per-version checks from workflow job metadata using an isolated publisher.
                 required: false
                 type: boolean
                 default: false
@@ -31,7 +31,7 @@ on:
                 type: string
                 default: '-1'
             publish-required-statuses:
-                description: Mirror required test matrix checks as commit statuses for workflow-dispatched runs.
+                description: Mirror per-version checks from workflow job metadata using an isolated publisher.
                 required: false
                 type: boolean
                 default: false
@@ -42,7 +42,8 @@ on:
 
 permissions:
     contents: read
-    statuses: write
+    statuses: none
+    actions: none
 
 concurrency:
     group: ${{ github.event_name == 'pull_request' && format('tests-pr-{0}', github.event.pull_request.number) || format('tests-{0}', github.ref) }}
@@ -55,6 +56,10 @@ jobs:
     resolve_php:
         name: Resolve PHP Version
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
+            actions: none
         outputs:
             php-version: ${{ steps.resolve.outputs.php-version }}
             php-version-source: ${{ steps.resolve.outputs.php-version-source }}
@@ -62,9 +67,12 @@ jobs:
 
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -75,10 +83,99 @@ jobs:
               id: resolve
               uses: ./.dev-tools-actions/.github/actions/php/resolve-version
 
-    tests:
+    publish_pending_statuses:
+        if: ${{ !cancelled() && needs.resolve_php.result == 'success' && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' }}
+        name: Publish Pending Test Statuses
         needs: resolve_php
+        runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            statuses: write
+        steps:
+            - name: Mark the current test attempt as pending
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                TARGET_SHA: ${{ github.sha }}
+                TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                TEST_MATRIX: ${{ needs.resolve_php.outputs.test-matrix }}
+              run: |
+                php <<'PHP'
+                <?php
+                declare(strict_types=1);
+
+                function githubApi(array $arguments): array
+                {
+                    $process = proc_open(['gh', 'api', ...$arguments], [['pipe', 'r'], ['pipe', 'w'], STDERR], $pipes);
+                    if (!is_resource($process)) {
+                        throw new RuntimeException('Cannot start the GitHub API client.');
+                    }
+                    fclose($pipes[0]);
+                    $response = stream_get_contents($pipes[1]);
+                    fclose($pipes[1]);
+                    if (proc_close($process) !== 0 || $response === false) {
+                        throw new RuntimeException('GitHub API request failed.');
+                    }
+                    $data = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+                    if (!is_array($data)) {
+                        throw new RuntimeException('Invalid GitHub API response.');
+                    }
+                    return $data;
+                }
+
+                $repository = getenv('GITHUB_REPOSITORY');
+                $runId = getenv('GITHUB_RUN_ID');
+                $attempt = getenv('GITHUB_RUN_ATTEMPT');
+                $targetSha = getenv('TARGET_SHA');
+                if (!is_string($repository) || preg_match('~\A[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+\z~', $repository) !== 1
+                    || !is_string($runId) || preg_match('/\A[1-9][0-9]*\z/', $runId) !== 1
+                    || !is_string($attempt) || preg_match('/\A[1-9][0-9]*\z/', $attempt) !== 1
+                    || !is_string($targetSha) || preg_match('/\A[0-9a-f]{40}\z/', $targetSha) !== 1) {
+                    throw new RuntimeException('Invalid current workflow identity.');
+                }
+                $matrix = json_decode(getenv('TEST_MATRIX'), true, 512, JSON_THROW_ON_ERROR);
+                $versions = $matrix['php-version'] ?? null;
+                if (!is_array($versions) || $versions === [] || !array_is_list($versions)) {
+                    throw new RuntimeException('A non-empty PHP test matrix is required.');
+                }
+                foreach ($versions as $version) {
+                    if (!is_string($version) || preg_match('/\A[0-9]+\.[0-9]+\z/', $version) !== 1) {
+                        throw new RuntimeException('Invalid PHP test matrix entry.');
+                    }
+                }
+                if (count($versions) !== count(array_unique($versions))) {
+                    throw new RuntimeException('Duplicate PHP test matrix entry.');
+                }
+                $run = githubApi(["repos/$repository/actions/runs/$runId"]);
+                if ((string) ($run['id'] ?? '') !== $runId
+                    || ($run['repository']['full_name'] ?? null) !== $repository
+                    || !is_int($run['run_attempt'] ?? null)
+                    || (string) $run['run_attempt'] !== $attempt
+                    || ($run['status'] ?? null) !== 'in_progress') {
+                    throw new RuntimeException('The current workflow attempt is not running.');
+                }
+
+                // Validate the full matrix and current attempt before the first write.
+                foreach ($versions as $version) {
+                    githubApi(['--method', 'POST', "repos/$repository/statuses/$targetSha",
+                        '-f', 'state=pending',
+                        '-f', "context=Run Tests ($version)",
+                        '-f', "description=PHP $version matrix job is pending for attempt $attempt.",
+                        '-f', 'target_url=' . getenv('TARGET_URL')]);
+                }
+                PHP
+
+    tests:
+        if: ${{ !cancelled() && needs.resolve_php.result == 'success' && (needs.publish_pending_statuses.result == 'success' || needs.publish_pending_statuses.result == 'skipped') }}
+        needs:
+            - resolve_php
+            - publish_pending_statuses
         name: Run Tests
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
+            actions: none
         strategy:
             fail-fast: false
             matrix: ${{ fromJson(needs.resolve_php.outputs.test-matrix) }}
@@ -86,9 +183,12 @@ jobs:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -105,7 +205,7 @@ jobs:
             - name: Composer Audit
               env:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
-              run: composer audit
+              run: composer --no-plugins audit
 
             - name: Resolve minimum coverage
               id: minimum-coverage
@@ -118,42 +218,24 @@ jobs:
                 COMPOSER_ROOT_VERSION: ${{ env.TESTS_ROOT_VERSION }}
               run: dev-tools tests --coverage=.dev-tools/coverage --min-coverage=${{ steps.minimum-coverage.outputs.value }}
 
-            - name: Publish required test status
-              if: ${{ always() && inputs.publish-required-statuses }}
-              env:
-                GH_TOKEN: ${{ github.token }}
-                TARGET_SHA: ${{ github.sha }}
-                TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                TEST_CONTEXT: Run Tests (${{ matrix.php-version }})
-                TEST_RESULT: ${{ job.status }}
-              run: |
-                if [ "${TEST_RESULT}" = "success" ]; then
-                  state="success"
-                  description="Workflow-dispatched PHPUnit job passed."
-                else
-                  state="failure"
-                  description="Workflow-dispatched PHPUnit job result: ${TEST_RESULT}."
-                fi
-
-                gh api \
-                  --method POST \
-                  "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
-                  -f state="${state}" \
-                  -f context="${TEST_CONTEXT}" \
-                  -f description="${description}" \
-                  -f target_url="${TARGET_URL}"
-
     dependency-health:
         needs: resolve_php
         name: Dependency Health
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
+            actions: none
         env:
             TESTS_ROOT_VERSION: ${{ github.event_name == 'pull_request' && format('dev-{0}', github.event.pull_request.head.ref) || 'dev-main' }}
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -164,6 +246,15 @@ jobs:
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
                 root-version: ${{ env.TESTS_ROOT_VERSION }}
                 install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+
+            - name: Keep nested Composer checks plugin-free
+              run: |
+                composer_original_binary="$(command -v composer)"
+                composer_shim_directory="${RUNNER_TEMP}/composer-without-plugins"
+                mkdir -p "${composer_shim_directory}"
+                install -m 0755 .dev-tools-actions/.github/actions/php/setup-composer/composer-without-plugins.php "${composer_shim_directory}/composer"
+                echo "FAST_FORWARD_CI_COMPOSER_BINARY=${composer_original_binary}" >> "$GITHUB_ENV"
+                echo "${composer_shim_directory}" >> "$GITHUB_PATH"
 
             - name: Run dependency health check
               env:
@@ -178,11 +269,18 @@ jobs:
             - tests
             - dependency-health
         runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            statuses: none
+            actions: none
         steps:
             - uses: actions/checkout@v7
+              with:
+                persist-credentials: false
             - name: Checkout dev-tools workflow action source
               uses: actions/checkout@v7
               with:
+                persist-credentials: false
                 repository: php-fast-forward/dev-tools
                 ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
                 path: .dev-tools-actions
@@ -203,25 +301,90 @@ jobs:
                   - Dependency health result: `${{ needs.dependency-health.result }}`
 
     publish_required_statuses:
-        if: ${{ always() && inputs.publish-required-statuses }}
+        if: ${{ always() && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' && needs.publish_pending_statuses.result == 'success' && (needs.tests.result == 'success' || needs.tests.result == 'failure') }}
         name: Publish Required Test Statuses
         needs:
             - resolve_php
+            - publish_pending_statuses
+            - tests
         runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            statuses: write
         steps:
-            - name: Publish pending required test statuses
+            - name: Publish completed required test statuses
+              shell: bash
               env:
                 GH_TOKEN: ${{ github.token }}
                 TARGET_SHA: ${{ github.sha }}
                 TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
                 TEST_MATRIX: ${{ needs.resolve_php.outputs.test-matrix }}
               run: |
-                php -r "foreach (json_decode(getenv('TEST_MATRIX'), true, 512, JSON_THROW_ON_ERROR)['php-version'] as \$version) { echo \$version, PHP_EOL; }" | while IFS= read -r php_version; do
+                export TEST_JOBS_FILE="${RUNNER_TEMP}/required-test-jobs.json"
+                gh api --paginate --slurp \
+                  "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?filter=all&per_page=100" > "$TEST_JOBS_FILE"
+
+                # PHP evaluates these variables; Bash must leave them literal.
+                # shellcheck disable=SC2016
+                php -r '
+                  $matrix = json_decode(getenv("TEST_MATRIX"), true, 512, JSON_THROW_ON_ERROR);
+                  $versions = $matrix["php-version"] ?? null;
+                  if (!is_array($versions) || $versions === []) {
+                    throw new RuntimeException("A non-empty PHP test matrix is required.");
+                  }
+                  foreach ($versions as $version) {
+                    if (!is_string($version) || preg_match("/\A[0-9]+\.[0-9]+\z/", $version) !== 1) {
+                      throw new RuntimeException("Unsupported PHP test matrix entry.");
+                    }
+                  }
+                  if (count($versions) !== count(array_unique($versions))) {
+                    throw new RuntimeException("Duplicate PHP test matrix entry.");
+                  }
+                  $pages = json_decode(file_get_contents(getenv("TEST_JOBS_FILE")), true, 512, JSON_THROW_ON_ERROR);
+                  $jobs = [];
+                  foreach ($pages as $page) {
+                    if (!is_array($page["jobs"] ?? null)) {
+                      throw new RuntimeException("Malformed workflow jobs response.");
+                    }
+                    $jobs = array_merge($jobs, $page["jobs"]);
+                  }
+                  $results = [];
+                  foreach ($versions as $version) {
+                    $name = "Run Tests (" . $version . ")";
+                    $matches = array_values(array_filter($jobs, static function ($job) use ($name) {
+                      return is_string($job["name"] ?? null)
+                        && ($job["name"] === $name || str_ends_with($job["name"], " / " . $name));
+                    }));
+                    if ($matches === []) {
+                      throw new RuntimeException("Missing workflow job for " . $version);
+                    }
+                    foreach ($matches as $candidate) {
+                      if ((string) ($candidate["run_id"] ?? "") !== getenv("GITHUB_RUN_ID")
+                        || !is_int($candidate["run_attempt"] ?? null) || $candidate["run_attempt"] < 1) {
+                        throw new RuntimeException("Invalid workflow job attempt for " . $version);
+                      }
+                    }
+                    $latestAttempt = max(array_column($matches, "run_attempt"));
+                    $latest = array_values(array_filter($matches, static fn ($job) => $job["run_attempt"] === $latestAttempt));
+                    if (count($latest) !== 1) {
+                      throw new RuntimeException("Ambiguous latest workflow job for " . $version);
+                    }
+                    $job = $latest[0];
+                    if (($job["status"] ?? null) !== "completed"
+                      || !is_string($job["conclusion"] ?? null) || $job["conclusion"] === ""
+                      || preg_match("/\A[a-z_]+\z/", $job["conclusion"]) !== 1) {
+                      throw new RuntimeException("Incomplete latest workflow job for " . $version);
+                    }
+                    $results[] = $version . "\t" . ($job["conclusion"] === "success" ? "success" : "failure")
+                      . "\t" . $job["conclusion"];
+                  }
+                  echo implode(PHP_EOL, $results), PHP_EOL;
+                ' | while IFS=$'\t' read -r php_version state conclusion; do
                   gh api \
                     --method POST \
                     "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
-                    -f state="pending" \
+                    -f state="${state}" \
                     -f context="Run Tests (${php_version})" \
-                    -f description="Workflow-dispatched PHPUnit job is pending." \
+                    -f description="PHP ${php_version} matrix job result: ${conclusion}." \
                     -f target_url="${TARGET_URL}"
                 done
