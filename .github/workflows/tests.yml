@@ -83,8 +83,93 @@ jobs:
               id: resolve
               uses: ./.dev-tools-actions/.github/actions/php/resolve-version
 
-    tests:
+    publish_pending_statuses:
+        if: ${{ !cancelled() && needs.resolve_php.result == 'success' && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' }}
+        name: Publish Pending Test Statuses
         needs: resolve_php
+        runs-on: ubuntu-latest
+        permissions:
+            actions: read
+            statuses: write
+        steps:
+            - name: Mark the current test attempt as pending
+              shell: bash
+              env:
+                GH_TOKEN: ${{ github.token }}
+                TARGET_SHA: ${{ github.sha }}
+                TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+                TEST_MATRIX: ${{ needs.resolve_php.outputs.test-matrix }}
+              run: |
+                php <<'PHP'
+                <?php
+                declare(strict_types=1);
+
+                function githubApi(array $arguments): array
+                {
+                    $process = proc_open(['gh', 'api', ...$arguments], [['pipe', 'r'], ['pipe', 'w'], STDERR], $pipes);
+                    if (!is_resource($process)) {
+                        throw new RuntimeException('Cannot start the GitHub API client.');
+                    }
+                    fclose($pipes[0]);
+                    $response = stream_get_contents($pipes[1]);
+                    fclose($pipes[1]);
+                    if (proc_close($process) !== 0 || $response === false) {
+                        throw new RuntimeException('GitHub API request failed.');
+                    }
+                    $data = json_decode($response, true, 512, JSON_THROW_ON_ERROR);
+                    if (!is_array($data)) {
+                        throw new RuntimeException('Invalid GitHub API response.');
+                    }
+                    return $data;
+                }
+
+                $repository = getenv('GITHUB_REPOSITORY');
+                $runId = getenv('GITHUB_RUN_ID');
+                $attempt = getenv('GITHUB_RUN_ATTEMPT');
+                $targetSha = getenv('TARGET_SHA');
+                if (!is_string($repository) || preg_match('~\A[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+\z~', $repository) !== 1
+                    || !is_string($runId) || preg_match('/\A[1-9][0-9]*\z/', $runId) !== 1
+                    || !is_string($attempt) || preg_match('/\A[1-9][0-9]*\z/', $attempt) !== 1
+                    || !is_string($targetSha) || preg_match('/\A[0-9a-f]{40}\z/', $targetSha) !== 1) {
+                    throw new RuntimeException('Invalid current workflow identity.');
+                }
+                $matrix = json_decode(getenv('TEST_MATRIX'), true, 512, JSON_THROW_ON_ERROR);
+                $versions = $matrix['php-version'] ?? null;
+                if (!is_array($versions) || $versions === [] || !array_is_list($versions)) {
+                    throw new RuntimeException('A non-empty PHP test matrix is required.');
+                }
+                foreach ($versions as $version) {
+                    if (!is_string($version) || preg_match('/\A[0-9]+\.[0-9]+\z/', $version) !== 1) {
+                        throw new RuntimeException('Invalid PHP test matrix entry.');
+                    }
+                }
+                if (count($versions) !== count(array_unique($versions))) {
+                    throw new RuntimeException('Duplicate PHP test matrix entry.');
+                }
+                $run = githubApi(["repos/$repository/actions/runs/$runId"]);
+                if ((string) ($run['id'] ?? '') !== $runId
+                    || ($run['repository']['full_name'] ?? null) !== $repository
+                    || !is_int($run['run_attempt'] ?? null)
+                    || (string) $run['run_attempt'] !== $attempt
+                    || ($run['status'] ?? null) !== 'in_progress') {
+                    throw new RuntimeException('The current workflow attempt is not running.');
+                }
+
+                // Validate the full matrix and current attempt before the first write.
+                foreach ($versions as $version) {
+                    githubApi(['--method', 'POST', "repos/$repository/statuses/$targetSha",
+                        '-f', 'state=pending',
+                        '-f', "context=Run Tests ($version)",
+                        '-f', "description=PHP $version matrix job is pending for attempt $attempt.",
+                        '-f', 'target_url=' . getenv('TARGET_URL')]);
+                }
+                PHP
+
+    tests:
+        if: ${{ !cancelled() && needs.resolve_php.result == 'success' && (needs.publish_pending_statuses.result == 'success' || needs.publish_pending_statuses.result == 'skipped') }}
+        needs:
+            - resolve_php
+            - publish_pending_statuses
         name: Run Tests
         runs-on: ubuntu-latest
         permissions:
@@ -216,10 +301,11 @@ jobs:
                   - Dependency health result: `${{ needs.dependency-health.result }}`
 
     publish_required_statuses:
-        if: ${{ always() && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' }}
+        if: ${{ always() && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' && needs.publish_pending_statuses.result == 'success' && (needs.tests.result == 'success' || needs.tests.result == 'failure') }}
         name: Publish Required Test Statuses
         needs:
             - resolve_php
+            - publish_pending_statuses
             - tests
         runs-on: ubuntu-latest
         permissions:

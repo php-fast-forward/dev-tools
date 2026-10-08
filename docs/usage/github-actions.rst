@@ -45,6 +45,13 @@ Example of an inherited workflow:
 
 This approach ensures that all libraries in the ecosystem benefit from infrastructure updates without requiring manual changes to every repository.
 
+First-party wrappers intentionally follow the reviewed ``@main`` workflow
+contract so centrally deployed fixes reach consumers. This is an explicit
+shared-infrastructure update policy, distinct from pinning third-party
+actions. A workflow SHA alone would not freeze the existing action-source
+checkout, which also follows DevTools ``main``; a fully immutable migration
+would need to version both surfaces together.
+
 The packaged wrappers currently include:
 
 *   ``tests.yml``
@@ -67,13 +74,15 @@ consumer ``vendor/bin/dev-tools`` when it exists and otherwise exposes a
 ``dev-tools`` wrapper backed by the checked-out ``.dev-tools-actions`` source.
 
 Dependabot Required Test Statuses
---------------------------------
+---------------------------------
 
 The standalone packaged ``test-statuses.yml`` workflow mirrors the three
 ``Run Tests (8.3)``, ``Run Tests (8.4)``, and ``Run Tests (8.5)``
 contexts required by consumers that still protect the unqualified names.
-It runs from the default branch after a same-repository Dependabot
-``push`` completes the ``Fast Forward Test Suite`` workflow.
+It runs from the default branch when a same-repository Dependabot
+``push`` requests, starts or completes the ``Fast Forward Test Suite``
+workflow. Active attempts receive pending statuses, including reruns;
+completed attempts receive the actual per-version conclusions.
 
 The publisher does not check out source, install dependencies, retrieve
 artifacts or caches, or run caller code. Its own job alone receives
@@ -81,7 +90,9 @@ artifacts or caches, or run caller code. Its own job alone receives
 repository, SHA, workflow ID/path/name, actor, event and attempt through
 the Run API, then validates all three jobs before publishing their actual
 conclusions. Partial retries retain the latest attempt for each version;
-stale completion events and superseded runs publish nothing.
+stale completion events and superseded runs publish nothing. A delayed
+start event reads the current Run API state and cannot overwrite a completed
+result with pending.
 
 The target is the source push's verified ``head_sha``, never the
 publisher's ``github.sha``, which points to the default branch.
@@ -94,6 +105,17 @@ branch. Copy it only to consumers with this workflow name, job prefix
 ``tests / Run Tests (...)`` and three-version matrix, or explicitly
 adjust and verify those contracts. Consumers protecting the native
 qualified GitHub Actions checks do not need the additional aliases.
+
+For ordinary opt-in runs, the reusable test workflow has a separate
+checkout-free pending publisher. The test matrix waits for pending
+publication; opt-out and Dependabot skips still permit tests to run.
+If pending publication fails, the matrix and final publisher cannot reuse
+earlier successful job results. The final publisher runs only after an
+actual success/failure matrix outcome. Full reruns reexecute this ordered
+publisher; rerunning only an individual successful job may retain successful
+ancestors, so instantaneous protection before scheduling or API access is
+not guaranteed by commit-status mirroring. Prefer native qualified checks
+when migrating a repository's protection policy.
 
 Fast Forward Reports
 --------------------
