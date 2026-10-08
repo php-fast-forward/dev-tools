@@ -3180,7 +3180,7 @@
             <h2>Workflow Layers</h2>
 
             
-    <p>The automation model now has three layers:</p>
+    <p>The automation model separates shared implementations from consumer triggers:</p>
 
             
 
@@ -3247,6 +3247,16 @@ secrets: inherit</code></pre>
     <p>This approach ensures that all libraries in the ecosystem benefit from infrastructure updates without requiring manual changes to every repository.</p>
 
             
+    <p>First-party wrappers intentionally follow the reviewed <code>@main</code>
+ workflow
+contract so centrally deployed fixes reach consumers. This is an explicit
+shared-infrastructure update policy, distinct from pinning third-party
+actions. A workflow SHA alone would not freeze the existing action-source
+checkout, which also follows DevTools <code>main</code>
+; a fully immutable migration
+would need to version both surfaces together.</p>
+
+            
     <p>The packaged wrappers currently include:</p>
 
             
@@ -3282,6 +3292,13 @@ secrets: inherit</code></pre>
 </ul>
 
             
+    <p>The optional <code>resources/github-actions-optional/test-statuses.yml</code>
+ template
+is kept outside this synchronized directory. It requires an explicit copy and
+repository-specific verification; <code>dev-tools:sync</code>
+ does not install it.</p>
+
+            
     <p>For the protected-branch-safe preview and publish model, see
 <a href="./advanced/branch-protection-and-bot-commits.html">Branch Protection and Bot Commits</a>.</p>
 
@@ -3295,6 +3312,138 @@ consumer <code>vendor/bin/dev-tools</code>
 <code>dev-tools</code>
  wrapper backed by the checked-out <code>.dev-tools-actions</code>
  source.</p>
+
+    </section>
+
+            <section class="section " id="dependabot-required-test-statuses">
+            <h2>Dependabot Required Test Statuses</h2>
+
+            
+    <p>The optional standalone <code>test-statuses.yml</code>
+ workflow supplies commit-status
+aliases for consumers whose branch protection requires unqualified names such
+as <code>Run Tests (8.3)</code>
+. The current first-party rollout targets twelve audited
+consumer repositories with PHP 8.3, 8.4 and 8.5; this template does not infer an
+arbitrary consumer&#039;s matrix or protection policy. Consumers protecting the
+native qualified GitHub Actions checks do not need these aliases.</p>
+
+            
+    <p>To opt in, copy
+<code>resources/github-actions-optional/test-statuses.yml</code>
+ from a reviewed
+DevTools checkout or installed package into the consumer repository as
+<code>.github/workflows/test-statuses.yml</code>
+. Review these contracts before merging
+the copied file:</p>
+
+            
+
+<ul>
+    <li>The <code>workflow_run.workflows</code>
+ name and the PHP metadata check must match the
+source workflow name, currently <code>Fast Forward Test Suite</code>
+.</li>
+
+    <li>The source workflow path must match the API path check, currently
+<code>.github/workflows/tests.yml</code>
+.</li>
+
+    <li>The caller job name must match all job-name checks. The template expects
+<code>tests / Run Tests (&lt;version&gt;)</code>
+ and control jobs prefixed with <code>tests /</code>
+.</li>
+
+    <li><code>EXPECTED_PHP_VERSIONS</code>
+ must list every expected version as JSON strings,
+currently <code>[&quot;8.3&quot;,&quot;8.4&quot;,&quot;8.5&quot;]</code>
+. Align those versions and the resulting
+<code>Run Tests (&lt;version&gt;)</code>
+ contexts with branch protection.</li>
+
+</ul>
+
+            
+    <p>A different caller prefix or matrix needs a reviewed adjustment to the copied
+template. An additional observed test version, missing expected version,
+ambiguous job or invalid attempt makes final publication fail closed; the
+publisher must not silently mirror only a subset of the matrix.</p>
+
+            
+    <p>After the file reaches the default branch, same-repository Dependabot <code>push</code>
+
+runs trigger it through <code>workflow_run</code>
+ requested, in-progress and completed
+events. Active attempts receive pending statuses, including reruns; terminal
+attempts receive the actual per-version outcomes. A delayed start event reads
+the current Run API state instead of overwriting completed results with pending.</p>
+
+            
+    <p>The publisher does not check out source, install dependencies, retrieve
+artifacts or caches, or run caller code. Its own job alone receives
+<code>actions: read</code>
+ and <code>statuses: write</code>
+. It verifies the source
+repository, SHA, workflow ID/path/name, actor, event and attempt through
+the Run API and rechecks that snapshot before writing. It validates the
+configured matrix before publishing terminal results. Partial retries retain
+completed results for unaffected versions and select the newest attempt for
+rerun versions. A full rerun that fails or is cancelled before the matrix runs
+must not reuse earlier successes: verified failed control jobs or a failed
+source attempt produce failure statuses for blocked versions. Stale events and
+superseded runs stop publication.</p>
+
+            
+    <p>The target is the source push&#039;s verified <code>head_sha</code>
+, never the
+publisher&#039;s <code>github.sha</code>
+, which points to the default branch.
+Pull-request runs are deliberately excluded because they can test a
+different merge commit; Dependabot&#039;s push run supplies this bridge.
+Fork pull requests are outside this workflow&#039;s scope.</p>
+
+            
+    <p>This bridge becomes active only after its file is merged into the default
+branch; merely adding the template to a pull request does not activate its
+lifecycle events. Verify a real Dependabot push and its required contexts after
+deployment. API reads and status writes are separate operations: scheduling,
+API availability and a state transition between requests prevent an atomic or
+instantaneous update of every context.</p>
+
+    </section>
+
+            <section class="section " id="ordinary-required-test-statuses">
+            <h2>Ordinary Required Test Statuses</h2>
+
+            
+    <p>For ordinary opt-in runs, the reusable test workflow has a separate
+checkout-free pending publisher after PHP version resolution. It verifies the
+current run attempt and complete matrix, then marks all configured contexts
+pending before the test matrix can start. Opt-out and Dependabot skips still
+permit tests to run; Dependabot uses the optional lifecycle bridge described
+above when its protection policy needs aliases.</p>
+
+            
+    <p>If pending publication fails, the matrix is blocked and the final publisher
+does not run. The final publisher requires successful pending publication and
+an actual success or failure matrix outcome; skipped or cancelled matrices
+cannot cause it to republish older successful jobs. Final results come from
+GitHub job metadata for that exact run, selecting the newest attempt for each
+version and requiring it to be completed. A failed-only retry can retain results from
+unaffected versions, while incomplete or ambiguous newest results stop
+publication.</p>
+
+            
+    <p>Full reruns reexecute the ordered pending publisher. Rerunning only an
+individual successful job may retain its successful ancestors and therefore
+does not guarantee another pending publication. There is also a scheduling and
+PHP-resolution gap before the pending job runs. A failed API read before its
+first POST leaves existing statuses unchanged, and later API failures may leave
+only some contexts updated. Commit-status mirroring does not provide an atomic
+replacement of earlier results. Prefer native qualified checks when migrating
+a repository&#039;s protection policy. See
+<a href="./advanced/branch-protection-and-bot-commits.html">Branch Protection and Bot Commits</a> for the permission ceiling
+and bot-authored commit flow.</p>
 
     </section>
 

@@ -3370,15 +3370,75 @@ the pull request head branch so the newest bot-authored commit receives the
 required <code>Run Tests</code>
  matrix checks. Because manually dispatched workflow check
 runs are not always treated as pull-request required checks, that dispatched
-test run first publishes pending commit statuses for the resolved PHP matrix and
-then lets each matrix job publish its own final status. The status contexts use
-the same required-check names, such as <code>Run Tests (8.3)</code>
+test run enables two separate status publishers. After PHP version resolution,
+the checkout-free pending publisher validates the matrix and the current run
+attempt, then marks every configured required context pending. The test matrix
+waits for this job. Disabling mirroring or skipping publication for Dependabot
+still permits tests to run; a failed pending publisher blocks the matrix.</p>
+
+            
+    <p>The final publisher requires successful pending publication and a matrix that
+actually finished with success or failure. It does not run for skipped or
+cancelled matrices, so a publication failure cannot make it select earlier
+successful jobs. Neither publisher checks out repository files or executes
+consumer code. The final publisher reads GitHub job attempts for that exact
+run, selects the newest attempt for each PHP version, and requires that result
+to be completed before publishing it under its required-check name, such as
+<code>Run Tests (8.3)</code>
 , <code>Run Tests (8.4)</code>
-,
-and <code>Run Tests (8.5)</code>
-. Test workflow concurrency cancels older in-progress
-runs for the same pull request so the newest commit owns the required check
-contexts.</p>
+, and <code>Run Tests (8.5)</code>
+.</p>
+
+            
+    <p>When only failed jobs are rerun, successful versions can remain in an earlier
+attempt. The publisher retains those completed results and replaces only the
+versions that have a newer attempt. An incomplete or ambiguous newest attempt
+fails publication rather than falling back to an older successful result.</p>
+
+            
+    <p>Full reruns execute the pending phase again before the new matrix starts. A
+missing, ambiguous, incomplete or wrong-run result makes final publication fail
+before posting terminal statuses. When investigating a blocked check, inspect
+both isolated publishers and the corresponding matrix job. Tests never publish
+statuses from their own code-executing jobs. Test workflow concurrency cancels
+older in-progress runs for the same pull request.</p>
+
+            
+    <p>Pending publication is not instantaneous or atomic. Earlier statuses may remain
+visible while the run is scheduled or PHP versions are resolved. An API failure
+before the first pending POST leaves old statuses unchanged; failure between
+POSTs can leave only some contexts updated. Rerunning an individual successful
+test job can retain its successful pending-job ancestor instead of executing
+that ancestor again. Prefer the exact native qualified GitHub Actions checks
+when deliberately migrating a consumer&#039;s branch protection policy.</p>
+
+            
+    <p>Jobs that execute checked-out code have read-only contents access and no status
+write permission; all checkouts disable credential persistence. Only the
+isolated pending and final publishers can write commit statuses. Both are
+skipped for Dependabot. Consumers requiring unqualified aliases for Dependabot
+pushes can explicitly install the optional default-branch lifecycle bridge
+described in <a href="./usage/github-actions.html">GitHub Actions Workflows</a>. It is outside normal
+<code>dev-tools:sync</code>
+ workflow installation and requires verification of the
+workflow name/path, caller job prefix, configured PHP versions and protection
+contexts. Its metadata-backed pending and terminal phases reject stale
+attempts; a verified failed or cancelled attempt that did not reach the matrix
+must not publish earlier successful results.</p>
+
+            
+    <p>Status mirroring is opt-in and defaults to disabled. The isolated publishers
+have <code>actions: read</code>
+ to access run and job metadata in public or private
+repositories and <code>statuses: write</code>
+ to submit pending and completed results.
+Reusable-workflow callers
+must include both permissions in their maximum permission set, even when
+mirroring is disabled: GitHub checks the reusable workflow&#039;s permission ceiling
+before evaluating its individual job conditions. The packaged test wrapper
+declares this maximum; jobs that execute consumer code explicitly reduce both
+Actions and status permissions to <code>none</code>
+.</p>
 
             
     <p>The predictable-conflict workflow MAY also refresh pull request branches when
@@ -3440,13 +3500,17 @@ permissions at the job level when generated content must be pushed or pull
 requests must be updated.</p>
 
             
-    <p><code>tests.yml</code>
- needs <code>contents: read</code>
- because it checks out code, installs
-dependencies, and runs PHPUnit. It also declares <code>statuses: write</code>
- so
-workflow-dispatched test runs can mirror required matrix contexts onto
-bot-authored wiki pointer commits.</p>
+    <p>The code-executing jobs in <code>tests.yml</code>
+ need only <code>contents: read</code>
+ to check
+out code, install dependencies and run PHPUnit. Its separate pending and final
+publishers have <code>actions: read</code>
+ and <code>statuses: write</code>
+ so workflow-dispatched
+test runs can mirror each required matrix context onto bot-authored wiki pointer
+commits. The publishers do not check out code or run consumer scripts. The
+optional Dependabot lifecycle bridge grants the same two scopes only to its
+isolated status job; it does not add write permission to consumer tests.</p>
 
             
     <p><code>reports.yml</code>
