@@ -1,37 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
 <head>
     <meta charset="utf-8">
+    <script>
+        (function () {
+            var theme = 'light';
+            try {
+                if (window.localStorage.getItem('fast-forward-documentation-theme') === 'dark') theme = 'dark';
+            } catch (error) { /* Storage is optional. */ }
+            document.documentElement.setAttribute('data-bs-theme', theme);
+        })();
+    </script>
             <title>fast-forward/dev-tools</title>
     
         
     
-        
+            
                                                     
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
 
     </head>
-<body>
+<body class="ff-docs">
+    <a class="ff-skip-link" href="graphs/classes.html#content">Skip to documentation</a>
     <div id="main-wrapper">
-        <header id="header" class="sticky-top">
-    <nav class="navbar bg-primary navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand text-bg-primary" href="" title="fast-forward/dev-tools">fast-forward/dev-tools</a>
-
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#header-nav" aria-controls="header-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <header id="header" class="sticky-top" data-bs-theme="dark">
+    <nav class="navbar ff-docs-header navbar-expand-lg" aria-label="Documentation toolbar">
+        <div class="container-fluid gap-3">
+            <a class="navbar-brand ff-docs-brand" href="" title="fast-forward/dev-tools">
+                <img src="images/fast-forward-logo-dark.svg" alt="PHP Fast Forward" width="200" height="80">
+                <span class="ff-docs-project">fast-forward/dev-tools</span>
+            </a>
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#header-nav" aria-controls="header-nav" aria-expanded="false" aria-label="Toggle toolbar">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            <div id="header-nav" class="collapse navbar-collapse">
-                <ul class="navbar-nav me-auto">
-                    <nav aria-label="Top navigation">
+            <div id="header-nav" class="collapse navbar-collapse gap-3">
+                <div class="me-auto"><nav aria-label="Top navigation">
     <ul class="navbar-nav flex-row flex-wrap align-items-center gap-2">
             </ul>
-</nav>                </ul>
-
-                <div class="navbar-nav ms-lg-3">
-                    <li class="nav-item ml-lg-auto">
+</nav></div>
+                <div class="nav-item">
     <section data-search-form class="phpdocumentor-search">
         <div class="input-group">
             <span class="input-group-text bg-body border-end-0">
@@ -41,7 +49,8 @@
             <input
                 type="search"
                 class="form-control border-start-0"
-                placeholder="Search..."
+                placeholder="Search documentation..."
+                aria-label="Search documentation"
                 autocomplete="off"
             >
 
@@ -55,15 +64,21 @@
             </button>
         </div>
     </section>
-</li>
-                </div>
+</div>
+                <button class="ff-docs-theme" type="button" data-reading-theme-toggle aria-label="Switch to navy theme" title="Switch to navy theme" hidden>
+                    <svg class="ff-theme-moon" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 0 1 11.21 3 9 9 0 1 0 21 12.79Z" /></svg>
+                    <svg class="ff-theme-sun" aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4" /><path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42" /></svg>
+                </button>
             </div>
         </div>
     </nav>
 </header>
-        <div id="content" role="main" class="container-fluid">
+
+        <main id="content" tabindex="-1" class="container-fluid">
             <div class="row min-vh-100">
-                <aside class="col-12 col-lg-3 col-xl-2 px-0 position-sticky top-0 vh-100 overflow-auto">
+                <aside class="ff-docs-rail col-12 col-lg-3 col-xl-2 px-0" data-bs-theme="dark">
+                    <details class="ff-docs-navigation" open>
+                        <summary>Documentation navigation</summary>
                     <div class="navigation h-100">
                         <nav class="py-4">
     <ul class="list-unstyled mb-0">
@@ -88,7 +103,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./getting-started/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Getting Started
         </a>
@@ -100,6 +115,7 @@
                 data-bs-target="#sidebar-getting-started-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-getting-started-index-html"
+                aria-label="Toggle Getting Started sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -121,7 +137,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./getting-started/installation.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Installation
         </a>
@@ -129,6 +145,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -143,7 +160,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./getting-started/quickstart.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Quickstart
         </a>
@@ -151,6 +168,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -165,7 +183,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./getting-started/supported-php-versions.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Supported PHP Versions
         </a>
@@ -173,10 +191,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -191,7 +211,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Usage
         </a>
@@ -203,6 +223,7 @@
                 data-bs-target="#sidebar-usage-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-usage-index-html"
+                aria-label="Toggle Usage sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -224,7 +245,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/common-workflows.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Common Workflows
         </a>
@@ -232,6 +253,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -246,7 +268,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/testing-and-coverage.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Testing and Coverage
         </a>
@@ -254,6 +276,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -268,7 +291,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/documentation-workflows.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Documentation Workflows
         </a>
@@ -276,6 +299,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -290,7 +314,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/github-actions.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             GitHub Actions Workflows
         </a>
@@ -298,6 +322,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -312,7 +337,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/migrating-consumer-repositories.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Migrating Consumer Repositories
         </a>
@@ -320,6 +345,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -334,7 +360,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/syncing-packaged-agents.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Syncing Packaged Agents
         </a>
@@ -342,6 +368,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -356,7 +383,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/syncing-packaged-skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Syncing Packaged Skills
         </a>
@@ -364,6 +391,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -378,7 +406,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./usage/syncing-consumer-projects.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Syncing Consumer Projects
         </a>
@@ -386,10 +414,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -404,7 +434,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./configuration/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Configuration
         </a>
@@ -416,6 +446,7 @@
                 data-bs-target="#sidebar-configuration-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-configuration-index-html"
+                aria-label="Toggle Configuration sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -437,7 +468,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./configuration/tooling-defaults.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Packaged Defaults
         </a>
@@ -445,6 +476,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -459,7 +491,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./configuration/overriding-defaults.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Overriding Defaults
         </a>
@@ -467,6 +499,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -481,7 +514,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./configuration/repository-setup.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Repository Setup
         </a>
@@ -489,10 +522,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -507,7 +542,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./running/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Running the Tools
         </a>
@@ -519,6 +554,7 @@
                 data-bs-target="#sidebar-running-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-running-index-html"
+                aria-label="Toggle Running the Tools sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -540,7 +576,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./running/unified-command.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             The Unified Command
         </a>
@@ -548,6 +584,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -562,7 +599,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./running/specialized-commands.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Specialized Commands
         </a>
@@ -570,6 +607,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -584,7 +622,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./running/reports.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Test Reports
         </a>
@@ -592,10 +630,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -610,7 +650,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Command Reference
         </a>
@@ -622,6 +662,7 @@
                 data-bs-target="#sidebar-commands-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-commands-index-html"
+                aria-label="Toggle Command Reference sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -643,7 +684,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/standards.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             standards
         </a>
@@ -651,6 +692,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -665,7 +707,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/tests.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             tests
         </a>
@@ -673,6 +715,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -687,7 +730,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/changelog.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             changelog commands
         </a>
@@ -695,6 +738,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -709,7 +753,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/dependencies.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             dependencies
         </a>
@@ -717,6 +761,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -731,7 +776,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/metrics.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             metrics
         </a>
@@ -739,6 +784,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -753,7 +799,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/code-style.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             code-style
         </a>
@@ -761,6 +807,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -775,7 +822,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/refactor.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             refactor
         </a>
@@ -783,6 +830,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -797,7 +845,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/phpdoc.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             phpdoc
         </a>
@@ -805,6 +853,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -819,7 +868,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/docs.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             docs
         </a>
@@ -827,6 +876,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -841,7 +891,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/wiki.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             wiki
         </a>
@@ -849,6 +899,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -863,7 +914,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/reports.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             reports
         </a>
@@ -871,6 +922,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -885,7 +937,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/agents.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             agents
         </a>
@@ -893,6 +945,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -907,7 +960,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/skills.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             skills
         </a>
@@ -915,6 +968,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -929,7 +983,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/sync.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             dev-tools:sync
         </a>
@@ -937,6 +991,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -951,7 +1006,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/self-update.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             self-update
         </a>
@@ -959,6 +1014,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -973,7 +1029,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/funding.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             funding
         </a>
@@ -981,6 +1037,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -995,7 +1052,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/codeowners.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             codeowners
         </a>
@@ -1003,6 +1060,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1017,7 +1075,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/gitignore.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             gitignore
         </a>
@@ -1025,6 +1083,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1039,7 +1098,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/gitattributes.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             gitattributes
         </a>
@@ -1047,6 +1106,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1061,7 +1121,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/license.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             license
         </a>
@@ -1069,6 +1129,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1083,7 +1144,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/copy-resource.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             copy-resource
         </a>
@@ -1091,6 +1152,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1105,7 +1167,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/git-hooks.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             git-hooks
         </a>
@@ -1113,6 +1175,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1127,7 +1190,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./commands/update-composer-json.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             update-composer-json
         </a>
@@ -1135,10 +1198,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -1153,7 +1218,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./advanced/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Advanced
         </a>
@@ -1165,6 +1230,7 @@
                 data-bs-target="#sidebar-advanced-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-advanced-index-html"
+                aria-label="Toggle Advanced sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1186,7 +1252,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./advanced/consumer-automation.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Consumer Automation
         </a>
@@ -1194,6 +1260,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1208,7 +1275,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./advanced/branch-protection-and-bot-commits.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Branch Protection and Bot Commits
         </a>
@@ -1216,6 +1283,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1230,7 +1298,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./advanced/phpunit-extension.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             PHPUnit Extension
         </a>
@@ -1238,6 +1306,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1252,7 +1321,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./advanced/rector-and-phpdoc.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Rector and PHPDoc Automation
         </a>
@@ -1260,10 +1329,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -1278,7 +1349,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./api/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             API Overview
         </a>
@@ -1290,6 +1361,7 @@
                 data-bs-target="#sidebar-api-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-api-index-html"
+                aria-label="Toggle API Overview sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1311,7 +1383,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./api/commands.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Command Classes
         </a>
@@ -1319,6 +1391,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1333,7 +1406,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./api/composer-integration.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Composer Integration
         </a>
@@ -1341,6 +1414,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1355,7 +1429,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./api/phpunit-support.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             PHPUnit Support Classes
         </a>
@@ -1363,6 +1437,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1377,7 +1452,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./api/rector-rules.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Rector Rules
         </a>
@@ -1385,10 +1460,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -1403,7 +1480,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./internals/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Internals
         </a>
@@ -1415,6 +1492,7 @@
                 data-bs-target="#sidebar-internals-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-internals-index-html"
+                aria-label="Toggle Internals sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1436,7 +1514,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./internals/architecture.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Architecture and Command Lifecycle
         </a>
@@ -1444,6 +1522,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1458,7 +1537,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./internals/release-publishing.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Release and Publishing Workflow
         </a>
@@ -1466,10 +1545,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -1484,7 +1565,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./links/index.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Links
         </a>
@@ -1496,6 +1577,7 @@
                 data-bs-target="#sidebar-links-index-html"
                 aria-expanded="false"
                 aria-controls="sidebar-links-index-html"
+                aria-label="Toggle Links sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1517,7 +1599,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./links/project-links.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Project Links
         </a>
@@ -1525,6 +1607,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1539,7 +1622,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./links/dependencies.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Dependencies
         </a>
@@ -1547,6 +1630,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1561,7 +1645,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./links/live-reports.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Live Reports
         </a>
@@ -1569,10 +1653,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -1587,7 +1673,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./troubleshooting.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             Troubleshooting
         </a>
@@ -1595,6 +1681,7 @@
             </div>
 
     </li>
+
                                                     <li class="nav-item">
     
     
@@ -1609,7 +1696,7 @@
     <div class="d-flex align-items-center">
         <a
             href="./faq.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             FAQ
         </a>
@@ -1617,6 +1704,7 @@
             </div>
 
     </li>
+
                                             </ul>
                 </li>
                             <li class="mb-4">
@@ -1640,7 +1728,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             FastForward
         </a>
@@ -1652,6 +1740,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-html"
+                aria-label="Toggle FastForward sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1673,7 +1762,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             DevTools
         </a>
@@ -1685,6 +1774,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-html"
+                aria-label="Toggle DevTools sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1706,7 +1796,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Changelog
         </a>
@@ -1718,6 +1808,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
+                aria-label="Toggle Changelog sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1739,7 +1830,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog-checker.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Checker
         </a>
@@ -1747,6 +1838,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1761,7 +1853,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog-conflict.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Conflict
         </a>
@@ -1769,6 +1861,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1783,7 +1876,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog-document.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Document
         </a>
@@ -1791,6 +1884,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1805,7 +1899,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog-entry.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Entry
         </a>
@@ -1813,6 +1907,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1827,7 +1922,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog-manager.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Manager
         </a>
@@ -1835,6 +1930,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1849,7 +1945,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog-parser.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Parser
         </a>
@@ -1857,6 +1953,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1871,7 +1968,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-changelog-renderer.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Renderer
         </a>
@@ -1879,10 +1976,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -1897,7 +1996,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-codeowners.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             CodeOwners
         </a>
@@ -1905,6 +2004,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1919,7 +2019,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-composer.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Composer
         </a>
@@ -1931,6 +2031,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-composer-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-composer-html"
+                aria-label="Toggle Composer sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -1952,7 +2053,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-composer-capability.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Capability
         </a>
@@ -1960,6 +2061,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1974,7 +2076,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-composer-command.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Command
         </a>
@@ -1982,6 +2084,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -1996,7 +2099,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-composer-json.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Json
         </a>
@@ -2008,6 +2111,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-composer-json-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-composer-json-html"
+                aria-label="Toggle Json sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2029,7 +2133,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-composer-json-schema.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Schema
         </a>
@@ -2037,14 +2141,17 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2059,7 +2166,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-config.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Config
         </a>
@@ -2067,6 +2174,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2081,7 +2189,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Console
         </a>
@@ -2093,6 +2201,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-console-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-console-html"
+                aria-label="Toggle Console sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2114,7 +2223,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-command.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Command
         </a>
@@ -2126,6 +2235,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-console-command-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-console-command-html"
+                aria-label="Toggle Command sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2147,7 +2257,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-command-traits.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Traits
         </a>
@@ -2155,10 +2265,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2173,7 +2285,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-commandloader.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             CommandLoader
         </a>
@@ -2181,6 +2293,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2195,7 +2308,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-formatter.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Formatter
         </a>
@@ -2203,6 +2316,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2217,7 +2331,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-input.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Input
         </a>
@@ -2225,6 +2339,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2239,7 +2354,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-logger.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Logger
         </a>
@@ -2251,6 +2366,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-console-logger-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-console-logger-html"
+                aria-label="Toggle Logger sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2272,7 +2388,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-logger-processor.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Processor
         </a>
@@ -2280,10 +2396,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2298,7 +2416,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-console-output.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Output
         </a>
@@ -2306,10 +2424,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2324,7 +2444,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-container.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Container
         </a>
@@ -2336,6 +2456,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-container-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-container-html"
+                aria-label="Toggle Container sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2357,7 +2478,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-container-serviceprovider.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             ServiceProvider
         </a>
@@ -2365,10 +2486,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2383,7 +2506,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-environment.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Environment
         </a>
@@ -2391,6 +2514,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2405,7 +2529,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-filesystem.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Filesystem
         </a>
@@ -2413,6 +2537,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2427,7 +2552,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-funding.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Funding
         </a>
@@ -2435,6 +2560,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2449,7 +2575,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-git.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Git
         </a>
@@ -2457,6 +2583,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2471,7 +2598,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-gitattributes.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             GitAttributes
         </a>
@@ -2479,6 +2606,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2493,7 +2621,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-githooks.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             GitHooks
         </a>
@@ -2501,6 +2629,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2515,7 +2644,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-gitignore.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             GitIgnore
         </a>
@@ -2523,6 +2652,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2537,7 +2667,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-grumphp.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             GrumPhp
         </a>
@@ -2545,6 +2675,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2559,7 +2690,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-license.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             License
         </a>
@@ -2567,6 +2698,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2581,7 +2713,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-path.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Path
         </a>
@@ -2589,6 +2721,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2603,7 +2736,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-php.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Php
         </a>
@@ -2611,6 +2744,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2625,7 +2759,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-phpunit.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             PhpUnit
         </a>
@@ -2637,6 +2771,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-phpunit-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-phpunit-html"
+                aria-label="Toggle PhpUnit sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2658,7 +2793,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-phpunit-bootstrap.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Bootstrap
         </a>
@@ -2666,6 +2801,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2680,7 +2816,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-phpunit-coverage.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Coverage
         </a>
@@ -2688,6 +2824,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2702,7 +2839,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-phpunit-event.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Event
         </a>
@@ -2714,6 +2851,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-phpunit-event-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-phpunit-event-html"
+                aria-label="Toggle Event sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2735,7 +2873,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-phpunit-event-testsuite.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             TestSuite
         </a>
@@ -2743,10 +2881,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2761,7 +2901,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-phpunit-runner.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Runner
         </a>
@@ -2773,6 +2913,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-phpunit-runner-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-phpunit-runner-html"
+                aria-label="Toggle Runner sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2794,7 +2935,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-phpunit-runner-extension.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Extension
         </a>
@@ -2802,14 +2943,17 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2824,7 +2968,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-process.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Process
         </a>
@@ -2832,6 +2976,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2846,7 +2991,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-project.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Project
         </a>
@@ -2854,6 +2999,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2868,7 +3014,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-psr.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Psr
         </a>
@@ -2880,6 +3026,7 @@
                 data-bs-target="#sidebar-namespaces-fastforward-devtools-psr-html"
                 aria-expanded="false"
                 aria-controls="sidebar-namespaces-fastforward-devtools-psr-html"
+                aria-label="Toggle Psr sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -2901,7 +3048,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-psr-clock.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Clock
         </a>
@@ -2909,10 +3056,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                             <li class="nav-item">
     
     
@@ -2927,7 +3076,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-rector.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Rector
         </a>
@@ -2935,6 +3084,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2949,7 +3099,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-reflection.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Reflection
         </a>
@@ -2957,6 +3107,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2971,7 +3122,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-resource.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Resource
         </a>
@@ -2979,6 +3130,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -2993,7 +3145,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-selfupdate.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             SelfUpdate
         </a>
@@ -3001,6 +3153,7 @@
             </div>
 
     </li>
+
                             <li class="nav-item">
     
     
@@ -3015,7 +3168,7 @@
     <div class="d-flex align-items-center">
         <a
             href="namespaces/fastforward-devtools-sync.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             Sync
         </a>
@@ -3023,14 +3176,17 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                             </ul>
                 </li>
                             <li class="mb-4">
@@ -3054,7 +3210,7 @@
     <div class="d-flex align-items-center">
         <a
             href="packages/FastForward.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis"
         >
             FastForward
         </a>
@@ -3066,6 +3222,7 @@
                 data-bs-target="#sidebar-packages-FastForward-html"
                 aria-expanded="false"
                 aria-controls="sidebar-packages-FastForward-html"
+                aria-label="Toggle FastForward sections"
             >
                 <i class="fas fa-chevron-down small"></i>
             </button>
@@ -3087,7 +3244,7 @@
     <div class="d-flex align-items-center">
         <a
             href="packages/FastForward-DevTools.html"
-            class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
+                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
             DevTools
         </a>
@@ -3095,10 +3252,12 @@
             </div>
 
     </li>
+
                         
             </ul>
         </div>
     </li>
+
                                             </ul>
                 </li>
                     
@@ -3148,6 +3307,7 @@
     </ul>
 </nav>
                     </div>
+                    </details>
                 </aside>
 
                 <div class="col-12 col-lg-9 col-xl-10">
@@ -3156,7 +3316,7 @@
                             
                             <div class="row g-4">
                                 <div class="col-12">
-                                    <div class="bg-body rounded-4 border p-4 p-xl-5 shadow-sm">
+                                    <div class="ff-docs-article bg-body p-4 p-xl-5">
                                             <section class="py-4">
         <div class="d-flex align-items-center gap-2 mb-4">
             <i class="fas fa-project-diagram text-primary"></i>
@@ -3244,7 +3404,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </main>
 
         <div
     data-search-results
@@ -3279,7 +3439,7 @@
     </div>
 </div>    </div>
 
-    <a id="back-to-top" data-toggle="tooltip" title="Back to Top" href="javascript:void(0)"><i class="fa fa-chevron-up"></i></a>
+    <a id="back-to-top" title="Back to Top" href="graphs/classes.html#content" aria-label="Back to documentation"><i class="fa fa-chevron-up"></i></a>
 
         <script src="https://unpkg.com/panzoom@8.7.3/dist/panzoom.min.js"></script>
 </body>
