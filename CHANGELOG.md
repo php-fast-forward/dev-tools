@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Add an opt-in native GitHub Pages reports workflow with an isolated deployment job and verified documentation identity assets from template 2.1.0 or newer.
+
 ### Changed
 
 - Refresh README and documentation with contextual Dash artwork for the DevTools quality pipeline (#360).

@@ -1,0 +1,17 @@
+name: "Fast Forward Reports"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Reusable job ceilings; only the isolated deploy job can write Pages or request OIDC.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  reports:
+    uses: php-fast-forward/dev-tools/.github/workflows/reports-native.yml@main
