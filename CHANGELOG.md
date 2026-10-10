@@ -21,6 +21,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Isolate native Pages PR builds from production deployment queues, preserve full repository history in generated metrics, and retry downloaded identity hashes during CDN propagation.
+
 - Keep required per-version statuses current across normal and Dependabot reruns through checkout-free lifecycle publishers using verified GitHub run and job metadata.
 - Keep Composer audit and nested dependency-health checks plugin-free after CI installs without plugins, so consumer allowlists do not block vulnerability or dependency analysis.
 - Isolate completed per-version status publication from repository-controlled test jobs, preserve access to private GitHub job metadata, and disable persisted checkout credentials in the reusable test workflow.
