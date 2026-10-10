@@ -3461,15 +3461,24 @@ repository-specific verification; <code>dev-tools:sync</code>
 <a href="./advanced/branch-protection-and-bot-commits.html">Branch Protection and Bot Commits</a>.</p>
 
             
-    <p>Workflow-only consumers do not need to declare <code>fast-forward/dev-tools</code>
- as a
-local Composer dependency. The shared <code>setup-composer</code>
+    <p>The standard reusable workflows support workflow-only consumers without a
+local <code>fast-forward/dev-tools</code>
+ Composer dependency. The shared
+<code>setup-composer</code>
  action prefers the
 consumer <code>vendor/bin/dev-tools</code>
  when it exists and otherwise exposes a
 <code>dev-tools</code>
  wrapper backed by the checked-out <code>.dev-tools-actions</code>
  source.</p>
+
+            
+    <p>For Pages configured to use GitHub Actions, the optional
+<code>reports-native.yml</code>
+ workflow requires consumer-local DevTools and a template
+version of at least 2.1.0. Follow the <a href="https://github.com/php-fast-forward/dev-tools/blob/main/resources/github-actions-optional/reports-native.md">native Pages operator guide</a>
+before adopting it. The legacy <code>reports.yml</code>
+ workflow remains unchanged.</p>
 
     </section>
 
