@@ -1,0 +1,139 @@
+name: Native GitHub Pages Reports
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: reports-pages
+  cancel-in-progress: false
+
+jobs:
+  reports:
+    name: Generate Reports
+    runs-on: ubuntu-latest
+    outputs:
+      logo-sha: ${{ steps.identity.outputs.logo_sha }}
+      dash-sha: ${{ steps.identity.outputs.dash_sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Checkout dev-tools workflow helpers
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: main
+          path: .dev-tools-actions
+          persist-credentials: false
+      - name: Resolve PHP version
+        id: php
+        uses: ./.dev-tools-actions/.github/actions/php/resolve-version
+      - name: Setup PHP and plugin-free dependencies
+        uses: ./.dev-tools-actions/.github/actions/php/setup-composer
+        with:
+          php-version: ${{ steps.php.outputs.php-version }}
+          extensions: pcov, pcntl, dom, intl, zip
+          coverage: pcov
+          root-version: dev-main
+          install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+      - name: Install signed documentation generator in isolation
+        shell: bash
+        run: |
+          command -v gpg
+          mkdir -p "$RUNNER_TEMP/phpdoc-tool"
+          php <<'PHP'
+          <?php
+          $manifest = [
+              'require' => ['phpdocumentor/shim' => '^3.9'],
+              'config' => ['allow-plugins' => ['phpdocumentor/shim' => true]],
+          ];
+          $json = json_encode($manifest, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+          if (file_put_contents(getenv('RUNNER_TEMP') . '/phpdoc-tool/composer.json', $json) === false) {
+              throw new RuntimeException('Cannot write the documentation tool manifest.');
+          }
+          PHP
+          COMPOSER_HOME="$RUNNER_TEMP/phpdoc-home" composer install --working-dir="$RUNNER_TEMP/phpdoc-tool" --no-scripts --no-interaction --prefer-dist --no-progress 2>&1 | tee "$RUNNER_TEMP/phpdoc-install.log"
+          grep -F 'PHAR signature successfully verified' "$RUNNER_TEMP/phpdoc-install.log"
+          install -m 0755 "$RUNNER_TEMP/phpdoc-tool/vendor/bin/phpdoc" vendor/bin/phpdoc
+      - name: Verify selected template version
+        run: |
+          php <<'PHP'
+          <?php
+          require 'vendor/autoload.php';
+          $name = 'fast-forward/phpdoc-bootstrap-template';
+          $version = Composer\InstalledVersions::getPrettyVersion($name);
+          if ($version === null || version_compare(ltrim($version, 'v'), '2.1.0', '<')) {
+              throw new RuntimeException('The documentation design system requires template 2.1.0 or newer.');
+          }
+          echo json_encode([
+              'template_version' => $version,
+              'template_reference' => Composer\InstalledVersions::getReference($name),
+          ], JSON_THROW_ON_ERROR) . PHP_EOL;
+          PHP
+      - name: Generate documentation, coverage and metrics
+        env:
+          COMPOSER_ROOT_VERSION: dev-main
+        run: |
+          dev-tools reports --target=.dev-tools/reports --coverage=.dev-tools/reports/coverage --metrics=.dev-tools/reports/metrics
+          touch .dev-tools/reports/.nojekyll
+          rm -rf .dev-tools/reports/cache
+          test -f .dev-tools/reports/index.html
+          test -f .dev-tools/reports/coverage/index.html
+          test -f .dev-tools/reports/metrics/index.html
+      - name: Verify generated identity assets
+        id: identity
+        run: |
+          php <<'PHP'
+          <?php
+          $template = 'vendor/fast-forward/phpdoc-bootstrap-template/data/';
+          $outputs = [];
+          foreach (['dash-reading.png' => 'dash_sha', 'fast-forward-logo-dark.svg' => 'logo_sha'] as $name => $key) {
+              $generated = '.dev-tools/reports/images/' . $name;
+              if (!is_file($generated) || hash_file('sha256', $generated) !== hash_file('sha256', $template . $name)) {
+                  throw new RuntimeException('The published documentation must contain the selected template asset: ' . $name);
+              }
+              $outputs[] = $key . '=' . hash_file('sha256', $generated);
+          }
+          if (file_put_contents(getenv('GITHUB_OUTPUT'), implode(PHP_EOL, $outputs) . PHP_EOL, FILE_APPEND) === false) {
+              throw new RuntimeException('Cannot expose identity hashes for deployment verification.');
+          }
+          PHP
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: .dev-tools/reports
+
+  deploy:
+    name: Deploy Reports to Pages
+    needs: reports
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    outputs:
+      page-url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+
+  verify:
+    name: Verify Reports Deployment
+    needs: [reports, deploy]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify public documentation identity
+        env:
+          PAGE_URL: ${{ needs.deploy.outputs.page-url }}
+          LOGO_SHA: ${{ needs.reports.outputs.logo-sha }}
+          DASH_SHA: ${{ needs.reports.outputs.dash-sha }}
+        run: |
+          curl --fail --location --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 "${PAGE_URL}images/fast-forward-logo-dark.svg" -o "$RUNNER_TEMP/published-logo.svg"
+          curl --fail --location --retry 8 --retry-all-errors --retry-delay 5 --max-time 30 "${PAGE_URL}images/dash-reading.png" -o "$RUNNER_TEMP/published-dash.png"
+          printf '%s  %s\n' "$LOGO_SHA" "$RUNNER_TEMP/published-logo.svg" | sha256sum --check --strict
+          printf '%s  %s\n' "$DASH_SHA" "$RUNNER_TEMP/published-dash.png" | sha256sum --check --strict
