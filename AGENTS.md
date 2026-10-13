@@ -158,7 +158,7 @@ other managed assets through `composer dev-tools:sync`.
 
 Release and publishing behavior is driven primarily through
 `.github/workflows/tests.yml`, `changelog.yml`, `reports.yml`, `wiki.yml`,
-`wiki-preview.yml`, `wiki-maintenance.yml`, `auto-assign.yml`, and
+`wiki-direct.yml`, `auto-assign.yml`, and
 `label-sync.yml`, with reusable local workflow building blocks grouped under
 `.github/actions/` and packaged consumer workflow wrappers living under
 `resources/github-actions/`. Contract-specific templates in
@@ -166,6 +166,11 @@ Release and publishing behavior is driven primarily through
 installed by `dev-tools:sync`; read each companion guide before copying one
 into a consumer repository. Packaged skills live under `.agents/skills/`
 alongside mirrored project-agent prompts under `.agents/agents/`.
+
+The active `wiki.yml` entry and packaged wrapper call `wiki-direct.yml` for
+read-only generation on pull requests and direct publication from `main`.
+The maintenance entry is manual-only compatibility guidance; legacy reusable
+`wiki-preview.yml` and `wiki-maintenance.yml` remain for unmigrated callers.
 
 **Package Details:**
 
@@ -198,7 +203,7 @@ composer dev-tools
 - `README.md`: high-level command surface, architecture overview, and consumer-facing context
 - `docs/commands/`: command-specific behavior and option details
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
-- `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `review.yml`, `wiki.yml`, `wiki-preview.yml`, `wiki-maintenance.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
+- `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `review.yml`, `wiki.yml`, `wiki-direct.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
 - `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `summary`, `wiki`, `changelog`, and `label-sync`
 - `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
 - [resources/github-actions-optional/test-statuses.md](resources/github-actions-optional/test-statuses.md): explicit opt-in guide for Dependabot status aliases; verify source workflow identity, PHP matrix and protection contexts before adopting the checkout-free template
@@ -206,14 +211,14 @@ composer dev-tools
 - `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
 - `.agents/skills/`: packaged procedural skills shipped to consumer repositories
 - `.agents/agents/`: repository-specific role prompts mirrored through `.github/agents`
-- `.github/wiki`: generated or synchronized wiki content published by repo workflows
+- `.dev-tools/wiki-generated`: local Markdown output from normal sync; wiki publication operates on a separate artifact and Wiki checkout
 
 ## Additional Notes
 
 - **GrumPHP**: Automatically runs on pre-commit (configured in `grumphp.yml`)
 - **Rector**: Custom rules in `src/Rector/` for automated refactoring
 - **Documentation**: Sphinx-based docs in `docs/` directory
-- **Wiki**: Pull-request preview publication starts in `.github/workflows/wiki.yml`, while merged publication and preview cleanup run through `.github/workflows/wiki-maintenance.yml`
+- **Wiki**: `.github/workflows/wiki.yml` delegates to `wiki-direct.yml`; pull requests generate without write credentials and only `main` publishes to the separate Wiki repository. `Home.md`, `classes/` and `functions/` are generated; preserve manually maintained pages outside those surfaces. Normal sync does not initialize a Wiki submodule; `wiki --init` remains an explicit legacy option.
 - **GitHub Actions**: Reusable workflows live in `.github/workflows/`, local workflow actions live in `.github/actions/`, and consumer wrappers are synchronized from `resources/github-actions/`
 - **Dependency Health CI**: `.github/workflows/tests.yml` always runs the dependency-health job, and its default `max-outdated` input is `-1` so outdated packages are reported without failing CI on count alone
 - **Sync Preview Modes**: `dev-tools:sync --dry-run`, `--check`, and `--interactive` intentionally skip wiki, skills, and agents because those flows do not yet expose non-destructive verification

@@ -164,7 +164,12 @@ final class SyncCommand extends Command
                 logLevel: LogLevel::WARNING,
             );
         } else {
-            $this->queueDevToolsCommand(['wiki', '--init'], true, $jsonOutput, $prettyJsonOutput);
+            $this->queueDevToolsCommand(
+                ['wiki', '--target=.dev-tools/wiki-generated'],
+                true,
+                $jsonOutput,
+                $prettyJsonOutput
+            );
             $this->queueDevToolsCommand(['skills'], true, $jsonOutput, $prettyJsonOutput);
             $this->queueDevToolsCommand(['agents'], true, $jsonOutput, $prettyJsonOutput);
         }

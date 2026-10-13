@@ -14,7 +14,7 @@ The ``dev-tools:sync`` command synchronizes consumer-facing automation and defau
 4. ``copy-resource`` - copies dependabot.yml
 5. ``codeowners`` - generates ``.github/CODEOWNERS`` from local metadata
 6. ``funding`` - synchronizes ``composer.json`` funding metadata with ``.github/FUNDING.yml``
-7. ``wiki --init`` - initializes wiki as submodule
+7. ``wiki --target=.dev-tools/wiki-generated`` - generates local wiki Markdown
 8. ``gitignore`` - merges .gitignore files
 9. ``gitattributes`` - manages export-ignore rules
 10. ``skills`` - synchronizes packaged skills
@@ -114,7 +114,12 @@ Behavior
   ``.gitattributes``, ``LICENSE``, and Git hooks.
 - ``--interactive`` prompts before replacing drifted managed files when the
   command is running in an interactive terminal.
-- Creates ``.github/wiki`` as a git submodule when missing.
+- Generates local API Markdown in ``.dev-tools/wiki-generated`` without
+  creating or updating a wiki Git submodule.
+- Existing workflow files are preserved unless ``--overwrite`` is requested.
+  To adopt direct wiki publication, migrate the existing ``wiki.yml`` and
+  ``wiki-maintenance.yml`` wrappers explicitly or sync with ``--overwrite``.
+  The packaged maintenance wrapper is manual-only compatibility guidance.
 - Calls other commands in sequence.
 - Runs ``skills`` and ``agents`` in normal mode so consumer repositories
   receive both packaged procedural skills and packaged role prompts.

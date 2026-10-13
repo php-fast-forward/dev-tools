@@ -59,8 +59,8 @@ The packaged wrappers currently include:
 *   ``review.yml``
 *   ``changelog.yml``
 *   ``auto-resolve-conflicts.yml``
-*   ``wiki.yml`` for pull-request wiki previews
-*   ``wiki-maintenance.yml`` for merged-publication and cleanup work
+*   ``wiki.yml`` for read-only pull-request generation and direct publication from ``main``
+*   ``wiki-maintenance.yml`` as manual-only migration guidance for legacy wrappers
 *   ``auto-assign.yml``
 *   ``label-sync.yml``
 
@@ -206,41 +206,42 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
 Fast Forward Wiki
 -----------------
 
-Wiki automation is split into two reusable workflows and two consumer
-wrappers:
+The active ``wiki.yml`` wrapper calls ``wiki-direct.yml``. The workflow follows
+the container repository's direct-publication model: generate first with read
+permissions, then publish the generated artifact in a separate job.
 
-*   ``wiki.yml`` calls the reusable ``wiki-preview.yml`` workflow and is
-    responsible only for pull-request preview updates.
-*   ``wiki-maintenance.yml`` calls the reusable
-    ``wiki-maintenance.yml`` workflow and is responsible for merged
-    publication, closed-preview deletion, and scheduled cleanup.
+* **Pull requests:** generate API Markdown and upload an artifact without Wiki
+  write credentials. There are no preview-branch or parent-pointer commits.
+* **Main publication:** only ``main`` publishes. The publishing job downloads
+  the artifact and updates a separate checkout of the GitHub Wiki; it does not
+  check out or execute the project's source code.
+* **Page ownership:** ``Home.md`` is generated and replaced during publication.
+  Generated ``classes/`` and ``functions/`` directories
+  are replaced during publication so removed APIs do not leave stale pages.
+  Maintain hand-written pages outside these generated directories and Home page.
+* **Generation sources:** shared helpers and the Markdown renderer use the
+  workflow's selected source revisions. DevTools generates its own API using
+  the checked-out ``bin/dev-tools``; consumers use their installed runtime.
+* **Local sync:** ``dev-tools:sync`` generates Markdown in
+  ``.dev-tools/wiki-generated`` and does not initialize a Git submodule.
+  Explicit ``wiki --init`` remains available for legacy local workflows.
 
-**Behavior:**
-*   **Submodule Management**: Both wiki workflows work against the
-    ``.github/wiki`` submodule that points to the actual GitHub Wiki
-    repository.
-*   **Pull Request Preview**: ``wiki.yml`` updates a dedicated preview branch
-    in the wiki repository named ``pr-{number}``.
-*   **Preview Generation**: The preview workflow resolves the PHP version,
-    installs dependencies, exposes the shared ``dev-tools`` runtime, runs
-    ``dev-tools wiki -- --target=.github/wiki``,
-    commits the generated Markdown into the wiki submodule, and then updates
-    the parent repository's submodule pointer when needed.
-*   **Preview Summary**: The preview workflow appends the preview branch name
-    and whether the parent repository submodule pointer changed.
-*   **Merged Publication**: ``wiki-maintenance.yml`` promotes the matching
-    ``pr-{number}`` preview branch to ``master`` after a pull request is merged
-    into ``main`` and validates the resulting remote SHA.
-*   **Cleanup**: ``wiki-maintenance.yml`` deletes preview branches for closed
-    pull requests and also performs scheduled cleanup for stale
-    ``pr-{number}`` branches.
-*   **Maintenance Summaries**: Publish and cleanup runs append the affected
-    branch names or cleanup counts to the run summary.
+Migration from the pointer-based workflows requires updating the consumer's
+``wiki.yml`` and removing its automatic maintenance triggers. The packaged
+``wiki-maintenance.yml`` is now a manual-only compatibility stub. Normal sync
+preserves existing files: replace the wrappers explicitly or review
+``composer dev-tools:sync --overwrite``. Sync does not delete files missing
+from its packaged source directory.
 
-.. note::
-   See :doc:`../configuration/repository-setup` for mandatory initial setup required for the Wiki workflow to function.
-   See :doc:`../advanced/branch-protection-and-bot-commits` for branch
-   protection, bot commit, and submodule pointer conflict guidance.
+Remove only the ``.github/wiki`` gitlink and its matching ``.gitmodules``
+stanza when migrating; preserve other submodules and the separate GitHub Wiki
+repository. Existing Wiki content is not deleted by removing the parent
+pointer. Initialize the Wiki in GitHub before enabling publication.
+
+Legacy reusable ``wiki-preview.yml`` and ``wiki-maintenance.yml`` implementations
+remain available to consumers that have not migrated. Their branch and pointer
+behavior is documented in :doc:`../advanced/branch-protection-and-bot-commits`;
+new wrappers use direct publication.
 
 Fast Forward Tests
 ------------------
@@ -347,9 +348,10 @@ the conflicted file list is limited to:
 *   ``.github/wiki``;
 *   ``CHANGELOG.md``.
 
-For ``.github/wiki`` conflicts, the workflow keeps the pull request side of the
-submodule pointer because that pointer references the preview wiki branch that
-belongs to the pull request. For ``CHANGELOG.md`` conflicts, it treats the base
+For legacy ``.github/wiki`` conflicts, the workflow keeps the pull request side
+of the submodule pointer because that pointer references the preview wiki branch
+that belongs to the pull request. Direct-publication repositories have no such
+pointer. For ``CHANGELOG.md`` conflicts, it treats the base
 branch changelog as authoritative and merges branch-only ``Unreleased`` entries
 back into the current top-level ``Unreleased`` section. That keeps entries in
 the right place even when a release was promoted while the pull request was

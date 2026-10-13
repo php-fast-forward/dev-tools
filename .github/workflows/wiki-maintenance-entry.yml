@@ -1,20 +1,12 @@
-name: Maintain Wiki
+name: Legacy Wiki Maintenance
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 3 * * *'
-  pull_request_target:
-    types: [closed]
 
-concurrency:
-  group: update-wiki-maintenance-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+permissions: {}
 
 jobs:
-  maintenance:
-    permissions:
-      contents: write
-      pull-requests: read
-    uses: ./.github/workflows/wiki-maintenance.yml
-    secrets: inherit
+  migration:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'Wiki publication now runs through wiki.yml without a submodule.'
