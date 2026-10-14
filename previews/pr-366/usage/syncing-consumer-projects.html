@@ -3418,11 +3418,11 @@ non-symlink directories.</td>
 non-symlink directories.</td>
     </tr>
     <tr>
-            <td><code>.github/wiki</code>
+            <td><code>.dev-tools/wiki-generated</code>
 </td>
-            <td>Adds a Git submodule derived from <code>git remote origin</code>
-.</td>
-            <td>Only when missing.</td>
+            <td>Generates local Markdown API documentation without creating a Git
+submodule.</td>
+            <td>Generated in normal mode; skipped in preview/check modes.</td>
     </tr>
     <tr>
             <td><code>.git/hooks/*</code>
@@ -3469,11 +3469,11 @@ needs fresh links.</li>
     <li class="dash">a writable <code>composer.json</code>
  in the consumer project;</li>
 
-    <li class="dash">a configured <code>git remote origin</code>
- if the wiki submodule must be created;</li>
-
     <li class="dash">permission to create local <code>.github/</code>
  files;</li>
+
+    <li class="dash">permission to write local <code>.dev-tools/wiki-generated</code>
+ documentation;</li>
 
     <li class="dash">permission to create local <code>.agents/skills</code>
  and <code>.agents/agents</code>
@@ -3496,11 +3496,15 @@ local action implementations, they explicitly check out the upstream
 <code>php-fast-forward/dev-tools</code>
  repository into a dedicated
 <code>.dev-tools-actions</code>
- path in the run workspace first, using sparse checkout
-for <code>.github/actions</code>
- only, so the consumer repository does not need to
-mirror <code>.github/actions</code>
- locally.</p>
+ path in the run workspace first, so the consumer
+repository does not need to mirror <code>.github/actions</code>
+ locally. Workflows that
+need only shared actions can use sparse checkout. The direct Wiki workflow
+uses a full checkout pinned to a commit, installs the renderer there, and runs
+it against the consumer project without changing its <code>composer.json</code>
+,
+<code>composer.lock</code>
+, or plugin allowlist.</p>
 
             
     <p>That matters most for these cases:</p>
@@ -3509,13 +3513,30 @@ mirror <code>.github/actions</code>
 
 <ul>
     <li><code>.github/workflows/wiki.yml</code>
- now handles only pull-request wiki previews.</li>
+ calls <code>wiki-direct.yml</code>
+ for read-only
+generation on pull requests and direct publication from <code>main</code>
+ to the
+separate Wiki repository. Only <code>Home.md</code>
+, <code>classes/</code>
+, and <code>functions/</code>
 
-    <li><code>.github/workflows/wiki-maintenance.yml</code>
- handles publication to the wiki
-<code>master</code>
- branch after merge, closed-preview deletion, and scheduled
-cleanup.</li>
+are generated surfaces; manually maintained pages outside them are
+preserved.</li>
+
+    <li>The packaged <code>.github/workflows/wiki-maintenance.yml</code>
+ is a manual-only
+migration notice. Legacy reusable <code>wiki-preview.yml</code>
+ and
+<code>wiki-maintenance.yml</code>
+ remain available for unmigrated callers.</li>
+
+    <li>Normal sync generates <code>.dev-tools/wiki-generated</code>
+ without <code>--init</code>
+.
+The explicit <code>wiki --init</code>
+ option remains available for legacy submodule
+users.</li>
 
     <li><code>.github/workflows/auto-assign.yml</code>
  and

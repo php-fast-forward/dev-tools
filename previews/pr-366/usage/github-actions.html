@@ -3701,9 +3701,13 @@ Maintain hand-written pages outside these generated directories and Home page.</
 
     <li><strong>Generation sources:</strong>
  shared helpers and the Markdown renderer use the
-workflow&#039;s selected source revisions. DevTools generates its own API using
-the checked-out <code>bin/dev-tools</code>
-; consumers use their installed runtime.</li>
+workflow&#039;s selected source revision in a separate Composer installation.
+Consumer dependencies are installed without plugins or scripts; their
+manifest, lock file, version constraints and plugin allowlist are preserved.
+The signed phpDocumentor binary and Markdown theme come from the isolated
+renderer. DevTools generates its own API using the checked-out
+<code>bin/dev-tools</code>
+; consumers use the explicit pinned renderer binary.</li>
 
     <li><strong>Local sync:</strong>
  <code>dev-tools:sync</code>
