@@ -1,0 +1,122 @@
+name: Publish Wiki Directly
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    outputs:
+      generated: ${{ steps.generate.outputs.generated }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - name: Checkout the shared dev-tools actions
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          repository: php-fast-forward/dev-tools
+          ref: d5a3b7eec9896f9ea50974ff09b23c32887acbc0
+          path: .dev-tools-actions
+          persist-credentials: false
+      - name: Resolve PHP version
+        id: php
+        uses: ./.dev-tools-actions/.github/actions/php/resolve-version
+      - name: Setup PHP and dependencies
+        uses: ./.dev-tools-actions/.github/actions/php/setup-composer
+        with:
+          php-version: ${{ steps.php.outputs.php-version }}
+          root-version: dev-main
+          install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+      - name: Install the pinned Markdown renderer
+        working-directory: .dev-tools-actions
+        env:
+          COMPOSER_ROOT_VERSION: dev-main
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
+      - name: Generate API pages
+        id: generate
+        run: |
+          has_api=$(php -r 'require ".dev-tools-actions/vendor/autoload.php"; echo FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface::class)->resolve()->canGenerateApiDocumentation() ? "true" : "false";')
+          echo "generated=${has_api}" >> "$GITHUB_OUTPUT"
+          if [ "$has_api" = false ]; then
+            echo 'No autoloaded PHP API directories; skip Wiki generation and publication.'
+            exit 0
+          fi
+          mkdir -p vendor/bin vendor/saggre/phpdocumentor-markdown/themes/markdown
+          cp .dev-tools-actions/vendor/bin/phpdoc vendor/bin/phpdoc
+          chmod +x vendor/bin/phpdoc
+          rsync -a --delete .dev-tools-actions/vendor/saggre/phpdocumentor-markdown/themes/markdown/ vendor/saggre/phpdocumentor-markdown/themes/markdown/
+          if [ "$GITHUB_REPOSITORY" = php-fast-forward/dev-tools ]; then
+            ./bin/dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
+          else
+            export DEV_TOOLS_BINARY="$GITHUB_WORKSPACE/.dev-tools-actions/bin/dev-tools"
+            export DEV_TOOLS_AUTOLOAD="$GITHUB_WORKSPACE/.dev-tools-actions/vendor/autoload.php"
+            export DEV_TOOLS_AUTO_RESOLVE_AUTOLOAD="$DEV_TOOLS_AUTOLOAD"
+            export DEV_TOOLS_RUNTIME_SOURCE=workflow
+            ./.dev-tools-actions/bin/dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
+          fi
+          test -s .dev-tools/wiki-generated/Home.md
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: steps.generate.outputs.generated == 'true'
+        with:
+          name: wiki
+          path: .dev-tools/wiki-generated
+          if-no-files-found: error
+
+  publish:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && needs.generate.outputs.generated == 'true'
+    needs: generate
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    concurrency:
+      group: ${{ github.repository }}-wiki-publication
+      cancel-in-progress: false
+      queue: max
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: wiki
+          path: wiki-generated
+      - name: Publish API pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          current=$(gh api "repos/${GITHUB_REPOSITORY}/commits/main" --jq .sha)
+          if [ "$current" != "$GITHUB_SHA" ]; then
+            echo 'A newer main run will publish the current documentation.'
+            exit 0
+          fi
+          git -c credential.helper= -c 'credential.helper=!gh auth git-credential' clone "https://github.com/${GITHUB_REPOSITORY}.wiki.git" wiki
+          if find wiki-generated wiki -path wiki/.git -prune -o \( -type l -o -name AGENTS.md \) -print -quit | grep -q .; then
+            echo 'Unexpected symlink or agent instruction page.' >&2
+            exit 1
+          fi
+          if find wiki-generated -type f ! -name '*.md' -print -quit | grep -q .; then
+            echo 'Generated Wiki payload must contain only Markdown.' >&2
+            exit 1
+          fi
+          # classes/ and functions/ are phpDocumentor-owned API namespaces.
+          # Pages outside those namespaces are preserved.
+          for namespace in classes functions; do
+            mkdir -p "wiki-generated/${namespace}" "wiki/${namespace}"
+            rsync -a --delete "wiki-generated/${namespace}/" "wiki/${namespace}/"
+          done
+          cp wiki-generated/Home.md wiki/Home.md
+          git -C wiki add --all
+          if ! git -C wiki diff --cached --quiet; then
+            git -C wiki config user.name 'github-actions[bot]'
+            git -C wiki config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git -C wiki commit -m "Update Wiki from ${GITHUB_SHA}"
+            current=$(gh api "repos/${GITHUB_REPOSITORY}/commits/main" --jq .sha)
+            if [ "$current" != "$GITHUB_SHA" ]; then
+              echo 'Main advanced during generation; skip outdated publication.'
+              exit 0
+            fi
+            git -C wiki -c credential.helper= -c 'credential.helper=!gh auth git-credential' push origin HEAD
+          fi

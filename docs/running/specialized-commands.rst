@@ -252,6 +252,9 @@ Builds Markdown API pages for a GitHub wiki.
 Important details:
 
 - the default output directory is ``.github/wiki``;
+- normal ``dev-tools:sync`` and the direct Wiki workflow explicitly use
+  ``.dev-tools/wiki-generated`` without initializing a submodule;
+- ``--init`` remains an explicit legacy option for submodule users;
 - it uses the Markdown template from
   ``vendor/saggre/phpdocumentor-markdown/themes/markdown``;
 - cache stays enabled by default; ``--cache`` forces it on and ``--no-cache``
@@ -390,8 +393,8 @@ Important details:
 - it copies missing workflow stubs, ``.editorconfig``, and ``dependabot.yml``;
 - it calls ``codeowners`` to generate ``.github/CODEOWNERS`` from local
   metadata;
-- it creates ``.github/wiki`` as a git submodule when the directory is
-  missing.
+- in normal mode it generates local API Markdown in
+  ``.dev-tools/wiki-generated`` without creating a Git submodule;
 - it calls ``gitignore`` to merge the canonical .gitignore with the project's
   .gitignore;
 - it calls ``gitattributes`` to manage export-ignore rules in .gitattributes;

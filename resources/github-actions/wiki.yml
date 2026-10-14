@@ -1,25 +1,14 @@
-name: "Fast Forward Wiki Update"
+name: Fast Forward Wiki Update
 
 on:
+  push:
+    branches: [main]
   pull_request:
-    types: [opened, synchronize, reopened]
+  workflow_dispatch:
 
 permissions:
-  actions: write
-  contents: write
-  pull-requests: read
-
-concurrency:
-  group: fast-forward-wiki-preview-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
+  contents: write # Ceiling for the isolated publisher; generation remains read-only.
 
 jobs:
-  preview:
-    permissions:
-      actions: write
-      contents: write
-      pull-requests: read
-    # Pull-request wiki previews live here. Publication and preview cleanup are
-    # handled by the separate wiki-maintenance wrapper.
-    uses: php-fast-forward/dev-tools/.github/workflows/wiki-preview.yml@main
-    secrets: inherit
+  wiki:
+    uses: php-fast-forward/dev-tools/.github/workflows/wiki-direct.yml@main

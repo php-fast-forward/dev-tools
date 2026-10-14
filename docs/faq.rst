@@ -84,8 +84,12 @@ only ``AddMissingMethodPhpDocRector`` and ``RemoveEmptyDocBlockRector``.
 What happens if ``.github/wiki`` already exists?
 ------------------------------------------------
 
-``dev-tools:sync`` leaves it alone. The wiki submodule is only created when the
-directory is missing.
+``dev-tools:sync`` leaves it alone and generates local API Markdown in
+``.dev-tools/wiki-generated`` instead. Normal sync does not create or update a
+Wiki submodule. When migrating to direct Wiki publication, remove the obsolete
+gitlink and matching ``.gitmodules`` stanza explicitly, preserving the separate
+Wiki repository and any other submodules. ``wiki --init`` remains available as
+an explicit legacy option.
 
 What happens if ``.agents/skills/my-skill`` already exists?
 -----------------------------------------------------------

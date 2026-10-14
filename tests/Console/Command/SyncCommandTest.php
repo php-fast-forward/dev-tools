@@ -92,12 +92,15 @@ final class SyncCommandTest extends TestCase
     #[Test]
     public function executeWillQueueDedicatedSynchronizationCommands(): void
     {
+        $detachedCommandLines = [];
         $this->processQueue->add(Argument::type(Process::class), false, false, Argument::cetera())->shouldBeCalledTimes(
             2
         );
-        $this->processQueue->add(Argument::type(Process::class), false, true, Argument::cetera())->shouldBeCalledTimes(
-            11
-        );
+        $this->processQueue->add(Argument::type(Process::class), false, true, Argument::cetera())
+            ->will(static function (array $arguments) use (&$detachedCommandLines): void {
+                $detachedCommandLines[] = $arguments[0]->getCommandLine();
+            })
+            ->shouldBeCalledTimes(11);
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
@@ -114,6 +117,13 @@ final class SyncCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(SyncCommand::SUCCESS, $this->executeCommand());
+        $wikiCommandLines = array_values(array_filter(
+            $detachedCommandLines,
+            static fn(string $commandLine): bool => str_contains($commandLine, "'wiki'"),
+        ));
+        self::assertCount(1, $wikiCommandLines);
+        self::assertStringContainsString("'--target=.dev-tools/wiki-generated'", $wikiCommandLines[0]);
+        self::assertStringNotContainsString('--init', $wikiCommandLines[0]);
     }
 
     /**

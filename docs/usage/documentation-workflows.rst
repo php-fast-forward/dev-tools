@@ -54,7 +54,9 @@ What Each Command Is For
 
 - ``docs`` builds the HTML documentation site. It fails early if the source
   guide directory does not exist.
-- ``wiki`` builds Markdown API pages intended for ``.github/wiki``.
+- Standalone ``wiki`` builds Markdown API pages in ``.github/wiki`` by default.
+  Normal sync and the direct Wiki workflow explicitly select
+  ``.dev-tools/wiki-generated`` without initializing a submodule.
 - ``reports`` runs ``docs``, ``tests --coverage``, and ``metrics`` using the
   selected DevTools workspace defaults. With the default workspace that means
   ``docs --target .dev-tools``, ``tests --coverage .dev-tools/coverage``, and
@@ -72,7 +74,8 @@ Outputs to Expect
   ``reports`` or ``tests --coverage`` is used;
 - metrics data under the selected workspace ``metrics`` directory when
   ``reports`` or ``metrics`` is used;
-- Markdown API pages under ``.github/wiki`` when ``wiki`` is used.
+- Markdown API pages under ``.github/wiki`` for standalone ``wiki`` by default,
+  or ``.dev-tools/wiki-generated`` for normal sync and the direct Wiki workflow.
 
 Troubleshooting
 ---------------

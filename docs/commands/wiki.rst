@@ -37,7 +37,8 @@ Options
    Force phpDocumentor caching off for this run.
 
 ``--init``
-   Initialize the configured wiki target as a Git submodule.
+   Legacy opt-in: initialize the configured wiki target as a Git submodule.
+   Normal ``dev-tools:sync`` and the direct wiki workflow do not use this option.
 
 ``--json``
    Emit a structured machine-readable payload instead of the normal terminal
@@ -59,9 +60,9 @@ Generate to custom directory:
 
 .. code-block:: bash
 
-   composer wiki --target=wiki
+   composer dev-tools wiki -- --target=.dev-tools/wiki-generated
 
-Initialize wiki as submodule:
+Initialize a legacy wiki submodule explicitly:
 
 .. code-block:: bash
 
@@ -100,3 +101,6 @@ Behavior
   directory. The option only affects phpDocumentor when caching is enabled.
 - Uses the Markdown template from ``vendor/saggre/phpdocumentor-markdown/themes/markdown``.
 - The ``--init`` option creates the wiki as a Git submodule pointing to the repository wiki.
+- Normal ``dev-tools:sync`` uses ``--target=.dev-tools/wiki-generated`` to
+  generate local Markdown. The direct wiki workflow publishes its generated
+  artifact to the separate GitHub Wiki repository without a parent gitlink.

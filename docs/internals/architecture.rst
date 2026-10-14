@@ -34,8 +34,9 @@ Consumer Synchronization Lifecycle
    ``composer.json`` scripts, funding metadata, workflow stubs,
    ``.editorconfig``, ``dependabot.yml``, ``.gitignore``,
    ``.gitattributes``, the project license, and packaged Git hooks.
-6. In normal mode, ``dev-tools:sync`` also runs ``wiki --init``,
-   ``skills``, and ``agents`` to initialize the wiki submodule and
+6. In normal mode, ``dev-tools:sync`` also runs
+   ``wiki --target=.dev-tools/wiki-generated``, ``skills``, and ``agents``
+   to generate local API Markdown without a wiki submodule and
    synchronize packaged links into ``.agents/skills`` and
    ``.agents/agents``.
 7. In ``--dry-run``, ``--check``, and ``--interactive`` modes, ``wiki``,

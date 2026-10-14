@@ -18,11 +18,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Composer(deps): Update ergebnis/phpunit-agent-reporter requirement from ^0.3 to ^1.0 (#356)
 - GitHub Actions(deps): Bump actions/checkout from 6 to 7 (#354)
 - GitHub Actions(deps): Bump EndBug/add-and-commit from 10 to 11 (#358)
+- Publish generated API pages directly to the GitHub Wiki from main without parent submodule-pointer commits, while pull requests generate read-only artifacts.
+- Generate local wiki Markdown in .dev-tools/wiki-generated during normal sync instead of initializing a Wiki submodule; retain explicit wiki --init for legacy use.
 
 ### Fixed
 
 - Isolate native Pages PR builds from production deployment queues, preserve full repository history in generated metrics, and retry downloaded identity hashes during CDN propagation.
-
 - Keep required per-version statuses current across normal and Dependabot reruns through checkout-free lifecycle publishers using verified GitHub run and job metadata.
 - Keep Composer audit and nested dependency-health checks plugin-free after CI installs without plugins, so consumer allowlists do not block vulnerability or dependency analysis.
 - Isolate completed per-version status publication from repository-controlled test jobs, preserve access to private GitHub job metadata, and disable persisted checkout credentials in the reusable test workflow.

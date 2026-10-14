@@ -168,7 +168,7 @@ composer update-composer-json --force
 
 # Installs and synchronizes dev-tools scripts, GitHub Actions workflows,
 # .editorconfig, .gitignore rules, packaged skills, packaged agents, and the
-# repository wiki submodule in .github/wiki
+# local wiki Markdown in .dev-tools/wiki-generated
 composer dev-tools:sync
 ```
 
@@ -192,6 +192,14 @@ guides without PSR-4 source paths, `docs` builds the guide site without trying
 to synthesize API pages. When `.github/wiki` is absent and no wiki has been
 initialized yet, `wiki` now skips generation with a warning instead of failing
 the whole automation run.
+
+Normal `dev-tools:sync` generates local Markdown in `.dev-tools/wiki-generated`
+without creating a Git submodule. The packaged `wiki.yml` workflow publishes
+generated API pages directly to the GitHub Wiki from `main`; pull requests
+generate a read-only artifact. Existing workflow wrappers require an explicit
+migration or `composer dev-tools:sync --overwrite` to adopt these changes. See
+[the workflow guide](docs/usage/github-actions.rst) for publication and page
+ownership details.
 
 The changelog commands manage Keep a Changelog 1.1.0 files without requiring
 extra tooling in the consumer repository. `changelog:entry` bootstraps a
@@ -329,7 +337,7 @@ skills they depend on.
 | `composer funding` | Synchronizes managed funding metadata between `composer.json` and `.github/FUNDING.yml`. |
 | `composer codeowners` | Generates managed `.github/CODEOWNERS` content from local repository metadata. |
 | `composer gitattributes` | Manages export-ignore rules in `.gitattributes`. |
-| `composer dev-tools:sync` | Updates scripts, CODEOWNERS, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, wiki setup, packaged skills, and packaged agents. |
+| `composer dev-tools:sync` | Updates scripts, CODEOWNERS, funding metadata, workflow stubs, `.editorconfig`, `.gitignore`, `.gitattributes`, local wiki Markdown, packaged skills, and packaged agents. |
 | `vendor/bin/dev-tools self-update` / `composer dev-tools:self-update` | Updates the local DevTools package, or the Composer global installation when the active binary is globally installed. |
 
 `--working-dir`/`-d` changes the project root used by the standalone binary.
@@ -370,7 +378,7 @@ authoring.
   the console application itself.
 - `Consumer Sync Pipeline` - `dev-tools:sync` refreshes `composer.json`,
   CODEOWNERS, funding metadata, workflow stubs, repository defaults, git
-  metadata files, packaged Git hooks, and, in normal mode, the wiki submodule
+  metadata files, packaged Git hooks, and, in normal mode, local wiki Markdown
   plus packaged skills and packaged project agents.
 
 ## 🤝 Contributing

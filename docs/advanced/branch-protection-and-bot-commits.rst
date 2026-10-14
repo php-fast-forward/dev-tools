@@ -9,22 +9,30 @@ updates.
 
 The model has two publishing lanes:
 
-- pull requests publish isolated previews;
+- pull requests provide report previews and read-only Wiki artifacts;
 - merges into ``main`` publish the final wiki and reports.
 
-For wiki automation, those lanes are now split across separate reusable
-workflows:
+The active ``wiki.yml`` calls ``wiki-direct.yml``. Its generation job has
+read-only permissions on pull requests; after merge, a separate job publishes
+from ``main`` to the Wiki repository. It does not create preview branches,
+commit repository pointers, or require Wiki-related bot commits on PR branches.
+
+Legacy consumers that have not migrated still use separate reusable workflows:
 
 - ``.github/workflows/wiki-preview.yml`` handles preview generation for pull
-  requests and is triggered through ``.github/workflows/wiki.yml``;
+  requests through a legacy consumer wrapper;
 - ``.github/workflows/wiki-maintenance.yml`` handles post-merge promotion,
   closed-pull-request cleanup, and scheduled orphan cleanup and is triggered
-  through ``.github/workflows/wiki-maintenance-entry.yml``.
+  through a legacy consumer maintenance wrapper. The producer maintenance entry
+  and current packaged consumer maintenance stub are manual-only notices.
 
 Wiki Preview Lifecycle
 ----------------------
 
-The wiki workflow writes generated Markdown to the GitHub wiki repository, but
+This section describes legacy preview/submodule consumers only. The direct
+workflow uses a generated artifact on pull requests instead.
+
+The legacy wiki workflow writes generated Markdown to the GitHub wiki repository, but
 it does not publish pull request content directly to the wiki ``master`` branch.
 Instead, each pull request receives a dedicated wiki branch.
 
@@ -91,6 +99,9 @@ respect those rules:
 - final wiki publication runs after the merge into ``main``;
 - final reports publication runs from the already-accepted ``main`` revision;
 - preview branches such as ``pr-123`` are temporary review targets.
+
+The pointer and preview-branch guidance below applies only to legacy Wiki
+consumers. Direct Wiki publication does not push to pull request branches.
 
 If a repository restricts bot pushes to pull request branches, maintainers
 should either allow the workflow token to update PR branches or require authors
@@ -220,7 +231,12 @@ comment. Scheduled preview cleanup uses ``pull-requests: read`` so it can
 distinguish open pull requests from closed or merged ones before deleting
 ``previews/pr-<number>`` directories.
 
-``wiki.yml`` is now preview-only, so its called workflow keeps
+The active ``wiki.yml`` caller permits ``contents: write`` so the separate
+``wiki-direct.yml`` publication job can publish from ``main``. Its generation
+job explicitly keeps ``contents: read`` and checkouts do not persist
+credentials. Pull requests never run the publication job.
+
+The legacy ``wiki-preview.yml`` keeps
 ``contents: write`` for wiki preview commits and parent-repository submodule
 pointer updates, ``actions: write`` to dispatch ``tests.yml`` after bot-authored
 pointer commits, and ``pull-requests: read`` to inspect pull request metadata
@@ -231,7 +247,7 @@ predictable conflict-resolution commits, ``pull-requests: write`` so it can
 inspect pull request state through GitHub tooling, and ``actions: write`` so it
 can dispatch ``tests.yml`` after it pushes a bot-authored resolution commit.
 
-``wiki-maintenance-entry.yml`` and ``wiki-maintenance.yml`` keep
+The legacy reusable ``wiki-maintenance.yml`` keeps
 ``contents: write`` for wiki publication and cleanup tasks, and
 ``pull-requests: read`` on jobs that need to distinguish merged, closed, and
 open pull requests before publishing or deleting preview branches.
@@ -265,6 +281,9 @@ updating a release pull request.
 Resolving ``.github/wiki`` Pointer Conflicts
 --------------------------------------------
 
+This section applies only to legacy submodule consumers. Direct Wiki publication
+does not create repository pointers.
+
 Submodule pointer conflicts happen when ``main`` and the pull request point to
 different generated wiki commits. The predictable-conflict workflow can resolve
 this automatically when the conflict scope is limited to ``.github/wiki`` and
@@ -291,13 +310,12 @@ regenerate the wiki locally before updating the pointer.
 Operational Checklist
 ---------------------
 
-- Keep source changes and generated pointer updates in the same pull request.
-- Review PR preview links before merging documentation-heavy changes.
+- Review report preview links and generated Wiki artifacts before merging
+  documentation-heavy changes.
 - Merge only through the protected ``main`` flow.
-- Let the post-merge wiki job publish to ``master``.
-- Treat wiki preview and wiki maintenance as separate automation concerns when
-  debugging workflow failures.
-- Let closed pull requests and scheduled cleanup remove wiki preview branches.
+- Let the direct Wiki publication job publish from ``main``.
+- For legacy consumers, keep generated pointers with their source changes and
+  use the separate preview and maintenance workflows for publication and cleanup.
 - Let closed pull requests and scheduled cleanup remove report preview
   directories.
 
