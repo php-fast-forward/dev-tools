@@ -24,33 +24,31 @@ jobs:
       - name: Resolve PHP version
         id: php
         uses: ./.dev-tools-actions/.github/actions/php/resolve-version
-      - name: Select the same pinned renderer
-        run: |
-          php <<'PHP'
-          <?php
-          $file = 'composer.json';
-          $data = json_decode(file_get_contents($file), true, 512, JSON_THROW_ON_ERROR);
-          if ($data['name'] !== 'fast-forward/dev-tools') {
-              $data['repositories']['pinned-dev-tools'] = [
-                  'type' => 'path',
-                  'url' => '.dev-tools-actions',
-                  'options' => ['symlink' => false, 'versions' => ['fast-forward/dev-tools' => 'dev-main']],
-              ];
-          }
-          $data['config']['allow-plugins']['fast-forward/dev-tools'] = false;
-          file_put_contents($file, json_encode($data, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT));
-          PHP
       - name: Setup PHP and dependencies
         uses: ./.dev-tools-actions/.github/actions/php/setup-composer
         with:
           php-version: ${{ steps.php.outputs.php-version }}
           root-version: dev-main
+          install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
+      - name: Install the pinned Markdown renderer
+        working-directory: .dev-tools-actions
+        env:
+          COMPOSER_ROOT_VERSION: dev-main
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
       - name: Generate API pages
         run: |
+          mkdir -p vendor/bin vendor/saggre/phpdocumentor-markdown/themes/markdown
+          cp .dev-tools-actions/vendor/bin/phpdoc vendor/bin/phpdoc
+          chmod +x vendor/bin/phpdoc
+          rsync -a --delete .dev-tools-actions/vendor/saggre/phpdocumentor-markdown/themes/markdown/ vendor/saggre/phpdocumentor-markdown/themes/markdown/
           if [ "$GITHUB_REPOSITORY" = php-fast-forward/dev-tools ]; then
             ./bin/dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
           else
-            dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
+            export DEV_TOOLS_BINARY="$GITHUB_WORKSPACE/.dev-tools-actions/bin/dev-tools"
+            export DEV_TOOLS_AUTOLOAD="$GITHUB_WORKSPACE/.dev-tools-actions/vendor/autoload.php"
+            export DEV_TOOLS_AUTO_RESOLVE_AUTOLOAD="$DEV_TOOLS_AUTOLOAD"
+            export DEV_TOOLS_RUNTIME_SOURCE=workflow
+            ./.dev-tools-actions/bin/dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
           fi
           test -s .dev-tools/wiki-generated/Home.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

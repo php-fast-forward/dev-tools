@@ -274,8 +274,18 @@ jobs:
                   safe-directories: |
                       ${{ github.workspace }}/.github/wiki
 
-            - name: Refresh wiki preview pointer for release pull request
+            - name: Detect legacy Wiki gitlink
               if: ${{ steps.create_pr.outputs.pull-request-number != '' }}
+              id: legacy_wiki
+              run: |
+                  if git ls-files --stage -- .github/wiki | grep -q '^160000 '; then
+                      echo 'present=true' >> "$GITHUB_OUTPUT"
+                  else
+                      echo 'present=false' >> "$GITHUB_OUTPUT"
+                  fi
+
+            - name: Refresh wiki preview pointer for release pull request
+              if: ${{ steps.create_pr.outputs.pull-request-number != '' && steps.legacy_wiki.outputs.present == 'true' }}
               id: refresh_release_preview
               uses: ./.dev-tools-actions/.github/actions/wiki/refresh-preview-pointer
               with:

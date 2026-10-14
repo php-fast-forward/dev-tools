@@ -220,8 +220,12 @@ permissions, then publish the generated artifact in a separate job.
   are replaced during publication so removed APIs do not leave stale pages.
   Maintain hand-written pages outside these generated directories and Home page.
 * **Generation sources:** shared helpers and the Markdown renderer use the
-  workflow's selected source revisions. DevTools generates its own API using
-  the checked-out ``bin/dev-tools``; consumers use their installed runtime.
+  workflow's selected source revision in a separate Composer installation.
+  Consumer dependencies are installed without plugins or scripts; their
+  manifest, lock file, version constraints and plugin allowlist are preserved.
+  The signed phpDocumentor binary and Markdown theme come from the isolated
+  renderer. DevTools generates its own API using the checked-out
+  ``bin/dev-tools``; consumers use the explicit pinned renderer binary.
 * **Local sync:** ``dev-tools:sync`` generates Markdown in
   ``.dev-tools/wiki-generated`` and does not initialize a Git submodule.
   Explicit ``wiki --init`` remains available for legacy local workflows.

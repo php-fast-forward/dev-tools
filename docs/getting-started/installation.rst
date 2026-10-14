@@ -10,7 +10,7 @@ Requirements
 - PHP 8.3 or newer.
 - Composer 2.
 - A project with PSR-4 autoload definitions in ``composer.json``.
-- Git, if you want ``dev-tools:sync`` to create the repository wiki submodule.
+- Git, for repository metadata and workflow synchronization.
 
 Install with Composer
 ---------------------
@@ -40,13 +40,25 @@ following steps:
    hooks that prefer a project-local ``grumphp.yml`` override and otherwise
    use a project-relative reference to the active packaged DevTools
    ``grumphp.yml`` path.
-6. If ``.github/wiki`` is missing, ``dev-tools:sync`` adds it as a Git
-   submodule that points to the repository wiki.
+6. In normal mode, ``dev-tools:sync`` generates local Markdown documentation
+   in ``.dev-tools/wiki-generated`` without initializing a Wiki submodule.
 7. ``dev-tools:sync`` runs ``gitignore`` to merge canonical ignore rules into
    the consumer project.
 8. ``dev-tools:sync`` runs ``skills`` and ``agents`` to create or repair
    packaged links inside ``.agents/skills`` and ``.agents/agents`` when sync
    runs in normal mode rather than preview/check mode.
+
+Wiki publication is separate from local synchronization. The synchronized
+``wiki.yml`` wrapper calls ``wiki-direct.yml`` to generate documentation with
+read-only permissions on pull requests and publish directly to the separate
+Wiki repository from ``main``. Its isolated, pinned DevTools checkout provides
+the renderer without changing the consumer's ``composer.json``,
+``composer.lock``, or plugin allowlist.
+
+The synchronized ``wiki-maintenance.yml`` is a manual-only migration notice.
+Existing callers of the legacy reusable preview and maintenance workflows
+remain supported until they migrate. The explicit ``wiki --init`` option also
+remains available for legacy submodule users; normal sync does not use it.
 
 First commands to try
 ---------------------
