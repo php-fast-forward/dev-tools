@@ -3380,7 +3380,9 @@ Default: selected workspace cache directory, usually
                                 <dt><code>--init</code>
 </dt>
         
-        <dd>Initialize the configured wiki target as a Git submodule.</dd>
+        <dd>Legacy opt-in: initialize the configured wiki target as a Git submodule.
+Normal <code>dev-tools:sync</code>
+ and the direct wiki workflow do not use this option.</dd>
                                 <dt><code>--json</code>
 </dt>
         
@@ -3405,10 +3407,10 @@ output.</dd>
             
     <p>Generate to custom directory:</p>
 
-            <pre><code class="language-bash">composer wiki --target=wiki</code></pre>
+            <pre><code class="language-bash">composer dev-tools wiki -- --target=.dev-tools/wiki-generated</code></pre>
 
             
-    <p>Initialize wiki as submodule:</p>
+    <p>Initialize a legacy wiki submodule explicitly:</p>
 
             <pre><code class="language-bash">composer wiki --init</code></pre>
 
@@ -3473,6 +3475,12 @@ directory. The option only affects phpDocumentor when caching is enabled.</li>
 
     <li class="dash">The <code>--init</code>
  option creates the wiki as a Git submodule pointing to the repository wiki.</li>
+
+    <li class="dash">Normal <code>dev-tools:sync</code>
+ uses <code>--target=.dev-tools/wiki-generated</code>
+ to
+generate local Markdown. The direct wiki workflow publishes its generated
+artifact to the separate GitHub Wiki repository without a parent gitlink.</li>
 
 </ul>
 

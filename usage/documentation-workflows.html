@@ -3428,9 +3428,12 @@ composer reports</code></pre>
  builds the HTML documentation site. It fails early if the source
 guide directory does not exist.</li>
 
-    <li class="dash"><code>wiki</code>
- builds Markdown API pages intended for <code>.github/wiki</code>
-.</li>
+    <li class="dash">Standalone <code>wiki</code>
+ builds Markdown API pages in <code>.github/wiki</code>
+ by default.
+Normal sync and the direct Wiki workflow explicitly select
+<code>.dev-tools/wiki-generated</code>
+ without initializing a submodule.</li>
 
     <li class="dash"><code>reports</code>
  runs <code>docs</code>
@@ -3478,8 +3481,10 @@ option overrides them.</li>
  is used;</li>
 
     <li class="dash">Markdown API pages under <code>.github/wiki</code>
- when <code>wiki</code>
- is used.</li>
+ for standalone <code>wiki</code>
+ by default,
+or <code>.dev-tools/wiki-generated</code>
+ for normal sync and the direct Wiki workflow.</li>
 
 </ul>
 

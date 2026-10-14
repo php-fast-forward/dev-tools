@@ -3443,10 +3443,10 @@ git diff</code></pre>
             <td>Confirm update cadence and ecosystem coverage.</td>
     </tr>
     <tr>
-            <td><code>.github/wiki</code>
+            <td><code>.dev-tools/wiki-generated</code>
 </td>
-            <td>Adds the wiki submodule when missing.</td>
-            <td>Confirm the wiki repository exists and branch protection is compatible.</td>
+            <td>Generates local API Markdown without creating a submodule.</td>
+            <td>Review the generated pages and direct Wiki workflow configuration.</td>
     </tr>
     <tr>
             <td><code>.agents/skills</code>
@@ -3505,6 +3505,24 @@ repository-specific <code>.gitignore</code>
 Shared defaults are meant to reduce repeated maintenance, not erase local
 constraints.</p>
 
+            
+    <p>When adopting direct Wiki publication, update an existing <code>wiki.yml</code>
+ wrapper
+explicitly to call <code>wiki-direct.yml</code>
+ and remove automatic maintenance
+triggers. Normal sync preserves existing workflow files by default. The
+packaged <code>wiki-maintenance.yml</code>
+ is a manual-only migration notice; legacy
+reusable preview and maintenance workflows remain available for unmigrated
+callers.</p>
+
+            
+    <p>Remove only the obsolete <code>.github/wiki</code>
+ gitlink and its matching
+<code>.gitmodules</code>
+ stanza, preserving other submodules and the separate GitHub
+Wiki repository. Local sync does not remove an existing pointer automatically.</p>
+
     </section>
 
             <section class="section " id="branch-protection-and-bot-commits">
@@ -3522,8 +3540,8 @@ Fast Forward model:</p>
 
     <li class="dash">report previews are published under PR-specific Pages paths;</li>
 
-    <li class="dash">wiki previews use branches such as <code>pr-123</code>
- before merge;</li>
+    <li class="dash">the direct Wiki workflow generates a read-only artifact on pull requests,
+without publishing a preview branch or committing a submodule pointer;</li>
 
     <li class="dash">post-merge jobs publish final reports and wiki content from <code>main</code>
 .</li>
@@ -3533,7 +3551,7 @@ Fast Forward model:</p>
             
     <p>If branch protection blocks bot commits to pull request branches, either adjust
 the repository policy to allow workflow updates on PR branches or document that
-maintainers must refresh generated pointers manually before merge.</p>
+maintainers must apply those bot-managed changes manually before merge.</p>
 
     </section>
 
@@ -3558,7 +3576,7 @@ maintainers must refresh generated pointers manually before merge.</p>
 
     <li value="5">open the pull request and let GitHub Actions create previews;</li>
 
-    <li value="6">verify report and wiki preview links before merge;</li>
+    <li value="6">verify report preview links and the generated Wiki artifact before merge;</li>
 
     <li value="7">merge through the protected <code>main</code>
  branch.</li>

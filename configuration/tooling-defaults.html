@@ -3429,9 +3429,14 @@ coverage data.</li>
  and <code>report-summary.json</code>
  artifacts.</li>
 
+    <li class="dash"><code>.dev-tools/wiki-generated/</code>
+ contains local Markdown API documentation
+from normal sync and the direct Wiki workflow.</li>
+
     <li class="dash"><code>.github/wiki/</code>
- contains generated Markdown API documentation and, in
-consumer repositories, the wiki submodule.</li>
+ remains the standalone <code>wiki</code>
+ command&#039;s default target;
+legacy consumers may also use it as an explicitly initialized Wiki submodule.</li>
 
     <li class="dash"><code>.agents/skills/</code>
  contains symlinked packaged skills or consumer-owned

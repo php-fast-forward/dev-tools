@@ -3364,8 +3364,8 @@
  funding metadata with <code>.github/FUNDING.yml</code>
 </li>
 
-    <li value="7"><code>wiki --init</code>
- - initializes wiki as submodule</li>
+    <li value="7"><code>wiki --target=.dev-tools/wiki-generated</code>
+ - generates local wiki Markdown</li>
 
     <li value="8"><code>gitignore</code>
  - merges .gitignore files</li>
@@ -3530,8 +3530,18 @@ so terminal sessions and CI logs show what changed.</li>
  prompts before replacing drifted managed files when the
 command is running in an interactive terminal.</li>
 
-    <li class="dash">Creates <code>.github/wiki</code>
- as a git submodule when missing.</li>
+    <li class="dash">Generates local API Markdown in <code>.dev-tools/wiki-generated</code>
+ without
+creating or updating a wiki Git submodule.</li>
+
+    <li class="dash">Existing workflow files are preserved unless <code>--overwrite</code>
+ is requested.
+To adopt direct wiki publication, migrate the existing <code>wiki.yml</code>
+ and
+<code>wiki-maintenance.yml</code>
+ wrappers explicitly or sync with <code>--overwrite</code>
+.
+The packaged maintenance wrapper is manual-only compatibility guidance.</li>
 
     <li class="dash">Calls other commands in sequence.</li>
 

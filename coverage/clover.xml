@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1791592369">
-  <project timestamp="1791592369" name="Clover Coverage">
+<coverage generated="1792006646">
+  <project timestamp="1792006646" name="Clover Coverage">
     <package name="FastForward\DevTools\Changelog\Checker">
       <file name="/home/runner/work/dev-tools/dev-tools/src/Changelog/Checker/UnreleasedEntryChecker.php">
         <class name="FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker" namespace="FastForward\DevTools\Changelog\Checker">
@@ -3298,7 +3298,7 @@
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/SyncCommand.php">
         <class name="FastForward\DevTools\Console\Command\SyncCommand" namespace="FastForward\DevTools\Console\Command">
-          <metrics complexity="30" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="125" coveredstatements="124" elements="129" coveredelements="127"/>
+          <metrics complexity="30" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="130" coveredstatements="129" elements="134" coveredelements="132"/>
         </class>
         <line num="52" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="3"/>
         <line num="56" type="stmt" count="3"/>
@@ -3397,39 +3397,44 @@
         <line num="167" type="stmt" count="2"/>
         <line num="168" type="stmt" count="2"/>
         <line num="169" type="stmt" count="2"/>
-        <line num="172" type="stmt" count="3"/>
-        <line num="173" type="stmt" count="3"/>
-        <line num="174" type="stmt" count="3"/>
-        <line num="175" type="stmt" count="3"/>
-        <line num="176" type="stmt" count="3"/>
+        <line num="170" type="stmt" count="2"/>
+        <line num="171" type="stmt" count="2"/>
+        <line num="172" type="stmt" count="2"/>
+        <line num="173" type="stmt" count="2"/>
+        <line num="174" type="stmt" count="2"/>
         <line num="177" type="stmt" count="3"/>
         <line num="178" type="stmt" count="3"/>
         <line num="179" type="stmt" count="3"/>
         <line num="180" type="stmt" count="3"/>
+        <line num="181" type="stmt" count="3"/>
         <line num="182" type="stmt" count="3"/>
+        <line num="183" type="stmt" count="3"/>
         <line num="184" type="stmt" count="3"/>
-        <line num="185" type="stmt" count="2"/>
-        <line num="186" type="stmt" count="2"/>
-        <line num="187" type="stmt" count="2"/>
-        <line num="188" type="stmt" count="2"/>
-        <line num="191" type="stmt" count="1"/>
-        <line num="192" type="stmt" count="1"/>
-        <line num="193" type="stmt" count="1"/>
-        <line num="194" type="stmt" count="1"/>
-        <line num="203" type="method" name="queueDevToolsCommand" visibility="private" complexity="9" crap="9.05" count="3"/>
-        <line num="209" type="stmt" count="3"/>
-        <line num="210" type="stmt" count="3"/>
-        <line num="212" type="stmt" count="3"/>
-        <line num="213" type="stmt" count="1"/>
-        <line num="216" type="stmt" count="3"/>
-        <line num="217" type="stmt" count="0"/>
-        <line num="220" type="stmt" count="3"/>
-        <line num="221" type="stmt" count="2"/>
-        <line num="224" type="stmt" count="3"/>
+        <line num="185" type="stmt" count="3"/>
+        <line num="187" type="stmt" count="3"/>
+        <line num="189" type="stmt" count="3"/>
+        <line num="190" type="stmt" count="2"/>
+        <line num="191" type="stmt" count="2"/>
+        <line num="192" type="stmt" count="2"/>
+        <line num="193" type="stmt" count="2"/>
+        <line num="196" type="stmt" count="1"/>
+        <line num="197" type="stmt" count="1"/>
+        <line num="198" type="stmt" count="1"/>
+        <line num="199" type="stmt" count="1"/>
+        <line num="208" type="method" name="queueDevToolsCommand" visibility="private" complexity="9" crap="9.05" count="3"/>
+        <line num="214" type="stmt" count="3"/>
+        <line num="215" type="stmt" count="3"/>
+        <line num="217" type="stmt" count="3"/>
+        <line num="218" type="stmt" count="1"/>
+        <line num="221" type="stmt" count="3"/>
+        <line num="222" type="stmt" count="0"/>
         <line num="225" type="stmt" count="3"/>
-        <line num="228" type="stmt" count="3"/>
+        <line num="226" type="stmt" count="2"/>
+        <line num="229" type="stmt" count="3"/>
         <line num="230" type="stmt" count="3"/>
-        <metrics loc="233" ncloc="199" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="125" coveredstatements="124" elements="129" coveredelements="127"/>
+        <line num="233" type="stmt" count="3"/>
+        <line num="235" type="stmt" count="3"/>
+        <metrics loc="238" ncloc="204" classes="1" methods="4" coveredmethods="3" conditionals="0" coveredconditionals="0" statements="130" coveredstatements="129" elements="134" coveredelements="132"/>
       </file>
       <file name="/home/runner/work/dev-tools/dev-tools/src/Console/Command/TestsCommand.php">
         <class name="FastForward\DevTools\Console\Command\TestsCommand" namespace="FastForward\DevTools\Console\Command">
@@ -6858,6 +6863,6 @@
         <metrics loc="148" ncloc="58" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="8" coveredstatements="8" elements="16" coveredelements="16"/>
       </file>
     </package>
-    <metrics files="161" loc="22352" ncloc="13692" classes="118" methods="592" coveredmethods="465" conditionals="0" coveredconditionals="0" statements="5322" coveredstatements="4887" elements="5914" coveredelements="5352"/>
+    <metrics files="161" loc="22357" ncloc="13697" classes="118" methods="592" coveredmethods="465" conditionals="0" coveredconditionals="0" statements="5327" coveredstatements="4892" elements="5919" coveredelements="5357"/>
   </project>
 </coverage>

@@ -3347,8 +3347,7 @@ through Composer as both a plugin and a local binary.</p>
     <li class="dash">A project with PSR-4 autoload definitions in <code>composer.json</code>
 .</li>
 
-    <li class="dash">Git, if you want <code>dev-tools:sync</code>
- to create the repository wiki submodule.</li>
+    <li class="dash">Git, for repository metadata and workflow synchronization.</li>
 
 </ul>
 
@@ -3406,10 +3405,10 @@ use a project-relative reference to the active packaged DevTools
 <code>grumphp.yml</code>
  path.</li>
 
-    <li value="6">If <code>.github/wiki</code>
- is missing, <code>dev-tools:sync</code>
- adds it as a Git
-submodule that points to the repository wiki.</li>
+    <li value="6">In normal mode, <code>dev-tools:sync</code>
+ generates local Markdown documentation
+in <code>.dev-tools/wiki-generated</code>
+ without initializing a Wiki submodule.</li>
 
     <li value="7"><code>dev-tools:sync</code>
  runs <code>gitignore</code>
@@ -3426,6 +3425,27 @@ packaged links inside <code>.agents/skills</code>
 runs in normal mode rather than preview/check mode.</li>
 
 </ol>
+
+            
+    <p>Wiki publication is separate from local synchronization. The synchronized
+<code>wiki.yml</code>
+ wrapper calls <code>wiki-direct.yml</code>
+ to generate documentation with
+read-only permissions on pull requests and publish directly to the separate
+Wiki repository from <code>main</code>
+. Its isolated, pinned DevTools checkout provides
+the renderer without changing the consumer&#039;s <code>composer.json</code>
+,
+<code>composer.lock</code>
+, or plugin allowlist.</p>
+
+            
+    <p>The synchronized <code>wiki-maintenance.yml</code>
+ is a manual-only migration notice.
+Existing callers of the legacy reusable preview and maintenance workflows
+remain supported until they migrate. The explicit <code>wiki --init</code>
+ option also
+remains available for legacy submodule users; normal sync does not use it.</p>
 
     </section>
 

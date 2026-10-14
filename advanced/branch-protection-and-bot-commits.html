@@ -3344,7 +3344,7 @@ updates.</p>
             
 
 <ul>
-    <li class="dash">pull requests publish isolated previews;</li>
+    <li class="dash">pull requests provide report previews and read-only Wiki artifacts;</li>
 
     <li class="dash">merges into <code>main</code>
  publish the final wiki and reports.</li>
@@ -3352,22 +3352,29 @@ updates.</p>
 </ul>
 
             
-    <p>For wiki automation, those lanes are now split across separate reusable
-workflows:</p>
+    <p>The active <code>wiki.yml</code>
+ calls <code>wiki-direct.yml</code>
+. Its generation job has
+read-only permissions on pull requests; after merge, a separate job publishes
+from <code>main</code>
+ to the Wiki repository. It does not create preview branches,
+commit repository pointers, or require Wiki-related bot commits on PR branches.</p>
+
+            
+    <p>Legacy consumers that have not migrated still use separate reusable workflows:</p>
 
             
 
 <ul>
     <li class="dash"><code>.github/workflows/wiki-preview.yml</code>
  handles preview generation for pull
-requests and is triggered through <code>.github/workflows/wiki.yml</code>
-;</li>
+requests through a legacy consumer wrapper;</li>
 
     <li class="dash"><code>.github/workflows/wiki-maintenance.yml</code>
  handles post-merge promotion,
 closed-pull-request cleanup, and scheduled orphan cleanup and is triggered
-through <code>.github/workflows/wiki-maintenance-entry.yml</code>
-.</li>
+through a legacy consumer maintenance wrapper. The producer maintenance entry
+and current packaged consumer maintenance stub are manual-only notices.</li>
 
 </ul>
 
@@ -3375,7 +3382,11 @@ through <code>.github/workflows/wiki-maintenance-entry.yml</code>
             <h2>Wiki Preview Lifecycle</h2>
 
             
-    <p>The wiki workflow writes generated Markdown to the GitHub wiki repository, but
+    <p>This section describes legacy preview/submodule consumers only. The direct
+workflow uses a generated artifact on pull requests instead.</p>
+
+            
+    <p>The legacy wiki workflow writes generated Markdown to the GitHub wiki repository, but
 it does not publish pull request content directly to the wiki <code>master</code>
  branch.
 Instead, each pull request receives a dedicated wiki branch.</p>
@@ -3500,6 +3511,10 @@ respect those rules:</p>
  are temporary review targets.</li>
 
 </ul>
+
+            
+    <p>The pointer and preview-branch guidance below applies only to legacy Wiki
+consumers. Direct Wiki publication does not push to pull request branches.</p>
 
             
     <p>If a repository restricts bot pushes to pull request branches, maintainers
@@ -3685,8 +3700,19 @@ distinguish open pull requests from closed or merged ones before deleting
  directories.</p>
 
             
-    <p><code>wiki.yml</code>
- is now preview-only, so its called workflow keeps
+    <p>The active <code>wiki.yml</code>
+ caller permits <code>contents: write</code>
+ so the separate
+<code>wiki-direct.yml</code>
+ publication job can publish from <code>main</code>
+. Its generation
+job explicitly keeps <code>contents: read</code>
+ and checkouts do not persist
+credentials. Pull requests never run the publication job.</p>
+
+            
+    <p>The legacy <code>wiki-preview.yml</code>
+ keeps
 <code>contents: write</code>
  for wiki preview commits and parent-repository submodule
 pointer updates, <code>actions: write</code>
@@ -3708,9 +3734,8 @@ can dispatch <code>tests.yml</code>
  after it pushes a bot-authored resolution commit.</p>
 
             
-    <p><code>wiki-maintenance-entry.yml</code>
- and <code>wiki-maintenance.yml</code>
- keep
+    <p>The legacy reusable <code>wiki-maintenance.yml</code>
+ keeps
 <code>contents: write</code>
  for wiki publication and cleanup tasks, and
 <code>pull-requests: read</code>
@@ -3766,6 +3791,10 @@ updating a release pull request.</p>
  Pointer Conflicts</h2>
 
             
+    <p>This section applies only to legacy submodule consumers. Direct Wiki publication
+does not create repository pointers.</p>
+
+            
     <p>Submodule pointer conflicts happen when <code>main</code>
  and the pull request point to
 different generated wiki commits. The predictable-conflict workflow can resolve
@@ -3802,20 +3831,17 @@ regenerate the wiki locally before updating the pointer.</p>
             
 
 <ul>
-    <li class="dash">Keep source changes and generated pointer updates in the same pull request.</li>
-
-    <li class="dash">Review PR preview links before merging documentation-heavy changes.</li>
+    <li class="dash">Review report preview links and generated Wiki artifacts before merging
+documentation-heavy changes.</li>
 
     <li class="dash">Merge only through the protected <code>main</code>
  flow.</li>
 
-    <li class="dash">Let the post-merge wiki job publish to <code>master</code>
+    <li class="dash">Let the direct Wiki publication job publish from <code>main</code>
 .</li>
 
-    <li class="dash">Treat wiki preview and wiki maintenance as separate automation concerns when
-debugging workflow failures.</li>
-
-    <li class="dash">Let closed pull requests and scheduled cleanup remove wiki preview branches.</li>
+    <li class="dash">For legacy consumers, keep generated pointers with their source changes and
+use the separate preview and maintenance workflows for publication and cleanup.</li>
 
     <li class="dash">Let closed pull requests and scheduled cleanup remove report preview
 directories.</li>

@@ -3407,11 +3407,12 @@ adapts the same application command set for Composer plugin integration.</li>
 , the project license, and packaged Git hooks.</li>
 
     <li value="6">In normal mode, <code>dev-tools:sync</code>
- also runs <code>wiki --init</code>
-,
-<code>skills</code>
+ also runs
+<code>wiki --target=.dev-tools/wiki-generated</code>
+, <code>skills</code>
 , and <code>agents</code>
- to initialize the wiki submodule and
+
+to generate local API Markdown without a wiki submodule and
 synchronize packaged links into <code>.agents/skills</code>
  and
 <code>.agents/agents</code>
