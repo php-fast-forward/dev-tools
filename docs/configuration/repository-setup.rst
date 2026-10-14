@@ -21,11 +21,17 @@ FastForward DevTools automatically generates and deploys reports, test coverage,
 GitHub Wiki
 -----------
 
-The wiki synchronization feature allows you to maintain documentation in Markdown within your repository and have it automatically published to the GitHub Wiki.
+Normal sync generates local API Markdown in ``.dev-tools/wiki-generated``
+without a submodule. The direct Wiki workflow generates a read-only artifact on
+pull requests and publishes directly from ``main`` to the separate GitHub Wiki
+repository.
 
 .. important::
    **Initial Manual Step Required**
-   GitHub does not create the underlying wiki repository until at least one page is created via the web interface. You **MUST** create an initial ``Home.md`` page manually before using ``dev-tools wiki --init`` or any automated sync features.
+   GitHub does not create the underlying Wiki repository until at least one
+   page is created via the web interface. Create an initial ``Home`` page before
+   automated publication or legacy ``wiki --init``. Local Markdown generation
+   does not require this remote initialization.
 
 1.  Navigate to your repository on GitHub.
 2.  Click the **Wiki** tab.
@@ -33,7 +39,9 @@ The wiki synchronization feature allows you to maintain documentation in Markdow
 4.  Ensure the title is ``Home`` and add some initial content.
 5.  Click **Save Page**.
 
-Once this is done, the wiki can be cloned as a submodule and synchronized by the DevTools commands.
+Once this is done, the direct workflow can clone the separate Wiki repository
+for publication. Only legacy users who explicitly choose ``wiki --init`` need
+a local submodule.
 
 Workflow Permissions
 --------------------

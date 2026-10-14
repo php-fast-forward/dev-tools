@@ -105,7 +105,8 @@ Utility Packages
 Environment Assumptions
 -----------------------
 
-- Git is required for wiki submodule creation.
+- Git is used for direct Wiki publication and explicit legacy submodule
+  initialization; normal sync generates local Markdown without a submodule.
 - ``pcov`` is used in the reusable GitHub Actions workflows for coverage.
 - ``pcntl`` improves asynchronous notification delivery on platforms that
   support it.

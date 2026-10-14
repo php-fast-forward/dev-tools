@@ -78,9 +78,9 @@ Expected changes can include:
    * - ``.github/dependabot.yml``
      - Adds the shared Dependabot template when missing.
      - Confirm update cadence and ecosystem coverage.
-   * - ``.github/wiki``
-     - Adds the wiki submodule when missing.
-     - Confirm the wiki repository exists and branch protection is compatible.
+   * - ``.dev-tools/wiki-generated``
+     - Generates local API Markdown without creating a submodule.
+     - Review the generated pages and direct Wiki workflow configuration.
    * - ``.agents/skills``
      - Links packaged skills for issue, PR, tests, docs, README, and style work.
      - Preserve existing custom skills and non-symlink directories.
@@ -110,6 +110,17 @@ repository-specific ``.gitignore`` rules, and existing Dependabot policies.
 Shared defaults are meant to reduce repeated maintenance, not erase local
 constraints.
 
+When adopting direct Wiki publication, update an existing ``wiki.yml`` wrapper
+explicitly to call ``wiki-direct.yml`` and remove automatic maintenance
+triggers. Normal sync preserves existing workflow files by default. The
+packaged ``wiki-maintenance.yml`` is a manual-only migration notice; legacy
+reusable preview and maintenance workflows remain available for unmigrated
+callers.
+
+Remove only the obsolete ``.github/wiki`` gitlink and its matching
+``.gitmodules`` stanza, preserving other submodules and the separate GitHub
+Wiki repository. Local sync does not remove an existing pointer automatically.
+
 Branch Protection and Bot Commits
 ---------------------------------
 
@@ -118,12 +129,13 @@ Fast Forward model:
 
 - pull requests receive generated previews and bot updates on the PR branch;
 - report previews are published under PR-specific Pages paths;
-- wiki previews use branches such as ``pr-123`` before merge;
+- the direct Wiki workflow generates a read-only artifact on pull requests,
+  without publishing a preview branch or committing a submodule pointer;
 - post-merge jobs publish final reports and wiki content from ``main``.
 
 If branch protection blocks bot commits to pull request branches, either adjust
 the repository policy to allow workflow updates on PR branches or document that
-maintainers must refresh generated pointers manually before merge.
+maintainers must apply those bot-managed changes manually before merge.
 
 Suggested Pull Request Rollout
 ------------------------------
@@ -135,7 +147,7 @@ Use one migration pull request per consumer repository:
 3. review and adapt generated files;
 4. run the smallest relevant local verification command;
 5. open the pull request and let GitHub Actions create previews;
-6. verify report and wiki preview links before merge;
+6. verify report preview links and the generated Wiki artifact before merge;
 7. merge through the protected ``main`` branch.
 
 After merge, confirm that the final reports and wiki pages reflect the merged

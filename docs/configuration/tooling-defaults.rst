@@ -46,8 +46,10 @@ Generated and Cache Directories
   coverage data.
 - ``.dev-tools/metrics/`` contains PhpMetrics HTML output plus the generated
   ``report.json`` and ``report-summary.json`` artifacts.
-- ``.github/wiki/`` contains generated Markdown API documentation and, in
-  consumer repositories, the wiki submodule.
+- ``.dev-tools/wiki-generated/`` contains local Markdown API documentation
+  from normal sync and the direct Wiki workflow.
+- ``.github/wiki/`` remains the standalone ``wiki`` command's default target;
+  legacy consumers may also use it as an explicitly initialized Wiki submodule.
 - ``.agents/skills/`` contains symlinked packaged skills or consumer-owned
   directories kept in place by the ``skills`` command.
 - ``.agents/agents/`` contains symlinked packaged project agents or

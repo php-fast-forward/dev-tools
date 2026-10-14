@@ -10,6 +10,8 @@ jobs:
   generate:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    outputs:
+      generated: ${{ steps.generate.outputs.generated }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
@@ -36,7 +38,14 @@ jobs:
           COMPOSER_ROOT_VERSION: dev-main
         run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
       - name: Generate API pages
+        id: generate
         run: |
+          has_api=$(php -r 'require ".dev-tools-actions/vendor/autoload.php"; echo FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface::class)->resolve()->canGenerateApiDocumentation() ? "true" : "false";')
+          echo "generated=${has_api}" >> "$GITHUB_OUTPUT"
+          if [ "$has_api" = false ]; then
+            echo 'No autoloaded PHP API directories; skip Wiki generation and publication.'
+            exit 0
+          fi
           mkdir -p vendor/bin vendor/saggre/phpdocumentor-markdown/themes/markdown
           cp .dev-tools-actions/vendor/bin/phpdoc vendor/bin/phpdoc
           chmod +x vendor/bin/phpdoc
@@ -52,13 +61,14 @@ jobs:
           fi
           test -s .dev-tools/wiki-generated/Home.md
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: steps.generate.outputs.generated == 'true'
         with:
           name: wiki
           path: .dev-tools/wiki-generated
           if-no-files-found: error
 
   publish:
-    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && needs.generate.outputs.generated == 'true'
     needs: generate
     runs-on: ubuntu-latest
     timeout-minutes: 5

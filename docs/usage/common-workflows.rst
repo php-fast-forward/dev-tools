@@ -46,7 +46,8 @@ Most day-to-day work falls into one of the flows below.
        packaged skills and packaged agents.
    * - Regenerate wiki pages
      - ``composer wiki``
-     - Builds Markdown API pages in ``.github/wiki``.
+     - Builds Markdown API pages in ``.github/wiki`` by default; normal sync
+       explicitly uses ``.dev-tools/wiki-generated`` without a submodule.
 
 Choose the Right Entry Point
 ----------------------------

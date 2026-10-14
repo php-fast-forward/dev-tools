@@ -78,11 +78,12 @@ the DevTools package source needed for the fallback runtime.
 Branch Protection or Bot Commit Blocks
 --------------------------------------
 
-Scope: GitHub Actions.
+Scope: GitHub Actions. Wiki preview and pointer symptoms below apply only to
+legacy consumers; the direct Wiki workflow generates read-only PR artifacts.
 
 Symptoms:
 
-- a wiki or reports preview job cannot push generated updates;
+- a legacy wiki or reports preview job cannot push generated updates;
 - GitHub rejects a bot commit with a protected-branch error;
 - a pull request is mergeable locally but blocked after the preview job runs.
 
@@ -105,6 +106,9 @@ Recovery:
 --------------------------------------------
 
 Scope: local and CI.
+
+This section applies only to legacy Wiki submodule consumers. Normal sync and
+direct Wiki publication do not create or update these pointers.
 
 Symptoms:
 
@@ -256,6 +260,9 @@ Reports or Wiki Preview Cleanup Issues
 --------------------------------------
 
 Scope: GitHub Actions.
+
+Wiki preview branches and their cleanup apply only to legacy workflows.
+The direct Wiki workflow has no PR preview branches or maintenance cleanup lane.
 
 Symptoms:
 
