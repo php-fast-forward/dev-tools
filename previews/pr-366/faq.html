@@ -3485,8 +3485,15 @@ only <code>AddMissingMethodPhpDocRector</code>
 
             
     <p><code>dev-tools:sync</code>
- leaves it alone. The wiki submodule is only created when the
-directory is missing.</p>
+ leaves it alone and generates local API Markdown in
+<code>.dev-tools/wiki-generated</code>
+ instead. Normal sync does not create or update a
+Wiki submodule. When migrating to direct Wiki publication, remove the obsolete
+gitlink and matching <code>.gitmodules</code>
+ stanza explicitly, preserving the separate
+Wiki repository and any other submodules. <code>wiki --init</code>
+ remains available as
+an explicit legacy option.</p>
 
     </section>
 

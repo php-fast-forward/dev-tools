@@ -3382,7 +3382,12 @@
             <h2>GitHub Wiki</h2>
 
             
-    <p>The wiki synchronization feature allows you to maintain documentation in Markdown within your repository and have it automatically published to the GitHub Wiki.</p>
+    <p>Normal sync generates local API Markdown in <code>.dev-tools/wiki-generated</code>
+
+without a submodule. The direct Wiki workflow generates a read-only artifact on
+pull requests and publishes directly from <code>main</code>
+ to the separate GitHub Wiki
+repository.</p>
 
             
         
@@ -3395,10 +3400,12 @@
         
     <p><strong>Initial Manual Step Required</strong>
 
-GitHub does not create the underlying wiki repository until at least one page is created via the web interface. You <strong>MUST</strong>
- create an initial <code>Home.md</code>
- page manually before using <code>dev-tools wiki --init</code>
- or any automated sync features.</p>
+GitHub does not create the underlying Wiki repository until at least one
+page is created via the web interface. Create an initial <code>Home</code>
+ page before
+automated publication or legacy <code>wiki --init</code>
+. Local Markdown generation
+does not require this remote initialization.</p>
 
     </article>
 </div>
@@ -3423,7 +3430,10 @@ GitHub does not create the underlying wiki repository until at least one page is
 </ol>
 
             
-    <p>Once this is done, the wiki can be cloned as a submodule and synchronized by the DevTools commands.</p>
+    <p>Once this is done, the direct workflow can clone the separate Wiki repository
+for publication. Only legacy users who explicitly choose <code>wiki --init</code>
+ need
+a local submodule.</p>
 
     </section>
 

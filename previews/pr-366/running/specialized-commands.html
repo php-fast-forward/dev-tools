@@ -3797,6 +3797,14 @@ mode;</li>
     <li class="dash">the default output directory is <code>.github/wiki</code>
 ;</li>
 
+    <li class="dash">normal <code>dev-tools:sync</code>
+ and the direct Wiki workflow explicitly use
+<code>.dev-tools/wiki-generated</code>
+ without initializing a submodule;</li>
+
+    <li class="dash"><code>--init</code>
+ remains an explicit legacy option for submodule users;</li>
+
     <li class="dash">it uses the Markdown template from
 <code>vendor/saggre/phpdocumentor-markdown/themes/markdown</code>
 ;</li>
@@ -4066,9 +4074,9 @@ DevTools-managed <code>extra.grumphp.config-default-path</code>
  from local
 metadata;</li>
 
-    <li class="dash">it creates <code>.github/wiki</code>
- as a git submodule when the directory is
-missing.</li>
+    <li class="dash">in normal mode it generates local API Markdown in
+<code>.dev-tools/wiki-generated</code>
+ without creating a Git submodule;</li>
 
     <li class="dash">it calls <code>gitignore</code>
  to merge the canonical .gitignore with the project&#039;s
