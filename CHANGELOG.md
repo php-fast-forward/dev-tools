@@ -21,6 +21,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Publish generated API pages directly to the GitHub Wiki from main without parent submodule-pointer commits, while pull requests generate read-only artifacts.
 - Generate local wiki Markdown in .dev-tools/wiki-generated during normal sync instead of initializing a Wiki submodule; retain explicit wiki --init for legacy use.
 - GitHub Actions(deps): bump actions/upload-artifact from 4.6.2 to 7.0.2 (#369)
+- GitHub Actions(deps): bump actions/download-artifact from 4.3.0 to 8.0.2 (#368)
 
 ### Fixed
 
