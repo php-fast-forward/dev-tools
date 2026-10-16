@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.26.0] - 2026-10-16
+
 ### Added
 
 - Add an opt-in native GitHub Pages reports workflow with an isolated deployment job and verified documentation identity assets from template 2.1.0 or newer.
@@ -486,7 +488,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
 
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.6...HEAD
+[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.26.0...HEAD
+[1.26.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.6...v1.26.0
 [1.25.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.5...v1.25.6
 [1.25.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.4...v1.25.5
 [1.25.4]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.3...v1.25.4
