@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Align the packaged documentation skill with the current code rather than release timing, while preserving migration history and verified installation claims.
+
 ## [1.26.0] - 2026-10-16
 
 ### Added
