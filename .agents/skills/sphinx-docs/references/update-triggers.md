@@ -2,6 +2,15 @@
 
 When to update Sphinx docs during code development.
 
+Update affected documentation with the code change. After merge into the default
+branch it describes the current API, independent of package-release timing.
+Keep current titles, metadata, badges, skill instructions and release-tool guides
+free of temporary PR/publication disclaimers. Preserve meaningful migration and
+versioned history, including a changelog's `Unreleased` section, and verify any
+claim about an installable package version separately.
+Write pending Changeset bodies as product changes suitable for the published
+changelog, without PR progress or execution receipts.
+
 ## Triggers by Change Type
 
 | Code Change | Doc Action Required |

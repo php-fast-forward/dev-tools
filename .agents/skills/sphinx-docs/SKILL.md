@@ -17,6 +17,15 @@ This skill provides a comprehensive checklist and structure for generating rich,
 - Reference relevant PSRs, RFCs, and related libraries where appropriate.
 - Always detect and document special features in the codebase: aliases, factories, singleton patterns, extensibility points, static helpers, PSR compliance, and integration hooks.
 
+## Documentation Follows the Current Code
+
+- Document the API and workflows implemented by the code the documentation accompanies. Once a change is merged into the default branch, treat it as current there, even when the next package release has not been tagged.
+- Use stable descriptions instead of temporary labels such as "unreleased next major", "not published yet", or "still in this PR". Documentation must not require a follow-up wording change in the release PR simply because publication happened.
+- Apply this rule to current page titles, introductions, HTML metadata, badges, bundled skill/provenance instructions, and release-tool guides such as `.changeset/README.md` when present. Immutable provenance facts remain valid; do not turn them into temporary instructions about the current API.
+- Pending Changeset bodies become published changelog text too. Describe the product change and migration impact, not PR progress, execution receipts, or temporary manifest-version instructions. Keep release automation markers with their actual semantics.
+- Preserve legitimate versioned migration guides, compatibility tables, changelogs (including an `Unreleased` section), and historical release notes. Review context instead of deleting version-related words blindly.
+- Verify installation and availability claims separately. Describing current code does not prove that a package version or tag is published; do not invent an installable constraint or recommend a development branch to avoid that distinction.
+
 ## Recommended Directory and File Structure
 
 - docs/
