@@ -3,4 +3,4 @@ category: changed
 type: major
 ---
 
-Delegates changelog authoring and release preparation to Fast Forward Changelog, replaces the legacy `changelog:*` commands with `dev-tools changelog`, and normalizes historical notes for review while keeping tag and Release publication disabled during adoption.
+Uses the standalone Fast Forward Changelog CLI, upstream skill and official workflow caller for fragment-based release preparation, normalizes historical release notes, and removes automatic pull-request conflict resolution. Tag and Release publication remain disabled during adoption.

@@ -105,13 +105,10 @@ How Changelog and Project Automation Fit In
 -------------------------------------------
 
 - ``.github/workflows/changelog.yml`` calls the external Changelog lifecycle
-  at ``@v0``; DevTools no longer owns its parser or release engine.
+  at ``@v0`` using the official README's single-job caller unchanged.
 - The external workflow validates contribution fragments and prepares the
-  managed version PR. Publication is disabled during adoption. A separate local
-  follow-up transitions the configured GitHub Project items after preparation.
-- A separate ``version_checks`` follow-up verifies the managed PR's live Bot,
-  repository, branch and head before dispatching independent required tests.
-  It scopes ``actions: write`` to dispatch and uses the selected runner labels.
+  ``changelog/version`` PR titled ``chore: update changelog``. Publication is
+  disabled. The lifecycle uses its default Ubuntu runner and GitHub token.
 - ``.github/workflows/review.yml`` composes its ready-for-review intake from
   ``.github/actions/review/*`` and posts a deterministic brief that points
   maintainers to the packaged ``review-guardian`` agent and
@@ -120,8 +117,8 @@ How Changelog and Project Automation Fit In
   delegate final run summaries to
   ``.github/actions/summary/*`` after their final-state information is known.
 - Project-board automation is no longer just an inline workflow concern; it is
-  a reusable local action group shared by issue, pull-request, review, and
-  release automation.
+  a reusable local action group shared by issue, pull-request and review
+  automation.
 
 See :doc:`branch-protection-and-bot-commits` for the branch protection model,
 bot commit behavior, and legacy ``.github/wiki`` conflict resolution steps.

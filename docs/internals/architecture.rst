@@ -89,8 +89,8 @@ command list:
        ``Composer\Plugin\Capability\CommandProvider`` exposes the same
        command set to Composer.
    * - ``External changelog and Git``
-     - ``ChangelogCommand`` delegates to the external CPX runtime; Changelog
-       owns fragment parsing, history, versioning and publication policy.
+     - The independent Changelog package owns fragment parsing, history,
+       versioning and publication policy, with its own CLI and workflow.
        ``GitClientInterface`` remains available for DevTools Git operations.
    * - ``Synchronization helpers``
      - Git ignore, Git attributes, license, resource diffing, and coverage

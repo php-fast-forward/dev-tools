@@ -19,9 +19,6 @@ fluent process management where subprocess execution is needed.
    * - ``FastForward\DevTools\Console\Command\StandardsCommand``
      - ``standards``
      - Runs the full quality pipeline.
-   * - ``FastForward\DevTools\Console\Command\ChangelogCommand``
-     - ``dev-tools:changelog`` (alias ``changelog``)
-     - Delegates arguments to the isolated external Changelog CLI through CPX.
    * - ``FastForward\DevTools\Console\Command\RefactorCommand``
      - ``refactor``
      - Runs Rector with local or packaged configuration.

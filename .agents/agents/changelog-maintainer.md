@@ -9,8 +9,9 @@ supporting-skills:
 # changelog-maintainer
 
 Use [fast-forward-changelog](../skills/fast-forward-changelog/SKILL.md) as the
-procedural authority. DevTools owns a thin CLI bridge and synchronized workflow
-templates; the external package owns parsing, rendering, planning and validation.
+procedural authority. Use the external package's CLI and reusable workflow;
+it owns parsing, rendering, planning and validation. DevTools distributes the
+consumer caller and upstream skill instructions.
 
 Add independent fragments for ordinary contributions. Historical maintenance
 must preserve descriptions, verified delivery PRs and publication dates.

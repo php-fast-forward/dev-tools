@@ -90,8 +90,8 @@ composer metrics --target=.dev-tools/metrics
 composer --working-dir=packages/example metrics
 
 # Create and validate an independent change fragment (CPX and PHP 8.5 required)
-vendor/bin/dev-tools changelog add "Fixes release-note rendering." --category=fixed --no-interaction
-vendor/bin/dev-tools changelog check --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 add "Fixes release-note rendering." --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 check --no-interaction
 
 # Check and fix code style using ECS and Composer Normalize
 composer code-style
@@ -181,19 +181,12 @@ migration or `composer dev-tools:sync --overwrite` to adopt these changes. See
 [the workflow guide](docs/usage/github-actions.rst) for publication and page
 ownership details.
 
-`dev-tools changelog <arguments...>` delegates to
-`cpx --skip-local fast-forward/changelog:0.2.0`. Install CPX separately and
-run this command and CPX with PHP 8.5; the consumer package still supports PHP
+Run the independent CLI with `cpx --skip-local fast-forward/changelog:0.2.0`.
+Install CPX separately and run it with PHP 8.5; the consumer package still supports PHP
 8.3. Changelog is isolated from the consumer Composer dependency graph.
-The former `changelog:entry`, `changelog:check`, `changelog:next-version`,
-`changelog:promote`, and `changelog:show` commands have been removed. This is a
-command migration: use the external CLI's `add`, `check`, `status`, `version`,
-and `notes` contracts instead of forwarding the old options unchanged.
 Contributions add `.changelog/*.md`; reviewed version PRs consolidate them
 into `CHANGELOG.md`. Do not add an `Unreleased` section. See the
 [changelog guide](docs/commands/changelog.rst) for prerequisites and previews.
-Use `dev-tools changelog -- <command> [options]` when forwarding all external
-options, including `--help`.
 Require the external workflow's exact `Fast Forward Changelog` commit status
 on the PR head, after verifying it in a repository pilot.
 
@@ -246,8 +239,8 @@ failures untouched.
 The packaged changelog caller uses
 `php-fast-forward/changelog/.github/workflows/changelog.yml@v0`.
 The `v0` channel follows published 0.x releases and can include breaking minor
-updates. This repository selects that channel explicitly; the local proxy
-uses the verified exact 0.2.0 CLI. Recheck compatibility before channel updates.
+updates. This repository selects that channel explicitly; local CPX examples
+use the verified exact 0.2.0 CLI. Recheck compatibility before channel updates.
 GitHub automation uses its own Docker/PHP runtime and requires Linux with
 Docker, Bash and Git, independently of the consumer PHP version.
 
@@ -284,13 +277,13 @@ copying workflow logic by hand. They also include a rigorous review intake
 workflow that reacts when a pull request becomes ready for review and posts a
 deterministic brief for the dedicated review agent.
 
-The external workflow checks fragments and prepares one managed version PR.
-This repository preserves `release/vnext` and the title
-`Prepare release v{next_version}`, plus its configured token, runner and project
-board contracts. Adoption sets `publish: false`: merging the version PR does
-not authorize tag or GitHub Release publication. Enabling publication requires
-a separate reviewed decision. Consumer callers must preserve their own
-credentials, permissions and branch policies; see the
+The external workflow checks fragments and prepares one managed version PR
+on `changelog/version`, titled `chore: update changelog`. This repository uses
+the official README caller unchanged: `main`, history from tags, feedback on
+every PR, release preparation enabled and `publish: false`. The lifecycle uses
+its default Ubuntu runner and GitHub token. Merging the version PR does not
+publish a tag or GitHub Release while publication is disabled. Enabling
+publication requires a separate reviewed decision; see the
 [workflow guide](docs/usage/github-actions.rst).
 
 This repository also keeps role-based project agents in `.agents/agents`. They
@@ -306,7 +299,6 @@ skills they depend on.
 | `composer tests` | Runs PHPUnit with local-or-packaged configuration. |
 | `composer dependencies` | Previews Rector Swiss Knife dependency updates, then reports missing, unused, misplaced, and outdated Composer dependencies. |
 | `composer metrics` | Runs PhpMetrics for the current project and generates requested report artifacts. |
-| `vendor/bin/dev-tools changelog <arguments...>` | Runs the external Changelog 0.2.0 CLI through isolated CPX. |
 | `composer docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer agents` | Creates or repairs packaged project-agent links in `.agents/agents`. |
 | `composer skills` | Creates or repairs packaged skill links in `.agents/skills`. |
@@ -368,16 +360,16 @@ review is complete. A typical contributor flow looks like this:
 
 ```bash
 # Record the user-visible change
-vendor/bin/dev-tools changelog add "Refines release-note rendering." --category=changed --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 add "Refines release-note rendering." --category=changed --no-interaction
 
 # Validate fragments; use --since after committing the contribution
-vendor/bin/dev-tools changelog check --since=origin/main --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 check --since=origin/main --no-interaction
 ```
 
 Maintainers can inspect pending fragments without consuming them:
 
 ```bash
-vendor/bin/dev-tools changelog status --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction
 ```
 
 Use the managed version PR for consolidation. Test history-writing commands

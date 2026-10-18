@@ -4,23 +4,22 @@ Specialized Commands
 Use the standalone commands when you want one tool instead of the full
 ``standards`` pipeline.
 
-``changelog``
--------------
+External Changelog CLI
+----------------------
 
-Delegates to the isolated external Fast Forward Changelog 0.2.0 CLI through
+Run the independent Fast Forward Changelog 0.2.0 CLI through
 ``cpx --skip-local``. CPX and PHP 8.5 must be available on its execution path;
 the consumer's PHP 8.3 requirement stays unchanged.
 
 .. code-block:: bash
 
-   vendor/bin/dev-tools changelog add "Fixes release-note rendering." --category=fixed --no-interaction
-   vendor/bin/dev-tools changelog check --no-interaction
-   vendor/bin/dev-tools changelog status --source=tags --no-interaction
+   cpx --skip-local fast-forward/changelog:0.2.0 add "Fixes release-note rendering." --category=fixed --no-interaction
+   cpx --skip-local fast-forward/changelog:0.2.0 check --no-interaction
+   cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction
 
-Contributions use independent ``.changelog/*.md`` files. The old
-``changelog:*`` commands and their ``Unreleased`` model have been removed;
-inspect external command help before migrating options or output consumers.
-See :doc:`../commands/changelog` for migration and release-preview boundaries.
+Contributions use independent ``.changelog/*.md`` files. Inspect external command
+help for its options and output contracts. See :doc:`../commands/changelog` for
+runtime requirements and release-preview boundaries.
 
 ``tests``
 ---------

@@ -177,32 +177,14 @@ before evaluating its individual job conditions. The packaged test wrapper
 declares this maximum; jobs that execute consumer code explicitly reduce both
 Actions and status permissions to ``none``.
 
-The predictable-conflict workflow MAY also refresh pull request branches when
-the only conflicts are ``.github/wiki`` pointer drift. It keeps pull request
-wiki preview pointers on the branch side. Central changelog conflicts are no
-longer rewritten; the external lifecycle regenerates its managed version PR
-from accepted independent fragments. Because automatic wiki resolutions are
-also pushed with the built-in workflow token, the workflow dispatches
-``tests.yml`` for the refreshed branch after a successful push so required test
-statuses can be reported for the new commit.
-
-The external Changelog workflow owns ``release/vnext`` and verifies its signed
+The external Changelog workflow owns ``changelog/version`` and verifies its signed
 transaction evidence. Branch names alone do not bypass checks. Its exact-head
-commit status is ``Fast Forward Changelog``, replacing the former
-``Changelog Validation`` aggregate. Confirm the status and all independent
+commit status is ``Fast Forward Changelog``. Confirm the status and all independent
 repository test gates on a pilot generated PR before changing protection.
-An explicitly configured GitHub App can preserve downstream event behavior;
-consumers using ``GITHUB_TOKEN`` must account for restrictions on subsequent CI runs.
-Do not treat the Changelog status as evidence that consumer tests ran.
-
-The local ``version_checks`` follow-up compensates for those token restrictions
-by dispatching ``tests.yml`` with ``publish-required-statuses: true``. Before
-dispatch it rereads the open PR and verifies the same-repository managed branch,
-exact head returned by Changelog and expected ``github-actions[bot]`` author.
-The dispatched tests mirror required test statuses onto that version PR head.
-If a consumer selects another Bot, adapt this identity guard consistently and
-verify its downstream event policy. All follow-up jobs use the selected runner
-labels, so preserve the consumer's authorized Linux runner settings.
+The official caller uses ``GITHUB_TOKEN`` and the external lifecycle defaults.
+Account for GitHub's restrictions on subsequent CI runs. Do not treat the
+Changelog status as evidence that independent consumer tests ran; inspect their
+results on the exact version PR head before approval.
 
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
@@ -242,11 +224,6 @@ pointer updates, ``actions: write`` to dispatch ``tests.yml`` after bot-authored
 pointer commits, and ``pull-requests: read`` to inspect pull request metadata
 safely.
 
-``auto-resolve-conflicts.yml`` keeps ``contents: write`` so it can push
-predictable conflict-resolution commits, ``pull-requests: write`` so it can
-inspect pull request state through GitHub tooling, and ``actions: write`` so it
-can dispatch ``tests.yml`` after it pushes a bot-authored resolution commit.
-
 The legacy reusable ``wiki-maintenance.yml`` keeps
 ``contents: write`` for wiki publication and cleanup tasks, and
 ``pull-requests: read`` on jobs that need to distinguish merged, closed, and
@@ -264,24 +241,18 @@ To enable reusable project automation in consumer repositories, pass
 ``project`` through the thin ``workflow_call`` wrapper or configure the
 repository variable ``PROJECT`` so the workflow can resolve the target GitHub
 Project without hardcoding repository-specific board identifiers into the
-packaged workflow itself. Consumer wrappers that call reusable workflows with
-project-board release transitions MUST also grant ``repository-projects: write``
-at the caller level; otherwise GitHub rejects the workflow before the release
-automation starts. The workflow derives the owner from
+packaged workflow itself. Consumer wrappers that call reusable project-board
+workflows MUST also grant ``repository-projects: write`` at the caller level;
+otherwise GitHub rejects the workflow before its automation starts. The workflow derives the owner from
 ``github.repository_owner`` and uses the built-in workflow token for the actual
 project mutations. Inside ``php-fast-forward`` repositories, the reusable
 workflow MAY fall back to the first organization Project V2 when no explicit
 project number is provided. The reusable project-board helpers now live under
 ``.github/actions/project-board/*``, which keeps project-state transitions
-shared across issue, pull-request, review, changelog, and release workflows.
+shared across issue, pull-request and review workflows.
 The external changelog lifecycle requires ``contents: write``,
 ``pull-requests: write``, ``issues: read`` and ``statuses: write`` at its caller.
-The local project-board follow-up retains ``repository-projects: write``.
-The separate local ``version_checks`` job requires ``actions: write`` to
-dispatch the independent tests and ``contents: read``/``pull-requests: read``
-for its identity checks. This permission is scoped to that follow-up; it is
-not granted to the external Changelog job. Reusable callers must permit these
-job permissions at their own maximum permission boundary.
+The official caller contains only the external Changelog job.
 
 Resolving ``.github/wiki`` Pointer Conflicts
 --------------------------------------------
@@ -290,10 +261,10 @@ This section applies only to legacy submodule consumers. Direct Wiki publication
 does not create repository pointers.
 
 Submodule pointer conflicts happen when ``main`` and the pull request point to
-different generated wiki commits. The predictable-conflict workflow can resolve
-this automatically when the conflict scope is limited to ``.github/wiki`` and
-``CHANGELOG.md``. When resolving it manually, rebase the pull request and choose
-the preview wiki commit that belongs to the pull request.
+different generated wiki commits. Legacy consumers should migrate to direct
+Wiki publication or resolve these conflicts manually. For a manual resolution, inspect
+both pointers, rebase the pull request and select the verified preview commit
+that belongs to it.
 
 For pull request ``123``:
 

@@ -3,7 +3,7 @@ Release and Publishing Workflow
 
 Fast Forward Changelog owns fragment validation, version planning, central
 history and optional tag/Release publication. DevTools delegates to that external
-package; it no longer implements a parallel changelog engine.
+package.
 
 Version PR and authorization
 ----------------------------
@@ -11,8 +11,8 @@ Version PR and authorization
 1. Contributions add independent ``.changelog/*.md`` fragments and pass the
    external ``Fast Forward Changelog`` status plus repository quality gates.
 2. Accepted contributions merge into ``main``. The external lifecycle prepares
-   or regenerates the single managed ``release/vnext`` PR with title
-   ``Prepare release v{next_version}``.
+   or regenerates the single managed ``changelog/version`` PR with title
+   ``chore: update changelog``.
 3. Review the exact new head, planned version, notes, comparison links and
    consumed fragment deletions. The Bot owns the branch; do not edit it manually
    or fake its transaction evidence. Let automation regenerate after base moves.
@@ -22,18 +22,16 @@ Version PR and authorization
    version PR does not create a tag or GitHub Release under this configuration.
    Enable publication only through a separately approved workflow change.
 
-The caller selects the upstream ``@v0`` channel and retains this repository's
-runner, token, branch and project-board settings. Local Changelog execution
+The caller selects the upstream ``@v0`` channel with the official README
+configuration unchanged: ``main``, historical source ``tags``, feedback
+``always``, release preparation enabled and publication disabled. The external
+defaults provide the Ubuntu runner and GitHub token. Local Changelog execution
 is fixed to 0.2.0 through CPX and PHP 8.5, without changing the consumer PHP 8.3
 requirement. The workflow uses Docker on Linux with Bash and Git instead of the
 consumer Composer environment. Read :doc:`../usage/github-actions` for caller
-contracts and :doc:`../commands/changelog` for the command migration.
-
-The local ``version_checks`` follow-up rereads the generated PR and validates
-its Bot, same-repository managed branch and exact returned head before
-dispatching independent ``tests.yml`` checks with required-status mirroring.
-Its scoped ``actions: write`` permission preserves required test gates despite
-``GITHUB_TOKEN`` event restrictions; all follow-ups retain the selected runner.
+contracts and :doc:`../commands/changelog` for local commands. The Changelog
+status and independent repository tests must be inspected on the exact version
+PR head; successful changelog validation does not prove that other CI ran.
 
 Verification before publication
 -------------------------------
@@ -59,34 +57,20 @@ or recreate an existing tag to repair notes. A new release needs an approved new
 identity and verified target. The external publication protocol recomputes notes
 and origin evidence; mismatches require regeneration and renewed review.
 
-Canonical release notes and historical reconciliation
------------------------------------------------------
+Canonical release notes
+-----------------------
 
 ``CHANGELOG.md`` is the canonical history after its maintenance PR is approved
 and integrated. Extract each version with the external ``notes`` command:
 
 .. code-block:: bash
 
-   vendor/bin/dev-tools changelog notes <version> --no-interaction
+   cpx --skip-local fast-forward/changelog:0.2.0 notes <version> --no-interaction
 
 A GitHub Release body contains that version's notes, preserving Markdown and
 links. Verify reference-style links in isolation and include only definitions
 needed by that body. Do not append authors, raw commits, automation metadata or
 a second generated change list.
-
-Reconciliation is prepared for review before any remote publication changes.
-Inventory tags, peeled commits, version identities, evidenced publication dates,
-central sections and existing Releases separately. A tag without a Release still
-belongs to history; a Release without a verifiable tag is an unresolved gap.
-Do not infer a publication date from a commit timestamp or today's date.
-
-After authorization and integration of canonical history, re-extract notes from
-the integrated SHA. Update divergent bodies through the supported external
-operation or an explicit reviewed GitHub API request. Create missing Releases
-only for verified existing tags. Preserve tag targets, version identities,
-assets and draft/prerelease flags. Creating a Release for an old tag today does
-not establish that GitHub published it historically. Reread every affected
-Release and compare its exact body with the approved extraction.
 
 Independent publication surfaces
 --------------------------------

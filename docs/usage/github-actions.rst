@@ -60,7 +60,6 @@ The packaged wrappers currently include:
 *   ``reports.yml``
 *   ``review.yml``
 *   ``changelog.yml``
-*   ``auto-resolve-conflicts.yml``
 *   ``wiki.yml`` for read-only pull-request generation and direct publication from ``main``
 *   ``wiki-maintenance.yml`` as manual-only migration guidance for legacy wrappers
 *   ``auto-assign.yml``
@@ -271,6 +270,8 @@ Fast Forward Changelog
 
 The repository and packaged consumer callers delegate to
 ``php-fast-forward/changelog/.github/workflows/changelog.yml@v0``.
+The repository's ``changelog.yml`` is an event-driven caller, with no
+``workflow_call`` interface.
 This explicitly selected channel tracks published 0.x releases, including
 potentially breaking minor updates. Local CPX execution is fixed to 0.2.0;
 resolve the channel and review its documented contracts before updating.
@@ -283,39 +284,28 @@ write credentials; privileged jobs read their trusted base. The selected Linux
 runner needs Docker, Bash and Git. It does not install the consumer Composer
 dependencies or require the consumer to run PHP 8.5.
 
-Repository settings preserve existing runner labels, configured Bot identity and
-credentials, ``main``, ``CHANGELOG.md``, ``.changelog``, the managed branch
-``release/vnext`` and title ``Prepare release v{next_version}``.
-The consumer stub must be adapted to each consumer's own credentials and runner
-policy. Supply either ``secrets.token`` or ``app-client-id`` with
-``secrets.app-private-key``, and match ``automation-actor`` to the actual Bot.
-Do not weaken runner isolation or copy this repository's identity to a consumer.
+Both callers use the official README YAML unchanged, with one ``changelog``
+job. They set ``base-branch: main``, ``source: tags``, ``comment-mode: always``,
+``prepare-release: true`` and ``publish: false``. The job grants
+``contents: write``, ``pull-requests: write``, ``issues: read`` and
+``statuses: write``; workflow-level permissions remain empty. The external
+defaults select Ubuntu, ``GITHUB_TOKEN``, ``CHANGELOG.md``, ``.changelog``,
+``changelog/version`` and the PR title ``chore: update changelog``.
 
-``resolve-pull-requests: true`` remains consistent across the lifecycle. It
+Automatic PR-origin lookup uses the external default enabled policy. It
 resolves missing origins from committed fragment bytes and merged PR evidence
 without requiring fragment edits after opening a PR. On base pushes or manual
 dispatch, the workflow prepares or refreshes a single version PR and consumes
-only its accepted fragments. The project-board follow-up uses the returned
-version PR number after preparation to preserve ``Release Prepared`` transitions.
-
-The separate ``version_checks`` follow-up preserves required consumer CI when
-the version PR is written with ``GITHUB_TOKEN``. It verifies the live open PR's
-repository, managed branch, expected Bot author and exact returned head before
-dispatching ``tests.yml`` with ``publish-required-statuses: true``. Its job alone
-grants ``actions: write`` for dispatch, plus read-only contents and PR access;
-the external Changelog job does not receive that permission. Follow-ups use the
-same selected runner labels. Consumers changing Bot identity must adapt the
-guard and verify their CI contract together with their credentials.
+only its accepted fragments. The single-job caller follows the external
+lifecycle directly, without local post-preparation jobs.
 
 Adoption explicitly sets ``publish: false``. The workflow never merges the
 version PR itself; merging it also does not publish tags or Releases while this
 setting is false. Publication needs separate authorization and a reviewed
-configuration change. Historical Release-body reconciliation is a separate
-approved operation after canonical history is merged.
+configuration change.
 
 Require the exact commit status ``Fast Forward Changelog`` on the current PR
-head after a repository pilot confirms it. It replaces the legacy
-``Changelog Validation`` aggregate. Managed-head validation uses the external
+head after a repository pilot confirms it. Managed-head validation uses the external
 ownership protocol; a matching branch name alone is not a waiver. Maintainer
 history exceptions must use the library's verified permission-based mechanism,
 not an editable label alone. Preserve all independent repository test gates.
@@ -324,27 +314,6 @@ See the selected release's
 `workflow contracts <https://github.com/php-fast-forward/changelog/blob/v0.2.0/docs/reusable-lifecycle.md>`_
 and :doc:`../commands/changelog` for local previews. Inspect generated PR
 ownership, notes, fragment deletions and exact-head statuses before approval.
-
-Fast Forward Predictable Conflict Resolution
---------------------------------------------
-
-The ``auto-resolve-conflicts.yml`` workflow scans pull requests after ``main``
-moves and after pull request updates. It only attempts an automatic merge when
-the conflicted file list is limited to:
-
-*   ``.github/wiki``.
-
-For legacy ``.github/wiki`` conflicts, the workflow keeps the pull request side
-of the submodule pointer because that pointer references the preview wiki branch
-that belongs to the pull request. Direct-publication repositories have no such
-pointer. Central changelog conflicts are no longer rewritten by the legacy
-resolver. Contributions use independent fragments; managed version PRs must be
-regenerated by the external Changelog workflow.
-
-If any other file is conflicted, or if GitHub reports a forked pull request
-branch, the workflow stops and leaves the branch for manual resolution. Each
-run writes a summary explaining which pull requests were resolved, skipped, or
-left untouched.
 
 Fast Forward Rigorous Review
 ----------------------------
@@ -402,12 +371,6 @@ Maintenance Workflows
     *   Adds linked pull requests to the same project, mirrors milestone plus inferable project metadata, and keeps draft PRs in ``In progress`` until they are explicitly ready for review.
     *   Promotes approved pull requests into ``Ready to Merge``.
     *   Moves merged pull requests and linked issues into ``Merged``.
-    *   Moves all currently ``Merged`` work into ``Release Prepared`` when ``changelog.yml`` opens or updates a release-preparation pull request.
-    *   Promotes ``Release Prepared`` work into ``Released`` when the
-        release-preparation pull request is merged and the GitHub release is
-        published, and also promotes any remaining ``Merged`` items as a
-        release-publication safety net when the preparation transition did not
-        run.
     *   Uses the built-in workflow token for project updates.
 *   **Label Sync**: Synchronizes repository labels with ecosystem standards.
 
