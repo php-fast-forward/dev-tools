@@ -279,8 +279,9 @@ deterministic brief for the dedicated review agent.
 
 The external workflow checks fragments and prepares one managed version PR
 on `changelog/version`, titled `chore: update changelog`. This repository uses
-the official README caller with the explicitly approved `publish: true`
-setting: `main`, history from tags, feedback on every PR and release preparation
+the official README caller with the explicitly approved
+`name: Fast Forward Changelog` and `publish: true` settings: `main`, history
+from tags, feedback on every PR and release preparation
 enabled. The lifecycle uses its default Ubuntu runner and GitHub token.
 Merging the reviewed managed version PR automatically publishes its tag and
 GitHub Release from the exact approved commit. The workflow never merges that

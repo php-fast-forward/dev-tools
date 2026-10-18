@@ -106,7 +106,7 @@ How Changelog and Project Automation Fit In
 
 - ``.github/workflows/changelog.yml`` calls the external Changelog lifecycle
   at ``@v0`` using the official README's single-job caller with the
-  owner-approved ``publish: true`` override.
+  owner-approved ``name: Fast Forward Changelog`` and ``publish: true`` overrides.
 - The external workflow validates contribution fragments and prepares the
   ``changelog/version`` PR titled ``chore: update changelog``. Publication is
   automatic after that reviewed PR is merged. The lifecycle uses its default

@@ -287,7 +287,7 @@ runner needs Docker, Bash and Git. It does not install the consumer Composer
 dependencies or require the consumer to run PHP 8.5.
 
 Both callers use the official README YAML with the owner-approved
-``publish: true`` override and one ``changelog``
+``name: Fast Forward Changelog`` and ``publish: true`` overrides and one ``changelog``
 job. They set ``base-branch: main``, ``source: tags``, ``comment-mode: always``,
 ``prepare-release: true`` and ``publish: true``. The job grants
 ``contents: write``, ``pull-requests: write``, ``issues: read`` and

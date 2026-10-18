@@ -24,7 +24,8 @@ Version PR and authorization
    per-release permission. The workflow never merges the PR itself.
 
 The caller selects the upstream ``@v0`` channel with the official README
-configuration plus the owner-approved ``publish: true`` override: ``main``,
+configuration plus the owner-approved ``name: Fast Forward Changelog`` and
+``publish: true`` overrides: ``main``,
 historical source ``tags``, feedback ``always`` and release preparation enabled. The external
 defaults provide the Ubuntu runner and GitHub token. Local Changelog execution
 is fixed to 0.2.0 through CPX and PHP 8.5, without changing the consumer PHP 8.3

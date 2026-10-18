@@ -175,8 +175,9 @@ The maintenance entry is manual-only compatibility guidance; legacy reusable
 Changelog parsing, fragments, history and release policy belong to the external
 `fast-forward/changelog` package. The workflow caller uses the user-selected
 `php-fast-forward/changelog/.github/workflows/changelog.yml@v0` channel and
-uses the official README caller with the owner-approved `publish: true`
-override: `base-branch: main`, `source: tags`, `comment-mode: always` and
+uses the official README caller with the owner-approved
+`name: Fast Forward Changelog` and `publish: true` overrides:
+`base-branch: main`, `source: tags`, `comment-mode: always` and
 `prepare-release: true`. Merging the reviewed managed version PR automatically
 publishes its tag and GitHub Release at the approved commit. The workflow never
 merges the PR itself. This configured publication needs no second per-release

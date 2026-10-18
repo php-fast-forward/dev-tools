@@ -37,7 +37,7 @@ final class ChangelogWorkflowTest extends TestCase
     {
         $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/changelog.yml');
 
-        self::assertSame('Changelog', $workflow['name']);
+        self::assertSame('Fast Forward Changelog', $workflow['name']);
         self::assertSame([
             'pull_request' => [
                 'branches' => ['main'],
