@@ -5,388 +5,383 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased]
-
-### Changed
-
-- Align the packaged documentation skill with the current code rather than release timing, while preserving migration history and verified installation claims.
-
 ## [1.26.0] - 2026-10-16
 
 ### Added
 
-- Add an opt-in native GitHub Pages reports workflow with an isolated deployment job and verified documentation identity assets from template 2.1.0 or newer.
+- Add an opt-in native GitHub Pages reports workflow with an isolated deployment job and verified documentation identity assets from template 2.1.0 or newer. ([#363](https://github.com/php-fast-forward/dev-tools/pull/363))
 
 ### Changed
 
-- Refresh README and documentation with contextual Dash artwork for the DevTools quality pipeline (#360).
-- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.2 to 3.0.3 (#355)
-- Composer(deps): Update ergebnis/phpunit-agent-reporter requirement from ^0.3 to ^1.0 (#356)
-- GitHub Actions(deps): Bump actions/checkout from 6 to 7 (#354)
-- GitHub Actions(deps): Bump EndBug/add-and-commit from 10 to 11 (#358)
-- Publish generated API pages directly to the GitHub Wiki from main without parent submodule-pointer commits, while pull requests generate read-only artifacts.
-- Generate local wiki Markdown in .dev-tools/wiki-generated during normal sync instead of initializing a Wiki submodule; retain explicit wiki --init for legacy use.
-- GitHub Actions(deps): bump actions/upload-artifact from 4.6.2 to 7.0.2 (#369)
-- GitHub Actions(deps): bump actions/download-artifact from 4.3.0 to 8.0.2 (#368)
+- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.3 to 3.1.0. ([#359](https://github.com/php-fast-forward/dev-tools/pull/359))
+- Refresh README and documentation with contextual Dash artwork for the DevTools quality pipeline. ([#360](https://github.com/php-fast-forward/dev-tools/pull/360))
+- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.2 to 3.0.3. ([#355](https://github.com/php-fast-forward/dev-tools/pull/355))
+- Composer(deps): Update ergebnis/phpunit-agent-reporter requirement from ^0.3 to ^1.0. ([#356](https://github.com/php-fast-forward/dev-tools/pull/356))
+- GitHub Actions(deps): Bump actions/checkout from 6 to 7. ([#354](https://github.com/php-fast-forward/dev-tools/pull/354))
+- GitHub Actions(deps): Bump EndBug/add-and-commit from 10 to 11. ([#358](https://github.com/php-fast-forward/dev-tools/pull/358))
+- Publish generated API pages directly to the GitHub Wiki from main without parent submodule-pointer commits, while pull requests generate read-only artifacts. ([#366](https://github.com/php-fast-forward/dev-tools/pull/366))
+- Generate local wiki Markdown in .dev-tools/wiki-generated during normal sync instead of initializing a Wiki submodule; retain explicit wiki --init for legacy use. ([#366](https://github.com/php-fast-forward/dev-tools/pull/366))
+- GitHub Actions(deps): bump actions/upload-artifact from 4.6.2 to 7.0.2. ([#369](https://github.com/php-fast-forward/dev-tools/pull/369))
+- GitHub Actions(deps): bump actions/download-artifact from 4.3.0 to 8.0.2. ([#368](https://github.com/php-fast-forward/dev-tools/pull/368))
 
 ### Fixed
 
-- Isolate native Pages PR builds from production deployment queues, preserve full repository history in generated metrics, and retry downloaded identity hashes during CDN propagation.
-- Keep required per-version statuses current across normal and Dependabot reruns through checkout-free lifecycle publishers using verified GitHub run and job metadata.
-- Keep Composer audit and nested dependency-health checks plugin-free after CI installs without plugins, so consumer allowlists do not block vulnerability or dependency analysis.
-- Isolate completed per-version status publication from repository-controlled test jobs, preserve access to private GitHub job metadata, and disable persisted checkout credentials in the reusable test workflow.
-- Restore tests, reports, and dependency checks after ECS and Rector API changes, and replace the abandoned rector/jack dependency checker with Rector Swiss Knife.
+- Isolate native Pages PR builds from production deployment queues, preserve full repository history in generated metrics, and retry downloaded identity hashes during CDN propagation. ([#364](https://github.com/php-fast-forward/dev-tools/pull/364))
+- Keep required per-version statuses current across normal and Dependabot reruns through checkout-free lifecycle publishers using verified GitHub run and job metadata. ([#362](https://github.com/php-fast-forward/dev-tools/pull/362))
+- Keep Composer audit and nested dependency-health checks plugin-free after CI installs without plugins, so consumer allowlists do not block vulnerability or dependency analysis. ([#362](https://github.com/php-fast-forward/dev-tools/pull/362))
+- Isolate completed per-version status publication from repository-controlled test jobs, preserve access to private GitHub job metadata, and disable persisted checkout credentials in the reusable test workflow. ([#362](https://github.com/php-fast-forward/dev-tools/pull/362))
+- Restore tests, reports, and dependency checks after ECS and Rector API changes, and replace the abandoned rector/jack dependency checker with Rector Swiss Knife. ([#361](https://github.com/php-fast-forward/dev-tools/pull/361))
 
-## [1.25.6] - 2026-05-22
+## [1.25.6] - 2026-06-04
 
 ### Fixed
 
-- Sync workflow metadata and managed-asset references requested during agents workflow validation review, including predictable action dispatch condition and label-sync permission updates, plus managed submodule/wiki pointer alignment (#347).
+- Sync workflow metadata and managed-asset references requested during agents workflow validation review, including predictable action dispatch condition and label-sync permission updates, plus managed submodule/wiki pointer alignment. ([#352](https://github.com/php-fast-forward/dev-tools/pull/352))
 
 ## [1.25.5] - 2026-05-13
 
 ### Fixed
 
-- Relax workflow fallback Composer install so .dev-tools-actions bootstrap does not require composer.lock when provisioning DevTools runtime in shared GitHub Actions contexts (#342).
-- Skip coverage report generation in reports command when no test surface is detectable (no default tests directory and no testable PHP source), while still generating docs and metrics.
+- Relax workflow fallback Composer install so .dev-tools-actions bootstrap does not require composer.lock when provisioning DevTools runtime in shared GitHub Actions contexts. ([#343](https://github.com/php-fast-forward/dev-tools/pull/343))
+- Skip coverage report generation in reports command when no test surface is detectable (no default tests directory and no testable PHP source), while still generating docs and metrics. ([#345](https://github.com/php-fast-forward/dev-tools/pull/345))
 
 ## [1.25.4] - 2026-05-11
 
 ### Fixed
 
-- Show DevTools version metadata in CLI application output so `list` and `--version` expose the installed package version from `Application` metadata (#339).
+- Show DevTools version metadata in CLI application output so `list` and `--version` expose the installed package version from `Application` metadata. ([#340](https://github.com/php-fast-forward/dev-tools/pull/340))
 
 ## [1.25.3] - 2026-05-11
 
 ### Fixed
 
-- Improve self-update global/local scope detection by normalizing Composer home candidates with realpath fallback handling and `XDG_CONFIG_HOME` support, to avoid global installs accidentally running as local updates in symlinked or alternate Composer home environments (#335).
+- Improve self-update global/local scope detection by normalizing Composer home candidates with realpath fallback handling and `XDG_CONFIG_HOME` support, to avoid global installs accidentally running as local updates in symlinked or alternate Composer home environments. ([#337](https://github.com/php-fast-forward/dev-tools/pull/337))
 
 ## [1.25.2] - 2026-05-11
 
 ### Fixed
 
-- Resolve global-install fallback for GrumPHP hook execution by using `vendor/bin/grumphp`, then `vendor/bin/grumphp.phar`, then `grumphp` in PATH, keeping local override precedence for managed project hooks unchanged (#296)
-- Remove deprecated ECS `strict` prepared set from `ECSConfig` to avoid deprecation failures during structured changelog validation and pre-commit hooks (#296)
+- Resolve global-install fallback for GrumPHP hook execution by using `vendor/bin/grumphp`, then `vendor/bin/grumphp.phar`, then `grumphp` in PATH, keeping local override precedence for managed project hooks unchanged. ([#332](https://github.com/php-fast-forward/dev-tools/pull/332))
+- Remove deprecated ECS `strict` prepared set from `ECSConfig` to avoid deprecation failures during structured changelog validation and pre-commit hooks. ([#332](https://github.com/php-fast-forward/dev-tools/pull/332))
 
 ## [1.25.1] - 2026-05-02
 
 ### Fixed
 
-- Keep structured DevTools command output parseable and agent-friendly by exposing the PHPUnit agent-reporter payload under nested `output`, suppressing intermediary progress logs in JSON modes, and normalizing orchestrated subprocess payloads before the final JSON envelope is emitted (#248)
-- Register ``ergebnis/phpunit-agent-reporter`` in the packaged ``phpunit.xml`` so AI agents receive compact PHPUnit JSON summaries without changing consumer overrides manually (#327)
-- Let `wiki`, `docs`, `tests`, `metrics`, and `reports` skip gracefully for guide-only repositories while keeping wiki/report workflows and published preview links aligned with the artifacts that were actually generated (#325)
+- Keep structured DevTools command output parseable and agent-friendly by exposing the PHPUnit agent-reporter payload under nested `output`, suppressing intermediary progress logs in JSON modes, and normalizing orchestrated subprocess payloads before the final JSON envelope is emitted. ([#329](https://github.com/php-fast-forward/dev-tools/pull/329))
+- Register ``ergebnis/phpunit-agent-reporter`` in the packaged ``phpunit.xml`` so AI agents receive compact PHPUnit JSON summaries without changing consumer overrides manually. ([#328](https://github.com/php-fast-forward/dev-tools/pull/328))
+- Let `wiki`, `docs`, `tests`, `metrics`, and `reports` skip gracefully for guide-only repositories while keeping wiki/report workflows and published preview links aligned with the artifacts that were actually generated. ([#326](https://github.com/php-fast-forward/dev-tools/pull/326))
 
 ## [1.25.0] - 2026-05-01
 
 ### Changed
 
-- Composer(deps): Update rector/jack requirement from ^0.5 to ^1.0 (#320)
-- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.1 to 3.0.2 (#319)
+- Composer(deps): Update rector/jack requirement from ^0.5 to ^1.0. ([#320](https://github.com/php-fast-forward/dev-tools/pull/320))
+- GitHub Actions(deps): Bump toshimaru/auto-author-assign from 3.0.1 to 3.0.2. ([#319](https://github.com/php-fast-forward/dev-tools/pull/319))
 
 ### Fixed
 
-- Keep release-preparation wiki preview refreshes installing Composer plugins so `phpdocumentor/shim` still exposes `phpdoc` when release pull request creation rebuilds `.github/wiki` (#318)
-- Keep release-preparation pull requests refreshing their wiki preview and parent `.github/wiki` pointer before merge, then publish merged release wikis from that preview branch so branch protection no longer requires direct post-merge pointer commits to `main` (#315)
-- Resolve predictable `.github/wiki` gitlink conflicts by staging the current-branch submodule pointer directly from the merge index, so auto-resolve automation no longer depends on `git add` for uninitialized submodule checkouts (#321)
+- Keep release-preparation wiki preview refreshes installing Composer plugins so `phpdocumentor/shim` still exposes `phpdoc` when release pull request creation rebuilds `.github/wiki`. ([#322](https://github.com/php-fast-forward/dev-tools/pull/322))
+- Keep release-preparation pull requests refreshing their wiki preview and parent `.github/wiki` pointer before merge, then publish merged release wikis from that preview branch so branch protection no longer requires direct post-merge pointer commits to `main`. ([#316](https://github.com/php-fast-forward/dev-tools/pull/316))
+- Resolve predictable `.github/wiki` gitlink conflicts by staging the current-branch submodule pointer directly from the merge index, so auto-resolve automation no longer depends on `git add` for uninitialized submodule checkouts. ([#323](https://github.com/php-fast-forward/dev-tools/pull/323))
 
 ## [1.24.6] - 2026-04-30
 
 ### Fixed
 
-- Keep reusable-workflow retry automation from failing on unreadable child-job logs, while moving release-branch wiki publication to changelog-driven release refreshes that republish wiki content and reconcile the parent `.github/wiki` pointer from the authoritative released state (#309)
-- Rebuild release-time wiki publication from the `.github/wiki` pointer already recorded on `main`, force-push the regenerated wiki branch only when the rebuilt content changes, and align merged-release wiki maintenance summaries with `main` as the source branch (#312)
+- Keep reusable-workflow retry automation from failing on unreadable child-job logs, while moving release-branch wiki publication to changelog-driven release refreshes that republish wiki content and reconcile the parent `.github/wiki` pointer from the authoritative released state. ([#310](https://github.com/php-fast-forward/dev-tools/pull/310))
+- Rebuild release-time wiki publication from the `.github/wiki` pointer already recorded on `main`, force-push the regenerated wiki branch only when the rebuilt content changes, and align merged-release wiki maintenance summaries with `main` as the source branch. ([#313](https://github.com/php-fast-forward/dev-tools/pull/313))
 
 ## [1.24.5] - 2026-04-30
 
 ### Fixed
 
-- Render managed GrumPHP hook fallback paths relative to the consumer project so global `dev-tools:sync` installs keep local GrumPHP hook execution working (#305)
-- Let reusable GitHub Actions workflows prefer a consumer-local `vendor/bin/dev-tools` and otherwise expose a deterministic runtime from the checked-out workflow source, so workflow-only consumers no longer need a direct DevTools dependency (#303)
+- Render managed GrumPHP hook fallback paths relative to the consumer project so global `dev-tools:sync` installs keep local GrumPHP hook execution working. ([#306](https://github.com/php-fast-forward/dev-tools/pull/306))
+- Let reusable GitHub Actions workflows prefer a consumer-local `vendor/bin/dev-tools` and otherwise expose a deterministic runtime from the checked-out workflow source, so workflow-only consumers no longer need a direct DevTools dependency. ([#307](https://github.com/php-fast-forward/dev-tools/pull/307))
 
 ## [1.24.4] - 2026-04-30
 
 ### Fixed
 
-- Restore global DevTools new-version notifications by using a supported Symfony Process success check during release lookups (#300)
+- Restore global DevTools new-version notifications by using a supported Symfony Process success check during release lookups. ([#301](https://github.com/php-fast-forward/dev-tools/pull/301))
 
 ## [1.24.3] - 2026-04-30
 
 ### Fixed
 
-- Keep global `dev-tools:sync` runs machine-independent by removing only deprecated DevTools-managed Composer GrumPHP default-path metadata while wiring packaged Git hooks to prefer a project-local `grumphp.yml` and otherwise use the active packaged DevTools config path resolved at sync time (#288)
-- Complete global runtime fallback support for phpdoc, phpunit, and phpmetrics commands, including packaged phpDocumentor templates used by `docs` and `wiki` (#297)
+- Keep global `dev-tools:sync` runs machine-independent by removing only deprecated DevTools-managed Composer GrumPHP default-path metadata while wiring packaged Git hooks to prefer a project-local `grumphp.yml` and otherwise use the active packaged DevTools config path resolved at sync time. ([#295](https://github.com/php-fast-forward/dev-tools/pull/295))
+- Complete global runtime fallback support for phpdoc, phpunit, and phpmetrics commands, including packaged phpDocumentor templates used by `docs` and `wiki`. ([#298](https://github.com/php-fast-forward/dev-tools/pull/298))
 
 ## [1.24.2] - 2026-04-30
 
 ### Fixed
 
-- Prefer project-local tooling binaries when available and fall back to the active DevTools runtime for `php-cs-fixer`, Rector, ECS, Jack, and Composer Dependency Analyser during global `dev-tools` runs (#292)
+- Prefer project-local tooling binaries when available and fall back to the active DevTools runtime for `php-cs-fixer`, Rector, ECS, Jack, and Composer Dependency Analyser during global `dev-tools` runs. ([#293](https://github.com/php-fast-forward/dev-tools/pull/293))
 
 ## [1.24.1] - 2026-04-30
 
 ### Fixed
 
-- Keep global `dev-tools tests` runs loading the packaged PHPUnit extension by generating a bootstrap shim that falls back to the active DevTools autoloader when the working directory does not install DevTools locally (#289)
+- Keep global `dev-tools tests` runs loading the packaged PHPUnit extension by generating a bootstrap shim that falls back to the active DevTools autoloader when the working directory does not install DevTools locally. ([#290](https://github.com/php-fast-forward/dev-tools/pull/290))
 
 ## [1.24.0] - 2026-04-28
 
 ### Added
 
-- Add a configurable DevTools generated artifact workspace through `--workspace-dir` and `FAST_FORWARD_WORKSPACE_DIR`, keeping explicit output/cache command options authoritative (#274)
-- Add a standalone DevTools `self-update` command plus global `--working-dir` and `--auto-update` binary options for local or global installations (#272)
-- Show the DevTools ASCII logo by default on all top-level command executions, while adding a `--no-logo` global option and automatically suppressing the banner for `--json` / `--pretty-json` invocations (including automatic forwarding of `--no-logo` to internal DevTools subprocesses) to avoid banner repetition in orchestrated command queues (#277)
+- Add a configurable DevTools generated artifact workspace through `--workspace-dir` and `FAST_FORWARD_WORKSPACE_DIR`, keeping explicit output/cache command options authoritative. ([#275](https://github.com/php-fast-forward/dev-tools/pull/275))
+- Add a standalone DevTools `self-update` command plus global `--working-dir` and `--auto-update` binary options for local or global installations. ([#273](https://github.com/php-fast-forward/dev-tools/pull/273))
+- Show the DevTools ASCII logo by default on all top-level command executions, while adding a `--no-logo` global option and automatically suppressing the banner for `--json` / `--pretty-json` invocations (including automatic forwarding of `--no-logo` to internal DevTools subprocesses) to avoid banner repetition in orchestrated command queues. ([#280](https://github.com/php-fast-forward/dev-tools/pull/280), [#278](https://github.com/php-fast-forward/dev-tools/pull/278))
 
 ### Fixed
 
-- Prevent DevTools from breaking changelog workflows by keeping raw output clean for `changelog:show` and `changelog:next-version` (suppressing the startup ASCII logo when these commands run without explicit `--json`/`--pretty-json`) (#280)
+- Prevent DevTools from breaking changelog workflows by keeping raw output clean for `changelog:show` and `changelog:next-version` (suppressing the startup ASCII logo when these commands run without explicit `--json`/`--pretty-json`). ([#280](https://github.com/php-fast-forward/dev-tools/pull/280))
 
 ## [1.23.0] - 2026-04-26
 
 ### Added
 
-- Add a hybrid command runtime bootstrap and capability bridge that keeps command discovery split between migrated Symfony commands (`DevTools`) and legacy Composer `BaseCommand` commands (`DevToolsComposer`) while exposing proxy commands during Composer execution for the first migration step (#199)
+- Add a hybrid command runtime bootstrap and capability bridge that keeps command discovery split between migrated Symfony commands (`DevTools`) and legacy Composer `BaseCommand` commands (`DevToolsComposer`) while exposing proxy commands during Composer execution for the first migration step. ([#270](https://github.com/php-fast-forward/dev-tools/pull/270))
 
 ## [1.22.3] - 2026-04-25
 
 ### Fixed
 
-- Add a branch-protection-safe changelog validation context that fails normal
-- Teach pull-request publication guidance to read the published PR body back
-- Keep workflow-dispatched test runs from failing before job creation by treating `max-outdated` as a string input and relying on the workflow default when release, wiki, or conflict automation dispatches required test status mirroring.
+- Add a branch-protection-safe changelog validation context that fails normal pull requests when changelog validation fails while still passing release preparation branches where validation is intentionally skipped. ([#260](https://github.com/php-fast-forward/dev-tools/pull/260))
+- Teach pull-request publication guidance to read the published PR body back from GitHub and fix literal escaped Markdown control characters before handing the PR off for review. ([#258](https://github.com/php-fast-forward/dev-tools/pull/258))
+- Keep workflow-dispatched test runs from failing before job creation by treating `max-outdated` as a string input and relying on the workflow default when release, wiki, or conflict automation dispatches required test status mirroring. ([#258](https://github.com/php-fast-forward/dev-tools/pull/258))
 
 ## [1.22.2] - 2026-04-24
 
 ### Fixed
 
-- Dispatch required test status mirroring after changelog release-preparation workflows create or update release pull requests so release branches no longer require branch-protection bypass for workflow-authored commits (#250)
+- Dispatch required test status mirroring after changelog release-preparation workflows create or update release pull requests so release branches no longer require branch-protection bypass for workflow-authored commits. ([#256](https://github.com/php-fast-forward/dev-tools/pull/256))
 
 ## [1.22.1] - 2026-04-24
 
 ### Fixed
 
-- Promote any remaining project-board `Merged` work to `Released` during release publication so bypassed or skipped preparation transitions do not leave completed items stale (#253)
-- Grant project-board write permission in the packaged changelog workflow wrapper so consumer release workflows can call the reusable changelog automation without GitHub rejecting the requested permissions (#251)
+- Promote any remaining project-board `Merged` work to `Released` during release publication so bypassed or skipped preparation transitions do not leave completed items stale. ([#254](https://github.com/php-fast-forward/dev-tools/pull/254))
+- Grant project-board write permission in the packaged changelog workflow wrapper so consumer release workflows can call the reusable changelog automation without GitHub rejecting the requested permissions. ([#252](https://github.com/php-fast-forward/dev-tools/pull/252))
 
 ## [1.22.0] - 2026-04-24
 
 ### Added
 
-- Auto-resolve pull-request conflicts limited to workflow-managed `.github/wiki` pointers and `CHANGELOG.md` `Unreleased` drift (#192)
-- Teach the pull-request review skill, review-guardian agent, and review request brief to require explicit validation strategies for workflow, local-action, and packaged-wrapper changes, including local `actionlint` installation guidance (#241)
+- Auto-resolve pull-request conflicts limited to workflow-managed `.github/wiki` pointers and `CHANGELOG.md` `Unreleased` drift. ([#237](https://github.com/php-fast-forward/dev-tools/pull/237))
+- Teach the pull-request review skill, review-guardian agent, and review request brief to require explicit validation strategies for workflow, local-action, and packaged-wrapper changes, including local `actionlint` installation guidance. ([#242](https://github.com/php-fast-forward/dev-tools/pull/242))
 
 ### Fixed
 
-- Preserve color-friendly nested command environments, explicit Symfony Console ANSI flags, concise process section labels, and fixture-safe PhpMetrics execution with bounded Packagist lookups without restoring PTY (#239)
-- Disable Xdebug for queued child processes unless coverage requires it without PCOV, reducing repeated Composer Xdebug warnings in orchestrated commands (#239)
-- Keep the reports workflow permission warning loop shell-safe for paths containing backslashes (#244)
-- Keep required PHPUnit matrix checks reporting after workflow-managed `.github/wiki` pointer commits by running the pull-request test workflow without top-level path filters and aligning the packaged consumer test wrapper (#230)
-- Publish pending and per-version required PHPUnit statuses for workflow-dispatched test runs so wiki pointer commits do not wait for an all-matrix aggregate status (#230)
-- Ignore intentional Composer Dependency Analyser shadow dependency findings by default while adding `dependencies --show-shadow-dependencies` for audits (#233)
-- Dispatch the required test workflow after wiki preview automation updates a pull-request `.github/wiki` pointer, avoiding permanently pending required checks on bot-authored pointer commits (#230)
-- Mirror workflow-dispatched wiki pointer test results into required `Run Tests` commit statuses so branch protection recognizes bot-authored pointer commits (#230)
+- Preserve color-friendly nested command environments, explicit Symfony Console ANSI flags, concise process section labels, and fixture-safe PhpMetrics execution with bounded Packagist lookups without restoring PTY. ([#247](https://github.com/php-fast-forward/dev-tools/pull/247))
+- Disable Xdebug for queued child processes unless coverage requires it without PCOV, reducing repeated Composer Xdebug warnings in orchestrated commands. ([#247](https://github.com/php-fast-forward/dev-tools/pull/247))
+- Keep the reports workflow permission warning loop shell-safe for paths containing backslashes. ([#245](https://github.com/php-fast-forward/dev-tools/pull/245))
+- Keep required PHPUnit matrix checks reporting after workflow-managed `.github/wiki` pointer commits by running the pull-request test workflow without top-level path filters and aligning the packaged consumer test wrapper. ([#231](https://github.com/php-fast-forward/dev-tools/pull/231))
+- Publish pending and per-version required PHPUnit statuses for workflow-dispatched test runs so wiki pointer commits do not wait for an all-matrix aggregate status. ([#236](https://github.com/php-fast-forward/dev-tools/pull/236))
+- Ignore intentional Composer Dependency Analyser shadow dependency findings by default while adding `dependencies --show-shadow-dependencies` for audits. ([#234](https://github.com/php-fast-forward/dev-tools/pull/234))
+- Dispatch the required test workflow after wiki preview automation updates a pull-request `.github/wiki` pointer, avoiding permanently pending required checks on bot-authored pointer commits. ([#231](https://github.com/php-fast-forward/dev-tools/pull/231))
+- Mirror workflow-dispatched wiki pointer test results into required `Run Tests` commit statuses so branch protection recognizes bot-authored pointer commits. ([#236](https://github.com/php-fast-forward/dev-tools/pull/236))
 
 ## [1.21.0] - 2026-04-24
 
 ### Changed
 
-- GitHub Actions(deps): Bump peter-evans/create-pull-request from 7 to 8 (#181)
-- GitHub Actions(deps): Bump marocchino/sticky-pull-request-comment from 2 to 3 (#182)
-- GitHub Actions(deps): Bump actions/github-script from 8 to 9 (#183)
-- Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns (#186)
-- Resolve Dependabot changelog fallback state from the actual PR head branch and report `already-present`, `auto-created`, or `missing` in the workflow summary so rebased PRs cannot pass on inherited `Unreleased` entries alone (#191)
+- GitHub Actions(deps): Bump peter-evans/create-pull-request from 7 to 8. ([#181](https://github.com/php-fast-forward/dev-tools/pull/181))
+- GitHub Actions(deps): Bump marocchino/sticky-pull-request-comment from 2 to 3. ([#182](https://github.com/php-fast-forward/dev-tools/pull/182))
+- GitHub Actions(deps): Bump actions/github-script from 8 to 9. ([#183](https://github.com/php-fast-forward/dev-tools/pull/183))
+- Auto-create and push minimal changelog entries for same-repository Dependabot pull requests before changelog validation reruns. ([#189](https://github.com/php-fast-forward/dev-tools/pull/189))
+- Resolve Dependabot changelog fallback state from the actual PR head branch and report `already-present`, `auto-created`, or `missing` in the workflow summary so rebased PRs cannot pass on inherited `Unreleased` entries alone. ([#193](https://github.com/php-fast-forward/dev-tools/pull/193))
 
 ### Fixed
 
-- Preserve literal angle brackets around maintainer emails when generating LICENSE files from composer metadata (#179)
-- Keep packaged `.agents` payloads exportable and synchronize packaged skills and agents with repository-relative symlink targets so consumer repositories no longer receive broken absolute machine paths (#188)
-- Rewrite drifted Git hooks by removing the previous target first, restore the intended `0o755` executable mode, and report unwritable hook replacements cleanly when `.git/hooks` stays locked (#190)
-- Keep Composer plugin command discovery compatible with consumer environments by moving unsupported Symfony Console named parameters out of command metadata/configuration and by decoupling the custom filesystem wrapper from Composer's bundled Symfony Filesystem signatures (#185)
-- Keep Composer autoload, Rector, and ECS from traversing nested fixture `vendor` directories when the composer-plugin consumer fixture has installed dependencies (#179)
-- Skip LICENSE generation cleanly when a consumer composer manifest omits or leaves the `license` field empty (#227)
-- Run nested DevTools subprocesses without forcing PTY, fixing aggregate commands in non-interactive environments (#171)
+- Preserve literal angle brackets around maintainer emails when generating LICENSE files from composer metadata. ([#226](https://github.com/php-fast-forward/dev-tools/pull/226))
+- Keep packaged `.agents` payloads exportable and synchronize packaged skills and agents with repository-relative symlink targets so consumer repositories no longer receive broken absolute machine paths. ([#194](https://github.com/php-fast-forward/dev-tools/pull/194))
+- Rewrite drifted Git hooks by removing the previous target first, restore the intended `0o755` executable mode, and report unwritable hook replacements cleanly when `.git/hooks` stays locked. ([#196](https://github.com/php-fast-forward/dev-tools/pull/196))
+- Keep Composer plugin command discovery compatible with consumer environments by moving unsupported Symfony Console named parameters out of command metadata/configuration and by decoupling the custom filesystem wrapper from Composer's bundled Symfony Filesystem signatures. ([#198](https://github.com/php-fast-forward/dev-tools/pull/198))
+- Keep Composer autoload, Rector, and ECS from traversing nested fixture `vendor` directories when the composer-plugin consumer fixture has installed dependencies. ([#226](https://github.com/php-fast-forward/dev-tools/pull/226))
+- Skip LICENSE generation cleanly when a consumer composer manifest omits or leaves the `license` field empty. ([#228](https://github.com/php-fast-forward/dev-tools/pull/228))
+- Run nested DevTools subprocesses without forcing PTY, fixing aggregate commands in non-interactive environments. ([#229](https://github.com/php-fast-forward/dev-tools/pull/229))
 
 ## [1.20.0] - 2026-04-23
 
 ### Changed
 
-- Force reusable workflows to sparse-checkout `.github/actions` into a dedicated `.dev-tools-actions` workspace before resolving local GitHub Actions so consumer wrappers stop failing on missing action paths (#180)
+- Force reusable workflows to sparse-checkout `.github/actions` into a dedicated `.dev-tools-actions` workspace before resolving local GitHub Actions so consumer wrappers stop failing on missing action paths. ([#184](https://github.com/php-fast-forward/dev-tools/pull/184))
 
 ## [1.19.0] - 2026-04-23
 
 ### Added
 
-- Package a rigorous pull-request review skill, review-guardian agent, and ready-for-review workflow brief for repositories and synchronized consumers (#147)
+- Package a rigorous pull-request review skill, review-guardian agent, and ready-for-review workflow brief for repositories and synchronized consumers. ([#172](https://github.com/php-fast-forward/dev-tools/pull/172))
 
 ### Changed
 
-- Retry failed GitHub Actions jobs once when failed workflow logs match transient GitHub-side checkout or transport errors (#175)
-- Teach the review and pull-request agent skills to treat workflow-managed wiki pointer updates as expected state and to prefer fresh follow-up issues plus PRs over reviving closed deleted branches (#147)
-- Require GitHub issue write readback verification in the github-issues skill (#165)
-- Standardize cache flags and nested cache-dir propagation across cache-aware commands (#162)
-- Add `GITHUB_STEP_SUMMARY` output to tests, reports, wiki, and changelog workflows for clearer final-state workflow results (#148)
+- Retry failed GitHub Actions jobs once when failed workflow logs match transient GitHub-side checkout or transport errors. ([#176](https://github.com/php-fast-forward/dev-tools/pull/176))
+- Teach the review and pull-request agent skills to treat workflow-managed wiki pointer updates as expected state and to prefer fresh follow-up issues plus PRs over reviving closed deleted branches. ([#172](https://github.com/php-fast-forward/dev-tools/pull/172))
+- Require GitHub issue write readback verification in the github-issues skill. ([#169](https://github.com/php-fast-forward/dev-tools/pull/169))
+- Standardize cache flags and nested cache-dir propagation across cache-aware commands. ([#170](https://github.com/php-fast-forward/dev-tools/pull/170))
+- Add `GITHUB_STEP_SUMMARY` output to tests, reports, wiki, and changelog workflows for clearer final-state workflow results. ([#173](https://github.com/php-fast-forward/dev-tools/pull/173))
 
 ## [1.18.0] - 2026-04-23
 
 ### Changed
 
-- Consolidate repository-local DevTools caches under `.dev-tools/cache`, keep published reports free of cache directories, and audit managed artifact path defaults across commands, workflows, and documentation (#151)
-- Refresh repository mascot artwork (#166)
+- Consolidate repository-local DevTools caches under `.dev-tools/cache`, keep published reports free of cache directories, and audit managed artifact path defaults across commands, workflows, and documentation. ([#161](https://github.com/php-fast-forward/dev-tools/pull/161))
+- Refresh repository mascot artwork. ([#167](https://github.com/php-fast-forward/dev-tools/pull/167))
 
 ## [1.17.1] - 2026-04-22
 
 ### Fixed
 
-- Keep the packaged pull-request label-sync action from failing when a PR does not reference any linked issue (#157)
+- Keep the packaged pull-request label-sync action from failing when a PR does not reference any linked issue. ([#159](https://github.com/php-fast-forward/dev-tools/pull/159))
 
 ## [1.17.0] - 2026-04-22
 
 ### Added
 
-- Add structured command output across the DevTools command surface with `--json` and `--pretty-json`, including pretty-printed JSON and agent-aware JSON defaults (#33)
-- Group queued subprocess output and emit GitHub Actions workflow annotations for clearer CI logs and error surfaces (#33)
+- Add structured command output across the DevTools command surface with `--json` and `--pretty-json`, including pretty-printed JSON and agent-aware JSON defaults. ([#146](https://github.com/php-fast-forward/dev-tools/pull/146))
+- Group queued subprocess output and emit GitHub Actions workflow annotations for clearer CI logs and error surfaces. ([#146](https://github.com/php-fast-forward/dev-tools/pull/146))
 
 ### Changed
 
-- Propagate structured output flags through nested DevTools subprocesses, simplify logger context extraction, and keep machine-readable runs quieter by default (#33)
-- Adopt `--progress` as the positive opt-in for transient progress rendering while keeping supported commands quiet by default (#33)
-- Teach packaged issue-authoring skills and prompts to reuse existing GitHub issue metadata, infer project field values, preserve relationships with open issues, and mirror linked issue project metadata onto pull requests (#152)
-- Automate the configured GitHub Project board across issue intake, PR review, merge, release preparation, and changelog-driven release publication using repository-level Project variables (#152)
-- Reorganize packaged GitHub Actions documentation to reflect the local `.github/actions` groups for `php`, `project-board`, `github-pages`, `wiki`, and `changelog`, plus the split between wiki preview and wiki maintenance workflows (#152)
+- Propagate structured output flags through nested DevTools subprocesses, simplify logger context extraction, and keep machine-readable runs quieter by default. ([#146](https://github.com/php-fast-forward/dev-tools/pull/146))
+- Adopt `--progress` as the positive opt-in for transient progress rendering while keeping supported commands quiet by default. ([#146](https://github.com/php-fast-forward/dev-tools/pull/146))
+- Teach packaged issue-authoring skills and prompts to reuse existing GitHub issue metadata, infer project field values, preserve relationships with open issues, and mirror linked issue project metadata onto pull requests. ([#153](https://github.com/php-fast-forward/dev-tools/pull/153))
+- Automate the configured GitHub Project board across issue intake, PR review, merge, release preparation, and changelog-driven release publication using repository-level Project variables. ([#153](https://github.com/php-fast-forward/dev-tools/pull/153))
+- Reorganize packaged GitHub Actions documentation to reflect the local `.github/actions` groups for `php`, `project-board`, `github-pages`, `wiki`, and `changelog`, plus the split between wiki preview and wiki maintenance workflows. ([#153](https://github.com/php-fast-forward/dev-tools/pull/153))
 
 ### Fixed
 
-- Stabilize logger and process-queue test expectations in CI by making GitHub Actions output detection deterministic during the PHPUnit suite (#33)
-- Restore raw text output for `changelog:next-version` and `changelog:show` so changelog release workflows can keep capturing versions and redirecting release notes safely (#149)
+- Stabilize logger and process-queue test expectations in CI by making GitHub Actions output detection deterministic during the PHPUnit suite. ([#146](https://github.com/php-fast-forward/dev-tools/pull/146))
+- Restore raw text output for `changelog:next-version` and `changelog:show` so changelog release workflows can keep capturing versions and redirecting release notes safely. ([#150](https://github.com/php-fast-forward/dev-tools/pull/150))
 
 ## [1.16.0] - 2026-04-20
 
 ### Changed
 
-- Skip pull-request changelog entry validation for generated release branches so release PRs can promote `Unreleased` without failing CI (#138)
-- Restore dependency workflow documentation so README, AGENTS, and command guides match the required CI dependency-health behavior (#138)
-- Require the GitHub pull-request skill to refresh `main` from the remote before branching for a new implementation so changelog and release state start from the latest baseline (#138)
+- Skip pull-request changelog entry validation for generated release branches so release PRs can promote `Unreleased` without failing CI. ([#139](https://github.com/php-fast-forward/dev-tools/pull/139))
+- Restore dependency workflow documentation so README, AGENTS, and command guides match the required CI dependency-health behavior. ([#139](https://github.com/php-fast-forward/dev-tools/pull/139))
+- Require the GitHub pull-request skill to refresh `main` from the remote before branching for a new implementation so changelog and release state start from the latest baseline. ([#139](https://github.com/php-fast-forward/dev-tools/pull/139))
 
 ## [1.15.0] - 2026-04-20
 
 ### Changed
 
-- Consolidate dependency analysis on `composer-dependency-analyser`, add a reusable packaged analyzer config, remove the redundant `composer-unused` dependency, and expose `--dump-usage` plus report-only `--max-outdated=-1` support (#135)
+- Consolidate dependency analysis on `composer-dependency-analyser`, add a reusable packaged analyzer config, remove the redundant `composer-unused` dependency, and expose `--dump-usage` plus report-only `--max-outdated=-1` support. ([#136](https://github.com/php-fast-forward/dev-tools/pull/136))
 
 ## [1.14.0] - 2026-04-20
 
 ### Added
 
-- Add CODEOWNERS generation and sync support for consumer repositories (#67)
-- Package a create-agentsmd skill for repository-level AGENTS.md authoring (#128)
-- Add an agents-maintainer project agent for ongoing AGENTS.md upkeep (#128)
-- Synchronize packaged project-agent prompts into consumer repositories (#130)
+- Add CODEOWNERS generation and sync support for consumer repositories. ([#127](https://github.com/php-fast-forward/dev-tools/pull/127))
+- Package a create-agentsmd skill for repository-level AGENTS.md authoring. ([#129](https://github.com/php-fast-forward/dev-tools/pull/129))
+- Add an agents-maintainer project agent for ongoing AGENTS.md upkeep. ([#129](https://github.com/php-fast-forward/dev-tools/pull/129))
+- Synchronize packaged project-agent prompts into consumer repositories. ([#131](https://github.com/php-fast-forward/dev-tools/pull/131))
 
 ## [1.13.0] - 2026-04-19
 
 ### Added
 
-- Add community health files plus issue and pull request templates for contributors (#37)
+- Add community health files plus issue and pull request templates for contributors. ([#125](https://github.com/php-fast-forward/dev-tools/pull/125))
 
 ### Changed
 
-- Document required GitHub Actions permissions for changelog release automation (#118)
-- Add the project mascot image to README and documentation (#121)
-- Upgrade the packaged phpDocumentor bootstrap template to v2.0.0 (#121)
-- Refresh outdated console bootstrap, sync, and dependency-injection documentation (#123)
+- Document required GitHub Actions permissions for changelog release automation. ([#120](https://github.com/php-fast-forward/dev-tools/pull/120))
+- Add the project mascot image to README and documentation. ([#122](https://github.com/php-fast-forward/dev-tools/pull/122))
+- Upgrade the packaged phpDocumentor bootstrap template to v2.0.0. ([#122](https://github.com/php-fast-forward/dev-tools/pull/122))
+- Refresh outdated console bootstrap, sync, and dependency-injection documentation. ([#124](https://github.com/php-fast-forward/dev-tools/pull/124))
 
 ## [1.12.0] - 2026-04-19
 
 ### Added
 
-- Add Keep a Changelog management commands and release automation workflows (#28).
-- Package changelog maintenance skills, docs, and the changelog-maintainer project agent (#28).
+- Add Keep a Changelog management commands and release automation workflows. ([#117](https://github.com/php-fast-forward/dev-tools/pull/117))
+- Package changelog maintenance skills, docs, and the changelog-maintainer project agent. ([#117](https://github.com/php-fast-forward/dev-tools/pull/117))
 
 ### Changed
 
-- Force workflow colors through FORCE_COLOR across packaged GitHub Actions for clearer CI logs (#28).
+- Force workflow colors through FORCE_COLOR across packaged GitHub Actions for clearer CI logs. ([#117](https://github.com/php-fast-forward/dev-tools/pull/117))
 
 ## [1.11.0] - 2026-04-19
 
 ### Added
 
-- Ship role-based project agents for issue implementation, docs, README, tests, and changelog work (#75) (#109).
-- Show diffs for overwritten synchronized resources and add preview/check modes to dev-tools:sync (#66) (#110) (#62) (#111).
-- Verify deployed reports health, synchronize funding metadata, and infer workflow PHP versions from project metadata (#70) (#112) (#56) (#113) (#76) (#114).
+- Ship role-based project agents for issue implementation, docs, README, tests, and changelog work. ([#109](https://github.com/php-fast-forward/dev-tools/pull/109))
+- Show diffs for overwritten synchronized resources and add preview/check modes to dev-tools:sync. ([#110](https://github.com/php-fast-forward/dev-tools/pull/110), [#111](https://github.com/php-fast-forward/dev-tools/pull/111))
+- Verify deployed reports health, synchronize funding metadata, and infer workflow PHP versions from project metadata. ([#112](https://github.com/php-fast-forward/dev-tools/pull/112), [#113](https://github.com/php-fast-forward/dev-tools/pull/113), [#114](https://github.com/php-fast-forward/dev-tools/pull/114))
 
 ### Fixed
 
-- Package the PHP version resolver action from resources/ so GitHub Actions can load it correctly (#115) (#116).
+- Package the PHP version resolver action from resources/ so GitHub Actions can load it correctly. ([#116](https://github.com/php-fast-forward/dev-tools/pull/116))
 
 ## [1.10.0] - 2026-04-19
 
 ### Changed
 
-- Refresh dependency and reporting docs to match the shipped commands and workflows (#105) (#106).
-- Move generated outputs into .dev-tools by default instead of public/ (#107) (#108).
+- Refresh dependency and reporting docs to match the shipped commands and workflows. ([#106](https://github.com/php-fast-forward/dev-tools/pull/106))
+- Move generated outputs into .dev-tools by default instead of public/. ([#108](https://github.com/php-fast-forward/dev-tools/pull/108))
 
 ### Fixed
 
-- Preserve Git history in metrics previews so PhpMetrics reports show meaningful contributor and file history (#103) (#104).
+- Preserve Git history in metrics previews so PhpMetrics reports show meaningful contributor and file history. ([#104](https://github.com/php-fast-forward/dev-tools/pull/104))
 
 ## [1.9.0] - 2026-04-19
 
 ### Added
 
-- Generate PhpMetrics reports for consumer repositories (#98).
-- Add a Jack-powered dependency workflow to the dependencies command (#34) (#102).
+- Generate PhpMetrics reports for consumer repositories. ([#98](https://github.com/php-fast-forward/dev-tools/pull/98))
+- Add a Jack-powered dependency workflow to the dependencies command. ([#102](https://github.com/php-fast-forward/dev-tools/pull/102))
 
 ### Changed
 
-- Unify metrics outputs under a target directory (#99) (#100).
+- Unify metrics outputs under a target directory. ([#100](https://github.com/php-fast-forward/dev-tools/pull/100))
 
 ### Fixed
 
-- Address code quality findings and sync safety regressions in command and test code (#94) (#95) (#96) (#97).
+- Address code quality findings and sync safety regressions in command and test code. ([#94](https://github.com/php-fast-forward/dev-tools/pull/94), [#95](https://github.com/php-fast-forward/dev-tools/pull/95), [#96](https://github.com/php-fast-forward/dev-tools/pull/96), [#97](https://github.com/php-fast-forward/dev-tools/pull/97))
 
 ## [1.8.0] - 2026-04-18
 
 ### Added
 
-- Canonicalize packaged Git hooks during synchronization (#92) (#93).
+- Canonicalize packaged Git hooks during synchronization. ([#93](https://github.com/php-fast-forward/dev-tools/pull/93))
 
 ### Changed
 
-- Isolate Finder creation behind a factory to make filesystem traversal extensible (#90) (#91).
+- Isolate Finder creation behind a factory to make filesystem traversal extensible. ([#91](https://github.com/php-fast-forward/dev-tools/pull/91))
 
 ## [1.7.0] - 2026-04-18
 
 ### Added
 
-- Publish branch protection, migration, troubleshooting, and release-publishing guidance for consumer repositories (#61) (#72) (#79) (#80).
-- Synchronize README metadata during composer sync and expand PHPUnit output controls (#57) (#84).
-- Validate and clean up wiki and reports preview branches in packaged GitHub Actions workflows (#68) (#69) (#83).
+- Publish branch protection, migration, troubleshooting, and release-publishing guidance for consumer repositories. ([#77](https://github.com/php-fast-forward/dev-tools/pull/77), [#78](https://github.com/php-fast-forward/dev-tools/pull/78), [#79](https://github.com/php-fast-forward/dev-tools/pull/79), [#80](https://github.com/php-fast-forward/dev-tools/pull/80))
+- Synchronize README metadata during composer sync and expand PHPUnit output controls. ([#82](https://github.com/php-fast-forward/dev-tools/pull/82), [#85](https://github.com/php-fast-forward/dev-tools/pull/85))
+- Validate and clean up wiki and reports preview branches in packaged GitHub Actions workflows. ([#88](https://github.com/php-fast-forward/dev-tools/pull/88), [#87](https://github.com/php-fast-forward/dev-tools/pull/87), [#86](https://github.com/php-fast-forward/dev-tools/pull/86))
 
 ### Changed
 
-- Reduce default GitHub Actions token permissions across packaged workflows (#63).
+- Reduce default GitHub Actions token permissions across packaged workflows. ([#89](https://github.com/php-fast-forward/dev-tools/pull/89))
 
-## [1.6.0] - 2026-04-17
+## [1.6.0] - 2026-04-18
 
 ### Added
 
 - Introduce copy-resource, update-composer-json, and git-hooks commands plus packaged funding and support metadata.
-- Publish pull request Pages previews for reports and document the consumer preview workflow (#54) (#55).
+- Publish pull request Pages previews for reports and document the consumer preview workflow. ([#55](https://github.com/php-fast-forward/dev-tools/pull/55))
 
 ### Changed
 
-- Refactor command architecture around filesystem abstractions, resource copy and update commands, and dependency-injected process handling (#46).
+- Refactor command architecture around filesystem abstractions, resource copy and update commands, and dependency-injected process handling. ([#46](https://github.com/php-fast-forward/dev-tools/pull/46))
 
 ## [1.5.0] - 2026-04-14
 
 ### Added
 
-- Package pull request auto-assign and label-sync GitHub Actions workflows (#35).
+- Package pull request auto-assign and label-sync GitHub Actions workflows. ([#35](https://github.com/php-fast-forward/dev-tools/pull/35))
 
 ### Changed
 
 - Standardize Composer installation and caching across packaged reports, tests, and wiki workflows.
-- Reorganize commands into the Console namespace and migrate to the GrumPHP shim (#42) (#44).
+- Reorganize commands into the Console namespace and migrate to the GrumPHP shim. ([#42](https://github.com/php-fast-forward/dev-tools/pull/42), [#44](https://github.com/php-fast-forward/dev-tools/pull/44))
 
 ### Fixed
 
@@ -396,21 +391,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Replace external coverage-check tooling with native PHPUnit coverage summary validation (#30) (#31).
+- Replace external coverage-check tooling with native PHPUnit coverage summary validation. ([#31](https://github.com/php-fast-forward/dev-tools/pull/31))
 
 ### Fixed
 
-- Update Symfony component constraints to support Symfony 8.0 (#31).
+- Update Symfony component constraints to support Symfony 8.0. ([#31](https://github.com/php-fast-forward/dev-tools/pull/31))
 
 ## [1.3.0] - 2026-04-11
 
 ### Added
 
-- Manage .gitattributes export-ignore rules through dedicated gitattributes tooling (#27).
+- Manage .gitattributes export-ignore rules through dedicated gitattributes tooling. ([#27](https://github.com/php-fast-forward/dev-tools/pull/27))
 
 ### Changed
 
-- Exclude context7.json from packaged exports and broaden GitAttributes test coverage (#27).
+- Exclude context7.json from packaged exports and broaden GitAttributes test coverage. ([#27](https://github.com/php-fast-forward/dev-tools/pull/27))
 
 ## [1.2.2] - 2026-03-26
 
@@ -427,26 +422,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Refine license-generation documentation and export-ignore defaults (#26).
+- Refine license-generation documentation and export-ignore defaults. ([#26](https://github.com/php-fast-forward/dev-tools/pull/26))
 
 ## [1.2.0] - 2026-04-10
 
 ### Added
 
-- Synchronize packaged skills into consumer repositories with the skills command (#23).
-- Bundle dependency analysis tooling and the dependencies command (#10).
-- Generate repository LICENSE files through dev-tools:sync and the license command (#25).
+- Synchronize packaged skills into consumer repositories with the skills command. ([#23](https://github.com/php-fast-forward/dev-tools/pull/23))
+- Bundle dependency analysis tooling and the dependencies command. ([#24](https://github.com/php-fast-forward/dev-tools/pull/24))
+- Generate repository LICENSE files through dev-tools:sync and the license command. ([#25](https://github.com/php-fast-forward/dev-tools/pull/25))
 
 ## [1.1.0] - 2026-04-09
 
 ### Added
 
 - Package reusable skills for Sphinx docs, README maintenance, PHPUnit, and GitHub issue workflows.
-- Synchronize .gitignore files through dedicated gitignore tooling (#21).
+- Synchronize .gitignore files through dedicated gitignore tooling. ([#21](https://github.com/php-fast-forward/dev-tools/pull/21))
 
 ### Changed
 
-- Make ECS and Rector configuration extensible for consumer overrides (#19).
+- Make ECS and Rector configuration extensible for consumer overrides. ([#19](https://github.com/php-fast-forward/dev-tools/pull/19))
 
 ## [1.0.4] - 2026-03-26
 
@@ -491,8 +486,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
-
-[unreleased]: https://github.com/php-fast-forward/dev-tools/compare/v1.26.0...HEAD
 [1.26.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.6...v1.26.0
 [1.25.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.5...v1.25.6
 [1.25.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.4...v1.25.5

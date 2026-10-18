@@ -1,158 +1,113 @@
-changelog commands
-==================
+changelog
+=========
 
-Author, validate, infer, promote, and render managed Keep a Changelog
-sections with the local changelog command set.
+DevTools delegates changelog behavior to the independent
+`Fast Forward Changelog <https://github.com/php-fast-forward/changelog/tree/v0.2.0>`_
+package. It does not implement parsing, version inference, history maintenance
+or publication policy itself.
 
-Description
------------
+Runtime and migration
+---------------------
 
-Fast Forward DevTools ships a focused changelog surface built around the local
-``CHANGELOG.md`` file:
+``vendor/bin/dev-tools changelog <arguments...>`` invokes
+``cpx --skip-local fast-forward/changelog:0.2.0`` from the consumer project.
+Run DevTools itself with PHP 8.5 for this command, and make CPX available on
+``PATH`` with the same compatible runtime. Other DevTools commands still support
+PHP 8.3. This isolated tool installation
+does not raise the consumer package's PHP 8.3 requirement or add Changelog to
+its Composer dependency graph. Consult the
+`official CPX setup <https://github.com/laravel/cpx>`_ before installation.
 
-- ``changelog:entry`` adds one categorized entry to ``Unreleased`` or to an
-  explicit release section;
-- ``changelog:check`` verifies that a branch or repository state contains a
-  meaningful ``Unreleased`` change;
-- ``changelog:next-version`` infers the next semantic version from the current
-  ``Unreleased`` categories;
-- ``changelog:promote`` publishes ``Unreleased`` into a dated release section;
-- ``changelog:show`` renders one published section body for GitHub release
-  notes or other automation.
-
-These commands intentionally work on the minimum Keep a Changelog 1.1.0
-structure managed by this repository and by synchronized Fast Forward consumer
-repositories.
-
-Usage
------
+The five internal ``changelog:*`` commands have been removed. Their options
+and JSON envelopes are not aliases for the external CLI. Inspect the selected
+runtime before adapting scripts:
 
 .. code-block:: bash
 
-   composer changelog:entry "Add changelog automation for release workflows (#28)"
-   composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
-   composer changelog:entry --json "Add changelog automation for release workflows (#28)"
+   vendor/bin/dev-tools changelog list --raw
+   vendor/bin/dev-tools changelog help add
+   vendor/bin/dev-tools changelog help check
+   vendor/bin/dev-tools changelog help version
 
-   composer changelog:check
-   composer changelog:check --against=origin/main
-   composer changelog:check --json
+Use ``vendor/bin/dev-tools changelog -- <command> [options]`` to forward all
+external options without wrapper interpretation, including the external
+``--help`` option. The wrapper streams the library's stdout/stderr and preserves
+its exit status instead of applying the DevTools JSON envelope.
 
-   composer changelog:next-version
-   composer changelog:next-version --json
+Use ``add`` for authoring, ``check`` for contribution validation, ``status`` for
+pending/version planning, ``version`` for consolidation, and ``notes`` for
+release-note extraction. The external package owns these command contracts.
 
-   composer changelog:promote 1.3.0
-   composer changelog:promote 1.3.0 --date=2026-04-19
-   composer changelog:promote 1.3.0 --json
+Contribution fragments
+----------------------
 
-   composer changelog:show 1.3.0
-   composer changelog:show 1.3.0 --json
+Each observable change adds one independent ``.changelog/*.md`` file. For example:
 
-Options
--------
+.. code-block:: markdown
 
-``changelog:entry``
-   Supports:
+   ---
+   category: fixed
+   type: patch
+   ---
 
-   - ``--type=<category>`` for ``added``, ``changed``, ``deprecated``,
-     ``removed``, ``fixed``, or ``security``;
-   - ``--release=<version>`` to target a published section instead of
-     ``Unreleased``;
-   - ``--date=<YYYY-MM-DD>`` when a published section should carry a release
-     date immediately;
-   - ``--file=<path>`` to work with a changelog file other than
-     ``CHANGELOG.md``;
-   - ``--json`` to emit a structured machine-readable payload instead of the
-     normal terminal output;
-   - ``--pretty-json`` to emit the same structured payload with indentation for
-     terminal inspection.
+   Preserves Markdown links when exporting release notes.
 
-``changelog:check``
-   Supports:
+Or create it once through the CLI:
 
-   - ``--against=<git-ref>`` to compare the current changelog against a base
-     branch or commit;
-   - ``--file=<path>`` to validate another changelog path;
-   - ``--json`` to emit a structured machine-readable payload instead of the
-     normal terminal output;
-   - ``--pretty-json`` to emit the same structured payload with indentation for
-     terminal inspection.
+.. code-block:: bash
 
-``changelog:next-version``
-   Supports:
+   vendor/bin/dev-tools changelog add "Preserves Markdown links when exporting release notes." --category=fixed --no-interaction
+   vendor/bin/dev-tools changelog check --no-interaction
 
-   - ``--current-version=<semver>`` when the current published version should
-     be supplied explicitly instead of inferred from the changelog;
-   - ``--file=<path>`` to inspect another changelog path;
-   - ``--json`` to emit a structured machine-readable payload instead of the
-     normal terminal output;
-   - ``--pretty-json`` to emit the same structured payload with indentation for
-     terminal inspection.
+``add`` creates the fragment directory when necessary and leaves central history
+unchanged. Categories describe the nature of the change; ``type`` separately
+records its semantic-version impact. Preserve other contributions' fragments.
+After committing the contribution, validate it against the intended Git base:
 
-``changelog:promote``
-   Supports:
+.. code-block:: bash
 
-   - the required version argument;
-   - ``--date=<YYYY-MM-DD>`` to control the published release date;
-   - ``--file=<path>`` to promote another changelog path;
-   - ``--json`` to emit a structured machine-readable payload instead of the
-     normal terminal output;
-   - ``--pretty-json`` to emit the same structured payload with indentation for
-     terminal inspection.
+   vendor/bin/dev-tools changelog check --since=origin/main --no-interaction
 
-``changelog:show``
-   Supports:
+No new ``Unreleased`` section is used. PR metadata may remain absent before a
+PR exists. Automation enables ``resolve-pull-requests: true`` consistently for
+planning, preparation, ownership checks and publication. It proves fragment
+origins from committed bytes and merged PR evidence without rewriting fragment
+metadata; no follow-up fragment edit is required after opening a PR. Unknown
+origins receive no invented PR, author or commit reference. Local previews
+require the explicit ``--resolve-pull-requests`` option for equivalent lookup.
 
-   - the required version argument;
-   - ``--file=<path>`` to render another changelog path;
-   - ``--json`` to emit a structured machine-readable payload instead of the
-     raw release-note text;
-   - ``--pretty-json`` to emit the same structured payload with indentation for
-     terminal inspection.
+History and release preparation
+-------------------------------
 
-Behavior
---------
+.. code-block:: bash
 
-- ``changelog:entry`` creates the managed changelog structure automatically
-  when the selected file does not exist yet;
-- ``changelog:check`` returns a failing exit code when ``Unreleased`` is empty
-  or does not differ from the selected baseline ref;
-- ``changelog:entry --json`` emits the authoring summary as the
-  ``message`` plus structured context describing the file, category, release,
-  optional date, and entry text;
-- ``changelog:check --json`` emits a deterministic JSON payload with
-  ``status``, ``message``, and ``context`` keys for automation consumers;
-- ``changelog:next-version --json`` emits the inferred semantic version
-  as the ``message`` plus structured context describing the inspected changelog
-  path and optional current version;
-- ``changelog:next-version`` prints only the inferred semantic version in text
-  mode so workflows can capture it safely in shell variables;
-- ``changelog:next-version`` uses ``Removed`` or ``Deprecated`` entries for a
-  major bump, ``Added`` or ``Changed`` entries for a minor bump, and otherwise
-  falls back to a patch bump;
-- ``changelog:promote --json`` emits the promotion summary as the
-  ``message`` plus structured context describing the file, version, and
-  release date written to the changelog;
-- ``changelog:promote`` restores an empty ``Unreleased`` section after
-  publishing the requested version;
-- ``changelog:show`` prints only the release body in text mode so workflows can
-  feed it directly into GitHub release notes;
-- ``changelog:show --json`` emits the rendered release-notes body as the
-  ``message`` plus structured context describing the file, version, and
-  release notes content.
+   vendor/bin/dev-tools changelog status --source=tags --no-interaction
+   vendor/bin/dev-tools changelog format --dry-run --no-interaction
+   vendor/bin/dev-tools changelog backfill --dry-run --source=tags --no-interaction
+   vendor/bin/dev-tools changelog notes <version> --no-interaction
 
-Workflow Integration
---------------------
+Read ``help <command>`` before selecting write options. Test ``version`` and
+other history-writing operations only in a disposable checkout: consolidation
+writes ``CHANGELOG.md`` and deletes consumed fragments. Use the canonical GitHub
+origin when repository discovery and comparison links depend on it. Review
+introductions, published dates, descriptions, existing link bytes, footer order
+and the single new version link after every rehearsal.
 
-The packaged changelog workflow consumes these commands in two places:
+The repository caller selects the external workflow's ``@v0`` channel, which
+tracks published 0.x releases. Local CLI execution is fixed to 0.2.0; resolve
+the channel and review compatibility when updating either integration.
+The caller preserves ``release/vnext`` and
+``Prepare release v{next_version}``. The Bot owns that branch: let automation
+regenerate its PR and inspect the new exact head rather than editing the branch
+or forging ownership trailers.
 
-- pull-request validation runs ``changelog:check`` against the base branch to
-  require a meaningful changelog update;
-- Dependabot pull-request validation MAY create one minimal ``changed`` entry
-  from the pull-request title before re-running ``changelog:check`` so the
-  branch keeps a persisted release note without manual intervention;
-- manual release preparation uses ``changelog:next-version`` and
-  ``changelog:promote`` to create a release pull request, then
-  ``changelog:show`` to publish the merged section as GitHub release notes.
+Adoption keeps ``publish: false``. Preparing or merging a version PR does not
+authorize publication. Historical GitHub Release reconciliation also remains
+separate: approve and integrate canonical history first, then apply authorized
+body changes or create releases only for verified existing tags. Preserve tag
+targets, assets and draft/prerelease flags, and reread each changed Release.
+The external ``notes`` command extracts the selected version body; verify any
+reference-style links also resolve when that body is rendered independently.
 
-See :doc:`../usage/github-actions` and :doc:`../internals/release-publishing`
-for the workflow-level behavior around those commands.
+See :doc:`../usage/github-actions` and
+:doc:`../internals/release-publishing` for automation and approval boundaries.

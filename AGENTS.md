@@ -57,7 +57,7 @@ composer dev-tools:sync          # Sync managed repository assets and packaged a
 - `composer dependencies`: Run dependency analysis workflows
 - `composer metrics`: Generate PhpMetrics reports and related artifacts
 - `composer update-composer-json`: Normalize managed `composer.json` settings
-- `composer changelog:entry|check|next-version|promote|show`: Manage changelog-driven release workflows
+- `vendor/bin/dev-tools changelog <arguments...>`: Delegate to `cpx --skip-local fast-forward/changelog:0.2.0`; requires CPX and PHP 8.5 on the tool execution path without raising the consumer PHP 8.3 requirement
 - `composer dev-tools:sync --dry-run|--check|--interactive`: Preview managed-file drift while intentionally skipping wiki, skills, and agents
 
 ## Testing Instructions
@@ -172,6 +172,16 @@ read-only generation on pull requests and direct publication from `main`.
 The maintenance entry is manual-only compatibility guidance; legacy reusable
 `wiki-preview.yml` and `wiki-maintenance.yml` remain for unmigrated callers.
 
+Changelog parsing, fragments, history and release policy belong to the external
+`fast-forward/changelog` package. The workflow caller uses the user-selected
+`php-fast-forward/changelog/.github/workflows/changelog.yml@v0` channel and
+keeps `publish: false` during adoption. Preserve the configured runner/token,
+`release/vnext`, `Prepare release v{next_version}` and project-board follow-up.
+Contributions add independent `.changelog/*.md` fragments; do not create a new
+`Unreleased` section or restore the removed `changelog:*` commands. Keep
+`resolve-pull-requests: true` consistent across workflow operations. Test
+history-writing or fragment-consuming operations only in disposable checkouts.
+
 **Package Details:**
 
 - Type: `composer-plugin`
@@ -204,7 +214,8 @@ composer dev-tools
 - `docs/commands/`: command-specific behavior and option details
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
 - `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `review.yml`, `wiki.yml`, `wiki-direct.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
-- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `summary`, `wiki`, `changelog`, and `label-sync`
+- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `summary`, `wiki`, and `label-sync`
+- `docs/commands/changelog.rst`: external runtime requirements, fragment authoring, migration and release-preview boundaries
 - `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
 - [resources/github-actions-optional/test-statuses.md](resources/github-actions-optional/test-statuses.md): explicit opt-in guide for Dependabot status aliases; verify source workflow identity, PHP matrix and protection contexts before adopting the checkout-free template
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
@@ -225,6 +236,8 @@ composer dev-tools
 - **Project Agents**: Packaged role prompts synchronized via `composer agents` and `dev-tools:sync`
 
 ## Skills Usage
+
+- **Changelog**: Use `.agents/skills/changelog-generator/SKILL.md` to route to the selected external Fast Forward Changelog release's skill and documentation; this repository does not own a parallel changelog implementation
 
 - **Creating/Updating Tests**: Use skill `phpunit-tests` in `.agents/skills/phpunit-tests/` for PHPUnit tests with Prophecy
 - **Creating/Refreshing AGENTS.md**: Use skill `create-agentsmd` in `.agents/skills/create-agentsmd/` to generate or update repository-root AGENTS instructions for coding agents
@@ -252,4 +265,4 @@ remains the procedural source of truth.
 - Delegate to `consumer-sync-auditor` when packaged skills, packaged agents, sync assets, wiki, workflow wrappers, local GitHub actions, or consumer bootstrap behavior change.
 - Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
 - Delegate to `review-guardian` when a pull request needs a rigorous findings-first review before or during human review.
-- Delegate to `changelog-maintainer` when a task needs changelog authoring, changelog validation for PRs, release promotion, or release-note export.
+- Delegate to `changelog-maintainer` for external fragment authoring, contribution validation, reviewed version-PR preparation, or release-note export. Tags, Releases and historical publication changes require separate explicit authorization.

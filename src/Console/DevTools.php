@@ -37,6 +37,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+
 use function Safe\putenv;
 
 /**
@@ -62,7 +63,7 @@ final class DevTools extends Application
      *
      * @var list<string>
      */
-    private const array RAW_OUTPUT_COMMANDS = ['changelog:next-version', 'changelog:show'];
+    private const array RAW_OUTPUT_COMMANDS = ['changelog', 'dev-tools:changelog'];
 
     /**
      * Initializes the DevTools global context and dependency graph.

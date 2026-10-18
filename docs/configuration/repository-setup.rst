@@ -56,7 +56,10 @@ the changelog release flow, to open release-preparation pull requests.
 5.  Click **Save**.
 
 .. warning::
-   Without these permissions, the ``wiki.yml`` and ``reports.yml`` workflows will fail when attempting to deploy content, and the ``changelog.yml`` workflow will fail when trying to open a ``release/v...`` pull request.
+   Publication jobs need their declared write permissions. The external
+   Changelog caller needs permission to open its managed version PR, but
+   keeps tag and Release publication disabled during adoption. Preserve any
+   reviewed GitHub App/token policy instead of broadening every workflow token.
 
 .. note::
    If the permission controls are disabled or grayed out, the repository is

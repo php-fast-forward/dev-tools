@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\GitHubActions;
 
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
@@ -28,44 +29,88 @@ use Symfony\Component\Yaml\Yaml;
 final class ChangelogWorkflowTest extends TestCase
 {
     /**
+     * @param string $path
+     *
      * @return void
      */
     #[Test]
-    public function prepareReleasePullRequestWillKeepComposerPluginsEnabledForWikiPreviewRefresh(): void
+    #[TestWith(['.github/workflows/changelog.yml'])]
+    #[TestWith(['resources/github-actions/changelog.yml'])]
+    public function workflowWillDelegateToTheExternalLibraryWithoutPublishing(string $path): void
+    {
+        $workflow = Yaml::parseFile(__DIR__ . '/../../' . $path);
+        $job = $workflow['jobs']['changelog'];
+
+        self::assertSame('php-fast-forward/changelog/.github/workflows/changelog.yml@v0', $job['uses']);
+        self::assertSame([], $workflow['permissions']);
+        self::assertTrue($job['with']['resolve-pull-requests']);
+        self::assertTrue($job['with']['prepare-release']);
+        self::assertFalse($job['with']['publish']);
+        self::assertSame('main', $job['with']['base-branch']);
+        self::assertSame('tags', $job['with']['source']);
+        self::assertSame('Prepare release v{next_version}', $job['with']['version-pr-title']);
+        self::assertSame([
+            'contents' => 'write',
+            'pull-requests' => 'write',
+            'issues' => 'read',
+            'statuses' => 'write',
+        ], $job['permissions']);
+        self::assertContains('closed', $workflow['on']['pull_request_target']['types']);
+        self::assertSame(['main'], $workflow['on']['push']['branches']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function compatibilityCallerWillPreserveRunnerTokenPathsAndReleaseBranchInputs(): void
     {
         $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/changelog.yml');
-        $steps = $workflow['jobs']['prepare_release_pull_request']['steps'] ?? null;
+        $job = $workflow['jobs']['changelog'];
 
-        self::assertIsArray($steps);
-
-        $setupComposerStep = null;
-
-        foreach ($steps as $step) {
-            if (! \is_array($step)) {
-                continue;
-            }
-
-            if (($step['name'] ?? null) !== 'Setup PHP and install dependencies') {
-                continue;
-            }
-
-            if (($step['if'] ?? null) !== '${{ steps.create_pr.outputs.pull-request-number != \'\' }}') {
-                continue;
-            }
-
-            $setupComposerStep = $step;
-
-            break;
-        }
-
-        self::assertIsArray($setupComposerStep);
+        self::assertSame('${{ inputs.runs-on || \'["ubuntu-latest"]\' }}', $job['with']['runs-on']);
+        self::assertSame('${{ secrets.token }}', $job['secrets']['token']);
+        self::assertSame('${{ inputs.changelog-file || \'CHANGELOG.md\' }}', $job['with']['changelog-file']);
         self::assertSame(
-            '--prefer-dist --no-progress --no-interaction --no-scripts',
-            $setupComposerStep['with']['install-options'] ?? null,
+            '${{ format(\'{0}next\', inputs.release-branch-prefix || \'release/v\') }}',
+            $job['with']['managed-branch']
         );
-        self::assertStringNotContainsString(
-            '--no-plugins',
-            (string) ($setupComposerStep['with']['install-options'] ?? ''),
+        self::assertSame('.changelog', $job['with']['fragment-directory']);
+        self::assertSame('en', $job['with']['locale']);
+        self::assertSame('v', $job['with']['tag-prefix']);
+        self::assertSame('compatibility', $job['needs']);
+        self::assertSame(
+            '${{ inputs.version }}',
+            $workflow['jobs']['compatibility']['steps'][0]['env']['LEGACY_VERSION']
         );
+        self::assertStringContainsString('exit 1', $workflow['jobs']['compatibility']['steps'][0]['run']);
+        self::assertSame('Release Prepared', $workflow['jobs']['project_prepared']['steps'][1]['with']['to-status']);
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function versionChecksWillVerifyTheLiveBotBranchAndHeadBeforeDispatching(): void
+    {
+        $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/changelog.yml');
+        $job = $workflow['jobs']['version_checks'];
+        $step = $job['steps'][0];
+        $script = $step['with']['script'];
+
+        self::assertSame('changelog', $job['needs']);
+        self::assertSame('write', $job['permissions']['actions']);
+        self::assertSame('read', $job['permissions']['contents']);
+        self::assertSame('read', $job['permissions']['pull-requests']);
+        self::assertSame('actions/github-script@v8', $step['uses']);
+        self::assertSame('${{ needs.changelog.outputs.version-head }}', $step['env']['VERSION_HEAD']);
+        self::assertStringContainsString('github.rest.pulls.get', $script);
+        self::assertStringContainsString("pr.state !== 'open'", $script);
+        self::assertStringContainsString('pr.head.repo?.full_name !== context.payload.repository.full_name', $script);
+        self::assertStringContainsString('pr.head.ref !== process.env.MANAGED_BRANCH', $script);
+        self::assertStringContainsString('pr.head.sha !== process.env.VERSION_HEAD', $script);
+        self::assertStringContainsString("pr.user.login !== 'github-actions[bot]'", $script);
+        self::assertStringContainsString("workflow_id: 'tests.yml', ref: pr.head.ref", $script);
+        self::assertStringContainsString("'publish-required-statuses': 'true'", $script);
     }
 }

@@ -20,14 +20,6 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Container\ServiceProvider;
 
 use Composer\Plugin\Capability\CommandProvider;
-use FastForward\DevTools\Changelog\Checker\UnreleasedEntryChecker;
-use FastForward\DevTools\Changelog\Checker\UnreleasedEntryCheckerInterface;
-use FastForward\DevTools\Changelog\Manager\ChangelogManager;
-use FastForward\DevTools\Changelog\Manager\ChangelogManagerInterface;
-use FastForward\DevTools\Changelog\Parser\ChangelogParser;
-use FastForward\DevTools\Changelog\Parser\ChangelogParserInterface;
-use FastForward\DevTools\Changelog\Renderer\MarkdownRenderer;
-use FastForward\DevTools\Changelog\Renderer\MarkdownRendererInterface;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
@@ -117,6 +109,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Twig\Loader\FilesystemLoader;
 use Twig\Loader\LoaderInterface;
+
 use function DI\create;
 use function DI\factory;
 use function DI\get;
@@ -161,12 +154,6 @@ class DevToolsServiceProvider implements ServiceProviderInterface
 
             // Project
             ProjectCapabilitiesResolverInterface::class => get(ProjectCapabilitiesResolver::class),
-
-            // Changelog
-            ChangelogManagerInterface::class => get(ChangelogManager::class),
-            ChangelogParserInterface::class => get(ChangelogParser::class),
-            MarkdownRendererInterface::class => get(MarkdownRenderer::class),
-            UnreleasedEntryCheckerInterface::class => get(UnreleasedEntryChecker::class),
 
             // Git
             GitClientInterface::class => get(GitClient::class),

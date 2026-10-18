@@ -3,7 +3,7 @@ set -euo pipefail
 
 base_ref="${INPUT_BASE_REF:-main}"
 pull_request_number="${INPUT_PULL_REQUEST_NUMBER:-}"
-allowed_conflicts=$'CHANGELOG.md\n.github/wiki'
+allowed_conflicts='.github/wiki'
 resolved_count=0
 skipped_count=0
 failed_count=0
@@ -160,21 +160,6 @@ resolve_pull_request() {
     if grep -Fx --quiet -- ".github/wiki" <<< "${conflicts}"; then
         # Resolve the gitlink directly from the index so uninitialized submodules do not break staging.
         "${DEV_TOOLS_GITLINK_RESOLVER}" "${workdir}/repo" ".github/wiki"
-    fi
-
-    if grep -Fx --quiet -- "CHANGELOG.md" <<< "${conflicts}"; then
-        # During `git merge base into PR`, stage 2 is the PR side and stage 3 is the base branch side.
-        git -C "${workdir}/repo" show :2:CHANGELOG.md > "${workdir}/CHANGELOG.ours.md"
-        git -C "${workdir}/repo" show :3:CHANGELOG.md > "${workdir}/CHANGELOG.theirs.md"
-        (
-            cd "${workdir}/repo"
-            php "${DEV_TOOLS_CONFLICT_RESOLVER}" \
-                --target="${workdir}/CHANGELOG.theirs.md" \
-                --source="${workdir}/CHANGELOG.ours.md" \
-                --output="CHANGELOG.md" \
-                --repository-url="$(repository_url)"
-        )
-        git -C "${workdir}/repo" add CHANGELOG.md
     fi
 
     if [ -n "$(git -C "${workdir}/repo" diff --name-only --diff-filter=U)" ]; then

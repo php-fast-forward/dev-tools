@@ -45,12 +45,14 @@ Example of an inherited workflow:
 
 This approach ensures that all libraries in the ecosystem benefit from infrastructure updates without requiring manual changes to every repository.
 
-First-party wrappers intentionally follow the reviewed ``@main`` workflow
+DevTools-owned wrappers intentionally follow the reviewed ``@main`` workflow
 contract so centrally deployed fixes reach consumers. This is an explicit
 shared-infrastructure update policy, distinct from pinning third-party
 actions. A workflow SHA alone would not freeze the existing action-source
 checkout, which also follows DevTools ``main``; a fully immutable migration
-would need to version both surfaces together.
+would need to version both surfaces together. The external Changelog caller
+instead selects its published ``@v0`` channel; its update contract is documented
+below.
 
 The packaged wrappers currently include:
 
@@ -267,80 +269,61 @@ The ``tests.yml`` workflow provides standard Continuous Integration.
 Fast Forward Changelog
 ----------------------
 
-The ``changelog.yml`` workflow validates pull-request changelog updates and
-automates the release-preparation flow for repositories that use the local
-changelog commands. Consumer repositories typically expose it through the thin
-wrapper in ``resources/github-actions/changelog.yml``.
+The repository and packaged consumer callers delegate to
+``php-fast-forward/changelog/.github/workflows/changelog.yml@v0``.
+This explicitly selected channel tracks published 0.x releases, including
+potentially breaking minor updates. Local CPX execution is fixed to 0.2.0;
+resolve the channel and review its documented contracts before updating.
+The external workflow owns fragment checks, feedback, Dependabot notes,
+managed version PRs and optional publication.
 
-**Triggers:**
-*   Pull Request (opened, synchronized, reopened).
-*   Pull Request Target (closed) for merged release-preparation pull requests.
-*   Manual trigger (workflow_dispatch).
+The caller handles ``pull_request`` and ``pull_request_target`` lifecycle
+events, pushes to ``main`` and manual dispatch. Untrusted PR checks run without
+write credentials; privileged jobs read their trusted base. The selected Linux
+runner needs Docker, Bash and Git. It does not install the consumer Composer
+dependencies or require the consumer to run PHP 8.5.
 
-**Behavior:**
-*   **Pull Requests**:
-    *   Resolves the workflow PHP version from ``composer.lock`` or
-        ``composer.json`` before installing dependencies.
-    *   Uses ``fetch-depth: 0`` so the base branch reference can be compared
-        safely.
-    *   Fetches the base branch changelog reference.
-    *   For same-repository Dependabot pull requests, creates and pushes a
-        minimal ``Unreleased`` changelog entry derived from the pull request
-        title when the branch has not added one yet.
-    *   Runs ``dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
-    *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
-    *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
-    *   Publishes the aggregate changelog check for every active pull request.
-        Direct workflow invocation uses ``Changelog Validation``; reusable
-        workflow consumers typically expose it namespaced as
-        ``changelog / Changelog Validation``. This is the branch-protection-safe
-        context to require: it fails when normal changelog validation fails and
-        succeeds for release-preparation branches where validation is
-        intentionally skipped.
-    *   Appends a run summary with the compared base ref and changelog file.
-*   **Manual Release Preparation**:
-    *   Checks out the repository default branch with full history.
-    *   Resolves the next version from ``Unreleased`` unless a version input is provided.
-    *   Promotes ``Unreleased`` into the selected version with the current UTC release date.
-    *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
-        ``dev-tools changelog:show -- <version>``.
-    *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
-    *   Dispatches ``tests.yml`` for the release branch with required-status
-        mirroring enabled, because release branches are written by the workflow
-        token and do not receive ordinary ``pull_request`` test runs
-        automatically.
-    *   Appends a run summary with the resolved version, version source, and pull-request URL.
-    *   Requires repository Actions permissions that allow the workflow token
-        to create pull requests and dispatch workflows.
-*   **Merged Release Pull Requests**:
-    *   Detects merged branches that match the configured release branch prefix.
-    *   Renders the released changelog section with ``dev-tools changelog:show -- <version>``.
-    *   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
-    *   Appends a run summary with the published tag and release URL.
-    *   Does **not** run for ordinary feature or fix pull requests merged into ``main``.
+Repository settings preserve existing runner labels, configured Bot identity and
+credentials, ``main``, ``CHANGELOG.md``, ``.changelog``, the managed branch
+``release/vnext`` and title ``Prepare release v{next_version}``.
+The consumer stub must be adapted to each consumer's own credentials and runner
+policy. Supply either ``secrets.token`` or ``app-client-id`` with
+``secrets.app-private-key``, and match ``automation-actor`` to the actual Bot.
+Do not weaken runner isolation or copy this repository's identity to a consumer.
 
-**Inputs:**
-*   ``changelog-file``: managed changelog path, default ``CHANGELOG.md``.
-*   ``version``: optional explicit version for manual release preparation.
-*   ``release-branch-prefix``: release branch prefix, default ``release/v``.
+``resolve-pull-requests: true`` remains consistent across the lifecycle. It
+resolves missing origins from committed fragment bytes and merged PR evidence
+without requiring fragment edits after opening a PR. On base pushes or manual
+dispatch, the workflow prepares or refreshes a single version PR and consumes
+only its accepted fragments. The project-board follow-up uses the returned
+version PR number after preparation to preserve ``Release Prepared`` transitions.
 
-**Repository prerequisites:**
-*   Go to **Settings** > **Actions** > **General**.
-*   Under **Workflow permissions**, enable **Read and write permissions**.
-*   Enable **Allow GitHub Actions to create and approve pull requests**.
-*   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.
-*   In branch protection, require the changelog workflow's aggregate context:
+The separate ``version_checks`` follow-up preserves required consumer CI when
+the version PR is written with ``GITHUB_TOKEN``. It verifies the live open PR's
+repository, managed branch, expected Bot author and exact returned head before
+dispatching ``tests.yml`` with ``publish-required-statuses: true``. Its job alone
+grants ``actions: write`` for dispatch, plus read-only contents and PR access;
+the external Changelog job does not receive that permission. Follow-ups use the
+same selected runner labels. Consumers changing Bot identity must adapt the
+guard and verify their CI contract together with their credentials.
 
-    - Direct workflow invocation: ``Changelog Validation``
-    - Reusable workflow wrapper invocation: ``changelog / Changelog Validation``
+Adoption explicitly sets ``publish: false``. The workflow never merges the
+version PR itself; merging it also does not publish tags or Releases while this
+setting is false. Publication needs separate authorization and a reviewed
+configuration change. Historical Release-body reconciliation is a separate
+approved operation after canonical history is merged.
 
-    Use this instead of the internal ``changelog / Validate PR Changelog`` job.
-    The internal job is intentionally skipped for release-preparation branches,
-    while the aggregate context stays stable for normal and release pull
-    requests.
+Require the exact commit status ``Fast Forward Changelog`` on the current PR
+head after a repository pilot confirms it. It replaces the legacy
+``Changelog Validation`` aggregate. Managed-head validation uses the external
+ownership protocol; a matching branch name alone is not a waiver. Maintainer
+history exceptions must use the library's verified permission-based mechanism,
+not an editable label alone. Preserve all independent repository test gates.
 
-.. note::
-   Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the ``release/v...`` pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.
+See the selected release's
+`workflow contracts <https://github.com/php-fast-forward/changelog/blob/v0.2.0/docs/reusable-lifecycle.md>`_
+and :doc:`../commands/changelog` for local previews. Inspect generated PR
+ownership, notes, fragment deletions and exact-head statuses before approval.
 
 Fast Forward Predictable Conflict Resolution
 --------------------------------------------
@@ -349,17 +332,14 @@ The ``auto-resolve-conflicts.yml`` workflow scans pull requests after ``main``
 moves and after pull request updates. It only attempts an automatic merge when
 the conflicted file list is limited to:
 
-*   ``.github/wiki``;
-*   ``CHANGELOG.md``.
+*   ``.github/wiki``.
 
 For legacy ``.github/wiki`` conflicts, the workflow keeps the pull request side
 of the submodule pointer because that pointer references the preview wiki branch
 that belongs to the pull request. Direct-publication repositories have no such
-pointer. For ``CHANGELOG.md`` conflicts, it treats the base
-branch changelog as authoritative and merges branch-only ``Unreleased`` entries
-back into the current top-level ``Unreleased`` section. That keeps entries in
-the right place even when a release was promoted while the pull request was
-waiting.
+pointer. Central changelog conflicts are no longer rewritten by the legacy
+resolver. Contributions use independent fragments; managed version PRs must be
+regenerated by the external Changelog workflow.
 
 If any other file is conflicted, or if GitHub reports a forked pull request
 branch, the workflow stops and leaves the branch for manual resolution. Each

@@ -4,41 +4,23 @@ Specialized Commands
 Use the standalone commands when you want one tool instead of the full
 ``standards`` pipeline.
 
-``changelog:*``
----------------
+``changelog``
+-------------
 
-Manages Keep a Changelog 1.1.0 files and supports the packaged changelog
-workflow.
+Delegates to the isolated external Fast Forward Changelog 0.2.0 CLI through
+``cpx --skip-local``. CPX and PHP 8.5 must be available on its execution path;
+the consumer's PHP 8.3 requirement stays unchanged.
 
 .. code-block:: bash
 
-   composer changelog:entry --type=added "Add release automation workflow (#28)"
-   composer changelog:entry --json "Add release automation workflow (#28)"
-   composer changelog:check --against=origin/main
-   composer changelog:check --json
-   composer changelog:next-version
-   composer changelog:next-version --json
-   composer changelog:promote 1.3.0 --date=2026-04-19
-   composer changelog:promote 1.3.0 --json
-   composer changelog:show 1.3.0
-   composer changelog:show 1.3.0 --json
+   vendor/bin/dev-tools changelog add "Fixes release-note rendering." --category=fixed --no-interaction
+   vendor/bin/dev-tools changelog check --no-interaction
+   vendor/bin/dev-tools changelog status --source=tags --no-interaction
 
-Important details:
-
-- ``changelog:entry`` creates the changelog file automatically when it does not
-  exist yet;
-- ``--json`` is the standard machine-readable output flag across the local
-  DevTools command surface;
-- ``--pretty-json`` keeps the same structured payload but indents it for easier
-  manual inspection in the terminal;
-- when structured output is active, DevTools suppresses progress-heavy nested
-  tool output where possible and forwards JSON, quiet, or progress preferences
-  to subprocesses that support them;
-- ``changelog:check`` is the command used by pull-request validation;
-- ``changelog:next-version`` and ``changelog:promote`` support the manual
-  release-preparation workflow;
-- ``changelog:show`` keeps its text-mode output as the raw published release
-  body used by GitHub Release publication.
+Contributions use independent ``.changelog/*.md`` files. The old
+``changelog:*`` commands and their ``Unreleased`` model have been removed;
+inspect external command help before migrating options or output consumers.
+See :doc:`../commands/changelog` for migration and release-preview boundaries.
 
 ``tests``
 ---------

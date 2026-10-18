@@ -31,9 +31,9 @@ implementation in this repository is increasingly composed from local actions in
    * - ``.github/actions/php/*``
      - Shared PHP helpers such as workflow PHP-version resolution, Composer
        setup, and local-vs-workflow DevTools runtime bootstrap.
-   * - ``.github/actions/changelog/*``
-     - Changelog-specific building blocks for release version resolution,
-       release-notes rendering, and GitHub release publication.
+   * - ``php-fast-forward/changelog``
+     - External fragment, history, version-PR and publication lifecycle called
+       through its reusable workflow at ``@v0``.
    * - ``.github/actions/github-pages/*``
      - Shared GitHub Pages helpers for restoring previews, removing closed pull
        request previews, cleaning orphaned previews, and verifying published
@@ -104,18 +104,20 @@ callers using the preview-branch and submodule model.
 How Changelog and Project Automation Fit In
 -------------------------------------------
 
-- ``.github/workflows/changelog.yml`` now composes its release flow from
-  ``.github/actions/changelog/*`` and ``.github/actions/project-board/*``.
-- The changelog workflow validates pull-request changelog entries, prepares
-  release branches, publishes GitHub releases from merged release branches, and
-  can transition the configured GitHub Project item state alongside those
-  lifecycle events.
+- ``.github/workflows/changelog.yml`` calls the external Changelog lifecycle
+  at ``@v0``; DevTools no longer owns its parser or release engine.
+- The external workflow validates contribution fragments and prepares the
+  managed version PR. Publication is disabled during adoption. A separate local
+  follow-up transitions the configured GitHub Project items after preparation.
+- A separate ``version_checks`` follow-up verifies the managed PR's live Bot,
+  repository, branch and head before dispatching independent required tests.
+  It scopes ``actions: write`` to dispatch and uses the selected runner labels.
 - ``.github/workflows/review.yml`` composes its ready-for-review intake from
   ``.github/actions/review/*`` and posts a deterministic brief that points
   maintainers to the packaged ``review-guardian`` agent and
   ``pull-request-review`` skill.
-- ``tests.yml``, ``reports.yml``, legacy wiki preview and maintenance flows, and
-  ``changelog.yml`` now delegate final run summaries to
+- ``tests.yml``, ``reports.yml``, and legacy wiki preview and maintenance flows
+  delegate final run summaries to
   ``.github/actions/summary/*`` after their final-state information is known.
 - Project-board automation is no longer just an inline workflow concern; it is
   a reusable local action group shared by issue, pull-request, review, and

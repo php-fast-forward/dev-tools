@@ -1,5 +1,5 @@
 name: Resolve Predictable PR Conflicts
-description: Resolve open pull requests conflicted only by CHANGELOG.md drift or workflow-managed .github/wiki pointers.
+description: Resolve open pull requests conflicted only by workflow-managed .github/wiki pointers.
 
 inputs:
   base-ref:
@@ -19,6 +19,5 @@ runs:
       env:
         INPUT_BASE_REF: ${{ inputs.base-ref }}
         INPUT_PULL_REQUEST_NUMBER: ${{ inputs.pull-request-number }}
-        DEV_TOOLS_CONFLICT_RESOLVER: ${{ github.action_path }}/resolve-changelog.php
         DEV_TOOLS_GITLINK_RESOLVER: ${{ github.action_path }}/stage-unmerged-gitlink.sh
       run: ${{ github.action_path }}/run.sh

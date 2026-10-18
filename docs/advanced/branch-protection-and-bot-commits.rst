@@ -178,31 +178,31 @@ declares this maximum; jobs that execute consumer code explicitly reduce both
 Actions and status permissions to ``none``.
 
 The predictable-conflict workflow MAY also refresh pull request branches when
-the only conflicts are ``.github/wiki`` pointer drift and/or ``CHANGELOG.md``
-``Unreleased`` drift. It keeps pull request wiki preview pointers on the branch
-side and replays branch-only changelog entries into the current base
-``Unreleased`` section, which avoids placing new entries under a freshly
-published release after ``main`` moved. Because those automatic resolutions are
+the only conflicts are ``.github/wiki`` pointer drift. It keeps pull request
+wiki preview pointers on the branch side. Central changelog conflicts are no
+longer rewritten; the external lifecycle regenerates its managed version PR
+from accepted independent fragments. Because automatic wiki resolutions are
 also pushed with the built-in workflow token, the workflow dispatches
 ``tests.yml`` for the refreshed branch after a successful push so required test
 statuses can be reported for the new commit.
 
-Release-preparation pull requests follow the same rule. The changelog workflow
-creates or updates ``release/v...`` branches with the built-in workflow token,
-so GitHub does not start ordinary ``pull_request`` test runs for the new release
-commit. After the release pull request exists, the changelog workflow
-dispatches ``tests.yml`` for the release branch with required-status mirroring
-enabled. The dispatched run publishes the same required ``Run Tests`` contexts
-for the release PR head, which lets branch protection evaluate the final
-workflow-managed release commit without a maintainer bypass.
+The external Changelog workflow owns ``release/vnext`` and verifies its signed
+transaction evidence. Branch names alone do not bypass checks. Its exact-head
+commit status is ``Fast Forward Changelog``, replacing the former
+``Changelog Validation`` aggregate. Confirm the status and all independent
+repository test gates on a pilot generated PR before changing protection.
+An explicitly configured GitHub App can preserve downstream event behavior;
+consumers using ``GITHUB_TOKEN`` must account for restrictions on subsequent CI runs.
+Do not treat the Changelog status as evidence that consumer tests ran.
 
-Changelog validation has its own branch-protection-safe aggregate context.
-For direct workflow runs, use ``Changelog Validation``. For consumers of the
-reusable workflow wrapper, use the namespaced check name ``changelog / Changelog
-Validation`` instead of the internal ``changelog / Validate PR Changelog`` job.
-The internal validation job is skipped for ``release/v...`` branches by design, while
-the aggregate job still reports success for release-preparation pull requests and
-failure for normal pull requests whose changelog validation did not pass.
+The local ``version_checks`` follow-up compensates for those token restrictions
+by dispatching ``tests.yml`` with ``publish-required-statuses: true``. Before
+dispatch it rereads the open PR and verifies the same-repository managed branch,
+exact head returned by Changelog and expected ``github-actions[bot]`` author.
+The dispatched tests mirror required test statuses onto that version PR head.
+If a consumer selects another Bot, adapt this identity guard consistently and
+verify its downstream event policy. All follow-up jobs use the selected runner
+labels, so preserve the consumer's authorized Linux runner settings.
 
 At a high level, the workflows need permission to read repository contents,
 write generated preview commits, update pull request comments, and publish Pages
@@ -274,9 +274,14 @@ workflow MAY fall back to the first organization Project V2 when no explicit
 project number is provided. The reusable project-board helpers now live under
 ``.github/actions/project-board/*``, which keeps project-state transitions
 shared across issue, pull-request, review, changelog, and release workflows.
-Consumer changelog wrappers MUST also grant ``actions: write`` so the reusable
-release-preparation workflow can dispatch ``tests.yml`` after creating or
-updating a release pull request.
+The external changelog lifecycle requires ``contents: write``,
+``pull-requests: write``, ``issues: read`` and ``statuses: write`` at its caller.
+The local project-board follow-up retains ``repository-projects: write``.
+The separate local ``version_checks`` job requires ``actions: write`` to
+dispatch the independent tests and ``contents: read``/``pull-requests: read``
+for its identity checks. This permission is scoped to that follow-up; it is
+not granted to the external Changelog job. Reusable callers must permit these
+job permissions at their own maximum permission boundary.
 
 Resolving ``.github/wiki`` Pointer Conflicts
 --------------------------------------------

@@ -436,8 +436,8 @@ final class DevToolsTest extends TestCase
      * @return void
      */
     #[Test]
-    #[TestWith(['changelog:show'])]
-    #[TestWith(['changelog:next-version'])]
+    #[TestWith(['changelog'])]
+    #[TestWith(['dev-tools:changelog'])]
     public function doRunWillNotRenderLogoWhenRawOutputCommandIsRequested(string $commandName): void
     {
         $command = new class extends Command {
