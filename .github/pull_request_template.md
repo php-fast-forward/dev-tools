@@ -24,7 +24,7 @@ Closes #
 
 ## Changelog
 
-- [ ] Added a notable `CHANGELOG.md` entry
+- [ ] Added a notable `.changelog/*.md` fragment
 
 ## Reviewer Notes
 
