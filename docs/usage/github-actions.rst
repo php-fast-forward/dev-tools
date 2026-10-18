@@ -10,8 +10,10 @@ The automation model separates shared implementations from consumer triggers:
 
 *   **Local composite and JavaScript actions** in ``.github/actions/`` inside
     this repository. These contain the reusable implementation details for PHP
-    setup, project-board transitions, GitHub Pages handling, changelog
-    publishing, wiki branch management, and related helpers.
+    setup, project-board transitions, GitHub Pages handling, wiki branch
+    management, and related helpers. Changelog validation, version preparation
+    and publication are implemented by ``php-fast-forward/changelog`` and
+    invoked through its external reusable workflow.
 *   **Reusable workflows** in ``.github/workflows/`` inside this repository.
     These are the canonical automation entrypoints consumed by Fast Forward
     repositories and wrappers.

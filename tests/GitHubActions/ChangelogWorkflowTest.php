@@ -83,4 +83,16 @@ final class ChangelogWorkflowTest extends TestCase
             file_get_contents(__DIR__ . '/../../resources/github-actions/changelog.yml'),
         );
     }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function transientRetryWillMonitorTheCurrentChangelogWorkflowName(): void
+    {
+        $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/changelog.yml');
+        $retryWorkflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/retry-transient-failures.yml');
+
+        self::assertContains($workflow['name'], $retryWorkflow['on']['workflow_run']['workflows']);
+    }
 }

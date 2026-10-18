@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows:
       - Project Board Automation
-      - Changelog Automation
+      - Changelog
       - Pull Request Label Sync
       - Generate Reports and Deploy to GitHub Pages
       - Rigorous Pull Request Review
