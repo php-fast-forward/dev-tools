@@ -3614,14 +3614,16 @@ runner needs Docker, Bash and Git. It does not install the consumer Composer
 dependencies or require the consumer to run PHP 8.5.</p>
 
             
-    <p>Both callers use the official README YAML unchanged, with one <code>changelog</code>
+    <p>Both callers use the official README YAML with the owner-approved
+<code>publish: true</code>
+ override and one <code>changelog</code>
 
 job. They set <code>base-branch: main</code>
 , <code>source: tags</code>
 , <code>comment-mode: always</code>
 ,
 <code>prepare-release: true</code>
- and <code>publish: false</code>
+ and <code>publish: true</code>
 . The job grants
 <code>contents: write</code>
 , <code>pull-requests: write</code>
@@ -3646,11 +3648,11 @@ only its accepted fragments. The single-job caller follows the external
 lifecycle directly, without local post-preparation jobs.</p>
 
             
-    <p>Adoption explicitly sets <code>publish: false</code>
-. The workflow never merges the
-version PR itself; merging it also does not publish tags or Releases while this
-setting is false. Publication needs separate authorization and a reviewed
-configuration change.</p>
+    <p>Merging the reviewed managed version PR automatically publishes its tag and
+GitHub Release from the exact approved commit. This configured operation is
+already authorized and requires no second per-release approval. The workflow
+never merges the version PR itself. Direct manual publication and changes to
+existing Releases require separate explicit authorization.</p>
 
             
     <p>Require the exact commit status <code>Fast Forward Changelog</code>

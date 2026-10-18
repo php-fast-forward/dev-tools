@@ -3725,7 +3725,7 @@ var classes = [
         "final": true,
         "methods": [
             {
-                "name": "workflowWillUseTheOfficialSingleJobCallerWithoutPublishing",
+                "name": "workflowWillUseTheOfficialSingleJobCallerWithAutomaticPublishing",
                 "role": null,
                 "public": true,
                 "private": false,

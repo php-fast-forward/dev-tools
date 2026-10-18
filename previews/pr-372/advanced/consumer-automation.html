@@ -3345,13 +3345,16 @@ callers using the preview-branch and submodule model.</p>
     <li class="dash"><code>.github/workflows/changelog.yml</code>
  calls the external Changelog lifecycle
 at <code>@v0</code>
- using the official README&#039;s single-job caller unchanged.</li>
+ using the official README&#039;s single-job caller with the
+owner-approved <code>publish: true</code>
+ override.</li>
 
     <li class="dash">The external workflow validates contribution fragments and prepares the
 <code>changelog/version</code>
  PR titled <code>chore: update changelog</code>
 . Publication is
-disabled. The lifecycle uses its default Ubuntu runner and GitHub token.</li>
+automatic after that reviewed PR is merged. The lifecycle uses its default
+Ubuntu runner and GitHub token and never merges the PR itself.</li>
 
     <li class="dash"><code>.github/workflows/review.yml</code>
  composes its ready-for-review intake from
