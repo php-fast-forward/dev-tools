@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
             aria-current="page"            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
-            changelog
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -3127,49 +3127,33 @@
                             <div class="row g-4">
                                 <div class="col-12 col-xl-9">
                                     <div class="ff-docs-article bg-body p-4 p-xl-5">
-                                            <section class="section " id="changelog">
-            <h1>changelog</h1>
+                                            <section class="section " id="external-fast-forward-changelog">
+            <h1>External Fast Forward Changelog</h1>
 
             
-    <p>DevTools delegates changelog behavior to the independent
+    <p>Use the independent
 <a href="https://github.com/php-fast-forward/changelog/tree/v0.2.0">Fast Forward Changelog</a>
-package. It does not implement parsing, version inference, history maintenance
-or publication policy itself.</p>
+package for fragments, version planning, history and publication policy.</p>
 
-            <section class="section " id="runtime-and-migration">
-            <h2>Runtime and migration</h2>
+            <section class="section " id="runtime">
+            <h2>Runtime</h2>
 
             
-    <p><code>vendor/bin/dev-tools changelog &lt;arguments...&gt;</code>
- invokes
-<code>cpx --skip-local fast-forward/changelog:0.2.0</code>
+    <p>Run <code>cpx --skip-local fast-forward/changelog:0.2.0</code>
  from the consumer project.
-Run DevTools itself with PHP 8.5 for this command, and make CPX available on
-<code>PATH</code>
- with the same compatible runtime. Other DevTools commands still support
-PHP 8.3. This isolated tool installation
+Make CPX available on <code>PATH</code>
+ with PHP 8.5. This isolated tool installation
 does not raise the consumer package&#039;s PHP 8.3 requirement or add Changelog to
 its Composer dependency graph. Consult the
 <a href="https://github.com/laravel/cpx">official CPX setup</a> before installation.</p>
 
             
-    <p>The five internal <code>changelog:*</code>
- commands have been removed. Their options
-and JSON envelopes are not aliases for the external CLI. Inspect the selected
-runtime before adapting scripts:</p>
+    <p>Inspect the selected runtime before running its commands:</p>
 
-            <pre><code class="language-bash">vendor/bin/dev-tools changelog list --raw
-vendor/bin/dev-tools changelog help add
-vendor/bin/dev-tools changelog help check
-vendor/bin/dev-tools changelog help version</code></pre>
-
-            
-    <p>Use <code>vendor/bin/dev-tools changelog -- &lt;command&gt; [options]</code>
- to forward all
-external options without wrapper interpretation, including the external
-<code>--help</code>
- option. The wrapper streams the library&#039;s stdout/stderr and preserves
-its exit status instead of applying the DevTools JSON envelope.</p>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 list --raw
+cpx --skip-local fast-forward/changelog:0.2.0 help add
+cpx --skip-local fast-forward/changelog:0.2.0 help check
+cpx --skip-local fast-forward/changelog:0.2.0 help version</code></pre>
 
             
     <p>Use <code>add</code>
@@ -3200,8 +3184,8 @@ Preserves Markdown links when exporting release notes.</code></pre>
             
     <p>Or create it once through the CLI:</p>
 
-            <pre><code class="language-bash">vendor/bin/dev-tools changelog add &quot;Preserves Markdown links when exporting release notes.&quot; --category=fixed --no-interaction
-vendor/bin/dev-tools changelog check --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 add &quot;Preserves Markdown links when exporting release notes.&quot; --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 check --no-interaction</code></pre>
 
             
     <p><code>add</code>
@@ -3211,7 +3195,7 @@ unchanged. Categories describe the nature of the change; <code>type</code>
 records its semantic-version impact. Preserve other contributions&#039; fragments.
 After committing the contribution, validate it against the intended Git base:</p>
 
-            <pre><code class="language-bash">vendor/bin/dev-tools changelog check --since=origin/main --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 check --since=origin/main --no-interaction</code></pre>
 
             
     <p>No new <code>Unreleased</code>
@@ -3230,10 +3214,10 @@ require the explicit <code>--resolve-pull-requests</code>
             <section class="section " id="history-and-release-preparation">
             <h2>History and release preparation</h2>
 
-            <pre><code class="language-bash">vendor/bin/dev-tools changelog status --source=tags --no-interaction
-vendor/bin/dev-tools changelog format --dry-run --no-interaction
-vendor/bin/dev-tools changelog backfill --dry-run --source=tags --no-interaction
-vendor/bin/dev-tools changelog notes &lt;version&gt; --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 format --dry-run --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 backfill --dry-run --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 notes &lt;version&gt; --no-interaction</code></pre>
 
             
     <p>Read <code>help &lt;command&gt;</code>
@@ -3251,22 +3235,19 @@ and the single new version link after every rehearsal.</p>
  channel, which
 tracks published 0.x releases. Local CLI execution is fixed to 0.2.0; resolve
 the channel and review compatibility when updating either integration.
-The caller preserves <code>release/vnext</code>
- and
-<code>Prepare release v{next_version}</code>
+The official caller uses <code>changelog/version</code>
+ and the title
+<code>chore: update changelog</code>
 . The Bot owns that branch: let automation
 regenerate its PR and inspect the new exact head rather than editing the branch
 or forging ownership trailers.</p>
 
             
-    <p>Adoption keeps <code>publish: false</code>
+    <p>The caller keeps <code>publish: false</code>
 . Preparing or merging a version PR does not
-authorize publication. Historical GitHub Release reconciliation also remains
-separate: approve and integrate canonical history first, then apply authorized
-body changes or create releases only for verified existing tags. Preserve tag
-targets, assets and draft/prerelease flags, and reread each changed Release.
-The external <code>notes</code>
- command extracts the selected version body; verify any
+authorize publication. The external <code>notes</code>
+ command extracts the selected
+version body; verify any
 reference-style links also resolve when that body is rendered independently.</p>
 
             

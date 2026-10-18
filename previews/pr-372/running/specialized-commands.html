@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -3135,28 +3135,24 @@
 <code>standards</code>
  pipeline.</p>
 
-            <section class="section " id="changelog">
-            <h2><code>changelog</code>
-</h2>
+            <section class="section " id="external-changelog-cli">
+            <h2>External Changelog CLI</h2>
 
             
-    <p>Delegates to the isolated external Fast Forward Changelog 0.2.0 CLI through
+    <p>Run the independent Fast Forward Changelog 0.2.0 CLI through
 <code>cpx --skip-local</code>
 . CPX and PHP 8.5 must be available on its execution path;
 the consumer&#039;s PHP 8.3 requirement stays unchanged.</p>
 
-            <pre><code class="language-bash">vendor/bin/dev-tools changelog add &quot;Fixes release-note rendering.&quot; --category=fixed --no-interaction
-vendor/bin/dev-tools changelog check --no-interaction
-vendor/bin/dev-tools changelog status --source=tags --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 add &quot;Fixes release-note rendering.&quot; --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 check --no-interaction
+cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction</code></pre>
 
             
     <p>Contributions use independent <code>.changelog/*.md</code>
- files. The old
-<code>changelog:*</code>
- commands and their <code>Unreleased</code>
- model have been removed;
-inspect external command help before migrating options or output consumers.
-See <a href="./commands/changelog.html">changelog</a> for migration and release-preview boundaries.</p>
+ files. Inspect external command
+help for its options and output contracts. See <a href="./commands/changelog.html">External Fast Forward Changelog</a> for
+runtime requirements and release-preview boundaries.</p>
 
     </section>
 

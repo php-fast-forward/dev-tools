@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -3345,17 +3345,13 @@ callers using the preview-branch and submodule model.</p>
     <li class="dash"><code>.github/workflows/changelog.yml</code>
  calls the external Changelog lifecycle
 at <code>@v0</code>
-; DevTools no longer owns its parser or release engine.</li>
+ using the official README&#039;s single-job caller unchanged.</li>
 
     <li class="dash">The external workflow validates contribution fragments and prepares the
-managed version PR. Publication is disabled during adoption. A separate local
-follow-up transitions the configured GitHub Project items after preparation.</li>
-
-    <li class="dash">A separate <code>version_checks</code>
- follow-up verifies the managed PR&#039;s live Bot,
-repository, branch and head before dispatching independent required tests.
-It scopes <code>actions: write</code>
- to dispatch and uses the selected runner labels.</li>
+<code>changelog/version</code>
+ PR titled <code>chore: update changelog</code>
+. Publication is
+disabled. The lifecycle uses its default Ubuntu runner and GitHub token.</li>
 
     <li class="dash"><code>.github/workflows/review.yml</code>
  composes its ready-for-review intake from
@@ -3374,8 +3370,8 @@ delegate final run summaries to
  after their final-state information is known.</li>
 
     <li class="dash">Project-board automation is no longer just an inline workflow concern; it is
-a reusable local action group shared by issue, pull-request, review, and
-release automation.</li>
+a reusable local action group shared by issue, pull-request and review
+automation.</li>
 
 </ul>
 

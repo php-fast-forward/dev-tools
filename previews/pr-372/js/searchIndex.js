@@ -876,46 +876,6 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-Command-AgentsCommand.html#property_filesystem"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand",
-            "name": "ChangelogCommand",
-            "summary": "Delegates\u0020changelog\u0020behavior\u0020to\u0020the\u0020isolated\u0020standalone\u0020library\u0020runtime.",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand\u003A\u003A__construct\u0028\u0029",
-            "name": "__construct",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html#method___construct"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand\u003A\u003Aconfigure\u0028\u0029",
-            "name": "configure",
-            "summary": "Accepts\u0020library\u0020arguments\u0020without\u0020duplicating\u0020its\u0020evolving\u0020option\u0020schema.",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html#method_configure"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand\u003A\u003Aexecute\u0028\u0029",
-            "name": "execute",
-            "summary": "Forwards\u0020the\u0020library\u0020output\u0020and\u0020exit\u0020status\u0020without\u0020adding\u0020presentation.",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html#method_execute"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand\u003A\u003AwithoutWrapperOptions\u0028\u0029",
-            "name": "withoutWrapperOptions",
-            "summary": "Removes\u0020DevTools\u0020runtime\u0020options\u0020already\u0020applied\u0020by\u0020the\u0020parent\u0020application.",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html#method_withoutWrapperOptions"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand\u003A\u003A\u0024processBuilder",
-            "name": "processBuilder",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html#property_processBuilder"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand\u003A\u003A\u0024environmentConfigurator",
-            "name": "environmentConfigurator",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html#property_environmentConfigurator"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCommand\u003A\u003A\u0024phpVersionId",
-            "name": "phpVersionId",
-            "summary": "",
-            "url": "classes/FastForward-DevTools-Console-Command-ChangelogCommand.html#property_phpVersionId"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\Command\\CodeOwnersCommand",
             "name": "CodeOwnersCommand",
             "summary": "Generates\u0020and\u0020synchronizes\u0020CODEOWNERS\u0020files\u0020from\u0020local\u0020project\u0020metadata.",
@@ -2301,11 +2261,6 @@ Search.appendIndex(
             "summary": "Determines\u0020whether\u0020the\u0020startup\u0020logo\u0020should\u0020be\u0020rendered\u0020for\u0020this\u0020invocation.",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#method_shouldRenderLogo"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AisRawOutputCommand\u0028\u0029",
-            "name": "isRawOutputCommand",
-            "summary": "Checks\u0020whether\u0020the\u0020current\u0020command\u0020is\u0020designed\u0020for\u0020raw\u0020output\u0020mode.",
-            "url": "classes/FastForward-DevTools-Console-DevTools.html#method_isRawOutputCommand"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003AisSelfUpdateCommand\u0028\u0029",
             "name": "isSelfUpdateCommand",
             "summary": "Detects\u0020whether\u0020the\u0020current\u0020invocation\u0020targets\u0020the\u0020self\u002Dupdate\u0020command.",
@@ -2325,11 +2280,6 @@ Search.appendIndex(
             "name": "LOGO",
             "summary": "",
             "url": "classes/FastForward-DevTools-Console-DevTools.html#constant_LOGO"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003ARAW_OUTPUT_COMMANDS",
-            "name": "RAW_OUTPUT_COMMANDS",
-            "summary": "Commands\u0020that\u0020require\u0020raw\u0020output\u0020and\u0020therefore\u0020must\u0020not\u0020render\u0020the\u0020logo.",
-            "url": "classes/FastForward-DevTools-Console-DevTools.html#constant_RAW_OUTPUT_COMMANDS"
         },                {
             "fqsen": "\\FastForward\\DevTools\\Console\\DevTools\u003A\u003A\u0024workingDirectorySwitcher",
             "name": "workingDirectorySwitcher",

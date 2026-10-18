@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -3235,9 +3235,6 @@ below.</p>
     <li><code>changelog.yml</code>
 </li>
 
-    <li><code>auto-resolve-conflicts.yml</code>
-</li>
-
     <li><code>wiki.yml</code>
  for read-only pull-request generation and direct publication from <code>main</code>
 </li>
@@ -3593,6 +3590,10 @@ matrix, effective coverage threshold, and dependency-health threshold.</li>
     <p>The repository and packaged consumer callers delegate to
 <code>php-fast-forward/changelog/.github/workflows/changelog.yml@v0</code>
 .
+The repository&#039;s <code>changelog.yml</code>
+ is an event-driven caller, with no
+<code>workflow_call</code>
+ interface.
 This explicitly selected channel tracks published 0.x releases, including
 potentially breaking minor updates. Local CPX execution is fixed to 0.2.0;
 resolve the channel and review its documented contracts before updating.
@@ -3610,62 +3611,48 @@ runner needs Docker, Bash and Git. It does not install the consumer Composer
 dependencies or require the consumer to run PHP 8.5.</p>
 
             
-    <p>Repository settings preserve existing runner labels, configured Bot identity and
-credentials, <code>main</code>
+    <p>Both callers use the official README YAML unchanged, with one <code>changelog</code>
+
+job. They set <code>base-branch: main</code>
+, <code>source: tags</code>
+, <code>comment-mode: always</code>
+,
+<code>prepare-release: true</code>
+ and <code>publish: false</code>
+. The job grants
+<code>contents: write</code>
+, <code>pull-requests: write</code>
+, <code>issues: read</code>
+ and
+<code>statuses: write</code>
+; workflow-level permissions remain empty. The external
+defaults select Ubuntu, <code>GITHUB_TOKEN</code>
 , <code>CHANGELOG.md</code>
 , <code>.changelog</code>
-, the managed branch
-<code>release/vnext</code>
- and title <code>Prepare release v{next_version}</code>
-.
-The consumer stub must be adapted to each consumer&#039;s own credentials and runner
-policy. Supply either <code>secrets.token</code>
- or <code>app-client-id</code>
- with
-<code>secrets.app-private-key</code>
-, and match <code>automation-actor</code>
- to the actual Bot.
-Do not weaken runner isolation or copy this repository&#039;s identity to a consumer.</p>
+,
+<code>changelog/version</code>
+ and the PR title <code>chore: update changelog</code>
+.</p>
 
             
-    <p><code>resolve-pull-requests: true</code>
- remains consistent across the lifecycle. It
+    <p>Automatic PR-origin lookup uses the external default enabled policy. It
 resolves missing origins from committed fragment bytes and merged PR evidence
 without requiring fragment edits after opening a PR. On base pushes or manual
 dispatch, the workflow prepares or refreshes a single version PR and consumes
-only its accepted fragments. The project-board follow-up uses the returned
-version PR number after preparation to preserve <code>Release Prepared</code>
- transitions.</p>
-
-            
-    <p>The separate <code>version_checks</code>
- follow-up preserves required consumer CI when
-the version PR is written with <code>GITHUB_TOKEN</code>
-. It verifies the live open PR&#039;s
-repository, managed branch, expected Bot author and exact returned head before
-dispatching <code>tests.yml</code>
- with <code>publish-required-statuses: true</code>
-. Its job alone
-grants <code>actions: write</code>
- for dispatch, plus read-only contents and PR access;
-the external Changelog job does not receive that permission. Follow-ups use the
-same selected runner labels. Consumers changing Bot identity must adapt the
-guard and verify their CI contract together with their credentials.</p>
+only its accepted fragments. The single-job caller follows the external
+lifecycle directly, without local post-preparation jobs.</p>
 
             
     <p>Adoption explicitly sets <code>publish: false</code>
 . The workflow never merges the
 version PR itself; merging it also does not publish tags or Releases while this
 setting is false. Publication needs separate authorization and a reviewed
-configuration change. Historical Release-body reconciliation is a separate
-approved operation after canonical history is merged.</p>
+configuration change.</p>
 
             
     <p>Require the exact commit status <code>Fast Forward Changelog</code>
  on the current PR
-head after a repository pilot confirms it. It replaces the legacy
-<code>Changelog Validation</code>
- aggregate. Managed-head validation uses the external
+head after a repository pilot confirms it. Managed-head validation uses the external
 ownership protocol; a matching branch name alone is not a waiver. Maintainer
 history exceptions must use the library&#039;s verified permission-based mechanism,
 not an editable label alone. Preserve all independent repository test gates.</p>
@@ -3673,43 +3660,8 @@ not an editable label alone. Preserve all independent repository test gates.</p>
             
     <p>See the selected release&#039;s
 <a href="https://github.com/php-fast-forward/changelog/blob/v0.2.0/docs/reusable-lifecycle.md">workflow contracts</a>
-and <a href="./commands/changelog.html">changelog</a> for local previews. Inspect generated PR
+and <a href="./commands/changelog.html">External Fast Forward Changelog</a> for local previews. Inspect generated PR
 ownership, notes, fragment deletions and exact-head statuses before approval.</p>
-
-    </section>
-
-            <section class="section " id="fast-forward-predictable-conflict-resolution">
-            <h2>Fast Forward Predictable Conflict Resolution</h2>
-
-            
-    <p>The <code>auto-resolve-conflicts.yml</code>
- workflow scans pull requests after <code>main</code>
-
-moves and after pull request updates. It only attempts an automatic merge when
-the conflicted file list is limited to:</p>
-
-            
-
-<ul>
-    <li><code>.github/wiki</code>
-.</li>
-
-</ul>
-
-            
-    <p>For legacy <code>.github/wiki</code>
- conflicts, the workflow keeps the pull request side
-of the submodule pointer because that pointer references the preview wiki branch
-that belongs to the pull request. Direct-publication repositories have no such
-pointer. Central changelog conflicts are no longer rewritten by the legacy
-resolver. Contributions use independent fragments; managed version PRs must be
-regenerated by the external Changelog workflow.</p>
-
-            
-    <p>If any other file is conflicted, or if GitHub reports a forked pull request
-branch, the workflow stops and leaves the branch for manual resolution. Each
-run writes a summary explaining which pull requests were resolved, skipped, or
-left untouched.</p>
 
     </section>
 
@@ -3801,16 +3753,6 @@ open pull request.</p>
    Promotes approved pull requests into <code>Ready to Merge</code>
 .
 <em>   Moves merged pull requests and linked issues into ``Merged``.
-</em>
-   Moves all currently <code>Merged</code>
- work into <code>Release Prepared</code>
- when <code>changelog.yml</code>
- opens or updates a release-preparation pull request.
-<em>   Promotes ``Release Prepared`` work into ``Released`` when the
-    release-preparation pull request is merged and the GitHub release is
-    published, and also promotes any remaining ``Merged`` items as a
-    release-publication safety net when the preparation transition did not
-    run.
 </em>
    Uses the built-in workflow token for project updates.</li>
 

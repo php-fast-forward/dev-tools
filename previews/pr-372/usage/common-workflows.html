@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -3176,7 +3176,7 @@ order.</td>
     </tr>
     <tr>
             <td>Record a notable pull-request change</td>
-            <td><code>vendor/bin/dev-tools changelog add &quot;Describes the change.&quot; --no-interaction</code>
+            <td><code>cpx --skip-local fast-forward/changelog:0.2.0 add &quot;Describes the change.&quot; --no-interaction</code>
 </td>
             <td>Creates one independent change fragment using the external CPX runtime.</td>
     </tr>
@@ -3205,7 +3205,7 @@ order.</td>
     </tr>
     <tr>
             <td>Inspect the next release</td>
-            <td><code>vendor/bin/dev-tools changelog status --source=tags --no-interaction</code>
+            <td><code>cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction</code>
 </td>
             <td>Plans from pending fragments; the managed version PR consolidates them
 for review. Publication remains disabled during adoption.</td>
@@ -3254,10 +3254,10 @@ to avoid Composer&#039;s <code>--</code>
     <li value="1">Run <code>composer tests</code>
 .</li>
 
-    <li value="2">Run <code>vendor/bin/dev-tools changelog add</code>
+    <li value="2">Run <code>cpx --skip-local fast-forward/changelog:0.2.0 add</code>
  with a description when the branch
 introduces a notable change (requires CPX and PHP 8.5); then run
-<code>vendor/bin/dev-tools changelog check</code>
+<code>cpx --skip-local fast-forward/changelog:0.2.0 check</code>
 .</li>
 
     <li value="3">Run <code>composer skills</code>

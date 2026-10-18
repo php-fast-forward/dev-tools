@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -3133,7 +3133,7 @@
             
     <p>Fast Forward Changelog owns fragment validation, version planning, central
 history and optional tag/Release publication. DevTools delegates to that external
-package; it no longer implements a parallel changelog engine.</p>
+package.</p>
 
             <section class="section " id="version-pr-and-authorization">
             <h2>Version PR and authorization</h2>
@@ -3148,9 +3148,9 @@ external <code>Fast Forward Changelog</code>
 
     <li value="2">Accepted contributions merge into <code>main</code>
 . The external lifecycle prepares
-or regenerates the single managed <code>release/vnext</code>
+or regenerates the single managed <code>changelog/version</code>
  PR with title
-<code>Prepare release v{next_version}</code>
+<code>chore: update changelog</code>
 .</li>
 
     <li value="3">Review the exact new head, planned version, notes, comparison links and
@@ -3169,23 +3169,19 @@ Enable publication only through a separately approved workflow change.</li>
 
             
     <p>The caller selects the upstream <code>@v0</code>
- channel and retains this repository&#039;s
-runner, token, branch and project-board settings. Local Changelog execution
+ channel with the official README
+configuration unchanged: <code>main</code>
+, historical source <code>tags</code>
+, feedback
+<code>always</code>
+, release preparation enabled and publication disabled. The external
+defaults provide the Ubuntu runner and GitHub token. Local Changelog execution
 is fixed to 0.2.0 through CPX and PHP 8.5, without changing the consumer PHP 8.3
 requirement. The workflow uses Docker on Linux with Bash and Git instead of the
 consumer Composer environment. Read <a href="./usage/github-actions.html">GitHub Actions Workflows</a> for caller
-contracts and <a href="./commands/changelog.html">changelog</a> for the command migration.</p>
-
-            
-    <p>The local <code>version_checks</code>
- follow-up rereads the generated PR and validates
-its Bot, same-repository managed branch and exact returned head before
-dispatching independent <code>tests.yml</code>
- checks with required-status mirroring.
-Its scoped <code>actions: write</code>
- permission preserves required test gates despite
-<code>GITHUB_TOKEN</code>
- event restrictions; all follow-ups retain the selected runner.</p>
+contracts and <a href="./commands/changelog.html">External Fast Forward Changelog</a> for local commands. The Changelog
+status and independent repository tests must be inspected on the exact version
+PR head; successful changelog validation does not prove that other CI ran.</p>
 
     </section>
 
@@ -3218,8 +3214,8 @@ and origin evidence; mismatches require regeneration and renewed review.</p>
 
     </section>
 
-            <section class="section " id="canonical-release-notes-and-historical-reconciliation">
-            <h2>Canonical release notes and historical reconciliation</h2>
+            <section class="section " id="canonical-release-notes">
+            <h2>Canonical release notes</h2>
 
             
     <p><code>CHANGELOG.md</code>
@@ -3227,29 +3223,13 @@ and origin evidence; mismatches require regeneration and renewed review.</p>
 and integrated. Extract each version with the external <code>notes</code>
  command:</p>
 
-            <pre><code class="language-bash">vendor/bin/dev-tools changelog notes &lt;version&gt; --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 notes &lt;version&gt; --no-interaction</code></pre>
 
             
     <p>A GitHub Release body contains that version&#039;s notes, preserving Markdown and
 links. Verify reference-style links in isolation and include only definitions
 needed by that body. Do not append authors, raw commits, automation metadata or
 a second generated change list.</p>
-
-            
-    <p>Reconciliation is prepared for review before any remote publication changes.
-Inventory tags, peeled commits, version identities, evidenced publication dates,
-central sections and existing Releases separately. A tag without a Release still
-belongs to history; a Release without a verifiable tag is an unresolved gap.
-Do not infer a publication date from a commit timestamp or today&#039;s date.</p>
-
-            
-    <p>After authorization and integration of canonical history, re-extract notes from
-the integrated SHA. Update divergent bodies through the supported external
-operation or an explicit reviewed GitHub API request. Create missing Releases
-only for verified existing tags. Preserve tag targets, version identities,
-assets and draft/prerelease flags. Creating a Release for an old tag today does
-not establish that GitHub published it historically. Reread every affected
-Release and compare its exact body with the approved extraction.</p>
 
     </section>
 
