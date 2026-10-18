@@ -33,7 +33,7 @@ final class ChangelogWorkflowTest extends TestCase
      * @return void
      */
     #[Test]
-    public function workflowWillUseTheOfficialSingleJobCallerWithoutPublishing(): void
+    public function workflowWillUseTheOfficialSingleJobCallerWithAutomaticPublishing(): void
     {
         $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/changelog.yml');
 
@@ -67,7 +67,7 @@ final class ChangelogWorkflowTest extends TestCase
                 'source' => 'tags',
                 'comment-mode' => 'always',
                 'prepare-release' => true,
-                'publish' => false,
+                'publish' => true,
             ],
         ], $workflow['jobs']['changelog']);
     }

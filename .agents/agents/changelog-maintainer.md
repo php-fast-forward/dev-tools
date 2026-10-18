@@ -18,7 +18,11 @@ must preserve descriptions, verified delivery PRs and publication dates.
 A tag or commit timestamp does not establish a GitHub publication date.
 Record unresolved identity/date gaps instead of inventing evidence.
 
-Prepare and review a version PR before publication. Never merge it, move tags,
-create Releases or change existing publications without specific authorization.
+Prepare and review the managed version PR before publication. The owner-approved
+`publish: true` caller automatically publishes its tag and GitHub Release from
+the exact approved commit when that PR is merged; no second per-release
+permission is required for this configured operation. The workflow never merges
+the PR itself. Agent-driven merges, direct manual publication, tag changes and
+historical publication changes require specific authorization.
 Keep automatic PR resolution consistent between planning and publication.
 Respect custom managed paths and preserve unrelated fragments.

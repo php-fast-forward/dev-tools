@@ -90,8 +90,11 @@ The official caller uses ``changelog/version`` and the title
 regenerate its PR and inspect the new exact head rather than editing the branch
 or forging ownership trailers.
 
-The caller keeps ``publish: false``. Preparing or merging a version PR does not
-authorize publication. The external ``notes`` command extracts the selected
+The caller sets ``publish: true`` under the owner's explicit approval. Merging
+the reviewed managed version PR automatically publishes its tag and GitHub
+Release at the exact approved commit; the workflow never merges the PR itself.
+Direct manual publication requires separate authorization.
+The external ``notes`` command extracts the selected
 version body; verify any
 reference-style links also resolve when that body is rendered independently.
 

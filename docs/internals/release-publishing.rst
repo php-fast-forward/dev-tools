@@ -2,7 +2,7 @@ Release and Publishing Workflow
 ===============================
 
 Fast Forward Changelog owns fragment validation, version planning, central
-history and optional tag/Release publication. DevTools delegates to that external
+history and automatic tag/Release publication. DevTools delegates to that external
 package.
 
 Version PR and authorization
@@ -18,13 +18,14 @@ Version PR and authorization
    or fake its transaction evidence. Let automation regenerate after base moves.
 4. Revalidate reviews, unresolved threads, mergeability and checks before any
    separately authorized merge. Green checks do not grant merge authority.
-5. Publication is disabled by ``publish: false`` during adoption. Merging a
-   version PR does not create a tag or GitHub Release under this configuration.
-   Enable publication only through a separately approved workflow change.
+5. Merging the reviewed managed version PR automatically publishes its tag and
+   GitHub Release from the exact approved commit. The owner has explicitly
+   enabled ``publish: true``; this configured operation needs no second
+   per-release permission. The workflow never merges the PR itself.
 
 The caller selects the upstream ``@v0`` channel with the official README
-configuration unchanged: ``main``, historical source ``tags``, feedback
-``always``, release preparation enabled and publication disabled. The external
+configuration plus the owner-approved ``publish: true`` override: ``main``,
+historical source ``tags``, feedback ``always`` and release preparation enabled. The external
 defaults provide the Ubuntu runner and GitHub token. Local Changelog execution
 is fixed to 0.2.0 through CPX and PHP 8.5, without changing the consumer PHP 8.3
 requirement. The workflow uses Docker on Linux with Bash and Git instead of the
@@ -51,11 +52,13 @@ new comparison definition in section order; adds no ``Unreleased`` section;
 and deletes only accepted fragments. Local PR-origin lookup requires explicit
 ``--resolve-pull-requests`` to match automation's enabled setting.
 
-Before authorized publication, inspect the immutable integrated SHA, tag
-availability, version PR ownership and approved central bytes again. Never move
+Before approving the version PR merge, inspect its exact SHA, tag availability,
+ownership and approved central bytes again. Never move
 or recreate an existing tag to repair notes. A new release needs an approved new
 identity and verified target. The external publication protocol recomputes notes
 and origin evidence; mismatches require regeneration and renewed review.
+Direct manual publication and changes to historical Release bodies require
+separate explicit authorization.
 
 Canonical release notes
 -----------------------

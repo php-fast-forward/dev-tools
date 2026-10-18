@@ -105,10 +105,12 @@ How Changelog and Project Automation Fit In
 -------------------------------------------
 
 - ``.github/workflows/changelog.yml`` calls the external Changelog lifecycle
-  at ``@v0`` using the official README's single-job caller unchanged.
+  at ``@v0`` using the official README's single-job caller with the
+  owner-approved ``publish: true`` override.
 - The external workflow validates contribution fragments and prepares the
   ``changelog/version`` PR titled ``chore: update changelog``. Publication is
-  disabled. The lifecycle uses its default Ubuntu runner and GitHub token.
+  automatic after that reviewed PR is merged. The lifecycle uses its default
+  Ubuntu runner and GitHub token and never merges the PR itself.
 - ``.github/workflows/review.yml`` composes its ready-for-review intake from
   ``.github/actions/review/*`` and posts a deterministic brief that points
   maintainers to the packaged ``review-guardian`` agent and

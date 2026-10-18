@@ -279,11 +279,12 @@ deterministic brief for the dedicated review agent.
 
 The external workflow checks fragments and prepares one managed version PR
 on `changelog/version`, titled `chore: update changelog`. This repository uses
-the official README caller unchanged: `main`, history from tags, feedback on
-every PR, release preparation enabled and `publish: false`. The lifecycle uses
-its default Ubuntu runner and GitHub token. Merging the version PR does not
-publish a tag or GitHub Release while publication is disabled. Enabling
-publication requires a separate reviewed decision; see the
+the official README caller with the explicitly approved `publish: true`
+setting: `main`, history from tags, feedback on every PR and release preparation
+enabled. The lifecycle uses its default Ubuntu runner and GitHub token.
+Merging the reviewed managed version PR automatically publishes its tag and
+GitHub Release from the exact approved commit. The workflow never merges that
+PR itself; see the
 [workflow guide](docs/usage/github-actions.rst).
 
 This repository also keeps role-based project agents in `.agents/agents`. They

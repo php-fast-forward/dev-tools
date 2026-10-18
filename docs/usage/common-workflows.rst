@@ -38,7 +38,8 @@ Most day-to-day work falls into one of the flows below.
    * - Inspect the next release
      - ``cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction``
      - Plans from pending fragments; the managed version PR consolidates them
-       for review. Publication remains disabled during adoption.
+       for review. Merging the reviewed managed version PR automatically
+       publishes its tag and GitHub Release at the approved commit.
    * - Publish local automation defaults into a consumer repository
      - ``composer dev-tools:sync``
      - Updates scripts, copies missing automation assets, and refreshes

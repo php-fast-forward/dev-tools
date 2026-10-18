@@ -175,8 +175,13 @@ The maintenance entry is manual-only compatibility guidance; legacy reusable
 Changelog parsing, fragments, history and release policy belong to the external
 `fast-forward/changelog` package. The workflow caller uses the user-selected
 `php-fast-forward/changelog/.github/workflows/changelog.yml@v0` channel and
-uses the official README caller unchanged: `base-branch: main`, `source: tags`,
-`comment-mode: always`, `prepare-release: true` and `publish: false`.
+uses the official README caller with the owner-approved `publish: true`
+override: `base-branch: main`, `source: tags`, `comment-mode: always` and
+`prepare-release: true`. Merging the reviewed managed version PR automatically
+publishes its tag and GitHub Release at the approved commit. The workflow never
+merges the PR itself. This configured publication needs no second per-release
+permission; manual publication and changes to existing publications still need
+explicit authorization.
 Its defaults select Ubuntu, the GitHub token, `changelog/version` and
 `chore: update changelog`. Contributions add independent `.changelog/*.md`
 fragments; do not create a new `Unreleased` section. Automatic PR-origin lookup
@@ -266,4 +271,4 @@ remains the procedural source of truth.
 - Delegate to `consumer-sync-auditor` when packaged skills, packaged agents, sync assets, wiki, workflow wrappers, local GitHub actions, or consumer bootstrap behavior change.
 - Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
 - Delegate to `review-guardian` when a pull request needs a rigorous findings-first review before or during human review.
-- Delegate to `changelog-maintainer` for external fragment authoring, contribution validation, reviewed version-PR preparation, or release-note export. Tags, Releases and historical publication changes require separate explicit authorization.
+- Delegate to `changelog-maintainer` for external fragment authoring, contribution validation, reviewed version-PR preparation, or release-note export. Automatic publication follows the approved managed-PR merge; manual publication and historical publication changes require separate explicit authorization.

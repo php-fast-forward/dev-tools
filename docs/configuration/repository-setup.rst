@@ -58,7 +58,8 @@ the changelog release flow, to open release-preparation pull requests.
 .. warning::
    Publication jobs need their declared write permissions. The external
    Changelog caller needs permission to open its managed version PR, but
-   keeps tag and Release publication disabled during adoption. Preserve any
+   automatically publishes the tag and Release after its reviewed managed
+   version PR is merged. Preserve any
    reviewed GitHub App/token policy instead of broadening every workflow token.
 
 .. note::

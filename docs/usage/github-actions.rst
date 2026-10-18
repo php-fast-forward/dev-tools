@@ -286,9 +286,10 @@ write credentials; privileged jobs read their trusted base. The selected Linux
 runner needs Docker, Bash and Git. It does not install the consumer Composer
 dependencies or require the consumer to run PHP 8.5.
 
-Both callers use the official README YAML unchanged, with one ``changelog``
+Both callers use the official README YAML with the owner-approved
+``publish: true`` override and one ``changelog``
 job. They set ``base-branch: main``, ``source: tags``, ``comment-mode: always``,
-``prepare-release: true`` and ``publish: false``. The job grants
+``prepare-release: true`` and ``publish: true``. The job grants
 ``contents: write``, ``pull-requests: write``, ``issues: read`` and
 ``statuses: write``; workflow-level permissions remain empty. The external
 defaults select Ubuntu, ``GITHUB_TOKEN``, ``CHANGELOG.md``, ``.changelog``,
@@ -301,10 +302,11 @@ dispatch, the workflow prepares or refreshes a single version PR and consumes
 only its accepted fragments. The single-job caller follows the external
 lifecycle directly, without local post-preparation jobs.
 
-Adoption explicitly sets ``publish: false``. The workflow never merges the
-version PR itself; merging it also does not publish tags or Releases while this
-setting is false. Publication needs separate authorization and a reviewed
-configuration change.
+Merging the reviewed managed version PR automatically publishes its tag and
+GitHub Release from the exact approved commit. This configured operation is
+already authorized and requires no second per-release approval. The workflow
+never merges the version PR itself. Direct manual publication and changes to
+existing Releases require separate explicit authorization.
 
 Require the exact commit status ``Fast Forward Changelog`` on the current PR
 head after a repository pilot confirms it. Managed-head validation uses the external
