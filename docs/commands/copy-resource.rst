@@ -21,8 +21,8 @@ Usage
 
 .. code-block:: bash
 
-   composer copy-resource --source <path> --target <path>
-   composer dev-tools copy-resource -- --source <path> --target <path> [--overwrite] [--dry-run] [--check] [--interactive]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" copy-resource --source <path> --target <path>
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" copy-resource --source <path> --target <path> [--overwrite] [--dry-run] [--check] [--interactive]
    vendor/bin/dev-tools copy-resource --source <path> --target <path> [--overwrite] [--dry-run] [--check] [--interactive]
 
 Options
@@ -64,19 +64,19 @@ Copy a docblock template:
 
 .. code-block:: bash
 
-   composer copy-resource --source resources/docblock --target .docheader
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" copy-resource --source resources/docblock --target .docheader
 
 Copy a directory of resources:
 
 .. code-block:: bash
 
-   composer copy-resource --source resources/git-hooks --target .git/hooks --overwrite
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" copy-resource --source resources/git-hooks --target .git/hooks --overwrite
 
 Copy and overwrite an existing file:
 
 .. code-block:: bash
 
-   composer copy-resource --source .editorconfig --target .editorconfig --overwrite
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" copy-resource --source .editorconfig --target .editorconfig --overwrite
 
 Exit Codes
 ---------

@@ -32,6 +32,7 @@ use Psr\Clock\ClockInterface;
 use Psr\Log\LogLevel;
 use Twig\Environment;
 use Throwable;
+use UnderflowException;
 use FastForward\DevTools\Rector\AddMissingMethodPhpDocRector;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -271,12 +272,18 @@ final class PhpDocCommand extends Command
             'rfc2119' => 'https://datatracker.ietf.org/doc/html/rfc2119',
         ]));
 
+        try {
+            $copyrightHolder = (string) $this->composer->getAuthors(true);
+        } catch (UnderflowException) {
+            $copyrightHolder = '';
+        }
+
         $docHeader = $this->renderer->render('docblock/.docheader', [
             'package' => $this->composer->getName(),
             'description' => rtrim($this->composer->getDescription(), '.'),
             'year' => $this->clock->now()
                 ->format('Y'),
-            'copyright_holder' => (string) $this->composer->getAuthors(true),
+            'copyright_holder' => $copyrightHolder,
             'license' => $this->composer->getLicense(),
             'links' => $links,
         ]);

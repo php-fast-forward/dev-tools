@@ -28,14 +28,12 @@ create them on day one.
    * - ``.editorconfig``
      - ``dev-tools:sync``
      - Copied into the consumer root when missing.
-   * - ``.agents/skills/*``
-     - ``skills`` and ``dev-tools:sync``
-     - Packaged agent skill directories exposed to consumer repositories
-       through symlinks.
-   * - ``.agents/agents/*``
-     - ``agents`` and ``dev-tools:sync``
-     - Packaged project-agent prompt directories exposed to consumer
-       repositories through symlinks.
+   * - ``grumphp.yml``
+     - Git hooks and explicit sync
+     - Copied locally when missing; local GrumPHP takes precedence over CPX.
+   * - ``resources/skills/fast-forward-*``
+     - LLM Skills
+     - Independently installs owned procedural packages.
 
 Generated and Cache Directories
 -------------------------------
@@ -50,10 +48,7 @@ Generated and Cache Directories
   from normal sync and the direct Wiki workflow.
 - ``.github/wiki/`` remains the standalone ``wiki`` command's default target;
   legacy consumers may also use it as an explicitly initialized Wiki submodule.
-- ``.agents/skills/`` contains symlinked packaged skills or consumer-owned
-  directories kept in place by the ``skills`` command.
-- ``.agents/agents/`` contains symlinked packaged project agents or
-  consumer-owned directories kept in place by the ``agents`` command.
+- ``.agents/skills/`` contains skills installed by LLM Skills.
 - ``.dev-tools/cache/phpdoc``, ``.dev-tools/cache/phpunit``,
   ``.dev-tools/cache/rector``, and
   ``.dev-tools/cache/php-cs-fixer/.php-cs-fixer.cache`` store repository-local

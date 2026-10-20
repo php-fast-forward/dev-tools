@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+
 use function Safe\chdir;
 use function Safe\file_put_contents;
 use function Safe\getcwd;

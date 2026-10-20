@@ -31,6 +31,50 @@ final class ReportsWorkflowTest extends TestCase
      * @return void
      */
     #[Test]
+    public function nativeReportsWillResolveOneSelectedTemplateForVersionAndAssetVerification(): void
+    {
+        $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/reports-native.yml');
+        $steps = $workflow['jobs']['reports']['steps'];
+
+        self::assertStringContainsString(
+            'resolve-report-template.php',
+            $this->findStep($steps, 'Verify selected template version')['run'],
+        );
+        self::assertStringContainsString(
+            "getenv('DEV_TOOLS_REPORTS_TEMPLATE')",
+            $this->findStep($steps, 'Verify generated identity assets')['run'],
+        );
+        self::assertSame(
+            './.dev-tools-actions/.github/actions/php/setup-phpdoc',
+            $this->findStep($steps, 'Install signed documentation generator in isolation')['uses'],
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function consumerWrappersWillPinWorkflowAndRuntimeToTheSameRelease(): void
+    {
+        foreach (['tests', 'reports', 'wiki', 'auto-assign', 'label-sync', 'review'] as $name) {
+            $workflow = Yaml::parseFile(__DIR__ . '/../../resources/github-actions/' . $name . '.yml');
+            foreach ($workflow['jobs'] as $job) {
+                if (! isset($job['uses']) || ! str_starts_with($job['uses'], 'php-fast-forward/dev-tools/')) {
+                    continue;
+                }
+
+                self::assertStringEndsWith('@v2.0.0', $job['uses']);
+                if (\in_array($name, ['tests', 'reports', 'wiki'], true)) {
+                    self::assertSame('2.0.0', $job['with']['dev-tools-version']);
+                }
+            }
+        }
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function reportsWorkflowWillDetectGeneratedReportSurfaces(): void
     {
         $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/reports.yml');

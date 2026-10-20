@@ -14,8 +14,8 @@ Usage
 
 .. code-block:: bash
 
-   composer gitattributes
-   composer dev-tools gitattributes
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitattributes
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitattributes
    vendor/bin/dev-tools gitattributes
 
 Options
@@ -44,7 +44,7 @@ Manage export-ignore rules:
 
 .. code-block:: bash
 
-   composer gitattributes
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitattributes
 
 Exit Codes
 ---------

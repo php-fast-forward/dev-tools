@@ -101,7 +101,7 @@ final class SyncCommandTest extends TestCase
             ->will(static function (array $arguments) use (&$detachedCommandLines): void {
                 $detachedCommandLines[] = $arguments[0]->getCommandLine();
             })
-            ->shouldBeCalledTimes(11);
+            ->shouldBeCalledTimes(10);
         $this->processQueue->run($this->output->reveal())
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();
@@ -136,7 +136,7 @@ final class SyncCommandTest extends TestCase
         $this->input->getOption('check')
             ->willReturn(true);
         $this->processQueue->add(Argument::type(Process::class), false, false, Argument::cetera())->shouldBeCalledTimes(
-            10
+            11
         );
         $this->processQueue->add(Argument::type(Process::class), false, true, Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->run($this->output->reveal())
@@ -148,7 +148,7 @@ final class SyncCommandTest extends TestCase
             ->shouldBeCalled();
         $this->logger->log(
             'warning',
-            'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
+            'Skipping wiki during preview/check modes because it does not yet expose non-destructive verification.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
         )->shouldBeCalled();
         $this->logger->error(
@@ -179,7 +179,7 @@ final class SyncCommandTest extends TestCase
             false,
             true,
             Argument::cetera()
-        )->shouldBeCalledTimes(11);
+        )->shouldBeCalledTimes(10);
         $this->processQueue->run(Argument::type('object'))
             ->willReturn(SyncCommand::SUCCESS)
             ->shouldBeCalledOnce();

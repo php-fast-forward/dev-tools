@@ -51,6 +51,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Finder\Finder;
+
 use function is_file;
 use function Safe\glob;
 use function Safe\mkdir;
@@ -247,10 +248,7 @@ final class GitHooksCommandTest extends TestCase
         $this->filesystem->dumpFile(
             '/app/.githooks/pre-commit',
             Argument::that(
-                static fn(string $contents): bool => str_contains(
-                    $contents,
-                    escapeshellarg(DevToolsPathResolver::getPackagePathRelativeToProject('grumphp.yml', '/app'))
-                )
+                static fn(string $contents): bool => str_contains($contents, escapeshellarg('./grumphp.yml'))
             ),
         )->shouldBeCalledOnce();
         $this->filesystem->chmod(Argument::type('string'), 0o755)

@@ -19,21 +19,18 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\GitHubActions;
 
-use FilesystemIterator;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+
 use function Safe\chmod;
 use function Safe\file_get_contents;
 use function Safe\file_put_contents;
+use function Safe\json_encode;
 use function Safe\mkdir;
 use function Safe\realpath;
-use function Safe\rmdir;
-use function Safe\unlink;
 
 #[CoversNothing]
 final class SetupComposerActionTest extends TestCase
@@ -49,6 +46,7 @@ final class SetupComposerActionTest extends TestCase
     {
         $this->workspace = sys_get_temp_dir() . '/setup-composer-action-test-' . bin2hex(random_bytes(4));
         mkdir($this->workspace, 0o777, true);
+        $this->workspace = realpath($this->workspace);
     }
 
     /**
@@ -56,297 +54,201 @@ final class SetupComposerActionTest extends TestCase
      */
     protected function tearDown(): void
     {
-        if (! is_dir($this->workspace)) {
-            return;
-        }
-
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($this->workspace, FilesystemIterator::SKIP_DOTS),
-            RecursiveIteratorIterator::CHILD_FIRST,
-        );
-
-        /** @var SplFileInfo $item */
-        foreach ($iterator as $item) {
-            if ($item->isDir()) {
-                rmdir($item->getPathname());
-
-                continue;
-            }
-
-            unlink($item->getPathname());
-        }
-
-        rmdir($this->workspace);
+        new Filesystem()
+            ->remove($this->workspace);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function detectRuntimeWillPreferTheConsumerLocalInstallation(): void
+    public function detectRuntimeWillUseTheWorkspaceRootForDevToolsSelfTests(): void
     {
-        $this->createInstalledRuntimeFiles($this->workspace);
-        $resolvedWorkspace = realpath($this->workspace);
-
-        $files = $this->createGitHubActionFiles();
-
-        $this->runActionScript('detect-dev-tools-runtime.sh', [
-            'GITHUB_OUTPUT' => $files['output'],
-        ]);
-
-        $outputs = $this->parseKeyValueFile($files['output']);
-
+        $this->createRuntime($this->workspace);
+        $process = $this->runScript('detect-dev-tools-runtime.sh');
+        self::assertTrue($process->isSuccessful(), $process->getErrorOutput());
+        $outputs = $this->readValues('output');
         self::assertSame('local', $outputs['source']);
-        self::assertSame('false', $outputs['needs-fallback']);
-        self::assertSame($resolvedWorkspace . '/vendor/bin/dev-tools', $outputs['binary']);
-        self::assertSame($resolvedWorkspace . '/vendor/autoload.php', $outputs['autoload']);
+        self::assertSame($this->workspace . '/bin/dev-tools', $outputs['binary']);
+        self::assertSame($this->workspace . '/vendor/autoload.php', $outputs['autoload']);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function fallbackInstallShouldNotRequireComposerLockFile(): void
+    public function detectRuntimeWillIgnoreConsumerInstalledDevToolsAndWorkflowSource(): void
     {
-        $actionFile = self::ACTION_PATH . '/action.yml';
-        $actionContents = file_get_contents($actionFile);
-
-        self::assertStringContainsString("require-lock-file: 'false'", $actionContents);
-        self::assertStringNotContainsString("require-lock-file: 'true'", $actionContents);
+        $this->createRuntime($this->workspace, 'example/consumer');
+        $this->createRuntime($this->workspace . '/vendor/fast-forward/dev-tools');
+        $this->createRuntime($this->workspace . '/.dev-tools-actions');
+        $process = $this->runScript('detect-dev-tools-runtime.sh');
+        self::assertTrue($process->isSuccessful(), $process->getErrorOutput());
+        self::assertSame('cpx', $this->readValues('output')['source']);
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function detectRuntimeWillFallbackToTheWorkflowSourceWhenTheConsumerDoesNotInstallDevTools(): void
+    public function consumerRuntimeWillUsePinnedCpxMetadataAndPreserveArguments(): void
     {
-        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
-        $resolvedWorkspace = realpath($this->workspace);
+        $runtime = $this->workspace . '/isolated runtime';
+        $this->createRuntime($runtime);
+        $this->createCpx(json_encode([
+            'binary' => $runtime . '/bin/dev-tools',
+            'autoload' => $runtime . '/vendor/autoload.php',
+        ]));
 
-        $files = $this->createGitHubActionFiles();
-
-        $this->runActionScript('detect-dev-tools-runtime.sh', [
-            'GITHUB_OUTPUT' => $files['output'],
+        $process = $this->runScript('expose-dev-tools-runtime.sh', [
+            'INPUT_DEV_TOOLS_VERSION' => '2.0.1',
         ]);
+        self::assertTrue($process->isSuccessful(), $process->getErrorOutput());
+        $outputs = $this->readValues('output');
+        $environment = $this->readValues('env');
 
-        $outputs = $this->parseKeyValueFile($files['output']);
-
-        self::assertSame('workflow', $outputs['source']);
-        self::assertSame('true', $outputs['needs-fallback']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function detectRuntimeWillPreferTheWorkspaceRootRepositoryCheckout(): void
-    {
-        $this->createRepositoryRuntimeFiles($this->workspace);
-        $resolvedWorkspace = realpath($this->workspace);
-
-        $files = $this->createGitHubActionFiles();
-
-        $this->runActionScript('detect-dev-tools-runtime.sh', [
-            'GITHUB_OUTPUT' => $files['output'],
-        ]);
-
-        $outputs = $this->parseKeyValueFile($files['output']);
-
-        self::assertSame('local', $outputs['source']);
-        self::assertSame('false', $outputs['needs-fallback']);
-        self::assertSame($resolvedWorkspace . '/bin/dev-tools', $outputs['binary']);
-        self::assertSame($resolvedWorkspace . '/vendor/autoload.php', $outputs['autoload']);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function detectRuntimeWillIgnoreAnUnrelatedWorkspaceRepositoryBinary(): void
-    {
-        $this->createRepositoryRuntimeFiles($this->workspace, 'example/consumer');
-        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
-        $resolvedWorkspace = realpath($this->workspace);
-
-        $files = $this->createGitHubActionFiles();
-
-        $this->runActionScript('detect-dev-tools-runtime.sh', [
-            'GITHUB_OUTPUT' => $files['output'],
-        ]);
-
-        $outputs = $this->parseKeyValueFile($files['output']);
-
-        self::assertSame('workflow', $outputs['source']);
-        self::assertSame('true', $outputs['needs-fallback']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function detectRuntimeWillIgnoreAnUnrelatedInstalledBinary(): void
-    {
-        $this->createInstalledRuntimeFiles($this->workspace, 'example/consumer');
-        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
-        $resolvedWorkspace = realpath($this->workspace);
-
-        $files = $this->createGitHubActionFiles();
-
-        $this->runActionScript('detect-dev-tools-runtime.sh', [
-            'GITHUB_OUTPUT' => $files['output'],
-        ]);
-
-        $outputs = $this->parseKeyValueFile($files['output']);
-
-        self::assertSame('workflow', $outputs['source']);
-        self::assertSame('true', $outputs['needs-fallback']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function exposeRuntimeWillPublishWrapperAndEnvironmentVariablesForTheWorkflowFallback(): void
-    {
-        $this->createRepositoryRuntimeFiles($this->workspace . '/.dev-tools-actions');
-        $resolvedWorkspace = realpath($this->workspace);
-
-        $files = $this->createGitHubActionFiles();
-        $runnerTemp = $this->workspace . '/runner-temp';
-        mkdir($runnerTemp, 0o777, true);
-
-        $this->runActionScript('expose-dev-tools-runtime.sh', [
-            'GITHUB_ENV' => $files['env'],
-            'GITHUB_OUTPUT' => $files['output'],
-            'GITHUB_PATH' => $files['path'],
-            'RUNNER_TEMP' => $runnerTemp,
-        ]);
-
-        $outputs = $this->parseKeyValueFile($files['output']);
-        $environment = $this->parseKeyValueFile($files['env']);
-        $pathEntries = array_filter(explode("\n", trim(file_get_contents($files['path']))));
-
-        self::assertSame('workflow', $outputs['source']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/bin/dev-tools', $outputs['binary']);
-        self::assertSame($resolvedWorkspace . '/.dev-tools-actions/vendor/autoload.php', $outputs['autoload']);
-        self::assertSame($outputs['binary'], $environment['DEV_TOOLS_BINARY']);
+        self::assertSame('cpx', $outputs['source']);
+        self::assertSame($runtime . '/bin/dev-tools', $outputs['binary']);
+        self::assertSame($runtime . '/vendor/autoload.php', $outputs['autoload']);
         self::assertSame($outputs['autoload'], $environment['DEV_TOOLS_AUTOLOAD']);
         self::assertSame($outputs['autoload'], $environment['DEV_TOOLS_AUTO_RESOLVE_AUTOLOAD']);
-        self::assertSame('workflow', $environment['DEV_TOOLS_RUNTIME_SOURCE']);
-        self::assertContains($runnerTemp . '/dev-tools-runtime/bin', $pathEntries);
+        self::assertSame($outputs['binary'], $environment['DEV_TOOLS_BINARY']);
+        self::assertSame('cpx', $environment['DEV_TOOLS_RUNTIME_SOURCE']);
+        self::assertStringContainsString(
+            "--skip-local\nfast-forward/dev-tools:2.0.1\nruntime\n--json",
+            file_get_contents($this->workspace . '/cpx-arguments')
+        );
+        self::assertStringContainsString(
+            $this->workspace . '/dev-tools-runtime/bin',
+            file_get_contents($this->workspace . '/path')
+        );
 
-        $wrapper = $outputs['command'];
-        $process = new Process([$wrapper, 'wiki', '--target=.github/wiki'], $this->workspace);
-        $process->mustRun();
-
-        self::assertSame("dev-tools:wiki --target=.github/wiki\n", $process->getOutput());
+        $command = new Process([$outputs['command'], 'wiki', '--target=directory with spaces'], $this->workspace);
+        $command->mustRun();
+        self::assertSame("wiki\n--target=directory with spaces\n", $command->getOutput());
     }
 
     /**
-     * @param string $runtimeRoot
-     * @param string $packageName
-     *
      * @return void
      */
-    private function createInstalledRuntimeFiles(
-        string $runtimeRoot,
-        string $packageName = 'fast-forward/dev-tools'
-    ): void {
-        mkdir($runtimeRoot . '/vendor/bin', 0o777, true);
-        mkdir($runtimeRoot . '/vendor/' . $packageName, 0o777, true);
-        file_put_contents(
-            $runtimeRoot . '/vendor/bin/dev-tools',
-            "#!/usr/bin/env bash\nprintf 'dev-tools:%s\\n' \"\$*\"\n",
-        );
-        chmod($runtimeRoot . '/vendor/bin/dev-tools', 0o755);
-        file_put_contents(
-            $runtimeRoot . '/vendor/' . $packageName . '/composer.json',
-            \sprintf("{\n    \"name\": \"%s\"\n}\n", $packageName)
-        );
-        file_put_contents($runtimeRoot . '/vendor/autoload.php', "<?php\n");
-    }
-
-    /**
-     * @param string $packageName
-     * @param string $runtimeRoot
-     *
-     * @return void
-     */
-    private function createRepositoryRuntimeFiles(
-        string $runtimeRoot,
-        string $packageName = 'fast-forward/dev-tools'
-    ): void {
-        mkdir($runtimeRoot . '/bin', 0o777, true);
-        mkdir($runtimeRoot . '/vendor', 0o777, true);
-        file_put_contents(
-            $runtimeRoot . '/bin/dev-tools',
-            "#!/usr/bin/env bash\nprintf 'dev-tools:%s\\n' \"\$*\"\n",
-        );
-        chmod($runtimeRoot . '/bin/dev-tools', 0o755);
-        file_put_contents($runtimeRoot . '/composer.json', \sprintf("{\n    \"name\": \"%s\"\n}\n", $packageName));
-        file_put_contents($runtimeRoot . '/vendor/autoload.php', "<?php\n");
-    }
-
-    /**
-     * @return array{env: string, output: string, path: string}
-     */
-    private function createGitHubActionFiles(): array
+    #[Test]
+    public function consumerRuntimeWillRejectRelativeMetadataPaths(): void
     {
-        $directory = $this->workspace . '/.github-action-files';
-
-        mkdir($directory, 0o777, true);
-
-        return [
-            'env' => $directory . '/github-env',
-            'output' => $directory . '/github-output',
-            'path' => $directory . '/github-path',
-        ];
+        $this->createCpx('{"binary":"vendor/bin/dev-tools","autoload":"vendor/autoload.php"}');
+        $process = $this->runScript('expose-dev-tools-runtime.sh');
+        self::assertFalse($process->isSuccessful());
+        self::assertStringContainsString('Invalid DevTools runtime path', $process->getErrorOutput());
+        self::assertFileDoesNotExist($this->workspace . '/env');
     }
 
     /**
-     * @param string $script
+     * @return void
+     */
+    #[Test]
+    public function consumerRuntimeWillRejectMissingAutoload(): void
+    {
+        $this->createRuntime($this->workspace . '/isolated');
+        $this->createCpx(json_encode([
+            'binary' => $this->workspace . '/isolated/bin/dev-tools',
+            'autoload' => $this->workspace . '/missing.php',
+        ]));
+        $process = $this->runScript('expose-dev-tools-runtime.sh');
+        self::assertFalse($process->isSuccessful());
+        self::assertStringContainsString('autoload file was not found', $process->getErrorOutput());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function consumerRuntimeWillRejectFloatingVersionsBeforeExecutingCpx(): void
+    {
+        $this->createCpx('{}');
+        $process = $this->runScript('expose-dev-tools-runtime.sh', [
+            'INPUT_DEV_TOOLS_VERSION' => 'dev-main',
+        ]);
+        self::assertFalse($process->isSuccessful());
+        self::assertStringContainsString('must be an exact published version', $process->getErrorOutput());
+        self::assertFileDoesNotExist($this->workspace . '/cpx-arguments');
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function actionWillInstallCpxWithoutInstallingWorkflowSourceDependencies(): void
+    {
+        $contents = file_get_contents(self::ACTION_PATH . '/action.yml');
+        self::assertStringContainsString('tools: cpx', $contents);
+        self::assertStringContainsString("default: '2.0.0'", $contents);
+        self::assertStringNotContainsString('Install fallback DevTools runtime', $contents);
+    }
+
+    /**
+     * @param string $root
+     * @param string $name
+     *
+     * @return void
+     */
+    private function createRuntime(string $root, string $name = 'fast-forward/dev-tools'): void
+    {
+        mkdir($root . '/bin', 0o777, true);
+        mkdir($root . '/vendor', 0o777, true);
+        file_put_contents($root . '/composer.json', json_encode([
+            'name' => $name,
+        ]));
+        file_put_contents($root . '/vendor/autoload.php', '<?php');
+        file_put_contents($root . '/bin/dev-tools', "#!/usr/bin/env bash\nprintf '%s\\n' \"\$@\"\n");
+        chmod($root . '/bin/dev-tools', 0o755);
+    }
+
+    /**
+     * @param string $metadata
+     *
+     * @return void
+     */
+    private function createCpx(string $metadata): void
+    {
+        mkdir($this->workspace . '/mock-bin', 0o777, true);
+        file_put_contents($this->workspace . '/metadata.json', $metadata);
+        file_put_contents(
+            $this->workspace . '/mock-bin/cpx',
+            "#!/usr/bin/env bash\nprintf '%s\\n' \"\$@\" > cpx-arguments\ncat metadata.json\n"
+        );
+        chmod($this->workspace . '/mock-bin/cpx', 0o755);
+    }
+
+    /**
      * @param array<string, string> $environment
-     *
-     * @return void
+     * @param string $script
      */
-    private function runActionScript(string $script, array $environment = []): void
+    private function runScript(string $script, array $environment = []): Process
     {
-        $process = new Process(
-            ['bash', self::ACTION_PATH . '/' . $script],
-            $this->workspace,
-            $environment + [
-                'INPUT_DEV_TOOLS_SOURCE_DIRECTORY' => '.dev-tools-actions',
-            ],
-        );
+        $process = new Process(['bash', self::ACTION_PATH . '/' . $script], $this->workspace, $environment + [
+            'GITHUB_OUTPUT' => $this->workspace . '/output',
+            'GITHUB_ENV' => $this->workspace . '/env',
+            'GITHUB_PATH' => $this->workspace . '/path',
+            'RUNNER_TEMP' => $this->workspace,
+            'PATH' => $this->workspace . '/mock-bin:' . getenv('PATH'),
+        ]);
+        $process->run();
 
-        $process->mustRun();
+        return $process;
     }
 
     /**
-     * @param string $path
+     * @param string $file
      *
      * @return array<string, string>
      */
-    private function parseKeyValueFile(string $path): array
+    private function readValues(string $file): array
     {
-        if (! is_file($path)) {
-            return [];
-        }
-
-        $entries = [];
-
-        foreach (array_filter(explode("\n", trim(file_get_contents($path)))) as $line) {
+        $values = [];
+        foreach (array_filter(explode("\n", trim(file_get_contents($this->workspace . '/' . $file)))) as $line) {
             [$key, $value] = explode('=', $line, 2);
-            $entries[$key] = $value;
+            $values[$key] = $value;
         }
 
-        return $entries;
+        return $values;
     }
 }

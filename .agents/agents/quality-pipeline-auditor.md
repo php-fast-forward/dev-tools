@@ -1,11 +1,11 @@
 ---
 name: quality-pipeline-auditor
 description: Evaluate cross-tool impacts across tests, style, PHPDoc, docs, reports, and dependency analysis.
-primary-skill: github-pull-request
+primary-skill: fast-forward-github-pull-request
 supporting-skills:
-  - phpunit-tests
-  - phpdoc-code-style
-  - sphinx-docs
+  - fast-forward-phpunit-tests
+  - fast-forward-phpdoc-code-style
+  - fast-forward-sphinx-docs
 ---
 
 # quality-pipeline-auditor
@@ -41,10 +41,10 @@ single command in isolation.
 
 ## Primary Skill
 
-- `github-pull-request`
+- `fast-forward-github-pull-request`
 
 ## Supporting Skills
 
-- `phpunit-tests`
-- `phpdoc-code-style`
-- `sphinx-docs`
+- `fast-forward-phpunit-tests`
+- `fast-forward-phpdoc-code-style`
+- `fast-forward-sphinx-docs`

@@ -19,8 +19,8 @@ Usage
 
 .. code-block:: bash
 
-   composer update-composer-json
-   composer dev-tools update-composer-json -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" update-composer-json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" update-composer-json [options]
    vendor/bin/dev-tools update-composer-json [options]
 
 Options
@@ -52,13 +52,13 @@ Update the default composer.json:
 
 .. code-block:: bash
 
-   composer dev-tools update-composer-json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" update-composer-json
 
 Update a specific file:
 
 .. code-block:: bash
 
-   composer dev-tools update-composer-json --file=composer.json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" update-composer-json --file=composer.json
 
 Behavior
 ---------

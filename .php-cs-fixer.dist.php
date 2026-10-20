@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/vendor/autoload.php';
-
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 
 $rules = [

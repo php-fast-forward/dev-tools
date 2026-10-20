@@ -27,8 +27,9 @@ permissions:
 
 jobs:
   tests:
-    uses: php-fast-forward/dev-tools/.github/workflows/tests.yml@main
+    uses: php-fast-forward/dev-tools/.github/workflows/tests.yml@v2.0.0
     with:
+      dev-tools-version: '2.0.0'
       max-outdated: ${{ inputs.max-outdated || -1 }}
       publish-required-statuses: ${{ inputs.publish-required-statuses || false }}
     secrets: inherit

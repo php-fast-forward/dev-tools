@@ -1,7 +1,7 @@
 ---
 name: agents-maintainer
 description: Keep repository AGENTS.md guidance aligned with the current Fast Forward DevTools workflows and packaged agent surfaces.
-primary-skill: create-agentsmd
+primary-skill: fast-forward-create-agentsmd
 supporting-skills: []
 ---
 
@@ -48,7 +48,7 @@ accurate setup, workflow, testing, and contribution instructions.
 
 ## Primary Skill
 
-- `create-agentsmd`
+- `fast-forward-create-agentsmd`
 
 ## Supporting Skills
 

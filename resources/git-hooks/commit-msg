@@ -28,18 +28,23 @@ elif [ -f "${DEVTOOLS_GRUMPHP_CONFIG}" ]; then
 fi
 
 # Run GrumPHP
-if [ -x "vendor/bin/grumphp" ]; then
-  GRUMPHP_COMMAND='vendor/bin/grumphp'
-elif [ -x "vendor/bin/grumphp.phar" ]; then
-  GRUMPHP_COMMAND='vendor/bin/grumphp.phar'
-else
-  GRUMPHP_COMMAND='grumphp'
-fi
-
-if [ -n "${GRUMPHP_COMMAND}" ]; then
-  if [ -n "${GRUMPHP_CONFIG_FILE}" ]; then
-    printf "%s\n" "${DIFF}" | exec "${GRUMPHP_COMMAND}" '--config' "${GRUMPHP_CONFIG_FILE}" 'git:commit-msg' "--git-user=$GIT_USER" "--git-email=$GIT_EMAIL" "$COMMIT_MSG_FILE"
+run_grumphp() {
+  if [ -x "vendor/bin/grumphp" ]; then
+    vendor/bin/grumphp "$@"
+  elif [ -x "vendor/bin/grumphp.phar" ]; then
+    vendor/bin/grumphp.phar "$@"
   else
-    printf "%s\n" "${DIFF}" | exec "${GRUMPHP_COMMAND}" 'git:commit-msg' "--git-user=$GIT_USER" "--git-email=$GIT_EMAIL" "$COMMIT_MSG_FILE"
+    cpx --skip-local phpro/grumphp-shim:2.26.0 "$@"
   fi
+}
+
+if command -v cpx >/dev/null 2>&1 || [ -x vendor/bin/grumphp ] || [ -x vendor/bin/grumphp.phar ]; then
+  if [ -n "${GRUMPHP_CONFIG_FILE}" ]; then
+    printf "%s\n" "${DIFF}" | run_grumphp '--config' "${GRUMPHP_CONFIG_FILE}" 'git:commit-msg' "--git-user=$GIT_USER" "--git-email=$GIT_EMAIL" "$COMMIT_MSG_FILE"
+  else
+    printf "%s\n" "${DIFF}" | run_grumphp 'git:commit-msg' "--git-user=$GIT_USER" "--git-email=$GIT_EMAIL" "$COMMIT_MSG_FILE"
+  fi
+else
+  printf '%s\n' 'DevTools hooks require CPX or a project-local GrumPHP binary.' >&2
+  exit 1
 fi

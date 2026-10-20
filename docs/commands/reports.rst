@@ -21,8 +21,8 @@ Usage
 
 .. code-block:: bash
 
-   composer reports
-   composer reports [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports [options]
    vendor/bin/dev-tools reports -- [options]
 
 Options
@@ -70,25 +70,25 @@ Generate reports with defaults:
 
 .. code-block:: bash
 
-   composer reports
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports
 
 Generate to custom directories:
 
 .. code-block:: bash
 
-   composer reports --target=.dev-tools --coverage=.dev-tools/coverage
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports --target=.dev-tools --coverage=.dev-tools/coverage
 
 Generate reports with a custom metrics directory:
 
 .. code-block:: bash
 
-   composer reports --metrics=.dev-tools/metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports --metrics=.dev-tools/metrics
 
 Generate reports with cache disabled for nested docs and tests:
 
 .. code-block:: bash
 
-   composer reports --no-cache
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports --no-cache
 
 Exit Codes
 ---------

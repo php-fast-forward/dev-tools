@@ -57,6 +57,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use UnderflowException;
 
 #[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
@@ -225,6 +227,32 @@ final class PhpDocCommandTest extends TestCase
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithoutAuthorsWillOmitAuthorHeaderAndRunPhpDocProcesses(): void
+    {
+        $this->composer->getAuthors(true)
+            ->willThrow(new UnderflowException('No author was defined.'));
+        $renderer = new Environment(new FilesystemLoader(DevToolsPathResolver::getResourcesPath()));
+        $this->renderer->render('docblock/.docheader', Argument::that(
+            static fn(array $context): bool => '' === $context['copyright_holder'],
+        ))->will(static fn(array $arguments): string => $renderer->render(...$arguments))
+            ->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, Argument::that(
+            static fn(string $header): bool => ! str_contains($header, '@author')
+                && str_contains($header, 'fast-forward/dev-tools')
+                && str_contains($header, '@license'),
+        ))->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->logger->log(Argument::cetera())->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }

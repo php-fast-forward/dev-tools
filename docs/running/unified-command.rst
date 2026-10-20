@@ -4,7 +4,7 @@ The Unified Command
 The default command of the local application is ``standards``. In practice,
 that means the following entry points all reach the same orchestration flow:
 
-- ``composer dev-tools``
+- ``cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards``
 - ``vendor/bin/dev-tools``
 - ``vendor/bin/dev-tools standards``
 
@@ -28,7 +28,7 @@ To allow the tools to modify files, use one of the following entry points:
 
 .. code-block:: bash
 
-   composer dev-tools:fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards --fix
    vendor/bin/dev-tools --fix
 
 The flag mainly affects ``refactor``, ``phpdoc``, and ``code-style``. The

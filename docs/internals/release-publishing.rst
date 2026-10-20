@@ -43,7 +43,7 @@ Run the project gate against the reviewed candidate:
 .. code-block:: bash
 
    composer install
-   composer dev-tools
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards
 
 When guides or generated output change, inspect reports and wiki artifacts as
 well. Test history-writing Changelog commands only in disposable checkouts,

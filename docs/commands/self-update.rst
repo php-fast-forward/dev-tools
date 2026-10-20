@@ -1,8 +1,9 @@
 self-update
 ===========
 
-``self-update`` updates the installed ``fast-forward/dev-tools`` package
-through Composer.
+``self-update`` refreshes DevTools through its owning package manager.
+Non-global execution runs ``cpx update fast-forward/dev-tools`` without
+changing the consumer's Composer manifest or lockfile.
 
 Usage
 -----
@@ -10,12 +11,15 @@ Usage
 .. code-block:: bash
 
    vendor/bin/dev-tools self-update
-   composer dev-tools:self-update
+
+For CPX consumption, update reviewed exact version selectors explicitly.
+Cache refresh does not change a pinned script, workflow input or skill-source
+ref, so adopting a newer release still requires a reviewed pin change.
 
 When the standalone ``dev-tools`` binary is itself loaded from Composer's
 global installation, ``self-update`` automatically targets
-``composer global update fast-forward/dev-tools``. Local project
-installations update the current project by default.
+``composer global update fast-forward/dev-tools``. Other execution uses the
+CPX cache update route, including execution from a project-local binary.
 
 Global runtime options
 ----------------------
@@ -36,7 +40,7 @@ Composer executions can use Composer's own ``--working-dir``/``-d`` option.
 
 ``--workspace-dir`` (or ``-w``) changes where generated DevTools artifacts and
 caches are written when command-specific paths are omitted. It does not change
-the project root selected by ``--working-dir``. Composer plugin executions can use
+the project root selected by ``--working-dir``. Composer script wrappers can use
 ``FAST_FORWARD_WORKSPACE_DIR=.artifacts`` to apply the same workspace policy.
 Explicit command options such as ``--target``, ``--coverage``, ``--metrics``,
 and ``--cache-dir`` continue to take precedence over the workspace default.

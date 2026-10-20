@@ -24,6 +24,7 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use JsonException;
 use Throwable;
+
 use function Safe\preg_match;
 use function Safe\json_decode;
 

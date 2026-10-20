@@ -223,6 +223,10 @@ final class DevTools extends Application
      */
     private function shouldRenderLogo(InputInterface $input): bool
     {
+        if ('runtime' === $input->getFirstArgument()) {
+            return false;
+        }
+
         if ($this->runtimeEnvironment->isAgentPresent()) {
             return false;
         }

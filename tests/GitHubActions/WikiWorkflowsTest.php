@@ -31,6 +31,29 @@ final class WikiWorkflowsTest extends TestCase
      * @return void
      */
     #[Test]
+    public function directWikiGenerationWillUseTheExposedRuntimeWithoutInstallingWorkflowSource(): void
+    {
+        $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/wiki-direct.yml');
+        $steps = $workflow['jobs']['generate']['steps'];
+        $setup = $this->findStep($steps, 'Setup PHP and dependencies');
+        $generation = $this->findStep($steps, 'Generate API pages')['run'];
+
+        self::assertSame('${{ inputs.dev-tools-version }}', $setup['with']['dev-tools-version']);
+        self::assertStringContainsString('require getenv("DEV_TOOLS_AUTOLOAD")', $generation);
+        self::assertStringContainsString('dev-tools wiki --target=', $generation);
+        self::assertStringNotContainsString('.dev-tools-actions/vendor', $generation);
+        self::assertStringNotContainsString('cp ', $generation);
+        self::assertNotContains('Install the pinned Markdown renderer', array_column($steps, 'name'));
+        self::assertSame(
+            './.dev-tools-actions/.github/actions/php/setup-phpdoc',
+            $this->findStep($steps, 'Install signed documentation generator in isolation')['uses'],
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
     public function wikiPreviewWorkflowWillSkipWikiOperationsWhenNoWikiRepositoryExists(): void
     {
         $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/wiki-preview.yml');

@@ -1,7 +1,7 @@
 ---
 name: issue-editor
 description: Turn short Fast Forward requests into implementation-ready GitHub issues and handle issue lifecycle updates.
-primary-skill: github-issues
+primary-skill: fast-forward-github-issues
 supporting-skills: []
 ---
 
@@ -43,7 +43,7 @@ issues for the current repository.
 
 ## Primary Skill
 
-- `github-issues`
+- `fast-forward-github-issues`
 
 ## Supporting Skills
 
