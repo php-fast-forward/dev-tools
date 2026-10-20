@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.0] - 2026-10-20
+
+### Changed
+
+- Uses the standalone Fast Forward Changelog CLI, upstream skill and workflow for fragment-based release preparation and automatic tag and GitHub Release publication after a validated version pull request is merged, normalizes historical release notes, and removes automatic pull-request conflict resolution. ([#372](https://github.com/php-fast-forward/dev-tools/pull/372))
+- Align the packaged documentation skill with the current code rather than release timing, while preserving migration history and verified installation claims. ([#371](https://github.com/php-fast-forward/dev-tools/pull/371))
+
 ## [1.26.0] - 2026-10-16
 
 ### Added
@@ -486,6 +493,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Normalize workflow PHP extension setup and Git submodule path handling for synced repositories.
 
+[2.0.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.26.0...v2.0.0
 [1.26.0]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.6...v1.26.0
 [1.25.6]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.5...v1.25.6
 [1.25.5]: https://github.com/php-fast-forward/dev-tools/compare/v1.25.4...v1.25.5
