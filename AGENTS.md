@@ -183,8 +183,9 @@ publishes its tag and GitHub Release at the approved commit. The workflow never
 merges the PR itself. This configured publication needs no second per-release
 permission; manual publication and changes to existing publications still need
 explicit authorization.
-Its defaults select Ubuntu, the GitHub token, `changelog/version` and
-`chore: update changelog`. Contributions add independent `.changelog/*.md`
+Its defaults select Ubuntu, the GitHub token and `changelog/version`. The caller
+sets `chore(release): dev-tools {current_version} → {next_version}` as its version
+PR title; the packaged caller uses the consuming repository's name. Contributions add independent `.changelog/*.md`
 fragments; do not create a new `Unreleased` section. Automatic PR-origin lookup
 uses the library's default enabled policy. Test
 history-writing or fragment-consuming operations only in disposable checkouts.
