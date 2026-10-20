@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog commands
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -1793,206 +1793,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Changelog
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-label="Toggle Changelog sections"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-changelog-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-checker.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Checker
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-conflict.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Conflict
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-document.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Document
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-entry.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Entry
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-manager.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Manager
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-parser.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Parser
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-renderer.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Renderer
-        </a>
-
-            </div>
-
-    </li>
-
-                        
-            </ul>
-        </div>
-    </li>
-
-                            <li class="nav-item">
     
     
     
@@ -3331,342 +3131,138 @@
             <h1>Release and Publishing Workflow</h1>
 
             
-    <p>This guide is for maintainers preparing a Fast Forward DevTools release. It
-documents the changelog-driven release flow, the automated GitHub Actions
-sequence that supports it, and the publishing surfaces affected by a merge or
-tag.</p>
+    <p>Fast Forward Changelog owns fragment validation, version planning, central
+history and automatic tag/Release publication. DevTools delegates to that external
+package.</p>
 
-            <section class="section " id="release-surfaces">
-            <h2>Release Surfaces</h2>
-
-            <table>
-                <thead>
-            <tr>
-                            <th>Surface</th>
-                            <th>Purpose</th>
-                            <th>Current behavior</th>
-                    </tr>
-        </thead>
-    <tbody>
-    <tr>
-            <td>GitHub <code>main</code>
-</td>
-            <td>Integration branch for accepted source and documentation changes.</td>
-            <td>Pull requests merge into <code>main</code>
- after required checks pass.</td>
-    </tr>
-    <tr>
-            <td>Git tags</td>
-            <td>Immutable release markers consumed by Composer and maintainers.</td>
-            <td>Created by the changelog release workflow when a prepared release pull request is merged.</td>
-    </tr>
-    <tr>
-            <td>Packagist</td>
-            <td>Composer package discovery for <code>fast-forward/dev-tools</code>
-.</td>
-            <td>Reads repository tags and metadata for installable versions.</td>
-    </tr>
-    <tr>
-            <td>GitHub Pages</td>
-            <td>Published reports, generated docs, and coverage pages.</td>
-            <td>Updated by the reports workflow after changes land on <code>main</code>
-.</td>
-    </tr>
-    <tr>
-            <td>GitHub Wiki</td>
-            <td>Markdown documentation generated by <code>composer dev-tools wiki</code>
-.</td>
-            <td>Updated by the wiki workflow after changes land on <code>main</code>
-.</td>
-    </tr>
-    <tr>
-            <td>GitHub Releases</td>
-            <td>Human-facing release notes and changelog summary.</td>
-            <td>Published by the changelog release workflow from the released changelog section.</td>
-    </tr>
-</tbody>
-</table>
-
-    </section>
-
-            <section class="section " id="versioning-and-branch-flow">
-            <h2>Versioning and Branch Flow</h2>
-
-            
-    <p>Use pull requests for all release-bound changes. The release candidate SHOULD
-land on <code>main</code>
- through a dedicated release-preparation pull request before the
-tag or GitHub release is published.</p>
-
-            
-    <p>The expected flow is:</p>
+            <section class="section " id="version-pr-and-authorization">
+            <h2>Version PR and authorization</h2>
 
             
     
 <ol start="1" type="1">
-    <li value="1">merge feature, bug fix, and documentation pull requests into <code>main</code>
- while keeping <code>Unreleased</code>
- current;</li>
+    <li value="1">Contributions add independent <code>.changelog/*.md</code>
+ fragments and pass the
+external <code>Fast Forward Changelog</code>
+ status plus repository quality gates.</li>
 
-    <li value="2">run the release verification checklist against the current <code>main</code>
-;</li>
+    <li value="2">Accepted contributions merge into <code>main</code>
+. The external lifecycle prepares
+or regenerates the single managed <code>changelog/version</code>
+ PR with title
+<code>chore: update changelog</code>
+.</li>
 
-    <li value="3">trigger the changelog workflow manually through <code>workflow_dispatch</code>
- to infer the next version or accept an explicit version;</li>
+    <li value="3">Review the exact new head, planned version, notes, comparison links and
+consumed fragment deletions. The Bot owns the branch; do not edit it manually
+or fake its transaction evidence. Let automation regenerate after base moves.</li>
 
-    <li value="4">review the release notes preview written to <code>.dev-tools/release-notes.md</code>
- in the release-preparation branch;</li>
+    <li value="4">Revalidate reviews, unresolved threads, mergeability and checks before any
+separately authorized merge. Green checks do not grant merge authority.</li>
 
-    <li value="5">review and merge the release-preparation pull request created from that workflow;</li>
-
-    <li value="6">let the merged release workflow create or update the GitHub release and tag from the released changelog section;</li>
-
-    <li value="7">confirm Packagist, reports, and wiki publication.</li>
+    <li value="5">Merging the reviewed managed version PR automatically publishes its tag and
+GitHub Release from the exact approved commit. The owner has explicitly
+enabled <code>publish: true</code>
+; this configured operation needs no second
+per-release permission. The workflow never merges the PR itself.</li>
 
 </ol>
 
             
-    <p>This means an ordinary feature or bug-fix pull request merged into <code>main</code>
-
-does <strong>not</strong>
- publish a GitHub release by itself. Publication happens only after
-the dedicated <code>release/v...</code>
- pull request created by the changelog workflow
-is merged.</p>
-
-            
-    <p>Do not retag an existing published version. If a release needs correction,
-prepare a follow-up changelog entry, open a new release-preparation pull
-request, and publish a new version tag.</p>
+    <p>The caller selects the upstream <code>@v0</code>
+ channel with the official README
+configuration plus the owner-approved <code>name: Fast Forward Changelog</code>
+ and
+<code>publish: true</code>
+ overrides: <code>main</code>
+,
+historical source <code>tags</code>
+, feedback <code>always</code>
+ and release preparation enabled. The external
+defaults provide the Ubuntu runner and GitHub token. Local Changelog execution
+uses the latest published CLI through CPX and PHP 8.5, without changing the consumer PHP 8.3
+requirement. The workflow uses Docker on Linux with Bash and Git instead of the
+consumer Composer environment. Read <a href="./usage/github-actions.html">GitHub Actions Workflows</a> for caller
+contracts and <a href="./commands/changelog.html">External Fast Forward Changelog</a> for local commands. The Changelog
+status and independent repository tests must be inspected on the exact version
+PR head; successful changelog validation does not prove that other CI ran.</p>
 
     </section>
 
-            <section class="section " id="pre-release-verification">
-            <h2>Pre-Release Verification</h2>
+            <section class="section " id="verification-before-publication">
+            <h2>Verification before publication</h2>
 
             
-    <p>Run the full project gate before tagging:</p>
+    <p>Run the project gate against the reviewed candidate:</p>
 
             <pre><code class="language-bash">composer install
 composer dev-tools</code></pre>
 
             
-    <p>For documentation-heavy releases, also verify the generated reports and wiki
-commands directly:</p>
-
-            <pre><code class="language-bash">composer dev-tools reports
-composer dev-tools wiki</code></pre>
-
-            
-    <p>Before creating the tag, check the repository state:</p>
-
-            <pre><code class="language-bash">git status --short
-git log --oneline origin/main..HEAD</code></pre>
+    <p>When guides or generated output change, inspect reports and wiki artifacts as
+well. Test history-writing Changelog commands only in disposable checkouts,
+recording the resolved runtime version and using a canonical GitHub origin. Confirm that
+consolidation preserves historical notes, dates and correct links; creates one
+new comparison definition in section order; adds no <code>Unreleased</code>
+ section;
+and deletes only accepted fragments. Local PR-origin lookup requires explicit
+<code>--resolve-pull-requests</code>
+ to match automation&#039;s enabled setting.</p>
 
             
-    <p>The working tree should be clean, and the release commit should already be on
-<code>main</code>
-.</p>
+    <p>Before approving the version PR merge, inspect its exact SHA, tag availability,
+ownership and approved central bytes again. Never move
+or recreate an existing tag to repair notes. A new release needs an approved new
+identity and verified target. The external publication protocol recomputes notes
+and origin evidence; mismatches require regeneration and renewed review.
+Direct manual publication and changes to historical Release bodies require
+separate explicit authorization.</p>
 
     </section>
 
-            <section class="section " id="tagging-and-github-release-notes">
-            <h2>Tagging and GitHub Release Notes</h2>
+            <section class="section " id="canonical-release-notes">
+            <h2>Canonical release notes</h2>
 
             
-    <p>The changelog workflow now handles the tag and GitHub release publication after
-the release-preparation pull request is merged. Manual tagging SHOULD only be
-used for recovery or exceptional maintenance.</p>
+    <p><code>CHANGELOG.md</code>
+ is the canonical history after its maintenance PR is approved
+and integrated. Extract each version with the external <code>notes</code>
+ command:</p>
+
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog notes &lt;version&gt; --no-interaction</code></pre>
 
             
-    <p>The same workflow also owns pull-request changelog validation. Regular feature
-and fix pull requests SHOULD expect <code>changelog:check</code>
- to run against the base
-branch and fail when no meaningful <code>Unreleased</code>
- entry is added. Generated
-<code>release/v...</code>
- pull requests are excluded from that validation because the
-release-preparation flow intentionally empties <code>Unreleased</code>
- after promotion.
-Repositories that protect merges SHOULD require the workflow&#039;s aggregate
-changelog context:</p>
-
-            
-
-<ul>
-    <li class="dash">Direct workflow invocation: <code>Changelog Validation</code>
-</li>
-
-    <li class="dash">Reusable workflow wrapper invocation: <code>changelog / Changelog Validation</code>
-</li>
-
-</ul>
-
-            
-    <p>That context fails when a normal pull request does not pass changelog
-validation and succeeds for release-preparation branches where the internal
-validation job is intentionally skipped.</p>
-
-            
-    <p>If maintainers must recover the release manually, create the tag from the
-verified <code>main</code>
- commit:</p>
-
-            <pre><code class="language-bash">git switch main
-git pull --ff-only
-git tag &lt;version&gt;
-git push origin &lt;version&gt;</code></pre>
-
-            
-    <p>When the workflow publishes the GitHub release, the notes come from the
-matching released changelog section. Those notes SHOULD include:</p>
-
-            
-
-<ul>
-    <li class="dash">user-facing changes;</li>
-
-    <li class="dash">breaking changes or migration notes;</li>
-
-    <li class="dash">new or changed commands;</li>
-
-    <li class="dash">documentation and workflow changes that affect consumer repositories;</li>
-
-    <li class="dash">verification performed before the release.</li>
-
-</ul>
+    <p>A GitHub Release body contains that version&#039;s notes, preserving Markdown and
+links. Verify reference-style links in isolation and include only definitions
+needed by that body. Do not append authors, raw commits, automation metadata or
+a second generated change list.</p>
 
     </section>
 
-            <section class="section " id="workflow-permissions">
-            <h2>Workflow Permissions</h2>
+            <section class="section " id="independent-publication-surfaces">
+            <h2>Independent publication surfaces</h2>
 
             
-    <p>The manual release-preparation step depends on GitHub Actions being allowed to
-open pull requests on behalf of the repository workflow token.</p>
-
-            
-    <p>Configure the repository under <strong>Settings</strong>
- &gt; <strong>Actions</strong>
- &gt; <strong>General</strong>
-:</p>
-
-            
-    
-<ol start="1" type="1">
-    <li value="1">enable <strong>Read and write permissions</strong>
- under <strong>Workflow permissions</strong>
-;</li>
-
-    <li value="2">enable <strong>Allow GitHub Actions to create and approve pull requests</strong>
-.</li>
-
-</ol>
-
-            
-    <p>If either control appears disabled or grayed out, the restriction is usually
-coming from repository permissions or organization policy rather than branch
-protection. In that case, an organization or repository administrator MUST
-adjust the policy before the workflow can prepare release pull requests.</p>
-
-            
-    <p>Branch protection matters later, when the generated <code>release/v...</code>
- pull
-request is reviewed and merged, but it does not control whether the workflow is
-allowed to create that pull request in the first place.</p>
-
-    </section>
-
-            <section class="section " id="packagist-publication">
-            <h2>Packagist Publication</h2>
-
-            
-    <p>Packagist uses the Git repository metadata for
-<a href="https://packagist.org/packages/fast-forward/dev-tools">fast-forward/dev-tools</a>.
-After pushing a tag, confirm the version appears on Packagist and that Composer
-can resolve it from a clean consumer project.</p>
+    <p>Packagist discovers <code>fast-forward/dev-tools</code>
+ versions from repository tags.
+After authorized publication, confirm the exact version is available and
+installable from a clean consumer project:</p>
 
             <pre><code class="language-bash">composer show fast-forward/dev-tools --all</code></pre>
 
             
-    <p>If Packagist does not show the version, inspect the package webhook or trigger a
-manual update from the Packagist package page.</p>
-
-    </section>
-
-            <section class="section " id="reports-and-wiki-publication">
-            <h2>Reports and Wiki Publication</h2>
-
-            
-    <p>Reports and wiki publication are tied to <code>main</code>
- workflows, not to the tag
-itself:</p>
+    <p>Reports and generated documentation publish to GitHub Pages from <code>main</code>
+.
+The wiki workflow publishes generated API pages to the separate Wiki repository
+from <code>main</code>
+. These workflows retain their own permissions and ownership rules;
+their successful runs do not authorize a tag or Release. Inspect their resulting
+output when the accepted change affects documentation or reporting.</p>
 
             
-
-<ul>
-    <li class="dash">the reports workflow publishes generated reports to GitHub Pages after
-changes land on <code>main</code>
-;</li>
-
-    <li class="dash">the wiki workflow promotes generated wiki content after changes land on
-<code>main</code>
-;</li>
-
-    <li class="dash">pull request previews remain review artifacts and should not be treated as
-final release output.</li>
-
-</ul>
-
-            
-    <p>When a release contains documentation changes, validate the final Pages and wiki
-output after the merge to <code>main</code>
- and before announcing the release broadly.</p>
-
-    </section>
-
-            <section class="section " id="post-release-validation">
-            <h2>Post-Release Validation</h2>
-
-            
-    <p>After the tag and release notes are published:</p>
-
-            
-    
-<ol start="1" type="1">
-    <li value="1">confirm the tag exists on GitHub;</li>
-
-    <li value="2">confirm the version appears on Packagist;</li>
-
-    <li value="3">install the tagged version in a temporary consumer project;</li>
-
-    <li value="4">verify GitHub Pages reports reflect the release commit;</li>
-
-    <li value="5">verify the GitHub Wiki reflects the release commit;</li>
-
-    <li value="6">check that no release pull request preview artifacts are left active by
-mistake;</li>
-
-    <li value="7">open follow-up issues for any release automation or changelog improvements
-discovered during the process.</li>
-
-</ol>
-
-    </section>
-
-            <section class="section " id="current-automation-and-remaining-manual-checks">
-            <h2>Current Automation and Remaining Manual Checks</h2>
-
-            
-    <p>Maintainers still decide when to prepare a release and when to merge the
-release-preparation pull request. After that merge, the workflow owns the tag
-and GitHub release publication so branch protection rules remain intact.</p>
-
-            
-    <p>Further automation may still help validate Packagist publication, summarize
-post-release checks, or backfill historical changelog sections. Those
-improvements should remain separate from this guide unless the release process
-itself changes again.</p>
+    <p>After authorized publication, confirm the tag target, reread release notes,
+verify Packagist installation and inspect relevant Pages/Wiki output. Report
+prepared, merged and remotely synchronized states separately.</p>
 
     </section>
 

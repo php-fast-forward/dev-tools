@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog commands
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -1793,206 +1793,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Changelog
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-label="Toggle Changelog sections"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-changelog-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-checker.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Checker
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-conflict.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Conflict
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-document.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Document
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-entry.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Entry
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-manager.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Manager
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-parser.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Parser
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-renderer.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Renderer
-        </a>
-
-            </div>
-
-    </li>
-
-                        
-            </ul>
-        </div>
-    </li>
-
-                            <li class="nav-item">
     
     
     
@@ -3347,8 +3147,11 @@
  in <code>.github/actions/</code>
  inside
 this repository. These contain the reusable implementation details for PHP
-setup, project-board transitions, GitHub Pages handling, changelog
-publishing, wiki branch management, and related helpers.</li>
+setup, project-board transitions, GitHub Pages handling, wiki branch
+management, and related helpers. Changelog validation, version preparation
+and publication are implemented by <code>php-fast-forward/changelog</code>
+ and
+invoked through its external reusable workflow.</li>
 
     <li><strong>Reusable workflows</strong>
  in <code>.github/workflows/</code>
@@ -3405,14 +3208,17 @@ secrets: inherit</code></pre>
     <p>This approach ensures that all libraries in the ecosystem benefit from infrastructure updates without requiring manual changes to every repository.</p>
 
             
-    <p>First-party wrappers intentionally follow the reviewed <code>@main</code>
+    <p>DevTools-owned wrappers intentionally follow the reviewed <code>@main</code>
  workflow
 contract so centrally deployed fixes reach consumers. This is an explicit
 shared-infrastructure update policy, distinct from pinning third-party
 actions. A workflow SHA alone would not freeze the existing action-source
 checkout, which also follows DevTools <code>main</code>
 ; a fully immutable migration
-would need to version both surfaces together.</p>
+would need to version both surfaces together. The external Changelog caller
+instead selects its published <code>@v0</code>
+ channel; its update contract is documented
+below.</p>
 
             
     <p>The packaged wrappers currently include:</p>
@@ -3430,9 +3236,6 @@ would need to version both surfaces together.</p>
 </li>
 
     <li><code>changelog.yml</code>
-</li>
-
-    <li><code>auto-resolve-conflicts.yml</code>
 </li>
 
     <li><code>wiki.yml</code>
@@ -3787,186 +3590,85 @@ matrix, effective coverage threshold, and dependency-health threshold.</li>
             <h2>Fast Forward Changelog</h2>
 
             
-    <p>The <code>changelog.yml</code>
- workflow validates pull-request changelog updates and
-automates the release-preparation flow for repositories that use the local
-changelog commands. Consumer repositories typically expose it through the thin
-wrapper in <code>resources/github-actions/changelog.yml</code>
+    <p>The repository and packaged consumer callers delegate to
+<code>php-fast-forward/changelog/.github/workflows/changelog.yml@v0</code>
+.
+The repository&#039;s <code>changelog.yml</code>
+ is an event-driven caller, with no
+<code>workflow_call</code>
+ interface.
+This explicitly selected channel tracks published 0.x releases, including
+potentially breaking minor updates. Local CPX examples select the latest
+published CLI without a version constraint. Inspect its help, resolve the
+workflow channel and review compatibility when performing release operations.
+The external workflow owns fragment checks, feedback, Dependabot notes,
+managed version PRs and optional publication.</p>
+
+            
+    <p>The caller handles <code>pull_request</code>
+ and <code>pull_request_target</code>
+ lifecycle
+events, pushes to <code>main</code>
+ and manual dispatch. Untrusted PR checks run without
+write credentials; privileged jobs read their trusted base. The selected Linux
+runner needs Docker, Bash and Git. It does not install the consumer Composer
+dependencies or require the consumer to run PHP 8.5.</p>
+
+            
+    <p>Both callers use the official README YAML with the owner-approved
+<code>name: Fast Forward Changelog</code>
+ and <code>publish: true</code>
+ overrides and one <code>changelog</code>
+
+job. They set <code>base-branch: main</code>
+, <code>source: tags</code>
+, <code>comment-mode: always</code>
+,
+<code>prepare-release: true</code>
+ and <code>publish: true</code>
+. The job grants
+<code>contents: write</code>
+, <code>pull-requests: write</code>
+, <code>issues: read</code>
+ and
+<code>statuses: write</code>
+; workflow-level permissions remain empty. The external
+defaults select Ubuntu, <code>GITHUB_TOKEN</code>
+, <code>CHANGELOG.md</code>
+, <code>.changelog</code>
+,
+<code>changelog/version</code>
+ and the PR title <code>chore: update changelog</code>
 .</p>
 
             
-    <p><strong>Triggers:</strong>
-
-<em>   Pull Request (opened, synchronized, reopened).
-</em>
-   Pull Request Target (closed) for merged release-preparation pull requests.
-*   Manual trigger (workflow_dispatch).</p>
-
-            
-    <p><strong>Behavior:</strong>
-
-<em>   **Pull Requests**:
-    </em>
-   Resolves the workflow PHP version from <code>composer.lock</code>
- or
-        <code>composer.json</code>
- before installing dependencies.
-    <em>   Uses ``fetch-depth: 0`` so the base branch reference can be compared
-        safely.
-    </em>
-   Fetches the base branch changelog reference.
-    <em>   For same-repository Dependabot pull requests, creates and pushes a
-        minimal ``Unreleased`` changelog entry derived from the pull request
-        title when the branch has not added one yet.
-    </em>
-   Runs <code>dev-tools changelog:check -- --against=&lt;base-ref&gt;</code>
- against the base ref.
-    <em>   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
-    </em>
-   Skips the validation job for pull requests whose head branch matches the configured <code>release-branch-prefix</code>
-, because release-preparation branches intentionally leave <code>Unreleased</code>
- empty after promotion.
-    <em>   Publishes the aggregate changelog check for every active pull request.
-        Direct workflow invocation uses ``Changelog Validation``; reusable
-        workflow consumers typically expose it namespaced as
-        ``changelog / Changelog Validation``. This is the branch-protection-safe
-        context to require: it fails when normal changelog validation fails and
-        succeeds for release-preparation branches where validation is
-        intentionally skipped.
-    </em>
-   Appends a run summary with the compared base ref and changelog file.
-<em>   **Manual Release Preparation**:
-    </em>
-   Checks out the repository default branch with full history.
-    <em>   Resolves the next version from ``Unreleased`` unless a version input is provided.
-    </em>
-   Promotes <code>Unreleased</code>
- into the selected version with the current UTC release date.
-    <em>   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
-        ``dev-tools changelog:show -- &lt;version&gt;``.
-    </em>
-   Opens or updates a release-preparation pull request instead of committing directly to <code>main</code>
-.
-    <em>   Dispatches ``tests.yml`` for the release branch with required-status
-        mirroring enabled, because release branches are written by the workflow
-        token and do not receive ordinary ``pull_request`` test runs
-        automatically.
-    </em>
-   Appends a run summary with the resolved version, version source, and pull-request URL.
-    <em>   Requires repository Actions permissions that allow the workflow token
-        to create pull requests and dispatch workflows.
-</em>
-   <strong>Merged Release Pull Requests</strong>
-:
-    <em>   Detects merged branches that match the configured release branch prefix.
-    </em>
-   Renders the released changelog section with <code>dev-tools changelog:show -- &lt;version&gt;</code>
-.
-    <em>   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
-    </em>
-   Appends a run summary with the published tag and release URL.
-*   Does <strong>not</strong>
- run for ordinary feature or fix pull requests merged into <code>main</code>
-.</p>
+    <p>Automatic PR-origin lookup uses the external default enabled policy. It
+resolves missing origins from committed fragment bytes and merged PR evidence
+without requiring fragment edits after opening a PR. On base pushes or manual
+dispatch, the workflow prepares or refreshes a single version PR and consumes
+only its accepted fragments. The single-job caller follows the external
+lifecycle directly, without local post-preparation jobs.</p>
 
             
-    <p><strong>Inputs:</strong>
-
-<em>   ``changelog-file``: managed changelog path, default ``CHANGELOG.md``.
-</em>
-   <code>version</code>
-: optional explicit version for manual release preparation.
-*   <code>release-branch-prefix</code>
-: release branch prefix, default <code>release/v</code>
-.</p>
+    <p>Merging the reviewed managed version PR automatically publishes its tag and
+GitHub Release from the exact approved commit. This configured operation is
+already authorized and requires no second per-release approval. The workflow
+never merges the version PR itself. Direct manual publication and changes to
+existing Releases require separate explicit authorization.</p>
 
             
-    <p><strong>Repository prerequisites:</strong>
-
-<em>   Go to **Settings** &gt; **Actions** &gt; **General**.
-</em>
-   Under <strong>Workflow permissions</strong>
-, enable <strong>Read and write permissions</strong>
-.
-<em>   Enable **Allow GitHub Actions to create and approve pull requests**.
-</em>
-   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.
-*   In branch protection, require the changelog workflow&#039;s aggregate context:</p>
-
-            <blockquote>
-
-<ul>
-    <li class="dash">Direct workflow invocation: <code>Changelog Validation</code>
-</li>
-
-    <li class="dash">Reusable workflow wrapper invocation: <code>changelog / Changelog Validation</code>
-</li>
-
-</ul>
-
-    <p>Use this instead of the internal <code>changelog / Validate PR Changelog</code>
- job.
-The internal job is intentionally skipped for release-preparation branches,
-while the aggregate context stays stable for normal and release pull
-requests.</p>
-</blockquote>
+    <p>Require the exact commit status <code>Fast Forward Changelog</code>
+ on the current PR
+head after a repository pilot confirms it. Managed-head validation uses the external
+ownership protocol; a matching branch name alone is not a waiver. Maintainer
+history exceptions must use the library&#039;s verified permission-based mechanism,
+not an editable label alone. Preserve all independent repository test gates.</p>
 
             
-        
-<div class="alert alert-info d-flex align-items-start gap-3" role="alert">
-    <div class="fs-5">
-        <i class="fas fa-sticky-note"></i>
-    </div>
-
-    <article class="mb-0 flex-grow-1">
-        
-    <p>Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the <code>release/v...</code>
- pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.</p>
-
-    </article>
-</div>
-    </section>
-
-            <section class="section " id="fast-forward-predictable-conflict-resolution">
-            <h2>Fast Forward Predictable Conflict Resolution</h2>
-
-            
-    <p>The <code>auto-resolve-conflicts.yml</code>
- workflow scans pull requests after <code>main</code>
-
-moves and after pull request updates. It only attempts an automatic merge when
-the conflicted file list is limited to:</p>
-
-            
-
-<ul>
-    <li><code>.github/wiki</code>
-;</li>
-
-    <li><code>CHANGELOG.md</code>
-.</li>
-
-</ul>
-
-            
-    <p>For legacy <code>.github/wiki</code>
- conflicts, the workflow keeps the pull request side
-of the submodule pointer because that pointer references the preview wiki branch
-that belongs to the pull request. Direct-publication repositories have no such
-pointer. For <code>CHANGELOG.md</code>
- conflicts, it treats the base
-branch changelog as authoritative and merges branch-only <code>Unreleased</code>
- entries
-back into the current top-level <code>Unreleased</code>
- section. That keeps entries in
-the right place even when a release was promoted while the pull request was
-waiting.</p>
-
-            
-    <p>If any other file is conflicted, or if GitHub reports a forked pull request
-branch, the workflow stops and leaves the branch for manual resolution. Each
-run writes a summary explaining which pull requests were resolved, skipped, or
-left untouched.</p>
+    <p>See the selected release&#039;s
+<a href="https://github.com/php-fast-forward/changelog/blob/v0/docs/reusable-lifecycle.md">workflow contracts</a>
+and <a href="./commands/changelog.html">External Fast Forward Changelog</a> for local previews. Inspect generated PR
+ownership, notes, fragment deletions and exact-head statuses before approval.</p>
 
     </section>
 
@@ -4058,16 +3760,6 @@ open pull request.</p>
    Promotes approved pull requests into <code>Ready to Merge</code>
 .
 <em>   Moves merged pull requests and linked issues into ``Merged``.
-</em>
-   Moves all currently <code>Merged</code>
- work into <code>Release Prepared</code>
- when <code>changelog.yml</code>
- opens or updates a release-preparation pull request.
-<em>   Promotes ``Release Prepared`` work into ``Released`` when the
-    release-preparation pull request is merged and the GitHub release is
-    published, and also promotes any remaining ``Merged`` items as a
-    release-publication safety net when the preparation transition did not
-    run.
 </em>
    Uses the built-in workflow token for project updates.</li>
 

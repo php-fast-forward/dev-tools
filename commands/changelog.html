@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
             aria-current="page"            class="nav-link flex-grow-1 px-3 py-1 rounded-2 active small"
         >
-            changelog commands
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -1793,206 +1793,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Changelog
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-label="Toggle Changelog sections"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-changelog-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-checker.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Checker
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-conflict.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Conflict
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-document.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Document
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-entry.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Entry
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-manager.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Manager
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-parser.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Parser
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-renderer.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Renderer
-        </a>
-
-            </div>
-
-    </li>
-
-                        
-            </ul>
-        </div>
-    </li>
-
-                            <li class="nav-item">
     
     
     
@@ -3327,331 +3127,138 @@
                             <div class="row g-4">
                                 <div class="col-12 col-xl-9">
                                     <div class="ff-docs-article bg-body p-4 p-xl-5">
-                                            <section class="section " id="changelog-commands">
-            <h1>changelog commands</h1>
+                                            <section class="section " id="external-fast-forward-changelog">
+            <h1>External Fast Forward Changelog</h1>
 
             
-    <p>Author, validate, infer, promote, and render managed Keep a Changelog
-sections with the local changelog command set.</p>
+    <p>Use the independent
+<a href="https://github.com/php-fast-forward/changelog">Fast Forward Changelog</a>
+package for fragments, version planning, history and publication policy.</p>
 
-            <section class="section " id="description">
-            <h2>Description</h2>
-
-            
-    <p>Fast Forward DevTools ships a focused changelog surface built around the local
-<code>CHANGELOG.md</code>
- file:</p>
+            <section class="section " id="runtime">
+            <h2>Runtime</h2>
 
             
-
-<ul>
-    <li class="dash"><code>changelog:entry</code>
- adds one categorized entry to <code>Unreleased</code>
- or to an
-explicit release section;</li>
-
-    <li class="dash"><code>changelog:check</code>
- verifies that a branch or repository state contains a
-meaningful <code>Unreleased</code>
- change;</li>
-
-    <li class="dash"><code>changelog:next-version</code>
- infers the next semantic version from the current
-<code>Unreleased</code>
- categories;</li>
-
-    <li class="dash"><code>changelog:promote</code>
- publishes <code>Unreleased</code>
- into a dated release section;</li>
-
-    <li class="dash"><code>changelog:show</code>
- renders one published section body for GitHub release
-notes or other automation.</li>
-
-</ul>
+    <p>Run <code>cpx --skip-local fast-forward/changelog</code>
+ from the consumer project.
+Omitting a version constraint selects the latest published release. Inspect its
+help before choosing command options.
+Make CPX available on <code>PATH</code>
+ with PHP 8.5. This isolated tool installation
+does not raise the consumer package&#039;s PHP 8.3 requirement or add Changelog to
+its Composer dependency graph. Consult the
+<a href="https://github.com/laravel/cpx">official CPX setup</a> before installation.</p>
 
             
-    <p>These commands intentionally work on the minimum Keep a Changelog 1.1.0
-structure managed by this repository and by synchronized Fast Forward consumer
-repositories.</p>
+    <p>Inspect the selected runtime before running its commands:</p>
+
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog list --raw
+cpx --skip-local fast-forward/changelog help add
+cpx --skip-local fast-forward/changelog help check
+cpx --skip-local fast-forward/changelog help version</code></pre>
+
+            
+    <p>Use <code>add</code>
+ for authoring, <code>check</code>
+ for contribution validation, <code>status</code>
+ for
+pending/version planning, <code>version</code>
+ for consolidation, and <code>notes</code>
+ for
+release-note extraction. The external package owns these command contracts.</p>
 
     </section>
 
-            <section class="section " id="usage">
-            <h2>Usage</h2>
+            <section class="section " id="contribution-fragments">
+            <h2>Contribution fragments</h2>
 
-            <pre><code class="language-bash">composer changelog:entry &quot;Add changelog automation for release workflows (#28)&quot;
-composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 &quot;Preserve published release sections during backfill (#28)&quot;
-composer changelog:entry --json &quot;Add changelog automation for release workflows (#28)&quot;
+            
+    <p>Each observable change adds one independent <code>.changelog/*.md</code>
+ file. For example:</p>
 
-composer changelog:check
-composer changelog:check --against=origin/main
-composer changelog:check --json
+            <pre><code class="language-markdown">---
+category: fixed
+type: patch
+---
 
-composer changelog:next-version
-composer changelog:next-version --json
+Preserves Markdown links when exporting release notes.</code></pre>
 
-composer changelog:promote 1.3.0
-composer changelog:promote 1.3.0 --date=2026-04-19
-composer changelog:promote 1.3.0 --json
+            
+    <p>Or create it once through the CLI:</p>
 
-composer changelog:show 1.3.0
-composer changelog:show 1.3.0 --json</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog add &quot;Preserves Markdown links when exporting release notes.&quot; --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog check --no-interaction</code></pre>
+
+            
+    <p><code>add</code>
+ creates the fragment directory when necessary and leaves central history
+unchanged. Categories describe the nature of the change; <code>type</code>
+ separately
+records its semantic-version impact. Preserve other contributions&#039; fragments.
+After committing the contribution, validate it against the intended Git base:</p>
+
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog check --since=origin/main --no-interaction</code></pre>
+
+            
+    <p>No new <code>Unreleased</code>
+ section is used. PR metadata may remain absent before a
+PR exists. Automation enables <code>resolve-pull-requests: true</code>
+ consistently for
+planning, preparation, ownership checks and publication. It proves fragment
+origins from committed bytes and merged PR evidence without rewriting fragment
+metadata; no follow-up fragment edit is required after opening a PR. Unknown
+origins receive no invented PR, author or commit reference. Local previews
+require the explicit <code>--resolve-pull-requests</code>
+ option for equivalent lookup.</p>
 
     </section>
 
-            <section class="section " id="options">
-            <h2>Options</h2>
+            <section class="section " id="history-and-release-preparation">
+            <h2>History and release preparation</h2>
 
-            <dl>
-                        <dt><code>changelog:entry</code>
-</dt>
-        
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash"><code>--type=&lt;category&gt;</code>
- for <code>added</code>
-, <code>changed</code>
-, <code>deprecated</code>
-,
-<code>removed</code>
-, <code>fixed</code>
-, or <code>security</code>
-;</li>
-
-    <li class="dash"><code>--release=&lt;version&gt;</code>
- to target a published section instead of
-<code>Unreleased</code>
-;</li>
-
-    <li class="dash"><code>--date=&lt;YYYY-MM-DD&gt;</code>
- when a published section should carry a release
-date immediately;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to work with a changelog file other than
-<code>CHANGELOG.md</code>
-;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:check</code>
-</dt>
-        
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash"><code>--against=&lt;git-ref&gt;</code>
- to compare the current changelog against a base
-branch or commit;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to validate another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:next-version</code>
-</dt>
-        
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash"><code>--current-version=&lt;semver&gt;</code>
- when the current published version should
-be supplied explicitly instead of inferred from the changelog;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to inspect another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:promote</code>
-</dt>
-        
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash">the required version argument;</li>
-
-    <li class="dash"><code>--date=&lt;YYYY-MM-DD&gt;</code>
- to control the published release date;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to promote another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-normal terminal output;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-                                <dt><code>changelog:show</code>
-</dt>
-        
-        <dd>
-    <p>Supports:</p>
-
-
-<ul>
-    <li class="dash">the required version argument;</li>
-
-    <li class="dash"><code>--file=&lt;path&gt;</code>
- to render another changelog path;</li>
-
-    <li class="dash"><code>--json</code>
- to emit a structured machine-readable payload instead of the
-raw release-note text;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- to emit the same structured payload with indentation for
-terminal inspection.</li>
-
-</ul>
-</dd>
-            </dl>
-
-    </section>
-
-            <section class="section " id="behavior">
-            <h2>Behavior</h2>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog status --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog format --dry-run --no-interaction
+cpx --skip-local fast-forward/changelog backfill --dry-run --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog notes &lt;version&gt; --no-interaction</code></pre>
 
             
-
-<ul>
-    <li class="dash"><code>changelog:entry</code>
- creates the managed changelog structure automatically
-when the selected file does not exist yet;</li>
-
-    <li class="dash"><code>changelog:check</code>
- returns a failing exit code when <code>Unreleased</code>
- is empty
-or does not differ from the selected baseline ref;</li>
-
-    <li class="dash"><code>changelog:entry --json</code>
- emits the authoring summary as the
-<code>message</code>
- plus structured context describing the file, category, release,
-optional date, and entry text;</li>
-
-    <li class="dash"><code>changelog:check --json</code>
- emits a deterministic JSON payload with
-<code>status</code>
-, <code>message</code>
-, and <code>context</code>
- keys for automation consumers;</li>
-
-    <li class="dash"><code>changelog:next-version --json</code>
- emits the inferred semantic version
-as the <code>message</code>
- plus structured context describing the inspected changelog
-path and optional current version;</li>
-
-    <li class="dash"><code>changelog:next-version</code>
- prints only the inferred semantic version in text
-mode so workflows can capture it safely in shell variables;</li>
-
-    <li class="dash"><code>changelog:next-version</code>
- uses <code>Removed</code>
- or <code>Deprecated</code>
- entries for a
-major bump, <code>Added</code>
- or <code>Changed</code>
- entries for a minor bump, and otherwise
-falls back to a patch bump;</li>
-
-    <li class="dash"><code>changelog:promote --json</code>
- emits the promotion summary as the
-<code>message</code>
- plus structured context describing the file, version, and
-release date written to the changelog;</li>
-
-    <li class="dash"><code>changelog:promote</code>
- restores an empty <code>Unreleased</code>
- section after
-publishing the requested version;</li>
-
-    <li class="dash"><code>changelog:show</code>
- prints only the release body in text mode so workflows can
-feed it directly into GitHub release notes;</li>
-
-    <li class="dash"><code>changelog:show --json</code>
- emits the rendered release-notes body as the
-<code>message</code>
- plus structured context describing the file, version, and
-release notes content.</li>
-
-</ul>
-
-    </section>
-
-            <section class="section " id="workflow-integration">
-            <h2>Workflow Integration</h2>
-
-            
-    <p>The packaged changelog workflow consumes these commands in two places:</p>
-
-            
-
-<ul>
-    <li class="dash">pull-request validation runs <code>changelog:check</code>
- against the base branch to
-require a meaningful changelog update;</li>
-
-    <li class="dash">Dependabot pull-request validation MAY create one minimal <code>changed</code>
- entry
-from the pull-request title before re-running <code>changelog:check</code>
- so the
-branch keeps a persisted release note without manual intervention;</li>
-
-    <li class="dash">manual release preparation uses <code>changelog:next-version</code>
+    <p>Read <code>help &lt;command&gt;</code>
+ before selecting write options. Test <code>version</code>
  and
-<code>changelog:promote</code>
- to create a release pull request, then
-<code>changelog:show</code>
- to publish the merged section as GitHub release notes.</li>
-
-</ul>
+other history-writing operations only in a disposable checkout: consolidation
+writes <code>CHANGELOG.md</code>
+ and deletes consumed fragments. Use the canonical GitHub
+origin when repository discovery and comparison links depend on it. Review
+introductions, published dates, descriptions, existing link bytes, footer order
+and the single new version link after every rehearsal.</p>
 
             
-    <p>See <a href="./usage/github-actions.html">GitHub Actions Workflows</a> and <a href="./internals/release-publishing.html">Release and Publishing Workflow</a>
-for the workflow-level behavior around those commands.</p>
+    <p>The repository caller selects the external workflow&#039;s <code>@v0</code>
+ channel, which
+tracks published 0.x releases. Local CPX examples select the latest published
+CLI without a version constraint. Resolve the workflow channel and record the
+CLI version used when validating release operations; review their compatibility.
+The official caller uses <code>changelog/version</code>
+ and the title
+<code>chore: update changelog</code>
+. The Bot owns that branch: let automation
+regenerate its PR and inspect the new exact head rather than editing the branch
+or forging ownership trailers.</p>
+
+            
+    <p>The caller sets <code>publish: true</code>
+ under the owner&#039;s explicit approval. Merging
+the reviewed managed version PR automatically publishes its tag and GitHub
+Release at the exact approved commit; the workflow never merges the PR itself.
+Direct manual publication requires separate authorization.
+The external <code>notes</code>
+ command extracts the selected
+version body; verify any
+reference-style links also resolve when that body is rendered independently.</p>
+
+            
+    <p>See <a href="./usage/github-actions.html">GitHub Actions Workflows</a> and
+<a href="./internals/release-publishing.html">Release and Publishing Workflow</a> for automation and approval boundaries.</p>
 
     </section>
 

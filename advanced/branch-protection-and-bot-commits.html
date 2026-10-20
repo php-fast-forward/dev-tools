@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog commands
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -1793,206 +1793,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Changelog
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-label="Toggle Changelog sections"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-changelog-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-checker.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Checker
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-conflict.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Conflict
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-document.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Document
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-entry.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Entry
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-manager.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Manager
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-parser.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Parser
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-renderer.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Renderer
-        </a>
-
-            </div>
-
-    </li>
-
-                        
-            </ul>
-        </div>
-    </li>
-
-                            <li class="nav-item">
     
     
     
@@ -3614,47 +3414,17 @@ Actions and status permissions to <code>none</code>
 .</p>
 
             
-    <p>The predictable-conflict workflow MAY also refresh pull request branches when
-the only conflicts are <code>.github/wiki</code>
- pointer drift and/or <code>CHANGELOG.md</code>
-
-<code>Unreleased</code>
- drift. It keeps pull request wiki preview pointers on the branch
-side and replays branch-only changelog entries into the current base
-<code>Unreleased</code>
- section, which avoids placing new entries under a freshly
-published release after <code>main</code>
- moved. Because those automatic resolutions are
-also pushed with the built-in workflow token, the workflow dispatches
-<code>tests.yml</code>
- for the refreshed branch after a successful push so required test
-statuses can be reported for the new commit.</p>
-
-            
-    <p>Release-preparation pull requests follow the same rule. The changelog workflow
-creates or updates <code>release/v...</code>
- branches with the built-in workflow token,
-so GitHub does not start ordinary <code>pull_request</code>
- test runs for the new release
-commit. After the release pull request exists, the changelog workflow
-dispatches <code>tests.yml</code>
- for the release branch with required-status mirroring
-enabled. The dispatched run publishes the same required <code>Run Tests</code>
- contexts
-for the release PR head, which lets branch protection evaluate the final
-workflow-managed release commit without a maintainer bypass.</p>
-
-            
-    <p>Changelog validation has its own branch-protection-safe aggregate context.
-For direct workflow runs, use <code>Changelog Validation</code>
-. For consumers of the
-reusable workflow wrapper, use the namespaced check name `<code>changelog / Changelog
-Validation`` instead of the internal ``changelog / Validate PR Changelog</code>
-` job.
-The internal validation job is skipped for <code>release/v...</code>
- branches by design, while
-the aggregate job still reports success for release-preparation pull requests and
-failure for normal pull requests whose changelog validation did not pass.</p>
+    <p>The external Changelog workflow owns <code>changelog/version</code>
+ and verifies its signed
+transaction evidence. Branch names alone do not bypass checks. Its exact-head
+commit status is <code>Fast Forward Changelog</code>
+. Confirm the status and all independent
+repository test gates on a pilot generated PR before changing protection.
+The official caller uses <code>GITHUB_TOKEN</code>
+ and the external lifecycle defaults.
+Account for GitHub&#039;s restrictions on subsequent CI runs. Do not treat the
+Changelog status as evidence that independent consumer tests ran; inspect their
+results on the exact version PR head before approval.</p>
 
             
     <p>At a high level, the workflows need permission to read repository contents,
@@ -3723,17 +3493,6 @@ pointer commits, and <code>pull-requests: read</code>
 safely.</p>
 
             
-    <p><code>auto-resolve-conflicts.yml</code>
- keeps <code>contents: write</code>
- so it can push
-predictable conflict-resolution commits, <code>pull-requests: write</code>
- so it can
-inspect pull request state through GitHub tooling, and <code>actions: write</code>
- so it
-can dispatch <code>tests.yml</code>
- after it pushes a bot-authored resolution commit.</p>
-
-            
     <p>The legacy reusable <code>wiki-maintenance.yml</code>
  keeps
 <code>contents: write</code>
@@ -3764,11 +3523,10 @@ to the configured GitHub Project and moved through the delivery pipeline.</p>
 repository variable <code>PROJECT</code>
  so the workflow can resolve the target GitHub
 Project without hardcoding repository-specific board identifiers into the
-packaged workflow itself. Consumer wrappers that call reusable workflows with
-project-board release transitions MUST also grant <code>repository-projects: write</code>
-
-at the caller level; otherwise GitHub rejects the workflow before the release
-automation starts. The workflow derives the owner from
+packaged workflow itself. Consumer wrappers that call reusable project-board
+workflows MUST also grant <code>repository-projects: write</code>
+ at the caller level;
+otherwise GitHub rejects the workflow before its automation starts. The workflow derives the owner from
 <code>github.repository_owner</code>
  and uses the built-in workflow token for the actual
 project mutations. Inside <code>php-fast-forward</code>
@@ -3777,12 +3535,14 @@ workflow MAY fall back to the first organization Project V2 when no explicit
 project number is provided. The reusable project-board helpers now live under
 <code>.github/actions/project-board/*</code>
 , which keeps project-state transitions
-shared across issue, pull-request, review, changelog, and release workflows.
-Consumer changelog wrappers MUST also grant <code>actions: write</code>
- so the reusable
-release-preparation workflow can dispatch <code>tests.yml</code>
- after creating or
-updating a release pull request.</p>
+shared across issue, pull-request and review workflows.
+The external changelog lifecycle requires <code>contents: write</code>
+,
+<code>pull-requests: write</code>
+, <code>issues: read</code>
+ and <code>statuses: write</code>
+ at its caller.
+The official caller contains only the external Changelog job.</p>
 
     </section>
 
@@ -3797,12 +3557,10 @@ does not create repository pointers.</p>
             
     <p>Submodule pointer conflicts happen when <code>main</code>
  and the pull request point to
-different generated wiki commits. The predictable-conflict workflow can resolve
-this automatically when the conflict scope is limited to <code>.github/wiki</code>
- and
-<code>CHANGELOG.md</code>
-. When resolving it manually, rebase the pull request and choose
-the preview wiki commit that belongs to the pull request.</p>
+different generated wiki commits. Legacy consumers should migrate to direct
+Wiki publication or resolve these conflicts manually. For a manual resolution, inspect
+both pointers, rebase the pull request and select the verified preview commit
+that belongs to it.</p>
 
             
     <p>For pull request <code>123</code>

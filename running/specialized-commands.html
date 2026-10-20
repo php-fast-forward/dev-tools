@@ -742,7 +742,7 @@
             href="./commands/changelog.html"
                         class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
         >
-            changelog commands
+            External Fast Forward Changelog
         </a>
 
             </div>
@@ -1793,206 +1793,6 @@
             <div id="sidebar-namespaces-fastforward-devtools-html" class="collapse">
             <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
                                                     <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Changelog
-        </a>
-
-                    <button
-                class="btn btn-sm border-0 bg-transparent text-body-secondary px-2"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-expanded="false"
-                aria-controls="sidebar-namespaces-fastforward-devtools-changelog-html"
-                aria-label="Toggle Changelog sections"
-            >
-                <i class="fas fa-chevron-down small"></i>
-            </button>
-            </div>
-
-            <div id="sidebar-namespaces-fastforward-devtools-changelog-html" class="collapse">
-            <ul class="nav flex-column ms-3 ps-3 border-start gap-1">
-                                                    <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-checker.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Checker
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-conflict.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Conflict
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-document.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Document
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-entry.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Entry
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-manager.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Manager
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-parser.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Parser
-        </a>
-
-            </div>
-
-    </li>
-
-                            <li class="nav-item">
-    
-    
-    
-    
-    
-    
-            
-    
-    
-        
-    <div class="d-flex align-items-center">
-        <a
-            href="namespaces/fastforward-devtools-changelog-renderer.html"
-                        class="nav-link flex-grow-1 px-3 py-1 rounded-2 link-body-emphasis small"
-        >
-            Renderer
-        </a>
-
-            </div>
-
-    </li>
-
-                        
-            </ul>
-        </div>
-    </li>
-
-                            <li class="nav-item">
     
     
     
@@ -3335,60 +3135,24 @@
 <code>standards</code>
  pipeline.</p>
 
-            <section class="section " id="changelog">
-            <h2><code>changelog:*</code>
-</h2>
+            <section class="section " id="external-changelog-cli">
+            <h2>External Changelog CLI</h2>
 
             
-    <p>Manages Keep a Changelog 1.1.0 files and supports the packaged changelog
-workflow.</p>
+    <p>Run the latest published independent Fast Forward Changelog CLI through
+<code>cpx --skip-local</code>
+. CPX and PHP 8.5 must be available on its execution path;
+the consumer&#039;s PHP 8.3 requirement stays unchanged.</p>
 
-            <pre><code class="language-bash">composer changelog:entry --type=added &quot;Add release automation workflow (#28)&quot;
-composer changelog:entry --json &quot;Add release automation workflow (#28)&quot;
-composer changelog:check --against=origin/main
-composer changelog:check --json
-composer changelog:next-version
-composer changelog:next-version --json
-composer changelog:promote 1.3.0 --date=2026-04-19
-composer changelog:promote 1.3.0 --json
-composer changelog:show 1.3.0
-composer changelog:show 1.3.0 --json</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog add &quot;Fixes release-note rendering.&quot; --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog check --no-interaction
+cpx --skip-local fast-forward/changelog status --source=tags --no-interaction</code></pre>
 
             
-    <p>Important details:</p>
-
-            
-
-<ul>
-    <li class="dash"><code>changelog:entry</code>
- creates the changelog file automatically when it does not
-exist yet;</li>
-
-    <li class="dash"><code>--json</code>
- is the standard machine-readable output flag across the local
-DevTools command surface;</li>
-
-    <li class="dash"><code>--pretty-json</code>
- keeps the same structured payload but indents it for easier
-manual inspection in the terminal;</li>
-
-    <li class="dash">when structured output is active, DevTools suppresses progress-heavy nested
-tool output where possible and forwards JSON, quiet, or progress preferences
-to subprocesses that support them;</li>
-
-    <li class="dash"><code>changelog:check</code>
- is the command used by pull-request validation;</li>
-
-    <li class="dash"><code>changelog:next-version</code>
- and <code>changelog:promote</code>
- support the manual
-release-preparation workflow;</li>
-
-    <li class="dash"><code>changelog:show</code>
- keeps its text-mode output as the raw published release
-body used by GitHub Release publication.</li>
-
-</ul>
+    <p>Contributions use independent <code>.changelog/*.md</code>
+ files. Inspect external command
+help for its options and output contracts. See <a href="./commands/changelog.html">External Fast Forward Changelog</a> for
+runtime requirements and release-preview boundaries.</p>
 
     </section>
 

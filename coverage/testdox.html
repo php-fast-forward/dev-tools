@@ -111,78 +111,11 @@
             <li class="success">Folder will contain dot github</li>
             <li class="success">Files will contain gitignore</li>
         </ul>
-        <h2>Changelog Check Command (FastForward\DevTools\Tests\Console\Command\ChangelogCheckCommand)</h2>
-        <ul>
-            <li class="success">Execute will return success when unreleased entries exist</li>
-            <li class="success">Execute will return failure when unreleased entries are missing</li>
-            <li class="success">Execute will log failure context when against reference is provided</li>
-        </ul>
-        <h2>Changelog Document (FastForward\DevTools\Tests\Changelog\Document\ChangelogDocument)</h2>
-        <ul>
-            <li class="success">With release will keep the unreleased section at the top</li>
-            <li class="success">Promote unreleased will merge with an existing published version</li>
-            <li class="success">Document accessors will resolve expected release variants</li>
-            <li class="success">Get latest published release will return null when only unreleased exists</li>
-            <li class="success">With release will replace existing version and insert unreleased at the top</li>
-            <li class="success">Promote unreleased will create published release when document is empty</li>
-            <li class="success">Release helpers will normalize entries and support immutable mutators</li>
-        </ul>
-        <h2>Changelog Entry Command (FastForward\DevTools\Tests\Console\Command\ChangelogEntryCommand)</h2>
-        <ul>
-            <li class="success">Execute will add an unreleased entry</li>
-            <li class="success">Execute will pass published release metadata</li>
-        </ul>
-        <h2>Changelog Entry Type (FastForward\DevTools\Tests\Changelog\Entry\ChangelogEntryType)</h2>
-        <ul>
-            <li class="success">Ordered will return keep a changelog section order</li>
-            <li class="success">From input will normalize supported values</li>
-            <li class="success">From input will reject unsupported values</li>
-        </ul>
-        <h2>Changelog Manager (FastForward\DevTools\Tests\Changelog\Manager\ChangelogManager)</h2>
-        <ul>
-            <li class="success">Add entry will create the managed changelog when needed</li>
-            <li class="success">Add entry will preserve existing release dates when no new date is provided</li>
-            <li class="success">Add entry will update an existing release date when a new one is provided</li>
-            <li class="success">Promote will throw when the unreleased section is empty</li>
-            <li class="success">Promote will persist the published release when unreleased entries exist</li>
-            <li class="success">Infer next version will throw when there are no unreleased entries</li>
-            <li class="success">Infer next version will bump minor versions when added entries exist</li>
-            <li class="success">Infer next version will bump major versions when removed entries exist</li>
-            <li class="success">Infer next version will bump patch versions when only fixes exist</li>
-            <li class="success">Render release notes will return the renderer output for the requested release</li>
-            <li class="success">Render release notes will throw when the requested release does not exist</li>
-        </ul>
-        <h2>Changelog Next Version Command (FastForward\DevTools\Tests\Console\Command\ChangelogNextVersionCommand)</h2>
-        <ul>
-            <li class="success">Execute will write the inferred version to output in plain text mode</li>
-            <li class="success">Execute will log the inferred version when json output is requested</li>
-            <li class="success">Execute will pass the explicit current version to inference in plain text mode</li>
-            <li class="success">Execute will return failure when version inference fails</li>
-        </ul>
-        <h2>Changelog Parser (FastForward\DevTools\Tests\Changelog\Parser\ChangelogParser)</h2>
-        <ul>
-            <li class="success">Parse will extract release sections and entries</li>
-            <li class="success">Parse will return default document for empty contents</li>
-            <li class="success">Parse will return default document when no release headings exist</li>
-            <li class="success">Parse will ignore unsupported lines and deduplicate entries within a section</li>
-            <li class="success">Parse will treat empty category bodies as empty entry lists</li>
-            <li class="success">Extract entries will return empty array when category heading is missing</li>
-        </ul>
-        <h2>Changelog Promote Command (FastForward\DevTools\Tests\Console\Command\ChangelogPromoteCommand)</h2>
-        <ul>
-            <li class="success">Execute will use the current date by default</li>
-            <li class="success">Execute will prefer the explicit date</li>
-            <li class="success">Execute will return failure when promotion fails</li>
-        </ul>
-        <h2>Changelog Show Command (FastForward\DevTools\Tests\Console\Command\ChangelogShowCommand)</h2>
-        <ul>
-            <li class="success">Execute will write release notes to output in plain text mode</li>
-            <li class="success">Execute will log release notes when json output is requested</li>
-            <li class="success">Execute will return failure when release notes cannot be rendered</li>
-        </ul>
         <h2>Changelog Workflow (FastForward\DevTools\Tests\GitHubActions\ChangelogWorkflow)</h2>
         <ul>
-            <li class="success">Prepare release pull request will keep composer plugins enabled for wiki preview refresh</li>
+            <li class="success">Workflow will use the official single job caller with automatic publishing</li>
+            <li class="success">Consumer template will match the repository caller exactly</li>
+            <li class="success">Transient retry will monitor the current changelog workflow name</li>
         </ul>
         <h2>Classifier (FastForward\DevTools\Tests\GitIgnore\Classifier)</h2>
         <ul>
@@ -377,12 +310,6 @@
             <li class="success">Load with missing coverage report will throw runtime exception</li>
             <li class="success">Load with invalid coverage report will throw runtime exception</li>
         </ul>
-        <h2>Dependabot Changelog Entry Message Resolver (FastForward\DevTools\Tests\Changelog\DependabotChangelogEntryMessageResolver)</h2>
-        <ul>
-            <li class="success">Resolve will append the pull request number when the title has no suffix</li>
-            <li class="success">Resolve will preserve an existing pull request suffix</li>
-            <li class="success">Resolve will trim trailing punctuation before appending the suffix</li>
-        </ul>
         <h2>Dependencies Command (FastForward\DevTools\Tests\Console\Command\DependenciesCommand)</h2>
         <ul>
             <li class="success">Execute will return success when preview and analyzers succeed</li>
@@ -417,8 +344,6 @@
             <li class="success">Do run will not render logo when running inside known agent environment</li>
             <li class="success">Do run will not render logo when json option is provided</li>
             <li class="success">Do run will not render logo when pretty json option is provided</li>
-            <li class="success">Do run will not render logo when raw output command is requested with data set #0</li>
-            <li class="success">Do run will not render logo when raw output command is requested with data set #1</li>
             <li class="success">All will return loader commands with preserved keys</li>
             <li class="success">Container factory will return a shared dev tools instance</li>
             <li class="success">Is self update command will use self update command attribute names and aliases</li>
@@ -716,18 +641,6 @@
             <li class="success">It will use configured relative workspace root</li>
             <li class="success">It will use configured absolute workspace root</li>
         </ul>
-        <h2>Markdown Renderer (FastForward\DevTools\Tests\Changelog\Renderer\MarkdownRenderer)</h2>
-        <ul>
-            <li class="success">Render will generate changelog with header and unreleased section</li>
-            <li class="success">Render will include published sections and references</li>
-            <li class="success">Render release body will omit the release heading</li>
-            <li class="success">Render will omit dangling release date separators when date is missing</li>
-            <li class="success">Render will not insert extra blank lines between rendered sections</li>
-            <li class="success">Render will keep only one blank line between an empty unreleased section and the next release</li>
-            <li class="success">Render will omit references when repository url is missing or blank</li>
-            <li class="success">Render will normalize ssh repository urls and trim trailing git suffix</li>
-            <li class="success">Render will omit references when only unreleased section exists</li>
-        </ul>
         <h2>Merger (FastForward\DevTools\Tests\GitAttributes\Merger)</h2>
         <ul>
             <li class="success">Merge will create managed block when file is empty</li>
@@ -914,11 +827,6 @@
             <li class="success">Reports workflow will only verify generated artifacts</li>
             <li class="success">Reports workflow will only comment and summarize generated artifacts</li>
         </ul>
-        <h2>Resolve Predictable Conflicts Action (FastForward\DevTools\Tests\GitHubActions\ResolvePredictableConflictsAction)</h2>
-        <ul>
-            <li class="success">Gitlink resolver will stage the current branch pointer without materializing the submodule checkout</li>
-            <li class="success">Fixture processes will ignore inherited git repository environment</li>
-        </ul>
         <h2>Resolver (FastForward\DevTools\Tests\License\Resolver)</h2>
         <ul>
             <li class="success">Resolve with m i t will return template filename</li>
@@ -1027,23 +935,6 @@
         <h2>Unified Differ (FastForward\DevTools\Tests\Resource\UnifiedDiffer)</h2>
         <ul>
             <li class="success">Diff will return trimmed unified diff output</li>
-        </ul>
-        <h2>Unreleased Changelog Conflict Resolver (FastForward\DevTools\Tests\Changelog\Conflict\UnreleasedChangelogConflictResolver)</h2>
-        <ul>
-            <li class="success">Resolve will preserve both sides of unreleased drift</li>
-            <li class="success">Resolve will keep branch entries in current unreleased after a release moved main</li>
-            <li class="success">Resolve will deduplicate entries from multiple sources</li>
-        </ul>
-        <h2>Unreleased Entry Checker (FastForward\DevTools\Tests\Changelog\Checker\UnreleasedEntryChecker)</h2>
-        <ul>
-            <li class="success">Has pending changes will return false when the file cannot be read</li>
-            <li class="success">Has pending changes will return false when the unreleased section is empty</li>
-            <li class="success">Has pending changes will return true when unreleased section contains entries</li>
-            <li class="success">Has pending changes will compare against baseline reference</li>
-            <li class="success">Has pending changes will return true when baseline does not contain new entries</li>
-            <li class="success">Has pending changes will ignore entries only inherited from the base branch</li>
-            <li class="success">Has pending changes will still detect branch specific entries alongside inherited ones</li>
-            <li class="success">Has pending changes will return true when the baseline cannot be loaded</li>
         </ul>
         <h2>Update Composer Json Command (FastForward\DevTools\Tests\Console\Command\UpdateComposerJsonCommand)</h2>
         <ul>

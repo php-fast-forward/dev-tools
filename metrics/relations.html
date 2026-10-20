@@ -49,7 +49,7 @@
 <div class="page">
     <div class="content content-first">
         <div class="report-details">
-            Created at 2026-10-17 17:52:50        , with PHPMetrics 2.11.0 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
+            Created at 2026-10-20 14:36:37        , with PHPMetrics 2.11.0 (<a href="https://twitter.com/Halleck45">Jean-François Lépine</a>).
         </div>
 
         
@@ -93,7 +93,7 @@
                             <path d="M0 0h24v24H0z" fill="none">
                             <path d="M20 8h-2.81c-.45-.78-1.07-1.45-1.82-1.96L17 4.41 15.59 3l-2.17 2.17C12.96 5.06 12.49 5 12 5c-.49 0-.96.06-1.41.17L8.41 3 7 4.41l1.62 1.63C7.88 6.55 7.26 7.22 6.81 8H4v2h2.09c-.05.33-.09.66-.09 1v1H4v2h2v1c0 .34.04.67.09 1H4v2h2.81c1.04 1.79 2.97 3 5.19 3s4.15-1.21 5.19-3H20v-2h-2.09c.05-.33.09-.66.09-1v-1h2v-2h-2v-1c0-.34-.04-.67-.09-1H20V8zm-6 8h-4v-2h4v2zm0-4h-4v-2h4v2z">
                         </svg>
-                        Violations (103)
+                        Violations (98)
                     </a>
                 </li>
                                     <li>
@@ -1113,16 +1113,6 @@
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\Tests\\GitHubActions\\ResolvePredictableConflictsActionTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\RecursiveDirectoryIterator",
-            "\\RecursiveIteratorIterator",
-            "\\Symfony\\Component\\Process\\Process"
-        ]
-    },
-    {
         "name": "\\FastForward\\DevTools\\Tests\\License\\ResolverTest",
         "size": 3000,
         "relations": [
@@ -1499,29 +1489,6 @@
         "name": "\\Symfony\\Component\\Console\\Output\\StreamOutput",
         "size": 3000,
         "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogPromoteCommandTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\DateTimeImmutable",
-            "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand",
-            "\\RuntimeException",
-            "\\ReflectionMethod"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogPromoteCommand",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Console\\Command\\Command",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\Psr\\Clock\\ClockInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
     },
     {
         "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\CommandAttributeCompatibilityTest",
@@ -1935,27 +1902,6 @@
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogEntryCommandTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand",
-            "\\ReflectionMethod"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogEntryCommand",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Console\\Command\\Command",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
-        ]
-    },
-    {
         "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\TestsCommandTest",
         "size": 3000,
         "relations": [
@@ -2096,28 +2042,6 @@
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogShowCommandTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
-            "\\Prophecy\\Argument",
-            "\\RuntimeException",
-            "\\ReflectionMethod"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogShowCommand",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Console\\Command\\Command",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
-    },
-    {
         "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\GitAttributesCommandTest",
         "size": 3000,
         "relations": [
@@ -2209,49 +2133,6 @@
         ]
     },
     {
-        "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogCheckCommandTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
-            "\\Prophecy\\Argument",
-            "\\ReflectionMethod"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogCheckCommand",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Console\\Command\\Command",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\ChangelogNextVersionCommandTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand",
-            "\\Prophecy\\Argument",
-            "\\RuntimeException",
-            "\\ReflectionMethod"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Console\\Command\\ChangelogNextVersionCommand",
-        "size": 3000,
-        "relations": [
-            "\\Symfony\\Component\\Console\\Command\\Command",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\Symfony\\Component\\Console\\Input\\InputInterface",
-            "\\Symfony\\Component\\Console\\Output\\OutputInterface"
-        ]
-    },
-    {
         "name": "\\FastForward\\DevTools\\Tests\\Console\\Command\\CodeStyleCommandTest",
         "size": 3000,
         "relations": [
@@ -2322,7 +2203,7 @@
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000002b870000000000000000",
+        "name": "\\anonymous@0000000000001fa60000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2343,7 +2224,7 @@
             "\\FastForward\\DevTools\\Console\\Logger\\Processor\\CompositeContextProcessor",
             "\\FastForward\\DevTools\\Console\\Logger\\OutputFormatLogger",
             "\\Prophecy\\Argument",
-            "\\anonymous@0000000000002b870000000000000000",
+            "\\anonymous@0000000000001fa60000000000000000",
             "\\stdClass",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
             "\\FastForward\\DevTools\\Console\\Output\\GithubActionOutput"
@@ -2483,7 +2364,7 @@
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000001c4f0000000000000000",
+        "name": "\\anonymous@00000000000030b60000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2493,27 +2374,22 @@
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000003e6b0000000000000000",
+        "name": "\\anonymous@00000000000032960000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000003f170000000000000000",
+        "name": "\\anonymous@00000000000032c00000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@0000000000003faf0000000000000000",
+        "name": "\\anonymous@00000000000033b80000000000000000",
         "size": 3000,
         "relations": []
     },
     {
-        "name": "\\anonymous@00000000000040360000000000000000",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\anonymous@00000000000040420000000000000000",
+        "name": "\\anonymous@00000000000033c50000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -2524,14 +2400,13 @@
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\Container\\ContainerFactory",
             "\\Prophecy\\Argument",
-            "\\anonymous@0000000000001c4f0000000000000000",
+            "\\anonymous@00000000000030b60000000000000000",
             "\\Symfony\\Component\\Console\\Input\\ArrayInput",
             "\\Symfony\\Component\\Console\\Output\\BufferedOutput",
-            "\\anonymous@0000000000003e6b0000000000000000",
-            "\\anonymous@0000000000003f170000000000000000",
-            "\\anonymous@0000000000003faf0000000000000000",
-            "\\anonymous@00000000000040360000000000000000",
-            "\\anonymous@00000000000040420000000000000000",
+            "\\anonymous@00000000000032960000000000000000",
+            "\\anonymous@00000000000032c00000000000000000",
+            "\\anonymous@00000000000033b80000000000000000",
+            "\\anonymous@00000000000033c50000000000000000",
             "\\FastForward\\DevTools\\Path\\ManagedWorkspace",
             "\\FastForward\\DevTools\\Console\\DevTools",
             "\\ReflectionMethod",
@@ -2648,162 +2523,6 @@
         "size": 3000,
         "relations": [
             "\\FastForward\\DevTools\\Container\\ContainerFactory"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\Entry\\ChangelogEntryTypeTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\Document\\ChangelogDocumentTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\Parser\\ChangelogParserTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParser",
-            "\\ReflectionMethod"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParser",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\Renderer\\MarkdownRendererTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRenderer",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRenderer",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\Manager\\ChangelogManagerTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManager",
-            "\\RuntimeException",
-            "\\Prophecy\\Argument",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManager",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
-            "\\FastForward\\DevTools\\Git\\GitClientInterface",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\RuntimeException",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\Conflict\\UnreleasedChangelogConflictResolverTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\Prophecy\\Argument"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Conflict\\UnreleasedChangelogConflictResolver",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-            "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\DependabotChangelogEntryMessageResolverTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\DependabotChangelogEntryMessageResolver"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\DependabotChangelogEntryMessageResolver",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Tests\\Changelog\\Checker\\UnreleasedEntryCheckerTest",
-        "size": 3000,
-        "relations": [
-            "\\PHPUnit\\Framework\\TestCase",
-            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryChecker",
-            "\\RuntimeException",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogDocument",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease"
-        ]
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryChecker",
-        "size": 3000,
-        "relations": [
-            "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
-            "\\FastForward\\DevTools\\Filesystem\\FilesystemInterface",
-            "\\FastForward\\DevTools\\Git\\GitClientInterface",
-            "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-            "\\FastForward\\DevTools\\Changelog\\Document\\ChangelogRelease",
-            "\\FastForward\\DevTools\\Changelog\\Entry\\ChangelogEntryType"
         ]
     },
     {
@@ -2991,7 +2710,7 @@
         ]
     },
     {
-        "name": "\\anonymous@00000000000036790000000000000000",
+        "name": "\\anonymous@0000000000003c720000000000000000",
         "size": 3000,
         "relations": []
     },
@@ -3012,7 +2731,7 @@
             "\\PHPUnit\\Framework\\TestCase",
             "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoader",
             "\\RuntimeException",
-            "\\anonymous@00000000000036790000000000000000",
+            "\\anonymous@0000000000003c720000000000000000",
             "\\SebastianBergmann\\CodeCoverage\\Filter",
             "\\SebastianBergmann\\CodeCoverage\\CodeCoverage",
             "\\SebastianBergmann\\CodeCoverage\\Data\\ProcessedCodeCoverageData",
@@ -3417,11 +3136,6 @@
         "relations": []
     },
     {
-        "name": "\\FastForward\\DevTools\\Changelog\\Manager\\ChangelogManagerInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
         "name": "\\FastForward\\DevTools\\Console\\Command\\Traits\\LogsCommandResults",
         "size": 3000,
         "relations": [
@@ -3438,11 +3152,6 @@
     },
     {
         "name": "\\FastForward\\DevTools\\PhpUnit\\Coverage\\CoverageSummaryLoaderInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Checker\\UnreleasedEntryCheckerInterface",
         "size": 3000,
         "relations": []
     },
@@ -3494,16 +3203,6 @@
     },
     {
         "name": "\\Symfony\\Component\\Config\\FileLocator",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Parser\\ChangelogParserInterface",
-        "size": 3000,
-        "relations": []
-    },
-    {
-        "name": "\\FastForward\\DevTools\\Changelog\\Renderer\\MarkdownRendererInterface",
         "size": 3000,
         "relations": []
     },
