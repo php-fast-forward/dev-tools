@@ -3617,7 +3617,8 @@ dependencies or require the consumer to run PHP 8.5.</p>
             
     <p>Both callers use the official README YAML with the owner-approved
 <code>name: Fast Forward Changelog</code>
- and <code>publish: true</code>
+, <code>publish: true</code>
+ and <code>version-pr-title</code>
  overrides and one <code>changelog</code>
 
 job. They set <code>base-branch: main</code>
@@ -3637,9 +3638,11 @@ defaults select Ubuntu, <code>GITHUB_TOKEN</code>
 , <code>CHANGELOG.md</code>
 , <code>.changelog</code>
 ,
-<code>changelog/version</code>
- and the PR title <code>chore: update changelog</code>
-.</p>
+and <code>changelog/version</code>
+. The callers explicitly configure
+<code>version-pr-title: &#039;chore: release {current_version} → {next_version}&#039;</code>
+;
+the library substitutes the validated plan&#039;s current and next versions.</p>
 
             
     <p>Automatic PR-origin lookup uses the external default enabled policy. It

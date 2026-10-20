@@ -3347,12 +3347,15 @@ callers using the preview-branch and submodule model.</p>
 at <code>@v0</code>
  using the official README&#039;s single-job caller with the
 owner-approved <code>name: Fast Forward Changelog</code>
- and <code>publish: true</code>
+, <code>publish: true</code>
+ and
+<code>version-pr-title</code>
  overrides.</li>
 
     <li class="dash">The external workflow validates contribution fragments and prepares the
 <code>changelog/version</code>
- PR titled <code>chore: update changelog</code>
+ PR with the configured title
+<code>chore: release {current_version} → {next_version}</code>
 . Publication is
 automatic after that reviewed PR is merged. The lifecycle uses its default
 Ubuntu runner and GitHub token and never merges the PR itself.</li>

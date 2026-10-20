@@ -3150,7 +3150,7 @@ external <code>Fast Forward Changelog</code>
 . The external lifecycle prepares
 or regenerates the single managed <code>changelog/version</code>
  PR with title
-<code>chore: update changelog</code>
+configured as <code>chore: release {current_version} → {next_version}</code>
 .</li>
 
     <li value="3">Review the exact new head, planned version, notes, comparison links and
@@ -3174,6 +3174,7 @@ per-release permission. The workflow never merges the PR itself.</li>
 configuration plus the owner-approved <code>name: Fast Forward Changelog</code>
  and
 <code>publish: true</code>
+ and <code>version-pr-title</code>
  overrides: <code>main</code>
 ,
 historical source <code>tags</code>
