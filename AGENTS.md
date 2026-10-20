@@ -176,15 +176,16 @@ Changelog parsing, fragments, history and release policy belong to the external
 `fast-forward/changelog` package. The workflow caller uses the user-selected
 `php-fast-forward/changelog/.github/workflows/changelog.yml@v0` channel and
 uses the official README caller with the owner-approved
-`name: Fast Forward Changelog` and `publish: true` overrides:
+`name: Fast Forward Changelog`, `publish: true` and
+`version-pr-title: 'chore: release {current_version} → {next_version}'` overrides:
 `base-branch: main`, `source: tags`, `comment-mode: always` and
 `prepare-release: true`. Merging the reviewed managed version PR automatically
 publishes its tag and GitHub Release at the approved commit. The workflow never
 merges the PR itself. This configured publication needs no second per-release
 permission; manual publication and changes to existing publications still need
 explicit authorization.
-Its defaults select Ubuntu, the GitHub token, `changelog/version` and
-`chore: update changelog`. Contributions add independent `.changelog/*.md`
+Its defaults select Ubuntu, the GitHub token and `changelog/version`; the PR
+title is configured above. Contributions add independent `.changelog/*.md`
 fragments; do not create a new `Unreleased` section. Automatic PR-origin lookup
 uses the library's default enabled policy. Test
 history-writing or fragment-consuming operations only in disposable checkouts.

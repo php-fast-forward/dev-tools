@@ -288,13 +288,15 @@ runner needs Docker, Bash and Git. It does not install the consumer Composer
 dependencies or require the consumer to run PHP 8.5.
 
 Both callers use the official README YAML with the owner-approved
-``name: Fast Forward Changelog`` and ``publish: true`` overrides and one ``changelog``
+``name: Fast Forward Changelog``, ``publish: true`` and ``version-pr-title`` overrides and one ``changelog``
 job. They set ``base-branch: main``, ``source: tags``, ``comment-mode: always``,
 ``prepare-release: true`` and ``publish: true``. The job grants
 ``contents: write``, ``pull-requests: write``, ``issues: read`` and
 ``statuses: write``; workflow-level permissions remain empty. The external
 defaults select Ubuntu, ``GITHUB_TOKEN``, ``CHANGELOG.md``, ``.changelog``,
-``changelog/version`` and the PR title ``chore: update changelog``.
+and ``changelog/version``. The callers explicitly configure
+``version-pr-title: 'chore: release {current_version} → {next_version}'``;
+the library substitutes the validated plan's current and next versions.
 
 Automatic PR-origin lookup uses the external default enabled policy. It
 resolves missing origins from committed fragment bytes and merged PR evidence

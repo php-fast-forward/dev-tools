@@ -279,9 +279,10 @@ workflow that reacts when a pull request becomes ready for review and posts a
 deterministic brief for the dedicated review agent.
 
 The external workflow checks fragments and prepares one managed version PR
-on `changelog/version`, titled `chore: update changelog`. This repository uses
+on `changelog/version`, with the configured title
+`chore: release {current_version} → {next_version}`. This repository uses
 the official README caller with the explicitly approved
-`name: Fast Forward Changelog` and `publish: true` settings: `main`, history
+`name: Fast Forward Changelog`, `publish: true` and `version-pr-title` settings: `main`, history
 from tags, feedback on every PR and release preparation
 enabled. The lifecycle uses its default Ubuntu runner and GitHub token.
 Merging the reviewed managed version PR automatically publishes its tag and

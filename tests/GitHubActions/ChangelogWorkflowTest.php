@@ -64,6 +64,7 @@ final class ChangelogWorkflowTest extends TestCase
             'uses' => 'php-fast-forward/changelog/.github/workflows/changelog.yml@v0',
             'with' => [
                 'base-branch' => 'main',
+                'version-pr-title' => 'chore: release {current_version} → {next_version}',
                 'source' => 'tags',
                 'comment-mode' => 'always',
                 'prepare-release' => true,
