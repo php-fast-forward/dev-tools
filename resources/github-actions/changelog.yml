@@ -28,6 +28,7 @@ jobs:
 
     with:
       base-branch: main
+      version-pr-title: 'chore: release {current_version} → {next_version}'
       source: tags
       version-pr-title: 'chore(release): ${{ github.repository }} v{current_version} → v{next_version}'
       comment-mode: always
