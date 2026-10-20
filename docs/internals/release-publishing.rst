@@ -12,7 +12,7 @@ Version PR and authorization
    external ``Fast Forward Changelog`` status plus repository quality gates.
 2. Accepted contributions merge into ``main``. The external lifecycle prepares
    or regenerates the single managed ``changelog/version`` PR with title
-   configured as ``chore: release {current_version} → {next_version}``.
+   configured as ``chore(release): fast-forward/dev-tools v{current_version} → v{next_version}``.
 3. Review the exact new head, planned version, notes, comparison links and
    consumed fragment deletions. The Bot owns the branch; do not edit it manually
    or fake its transaction evidence. Let automation regenerate after base moves.

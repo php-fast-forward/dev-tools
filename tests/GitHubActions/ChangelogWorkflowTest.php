@@ -24,8 +24,6 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
 
-use function Safe\file_get_contents;
-
 #[CoversNothing]
 final class ChangelogWorkflowTest extends TestCase
 {
@@ -64,8 +62,8 @@ final class ChangelogWorkflowTest extends TestCase
             'uses' => 'php-fast-forward/changelog/.github/workflows/changelog.yml@v0',
             'with' => [
                 'base-branch' => 'main',
-                'version-pr-title' => 'chore: release {current_version} → {next_version}',
                 'source' => 'tags',
+                'version-pr-title' => 'chore(release): fast-forward/dev-tools v{current_version} → v{next_version}',
                 'comment-mode' => 'always',
                 'prepare-release' => true,
                 'publish' => true,
@@ -73,16 +71,20 @@ final class ChangelogWorkflowTest extends TestCase
         ], $workflow['jobs']['changelog']);
     }
 
-    /**
-     * @return void
-     */
+    /** Confirms identical lifecycle settings with an independent consuming repository identity in the title. */
     #[Test]
-    public function consumerTemplateWillMatchTheRepositoryCallerExactly(): void
+    public function consumerTemplateWillMatchTheLifecycleWithItsOwnRepositoryName(): void
     {
+        $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/changelog.yml');
+        $consumer = Yaml::parseFile(__DIR__ . '/../../resources/github-actions/changelog.yml');
+
         self::assertSame(
-            file_get_contents(__DIR__ . '/../../.github/workflows/changelog.yml'),
-            file_get_contents(__DIR__ . '/../../resources/github-actions/changelog.yml'),
+            'chore(release): ${{ github.repository }} v{current_version} → v{next_version}',
+            $consumer['jobs']['changelog']['with']['version-pr-title'],
         );
+        $workflow['jobs']['changelog']['with']['version-pr-title'] = $consumer['jobs']['changelog']['with']['version-pr-title'];
+
+        self::assertSame($workflow, $consumer);
     }
 
     /**
