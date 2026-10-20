@@ -57,7 +57,7 @@ composer dev-tools:sync          # Sync managed repository assets and packaged a
 - `composer dependencies`: Run dependency analysis workflows
 - `composer metrics`: Generate PhpMetrics reports and related artifacts
 - `composer update-composer-json`: Normalize managed `composer.json` settings
-- `composer changelog:entry|check|next-version|promote|show`: Manage changelog-driven release workflows
+- `cpx --skip-local fast-forward/changelog <arguments...>`: Run the independent changelog CLI with PHP 8.5, outside the consumer Composer dependency graph
 - `composer dev-tools:sync --dry-run|--check|--interactive`: Preview managed-file drift while intentionally skipping wiki, skills, and agents
 
 ## Testing Instructions
@@ -172,6 +172,23 @@ read-only generation on pull requests and direct publication from `main`.
 The maintenance entry is manual-only compatibility guidance; legacy reusable
 `wiki-preview.yml` and `wiki-maintenance.yml` remain for unmigrated callers.
 
+Changelog parsing, fragments, history and release policy belong to the external
+`fast-forward/changelog` package. The workflow caller uses the user-selected
+`php-fast-forward/changelog/.github/workflows/changelog.yml@v0` channel and
+uses the official README caller with the owner-approved
+`name: Fast Forward Changelog` and `publish: true` overrides:
+`base-branch: main`, `source: tags`, `comment-mode: always` and
+`prepare-release: true`. Merging the reviewed managed version PR automatically
+publishes its tag and GitHub Release at the approved commit. The workflow never
+merges the PR itself. This configured publication needs no second per-release
+permission; manual publication and changes to existing publications still need
+explicit authorization.
+Its defaults select Ubuntu, the GitHub token, `changelog/version` and
+`chore: update changelog`. Contributions add independent `.changelog/*.md`
+fragments; do not create a new `Unreleased` section. Automatic PR-origin lookup
+uses the library's default enabled policy. Test
+history-writing or fragment-consuming operations only in disposable checkouts.
+
 **Package Details:**
 
 - Type: `composer-plugin`
@@ -204,7 +221,8 @@ composer dev-tools
 - `docs/commands/`: command-specific behavior and option details
 - `docs/usage/` and `docs/internals/`: workflow, reporting, release, and implementation notes
 - `.github/workflows/`: CI and release automation truth, especially `tests.yml`, `reports.yml`, `review.yml`, `wiki.yml`, `wiki-direct.yml`, `changelog.yml`, `auto-assign.yml`, and `label-sync.yml`
-- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `summary`, `wiki`, `changelog`, and `label-sync`
+- `.github/actions/`: shared workflow building blocks for `php`, `project-board`, `github-pages`, `review`, `summary`, `wiki`, and `label-sync`
+- `docs/commands/changelog.rst`: external runtime requirements, fragment authoring and release-preview boundaries
 - `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
 - [resources/github-actions-optional/test-statuses.md](resources/github-actions-optional/test-statuses.md): explicit opt-in guide for Dependabot status aliases; verify source workflow identity, PHP matrix and protection contexts before adopting the checkout-free template
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
@@ -225,6 +243,8 @@ composer dev-tools
 - **Project Agents**: Packaged role prompts synchronized via `composer agents` and `dev-tools:sync`
 
 ## Skills Usage
+
+- **Changelog**: Use `.agents/skills/fast-forward-changelog/SKILL.md` for external fragment authoring, contribution checks, version-PR review and authorized release maintenance, following the selected release's documentation
 
 - **Creating/Updating Tests**: Use skill `phpunit-tests` in `.agents/skills/phpunit-tests/` for PHPUnit tests with Prophecy
 - **Creating/Refreshing AGENTS.md**: Use skill `create-agentsmd` in `.agents/skills/create-agentsmd/` to generate or update repository-root AGENTS instructions for coding agents
@@ -252,4 +272,4 @@ remains the procedural source of truth.
 - Delegate to `consumer-sync-auditor` when packaged skills, packaged agents, sync assets, wiki, workflow wrappers, local GitHub actions, or consumer bootstrap behavior change.
 - Delegate to `quality-pipeline-auditor` when a task changes command orchestration, verification flow, or quality gates.
 - Delegate to `review-guardian` when a pull request needs a rigorous findings-first review before or during human review.
-- Delegate to `changelog-maintainer` when a task needs changelog authoring, changelog validation for PRs, release promotion, or release-note export.
+- Delegate to `changelog-maintainer` for external fragment authoring, contribution validation, reviewed version-PR preparation, or release-note export. Automatic publication follows the approved managed-PR merge; manual publication and historical publication changes require separate explicit authorization.

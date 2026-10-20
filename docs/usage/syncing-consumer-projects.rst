@@ -105,8 +105,7 @@ That matters most for these cases:
 *   Normal sync generates ``.dev-tools/wiki-generated`` without ``--init``.
     The explicit ``wiki --init`` option remains available for legacy submodule
     users.
-*   ``.github/workflows/auto-assign.yml`` and
-    ``.github/workflows/changelog.yml`` accept a ``project`` input in the
+*   ``.github/workflows/auto-assign.yml`` accepts a ``project`` input in the
     wrapper and also support the ``PROJECT`` repository variable.
 *   The effective project-board contract is ``project`` first, then
     ``PROJECT``, then any reusable-workflow default that applies to

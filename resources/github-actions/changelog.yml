@@ -1,50 +1,34 @@
-name: "Fast Forward Changelog"
+name: Fast Forward Changelog
 
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
-  pull_request_target:
-    types: [closed]
-  workflow_dispatch:
-    inputs:
-      changelog-file:
-        description: Path to the managed changelog file.
-        required: false
-        type: string
-        default: CHANGELOG.md
-      project:
-        description: Optional GitHub Project V2 number used for project-board release transitions.
-        required: false
-        type: string
-        default: ''
-      version:
-        description: Optional version to promote. Leave empty to infer from Unreleased.
-        required: false
-        type: string
-        default: ''
-      release-branch-prefix:
-        description: Prefix used for release-preparation branches.
-        required: false
-        type: string
-        default: release/v
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled]
 
-permissions:
-  actions: write
-  contents: write
-  pull-requests: write
-  repository-projects: write
+  pull_request_target:
+    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review, labeled, unlabeled, closed]
+
+  push:
+    branches: [main]
+
+  workflow_dispatch:
+
+permissions: {}
 
 jobs:
   changelog:
-    if: ${{ github.event_name != 'pull_request_target' || github.event.pull_request.merged == true }}
-    uses: php-fast-forward/dev-tools/.github/workflows/changelog.yml@main
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: read
+      statuses: write
+
+    uses: php-fast-forward/changelog/.github/workflows/changelog.yml@v0
+
     with:
-      changelog-file: ${{ inputs.changelog-file || 'CHANGELOG.md' }}
-      # project: 1
-      #
-      # Consumer repositories SHOULD set this when they want changelog-driven
-      # release transitions to update a specific GitHub Project V2 board.
-      project: ${{ inputs.project || vars.PROJECT || '' }}
-      version: ${{ inputs.version || '' }}
-      release-branch-prefix: ${{ inputs.release-branch-prefix || 'release/v' }}
-    secrets: inherit
+      base-branch: main
+      source: tags
+      comment-mode: always
+      prepare-release: true
+      publish: true

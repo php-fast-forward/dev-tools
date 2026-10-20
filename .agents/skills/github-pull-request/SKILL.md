@@ -27,7 +27,7 @@ Use this skill to take a Fast Forward issue from "ready to implement" to an open
 - Prefer local `git` for checkout, commit, and push.
 - Prefer connector-backed GitHub data for issue and PR context when available.
 - Use `phpunit-tests`, `package-readme`, and `sphinx-docs` when the change clearly affects tests or documentation.
-- Use `changelog-generator` when the implementation introduces a notable user-facing or automation-facing change that SHOULD appear in release notes.
+- Use `fast-forward-changelog` when the implementation introduces a notable user-facing or automation-facing change that SHOULD appear in release notes.
 - Never manually close an issue; rely on `Closes #123` style text in the PR body.
 - Do not block waiting for merge. Open or update the PR, then report status and the next action.
 

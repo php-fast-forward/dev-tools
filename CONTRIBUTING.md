@@ -44,6 +44,7 @@ helpers that already exist in this repository:
 
 - `.agents/skills/github-pull-request/` for issue-to-branch-to-PR flow
 - `.agents/skills/github-issues/` for issue drafting and updates
+- `.agents/skills/fast-forward-changelog/` for independent changelog fragments
 - `.agents/skills/phpunit-tests/` for focused PHPUnit coverage work
 - `.agents/skills/phpdoc-code-style/` for PHPDoc and repository PHP style
 - `.agents/skills/package-readme/` and `.agents/skills/sphinx-docs/` for
@@ -67,14 +68,24 @@ helpers that already exist in this repository:
 
 ## Changelog Expectations
 
-Notable pull requests are expected to add an entry to `CHANGELOG.md`.
+Notable pull requests add an independent Markdown fragment in `.changelog/`.
+Use the external Fast Forward Changelog CLI with PHP 8.5 and CPX:
 
 Typical flow:
 
 ```bash
-composer changelog:entry --type=changed "Describe the notable change (#123)"
-composer changelog:check --against=origin/main
+cpx --skip-local fast-forward/changelog add "Describe the notable change." --category=changed --no-interaction
+cpx --skip-local fast-forward/changelog check --no-interaction
 ```
+
+After committing the fragment, compare the contribution with `origin/main`:
+
+```bash
+cpx --skip-local fast-forward/changelog check --since=origin/main --no-interaction
+```
+
+The external workflow resolves verified PR links during consolidation; a
+fragment does not need a follow-up edit after its PR is opened.
 
 ## Pull Request Process
 

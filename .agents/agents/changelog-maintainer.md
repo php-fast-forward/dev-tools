@@ -1,61 +1,28 @@
 ---
 name: changelog-maintainer
-description: Maintain Keep a Changelog entries, release promotions, and release-note exports for Fast Forward repositories.
-primary-skill: changelog-generator
+description: Maintain fragment-based changelog contributions and verified release history through the external Fast Forward Changelog package.
+primary-skill: fast-forward-changelog
 supporting-skills:
   - github-issues
 ---
 
 # changelog-maintainer
 
-## Purpose
+Use [fast-forward-changelog](../skills/fast-forward-changelog/SKILL.md) as the
+procedural authority. Use the external package's CLI and reusable workflow;
+it owns parsing, rendering, planning and validation. DevTools distributes the
+consumer caller and upstream skill instructions.
 
-Keep repository changelog files accurate, human-readable, and ready for release
-automation using the local changelog workflow.
+Add independent fragments for ordinary contributions. Historical maintenance
+must preserve descriptions, verified delivery PRs and publication dates.
+A tag or commit timestamp does not establish a GitHub publication date.
+Record unresolved identity/date gaps instead of inventing evidence.
 
-## Responsibilities
-
-- Add or adjust categorized changelog entries in `Unreleased` or a published
-  release.
-- Reconstruct missing release history from Git tags when a repository has no
-  changelog yet or has undocumented published versions.
-- Capture each documented tag's creation date and persist it as the release
-  date while backfilling historical versions.
-- Order documented releases by semantic version, not by lexical string
-  comparison, so versions like `1.10.0` and `1.11.0` remain above `1.9.0` and
-  `1.1.0`.
-- Validate whether a branch or pull request added meaningful changelog content.
-- Infer the next semantic version from changelog content when preparing a
-  release.
-- Promote `Unreleased` entries into a published version and export release
-  notes for publishing flows.
-- Respect alternate changelog file paths when a repository does not use the
-  default `CHANGELOG.md`.
-
-## Use When
-
-- A request asks to add changelog notes for a bug fix, feature, workflow, or
-  release preparation.
-- A pull request or workflow needs changelog validation before merge.
-- A release flow needs version inference, release promotion, or release-note
-  export.
-- A repository adopting DevTools may need its first managed changelog file.
-- A repository has tags or releases that exist in Git but are not yet present
-  in the changelog.
-
-## Boundaries
-
-- Do not invent release automation beyond the commands and workflows already
-  supported by the repository.
-- Do not replace the procedural guidance in the skill; this agent defines role
-  behavior, not command syntax.
-- Do not assume the changelog file always uses the default filename or lives in
-  the repository root.
-
-## Primary Skill
-
-- `changelog-generator`
-
-## Supporting Skills
-
-- `github-issues`
+Prepare and review the managed version PR before publication. The owner-approved
+`publish: true` caller automatically publishes its tag and GitHub Release from
+the exact approved commit when that PR is merged; no second per-release
+permission is required for this configured operation. The workflow never merges
+the PR itself. Agent-driven merges, direct manual publication, tag changes and
+historical publication changes require specific authorization.
+Keep automatic PR resolution consistent between planning and publication.
+Respect custom managed paths and preserve unrelated fragments.

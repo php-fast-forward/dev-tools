@@ -10,8 +10,10 @@ The automation model separates shared implementations from consumer triggers:
 
 *   **Local composite and JavaScript actions** in ``.github/actions/`` inside
     this repository. These contain the reusable implementation details for PHP
-    setup, project-board transitions, GitHub Pages handling, changelog
-    publishing, wiki branch management, and related helpers.
+    setup, project-board transitions, GitHub Pages handling, wiki branch
+    management, and related helpers. Changelog validation, version preparation
+    and publication are implemented by ``php-fast-forward/changelog`` and
+    invoked through its external reusable workflow.
 *   **Reusable workflows** in ``.github/workflows/`` inside this repository.
     These are the canonical automation entrypoints consumed by Fast Forward
     repositories and wrappers.
@@ -45,12 +47,14 @@ Example of an inherited workflow:
 
 This approach ensures that all libraries in the ecosystem benefit from infrastructure updates without requiring manual changes to every repository.
 
-First-party wrappers intentionally follow the reviewed ``@main`` workflow
+DevTools-owned wrappers intentionally follow the reviewed ``@main`` workflow
 contract so centrally deployed fixes reach consumers. This is an explicit
 shared-infrastructure update policy, distinct from pinning third-party
 actions. A workflow SHA alone would not freeze the existing action-source
 checkout, which also follows DevTools ``main``; a fully immutable migration
-would need to version both surfaces together.
+would need to version both surfaces together. The external Changelog caller
+instead selects its published ``@v0`` channel; its update contract is documented
+below.
 
 The packaged wrappers currently include:
 
@@ -58,7 +62,6 @@ The packaged wrappers currently include:
 *   ``reports.yml``
 *   ``review.yml``
 *   ``changelog.yml``
-*   ``auto-resolve-conflicts.yml``
 *   ``wiki.yml`` for read-only pull-request generation and direct publication from ``main``
 *   ``wiki-maintenance.yml`` as manual-only migration guidance for legacy wrappers
 *   ``auto-assign.yml``
@@ -267,104 +270,55 @@ The ``tests.yml`` workflow provides standard Continuous Integration.
 Fast Forward Changelog
 ----------------------
 
-The ``changelog.yml`` workflow validates pull-request changelog updates and
-automates the release-preparation flow for repositories that use the local
-changelog commands. Consumer repositories typically expose it through the thin
-wrapper in ``resources/github-actions/changelog.yml``.
+The repository and packaged consumer callers delegate to
+``php-fast-forward/changelog/.github/workflows/changelog.yml@v0``.
+The repository's ``changelog.yml`` is an event-driven caller, with no
+``workflow_call`` interface.
+This explicitly selected channel tracks published 0.x releases, including
+potentially breaking minor updates. Local CPX examples select the latest
+published CLI without a version constraint. Inspect its help, resolve the
+workflow channel and review compatibility when performing release operations.
+The external workflow owns fragment checks, feedback, Dependabot notes,
+managed version PRs and optional publication.
 
-**Triggers:**
-*   Pull Request (opened, synchronized, reopened).
-*   Pull Request Target (closed) for merged release-preparation pull requests.
-*   Manual trigger (workflow_dispatch).
+The caller handles ``pull_request`` and ``pull_request_target`` lifecycle
+events, pushes to ``main`` and manual dispatch. Untrusted PR checks run without
+write credentials; privileged jobs read their trusted base. The selected Linux
+runner needs Docker, Bash and Git. It does not install the consumer Composer
+dependencies or require the consumer to run PHP 8.5.
 
-**Behavior:**
-*   **Pull Requests**:
-    *   Resolves the workflow PHP version from ``composer.lock`` or
-        ``composer.json`` before installing dependencies.
-    *   Uses ``fetch-depth: 0`` so the base branch reference can be compared
-        safely.
-    *   Fetches the base branch changelog reference.
-    *   For same-repository Dependabot pull requests, creates and pushes a
-        minimal ``Unreleased`` changelog entry derived from the pull request
-        title when the branch has not added one yet.
-    *   Runs ``dev-tools changelog:check -- --against=<base-ref>`` against the base ref.
-    *   Fails when a normal non-release branch does not add a meaningful ``Unreleased`` change.
-    *   Skips the validation job for pull requests whose head branch matches the configured ``release-branch-prefix``, because release-preparation branches intentionally leave ``Unreleased`` empty after promotion.
-    *   Publishes the aggregate changelog check for every active pull request.
-        Direct workflow invocation uses ``Changelog Validation``; reusable
-        workflow consumers typically expose it namespaced as
-        ``changelog / Changelog Validation``. This is the branch-protection-safe
-        context to require: it fails when normal changelog validation fails and
-        succeeds for release-preparation branches where validation is
-        intentionally skipped.
-    *   Appends a run summary with the compared base ref and changelog file.
-*   **Manual Release Preparation**:
-    *   Checks out the repository default branch with full history.
-    *   Resolves the next version from ``Unreleased`` unless a version input is provided.
-    *   Promotes ``Unreleased`` into the selected version with the current UTC release date.
-    *   Writes a release-notes preview file to ``.dev-tools/release-notes.md`` with
-        ``dev-tools changelog:show -- <version>``.
-    *   Opens or updates a release-preparation pull request instead of committing directly to ``main``.
-    *   Dispatches ``tests.yml`` for the release branch with required-status
-        mirroring enabled, because release branches are written by the workflow
-        token and do not receive ordinary ``pull_request`` test runs
-        automatically.
-    *   Appends a run summary with the resolved version, version source, and pull-request URL.
-    *   Requires repository Actions permissions that allow the workflow token
-        to create pull requests and dispatch workflows.
-*   **Merged Release Pull Requests**:
-    *   Detects merged branches that match the configured release branch prefix.
-    *   Renders the released changelog section with ``dev-tools changelog:show -- <version>``.
-    *   Creates or updates the Git tag and GitHub release with the rendered changelog section as the release body.
-    *   Appends a run summary with the published tag and release URL.
-    *   Does **not** run for ordinary feature or fix pull requests merged into ``main``.
+Both callers use the official README YAML with the owner-approved
+``name: Fast Forward Changelog`` and ``publish: true`` overrides and one ``changelog``
+job. They set ``base-branch: main``, ``source: tags``, ``comment-mode: always``,
+``prepare-release: true`` and ``publish: true``. The job grants
+``contents: write``, ``pull-requests: write``, ``issues: read`` and
+``statuses: write``; workflow-level permissions remain empty. The external
+defaults select Ubuntu, ``GITHUB_TOKEN``, ``CHANGELOG.md``, ``.changelog``,
+``changelog/version`` and the PR title ``chore: update changelog``.
 
-**Inputs:**
-*   ``changelog-file``: managed changelog path, default ``CHANGELOG.md``.
-*   ``version``: optional explicit version for manual release preparation.
-*   ``release-branch-prefix``: release branch prefix, default ``release/v``.
+Automatic PR-origin lookup uses the external default enabled policy. It
+resolves missing origins from committed fragment bytes and merged PR evidence
+without requiring fragment edits after opening a PR. On base pushes or manual
+dispatch, the workflow prepares or refreshes a single version PR and consumes
+only its accepted fragments. The single-job caller follows the external
+lifecycle directly, without local post-preparation jobs.
 
-**Repository prerequisites:**
-*   Go to **Settings** > **Actions** > **General**.
-*   Under **Workflow permissions**, enable **Read and write permissions**.
-*   Enable **Allow GitHub Actions to create and approve pull requests**.
-*   If either control is disabled or grayed out, the repository is likely constrained by organization-level policy or missing admin permission. In that case, an organization or repository admin must unlock the setting before manual release preparation can open a release pull request.
-*   In branch protection, require the changelog workflow's aggregate context:
+Merging the reviewed managed version PR automatically publishes its tag and
+GitHub Release from the exact approved commit. This configured operation is
+already authorized and requires no second per-release approval. The workflow
+never merges the version PR itself. Direct manual publication and changes to
+existing Releases require separate explicit authorization.
 
-    - Direct workflow invocation: ``Changelog Validation``
-    - Reusable workflow wrapper invocation: ``changelog / Changelog Validation``
+Require the exact commit status ``Fast Forward Changelog`` on the current PR
+head after a repository pilot confirms it. Managed-head validation uses the external
+ownership protocol; a matching branch name alone is not a waiver. Maintainer
+history exceptions must use the library's verified permission-based mechanism,
+not an editable label alone. Preserve all independent repository test gates.
 
-    Use this instead of the internal ``changelog / Validate PR Changelog`` job.
-    The internal job is intentionally skipped for release-preparation branches,
-    while the aggregate context stays stable for normal and release pull
-    requests.
-
-.. note::
-   Branch protection is not what blocks the release-preparation workflow from opening a pull request. Branch protection affects the merge of the ``release/v...`` pull request later in the flow. The gray or disabled workflow-permission controls come from repository permissions or organization policy.
-
-Fast Forward Predictable Conflict Resolution
---------------------------------------------
-
-The ``auto-resolve-conflicts.yml`` workflow scans pull requests after ``main``
-moves and after pull request updates. It only attempts an automatic merge when
-the conflicted file list is limited to:
-
-*   ``.github/wiki``;
-*   ``CHANGELOG.md``.
-
-For legacy ``.github/wiki`` conflicts, the workflow keeps the pull request side
-of the submodule pointer because that pointer references the preview wiki branch
-that belongs to the pull request. Direct-publication repositories have no such
-pointer. For ``CHANGELOG.md`` conflicts, it treats the base
-branch changelog as authoritative and merges branch-only ``Unreleased`` entries
-back into the current top-level ``Unreleased`` section. That keeps entries in
-the right place even when a release was promoted while the pull request was
-waiting.
-
-If any other file is conflicted, or if GitHub reports a forked pull request
-branch, the workflow stops and leaves the branch for manual resolution. Each
-run writes a summary explaining which pull requests were resolved, skipped, or
-left untouched.
+See the selected release's
+`workflow contracts <https://github.com/php-fast-forward/changelog/blob/v0/docs/reusable-lifecycle.md>`_
+and :doc:`../commands/changelog` for local previews. Inspect generated PR
+ownership, notes, fragment deletions and exact-head statuses before approval.
 
 Fast Forward Rigorous Review
 ----------------------------
@@ -422,12 +376,6 @@ Maintenance Workflows
     *   Adds linked pull requests to the same project, mirrors milestone plus inferable project metadata, and keeps draft PRs in ``In progress`` until they are explicitly ready for review.
     *   Promotes approved pull requests into ``Ready to Merge``.
     *   Moves merged pull requests and linked issues into ``Merged``.
-    *   Moves all currently ``Merged`` work into ``Release Prepared`` when ``changelog.yml`` opens or updates a release-preparation pull request.
-    *   Promotes ``Release Prepared`` work into ``Released`` when the
-        release-preparation pull request is merged and the GitHub release is
-        published, and also promotes any remaining ``Merged`` items as a
-        release-publication safety net when the preparation transition did not
-        run.
     *   Uses the built-in workflow token for project updates.
 *   **Label Sync**: Synchronizes repository labels with ecosystem standards.
 

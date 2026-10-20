@@ -88,10 +88,10 @@ command list:
      - ``CommandLoaderInterface`` resolves lazy command loading, and
        ``Composer\Plugin\Capability\CommandProvider`` exposes the same
        command set to Composer.
-   * - ``Changelog and Git``
-     - The changelog manager, parser, renderer, checker, and
-       ``GitClientInterface`` support changelog authoring, verification, and
-       release-note flows.
+   * - ``External changelog and Git``
+     - The independent Changelog package owns fragment parsing, history,
+       versioning and publication policy, with its own CLI and workflow.
+       ``GitClientInterface`` remains available for DevTools Git operations.
    * - ``Synchronization helpers``
      - Git ignore, Git attributes, license, resource diffing, and coverage
        summary services support consumer sync and reporting workflows.

@@ -37,6 +37,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Throwable;
+
 use function Safe\putenv;
 
 /**
@@ -56,13 +57,6 @@ final class DevTools extends Application
         ========================================
 
         LOGO;
-
-    /**
-     * Commands that require raw output and therefore must not render the logo.
-     *
-     * @var list<string>
-     */
-    private const array RAW_OUTPUT_COMMANDS = ['changelog:next-version', 'changelog:show'];
 
     /**
      * Initializes the DevTools global context and dependency graph.
@@ -237,27 +231,7 @@ final class DevTools extends Application
             return false;
         }
 
-        if ($input->hasParameterOption('--json', true) || $input->hasParameterOption('--pretty-json', true)) {
-            return false;
-        }
-
-        return ! $this->isRawOutputCommand($input);
-    }
-
-    /**
-     * Checks whether the current command is designed for raw output mode.
-     *
-     * @param InputInterface $input the application input
-     */
-    private function isRawOutputCommand(InputInterface $input): bool
-    {
-        $commandName = $input->getFirstArgument();
-
-        if (! \is_string($commandName)) {
-            return false;
-        }
-
-        return \in_array($commandName, self::RAW_OUTPUT_COMMANDS, true);
+        return ! $input->hasParameterOption('--json', true) && ! $input->hasParameterOption('--pretty-json', true);
     }
 
     /**

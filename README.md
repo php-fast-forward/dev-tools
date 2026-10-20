@@ -23,8 +23,8 @@ across Fast Forward libraries.
   single Composer-facing command vocabulary
 - Adds dependency analysis for missing and unused Composer packages through a
   single report entrypoint
-- Manages Keep a Changelog 1.1.0 files with local authoring, validation,
-  version inference, release promotion, and release-note rendering commands
+- Delegates fragment authoring and Keep a Changelog release automation to
+  the independent Fast Forward Changelog package
 - Ships shared workflow stubs, `.editorconfig`, Dependabot configuration, and
   other onboarding defaults for consumer repositories
 - Packages a rigorous pull-request review skill, matching `review-guardian`
@@ -89,29 +89,9 @@ composer metrics
 composer metrics --target=.dev-tools/metrics
 composer --working-dir=packages/example metrics
 
-# Add one changelog entry to Unreleased or a published version
-composer changelog:entry "Add changelog automation for release workflows (#28)"
-composer changelog:entry --type=fixed --release=1.2.0 --date=2026-04-19 "Preserve published release sections during backfill (#28)"
-composer changelog:entry --json "Add changelog automation for release workflows (#28)"
-composer changelog:entry --pretty-json "Add changelog automation for release workflows (#28)"
-
-# Verify that the current branch added a meaningful Unreleased entry
-composer changelog:check
-composer changelog:check --against=origin/main
-composer changelog:check --json
-composer changelog:check --pretty-json
-
-# Infer the next semantic version from Unreleased
-composer changelog:next-version
-composer changelog:next-version --json
-
-# Promote Unreleased into a published version
-composer changelog:promote 1.3.0
-composer changelog:promote 1.3.0 --json
-
-# Render one published section as release notes
-composer changelog:show 1.3.0
-composer changelog:show 1.3.0 --json
+# Create and validate an independent change fragment (CPX and PHP 8.5 required)
+cpx --skip-local fast-forward/changelog add "Fixes release-note rendering." --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog check --no-interaction
 
 # Check and fix code style using ECS and Composer Normalize
 composer code-style
@@ -201,22 +181,14 @@ migration or `composer dev-tools:sync --overwrite` to adopt these changes. See
 [the workflow guide](docs/usage/github-actions.rst) for publication and page
 ownership details.
 
-The changelog commands manage Keep a Changelog 1.1.0 files without requiring
-extra tooling in the consumer repository. `changelog:entry` bootstraps a
-missing changelog file on first use, `changelog:check` enforces meaningful
-`Unreleased` entries in pull requests, `changelog:next-version` infers the
-next semantic version from pending changes, `changelog:promote` publishes the
-current `Unreleased` section into a tagged version, and `changelog:show`
-renders one published section for GitHub release notes.
-Repositories that require changelog enforcement in branch protection should
-require the aggregate changelog check:
-
-- Direct workflow invocation: `Changelog Validation`
-- Reusable workflow wrappers (`resources/github-actions/changelog.yml`): `changelog / Changelog Validation`
-
-This remains stable for normal pull requests and release-preparation branches,
-while the lower-level validation job can be skipped intentionally for
-`release/v...` branches.
+Run the independent CLI with `cpx --skip-local fast-forward/changelog`.
+Install CPX separately and run it with PHP 8.5; the consumer package still supports PHP
+8.3. Changelog is isolated from the consumer Composer dependency graph.
+Contributions add `.changelog/*.md`; reviewed version PRs consolidate them
+into `CHANGELOG.md`. Do not add an `Unreleased` section. See the
+[changelog guide](docs/commands/changelog.rst) for prerequisites and previews.
+Require the external workflow's exact `Fast Forward Changelog` commit status
+on the PR head, after verifying it in a repository pilot.
 
 Structured output is available across the DevTools command surface through
 `--json`, which returns deterministic `message` / `level` / `context` payloads
@@ -225,10 +197,8 @@ human-readable terminal output by default. Use `--pretty-json` when you want
 the same structured payload indented for manual inspection in a terminal.
 `--pretty-json` also implies JSON output, so there is no need to pass both
 flags together. In agent environments, DevTools can also switch to JSON
-automatically when the runtime is detected as agent-driven. For
-`changelog:next-version` and `changelog:show`, the default text mode still
-prints raw values so release workflows can keep capturing semantic versions
-and piping rendered release notes directly into GitHub releases.
+automatically when the runtime is detected as agent-driven. The external
+Changelog CLI has its own output and option contracts; consult its command help.
 
 `--pretty-json` intentionally remains valid JSON. DevTools does not inject ANSI
 escape sequences into that mode today because preserving a parseable payload
@@ -266,11 +236,14 @@ when failed job logs match transient GitHub-side checkout or transport errors
 such as HTTP 500 fetch failures, while leaving genuine logic and quality
 failures untouched.
 
-When the packaged changelog workflow is synchronized into a consumer
-repository, pull requests are expected to add a notable changelog entry before
-merge. The same workflow can be triggered manually to prepare a release bump
-pull request from `Unreleased`, and merged release branches publish GitHub
-releases from the exact changelog section body.
+The packaged changelog caller uses
+`php-fast-forward/changelog/.github/workflows/changelog.yml@v0`.
+The `v0` channel follows published 0.x releases and can include breaking minor
+updates. This repository selects that channel explicitly; local CPX examples
+use the latest published CLI without a version constraint. Check its help and
+compatibility with the workflow when performing release maintenance.
+GitHub automation uses its own Docker/PHP runtime and requires Linux with
+Docker, Bash and Git, independently of the consumer PHP version.
 
 The `funding` command keeps supported `composer.json` funding entries aligned
 with `.github/FUNDING.yml`, including GitHub Sponsors handles and `custom`
@@ -305,13 +278,16 @@ copying workflow logic by hand. They also include a rigorous review intake
 workflow that reacts when a pull request becomes ready for review and posts a
 deterministic brief for the dedicated review agent.
 
-The release workflow is intentionally two-step: `workflow_dispatch` prepares a
-`release/v...` pull request, and merging that release pull request publishes
-the GitHub release and tag. Consumer repositories must enable GitHub Actions
-**Read and write permissions** and **Allow GitHub Actions to create and approve
-pull requests** under `Settings -> Actions -> General`. If those controls are
-disabled, an organization or repository admin must unlock them before the
-release-preparation workflow can create pull requests.
+The external workflow checks fragments and prepares one managed version PR
+on `changelog/version`, titled `chore: update changelog`. This repository uses
+the official README caller with the explicitly approved
+`name: Fast Forward Changelog` and `publish: true` settings: `main`, history
+from tags, feedback on every PR and release preparation
+enabled. The lifecycle uses its default Ubuntu runner and GitHub token.
+Merging the reviewed managed version PR automatically publishes its tag and
+GitHub Release from the exact approved commit. The workflow never merges that
+PR itself; see the
+[workflow guide](docs/usage/github-actions.rst).
 
 This repository also keeps role-based project agents in `.agents/agents`. They
 are packaged for consumer repositories alongside `.agents/skills`, so
@@ -326,11 +302,6 @@ skills they depend on.
 | `composer tests` | Runs PHPUnit with local-or-packaged configuration. |
 | `composer dependencies` | Previews Rector Swiss Knife dependency updates, then reports missing, unused, misplaced, and outdated Composer dependencies. |
 | `composer metrics` | Runs PhpMetrics for the current project and generates requested report artifacts. |
-| `composer changelog:entry` | Adds one categorized changelog entry to `Unreleased` or a published release section. |
-| `composer changelog:check` | Verifies that a changelog file contains meaningful `Unreleased` notes, optionally against a git base reference. |
-| `composer changelog:next-version` | Infers the next semantic version from the current changelog state. |
-| `composer changelog:promote` | Moves `Unreleased` entries into a published version section and records the release date. |
-| `composer changelog:show` | Renders one published changelog section for release notes and automation. |
 | `composer docs` | Builds the HTML documentation site from PSR-4 code and `docs/`. |
 | `composer agents` | Creates or repairs packaged project-agent links in `.agents/agents`. |
 | `composer skills` | Creates or repairs packaged skill links in `.agents/skills`. |
@@ -366,7 +337,7 @@ authoring.
   update.
 - `DevTools Container` - `FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Console\DevTools::class)`
   resolves the shared application from `DevToolsServiceProvider`, which wires
-  process execution, filesystem access, changelog services, Git helpers,
+  process execution, filesystem access, external tool wrappers, Git helpers,
   diffing, reporting, and template loading.
 - `Generic Link Synchronization` -
   `FastForward\DevTools\Sync\PackagedDirectorySynchronizer` provides the
@@ -387,28 +358,27 @@ Run `composer dev-tools` before opening a pull request. If you change public
 commands or consumer onboarding behavior, update `README.md` and `docs/`
 together so downstream libraries keep accurate guidance.
 
-Notable pull requests are also expected to add a changelog entry before
+Notable pull requests are also expected to add a change fragment before
 review is complete. A typical contributor flow looks like this:
 
 ```bash
 # Record the user-visible change
-composer changelog:entry --type=changed "Refine changelog automation for release publication (#28)"
+cpx --skip-local fast-forward/changelog add "Refines release-note rendering." --category=changed --no-interaction
 
-# Validate that the branch added meaningful Unreleased notes
-composer changelog:check --against=origin/main
+# Validate fragments; use --since after committing the contribution
+cpx --skip-local fast-forward/changelog check --since=origin/main --no-interaction
 ```
 
-For release preparation, maintainers can infer and promote the next version
-locally before using the packaged GitHub workflow:
+Maintainers can inspect pending fragments without consuming them:
 
 ```bash
-# Inspect the version that Unreleased implies
-composer changelog:next-version
-
-# Publish Unreleased into the selected version and review the resulting notes
-composer changelog:promote 1.3.0
-composer changelog:show 1.3.0
+cpx --skip-local fast-forward/changelog status --source=tags --no-interaction
 ```
+
+Use the managed version PR for consolidation. Test history-writing commands
+only in a disposable checkout; they can consume accepted fragments. PR origin
+resolution is enabled in automation and does not require editing a fragment
+after opening its PR. Unknown PR numbers stay absent.
 
 ## 📄 License
 
