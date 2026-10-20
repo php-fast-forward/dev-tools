@@ -29,7 +29,7 @@ jobs:
     with:
       base-branch: main
       source: tags
-      version-pr-title: 'chore(release): dev-tools {current_version} → {next_version}'
+      version-pr-title: 'chore(release): fast-forward/dev-tools v{current_version} → v{next_version}'
       comment-mode: always
       prepare-release: true
       publish: true
