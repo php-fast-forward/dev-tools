@@ -12,7 +12,7 @@ Version PR and authorization
    external ``Fast Forward Changelog`` status plus repository quality gates.
 2. Accepted contributions merge into ``main``. The external lifecycle prepares
    or regenerates the single managed ``changelog/version`` PR with title
-   ``chore: update changelog``.
+   configured as ``chore: release {current_version} → {next_version}``.
 3. Review the exact new head, planned version, notes, comparison links and
    consumed fragment deletions. The Bot owns the branch; do not edit it manually
    or fake its transaction evidence. Let automation regenerate after base moves.
@@ -25,7 +25,7 @@ Version PR and authorization
 
 The caller selects the upstream ``@v0`` channel with the official README
 configuration plus the owner-approved ``name: Fast Forward Changelog`` and
-``publish: true`` overrides: ``main``,
+``publish: true`` and ``version-pr-title`` overrides: ``main``,
 historical source ``tags``, feedback ``always`` and release preparation enabled. The external
 defaults provide the Ubuntu runner and GitHub token. Local Changelog execution
 uses the latest published CLI through CPX and PHP 8.5, without changing the consumer PHP 8.3
