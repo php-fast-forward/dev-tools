@@ -23,7 +23,7 @@ Most day-to-day work falls into one of the flows below.
      - ``composer docs``
      - Runs phpDocumentor using PSR-4 namespaces and the ``docs/`` guide.
    * - Record a notable pull-request change
-     - ``cpx --skip-local fast-forward/changelog:0.2.0 add "Describes the change." --no-interaction``
+     - ``cpx --skip-local fast-forward/changelog:0.3.0 add "Describes the change." --no-interaction``
      - Creates one independent change fragment using the external CPX runtime.
    * - Refresh packaged agent skills only
      - ``composer skills``
@@ -36,7 +36,7 @@ Most day-to-day work falls into one of the flows below.
      - Posts a deterministic review brief that points maintainers to the
        ``review-guardian`` agent and ``pull-request-review`` skill.
    * - Inspect the next release
-     - ``cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction``
+     - ``cpx --skip-local fast-forward/changelog:0.3.0 status --source=tags --no-interaction``
      - Plans from pending fragments; the managed version PR consolidates them
        for review. Merging the reviewed managed version PR automatically
        publishes its tag and GitHub Release at the approved commit.
@@ -62,9 +62,9 @@ A Safe Beginner Routine
 -----------------------
 
 1. Run ``composer tests``.
-2. Run ``cpx --skip-local fast-forward/changelog:0.2.0 add`` with a description when the branch
+2. Run ``cpx --skip-local fast-forward/changelog:0.3.0 add`` with a description when the branch
    introduces a notable change (requires CPX and PHP 8.5); then run
-   ``cpx --skip-local fast-forward/changelog:0.2.0 check``.
+   ``cpx --skip-local fast-forward/changelog:0.3.0 check``.
 3. Run ``composer skills`` if you changed packaged consumer skills.
 4. Run ``composer agents`` if you changed packaged project-agent prompts.
 5. Run ``composer docs`` if you changed guides or public APIs.

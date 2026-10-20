@@ -90,8 +90,8 @@ composer metrics --target=.dev-tools/metrics
 composer --working-dir=packages/example metrics
 
 # Create and validate an independent change fragment (CPX and PHP 8.5 required)
-cpx --skip-local fast-forward/changelog:0.2.0 add "Fixes release-note rendering." --category=fixed --no-interaction
-cpx --skip-local fast-forward/changelog:0.2.0 check --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 add "Fixes release-note rendering." --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 check --no-interaction
 
 # Check and fix code style using ECS and Composer Normalize
 composer code-style
@@ -181,7 +181,7 @@ migration or `composer dev-tools:sync --overwrite` to adopt these changes. See
 [the workflow guide](docs/usage/github-actions.rst) for publication and page
 ownership details.
 
-Run the independent CLI with `cpx --skip-local fast-forward/changelog:0.2.0`.
+Run the independent CLI with `cpx --skip-local fast-forward/changelog:0.3.0`.
 Install CPX separately and run it with PHP 8.5; the consumer package still supports PHP
 8.3. Changelog is isolated from the consumer Composer dependency graph.
 Contributions add `.changelog/*.md`; reviewed version PRs consolidate them
@@ -240,7 +240,7 @@ The packaged changelog caller uses
 `php-fast-forward/changelog/.github/workflows/changelog.yml@v0`.
 The `v0` channel follows published 0.x releases and can include breaking minor
 updates. This repository selects that channel explicitly; local CPX examples
-use the verified exact 0.2.0 CLI. Recheck compatibility before channel updates.
+use the verified exact 0.3.0 CLI. Recheck compatibility before channel updates.
 GitHub automation uses its own Docker/PHP runtime and requires Linux with
 Docker, Bash and Git, independently of the consumer PHP version.
 
@@ -362,16 +362,16 @@ review is complete. A typical contributor flow looks like this:
 
 ```bash
 # Record the user-visible change
-cpx --skip-local fast-forward/changelog:0.2.0 add "Refines release-note rendering." --category=changed --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 add "Refines release-note rendering." --category=changed --no-interaction
 
 # Validate fragments; use --since after committing the contribution
-cpx --skip-local fast-forward/changelog:0.2.0 check --since=origin/main --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 check --since=origin/main --no-interaction
 ```
 
 Maintainers can inspect pending fragments without consuming them:
 
 ```bash
-cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 status --source=tags --no-interaction
 ```
 
 Use the managed version PR for consolidation. Test history-writing commands
