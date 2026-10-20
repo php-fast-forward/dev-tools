@@ -88,8 +88,10 @@ The repository caller selects the external workflow's ``@v0`` channel, which
 tracks published 0.x releases. Local CPX examples select the latest published
 CLI without a version constraint. Resolve the workflow channel and record the
 CLI version used when validating release operations; review their compatibility.
-The official caller uses ``changelog/version`` and the title
-``chore: update changelog``. The Bot owns that branch: let automation
+The repository caller uses ``changelog/version`` and configures
+``version-pr-title: 'chore: release {current_version} -> {next_version}'``.
+The placeholders resolve to the current and next versions from the validated
+plan. The Bot owns that branch: let automation
 regenerate its PR and inspect the new exact head rather than editing the branch
 or forging ownership trailers.
 
