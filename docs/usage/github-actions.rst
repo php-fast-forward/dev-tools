@@ -275,8 +275,9 @@ The repository and packaged consumer callers delegate to
 The repository's ``changelog.yml`` is an event-driven caller, with no
 ``workflow_call`` interface.
 This explicitly selected channel tracks published 0.x releases, including
-potentially breaking minor updates. Local CPX execution is fixed to 0.3.0;
-resolve the channel and review its documented contracts before updating.
+potentially breaking minor updates. Local CPX examples select the latest
+published CLI without a version constraint. Inspect its help, resolve the
+workflow channel and review compatibility when performing release operations.
 The external workflow owns fragment checks, feedback, Dependabot notes,
 managed version PRs and optional publication.
 
@@ -315,7 +316,7 @@ history exceptions must use the library's verified permission-based mechanism,
 not an editable label alone. Preserve all independent repository test gates.
 
 See the selected release's
-`workflow contracts <https://github.com/php-fast-forward/changelog/blob/v0.3.0/docs/reusable-lifecycle.md>`_
+`workflow contracts <https://github.com/php-fast-forward/changelog/blob/v0/docs/reusable-lifecycle.md>`_
 and :doc:`../commands/changelog` for local previews. Inspect generated PR
 ownership, notes, fragment deletions and exact-head statuses before approval.
 

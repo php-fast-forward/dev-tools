@@ -28,7 +28,7 @@ configuration plus the owner-approved ``name: Fast Forward Changelog`` and
 ``publish: true`` overrides: ``main``,
 historical source ``tags``, feedback ``always`` and release preparation enabled. The external
 defaults provide the Ubuntu runner and GitHub token. Local Changelog execution
-is fixed to 0.3.0 through CPX and PHP 8.5, without changing the consumer PHP 8.3
+uses the latest published CLI through CPX and PHP 8.5, without changing the consumer PHP 8.3
 requirement. The workflow uses Docker on Linux with Bash and Git instead of the
 consumer Composer environment. Read :doc:`../usage/github-actions` for caller
 contracts and :doc:`../commands/changelog` for local commands. The Changelog
@@ -47,7 +47,7 @@ Run the project gate against the reviewed candidate:
 
 When guides or generated output change, inspect reports and wiki artifacts as
 well. Test history-writing Changelog commands only in disposable checkouts,
-using the selected exact runtime and a canonical GitHub origin. Confirm that
+recording the resolved runtime version and using a canonical GitHub origin. Confirm that
 consolidation preserves historical notes, dates and correct links; creates one
 new comparison definition in section order; adds no ``Unreleased`` section;
 and deletes only accepted fragments. Local PR-origin lookup requires explicit
@@ -69,7 +69,7 @@ and integrated. Extract each version with the external ``notes`` command:
 
 .. code-block:: bash
 
-   cpx --skip-local fast-forward/changelog:0.3.0 notes <version> --no-interaction
+   cpx --skip-local fast-forward/changelog notes <version> --no-interaction
 
 A GitHub Release body contains that version's notes, preserving Markdown and
 links. Verify reference-style links in isolation and include only definitions

@@ -2,13 +2,15 @@ External Fast Forward Changelog
 ===============================
 
 Use the independent
-`Fast Forward Changelog <https://github.com/php-fast-forward/changelog/tree/v0.3.0>`_
+`Fast Forward Changelog <https://github.com/php-fast-forward/changelog>`_
 package for fragments, version planning, history and publication policy.
 
 Runtime
 -------
 
-Run ``cpx --skip-local fast-forward/changelog:0.3.0`` from the consumer project.
+Run ``cpx --skip-local fast-forward/changelog`` from the consumer project.
+Omitting a version constraint selects the latest published release. Inspect its
+help before choosing command options.
 Make CPX available on ``PATH`` with PHP 8.5. This isolated tool installation
 does not raise the consumer package's PHP 8.3 requirement or add Changelog to
 its Composer dependency graph. Consult the
@@ -18,10 +20,10 @@ Inspect the selected runtime before running its commands:
 
 .. code-block:: bash
 
-   cpx --skip-local fast-forward/changelog:0.3.0 list --raw
-   cpx --skip-local fast-forward/changelog:0.3.0 help add
-   cpx --skip-local fast-forward/changelog:0.3.0 help check
-   cpx --skip-local fast-forward/changelog:0.3.0 help version
+   cpx --skip-local fast-forward/changelog list --raw
+   cpx --skip-local fast-forward/changelog help add
+   cpx --skip-local fast-forward/changelog help check
+   cpx --skip-local fast-forward/changelog help version
 
 Use ``add`` for authoring, ``check`` for contribution validation, ``status`` for
 pending/version planning, ``version`` for consolidation, and ``notes`` for
@@ -45,8 +47,8 @@ Or create it once through the CLI:
 
 .. code-block:: bash
 
-   cpx --skip-local fast-forward/changelog:0.3.0 add "Preserves Markdown links when exporting release notes." --category=fixed --no-interaction
-   cpx --skip-local fast-forward/changelog:0.3.0 check --no-interaction
+   cpx --skip-local fast-forward/changelog add "Preserves Markdown links when exporting release notes." --category=fixed --no-interaction
+   cpx --skip-local fast-forward/changelog check --no-interaction
 
 ``add`` creates the fragment directory when necessary and leaves central history
 unchanged. Categories describe the nature of the change; ``type`` separately
@@ -55,7 +57,7 @@ After committing the contribution, validate it against the intended Git base:
 
 .. code-block:: bash
 
-   cpx --skip-local fast-forward/changelog:0.3.0 check --since=origin/main --no-interaction
+   cpx --skip-local fast-forward/changelog check --since=origin/main --no-interaction
 
 No new ``Unreleased`` section is used. PR metadata may remain absent before a
 PR exists. Automation enables ``resolve-pull-requests: true`` consistently for
@@ -70,10 +72,10 @@ History and release preparation
 
 .. code-block:: bash
 
-   cpx --skip-local fast-forward/changelog:0.3.0 status --source=tags --no-interaction
-   cpx --skip-local fast-forward/changelog:0.3.0 format --dry-run --no-interaction
-   cpx --skip-local fast-forward/changelog:0.3.0 backfill --dry-run --source=tags --no-interaction
-   cpx --skip-local fast-forward/changelog:0.3.0 notes <version> --no-interaction
+   cpx --skip-local fast-forward/changelog status --source=tags --no-interaction
+   cpx --skip-local fast-forward/changelog format --dry-run --no-interaction
+   cpx --skip-local fast-forward/changelog backfill --dry-run --source=tags --no-interaction
+   cpx --skip-local fast-forward/changelog notes <version> --no-interaction
 
 Read ``help <command>`` before selecting write options. Test ``version`` and
 other history-writing operations only in a disposable checkout: consolidation
@@ -83,8 +85,9 @@ introductions, published dates, descriptions, existing link bytes, footer order
 and the single new version link after every rehearsal.
 
 The repository caller selects the external workflow's ``@v0`` channel, which
-tracks published 0.x releases. Local CLI execution is fixed to 0.3.0; resolve
-the channel and review compatibility when updating either integration.
+tracks published 0.x releases. Local CPX examples select the latest published
+CLI without a version constraint. Resolve the workflow channel and record the
+CLI version used when validating release operations; review their compatibility.
 The official caller uses ``changelog/version`` and the title
 ``chore: update changelog``. The Bot owns that branch: let automation
 regenerate its PR and inspect the new exact head rather than editing the branch

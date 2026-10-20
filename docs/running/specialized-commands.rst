@@ -7,15 +7,15 @@ Use the standalone commands when you want one tool instead of the full
 External Changelog CLI
 ----------------------
 
-Run the independent Fast Forward Changelog 0.3.0 CLI through
+Run the latest published independent Fast Forward Changelog CLI through
 ``cpx --skip-local``. CPX and PHP 8.5 must be available on its execution path;
 the consumer's PHP 8.3 requirement stays unchanged.
 
 .. code-block:: bash
 
-   cpx --skip-local fast-forward/changelog:0.3.0 add "Fixes release-note rendering." --category=fixed --no-interaction
-   cpx --skip-local fast-forward/changelog:0.3.0 check --no-interaction
-   cpx --skip-local fast-forward/changelog:0.3.0 status --source=tags --no-interaction
+   cpx --skip-local fast-forward/changelog add "Fixes release-note rendering." --category=fixed --no-interaction
+   cpx --skip-local fast-forward/changelog check --no-interaction
+   cpx --skip-local fast-forward/changelog status --source=tags --no-interaction
 
 Contributions use independent ``.changelog/*.md`` files. Inspect external command
 help for its options and output contracts. See :doc:`../commands/changelog` for

@@ -57,7 +57,7 @@ composer dev-tools:sync          # Sync managed repository assets and packaged a
 - `composer dependencies`: Run dependency analysis workflows
 - `composer metrics`: Generate PhpMetrics reports and related artifacts
 - `composer update-composer-json`: Normalize managed `composer.json` settings
-- `cpx --skip-local fast-forward/changelog:0.3.0 <arguments...>`: Run the independent changelog CLI with PHP 8.5, outside the consumer Composer dependency graph
+- `cpx --skip-local fast-forward/changelog <arguments...>`: Run the independent changelog CLI with PHP 8.5, outside the consumer Composer dependency graph
 - `composer dev-tools:sync --dry-run|--check|--interactive`: Preview managed-file drift while intentionally skipping wiki, skills, and agents
 
 ## Testing Instructions

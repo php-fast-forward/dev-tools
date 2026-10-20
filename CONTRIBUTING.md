@@ -74,14 +74,14 @@ Use the external Fast Forward Changelog CLI with PHP 8.5 and CPX:
 Typical flow:
 
 ```bash
-cpx --skip-local fast-forward/changelog:0.2.0 add "Describe the notable change." --category=changed --no-interaction
-cpx --skip-local fast-forward/changelog:0.2.0 check --no-interaction
+cpx --skip-local fast-forward/changelog add "Describe the notable change." --category=changed --no-interaction
+cpx --skip-local fast-forward/changelog check --no-interaction
 ```
 
 After committing the fragment, compare the contribution with `origin/main`:
 
 ```bash
-cpx --skip-local fast-forward/changelog:0.2.0 check --since=origin/main --no-interaction
+cpx --skip-local fast-forward/changelog check --since=origin/main --no-interaction
 ```
 
 The external workflow resolves verified PR links during consolidation; a
