@@ -280,7 +280,7 @@ deterministic brief for the dedicated review agent.
 
 The external workflow checks fragments and prepares one managed version PR
 on `changelog/version`, with the configured title
-`chore: release {current_version} -> {next_version}`. This repository uses
+`chore: release {current_version} → {next_version}`. This repository uses
 the official README caller with the explicitly approved
 `name: Fast Forward Changelog`, `publish: true` and `version-pr-title` settings: `main`, history
 from tags, feedback on every PR and release preparation

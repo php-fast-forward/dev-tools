@@ -295,7 +295,7 @@ job. They set ``base-branch: main``, ``source: tags``, ``comment-mode: always``,
 ``statuses: write``; workflow-level permissions remain empty. The external
 defaults select Ubuntu, ``GITHUB_TOKEN``, ``CHANGELOG.md``, ``.changelog``,
 and ``changelog/version``. The callers explicitly configure
-``version-pr-title: 'chore: release {current_version} -> {next_version}'``;
+``version-pr-title: 'chore: release {current_version} → {next_version}'``;
 the library substitutes the validated plan's current and next versions.
 
 Automatic PR-origin lookup uses the external default enabled policy. It

@@ -89,7 +89,7 @@ tracks published 0.x releases. Local CPX examples select the latest published
 CLI without a version constraint. Resolve the workflow channel and record the
 CLI version used when validating release operations; review their compatibility.
 The repository caller uses ``changelog/version`` and configures
-``version-pr-title: 'chore: release {current_version} -> {next_version}'``.
+``version-pr-title: 'chore: release {current_version} → {next_version}'``.
 The placeholders resolve to the current and next versions from the validated
 plan. The Bot owns that branch: let automation
 regenerate its PR and inspect the new exact head rather than editing the branch

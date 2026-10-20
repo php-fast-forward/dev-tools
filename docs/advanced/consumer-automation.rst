@@ -110,7 +110,7 @@ How Changelog and Project Automation Fit In
   ``version-pr-title`` overrides.
 - The external workflow validates contribution fragments and prepares the
   ``changelog/version`` PR with the configured title
-  ``chore: release {current_version} -> {next_version}``. Publication is
+  ``chore: release {current_version} → {next_version}``. Publication is
   automatic after that reviewed PR is merged. The lifecycle uses its default
   Ubuntu runner and GitHub token and never merges the PR itself.
 - ``.github/workflows/review.yml`` composes its ready-for-review intake from
