@@ -3132,14 +3132,14 @@
 
             
     <p>Use the independent
-<a href="https://github.com/php-fast-forward/changelog/tree/v0.2.0">Fast Forward Changelog</a>
+<a href="https://github.com/php-fast-forward/changelog/tree/v0.3.0">Fast Forward Changelog</a>
 package for fragments, version planning, history and publication policy.</p>
 
             <section class="section " id="runtime">
             <h2>Runtime</h2>
 
             
-    <p>Run <code>cpx --skip-local fast-forward/changelog:0.2.0</code>
+    <p>Run <code>cpx --skip-local fast-forward/changelog:0.3.0</code>
  from the consumer project.
 Make CPX available on <code>PATH</code>
  with PHP 8.5. This isolated tool installation
@@ -3150,10 +3150,10 @@ its Composer dependency graph. Consult the
             
     <p>Inspect the selected runtime before running its commands:</p>
 
-            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 list --raw
-cpx --skip-local fast-forward/changelog:0.2.0 help add
-cpx --skip-local fast-forward/changelog:0.2.0 help check
-cpx --skip-local fast-forward/changelog:0.2.0 help version</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.3.0 list --raw
+cpx --skip-local fast-forward/changelog:0.3.0 help add
+cpx --skip-local fast-forward/changelog:0.3.0 help check
+cpx --skip-local fast-forward/changelog:0.3.0 help version</code></pre>
 
             
     <p>Use <code>add</code>
@@ -3184,8 +3184,8 @@ Preserves Markdown links when exporting release notes.</code></pre>
             
     <p>Or create it once through the CLI:</p>
 
-            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 add &quot;Preserves Markdown links when exporting release notes.&quot; --category=fixed --no-interaction
-cpx --skip-local fast-forward/changelog:0.2.0 check --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.3.0 add &quot;Preserves Markdown links when exporting release notes.&quot; --category=fixed --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 check --no-interaction</code></pre>
 
             
     <p><code>add</code>
@@ -3195,7 +3195,7 @@ unchanged. Categories describe the nature of the change; <code>type</code>
 records its semantic-version impact. Preserve other contributions&#039; fragments.
 After committing the contribution, validate it against the intended Git base:</p>
 
-            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 check --since=origin/main --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.3.0 check --since=origin/main --no-interaction</code></pre>
 
             
     <p>No new <code>Unreleased</code>
@@ -3214,10 +3214,10 @@ require the explicit <code>--resolve-pull-requests</code>
             <section class="section " id="history-and-release-preparation">
             <h2>History and release preparation</h2>
 
-            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.2.0 status --source=tags --no-interaction
-cpx --skip-local fast-forward/changelog:0.2.0 format --dry-run --no-interaction
-cpx --skip-local fast-forward/changelog:0.2.0 backfill --dry-run --source=tags --no-interaction
-cpx --skip-local fast-forward/changelog:0.2.0 notes &lt;version&gt; --no-interaction</code></pre>
+            <pre><code class="language-bash">cpx --skip-local fast-forward/changelog:0.3.0 status --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 format --dry-run --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 backfill --dry-run --source=tags --no-interaction
+cpx --skip-local fast-forward/changelog:0.3.0 notes &lt;version&gt; --no-interaction</code></pre>
 
             
     <p>Read <code>help &lt;command&gt;</code>
@@ -3233,7 +3233,7 @@ and the single new version link after every rehearsal.</p>
             
     <p>The repository caller selects the external workflow&#039;s <code>@v0</code>
  channel, which
-tracks published 0.x releases. Local CLI execution is fixed to 0.2.0; resolve
+tracks published 0.x releases. Local CLI execution is fixed to 0.3.0; resolve
 the channel and review compatibility when updating either integration.
 The official caller uses <code>changelog/version</code>
  and the title
