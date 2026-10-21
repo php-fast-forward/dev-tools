@@ -30,6 +30,7 @@ use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -192,9 +193,36 @@ final class SyncCommandTest extends TestCase
         self::assertSame(SyncCommand::SUCCESS, $this->executeCommand());
     }
 
-    /**
-     * @return int
-     */
+    #[Test]
+    #[DataProvider('readOnlyModes')]
+    public function executeWillForwardReadOnlyModeToEveryQueuedCommand(string $mode, int $status): void
+    {
+        $this->input->getOption($mode)->willReturn(true);
+        $commandLines = [];
+        $this->processQueue->add(Argument::type(Process::class), false, false, Argument::cetera())
+            ->will(static function (array $arguments) use (&$commandLines): void {
+                $commandLines[] = $arguments[0]->getCommandLine();
+            })->shouldBeCalledTimes(10);
+        $this->processQueue->add(Argument::type(Process::class), false, true, Argument::cetera())->shouldNotBeCalled();
+        $this->processQueue->run($this->output->reveal())->willReturn($status);
+
+        self::assertSame($status, $this->executeCommand());
+        foreach ($commandLines as $commandLine) {
+            self::assertStringContainsString('--' . $mode, $commandLine);
+            self::assertStringNotContainsString("'wiki'", $commandLine);
+            self::assertStringNotContainsString("'skills'", $commandLine);
+            self::assertStringNotContainsString("'agents'", $commandLine);
+        }
+        self::assertCount(3, array_filter($commandLines, static fn(string $line): bool => str_contains($line, "'copy-resource'")));
+        self::assertCount(1, array_filter($commandLines, static fn(string $line): bool => str_contains($line, "'git-hooks'")));
+    }
+
+    public static function readOnlyModes(): iterable
+    {
+        yield 'dry-run' => ['dry-run', SyncCommand::SUCCESS];
+        yield 'check' => ['check', SyncCommand::FAILURE];
+    }
+
     private function executeCommand(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))

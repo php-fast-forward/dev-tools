@@ -33,6 +33,7 @@ use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
@@ -468,9 +469,71 @@ final class CopyResourceCommandTest extends TestCase
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
     }
 
-    /**
-     * @return int
-     */
+    #[Test]
+    #[DataProvider('missingTargetPreviewModes')]
+    public function executeWillNotCreateMissingTargetsInPreviewModes(bool $directory, bool $dryRun, bool $check): void
+    {
+        $source = $directory ? $this->sourceDirectory : $this->sourceDirectory . '/nested/example.yml';
+        $target = $this->sourceDirectory . '/missing/output';
+        $destination = $directory ? $target . '/nested/example.yml' : $target;
+        $this->input->getOption('source')->willReturn($source);
+        $this->input->getOption('target')->willReturn($target);
+        $this->input->getOption('overwrite')->willReturn(true);
+        $this->input->getOption('interactive')->willReturn(true);
+        $this->input->getOption('dry-run')->willReturn($dryRun);
+        $this->input->getOption('check')->willReturn($check);
+        $this->fileLocator->locate($source)->willReturn($source);
+        $this->filesystem->getAbsolutePath($target)->willReturn($target);
+        $this->filesystem->exists($destination)->willReturn(false);
+        $this->finderFactory->create()->willReturn(new Finder());
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->mkdir(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+        $this->io->askQuestion(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('notice', 'Resource {target_path} is missing and would be created.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+
+        self::assertSame($check ? CopyResourceCommand::FAILURE : CopyResourceCommand::SUCCESS, $this->executeCommand());
+        self::assertDirectoryDoesNotExist($this->sourceDirectory . '/missing');
+    }
+
+    #[Test]
+    public function executeWillCheckAllFilesWithoutWritingWhenDirectoryContainsExistingAndMissingTargets(): void
+    {
+        $extraSource = $this->sourceDirectory . '/nested/second.yml';
+        file_put_contents($extraSource, 'second');
+        try {
+            $target = $this->sourceDirectory . '/missing';
+            $this->input->getOption('source')->willReturn($this->sourceDirectory);
+            $this->input->getOption('target')->willReturn($target);
+            $this->input->getOption('overwrite')->willReturn(false);
+            $this->input->getOption('check')->willReturn(true);
+            $this->fileLocator->locate($this->sourceDirectory)->willReturn($this->sourceDirectory);
+            $this->filesystem->getAbsolutePath($target)->willReturn($target);
+            $this->filesystem->exists($target . '/nested/example.yml')->willReturn(true);
+            $this->filesystem->exists($target . '/nested/second.yml')->willReturn(false);
+            $this->finderFactory->create()->willReturn(new Finder());
+            $this->fileDiffer->diff($this->sourceDirectory . '/nested/example.yml', $target . '/nested/example.yml')
+                ->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Unchanged'))->shouldBeCalledOnce();
+            $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
+            $this->filesystem->mkdir(Argument::cetera())->shouldNotBeCalled();
+
+            self::assertSame(CopyResourceCommand::FAILURE, $this->executeCommand());
+            self::assertDirectoryDoesNotExist($target);
+        } finally {
+            unlink($extraSource);
+        }
+    }
+
+    public static function missingTargetPreviewModes(): iterable
+    {
+        foreach ([false, true] as $directory) {
+            yield [$directory, true, false];
+            yield [$directory, false, true];
+            yield [$directory, true, true];
+        }
+    }
+
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');
