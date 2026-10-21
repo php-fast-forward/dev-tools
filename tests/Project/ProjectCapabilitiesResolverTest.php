@@ -60,6 +60,7 @@ final class ProjectCapabilitiesResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
+        $this->composer->getAutoload('files')->willReturn([]);
         $this->filesystem = new SymfonyFilesystem();
         $this->workingDirectory = getcwd();
         $this->workspace = sys_get_temp_dir() . '/dev-tools-project-capabilities-' . uniqid('', true);
@@ -176,6 +177,48 @@ final class ProjectCapabilitiesResolverTest extends TestCase
         self::assertTrue($capabilities->hasPhpSourceFiles());
         self::assertTrue($capabilities->canRunTests());
         self::assertFalse($capabilities->canGenerateApiDocumentation());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function resolveWillDetectFilesOnlySourceWithoutInventingApiDirectories(): void
+    {
+        mkdir($this->workspace . '/tests');
+        file_put_contents($this->workspace . '/functions.php', "<?php\nfunction example(): void {}\n");
+
+        foreach (['psr-4', 'psr-0', 'classmap'] as $type) {
+            $this->composer->getAutoload($type)->willReturn([]);
+        }
+
+        $this->composer->getAutoload('files')->willReturn(['missing.php', 'functions.php']);
+
+        $capabilities = $this->resolver->resolve();
+
+        self::assertTrue($capabilities->hasTestsPath());
+        self::assertTrue($capabilities->hasPhpSourceFiles());
+        self::assertTrue($capabilities->canRunTests());
+        self::assertSame([], $capabilities->getApiDirectories());
+        self::assertFalse($capabilities->canGenerateApiDocumentation());
+        self::assertFalse($capabilities->canGenerateWiki());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function resolveWillIgnoreMissingAndNonPhpAutoloadFiles(): void
+    {
+        file_put_contents($this->workspace . '/README.md', 'Guide');
+
+        foreach (['psr-4', 'psr-0', 'classmap'] as $type) {
+            $this->composer->getAutoload($type)->willReturn([]);
+        }
+
+        $this->composer->getAutoload('files')->willReturn(['missing.php', 'README.md']);
+
+        self::assertFalse($this->resolver->resolve()->canRunTests());
     }
 
     /**
