@@ -270,6 +270,11 @@ final class StandardsCommandTest extends TestCase
         $this->processBuilder->build(Argument::any())
             ->will(static fn(): Process => new Process([PHP_BINARY, '-r', 'exit(2);']));
         $this->command = new StandardsCommand($this->processBuilder->reveal(), $queue);
+        $this->logger->log(
+            'info',
+            'Running code standards checks...',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface),
+        )->shouldBeCalledOnce();
         $this->logger->error(
             'Code standards checks failed.',
             Argument::that(static fn(array $context): bool => 2 === $context['exit_code']),
