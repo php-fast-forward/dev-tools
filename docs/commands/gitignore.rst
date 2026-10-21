@@ -77,7 +77,12 @@ Behavior
 
 - Reads the canonical .gitignore from dev-tools and merges with the project's.
 - By default, the source is the packaged .gitignore and the target is the project's root.
-- Duplicates are removed and entries are sorted alphabetically.
+- Canonical defaults precede consumer rules, so the last matching consumer rule
+  keeps Git precedence. Existing order, repetitions and pattern whitespace are
+  preserved; patterns are not sorted or globally deduplicated.
+- An already present canonical prefix is not prepended again, making repeated
+  synchronization idempotent. Changed defaults are added before existing rules;
+  synchronization does not silently remove historical consumer rules.
 - Uses the Reader, Merger, and Writer components from the GitIgnore namespace.
 - ``--dry-run`` and ``--check`` render a diff against the normalized managed
   result before deciding whether to write.

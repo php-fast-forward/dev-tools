@@ -27,9 +27,8 @@ use function Safe\preg_match;
  * Merges .gitattributes content with generated export-ignore rules.
  *
  * This class preserves existing custom entries while adding missing
- * export-ignore rules for known candidate paths, deduplicates semantically
- * equivalent entries, and sorts export-ignore rules with directories before
- * files.
+ * export-ignore defaults before consumer rules. Existing rules MUST retain their
+ * order and repetitions so later unset and unspecified attributes keep precedence.
  */
 final class Merger implements MergerInterface
 {
@@ -38,9 +37,9 @@ final class Merger implements MergerInterface
      *
      * This method:
      * 1. Preserves custom user-defined entries in their original order
-     * 2. Adds missing generated export-ignore entries for existing paths
-     * 3. Deduplicates entries using normalized path comparison
-     * 4. Sorts export-ignore entries with directories before files
+     * 2. Prepends missing generated defaults before consumer overrides
+     * 3. Omits generated duplicates without deduplicating existing rules
+     * 4. Removes simple positive rules for explicitly kept paths
      *
      * @param string $existingContent The raw .gitattributes content currently stored.
      * @param list<string> $exportIgnoreEntries the export-ignore entries to manage
@@ -50,90 +49,41 @@ final class Merger implements MergerInterface
      */
     public function merge(string $existingContent, array $exportIgnoreEntries, array $keepInExportPaths = []): string
     {
-        $nonExportIgnoreLines = [];
-        $seenNonExportIgnoreLines = [];
-        $exportIgnoreLines = [];
+        $existingLines = [];
+        $existingRules = [];
         $keptExportLookup = $this->keepInExportLookup($keepInExportPaths);
-        $generatedDirectoryLookup = $this->generatedDirectoryLookup($exportIgnoreEntries);
 
         foreach ($this->parseExistingLines($existingContent) as $line) {
-            $normalizedLine = $this->normalizeLine($line);
+            $pathSpec = $this->extractExportIgnorePathSpec($line);
 
-            if ('' === $normalizedLine) {
-                continue;
-            }
+            if (null !== $pathSpec) {
+                $pathKey = $this->normalizePathKey($pathSpec);
 
-            $pathSpec = $this->extractExportIgnorePathSpec($normalizedLine);
-
-            if (null === $pathSpec) {
-                if (isset($seenNonExportIgnoreLines[$normalizedLine])) {
+                if ($this->isKeptPath($pathKey, $keptExportLookup)) {
                     continue;
                 }
 
-                $nonExportIgnoreLines[] = $normalizedLine;
-                $seenNonExportIgnoreLines[$normalizedLine] = true;
-
-                continue;
+                $existingRules[$pathKey] = true;
             }
 
-            $pathKey = $this->normalizePathKey($pathSpec);
-            if ($this->isKeptPath($pathKey, $keptExportLookup)) {
-                continue;
-            }
-
-            if (isset($exportIgnoreLines[$pathKey])) {
-                continue;
-            }
-
-            $exportIgnoreLines[$pathKey] = [
-                'line' => $normalizedLine,
-                'sort_key' => $this->sortKey($pathSpec),
-                'is_directory' => str_ends_with($pathSpec, '/') || isset($generatedDirectoryLookup[$pathKey]),
-            ];
+            $existingLines[] = $line;
         }
+
+        $generatedLines = [];
 
         foreach ($exportIgnoreEntries as $entry) {
-            $trimmedEntry = trim($entry);
-            $pathKey = $this->normalizePathKey($trimmedEntry);
+            $entry = trim($entry);
+            $pathKey = $this->normalizePathKey($entry);
 
-            if ($this->isKeptPath($pathKey, $keptExportLookup)) {
+            if ('' === $entry || $this->isKeptPath($pathKey, $keptExportLookup) || isset($existingRules[$pathKey])) {
                 continue;
             }
 
-            if (! isset($exportIgnoreLines[$pathKey])) {
-                $exportIgnoreLines[$pathKey] = [
-                    'line' => $trimmedEntry . ' export-ignore',
-                    'sort_key' => $this->sortKey($trimmedEntry),
-                    'is_directory' => str_ends_with($trimmedEntry, '/'),
-                ];
-
-                continue;
-            }
-
-            $exportIgnoreLines[$pathKey]['is_directory'] = $exportIgnoreLines[$pathKey]['is_directory']
-                || str_ends_with($trimmedEntry, '/');
+            $generatedLines[] = $entry . ' export-ignore';
+            $existingRules[$pathKey] = true;
         }
 
-        $sortedExportIgnoreLines = array_values($exportIgnoreLines);
-
-        usort(
-            $sortedExportIgnoreLines,
-            static function (array $left, array $right): int {
-                if ($left['is_directory'] !== $right['is_directory']) {
-                    return $left['is_directory'] ? -1 : 1;
-                }
-
-                $naturalOrder = strnatcasecmp($left['sort_key'], $right['sort_key']);
-
-                if (0 !== $naturalOrder) {
-                    return $naturalOrder;
-                }
-
-                return strcmp($left['sort_key'], $right['sort_key']);
-            }
-        );
-
-        return implode("\n", [...$nonExportIgnoreLines, ...array_column($sortedExportIgnoreLines, 'line')]);
+        return implode("\n", [...$generatedLines, ...$existingLines]);
     }
 
     /**
@@ -204,52 +154,6 @@ final class Merger implements MergerInterface
     }
 
     /**
-     * Builds a lookup table of generated directory candidates.
-     *
-     * @param list<string> $exportIgnoreEntries the generated export-ignore path list
-     *
-     * @return array<string, true> the normalized directory lookup
-     */
-    private function generatedDirectoryLookup(array $exportIgnoreEntries): array
-    {
-        $lookup = [];
-
-        foreach ($exportIgnoreEntries as $entry) {
-            $trimmedEntry = trim($entry);
-
-            if (! str_ends_with($trimmedEntry, '/')) {
-                continue;
-            }
-
-            $lookup[$this->normalizePathKey($trimmedEntry)] = true;
-        }
-
-        return $lookup;
-    }
-
-    /**
-     * Normalizes a .gitattributes line for deterministic comparison and output.
-     *
-     * @param string $line the raw line to normalize
-     *
-     * @return string the normalized line
-     */
-    private function normalizeLine(string $line): string
-    {
-        $trimmedLine = trim($line);
-
-        if ('' === $trimmedLine) {
-            return '';
-        }
-
-        if (str_starts_with($trimmedLine, '#')) {
-            return $trimmedLine;
-        }
-
-        return preg_replace('/(?<!\\\\)[ \t]+/', ' ', $trimmedLine) ?? $trimmedLine;
-    }
-
-    /**
      * Extracts the path spec from a simple export-ignore line.
      *
      * @param string $line the line to inspect
@@ -263,18 +167,6 @@ final class Merger implements MergerInterface
         }
 
         return $matches[1];
-    }
-
-    /**
-     * Builds the natural sort key for a path spec.
-     *
-     * @param string $pathSpec the raw path spec to normalize for sorting
-     *
-     * @return string the natural sort key
-     */
-    private function sortKey(string $pathSpec): string
-    {
-        return ltrim($this->normalizePathSpec($pathSpec), '/');
     }
 
     /**
@@ -321,7 +213,7 @@ final class Merger implements MergerInterface
             return ltrim(rtrim($normalizedPathSpec, '/'), '/');
         }
 
-        return $normalizedPathSpec;
+        return trim($pathSpec);
     }
 
     /**
