@@ -3243,7 +3243,13 @@ output.</dd>
 
     <li class="dash">By default, the source is the packaged .gitignore and the target is the project&#039;s root.</li>
 
-    <li class="dash">Duplicates are removed and entries are sorted alphabetically.</li>
+    <li class="dash">Canonical defaults precede consumer rules, so the last matching consumer rule
+keeps Git precedence. Existing order, repetitions and pattern whitespace are
+preserved; patterns are not sorted or globally deduplicated.</li>
+
+    <li class="dash">An already present canonical prefix is not prepended again, making repeated
+synchronization idempotent. Changed defaults are added before existing rules;
+synchronization does not silently remove historical consumer rules.</li>
 
     <li class="dash">Uses the Reader, Merger, and Writer components from the GitIgnore namespace.</li>
 

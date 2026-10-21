@@ -170,10 +170,9 @@ var Search = (function () {
         searchField.setAttribute('placeholder', 'Search (Press "/" to focus)');
         searchField.removeAttribute('disabled');
         searchField.addEventListener('keyup', debounce(search, 250));
-        searchField.addEventListener('focus', function () {
+        searchField.addEventListener('focus', function (event) {
             if (searchField.value.trim()) {
-                searchResults.classList.remove('phpdocumentor-search-results--hidden');
-                searchResults.classList.add('show');
+                search(event);
             }
         });
 

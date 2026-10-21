@@ -3164,11 +3164,12 @@ vendor/bin/dev-tools refactor [options]</code></pre>
 </dt>
         
         <dd>Automatically fix code refactoring issues. Without this option, runs in dry-run mode.</dd>
-                                <dt><code>--config, -c</code>
- (optional)</dt>
+                                <dt><code>--config=FILE, -c FILE</code>
+</dt>
         
         <dd>Path to the Rector configuration file. Default: <code>rector.php</code>
-.</dd>
+. When supplied,
+a value is required; an invalid path fails instead of using the default.</dd>
                                 <dt><code>--progress</code>
 </dt>
         
@@ -3231,7 +3232,9 @@ output.</dd>
             
 
 <ul>
-    <li class="dash">Local <code>rector.php</code>
+    <li class="dash">Explicit <code>--config</code>
+ is resolved and passed unchanged to Rector. Without it,
+local <code>rector.php</code>
  is preferred when present.</li>
 
     <li class="dash">Packaged default includes Fast Forward custom Rector rules plus shared Rector sets.</li>
