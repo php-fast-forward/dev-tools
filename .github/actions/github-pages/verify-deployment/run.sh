@@ -21,7 +21,7 @@ check_url() {
     for ((attempt = 1; attempt <= attempts; attempt++)); do
         remaining=$((deadline - SECONDS))
         if ((remaining <= 0)); then
-            echo '::error::Deployment health checks exceeded the 180-second total budget.'
+            echo "::error title=${title}::${label} was not verified: deployment health checks exceeded the 180-second total budget."
             return 1
         fi
         transfer_timeout=$((remaining < 10 ? remaining : 10))
@@ -31,7 +31,7 @@ check_url() {
         http_status="$(curl --silent --output /dev/null --location --connect-timeout 5 --max-time "$transfer_timeout" --write-out '%{http_code}' "$url" 2>/dev/null)" || curl_status=$?
 
         if ((SECONDS >= deadline)); then
-            echo '::error::Deployment health checks exceeded the 180-second total budget.'
+            echo "::error title=${title}::${label} was not verified: deployment health checks exceeded the 180-second total budget."
             return 1
         fi
         if ((curl_status == 0)) && [[ "$http_status" =~ ^[23][0-9][0-9]$ ]]; then

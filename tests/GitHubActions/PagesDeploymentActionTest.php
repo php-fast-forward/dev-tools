@@ -81,7 +81,7 @@ final class PagesDeploymentActionTest extends TestCase
         [$exit, $output, $calls] = $this->runAction('404 200 404', 0, '30', '30', "/|Index\n/coverage/|Coverage");
         self::assertSame(1, $exit);
         self::assertCount(7, $calls);
-        self::assertStringContainsString('180-second total budget', $output);
+        self::assertStringContainsString('::error title=Deployment failed::Coverage was not verified: deployment health checks exceeded the 180-second total budget.', $output);
     }
 
     #[Test]
@@ -91,7 +91,7 @@ final class PagesDeploymentActionTest extends TestCase
         self::assertSame(1, $exit);
         self::assertCount(7, $calls);
         self::assertMatchesRegularExpression('/--max-time [1-6] /', $calls[6]);
-        self::assertStringContainsString('180-second total budget', $output);
+        self::assertStringContainsString('::error title=Deployment failed::Index was not verified: deployment health checks exceeded the 180-second total budget.', $output);
     }
 
     /** @return array{int, string, list<string>} */
