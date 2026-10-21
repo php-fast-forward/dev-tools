@@ -3239,7 +3239,15 @@ paths in exported archives.</li>
     <li class="dash">Preserves existing custom <code>.gitattributes</code>
  rules.</li>
 
-    <li class="dash">Deduplicates equivalent entries and sorts them (directories before files, then alphabetically).</li>
+    <li class="dash">Missing generated exclusions are prepended as defaults. Existing rules retain
+order and repetitions, so later consumer <code>-export-ignore</code>
+ or
+<code>!export-ignore</code>
+ overrides remain effective. No-op and repeated merges retain
+the same effective attributes.</li>
+
+    <li class="dash">Explicit keep-in-export paths still remove matching simple positive exclusions;
+they do not rewrite arbitrary compound attribute rules or glob exceptions.</li>
 
     <li class="dash">Uses CandidateProvider, ExistenceChecker, ExportIgnoreFilter, Merger,
 Reader, and Writer components from the GitAttributes namespace.</li>
