@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Keep resource and Git hook synchronization dry-run/check modes read-only when destinations are missing, reporting planned creations and failing checks without creating directories, copying files, rendering installed hooks or changing permissions. ([#389](https://github.com/php-fast-forward/dev-tools/pull/389))
+- Fail standards checks for every nonzero subprocess queue status, retaining the original exit code in failure diagnostics instead of reporting invalid invocations or missing executables as successful. ([#390](https://github.com/php-fast-forward/dev-tools/pull/390))
 
 ## [1.26.0] - 2026-10-16
 
