@@ -86,3 +86,12 @@ Exit Codes
    * - 1
      - Failure. Drift detected in ``--check`` mode or one or more hooks could
        not be rewritten automatically.
+
+Preview safety
+--------------
+
+Missing targets are reported as planned creations. ``--dry-run`` returns success
+and ``--check`` returns failure without creating files or parent directories,
+including when overwrite or interactive options are also supplied. When both
+preview flags are supplied, ``--check`` determines the failure status. Existing
+targets are compared without replacement or permission changes.
