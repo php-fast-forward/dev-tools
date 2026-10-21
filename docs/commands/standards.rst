@@ -63,7 +63,10 @@ Behavior
 ---------
 
 - This is the default command when running ``composer dev-tools`` without args.
-- Each phase runs in sequence; if any phase fails, the command returns failure.
+- Each phase runs in sequence; every nonzero queue status makes the command
+  return failure (1), including invalid invocations and missing executables.
+  The original queue status is retained as ``exit_code`` in the failure log
+  context, alongside nested output, including in JSON mode.
 - The ``--fix`` option is passed to all phases that support it.
 - Cache stays enabled by default for nested cache-aware phases; omit both flags
   to keep the command default, pass ``--cache`` to force it on, and pass
