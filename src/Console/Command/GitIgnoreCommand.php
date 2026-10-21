@@ -40,7 +40,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * Provides functionality to merge and synchronize .gitignore files.
  *
  * This command merges the canonical .gitignore from dev-tools with the project's
- * existing .gitignore, removing duplicates and sorting entries.
+ * existing .gitignore, preserving ordered consumer overrides.
  *
  * The command accepts two options: --source and --target to specify the paths
  * to the canonical and project .gitignore files respectively.

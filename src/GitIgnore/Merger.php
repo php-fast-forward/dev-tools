@@ -20,82 +20,49 @@ declare(strict_types=1);
 namespace FastForward\DevTools\GitIgnore;
 
 /**
- * Merges, deduplicates, and sorts .gitignore entries.
+ * Merges ordered .gitignore rules with canonical defaults before consumer overrides.
  *
- * This service SHALL combine canonical and project-specific .gitignore
- * definitions into a single normalized result. The resulting entry list MUST
- * exclude blank lines and comment lines from the merged output, MUST remove
- * duplicate entries, and MUST group directory entries before file entries.
- * Directory and file groups SHALL be sorted independently in ascending string
- * order to provide deterministic output.
+ * Existing patterns MUST retain their order, whitespace and repeated occurrences.
  */
 final readonly class Merger implements MergerInterface
 {
     /**
-     * Initializes the merger with a classifier implementation.
-     *
-     * The classifier MUST be capable of determining whether a normalized
-     * .gitignore entry represents a directory or a file pattern. When no
-     * classifier is provided, a default Classifier instance SHALL be used.
-     *
-     * @param ClassifierInterface $classifier the classifier responsible for
-     *                                        distinguishing directory entries
-     *                                        from file entries during merging
+     * Retains the classifier constructor parameter for compatibility with consumers.
      */
     public function __construct(
         private ClassifierInterface $classifier = new Classifier()
     ) {}
 
     /**
-     * Merges canonical and project .gitignore entries into a normalized result.
+     * Prepends canonical defaults once, allowing later consumer rules to override them.
      *
-     * The implementation MUST combine entries from both sources, MUST remove
-     * duplicates, and MUST ignore blank or commented entries after trimming.
-     * Entries identified as directories SHALL be collected separately from file
-     * entries. Each group MUST be sorted using string comparison, and directory
-     * entries MUST appear before file entries in the final result.
-     *
-     * The returned GitIgnore instance SHALL preserve the project path provided by
-     * the $project argument.
-     *
-     * @param GitIgnoreInterface $canonical The canonical .gitignore source whose
-     *                                      entries provide the shared baseline.
-     * @param GitIgnoreInterface $project The project-specific .gitignore source
-     *                                    whose path MUST be preserved in the
-     *                                    merged result.
-     *
-     * @return GitIgnoreInterface A new merged .gitignore representation containing
-     *                            normalized, deduplicated, and ordered entries.
+     * @param GitIgnoreInterface $canonical the canonical baseline
+     * @param GitIgnoreInterface $project the consumer rules and destination path
      */
     public function merge(GitIgnoreInterface $canonical, GitIgnoreInterface $project): GitIgnoreInterface
     {
-        $entries = array_unique(array_merge($canonical->entries(), $project->entries()));
+        $canonicalEntries = $this->patterns($canonical->entries());
+        $projectEntries = $this->patterns($project->entries());
 
-        $directories = [];
-        $files = [];
-
-        foreach ($entries as $entry) {
-            $trimmed = trim($entry);
-            if ('' === $trimmed) {
-                continue;
-            }
-
-            if (str_starts_with($trimmed, '#')) {
-                continue;
-            }
-
-            if ($this->classifier->isDirectory($trimmed)) {
-                $directories[] = $trimmed;
-            } else {
-                $files[] = $trimmed;
-            }
+        if (array_slice($projectEntries, 0, count($canonicalEntries)) === $canonicalEntries) {
+            return new GitIgnore($project->path(), $projectEntries);
         }
 
-        sort($directories, \SORT_STRING);
-        sort($files, \SORT_STRING);
+        return new GitIgnore($project->path(), [...$canonicalEntries, ...$projectEntries]);
+    }
 
-        $mergedEntries = array_merge($directories, $files);
-
-        return new GitIgnore($project->path(), array_values($mergedEntries));
+    /**
+     * Removes only blank lines and comments, never normalizing pattern whitespace.
+     *
+     * @param list<string> $entries the raw rules
+     *
+     * @return list<string>
+     */
+    private function patterns(array $entries): array
+    {
+        return array_values(array_filter(
+            $entries,
+            static fn(string $entry): bool => '' !== trim($entry) && ! str_starts_with($entry, '#'),
+        ));
     }
 }
