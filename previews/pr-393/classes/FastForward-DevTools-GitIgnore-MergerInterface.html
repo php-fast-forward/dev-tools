@@ -3193,7 +3193,7 @@
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">32</span>
+    <span class="badge text-bg-light border">30</span>
 
     </aside>
         </div>
@@ -3215,11 +3215,9 @@
 
                     <div>
                         <p>This service SHALL combine canonical and project-specific .gitignore
-definitions into a single normalized result. The resulting entry list MUST
-exclude blank lines and comment lines from the merged output, MUST remove
-duplicate entries, and MUST group directory entries before file entries.
-Directory and file groups SHALL be sorted independently in ascending string
-order to provide deterministic output.</p>
+definitions into an ordered result. Canonical defaults MUST precede consumer
+rules. The merger MUST preserve pattern whitespace and repeated rules because
+Git resolves conflicts using the last matching pattern.</p>
 
                     </div>
                 </div>
@@ -3273,7 +3271,7 @@ order to provide deterministic output.</p>
         </a>
 
                     <p class="text-body-secondary mb-0 small mt-1">
-                Merges two GitIgnore instances, removing duplicates and sorting entries.
+                Merges two GitIgnore instances without changing consumer rule precedence.
             </p>
             </div>
 
@@ -3337,11 +3335,11 @@ order to provide deterministic output.</p>
 
     <span class="text-body-tertiary">:</span>
 
-    <span class="badge text-bg-light border">45</span>
+    <span class="badge text-bg-light border">43</span>
 
     </aside>
         <div class="mb-4">
-        <p class="lead text-body-secondary mb-0">Merges two GitIgnore instances, removing duplicates and sorting entries.</p>
+        <p class="lead text-body-secondary mb-0">Merges two GitIgnore instances without changing consumer rule precedence.</p>
     </div>
 
 
@@ -3372,7 +3370,7 @@ order to provide deterministic output.</p>
                     </div>
 
                     <div>
-                        <p>Directories are placed before files in the resulting list.
+                        <p>An already present canonical prefix MUST NOT be added again.
 The path from $project is used in the returned instance.</p>
 
                     </div>
