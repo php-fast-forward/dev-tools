@@ -20,6 +20,12 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\Command;
 
 use Symfony\Component\Process\Process;
+use FastForward\DevTools\Process\ProcessQueue;
+use FastForward\DevTools\Process\ProcessEnvironmentConfiguratorInterface;
+use FastForward\DevTools\Console\Output\GithubActionOutput;
+use FastForward\DevTools\Console\Output\OutputCapabilityDetectorInterface;
+use FastForward\DevTools\Environment\RuntimeEnvironmentInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
@@ -30,6 +36,7 @@ use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -44,6 +51,8 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[UsesClass(ProcessQueue::class)]
+#[UsesClass(GithubActionOutput::class)]
 #[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
 #[UsesClass(DevToolsEnvironment::class)]
@@ -135,22 +144,27 @@ final class StandardsCommandTest extends TestCase
      * @return void
      */
     #[Test]
-    public function executeWillReturnFailureWhenAnyCommandFails(): void
+    #[DataProvider('failureExitCodes')]
+    public function executeWillReturnFailureWhenAnyCommandFails(int $exitCode, bool $json): void
     {
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
             ->shouldBeCalledTimes(4);
-        $this->processQueue->run($this->output->reveal())
-            ->willReturn(StandardsCommand::FAILURE)
+        $this->input->getOption('json')->willReturn($json);
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->willReturn($exitCode)
             ->shouldBeCalledOnce();
-        $this->logger->log('info', 'Running code standards checks...', Argument::that(
-            static fn(array $context): bool => $context['input'] instanceof InputInterface
-        ))
-            ->shouldBeCalled();
+        if (! $json) {
+            $this->logger->log('info', 'Running code standards checks...', Argument::that(
+                static fn(array $context): bool => $context['input'] instanceof InputInterface
+            ))
+                ->shouldBeCalled();
+        }
         $this->logger->error(
             'Code standards checks failed.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface
-                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']),
+                && ['refactor', 'phpdoc', 'code-style', 'reports'] === $context['commands']
+                && $exitCode === $context['exit_code']),
         )->shouldBeCalled();
 
         self::assertSame(StandardsCommand::FAILURE, $this->invokeExecute());
@@ -237,9 +251,41 @@ final class StandardsCommandTest extends TestCase
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
     }
 
-    /**
-     * @return int
-     */
+    #[Test]
+    public function executeWillFailForAnActualSubprocessWithExitCodeTwo(): void
+    {
+        $environment = $this->prophesize(RuntimeEnvironmentInterface::class);
+        $environment->isGithubActions()->willReturn(false);
+        $capabilities = $this->prophesize(OutputCapabilityDetectorInterface::class);
+        $capabilities->supportsAnsi(Argument::type(OutputInterface::class))->willReturn(false);
+        $configurator = $this->prophesize(ProcessEnvironmentConfiguratorInterface::class);
+        $configurator->configure(Argument::type(Process::class), Argument::type(OutputInterface::class))
+            ->shouldBeCalledTimes(4);
+        $queue = new ProcessQueue(
+            new GithubActionOutput($this->prophesize(ConsoleOutputInterface::class)->reveal(), $environment->reveal()),
+            $configurator->reveal(),
+            $environment->reveal(),
+            $capabilities->reveal(),
+        );
+        $this->processBuilder->build(Argument::any())
+            ->will(static fn(): Process => new Process([PHP_BINARY, '-r', 'exit(2);']));
+        $this->command = new StandardsCommand($this->processBuilder->reveal(), $queue);
+        $this->logger->error(
+            'Code standards checks failed.',
+            Argument::that(static fn(array $context): bool => 2 === $context['exit_code']),
+        )->shouldBeCalledOnce();
+
+        self::assertSame(StandardsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    public static function failureExitCodes(): iterable
+    {
+        foreach ([1, 2, 127, 143] as $exitCode) {
+            yield 'text ' . $exitCode => [$exitCode, false];
+            yield 'json ' . $exitCode => [$exitCode, true];
+        }
+    }
+
     private function invokeExecute(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))

@@ -152,8 +152,9 @@ final class StandardsCommand extends Command
 
         $result = $this->processQueue->run($commandOutput);
 
-        if (self::FAILURE === $result) {
+        if (self::SUCCESS !== $result) {
             return $this->failure('Code standards checks failed.', $input, [
+                'exit_code' => $result,
                 'output' => $commandOutput,
                 'commands' => $commands,
             ]);
