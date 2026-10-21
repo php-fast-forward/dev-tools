@@ -100,7 +100,7 @@ final class PendingTestStatusWorkflowTest extends TestCase
             . 'if ($arguments[0] === "--method") { echo "STATUS_WRITE\\n"; return []; }'
             . 'return ' . var_export($run, true) . '; }' . "\n";
         $program = substr($program, 0, $start) . $transport . substr($program, $end);
-        $process = proc_open([PHP_BINARY], [['pipe', 'r'], ['pipe', 'w'], ['redirect', 1]], $pipes, null, array_merge(getenv(), [
+        $process = proc_open(escapeshellarg(PHP_BINARY), [['pipe', 'r'], ['pipe', 'w'], ['redirect', 1]], $pipes, null, array_merge(getenv(), [
             'GITHUB_REPOSITORY' => 'example/repo',
             'GITHUB_RUN_ID' => '7',
             'GITHUB_RUN_ATTEMPT' => '1',
