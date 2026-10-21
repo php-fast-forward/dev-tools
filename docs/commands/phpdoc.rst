@@ -27,8 +27,12 @@ Usage
 Arguments
 ---------
 
-``path`` (optional)
-   Path to the file or directory to check. Default: ``.``.
+``path...`` (optional)
+   Files or directories to check. Quote paths containing spaces. Without paths,
+   each tool uses its configured source paths. Explicit paths are passed to both
+   tools; PHP-CS-Fixer intersects them with its configured Finder, preserving
+   exclusions. Rector receives the paths as positional arguments and retains its
+   configured skips. Missing paths fail before the header or tools are invoked.
 
 Options
 -------

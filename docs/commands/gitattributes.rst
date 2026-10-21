@@ -68,7 +68,12 @@ Behavior
   paths in exported archives.
 - Respects ``extra.gitattributes.no-export-ignore`` as an alias.
 - Preserves existing custom ``.gitattributes`` rules.
-- Deduplicates equivalent entries and sorts them (directories before files, then alphabetically).
+- Missing generated exclusions are prepended as defaults. Existing rules retain
+  order and repetitions, so later consumer ``-export-ignore`` or
+  ``!export-ignore`` overrides remain effective. No-op and repeated merges retain
+  the same effective attributes.
+- Explicit keep-in-export paths still remove matching simple positive exclusions;
+  they do not rewrite arbitrary compound attribute rules or glob exceptions.
 - Uses CandidateProvider, ExistenceChecker, ExportIgnoreFilter, Merger,
   Reader, and Writer components from the GitAttributes namespace.
 - ``--dry-run`` and ``--check`` render a diff against the normalized managed

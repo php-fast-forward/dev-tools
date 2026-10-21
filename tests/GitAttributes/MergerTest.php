@@ -21,98 +21,88 @@ namespace FastForward\DevTools\Tests\GitAttributes;
 
 use FastForward\DevTools\GitAttributes\Merger;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use ReflectionMethod;
 
 #[CoversClass(Merger::class)]
 final class MergerTest extends TestCase
 {
-    private Merger $merger;
-
     /**
      * @return void
      */
-    protected function setUp(): void
+    #[Test]
+    public function mergeWillCreateMissingDefaultsInProvidedOrder(): void
     {
-        $this->merger = new Merger();
+        self::assertSame(
+            "/README.md export-ignore\n/docs/ export-ignore\n/tests/ export-ignore",
+            (new Merger())->merge('', ['/README.md', '/docs/', '/tests/', '/docs/']),
+        );
+    }
+
+    /**
+     * @param string $content
+     */
+    #[Test]
+    #[DataProvider('orderedRules')]
+    public function mergeWithoutGeneratedRulesPreservesConsumerPrecedence(string $content): void
+    {
+        $merger = new Merger();
+
+        self::assertSame($content, $merger->merge($content, []));
+        self::assertSame($content, $merger->merge($merger->merge($content, []), []));
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function orderedRules(): iterable
+    {
+        yield 'explicit unset exception' => ["*.txt export-ignore\nkeep.txt -export-ignore"];
+        yield 'explicit unspecified exception' => ["*.txt export-ignore\nkeep.txt !export-ignore"];
+        yield 'repeated positive after exception' => ["*.txt export-ignore\nkeep.txt -export-ignore\n*.txt export-ignore"];
+        yield 'repeated custom attributes' => ["* text=auto\n*.txt -text\n* text=auto"];
+        yield 'overlapping patterns' => ["docs/** export-ignore\ndocs/keep.* -export-ignore\ndocs/keep.txt export-ignore"];
+        yield 'comments and whitespace' => ["# comment\n/docs/    export-ignore\n/tests/  export-ignore"];
+        yield 'quoted path' => ['"docs with spaces/file.txt" export-ignore'];
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function mergeWillCreateManagedBlockWhenFileIsEmpty(): void
+    public function mergePlacesGeneratedDefaultsBeforeConsumerOverrides(): void
     {
-        $result = $this->merger->merge('', ['/docs/', '/README.md']);
+        $content = "keep.txt -export-ignore\nother.txt !export-ignore\n*.zip -diff";
+        $merger = new Merger();
+        $result = $merger->merge($content, ['*.txt']);
 
-        self::assertSame("/docs/ export-ignore\n" . '/README.md export-ignore', $result);
+        self::assertSame("*.txt export-ignore\n" . $content, $result);
+        self::assertSame($result, $merger->merge($result, ['*.txt']));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function mergeWillPreserveCustomEntries(): void
+    public function mergePreservesExistingPositiveRulesInsteadOfAddingDuplicates(): void
     {
-        $existingContent = implode("\n", ['*.zip -diff', '*.phar binary']);
+        $content = "/docs/   export-ignore\n/docs/ -export-ignore\n/docs/ export-ignore";
 
-        $result = $this->merger->merge($existingContent, ['/docs/']);
-
-        self::assertSame("*.zip -diff\n*.phar binary\n" . '/docs/ export-ignore', $result);
+        self::assertSame($content, (new Merger())->merge($content, ['/docs/', '/docs/']));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function mergeWillDeduplicateExistingAndGeneratedEntries(): void
+    public function mergeRemovesSimplePositiveRulesForExplicitlyKeptPaths(): void
     {
-        $existingContent = implode("\n", [
-            '*                   text=auto',
-            '/.github/           export-ignore',
-            '/docs/              export-ignore',
-            '/tests/             export-ignore',
-            '/.gitattributes     export-ignore',
-            '/.gitignore         export-ignore',
-            '/.gitmodules        export-ignore',
-            'AGENTS.md           export-ignore',
-            '/.github/ export-ignore',
-            '/.vscode/ export-ignore',
-            '/docs/ export-ignore',
-            '/tests/ export-ignore',
-            '/.editorconfig export-ignore',
-            '/.gitattributes export-ignore',
-            '/.gitignore export-ignore',
-            '/.gitmodules export-ignore',
-            '/README.md export-ignore',
-        ]);
-
-        $result = $this->merger->merge($existingContent, [
-            '/.github/',
-            '/.vscode/',
-            '/docs/',
-            '/tests/',
-            '/.editorconfig',
-            '/.gitattributes',
-            '/.gitignore',
-            '/.gitmodules',
-            '/README.md',
-        ]);
+        $content = "* text=auto\n/.agents/agents/ export-ignore\n/.agents/skills/ export-ignore\nAGENTS.md export-ignore\n/tests/ export-ignore";
 
         self::assertSame(
-            "* text=auto\n"
-            . "/.github/ export-ignore\n"
-            . "/.vscode/ export-ignore\n"
-            . "/docs/ export-ignore\n"
-            . "/tests/ export-ignore\n"
-            . "/.editorconfig export-ignore\n"
-            . "/.gitattributes export-ignore\n"
-            . "/.gitignore export-ignore\n"
-            . "/.gitmodules export-ignore\n"
-            . "AGENTS.md export-ignore\n"
-            . '/README.md export-ignore',
-            $result,
+            "* text=auto\n/tests/ export-ignore",
+            (new Merger())->merge($content, ['/.agents/agents/', '/AGENTS.md', '/tests/'], ['/.agents/', '/AGENTS.md']),
         );
     }
 
@@ -120,66 +110,22 @@ final class MergerTest extends TestCase
      * @return void
      */
     #[Test]
-    public function mergeWillRemoveExistingExportIgnoreRulesForKeptPaths(): void
+    public function mergeKeepsAttributeOverridesForExplicitlyKeptPaths(): void
     {
-        $existingContent = implode("\n", [
-            '*                   text=auto',
-            '/.gitignore         export-ignore',
-            'AGENTS.md           export-ignore',
-            '/README.md export-ignore',
-        ]);
+        $content = "/docs/ -export-ignore\n/docs/ !export-ignore";
 
-        $result = $this->merger->merge($existingContent, ['/README.md'], ['/.gitignore', '/AGENTS.md']);
-
-        self::assertSame("* text=auto\n" . '/README.md export-ignore', $result);
+        self::assertSame($content, (new Merger())->merge($content, ['/docs/'], ['/docs/']));
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function mergeWillRemoveNestedExportIgnoreRulesWhenParentPathIsKept(): void
+    public function mergeDoesNotConflateRootAnchoredAndUnanchoredGlobs(): void
     {
-        $existingContent = implode("\n", [
-            '* text=auto',
-            '/.agents/agents/ export-ignore',
-            '/.agents/skills/ export-ignore',
-            '/tests/ export-ignore',
-        ]);
-
-        $result = $this->merger->merge(
-            $existingContent,
-            ['/.agents/agents/', '/.agents/skills/', '/tests/'],
-            ['/.agents/'],
-        );
-
-        self::assertSame("* text=auto\n" . '/tests/ export-ignore', $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillSortExportIgnoreEntriesWithDirectoriesBeforeFiles(): void
-    {
-        $existingContent = implode("\n", [
-            '* text=auto',
-            '/README.md export-ignore',
-            '/docs/ export-ignore',
-            '/AGENTS.md export-ignore',
-        ]);
-
-        $result = $this->merger->merge($existingContent, ['/.vscode/', '/tests/', '/.gitattributes']);
-
         self::assertSame(
-            "* text=auto\n"
-            . "/.vscode/ export-ignore\n"
-            . "/docs/ export-ignore\n"
-            . "/tests/ export-ignore\n"
-            . "/.gitattributes export-ignore\n"
-            . "/AGENTS.md export-ignore\n"
-            . '/README.md export-ignore',
-            $result,
+            "/*.txt export-ignore\n*.txt export-ignore",
+            (new Merger())->merge('*.txt export-ignore', ['/*.txt']),
         );
     }
 
@@ -187,153 +133,8 @@ final class MergerTest extends TestCase
      * @return void
      */
     #[Test]
-    public function mergeWillPreserveComments(): void
+    public function mergeIgnoresBlankGeneratedAndKeepEntries(): void
     {
-        $existingContent = "# This is a comment\n*.zip -diff";
-
-        $result = $this->merger->merge($existingContent, ['/docs/']);
-
-        self::assertStringStartsWith('#', $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillNormalizeWhitespaceInExistingEntries(): void
-    {
-        $existingContent = '/docs/   export-ignore';
-
-        $result = $this->merger->merge($existingContent, ['/tests/']);
-
-        self::assertStringContainsString('/docs/ export-ignore', $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillDeduplicateNormalizedEntries(): void
-    {
-        $existingContent = '/.github/ export-ignore';
-
-        $result = $this->merger->merge($existingContent, ['/.github/']);
-
-        self::assertCount(1, explode("\n", trim($result)));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWithEmptyExistingContentWillCreateCleanOutput(): void
-    {
-        $result = $this->merger->merge('', ['/docs/', '/tests/']);
-
-        self::assertSame("/docs/ export-ignore\n/tests/ export-ignore", $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillHandleGlobPatternsWithExportIgnore(): void
-    {
-        $existingContent = '*.pdf export-ignore';
-
-        $result = $this->merger->merge($existingContent, ['/docs/']);
-
-        self::assertStringContainsString('*.pdf export-ignore', $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillSortDirectoriesBeforeFiles(): void
-    {
-        $result = $this->merger->merge('', ['/README.md', '/docs/', '/tests/', '/.editorconfig']);
-
-        $lines = explode("\n", $result);
-        self::assertSame('/docs/ export-ignore', $lines[0]);
-        self::assertSame('/tests/ export-ignore', $lines[1]);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillHandleMultipleWhitespaceNormalize(): void
-    {
-        $existingContent = "/docs/    export-ignore\n/tests/  export-ignore";
-
-        $result = $this->merger->merge($existingContent, []);
-
-        self::assertStringContainsString('/docs/ export-ignore', $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillRemoveDuplicateNonExportIgnoreLines(): void
-    {
-        $existingContent = "* text=auto\n* text=auto";
-
-        $result = $this->merger->merge($existingContent, []);
-
-        self::assertSame(1, substr_count($result, '* text=auto'));
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeWillPreserveLeadingWhitespaceInCustomEntries(): void
-    {
-        $existingContent = '  * text=auto';
-
-        $result = $this->merger->merge($existingContent, []);
-
-        self::assertStringContainsString('* text=auto', $result);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function privateHelpersWillNormalizeAndFilterPathMetadataConsistently(): void
-    {
-        $parseExistingLines = new ReflectionMethod($this->merger, 'parseExistingLines');
-        $keepInExportLookup = new ReflectionMethod($this->merger, 'keepInExportLookup');
-        $generatedDirectoryLookup = new ReflectionMethod($this->merger, 'generatedDirectoryLookup');
-        $normalizeLine = new ReflectionMethod($this->merger, 'normalizeLine');
-        $extractExportIgnorePathSpec = new ReflectionMethod($this->merger, 'extractExportIgnorePathSpec');
-        $sortKey = new ReflectionMethod($this->merger, 'sortKey');
-        $normalizePathKey = new ReflectionMethod($this->merger, 'normalizePathKey');
-        $isLiteralPathSpec = new ReflectionMethod($this->merger, 'isLiteralPathSpec');
-
-        self::assertSame(
-            ['/docs/ export-ignore', '# comment'],
-            $parseExistingLines->invoke($this->merger, "\n/docs/ export-ignore\n\n# comment\n"),
-        );
-        self::assertSame([
-            'docs' => true,
-        ], $keepInExportLookup->invoke($this->merger, [' ', '/docs/']),);
-        self::assertSame(
-            [
-                'docs' => true,
-            ],
-            $generatedDirectoryLookup->invoke($this->merger, [' /docs/ ', '/README.md']),
-        );
-        self::assertSame('# comment', $normalizeLine->invoke($this->merger, '  # comment  '));
-        self::assertSame(
-            'docs\\ path export-ignore',
-            $normalizeLine->invoke($this->merger, "docs\\ path\texport-ignore")
-        );
-        self::assertNull($extractExportIgnorePathSpec->invoke($this->merger, '*.zip -diff'));
-        self::assertSame('docs/file.txt', $sortKey->invoke($this->merger, '///docs//file.txt'));
-        self::assertSame('/*.md', $normalizePathKey->invoke($this->merger, '/*.md'));
-        self::assertFalse($isLiteralPathSpec->invoke($this->merger, '/*.md'));
+        self::assertSame('/docs/ export-ignore', (new Merger())->merge('', ['', ' ', '/docs/'], ['', ' ']));
     }
 }

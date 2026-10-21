@@ -133,4 +133,21 @@ final class GitIgnoreTest extends TestCase
             unlink($tempFile);
         }
     }
+    /**
+     * @return void
+     */
+    #[Test]
+    public function fromFilePreservesSignificantPatternWhitespaceAndZero(): void
+    {
+        $tempFile = sys_get_temp_dir() . '/test_gitignore_' . uniqid() . '.gitignore';
+        $entries = [' leading', 'trailing\\ ', '\\#literal', '\\!literal', '0'];
+        file_put_contents($tempFile, implode("\n", $entries) . "\n");
+
+        try {
+            self::assertSame($entries, GitIgnore::fromFile($tempFile)->entries());
+        } finally {
+            unlink($tempFile);
+        }
+    }
+
 }
