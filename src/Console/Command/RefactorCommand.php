@@ -93,7 +93,7 @@ final class RefactorCommand extends Command
             ->addOption(
                 name: 'config',
                 shortcut: 'c',
-                mode: InputOption::VALUE_OPTIONAL,
+                mode: InputOption::VALUE_REQUIRED,
                 description: 'The path to the Rector configuration file.',
                 default: self::CONFIG
             );
@@ -122,7 +122,7 @@ final class RefactorCommand extends Command
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument('--config')
-            ->withArgument($this->fileLocator->locate(self::CONFIG));
+            ->withArgument($this->fileLocator->locate($input->getOption('config') ?? self::CONFIG));
 
         if (! $progress) {
             $processBuilder = $processBuilder->withArgument('--no-progress-bar');

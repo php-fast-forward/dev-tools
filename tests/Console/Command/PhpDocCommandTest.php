@@ -30,6 +30,7 @@ use FastForward\DevTools\Console\Command\RefactorCommand;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
@@ -39,6 +40,7 @@ use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -61,6 +63,7 @@ use Twig\Environment;
 #[UsesClass(DevToolsEnvironment::class)]
 #[UsesClass(RuntimeEnvironment::class)]
 #[CoversClass(PhpDocCommand::class)]
+#[UsesClass(ProcessBuilder::class)]
 #[UsesClass(Author::class)]
 #[UsesClass(Support::class)]
 #[UsesClass(ManagedWorkspace::class)]
@@ -118,6 +121,7 @@ final class PhpDocCommandTest extends TestCase
         $this->process->setEnv(Argument::type('array'))
             ->willReturn($this->process->reveal());
 
+        $this->input->getArgument('path')->willReturn([]);
         $this->input->getOption('fix')
             ->willReturn(false);
         $this->input->getOption('cache')
@@ -331,6 +335,85 @@ final class PhpDocCommandTest extends TestCase
             ->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @param list<string> $paths
+     */
+    #[Test]
+    #[DataProvider('selectedPaths')]
+    public function executeWillForwardSelectedPathsToBothTools(array $paths): void
+    {
+        $queue = $this->prophesize(ProcessQueueInterface::class);
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldNotBeCalled();
+        $this->command = new PhpDocCommand(
+            new ProcessBuilder(),
+            $queue->reveal(),
+            $this->composer->reveal(),
+            $this->fileLocator->reveal(),
+            $this->filesystem->reveal(),
+            $this->renderer->reveal(),
+            $this->clock->reveal(),
+        );
+        $this->input->getArgument('path')->willReturn($paths);
+        $this->input->getOption('fix')->willReturn(true);
+        foreach ($paths as $path) {
+            $this->filesystem->exists($path)->willReturn(true);
+        }
+        $suffix = (new Process(['--', ...$paths]))->getCommandLine();
+        $queue->add(
+            Argument::that(static fn(Process $process): bool => str_ends_with($process->getCommandLine(), $suffix)
+                && str_contains($process->getCommandLine(), '--path-mode=intersection')
+                && str_contains($process->getCommandLine(), DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer'))
+                && ! str_contains($process->getCommandLine(), '--dry-run')),
+            false,
+            false,
+            'Fixing PHPDoc File Headers with PHP-CS-Fixer',
+        )->shouldBeCalledOnce();
+        $queue->add(
+            Argument::that(static fn(Process $process): bool => str_ends_with($process->getCommandLine(), $suffix)
+                && str_contains($process->getCommandLine(), DevToolsPathResolver::getPreferredToolBinaryPath('rector'))
+                && ! str_contains($process->getCommandLine(), '--path-mode')
+                && ! str_contains($process->getCommandLine(), '--dry-run')),
+            false,
+            false,
+            'Adding Missing PHPDoc with Rector',
+        )->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalledOnce();
+        $queue->run($this->output->reveal())->willReturn(PhpDocCommand::SUCCESS);
+        $this->logger->log('info', 'Checking and fixing PHPDocs...', Argument::type('array'))->shouldBeCalledOnce();
+        $this->logger->log('info', 'Created .docheader from repository template.', Argument::type('array'))->shouldBeCalledOnce();
+        $this->logger->log('info', 'PHPDoc checks completed successfully.', Argument::type('array'))->shouldBeCalledOnce();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return iterable<string, array{list<string>}>
+     */
+    public static function selectedPaths(): iterable
+    {
+        yield 'file' => [['src/Feature.php']];
+        yield 'directory' => [['src']];
+        yield 'multiple paths with spaces' => [['source files/Feature.php', 'tests']];
+        yield 'option-like filename' => [['--rules.php']];
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRejectMissingPathsBeforeWritingOrStartingTools(): void
+    {
+        $this->input->getArgument('path')->willReturn(['missing.php']);
+        $this->filesystem->exists('missing.php')->willReturn(false);
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldNotBeCalled();
+        $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', 'Checking and fixing PHPDocs...', Argument::type('array'))->shouldBeCalledOnce();
+        $this->logger->error('PHPDoc path not found: {path}', Argument::type('array'))->shouldBeCalledOnce();
+
+        self::assertSame(PhpDocCommand::FAILURE, $this->invokeExecute());
     }
 
     /**

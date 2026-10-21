@@ -37,6 +37,7 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -114,9 +115,9 @@ final class PhpDocCommand extends Command
             )
             ->addArgument(
                 name: 'path',
-                mode: InputOption::VALUE_OPTIONAL,
-                description: 'Path to the file or directory to check.',
-                default: ['.'],
+                mode: InputArgument::OPTIONAL | InputArgument::IS_ARRAY,
+                description: 'Files or directories to check; omit to use configured paths.',
+                default: [],
             )
             ->addOption(
                 name: 'progress',
@@ -152,6 +153,17 @@ final class PhpDocCommand extends Command
 
         $this->log('Checking and fixing PHPDocs...', $input);
 
+        $paths = (array) $input->getArgument('path');
+
+        foreach ($paths as $path) {
+            if ('' === $path || ! $this->filesystem->exists($path)) {
+                return $this->failure('PHPDoc path not found: {path}', $input, [
+                    'path' => $path,
+                    'output' => $processOutput,
+                ]);
+            }
+        }
+
         $this->ensureDocHeaderExists($input);
 
         $processBuilder = $this->processBuilder
@@ -182,6 +194,14 @@ final class PhpDocCommand extends Command
             $processBuilder = $processBuilder->withArgument('--dry-run');
         }
 
+        if ([] !== $paths) {
+            $processBuilder = $processBuilder->withArgument('--path-mode=intersection')->withArgument('--');
+
+            foreach ($paths as $path) {
+                $processBuilder = $processBuilder->withArgument($path);
+            }
+        }
+
         $phpCsFixer = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer'), 'fix']);
 
         $processBuilder = $this->processBuilder
@@ -201,6 +221,14 @@ final class PhpDocCommand extends Command
 
         if (! $fix) {
             $processBuilder = $processBuilder->withArgument('--dry-run');
+        }
+
+        if ([] !== $paths) {
+            $processBuilder = $processBuilder->withArgument('--');
+
+            foreach ($paths as $path) {
+                $processBuilder = $processBuilder->withArgument($path);
+            }
         }
 
         $rector = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('rector'), 'process']);
