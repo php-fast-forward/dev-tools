@@ -3243,7 +3243,11 @@ terminal inspection.</li>
     <li class="dash">This is the default command when running <code>composer dev-tools</code>
  without args.</li>
 
-    <li class="dash">Each phase runs in sequence; if any phase fails, the command returns failure.</li>
+    <li class="dash">Each phase runs in sequence; every nonzero queue status makes the command
+return failure (1), including invalid invocations and missing executables.
+The original queue status is retained as <code>exit_code</code>
+ in the failure log
+context, alongside nested output, including in JSON mode.</li>
 
     <li class="dash">The <code>--fix</code>
  option is passed to all phases that support it.</li>
