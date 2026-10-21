@@ -3262,6 +3262,21 @@ not be rewritten automatically.</td>
 
     </section>
 
+            <section class="section " id="preview-safety">
+            <h2>Preview safety</h2>
+
+            
+    <p>Missing targets are reported as planned creations. <code>--dry-run</code>
+ returns success
+and <code>--check</code>
+ returns failure without creating files or parent directories,
+including when overwrite or interactive options are also supplied. When both
+preview flags are supplied, <code>--check</code>
+ determines the failure status. Existing
+targets are compared without replacement or permission changes.</p>
+
+    </section>
+
     </section>
 
                                     </div>
