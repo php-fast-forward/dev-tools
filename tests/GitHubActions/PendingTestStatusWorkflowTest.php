@@ -71,6 +71,16 @@ final class PendingTestStatusWorkflowTest extends TestCase
 
         self::assertSame(0, $code, $output);
         self::assertSame(3, substr_count($output, 'STATUS_WRITE'));
+        foreach (['8.3', '8.4', '8.5'] as $version) {
+            $expected = [
+                '--method', 'POST', 'repos/example/repo/statuses/' . str_repeat('a', 40),
+                '-f', 'state=pending',
+                '-f', "context=Run Tests ($version)",
+                '-f', "description=PHP $version matrix job is pending for attempt 1.",
+                '-f', 'target_url=https://github.com/example/repo/actions/runs/7',
+            ];
+            self::assertStringContainsString(var_export($expected, true), $output);
+        }
     }
 
     /**
@@ -97,7 +107,7 @@ final class PendingTestStatusWorkflowTest extends TestCase
             'status' => 'in_progress',
         ], $overrides);
         $transport = 'function githubApi(array $arguments): array {'
-            . 'if ($arguments[0] === "--method") { echo "STATUS_WRITE\\n"; return []; }'
+            . 'if ($arguments[0] === "--method") { echo "STATUS_WRITE\\n" . var_export($arguments, true) . "\\n"; return []; }'
             . 'return ' . var_export($run, true) . '; }' . "\n";
         $program = substr($program, 0, $start) . $transport . substr($program, $end);
         $process = proc_open(escapeshellarg(PHP_BINARY), [['pipe', 'r'], ['pipe', 'w'], ['redirect', 1]], $pipes, null, array_merge(getenv(), [
