@@ -149,6 +149,21 @@ final class GitHooksCommand extends Command
             $renderedSourceContents = $this->hookContentRenderer->render($sourceContents, $projectPath);
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
+            if (($dryRun || $check) && ! $this->filesystem->exists($hookPath)) {
+                $this->log(
+                    'Git hook {hook_path} is missing and would be installed.',
+                    $input,
+                    [
+                        'hook_name' => $file->getFilename(),
+                        'hook_path' => $hookPath,
+                    ],
+                    LogLevel::NOTICE,
+                );
+                $checkFailure = $checkFailure || $check;
+
+                continue;
+            }
+
             if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($hookPath)) {
                 $this->log(
                     'Skipped existing {hook_name} hook.',

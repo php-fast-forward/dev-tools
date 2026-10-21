@@ -34,6 +34,7 @@ use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
 use PHPUnit\Framework\TestCase;
@@ -510,9 +511,45 @@ final class GitHooksCommandTest extends TestCase
         self::assertSame(GitHooksCommand::FAILURE, $this->executeCommand());
     }
 
-    /**
-     * @return int
-     */
+    #[Test]
+    #[DataProvider('missingHookPreviewModes')]
+    public function executeWillNotInstallMissingHooksInPreviewModes(bool $rendered, bool $dryRun, bool $check): void
+    {
+        $target = $this->sourceDirectory . '/missing/hooks';
+        $this->input->getOption('source')->willReturn($this->sourceDirectory);
+        $this->input->getOption('target')->willReturn($target);
+        $this->input->getOption('no-overwrite')->willReturn(false);
+        $this->input->getOption('interactive')->willReturn(true);
+        $this->input->getOption('dry-run')->willReturn($dryRun);
+        $this->input->getOption('check')->willReturn($check);
+        $this->fileLocator->locate($this->sourceDirectory)->willReturn($this->sourceDirectory);
+        $this->filesystem->getAbsolutePath($target)->willReturn($target);
+        $this->filesystem->exists($target . '/post-merge')->willReturn(false);
+        $this->filesystem->readFile($this->sourceDirectory . '/post-merge')
+            ->willReturn($rendered ? '#!/bin/sh\n' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER : '#!/bin/sh');
+        $this->finderFactory->create()->willReturn(new Finder());
+        $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->chmod(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->remove(Argument::cetera())->shouldNotBeCalled();
+        $this->filesystem->mkdir(Argument::cetera())->shouldNotBeCalled();
+        $this->io->askQuestion(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('notice', 'Git hook {hook_path} is missing and would be installed.', Argument::type('array'))
+            ->shouldBeCalledOnce();
+
+        self::assertSame($check ? GitHooksCommand::FAILURE : GitHooksCommand::SUCCESS, $this->executeCommand());
+        self::assertDirectoryDoesNotExist($this->sourceDirectory . '/missing');
+    }
+
+    public static function missingHookPreviewModes(): iterable
+    {
+        foreach ([false, true] as $rendered) {
+            yield [$rendered, true, false];
+            yield [$rendered, false, true];
+            yield [$rendered, true, true];
+        }
+    }
+
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

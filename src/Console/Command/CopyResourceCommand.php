@@ -228,6 +228,20 @@ final class CopyResourceCommand extends Command
         InputInterface $input,
         OutputInterface $output,
     ): int {
+        if (($dryRun || $check) && ! $this->filesystem->exists($targetPath)) {
+            $this->log(
+                'Resource {target_path} is missing and would be created.',
+                $input,
+                [
+                    'source_path' => $sourcePath,
+                    'target_path' => $targetPath,
+                ],
+                LogLevel::NOTICE,
+            );
+
+            return $check ? self::FAILURE : self::SUCCESS;
+        }
+
         if (! $overwrite && ! $dryRun && ! $check && ! $interactive && $this->filesystem->exists($targetPath)) {
             return $this->success(
                 'Skipped existing resource {target_path}.',
