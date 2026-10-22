@@ -24,8 +24,8 @@ namespace FastForward\DevTools\GitAttributes;
  *
  * This interface defines the contract for managing .gitattributes files,
  * specifically handling the merging of canonical export-ignore rules with
- * existing custom entries while removing obsolete generated markers and
- * duplicate lines.
+ * existing custom entries. New defaults MUST precede consumer overrides;
+ * existing order and repeated rules MUST be retained.
  */
 interface MergerInterface
 {

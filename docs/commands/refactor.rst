@@ -26,8 +26,9 @@ Options
 ``--fix, -f``
    Automatically fix code refactoring issues. Without this option, runs in dry-run mode.
 
-``--config, -c`` (optional)
-   Path to the Rector configuration file. Default: ``rector.php``.
+``--config=FILE, -c FILE``
+   Path to the Rector configuration file. Default: ``rector.php``. When supplied,
+   a value is required; an invalid path fails instead of using the default.
 
 ``--progress``
    Enable progress output from Rector.
@@ -70,7 +71,8 @@ Exit Codes
 Behavior
 ---------
 
-- Local ``rector.php`` is preferred when present.
+- Explicit ``--config`` is resolved and passed unchanged to Rector. Without it,
+  local ``rector.php`` is preferred when present.
 - Packaged default includes Fast Forward custom Rector rules plus shared Rector sets.
 - Progress output is disabled by default; use ``--progress`` to re-enable it in
   text mode.

@@ -96,10 +96,10 @@ final readonly class GitIgnore implements GitIgnoreInterface
 
         $entries = [];
         foreach ($file as $line) {
-            $trimmed = trim($line ?: '');
+            $entry = false === $line ? '' : $line;
 
-            if ('' !== $trimmed) {
-                $entries[] = $trimmed;
+            if ('' !== trim($entry)) {
+                $entries[] = $entry;
             }
         }
 
