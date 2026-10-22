@@ -147,12 +147,20 @@ jobs:
                     throw new RuntimeException('Duplicate PHP test matrix entry.');
                 }
                 $run = githubApi(["repos/$repository/actions/runs/$runId"]);
-                if ((string) ($run['id'] ?? '') !== $runId
-                    || ($run['repository']['full_name'] ?? null) !== $repository
-                    || !is_int($run['run_attempt'] ?? null)
-                    || (string) $run['run_attempt'] !== $attempt
-                    || ($run['status'] ?? null) !== 'in_progress') {
-                    throw new RuntimeException('The current workflow attempt is not running.');
+                if ((string) ($run['id'] ?? '') !== $runId) {
+                    throw new RuntimeException('Workflow run ID does not match the current run.');
+                }
+                if (($run['repository']['full_name'] ?? null) !== $repository) {
+                    throw new RuntimeException('Workflow repository does not match the current repository.');
+                }
+                if (!is_int($run['run_attempt'] ?? null)) {
+                    throw new RuntimeException('Workflow run attempt is not an integer.');
+                }
+                if ((string) $run['run_attempt'] !== $attempt) {
+                    throw new RuntimeException('Workflow run attempt does not match the current attempt.');
+                }
+                if (($run['status'] ?? null) !== 'in_progress') {
+                    throw new RuntimeException('Workflow run status is not in_progress.');
                 }
 
                 // Validate the full matrix and current attempt before the first write.
