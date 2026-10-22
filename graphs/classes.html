@@ -20,7 +20,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <base href="../">
 
-    </head>
+                <!-- Bootstrap -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+        
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+
+        <link rel="stylesheet" href="css/base.css">
+    
+</head>
 <body class="ff-docs">
     <a class="ff-skip-link" href="graphs/classes.html#content">Skip to documentation</a>
     <div id="main-wrapper">
@@ -3158,44 +3168,7 @@
         </div>
     </section>
 
-    <script>
-        (function () {
-            var element = document.getElementById('scene');
-            var container = document.getElementById('graph-container');
 
-            var instance = panzoom(element, {
-                smoothScroll: false,
-                maxZoom: 5,
-                minZoom: 0.2,
-                bounds: false
-            });
-
-            container.addEventListener('mousedown', function () {
-                container.style.cursor = 'grabbing';
-            });
-
-            container.addEventListener('mouseup', function () {
-                container.style.cursor = 'grab';
-            });
-
-            container.addEventListener('mouseleave', function () {
-                container.style.cursor = 'grab';
-            });
-
-            document.getElementById('zoom-in').addEventListener('click', function () {
-                instance.smoothZoom(0, 0, 1.2);
-            });
-
-            document.getElementById('zoom-out').addEventListener('click', function () {
-                instance.smoothZoom(0, 0, 0.8);
-            });
-
-            document.getElementById('reset-panzoom').addEventListener('click', function () {
-                instance.moveTo(0, 0);
-                instance.zoomAbs(0, 0, 1);
-            });
-        })();
-    </script>
                                     </div>
                                 </div>
 
@@ -3241,6 +3214,60 @@
 
     <a id="back-to-top" title="Back to Top" href="graphs/classes.html#content" aria-label="Back to documentation"><i class="fa fa-chevron-up"></i></a>
 
-        <script src="https://unpkg.com/panzoom@8.7.3/dist/panzoom.min.js"></script>
+                <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+        <!-- Bootstrap Bundle (includes Popper) -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+
+        <script src="https://cdn.jsdelivr.net/npm/fuse.js@3.4.6"></script>
+        <script src="https://cdn.jsdelivr.net/npm/css-vars-ponyfill@2"></script>
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+        <script src="js/template.js"></script>
+        <script src="js/search.js"></script>
+        <script defer src="js/searchIndex.js"></script>
+    
+    <script src="https://unpkg.com/panzoom@8.7.3/dist/panzoom.min.js"></script>
+    <script>
+        (function () {
+            var element = document.getElementById('scene');
+            var container = document.getElementById('graph-container');
+
+            var instance = panzoom(element, {
+                smoothScroll: false,
+                maxZoom: 5,
+                minZoom: 0.2,
+                bounds: false
+            });
+
+            container.addEventListener('mousedown', function () {
+                container.style.cursor = 'grabbing';
+            });
+
+            container.addEventListener('mouseup', function () {
+                container.style.cursor = 'grab';
+            });
+
+            container.addEventListener('mouseleave', function () {
+                container.style.cursor = 'grab';
+            });
+
+            document.getElementById('zoom-in').addEventListener('click', function () {
+                instance.smoothZoom(0, 0, 1.2);
+            });
+
+            document.getElementById('zoom-out').addEventListener('click', function () {
+                instance.smoothZoom(0, 0, 0.8);
+            });
+
+            document.getElementById('reset-panzoom').addEventListener('click', function () {
+                // zoomTo cancels pending smoothZoom animation in Panzoom 8.x.
+                instance.zoomTo(0, 0, 1);
+                instance.moveTo(0, 0);
+                instance.zoomAbs(0, 0, 1);
+            });
+        })();
+    </script>
 </body>
 </html>
