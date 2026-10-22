@@ -24,6 +24,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
+use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Container\ContainerFactory;
 use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
@@ -40,6 +41,7 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
+use InvalidArgumentException;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
@@ -53,6 +55,7 @@ use Symfony\Component\Process\Process;
 #[CoversClass(RefactorCommand::class)]
 #[UsesClass(DevToolsPathResolver::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
+#[UsesClass(ProcessBuilder::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class RefactorCommandTest extends TestCase
 {
@@ -89,6 +92,7 @@ final class RefactorCommandTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
 
+        $this->input->getOption('config')->willReturn(RefactorCommand::CONFIG);
         $this->input->getOption('fix')
             ->willReturn(false);
         $this->input->getOption('progress')
@@ -209,6 +213,60 @@ final class RefactorCommandTest extends TestCase
             ->shouldBeCalled();
 
         self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillHonorExplicitConfigurationWithSpaces(): void
+    {
+        $queue = $this->prophesize(ProcessQueueInterface::class);
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldNotBeCalled();
+        $this->command = new RefactorCommand($this->fileLocator->reveal(), new ProcessBuilder(), $queue->reveal());
+        $this->input->getOption('config')->willReturn('custom rules/limited.php');
+        $this->fileLocator->locate('custom rules/limited.php')
+            ->willReturn('/repo/custom rules/limited.php')->shouldBeCalledOnce();
+        $this->fileLocator->locate(RefactorCommand::CONFIG)->shouldNotBeCalled();
+        $expected = new Process([
+            DevToolsPathResolver::getPreferredToolBinaryPath('rector'),
+            'process',
+            '--ansi',
+            '--config',
+            '/repo/custom rules/limited.php',
+            '--no-progress-bar',
+            '--dry-run',
+        ]);
+        $queue->add(
+            Argument::that(static fn(Process $process): bool => $expected->getCommandLine() === $process->getCommandLine()),
+            false,
+            false,
+            'Refactoring Code with Rector',
+        )->shouldBeCalledOnce();
+        $queue->run($this->output->reveal())->willReturn(RefactorCommand::SUCCESS);
+        $this->logger->log('info', 'Running Rector for code refactoring...', Argument::type('array'))->shouldBeCalledOnce();
+        $this->logger->log('info', 'Code refactoring checks completed successfully.', Argument::type('array'))->shouldBeCalledOnce();
+
+        self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillRejectInvalidExplicitConfigurationWithoutDefaultFallback(): void
+    {
+        $this->input->getOption('config')->willReturn('missing/config.php');
+        $this->fileLocator->locate('missing/config.php')
+            ->willThrow(new InvalidArgumentException('Configuration not found: missing/config.php'));
+        $this->fileLocator->locate(RefactorCommand::CONFIG)->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldNotBeCalled();
+        $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->log('info', 'Running Rector for code refactoring...', Argument::type('array'))->shouldBeCalledOnce();
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Configuration not found: missing/config.php');
+
+        $this->executeCommand();
     }
 
     /**

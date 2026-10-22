@@ -19,236 +19,85 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Tests\GitIgnore;
 
-use FastForward\DevTools\GitIgnore\ClassifierInterface;
 use FastForward\DevTools\GitIgnore\GitIgnore;
-use FastForward\DevTools\GitIgnore\GitIgnoreInterface;
 use FastForward\DevTools\GitIgnore\Merger;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
-use Prophecy\PhpUnit\ProphecyTrait;
-use Prophecy\Prophecy\ObjectProphecy;
 
 #[CoversClass(Merger::class)]
 #[UsesClass(GitIgnore::class)]
 final class MergerTest extends TestCase
 {
-    use ProphecyTrait;
-
     /**
-     * @var ObjectProphecy<ClassifierInterface>
+     * @param list<string> $entries
      */
-    private ObjectProphecy $classifier;
-
-    /**
-     * @var ObjectProphecy<GitIgnoreInterface>
-     */
-    private ObjectProphecy $gitIgnoreDevTools;
-
-    /**
-     * @var ObjectProphecy<GitIgnoreInterface>
-     */
-    private ObjectProphecy $gitIgnoreProject;
-
-    private Merger $merger;
-
-    /**
-     * @return void
-     */
-    protected function setUp(): void
+    #[Test]
+    #[DataProvider('orderedRules')]
+    public function mergeWithEmptyCanonicalPreservesConsumerRules(array $entries): void
     {
-        $this->classifier = $this->prophesize(ClassifierInterface::class);
-        $this->gitIgnoreDevTools = $this->prophesize(GitIgnoreInterface::class);
-        $this->gitIgnoreProject = $this->prophesize(GitIgnoreInterface::class);
+        $result = (new Merger())->merge(new GitIgnore('/canonical', []), new GitIgnore('/project', $entries));
 
-        $this->gitIgnoreDevTools->path()
-            ->willReturn('/canonical/.gitignore');
-        $this->gitIgnoreProject->path()
-            ->willReturn('/project/.gitignore');
-
-        $this->merger = new Merger($this->classifier->reveal());
+        self::assertSame($entries, $result->entries());
+        self::assertSame('/project', $result->path());
     }
 
     /**
-     * @param string $entries
+     * @return iterable<string, array{list<string>}>
      */
-    private function withDirectoryClassification(string ...$entries): self
+    public static function orderedRules(): iterable
     {
-        foreach ($entries as $entry) {
-            $this->classifier->isDirectory($entry)
-                ->willReturn(true);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @param string $entries
-     */
-    private function withFileClassification(string ...$entries): self
-    {
-        foreach ($entries as $entry) {
-            $this->classifier->isDirectory($entry)
-                ->willReturn(false);
-        }
-
-        return $this;
+        yield 'negation' => [['*.log', '!important.log']];
+        yield 'repeated rule after exception' => [['*.log', '!important.log', '*.log']];
+        yield 'directory traversal exception' => [['build/*', '!build/keep/', 'build/keep/*', '!build/keep/file.txt']];
+        yield 'significant whitespace and escaped markers' => [[' leading', 'trailing\\ ', '\\#literal', '\\!literal', '0']];
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function mergeWithEmptyEntries(): void
+    public function mergePlacesCanonicalDefaultsBeforeConsumerOverrides(): void
     {
-        $this->withFileClassification('*.log');
+        $canonical = new GitIgnore('/canonical', ['*.log', 'build/*']);
+        $project = new GitIgnore('/project', ['!important.log', '!build/keep/']);
+        $merger = new Merger();
 
-        $this->gitIgnoreDevTools->entries()
-            ->willReturn([]);
-        $this->gitIgnoreProject->entries()
-            ->willReturn(['*.log']);
+        $result = $merger->merge($canonical, $project);
 
-        $result = $this->merger->merge($this->gitIgnoreDevTools->reveal(), $this->gitIgnoreProject->reveal());
-
-        self::assertSame(['*.log'], $result->entries());
+        self::assertSame(['*.log', 'build/*', '!important.log', '!build/keep/'], $result->entries());
+        self::assertSame($result->entries(), $merger->merge($canonical, $result)->entries());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function mergeRemovesDuplicates(): void
+    public function mergePreservesExistingOccurrencesAfterCanonicalPrefix(): void
     {
-        $this->withDirectoryClassification('vendor/', 'node_modules/');
-        $this->withFileClassification('*.log');
+        $canonical = new GitIgnore('/canonical', ['*.log']);
+        $project = new GitIgnore('/project', ['!important.log', '*.log']);
+        $merger = new Merger();
 
-        $this->gitIgnoreDevTools->entries()
-            ->willReturn(['vendor/', '*.log']);
-        $this->gitIgnoreProject->entries()
-            ->willReturn(['vendor/', 'node_modules/']);
+        $result = $merger->merge($canonical, $project);
 
-        $result = $this->merger->merge($this->gitIgnoreDevTools->reveal(), $this->gitIgnoreProject->reveal());
-
-        self::assertCount(3, $result->entries());
-        self::assertContains('vendor/', $result->entries());
-        self::assertContains('*.log', $result->entries());
-        self::assertContains('node_modules/', $result->entries());
+        self::assertSame(['*.log', '!important.log', '*.log'], $result->entries());
+        self::assertSame($result->entries(), $merger->merge($canonical, $result)->entries());
     }
 
     /**
      * @return void
      */
     #[Test]
-    public function mergeSortsDirectoriesFirst(): void
+    public function mergeRemovesOnlyCommentsAndBlankLines(): void
     {
-        $this->withDirectoryClassification('vendor/', 'node_modules/');
-        $this->withFileClassification('*.log');
+        $result = (new Merger())->merge(
+            new GitIgnore('/canonical', ['', '# comment', 'vendor/']),
+            new GitIgnore('/project', ['  ', '# another comment', '*.log', ' #literal']),
+        );
 
-        $this->gitIgnoreDevTools->entries()
-            ->willReturn(['*.log']);
-        $this->gitIgnoreProject->entries()
-            ->willReturn(['vendor/', 'node_modules/']);
-
-        $result = $this->merger->merge($this->gitIgnoreDevTools->reveal(), $this->gitIgnoreProject->reveal());
-        $entries = $result->entries();
-
-        self::assertCount(3, $entries);
-        self::assertContains('vendor/', $entries);
-        self::assertContains('node_modules/', $entries);
-        self::assertContains('*.log', $entries);
-
-        self::assertTrue($this->isBeforeInArray('vendor/', $entries, '*.log'));
-        self::assertTrue($this->isBeforeInArray('node_modules/', $entries, '*.log'));
-    }
-
-    /**
-     * @param string $needle
-     * @param array $haystack
-     * @param string $before
-     *
-     * @return bool
-     */
-    private function isBeforeInArray(string $needle, array $haystack, string $before): bool
-    {
-        return array_search($needle, $haystack, true) < array_search($before, $haystack, true);
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeRemovesComments(): void
-    {
-        $this->withDirectoryClassification('vendor/');
-        $this->withFileClassification('*.log');
-
-        $this->gitIgnoreDevTools->entries()
-            ->willReturn(['# comment', 'vendor/']);
-        $this->gitIgnoreProject->entries()
-            ->willReturn(['# another comment', '*.log']);
-
-        $result = $this->merger->merge($this->gitIgnoreDevTools->reveal(), $this->gitIgnoreProject->reveal());
-
-        self::assertNotContains('# comment', $result->entries());
-        self::assertNotContains('# another comment', $result->entries());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeRemovesEmptyEntries(): void
-    {
-        $this->withDirectoryClassification('vendor/');
-        $this->withFileClassification('*.log');
-
-        $this->gitIgnoreDevTools->entries()
-            ->willReturn(['', '  ', 'vendor/']);
-        $this->gitIgnoreProject->entries()
-            ->willReturn(['*.log', '', '   ']);
-
-        $result = $this->merger->merge($this->gitIgnoreDevTools->reveal(), $this->gitIgnoreProject->reveal());
-
-        self::assertNotContains('', $result->entries());
-        self::assertNotContains('  ', $result->entries());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeUsesProjectPath(): void
-    {
-        $this->withDirectoryClassification('vendor/');
-        $this->withFileClassification('*.log');
-
-        $this->gitIgnoreDevTools->entries()
-            ->willReturn(['vendor/']);
-        $this->gitIgnoreProject->entries()
-            ->willReturn(['*.log']);
-
-        $result = $this->merger->merge($this->gitIgnoreDevTools->reveal(), $this->gitIgnoreProject->reveal());
-
-        self::assertSame('/project/.gitignore', $result->path());
-    }
-
-    /**
-     * @return void
-     */
-    #[Test]
-    public function mergeReturnsGitIgnoreInstance(): void
-    {
-        $this->withDirectoryClassification('vendor/');
-        $this->withFileClassification('*.log');
-
-        $this->gitIgnoreDevTools->entries()
-            ->willReturn(['vendor/']);
-        $this->gitIgnoreProject->entries()
-            ->willReturn(['*.log']);
-
-        $result = $this->merger->merge($this->gitIgnoreDevTools->reveal(), $this->gitIgnoreProject->reveal());
-
-        self::assertInstanceOf(GitIgnore::class, $result);
+        self::assertSame(['vendor/', '*.log', ' #literal'], $result->entries());
     }
 }

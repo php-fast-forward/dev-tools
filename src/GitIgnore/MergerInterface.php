@@ -23,18 +23,16 @@ namespace FastForward\DevTools\GitIgnore;
  * Defines the contract for merging .gitignore entries.
  *
  * This service SHALL combine canonical and project-specific .gitignore
- * definitions into a single normalized result. The resulting entry list MUST
- * exclude blank lines and comment lines from the merged output, MUST remove
- * duplicate entries, and MUST group directory entries before file entries.
- * Directory and file groups SHALL be sorted independently in ascending string
- * order to provide deterministic output.
+ * definitions into an ordered result. Canonical defaults MUST precede consumer
+ * rules. The merger MUST preserve pattern whitespace and repeated rules because
+ * Git resolves conflicts using the last matching pattern.
  */
 interface MergerInterface
 {
     /**
-     * Merges two GitIgnore instances, removing duplicates and sorting entries.
+     * Merges two GitIgnore instances without changing consumer rule precedence.
      *
-     * Directories are placed before files in the resulting list.
+     * An already present canonical prefix MUST NOT be added again.
      * The path from $project is used in the returned instance.
      *
      * @param GitIgnoreInterface $canonical the canonical .gitignore from dev-tools
