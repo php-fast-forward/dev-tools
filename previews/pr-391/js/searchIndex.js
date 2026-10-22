@@ -3346,25 +3346,10 @@ Search.appendIndex(
             "summary": "",
             "url": "classes/FastForward-DevTools-GitAttributes-Merger.html#method_isKeptPath"
         },                {
-            "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Merger\u003A\u003AgeneratedDirectoryLookup\u0028\u0029",
-            "name": "generatedDirectoryLookup",
-            "summary": "Builds\u0020a\u0020lookup\u0020table\u0020of\u0020generated\u0020directory\u0020candidates.",
-            "url": "classes/FastForward-DevTools-GitAttributes-Merger.html#method_generatedDirectoryLookup"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Merger\u003A\u003AnormalizeLine\u0028\u0029",
-            "name": "normalizeLine",
-            "summary": "Normalizes\u0020a\u0020.gitattributes\u0020line\u0020for\u0020deterministic\u0020comparison\u0020and\u0020output.",
-            "url": "classes/FastForward-DevTools-GitAttributes-Merger.html#method_normalizeLine"
-        },                {
             "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Merger\u003A\u003AextractExportIgnorePathSpec\u0028\u0029",
             "name": "extractExportIgnorePathSpec",
             "summary": "Extracts\u0020the\u0020path\u0020spec\u0020from\u0020a\u0020simple\u0020export\u002Dignore\u0020line.",
             "url": "classes/FastForward-DevTools-GitAttributes-Merger.html#method_extractExportIgnorePathSpec"
-        },                {
-            "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Merger\u003A\u003AsortKey\u0028\u0029",
-            "name": "sortKey",
-            "summary": "Builds\u0020the\u0020natural\u0020sort\u0020key\u0020for\u0020a\u0020path\u0020spec.",
-            "url": "classes/FastForward-DevTools-GitAttributes-Merger.html#method_sortKey"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitAttributes\\Merger\u003A\u003AnormalizePathSpec\u0028\u0029",
             "name": "normalizePathSpec",
@@ -3578,18 +3563,23 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Merger",
             "name": "Merger",
-            "summary": "Merges,\u0020deduplicates,\u0020and\u0020sorts\u0020.gitignore\u0020entries.",
+            "summary": "Merges\u0020ordered\u0020.gitignore\u0020rules\u0020with\u0020canonical\u0020defaults\u0020before\u0020consumer\u0020overrides.",
             "url": "classes/FastForward-DevTools-GitIgnore-Merger.html"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Merger\u003A\u003A__construct\u0028\u0029",
             "name": "__construct",
-            "summary": "Initializes\u0020the\u0020merger\u0020with\u0020a\u0020classifier\u0020implementation.",
+            "summary": "Retains\u0020the\u0020classifier\u0020constructor\u0020parameter\u0020for\u0020compatibility\u0020with\u0020consumers.",
             "url": "classes/FastForward-DevTools-GitIgnore-Merger.html#method___construct"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Merger\u003A\u003Amerge\u0028\u0029",
             "name": "merge",
-            "summary": "Merges\u0020canonical\u0020and\u0020project\u0020.gitignore\u0020entries\u0020into\u0020a\u0020normalized\u0020result.",
+            "summary": "Prepends\u0020canonical\u0020defaults\u0020once,\u0020allowing\u0020later\u0020consumer\u0020rules\u0020to\u0020override\u0020them.",
             "url": "classes/FastForward-DevTools-GitIgnore-Merger.html#method_merge"
+        },                {
+            "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Merger\u003A\u003Apatterns\u0028\u0029",
+            "name": "patterns",
+            "summary": "Removes\u0020only\u0020blank\u0020lines\u0020and\u0020comments,\u0020never\u0020normalizing\u0020pattern\u0020whitespace.",
+            "url": "classes/FastForward-DevTools-GitIgnore-Merger.html#method_patterns"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Merger\u003A\u003A\u0024classifier",
             "name": "classifier",
@@ -3603,7 +3593,7 @@ Search.appendIndex(
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\MergerInterface\u003A\u003Amerge\u0028\u0029",
             "name": "merge",
-            "summary": "Merges\u0020two\u0020GitIgnore\u0020instances,\u0020removing\u0020duplicates\u0020and\u0020sorting\u0020entries.",
+            "summary": "Merges\u0020two\u0020GitIgnore\u0020instances\u0020without\u0020changing\u0020consumer\u0020rule\u0020precedence.",
             "url": "classes/FastForward-DevTools-GitIgnore-MergerInterface.html#method_merge"
         },                {
             "fqsen": "\\FastForward\\DevTools\\GitIgnore\\Reader",

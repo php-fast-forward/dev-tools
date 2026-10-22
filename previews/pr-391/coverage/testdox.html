@@ -598,6 +598,7 @@
             <li class="success">From file with non existent file returns empty git ignore</li>
             <li class="success">From file with existing file reads entries</li>
             <li class="success">From file filters empty lines</li>
+            <li class="success">From file preserves significant pattern whitespace and zero</li>
         </ul>
         <h2>Git Ignore Command (FastForward\DevTools\Tests\Console\Command\GitIgnoreCommand)</h2>
         <ul>
@@ -656,32 +657,30 @@
         </ul>
         <h2>Merger (FastForward\DevTools\Tests\GitAttributes\Merger)</h2>
         <ul>
-            <li class="success">Merge will create managed block when file is empty</li>
-            <li class="success">Merge will preserve custom entries</li>
-            <li class="success">Merge will deduplicate existing and generated entries</li>
-            <li class="success">Merge will remove existing export ignore rules for kept paths</li>
-            <li class="success">Merge will remove nested export ignore rules when parent path is kept</li>
-            <li class="success">Merge will sort export ignore entries with directories before files</li>
-            <li class="success">Merge will preserve comments</li>
-            <li class="success">Merge will normalize whitespace in existing entries</li>
-            <li class="success">Merge will deduplicate normalized entries</li>
-            <li class="success">Merge with empty existing content will create clean output</li>
-            <li class="success">Merge will handle glob patterns with export ignore</li>
-            <li class="success">Merge will sort directories before files</li>
-            <li class="success">Merge will handle multiple whitespace normalize</li>
-            <li class="success">Merge will remove duplicate non export ignore lines</li>
-            <li class="success">Merge will preserve leading whitespace in custom entries</li>
-            <li class="success">Private helpers will normalize and filter path metadata consistently</li>
+            <li class="success">Merge will create missing defaults in provided order</li>
+            <li class="success">Merge without generated rules preserves consumer precedence with data set &quot;explicit unset exception&quot;</li>
+            <li class="success">Merge without generated rules preserves consumer precedence with data set &quot;explicit unspecified exception&quot;</li>
+            <li class="success">Merge without generated rules preserves consumer precedence with data set &quot;repeated positive after exception&quot;</li>
+            <li class="success">Merge without generated rules preserves consumer precedence with data set &quot;repeated custom attributes&quot;</li>
+            <li class="success">Merge without generated rules preserves consumer precedence with data set &quot;overlapping patterns&quot;</li>
+            <li class="success">Merge without generated rules preserves consumer precedence with data set &quot;comments and whitespace&quot;</li>
+            <li class="success">Merge without generated rules preserves consumer precedence with data set &quot;quoted path&quot;</li>
+            <li class="success">Merge places generated defaults before consumer overrides</li>
+            <li class="success">Merge preserves existing positive rules instead of adding duplicates</li>
+            <li class="success">Merge removes simple positive rules for explicitly kept paths</li>
+            <li class="success">Merge keeps attribute overrides for explicitly kept paths</li>
+            <li class="success">Merge does not conflate root anchored and unanchored globs</li>
+            <li class="success">Merge ignores blank generated and keep entries</li>
         </ul>
         <h2>Merger (FastForward\DevTools\Tests\GitIgnore\Merger)</h2>
         <ul>
-            <li class="success">Merge with empty entries</li>
-            <li class="success">Merge removes duplicates</li>
-            <li class="success">Merge sorts directories first</li>
-            <li class="success">Merge removes comments</li>
-            <li class="success">Merge removes empty entries</li>
-            <li class="success">Merge uses project path</li>
-            <li class="success">Merge returns git ignore instance</li>
+            <li class="success">Merge with empty canonical preserves consumer rules with data set &quot;negation&quot;</li>
+            <li class="success">Merge with empty canonical preserves consumer rules with data set &quot;repeated rule after exception&quot;</li>
+            <li class="success">Merge with empty canonical preserves consumer rules with data set &quot;directory traversal exception&quot;</li>
+            <li class="success">Merge with empty canonical preserves consumer rules with data set &quot;significant whitespace and escaped markers&quot;</li>
+            <li class="success">Merge places canonical defaults before consumer overrides</li>
+            <li class="success">Merge preserves existing occurrences after canonical prefix</li>
+            <li class="success">Merge removes only comments and blank lines</li>
         </ul>
         <h2>Metrics Command (FastForward\DevTools\Tests\Console\Command\MetricsCommand)</h2>
         <ul>
@@ -724,6 +723,23 @@
             <li class="success">Packaged pre commit hook will prefer project config and fallback to the managed placeholder</li>
             <li class="success">Packaged commit msg hook will prefer project config and fallback to the managed placeholder</li>
         </ul>
+        <h2>Pending Test Status Workflow (FastForward\DevTools\Tests\GitHubActions\PendingTestStatusWorkflow)</h2>
+        <ul>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;wrong ID&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;missing ID&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;wrong repository&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;missing repository&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;string attempt&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;missing attempt&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;different attempt&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;status queued&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;status completed&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;status cancelled&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;status missing&quot;</li>
+            <li class="success">Pending publisher will explain each rejected run without writing with data set &quot;status untrusted
+TOKEN_MARKER&quot;</li>
+            <li class="success">Pending publisher will keep the valid run publishing path</li>
+        </ul>
         <h2>Php Doc Command (FastForward\DevTools\Tests\Console\Command\PhpDocCommand)</h2>
         <ul>
             <li class="success">Execute will create doc header and run php doc processes</li>
@@ -731,6 +747,11 @@
             <li class="success">Execute will handle dump file exception and continue running processes</li>
             <li class="success">Execute will request structured output and disable progress when json is requested</li>
             <li class="success">Execute will enable progress when requested</li>
+            <li class="success">Execute will forward selected paths to both tools with data set &quot;file&quot;</li>
+            <li class="success">Execute will forward selected paths to both tools with data set &quot;directory&quot;</li>
+            <li class="success">Execute will forward selected paths to both tools with data set &quot;multiple paths with spaces&quot;</li>
+            <li class="success">Execute will forward selected paths to both tools with data set &quot;option-like filename&quot;</li>
+            <li class="success">Execute will reject missing paths before writing or starting tools</li>
         </ul>
         <h2>Plugin (FastForward\DevTools\Tests\Composer\Plugin)</h2>
         <ul>
@@ -807,6 +828,8 @@
             <li class="success">Execute will return failure when process queue fails</li>
             <li class="success">Execute will request json output and disable progress when json is requested</li>
             <li class="success">Execute will enable progress when requested</li>
+            <li class="success">Execute will honor explicit configuration with spaces</li>
+            <li class="success">Execute will reject invalid explicit configuration without default fallback</li>
         </ul>
         <h2>Refresh Preview Pointer Action (FastForward\DevTools\Tests\GitHubActions\RefreshPreviewPointerAction)</h2>
         <ul>
