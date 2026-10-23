@@ -62,7 +62,6 @@ final class ComposerDependencyAnalyserConfig
         'php-parallel-lint/php-parallel-lint',
         'phpdocumentor/shim',
         'phpmetrics/phpmetrics',
-        'phpro/grumphp-shim',
         'pyrech/composer-changelogs',
         'rector/swiss-knife',
         'saggre/phpdocumentor-markdown',

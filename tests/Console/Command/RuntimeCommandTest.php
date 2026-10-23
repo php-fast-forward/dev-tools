@@ -121,8 +121,8 @@ final class RuntimeCommandTest extends TestCase
             self::assertSame($packageRoot . '/vendor/autoload.php', $metadata['autoload']);
             self::assertIsString($metadata['version']);
         } finally {
-            new Filesystem()
-                ->remove($directory);
+            $filesystem = new Filesystem();
+            $filesystem->remove($directory);
         }
     }
 }

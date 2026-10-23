@@ -183,6 +183,7 @@ final class ExternalExecutionTest extends TestCase
             '--no-interaction',
         ], $this->consumer, [
             'CI' => 'true',
+            'COMPOSER_TESTS_ARE_RUNNING' => 'true',
             'FAST_FORWARD_MIN_COVERAGE' => false,
         ]);
         $process->setTimeout(60);
