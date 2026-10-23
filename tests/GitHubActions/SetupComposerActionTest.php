@@ -54,8 +54,8 @@ final class SetupComposerActionTest extends TestCase
      */
     protected function tearDown(): void
     {
-        new Filesystem()
-            ->remove($this->workspace);
+        $filesystem = new Filesystem();
+        $filesystem->remove($this->workspace);
     }
 
     /**
