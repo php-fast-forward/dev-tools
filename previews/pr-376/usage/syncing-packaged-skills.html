@@ -3143,19 +3143,21 @@ payload rather than adding a second GitHub owner for the same skill:</p>
             <pre><code class="language-json">{
   &quot;dependencies&quot;: {
     &quot;composer&quot;: {
-      &quot;trusted&quot;: [&quot;fast-forward/config&quot;, &quot;fast-forward/container&quot;],
+      &quot;trusted&quot;: [&quot;fast-forward/*&quot;],
       &quot;trusted-replace&quot;: true
     }
   }
 }</code></pre>
 
             
-    <p>This is an example for projects that really install those packages. Trust does
+    <p>This trusts installed Composer donors in the <code>fast-forward/*</code>
+ namespace.
+<code>trusted-replace</code>
+ replaces built-in and implicit direct-dependency trust, so
+packages outside that namespace stay untrusted. Trust does
 not install a missing library or fetch a GitHub replacement. A missing donor
 payload must fail review until a compatible donor or explicit source migration
-is selected. <code>trusted-replace</code>
- permits a trusted package&#039;s canonical skill
-replacement; review ownership changes and remove the prior source explicitly.</p>
+is selected. Review ownership changes and remove the prior source explicitly.</p>
 
     </section>
 
@@ -3165,7 +3167,24 @@ replacement; review ownership changes and remove the prior source explicitly.</p
             
     <p>The DevTools checkout uses a <code>dir</code>
  source for its own <code>resources/skills</code>
-.
+,
+without a package-name override. The directory adapter derives its identity.
+The Changelog GitHub source selects stable <code>0.4.x</code>
+ releases through
+<code>^0.4.0</code>
+ and discovers its skill through that package&#039;s Composer metadata,
+without a redundant skill allowlist. Development-only <code>llm/skills</code>
+ and its
+specific plugin permission enable <code>auto-sync: true</code>
+ after normal Composer
+install/update operations. <code>composer skills:update</code>
+ refreshes the configured
+sources explicitly; <code>--no-scripts</code>
+ suppresses automatic synchronization.
+Generated <code>.agents/skills</code>
+ copies remain ignored; canonical DevTools payloads
+stay under <code>resources/skills</code>
+ and repository role prompts remain local.
 Consumers use GitHub when DevTools is absent from their Composer graph.
 As code style, quality or another domain moves out, retain the
 <code>fast-forward-&lt;responsibility&gt;</code>
