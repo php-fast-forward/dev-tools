@@ -190,7 +190,7 @@ The ``reports.yml`` workflow is responsible for generating technical documentati
 
 **Behavior:**
 *   **Main Branch**: Runs all checks and deploys the final reports to the root of the ``gh-pages`` branch.
-    *   Runs a post-deploy health check against the published reports index and coverage URLs with retry/backoff to account for Pages propagation.
+    *   Runs a post-deploy health check against the published reports index and coverage URLs with retry/backoff to account for Pages propagation. The legacy health-check action defaults to 12 attempts at 10-second intervals, with a shared 180-second budget across URLs and a 10-second transfer limit (5-second connection limit). Attempts and delay accept integers from 1 to 30; exhaustion remains a failing check, not successful deployment.
     *   Resolves the workflow PHP version from ``composer.lock`` or ``composer.json`` before installing dependencies.
     *   Removes ``.dev-tools/cache`` from the publish directory before deployment so repository-local tool caches never leak into GitHub Pages output.
     *   Appends a run summary with the published docs, coverage, and metrics URLs plus deployment verification status.
