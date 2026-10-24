@@ -1,5 +1,5 @@
 name: Verify GitHub Pages Deployment
-description: Health-check a set of GitHub Pages URLs with retry/backoff.
+description: Health-check a set of GitHub Pages URLs with bounded propagation polling (180 seconds total).
 
 inputs:
   base-url:
@@ -14,11 +14,11 @@ inputs:
   attempts:
     description: Number of retry attempts.
     required: false
-    default: '6'
+    default: '12'
   delay:
     description: Delay in seconds between retries.
     required: false
-    default: '5'
+    default: '10'
 
 runs:
   using: composite

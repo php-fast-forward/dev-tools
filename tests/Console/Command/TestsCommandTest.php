@@ -36,6 +36,7 @@ use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Project\ProjectCapabilities;
 use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
+use FastForward\DevTools\Project\ProjectCapabilitiesResolver;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
@@ -54,6 +55,8 @@ use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+use function Safe\file_put_contents;
+use function Safe\unlink;
 use function Safe\mkdir;
 use function Safe\rmdir;
 use function Safe\getcwd;
@@ -69,6 +72,7 @@ use function Safe\getcwd;
 #[UsesClass(ProcessBuilder::class)]
 #[UsesClass(ManagedWorkspace::class)]
 #[UsesClass(ProjectCapabilities::class)]
+#[UsesClass(ProjectCapabilitiesResolver::class)]
 #[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesTrait(LogsCommandResults::class)]
 final class TestsCommandTest extends TestCase
@@ -570,6 +574,57 @@ final class TestsCommandTest extends TestCase
         )->shouldBeCalled();
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWillPropagateTestFailureForFilesOnlyPackage(): void
+    {
+        $workspace = sys_get_temp_dir() . '/dev-tools-files-tests-' . uniqid('', true);
+        mkdir($workspace);
+        mkdir($workspace . '/tests');
+        file_put_contents($workspace . '/functions.php', "<?php\nfunction fixtureFunction(): bool { return true; }\n");
+
+        try {
+            $composer = $this->prophesize(ComposerJsonInterface::class);
+            $filesystem = $this->prophesize(FilesystemInterface::class);
+            foreach (['psr-4', 'psr-0', 'classmap'] as $autoloadType) {
+                $composer->getAutoload($autoloadType)->willReturn([]);
+            }
+            $composer->getAutoload('files')->willReturn(['functions.php']);
+            $filesystem->getAbsolutePath('functions.php')->willReturn($workspace . '/functions.php');
+            $filesystem->exists('./tests')->willReturn(true);
+            $filesystem->exists('docs')->willReturn(false);
+            $filesystem->exists('.github/wiki')->willReturn(false);
+            $resolver = new ProjectCapabilitiesResolver($composer->reveal(), $filesystem->reveal());
+            $capabilities = $resolver->resolve();
+            self::assertSame([], $capabilities->getApiDirectories());
+            self::assertTrue($capabilities->canRunTests());
+            $this->projectCapabilitiesResolver->resolve(Argument::any())->willReturn($capabilities);
+            $this->processQueue->add(
+                Argument::that(static fn(Process $process): bool => str_contains(
+                    $process->getCommandLine(),
+                    DevToolsPathResolver::getPreferredToolBinaryPath('phpunit'),
+                )),
+                false,
+                false,
+                'Running PHPUnit Tests',
+            )->shouldBeCalledOnce();
+            $this->processQueue->run($this->output->reveal())
+                ->willReturn(TestsCommand::FAILURE)->shouldBeCalledOnce();
+            $this->logger->log('info', 'Running PHPUnit tests...', Argument::type('array'))
+                ->shouldBeCalledOnce();
+            $this->logger->error('PHPUnit tests failed.', Argument::type('array'))
+                ->shouldBeCalledOnce();
+
+            self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+        } finally {
+            unlink($workspace . '/functions.php');
+            rmdir($workspace . '/tests');
+            rmdir($workspace);
+        }
     }
 
     /**

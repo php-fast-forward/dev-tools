@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-10-22
+## [2.0.0] - 2026-10-24
 
 ### Changed
 
@@ -16,8 +16,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
+- Detect PHP sources declared in Composer `autoload.files` so function-only packages run tests and coverage reporting instead of silently skipping them, without changing API documentation discovery. ([#391](https://github.com/php-fast-forward/dev-tools/pull/391))
 - Honor explicit Rector configuration and forward PHPDoc file/directory selections to both underlying tools. Preserve configured scope when no paths are given and reject missing explicit PHPDoc paths before writing or running fixers. ([#393](https://github.com/php-fast-forward/dev-tools/pull/393))
 - Preserve consumer rule ordering and overrides when synchronizing `.gitignore` and `.gitattributes`, including repeated patterns, export exceptions, and significant ignore-pattern whitespace. Add generated defaults before existing rules without reordering consumer exceptions. ([#392](https://github.com/php-fast-forward/dev-tools/pull/392))
+- Allow Pages health checks to tolerate delayed propagation while bounding all URL checks to 180 seconds, limiting transfers and preserving failures for missing or broken deployments. ([#397](https://github.com/php-fast-forward/dev-tools/pull/397))
 - Distinguish pending test-status publisher identity, attempt and lifecycle validation failures without exposing response values or weakening fail-closed checks. ([#395](https://github.com/php-fast-forward/dev-tools/pull/395))
 - Keep resource and Git hook synchronization dry-run/check modes read-only when destinations are missing, reporting planned creations and failing checks without creating directories, copying files, rendering installed hooks or changing permissions. ([#389](https://github.com/php-fast-forward/dev-tools/pull/389))
 - Fail standards checks for every nonzero subprocess queue status, retaining the original exit code in failure diagnostics instead of reporting invalid invocations or missing executables as successful. ([#390](https://github.com/php-fast-forward/dev-tools/pull/390))
