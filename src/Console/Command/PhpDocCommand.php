@@ -196,7 +196,8 @@ final class PhpDocCommand extends Command
         }
 
         if ([] !== $paths) {
-            $processBuilder = $processBuilder->withArgument('--path-mode=intersection')->withArgument('--');
+            $processBuilder = $processBuilder->withArgument('--path-mode=intersection')
+                ->withArgument('--');
 
             foreach ($paths as $path) {
                 $processBuilder = $processBuilder->withArgument($path);

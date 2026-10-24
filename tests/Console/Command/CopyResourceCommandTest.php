@@ -48,6 +48,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Finder\Finder;
 
 use function Safe\mkdir;
+use function Safe\realpath;
 use function Safe\file_put_contents;
 use function Safe\unlink;
 use function Safe\rmdir;
@@ -91,6 +92,7 @@ final class CopyResourceCommandTest extends TestCase
     {
         $this->sourceDirectory = sys_get_temp_dir() . '/copy-resource-command-test-' . bin2hex(random_bytes(4));
         mkdir($this->sourceDirectory . '/nested', 0o777, true);
+        $this->sourceDirectory = realpath($this->sourceDirectory);
         file_put_contents($this->sourceDirectory . '/nested/example.yml', 'name: example');
 
         $this->filesystem = $this->prophesize(FilesystemInterface::class);
@@ -470,6 +472,13 @@ final class CopyResourceCommandTest extends TestCase
         self::assertSame(CopyResourceCommand::SUCCESS, $this->executeCommand());
     }
 
+    /**
+     * @param bool $directory
+     * @param bool $dryRun
+     * @param bool $check
+     *
+     * @return void
+     */
     #[Test]
     #[DataProvider('missingTargetPreviewModes')]
     public function executeWillNotCreateMissingTargetsInPreviewModes(bool $directory, bool $dryRun, bool $check): void
@@ -477,16 +486,26 @@ final class CopyResourceCommandTest extends TestCase
         $source = $directory ? $this->sourceDirectory : $this->sourceDirectory . '/nested/example.yml';
         $target = $this->sourceDirectory . '/missing/output';
         $destination = $directory ? $target . '/nested/example.yml' : $target;
-        $this->input->getOption('source')->willReturn($source);
-        $this->input->getOption('target')->willReturn($target);
-        $this->input->getOption('overwrite')->willReturn(true);
-        $this->input->getOption('interactive')->willReturn(true);
-        $this->input->getOption('dry-run')->willReturn($dryRun);
-        $this->input->getOption('check')->willReturn($check);
-        $this->fileLocator->locate($source)->willReturn($source);
-        $this->filesystem->getAbsolutePath($target)->willReturn($target);
-        $this->filesystem->exists($destination)->willReturn(false);
-        $this->finderFactory->create()->willReturn(new Finder());
+        $this->input->getOption('source')
+            ->willReturn($source);
+        $this->input->getOption('target')
+            ->willReturn($target);
+        $this->input->getOption('overwrite')
+            ->willReturn(true);
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->getOption('dry-run')
+            ->willReturn($dryRun);
+        $this->input->getOption('check')
+            ->willReturn($check);
+        $this->fileLocator->locate($source)
+            ->willReturn($source);
+        $this->filesystem->getAbsolutePath($target)
+            ->willReturn($target);
+        $this->filesystem->exists($destination)
+            ->willReturn(false);
+        $this->finderFactory->create()
+            ->willReturn(new Finder());
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
         $this->filesystem->mkdir(Argument::cetera())->shouldNotBeCalled();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
@@ -498,6 +517,9 @@ final class CopyResourceCommandTest extends TestCase
         self::assertDirectoryDoesNotExist($this->sourceDirectory . '/missing');
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillCheckAllFilesWithoutWritingWhenDirectoryContainsExistingAndMissingTargets(): void
     {
@@ -505,15 +527,22 @@ final class CopyResourceCommandTest extends TestCase
         file_put_contents($extraSource, 'second');
         try {
             $target = $this->sourceDirectory . '/missing';
-            $this->input->getOption('source')->willReturn($this->sourceDirectory);
-            $this->input->getOption('target')->willReturn($target);
-            $this->input->getOption('overwrite')->willReturn(false);
-            $this->input->getOption('check')->willReturn(true);
-            $this->fileLocator->locate($this->sourceDirectory)->willReturn($this->sourceDirectory);
-            $this->filesystem->getAbsolutePath($target)->willReturn($target);
+            $this->input->getOption('source')
+                ->willReturn($this->sourceDirectory);
+            $this->input->getOption('target')
+                ->willReturn($target);
+            $this->input->getOption('overwrite')
+                ->willReturn(false);
+            $this->input->getOption('check')
+                ->willReturn(true);
+            $this->fileLocator->locate($this->sourceDirectory)
+                ->willReturn($this->sourceDirectory);
+            $this->filesystem->getAbsolutePath($target)
+                ->willReturn($target);
             $this->filesystem->exists($target . '/nested/example.yml')->willReturn(true);
             $this->filesystem->exists($target . '/nested/second.yml')->willReturn(false);
-            $this->finderFactory->create()->willReturn(new Finder());
+            $this->finderFactory->create()
+                ->willReturn(new Finder());
             $this->fileDiffer->diff($this->sourceDirectory . '/nested/example.yml', $target . '/nested/example.yml')
                 ->willReturn(new FileDiff(FileDiff::STATUS_UNCHANGED, 'Unchanged'))->shouldBeCalledOnce();
             $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
@@ -526,6 +555,9 @@ final class CopyResourceCommandTest extends TestCase
         }
     }
 
+    /**
+     * @return iterable
+     */
     public static function missingTargetPreviewModes(): iterable
     {
         foreach ([false, true] as $directory) {
@@ -535,6 +567,9 @@ final class CopyResourceCommandTest extends TestCase
         }
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

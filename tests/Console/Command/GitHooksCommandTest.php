@@ -509,23 +509,41 @@ final class GitHooksCommandTest extends TestCase
         self::assertSame(GitHooksCommand::FAILURE, $this->executeCommand());
     }
 
+    /**
+     * @param bool $rendered
+     * @param bool $dryRun
+     * @param bool $check
+     *
+     * @return void
+     */
     #[Test]
     #[DataProvider('missingHookPreviewModes')]
     public function executeWillNotInstallMissingHooksInPreviewModes(bool $rendered, bool $dryRun, bool $check): void
     {
         $target = $this->sourceDirectory . '/missing/hooks';
-        $this->input->getOption('source')->willReturn($this->sourceDirectory);
-        $this->input->getOption('target')->willReturn($target);
-        $this->input->getOption('no-overwrite')->willReturn(false);
-        $this->input->getOption('interactive')->willReturn(true);
-        $this->input->getOption('dry-run')->willReturn($dryRun);
-        $this->input->getOption('check')->willReturn($check);
-        $this->fileLocator->locate($this->sourceDirectory)->willReturn($this->sourceDirectory);
-        $this->filesystem->getAbsolutePath($target)->willReturn($target);
+        $this->input->getOption('source')
+            ->willReturn($this->sourceDirectory);
+        $this->input->getOption('target')
+            ->willReturn($target);
+        $this->input->getOption('no-overwrite')
+            ->willReturn(false);
+        $this->input->getOption('interactive')
+            ->willReturn(true);
+        $this->input->getOption('dry-run')
+            ->willReturn($dryRun);
+        $this->input->getOption('check')
+            ->willReturn($check);
+        $this->fileLocator->locate($this->sourceDirectory)
+            ->willReturn($this->sourceDirectory);
+        $this->filesystem->getAbsolutePath($target)
+            ->willReturn($target);
         $this->filesystem->exists($target . '/post-merge')->willReturn(false);
         $this->filesystem->readFile($this->sourceDirectory . '/post-merge')
-            ->willReturn($rendered ? '#!/bin/sh\n' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER : '#!/bin/sh');
-        $this->finderFactory->create()->willReturn(new Finder());
+            ->willReturn(
+                $rendered ? '#!/bin/sh\n' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER : '#!/bin/sh'
+            );
+        $this->finderFactory->create()
+            ->willReturn(new Finder());
         $this->filesystem->copy(Argument::cetera())->shouldNotBeCalled();
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
         $this->filesystem->chmod(Argument::cetera())->shouldNotBeCalled();
@@ -539,6 +557,9 @@ final class GitHooksCommandTest extends TestCase
         self::assertDirectoryDoesNotExist($this->sourceDirectory . '/missing');
     }
 
+    /**
+     * @return iterable
+     */
     public static function missingHookPreviewModes(): iterable
     {
         foreach ([false, true] as $rendered) {
@@ -548,6 +569,9 @@ final class GitHooksCommandTest extends TestCase
         }
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         $reflectionMethod = new ReflectionMethod($this->command, 'execute');

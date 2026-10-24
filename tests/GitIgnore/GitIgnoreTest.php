@@ -134,6 +134,7 @@ final class GitIgnoreTest extends TestCase
             unlink($tempFile);
         }
     }
+
     /**
      * @return void
      */
@@ -150,5 +151,4 @@ final class GitIgnoreTest extends TestCase
             unlink($tempFile);
         }
     }
-
 }

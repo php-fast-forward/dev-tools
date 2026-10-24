@@ -4,6 +4,10 @@ declare(strict_types=1);
 
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 
+if (! class_exists(WorkingProjectPathResolver::class)) {
+    require_once __DIR__ . '/src/Path/WorkingProjectPathResolver.php';
+}
+
 $rules = [
     'phpdoc_indent' => true,
     'phpdoc_order' => [

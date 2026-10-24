@@ -41,6 +41,25 @@ use function Safe\realpath;
 #[CoversNothing]
 final class PackagedHooksTest extends TestCase
 {
+    private const array ISOLATED_GIT_ENVIRONMENT = [
+        'GIT_ALTERNATE_OBJECT_DIRECTORIES' => false,
+        'GIT_CONFIG' => false,
+        'GIT_CONFIG_PARAMETERS' => false,
+        'GIT_CONFIG_COUNT' => false,
+        'GIT_OBJECT_DIRECTORY' => false,
+        'GIT_DIR' => false,
+        'GIT_WORK_TREE' => false,
+        'GIT_IMPLICIT_WORK_TREE' => false,
+        'GIT_GRAFT_FILE' => false,
+        'GIT_INDEX_FILE' => false,
+        'GIT_NO_REPLACE_OBJECTS' => false,
+        'GIT_REPLACE_REF_BASE' => false,
+        'GIT_PREFIX' => false,
+        'GIT_INTERNAL_SUPER_PREFIX' => false,
+        'GIT_SHALLOW_FILE' => false,
+        'GIT_COMMON_DIR' => false,
+    ];
+
     private string $project;
 
     private Filesystem $filesystem;
@@ -174,12 +193,41 @@ final class PackagedHooksTest extends TestCase
     }
 
     /**
+     * @return void
+     */
+    #[Test]
+    public function fixtureProcessesWillIgnoreInheritedRepositoryAndIndexPaths(): void
+    {
+        $foreignIndex = $this->project . '/foreign-index';
+        $foreignContents = "Synthetic index MUST remain unchanged.\n";
+        file_put_contents($foreignIndex, $foreignContents);
+        $environment = [
+            'GIT_DIR' => $this->project . '/foreign.git',
+            'GIT_WORK_TREE' => $this->project . '/foreign-work-tree',
+            'GIT_COMMON_DIR' => $this->project . '/foreign-common',
+            'GIT_INDEX_FILE' => $foreignIndex,
+            'GIT_OBJECT_DIRECTORY' => $this->project . '/foreign-objects',
+            'GIT_ALTERNATE_OBJECT_DIRECTORIES' => $this->project . '/foreign-alternate-objects',
+        ];
+        $this->writeRunner('bin/cpx');
+
+        self::assertSame($this->project, trim($this->git(['rev-parse', '--show-toplevel'], $environment)));
+        $process = $this->executeHook('pre-commit', 0, $environment);
+
+        self::assertSame(0, $process->getExitCode(), $process->getErrorOutput());
+        self::assertSame($this->gitDiff(), file_get_contents($this->project . '/stdin'));
+        self::assertSame($foreignContents, file_get_contents($foreignIndex));
+        self::assertSame("called\n", file_get_contents($this->project . '/calls'));
+    }
+
+    /**
      * @param string $hook
      * @param int $status
+     * @param array<string, string> $environment
      *
      * @return Process
      */
-    private function executeHook(string $hook, int $status): Process
+    private function executeHook(string $hook, int $status, array $environment = []): Process
     {
         $contents = file_get_contents(\dirname(__DIR__, 2) . '/resources/git-hooks/' . $hook);
         file_put_contents($this->project . '/hook', str_replace(
@@ -191,11 +239,13 @@ final class PackagedHooksTest extends TestCase
             ['/bin/sh', $this->project . '/hook', $this->project . '/commit message.txt'],
             $this->project,
             [
+                ...$environment,
                 'PATH' => $this->project . '/bin:/usr/bin:/bin',
                 'HOOK_CAPTURE_DIR' => $this->project,
                 'HOOK_EXIT_STATUS' => (string) $status,
                 'GIT_CONFIG_GLOBAL' => '/dev/null',
                 'GIT_CONFIG_NOSYSTEM' => '1',
+                ...self::ISOLATED_GIT_ENVIRONMENT,
             ],
         );
         $process->run();
@@ -231,7 +281,7 @@ final class PackagedHooksTest extends TestCase
      */
     private function expectedArguments(string $hook, bool $config, bool $cpx): string
     {
-        $arguments = $cpx ? ['--skip-local', 'phpro/grumphp-shim:2.26.0'] : [];
+        $arguments = $cpx ? ['--skip-local', 'phpro/grumphp-shim:2.26.0', 'grumphp'] : [];
         if ($config) {
             $arguments[] = '--config';
             $arguments[] = './grumphp.yml';
@@ -276,12 +326,15 @@ final class PackagedHooksTest extends TestCase
 
     /**
      * @param list<string> $arguments
+     * @param array<string, string> $environment
      */
-    private function git(array $arguments): string
+    private function git(array $arguments, array $environment = []): string
     {
         $process = new Process(['git', ...$arguments], $this->project, [
+            ...$environment,
             'GIT_CONFIG_GLOBAL' => '/dev/null',
             'GIT_CONFIG_NOSYSTEM' => '1',
+            ...self::ISOLATED_GIT_ENVIRONMENT,
         ]);
         $process->mustRun();
 

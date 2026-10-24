@@ -30,7 +30,7 @@ run_grumphp() {
   elif [ -x "vendor/bin/grumphp.phar" ]; then
     vendor/bin/grumphp.phar "$@"
   else
-    cpx --skip-local phpro/grumphp-shim:2.26.0 "$@"
+    cpx --skip-local phpro/grumphp-shim:2.26.0 grumphp "$@"
   fi
 }
 

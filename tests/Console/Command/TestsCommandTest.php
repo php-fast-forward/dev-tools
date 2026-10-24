@@ -592,13 +592,20 @@ final class TestsCommandTest extends TestCase
             $composer = $this->prophesize(ComposerJsonInterface::class);
             $filesystem = $this->prophesize(FilesystemInterface::class);
             foreach (['psr-4', 'psr-0', 'classmap'] as $autoloadType) {
-                $composer->getAutoload($autoloadType)->willReturn([]);
+                $composer->getAutoload($autoloadType)
+                    ->willReturn([]);
             }
-            $composer->getAutoload('files')->willReturn(['functions.php']);
-            $filesystem->getAbsolutePath('functions.php')->willReturn($workspace . '/functions.php');
-            $filesystem->exists('./tests')->willReturn(true);
-            $filesystem->exists('docs')->willReturn(false);
-            $filesystem->exists('.github/wiki')->willReturn(false);
+
+            $composer->getAutoload('files')
+                ->willReturn(['functions.php']);
+            $filesystem->getAbsolutePath('functions.php')
+                ->willReturn($workspace . '/functions.php');
+            $filesystem->exists('./tests')
+                ->willReturn(true);
+            $filesystem->exists('docs')
+                ->willReturn(false);
+            $filesystem->exists('.github/wiki')
+                ->willReturn(false);
             $resolver = new ProjectCapabilitiesResolver($composer->reveal(), $filesystem->reveal());
             $capabilities = $resolver->resolve();
             self::assertSame([], $capabilities->getApiDirectories());

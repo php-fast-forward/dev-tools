@@ -24,6 +24,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Yaml\Yaml;
+
+use function Safe\proc_close;
 use function Safe\fclose;
 use function Safe\fwrite;
 use function Safe\proc_open;
@@ -37,15 +39,33 @@ final class PendingTestStatusWorkflowTest extends TestCase
      */
     public static function invalidRuns(): iterable
     {
-        yield 'wrong ID' => [['id' => 8], 'Workflow run ID does not match the current run.'];
-        yield 'missing ID' => [['id' => null], 'Workflow run ID does not match the current run.'];
-        yield 'wrong repository' => [['repository' => ['full_name' => 'other/repo']], 'Workflow repository does not match the current repository.'];
-        yield 'missing repository' => [['repository' => null], 'Workflow repository does not match the current repository.'];
-        yield 'string attempt' => [['run_attempt' => '1'], 'Workflow run attempt is not an integer.'];
-        yield 'missing attempt' => [['run_attempt' => null], 'Workflow run attempt is not an integer.'];
-        yield 'different attempt' => [['run_attempt' => 2], 'Workflow run attempt does not match the current attempt.'];
+        yield 'wrong ID' => [[
+            'id' => 8,
+        ], 'Workflow run ID does not match the current run.'];
+        yield 'missing ID' => [[
+            'id' => null,
+        ], 'Workflow run ID does not match the current run.'];
+        yield 'wrong repository' => [[
+            'repository' => [
+                'full_name' => 'other/repo',
+            ],
+        ], 'Workflow repository does not match the current repository.'];
+        yield 'missing repository' => [[
+            'repository' => null,
+        ], 'Workflow repository does not match the current repository.'];
+        yield 'string attempt' => [[
+            'run_attempt' => '1',
+        ], 'Workflow run attempt is not an integer.'];
+        yield 'missing attempt' => [[
+            'run_attempt' => null,
+        ], 'Workflow run attempt is not an integer.'];
+        yield 'different attempt' => [[
+            'run_attempt' => 2,
+        ], 'Workflow run attempt does not match the current attempt.'];
         foreach (['queued', 'completed', 'cancelled', null, "untrusted\nTOKEN_MARKER"] as $status) {
-            yield 'status ' . ($status ?? 'missing') => [['status' => $status], 'Workflow run status is not in_progress.'];
+            yield 'status ' . ($status ?? 'missing') => [[
+                'status' => $status,
+            ], 'Workflow run status is not in_progress.'];
         }
     }
 
@@ -64,6 +84,9 @@ final class PendingTestStatusWorkflowTest extends TestCase
         self::assertStringNotContainsString('TOKEN_MARKER', $output);
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function pendingPublisherWillKeepTheValidRunPublishingPath(): void
     {
@@ -75,8 +98,8 @@ final class PendingTestStatusWorkflowTest extends TestCase
             $expected = [
                 '--method', 'POST', 'repos/example/repo/statuses/' . str_repeat('a', 40),
                 '-f', 'state=pending',
-                '-f', "context=Run Tests ($version)",
-                '-f', "description=PHP $version matrix job is pending for attempt 1.",
+                '-f', "context=Run Tests ({$version})",
+                '-f', "description=PHP {$version} matrix job is pending for attempt 1.",
                 '-f', 'target_url=https://github.com/example/repo/actions/runs/7',
             ];
             self::assertStringContainsString(var_export($expected, true), $output);
@@ -87,6 +110,7 @@ final class PendingTestStatusWorkflowTest extends TestCase
      * Execute the actual embedded program with only its GitHub transport substituted.
      *
      * @param array<string, mixed> $overrides
+     *
      * @return array{int, string}
      */
     private function executePublisher(array $overrides): array
@@ -96,13 +120,16 @@ final class PendingTestStatusWorkflowTest extends TestCase
         self::assertIsString($shell);
         $program = substr($shell, strpos($shell, '<?php'));
         $program = substr($program, 0, strrpos($program, 'PHP'));
+
         $start = strpos($program, 'function githubApi(');
         $end = strpos($program, '$repository = getenv');
         self::assertIsInt($start);
         self::assertIsInt($end);
         $run = array_replace([
             'id' => 7,
-            'repository' => ['full_name' => 'example/repo'],
+            'repository' => [
+                'full_name' => 'example/repo',
+            ],
             'run_attempt' => 1,
             'status' => 'in_progress',
         ], $overrides);
@@ -110,14 +137,20 @@ final class PendingTestStatusWorkflowTest extends TestCase
             . 'if ($arguments[0] === "--method") { echo "STATUS_WRITE\\n" . var_export($arguments, true) . "\\n"; return []; }'
             . 'return ' . var_export($run, true) . '; }' . "\n";
         $program = substr($program, 0, $start) . $transport . substr($program, $end);
-        $process = proc_open(escapeshellarg(PHP_BINARY), [['pipe', 'r'], ['pipe', 'w'], ['redirect', 1]], $pipes, null, array_merge(getenv(), [
-            'GITHUB_REPOSITORY' => 'example/repo',
-            'GITHUB_RUN_ID' => '7',
-            'GITHUB_RUN_ATTEMPT' => '1',
-            'TARGET_SHA' => str_repeat('a', 40),
-            'TARGET_URL' => 'https://github.com/example/repo/actions/runs/7',
-            'TEST_MATRIX' => '{"php-version":["8.3","8.4","8.5"]}',
-        ]));
+        $process = proc_open(
+            escapeshellarg(\PHP_BINARY),
+            [['pipe', 'r'], ['pipe', 'w'], ['redirect', 1]],
+            $pipes,
+            null,
+            array_merge(getenv(), [
+                'GITHUB_REPOSITORY' => 'example/repo',
+                'GITHUB_RUN_ID' => '7',
+                'GITHUB_RUN_ATTEMPT' => '1',
+                'TARGET_SHA' => str_repeat('a', 40),
+                'TARGET_URL' => 'https://github.com/example/repo/actions/runs/7',
+                'TEST_MATRIX' => '{"php-version":["8.3","8.4","8.5"]}',
+            ])
+        );
         self::assertIsResource($process);
         fwrite($pipes[0], $program);
         fclose($pipes[0]);

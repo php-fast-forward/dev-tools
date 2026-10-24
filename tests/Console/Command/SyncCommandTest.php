@@ -193,18 +193,26 @@ final class SyncCommandTest extends TestCase
         self::assertSame(SyncCommand::SUCCESS, $this->executeCommand());
     }
 
+    /**
+     * @param string $mode
+     * @param int $status
+     *
+     * @return void
+     */
     #[Test]
     #[DataProvider('readOnlyModes')]
     public function executeWillForwardReadOnlyModeToEveryQueuedCommand(string $mode, int $status): void
     {
-        $this->input->getOption($mode)->willReturn(true);
+        $this->input->getOption($mode)
+            ->willReturn(true);
         $commandLines = [];
         $this->processQueue->add(Argument::type(Process::class), false, false, Argument::cetera())
             ->will(static function (array $arguments) use (&$commandLines): void {
                 $commandLines[] = $arguments[0]->getCommandLine();
-            })->shouldBeCalledTimes(10);
+            })->shouldBeCalledTimes(11);
         $this->processQueue->add(Argument::type(Process::class), false, true, Argument::cetera())->shouldNotBeCalled();
-        $this->processQueue->run($this->output->reveal())->willReturn($status);
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn($status);
 
         self::assertSame($status, $this->executeCommand());
         foreach ($commandLines as $commandLine) {
@@ -213,16 +221,29 @@ final class SyncCommandTest extends TestCase
             self::assertStringNotContainsString("'skills'", $commandLine);
             self::assertStringNotContainsString("'agents'", $commandLine);
         }
-        self::assertCount(3, array_filter($commandLines, static fn(string $line): bool => str_contains($line, "'copy-resource'")));
-        self::assertCount(1, array_filter($commandLines, static fn(string $line): bool => str_contains($line, "'git-hooks'")));
+
+        self::assertCount(
+            4,
+            array_filter($commandLines, static fn(string $line): bool => str_contains($line, "'copy-resource'"))
+        );
+        self::assertCount(
+            1,
+            array_filter($commandLines, static fn(string $line): bool => str_contains($line, "'git-hooks'"))
+        );
     }
 
+    /**
+     * @return iterable
+     */
     public static function readOnlyModes(): iterable
     {
         yield 'dry-run' => ['dry-run', SyncCommand::SUCCESS];
         yield 'check' => ['check', SyncCommand::FAILURE];
     }
 
+    /**
+     * @return int
+     */
     private function executeCommand(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))

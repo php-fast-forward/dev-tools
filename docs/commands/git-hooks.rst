@@ -100,8 +100,13 @@ Runtime and durable configuration
 ---------------------------------
 
 Hooks prefer ``vendor/bin/grumphp`` or ``vendor/bin/grumphp.phar``; otherwise
-they run ``cpx --skip-local phpro/grumphp-shim:2.26.0``. CPX must be available
+they run ``cpx --skip-local phpro/grumphp-shim:2.26.0 grumphp``. The explicit
+binary name avoids an interactive choice between ``grumphp`` and ``grumphp.phar``.
+CPX must be available
 when no local executable exists. GrumPHP is not a DevTools runtime dependency.
 Explicit ``dev-tools:sync`` copies a missing ``grumphp.yml`` into the consumer
 root. Local overrides remain authoritative; hooks do not persist temporary
 runtime/cache paths.
+
+The packaged GrumPHP configuration allows 600 seconds per process so its
+``composer dev-tools`` task can complete the full coverage and reports pipeline.
