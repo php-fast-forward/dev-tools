@@ -157,7 +157,7 @@ final readonly class ProjectCapabilitiesResolver implements ProjectCapabilitiesR
             }
         }
 
-        foreach (self::API_AUTOLOAD_TYPES as $autoloadType) {
+        foreach ([...self::API_AUTOLOAD_TYPES, 'files'] as $autoloadType) {
             foreach ($this->normalizeAutoloadPaths($this->composer->getAutoload($autoloadType)) as $path) {
                 $absolutePath = $this->filesystem->getAbsolutePath($path);
 
