@@ -817,6 +817,8 @@ TOKEN_MARKER&quot;</li>
             <li class="success">Resolve will ignore tooling php files when detecting testable php source</li>
             <li class="success">Resolve will not detect php source from empty autoload directories</li>
             <li class="success">Resolve will detect php source from file based classmap entries</li>
+            <li class="success">Resolve will detect files only source without inventing api directories</li>
+            <li class="success">Resolve will ignore missing and non php autoload files</li>
             <li class="success">Resolve will detect php package capabilities</li>
         </ul>
         <h2>Reader (FastForward\DevTools\Tests\GitAttributes\Reader)</h2>
@@ -873,6 +875,7 @@ TOKEN_MARKER&quot;</li>
             <li class="success">Execute will forward progress to nested commands when requested</li>
             <li class="success">Execute with cache will forward cache only to docs and tests</li>
             <li class="success">Execute with no cache will forward no cache only to docs and tests</li>
+            <li class="success">Execute will generate coverage for files only package</li>
             <li class="success">Execute will skip coverage report when no tests available</li>
         </ul>
         <h2>Reports Workflow (FastForward\DevTools\Tests\GitHubActions\ReportsWorkflow)</h2>
@@ -987,6 +990,7 @@ TOKEN_MARKER&quot;</li>
             <li class="success">Execute will keep raw php unit output when structured summary cannot be decoded</li>
             <li class="success">Execute will enable php unit progress when requested</li>
             <li class="success">Execute with invalid min coverage will return failure</li>
+            <li class="success">Execute will propagate test failure for files only package</li>
             <li class="success">Execute will skip when no tests directory or php source exists</li>
             <li class="success">Execute will skip when tests directory exists but no php source files are detected</li>
             <li class="success">Execute will use minimum coverage from environment when not provided</li>
