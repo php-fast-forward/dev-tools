@@ -7,3 +7,4 @@ vendor/
 *.cache
 .DS_Store
 composer.lock
+/.agents/skills/

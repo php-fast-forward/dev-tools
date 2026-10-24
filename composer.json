@@ -80,6 +80,9 @@
         "thecodingmachine/safe": "^3.4",
         "twig/twig": "^3.24"
     },
+    "require-dev": {
+        "llm/skills": "^1.15"
+    },
     "suggest": {
         "llm/skills": "Synchronize bundled skills from Composer dependencies or explicit GitHub sources."
     },
@@ -101,6 +104,7 @@
     "config": {
         "allow-plugins": {
             "ergebnis/composer-normalize": true,
+            "llm/skills": true,
             "phpdocumentor/shim": true,
             "phpro/grumphp-shim": true,
             "pyrech/composer-changelogs": true

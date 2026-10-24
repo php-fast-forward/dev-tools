@@ -8,7 +8,7 @@
     "dependencies": {
         "composer": {
             "trusted": [
-                "fast-forward/changelog"
+                "fast-forward/*"
             ],
             "trusted-replace": true
         }
@@ -16,14 +16,12 @@
     "sources": [
         {
             "from": "dir",
-            "path": "resources/skills",
-            "package": "fast-forward/dev-tools"
+            "path": "resources/skills"
         },
         {
             "from": "github",
             "package": "php-fast-forward/changelog",
-            "ref": "v0.3.0",
-            "skills": ["fast-forward-changelog"]
+            "ref": "^0.4.0"
         }
     ]
 }

@@ -84,7 +84,6 @@ final class SkillsDistributionTest extends TestCase
         self::assertContains([
             'from' => 'dir',
             'path' => 'resources/skills',
-            'package' => 'fast-forward/dev-tools',
         ], $config['sources']);
     }
 }
