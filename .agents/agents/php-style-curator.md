@@ -1,7 +1,7 @@
 ---
 name: php-style-curator
 description: Normalize Fast Forward PHP style, PHPDoc, headers, and wording without changing behavior.
-primary-skill: phpdoc-code-style
+primary-skill: fast-forward-phpdoc-code-style
 supporting-skills: []
 ---
 
@@ -32,7 +32,7 @@ conventions without changing runtime behavior.
 
 ## Primary Skill
 
-- `phpdoc-code-style`
+- `fast-forward-phpdoc-code-style`
 
 ## Supporting Skills
 

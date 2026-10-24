@@ -27,12 +27,12 @@ Useful Examples
 
 .. code-block:: bash
 
-   composer tests
-   composer tests -- --filter=PluginTest
-   composer tests --coverage=.dev-tools/coverage
-   composer tests --no-cache --bootstrap=tests/bootstrap.php
-   composer tests --json
-   composer tests --pretty-json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --filter=PluginTest
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --coverage=.dev-tools/coverage
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --no-cache --bootstrap=tests/bootstrap.php
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --pretty-json
 
 Coverage Outputs
 ----------------

@@ -31,6 +31,7 @@ use SebastianBergmann\CodeCoverage\Data\RawCodeCoverageData;
 use SebastianBergmann\CodeCoverage\Driver\Driver;
 use SebastianBergmann\CodeCoverage\Filter;
 use SebastianBergmann\CodeCoverage\Report\PHP as PhpReport;
+
 use function Safe\file_put_contents;
 use function Safe\tempnam;
 use function Safe\unlink;

@@ -1,10 +1,10 @@
 ---
 name: consumer-sync-auditor
 description: Audit downstream sync and consumer bootstrap impacts for packaged skills, packaged agents, workflows, wiki, and repository defaults.
-primary-skill: github-pull-request
+primary-skill: fast-forward-github-pull-request
 supporting-skills:
-  - package-readme
-  - sphinx-docs
+  - fast-forward-package-readme
+  - fast-forward-sphinx-docs
 ---
 
 # consumer-sync-auditor
@@ -28,7 +28,7 @@ wiki/bootstrap assets.
 
 ## Use When
 
-- A change touches `resources/`, `.github/workflows/`, `.agents/skills`,
+- A change touches `resources/`, `.github/workflows/`, `resources/skills`,
   `.agents/agents`, `.editorconfig`, wiki automation, `.github/actions/`, or
   `dev-tools:sync`.
 - A PR may affect how consumer repositories adopt or refresh DevTools assets.
@@ -44,9 +44,9 @@ wiki/bootstrap assets.
 
 ## Primary Skill
 
-- `github-pull-request`
+- `fast-forward-github-pull-request`
 
 ## Supporting Skills
 
-- `package-readme`
-- `sphinx-docs`
+- `fast-forward-package-readme`
+- `fast-forward-sphinx-docs`

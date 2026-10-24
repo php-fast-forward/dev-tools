@@ -45,14 +45,6 @@ Commands and Their Configuration Files
    * - ``docs``
      - ``docs/`` or another path passed with ``--source``
      - The selected guide source must exist locally.
-   * - ``skills``
-     - ``.agents/skills/``
-     - Creates missing local links to packaged skills and preserves existing
-       non-symlink directories.
-   * - ``agents``
-     - ``.agents/agents/``
-     - Creates missing local links to packaged project agents and preserves
-       existing non-symlink directories.
    * - ``dev-tools:sync``
      - Consumer repository files
      - Works directly against local project files such as ``composer.json`` and
@@ -144,7 +136,7 @@ repositories add project-specific ignores or scan rules.
 The baseline ignores ``SHADOW_DEPENDENCY`` findings by default because Fast
 Forward packages may intentionally require dependency groups, ecosystem bundles,
 or meta packages that install related dependencies for consumers. Run
-``composer dependencies --show-shadow-dependencies`` when you want to audit
+``cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --show-shadow-dependencies`` when you want to audit
 those findings and decide whether a package should keep, document, or remove a
 direct dependency.
 
@@ -154,8 +146,6 @@ What Is Not Overwritten Automatically
 - existing workflow files in ``.github/workflows/``;
 - an existing ``.editorconfig``;
 - an existing ``.github/dependabot.yml``;
-- an existing non-symlink directory inside ``.agents/skills/``;
-- an existing non-symlink directory inside ``.agents/agents/``;
 - an existing ``.github/wiki`` directory or submodule.
 
 .. tip::

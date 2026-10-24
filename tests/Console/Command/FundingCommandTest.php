@@ -38,6 +38,7 @@ use FastForward\DevTools\Container\ServiceProvider\DevToolsServiceProvider;
 use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -53,10 +54,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
+
 use function Safe\json_decode;
 
 #[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevToolsPathResolver::class)]
+#[UsesClass(WorkingProjectPathResolver::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
 #[UsesClass(DevToolsEnvironment::class)]
 #[UsesClass(RuntimeEnvironment::class)]
@@ -141,7 +144,9 @@ final class FundingCommandTest extends TestCase
         $this->processBuilder->withArgument(Argument::any(), Argument::any())->willReturn(
             $this->processBuilder->reveal()
         );
-        $this->processBuilder->build('composer normalize')
+        $this->processBuilder->build(Argument::that(static fn(array $command): bool => 'composer' === $command[0]
+            && '--working-dir=' . \dirname(DevToolsPathResolver::getRuntimeAutoloadPath(), 2) === $command[1]
+            && 'normalize' === $command[2]))
             ->willReturn($this->normalizeProcess->reveal());
 
         $this->command = new FundingCommand(
@@ -596,11 +601,12 @@ final class FundingCommandTest extends TestCase
             ->willReturn('build/custom');
         $this->filesystem->getBasename($composerFile)
             ->willReturn('composer.alt.json');
-        $this->processBuilder->withArgument('--working-dir', 'build/custom')
-            ->willReturn($this->processBuilder->reveal())
-            ->shouldBeCalledOnce();
-        $this->processBuilder->withArgument('--file', 'composer.alt.json')
-            ->willReturn($this->processBuilder->reveal())
+        $this->processBuilder->build([
+            'composer',
+            '--working-dir=' . \dirname(DevToolsPathResolver::getRuntimeAutoloadPath(), 2),
+            'normalize',
+            WorkingProjectPathResolver::getProjectPath($composerFile),
+        ])->willReturn($this->normalizeProcess->reveal())
             ->shouldBeCalledOnce();
         $this->fileDiffer->diffContents(
             'generated funding metadata synchronization',
@@ -700,8 +706,12 @@ final class FundingCommandTest extends TestCase
             ->willReturn('.');
         $this->filesystem->getBasename('composer.alt.json')
             ->willReturn('composer.alt.json');
-        $this->processBuilder->withArgument('--file', 'composer.alt.json')
-            ->willReturn($this->processBuilder->reveal())
+        $this->processBuilder->build([
+            'composer',
+            '--working-dir=' . \dirname(DevToolsPathResolver::getRuntimeAutoloadPath(), 2),
+            'normalize',
+            WorkingProjectPathResolver::getProjectPath('composer.alt.json'),
+        ])->willReturn($this->normalizeProcess->reveal())
             ->shouldBeCalledOnce();
         $this->processQueue->add($this->normalizeProcess->reveal(), Argument::cetera())
             ->shouldBeCalledOnce();

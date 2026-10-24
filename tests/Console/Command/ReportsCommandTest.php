@@ -51,6 +51,7 @@ use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+
 use function Safe\file_put_contents;
 use function Safe\mkdir;
 use function Safe\rmdir;
@@ -274,20 +275,29 @@ final class ReportsCommandTest extends TestCase
             $composer = $this->prophesize(ComposerJsonInterface::class);
             $filesystem = $this->prophesize(FilesystemInterface::class);
             foreach (['psr-4', 'psr-0', 'classmap'] as $autoloadType) {
-                $composer->getAutoload($autoloadType)->willReturn([]);
+                $composer->getAutoload($autoloadType)
+                    ->willReturn([]);
             }
-            $composer->getAutoload('files')->willReturn(['functions.php']);
-            $filesystem->getAbsolutePath('functions.php')->willReturn($workspace . '/functions.php');
-            $filesystem->exists('./tests')->willReturn(true);
-            $filesystem->exists('docs')->willReturn(false);
-            $filesystem->exists('.github/wiki')->willReturn(false);
+
+            $composer->getAutoload('files')
+                ->willReturn(['functions.php']);
+            $filesystem->getAbsolutePath('functions.php')
+                ->willReturn($workspace . '/functions.php');
+            $filesystem->exists('./tests')
+                ->willReturn(true);
+            $filesystem->exists('docs')
+                ->willReturn(false);
+            $filesystem->exists('.github/wiki')
+                ->willReturn(false);
             $resolver = new ProjectCapabilitiesResolver($composer->reveal(), $filesystem->reveal());
             $capabilities = $resolver->resolve();
             self::assertSame([], $capabilities->getApiDirectories());
             self::assertTrue($capabilities->canRunTests());
-            $this->projectCapabilitiesResolver->resolve()->willReturn($capabilities);
+            $this->projectCapabilitiesResolver->resolve()
+                ->willReturn($capabilities);
             $this->processBuilder->build([DevToolsPathResolver::getBinaryPath(), 'tests'])
-                ->willReturn($this->process->reveal())->shouldBeCalledOnce();
+                ->willReturn($this->process->reveal())
+                ->shouldBeCalledOnce();
             $this->processQueue->add($this->process->reveal(), false, false, 'Generating Coverage Report')
                 ->shouldBeCalledOnce();
             $this->processQueue->add($this->process->reveal(), false, true, 'Generating API Docs Report')
@@ -296,7 +306,11 @@ final class ReportsCommandTest extends TestCase
                 ->shouldBeCalledOnce();
             $this->processQueue->run($this->output->reveal())
                 ->willReturn(ReportsCommand::SUCCESS)->shouldBeCalledOnce();
-            $this->logger->log('info', 'Generating frontpage for Fast Forward documentation...', Argument::type('array'))
+            $this->logger->log(
+                'info',
+                'Generating frontpage for Fast Forward documentation...',
+                Argument::type('array')
+            )
                 ->shouldBeCalledOnce();
             $this->logger->log('info', 'Documentation reports generated successfully.', Argument::type('array'))
                 ->shouldBeCalledOnce();

@@ -12,11 +12,11 @@ Runtime and Composer Integration
 
    * - Package
      - Why it matters
-   * - ``composer/composer`` and ``composer-plugin-api``
-     - Provide the Composer plugin API, command integration, and script hooks.
-   * - ``phpro/grumphp-shim``
-     - Supplies the default GrumPHP executable and configuration referenced by
-       ``dev-tools:sync``.
+   * - ``symfony/console``
+     - Provides the standalone command runtime; no Composer plugin is registered.
+   * - External ``phpro/grumphp-shim:2.26.0``
+     - Hooks use CPX when local GrumPHP is absent. It is not a DevTools runtime
+       dependency; explicit sync supplies durable local configuration.
 
 QA and Refactoring
 ------------------

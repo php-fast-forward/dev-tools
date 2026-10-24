@@ -23,9 +23,9 @@ Usage
 
 .. code-block:: bash
 
-   composer funding
-   composer funding [options]
-   composer dev-tools funding -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding [options]
    vendor/bin/dev-tools funding [options]
 
 Options
@@ -63,25 +63,25 @@ Synchronize the default files:
 
 .. code-block:: bash
 
-   composer funding
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding
 
 Preview funding drift:
 
 .. code-block:: bash
 
-   composer funding --dry-run
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding --dry-run
 
 Validate funding metadata in CI:
 
 .. code-block:: bash
 
-   composer funding --check
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding --check
 
 Use custom paths:
 
 .. code-block:: bash
 
-   composer funding --composer-file=packages/example/composer.json --funding-file=packages/example/.github/FUNDING.yml
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding --composer-file=packages/example/composer.json --funding-file=packages/example/.github/FUNDING.yml
 
 Exit Codes
 ----------
@@ -104,7 +104,8 @@ Behavior
   entries.
 - Preserves unsupported Composer funding providers and unsupported GitHub
   funding YAML keys.
-- Normalizes ``composer.json`` with ``composer normalize`` after applying
+- Normalizes the absolute consumer manifest through the Composer Normalize
+  plugin in the isolated runtime root with ``--no-update-lock`` after applying
   funding metadata updates.
 - Creates ``.github/FUNDING.yml`` when Composer declares supported funding
   metadata and the file is missing.

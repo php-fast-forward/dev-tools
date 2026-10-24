@@ -41,6 +41,7 @@ use ReflectionProperty;
 use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
 use Symplify\EasyCodingStandard\Config\ECSConfig as ECSConfigInterface;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
+
 use function Safe\getcwd;
 
 #[CoversClass(ECSConfig::class)]

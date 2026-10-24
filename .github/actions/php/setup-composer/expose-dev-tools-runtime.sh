@@ -4,6 +4,9 @@ set -euo pipefail
 source "$(dirname "$0")/dev-tools-runtime-lib.sh"
 
 resolve_dev_tools_runtime
+if [ "${DEV_TOOLS_RUNTIME_SOURCE}" = 'cpx' ]; then
+    resolve_cpx_runtime
+fi
 ensure_resolved_runtime_is_available
 
 runtime_directory="${RUNNER_TEMP:-${TMPDIR:-/tmp}}/dev-tools-runtime/bin"

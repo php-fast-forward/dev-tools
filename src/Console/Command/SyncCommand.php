@@ -63,7 +63,7 @@ final class SyncCommand extends Command
     {
         $this->setHelp(
             'This command runs the dedicated synchronization commands for composer.json, resources, CODEOWNERS,'
-            . ' funding metadata, wiki, git metadata, packaged skills, packaged agents, license, and Git hooks.'
+            . ' funding metadata, wiki, git metadata, license, and Git hooks.'
         );
 
         $this->addJsonOption()
@@ -117,6 +117,18 @@ final class SyncCommand extends Command
         $this->queueDevToolsCommand(
             [
                 'copy-resource',
+                '--source=grumphp.yml',
+                '--target=grumphp.yml',
+                $overwrite ? '--overwrite' : null,
+                ...$modeArguments,
+            ],
+            $allowDetached,
+            $jsonOutput,
+            $prettyJsonOutput,
+        );
+        $this->queueDevToolsCommand(
+            [
+                'copy-resource',
                 '--source=resources/github-actions',
                 '--target=.github/workflows',
                 $overwrite ? '--overwrite' : null,
@@ -159,7 +171,7 @@ final class SyncCommand extends Command
 
         if ($dryRun || $check || $interactive) {
             $this->log(
-                'Skipping wiki, skills, and agents during preview/check modes because they do not yet expose non-destructive verification.',
+                'Skipping wiki during preview/check modes because it does not yet expose non-destructive verification.',
                 $input,
                 logLevel: LogLevel::WARNING,
             );
@@ -170,8 +182,6 @@ final class SyncCommand extends Command
                 $jsonOutput,
                 $prettyJsonOutput
             );
-            $this->queueDevToolsCommand(['skills'], true, $jsonOutput, $prettyJsonOutput);
-            $this->queueDevToolsCommand(['agents'], true, $jsonOutput, $prettyJsonOutput);
         }
 
         $this->queueDevToolsCommand(['gitignore', ...$modeArguments], $allowDetached, $jsonOutput, $prettyJsonOutput);

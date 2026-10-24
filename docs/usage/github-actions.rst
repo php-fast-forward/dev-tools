@@ -25,10 +25,9 @@ The automation model separates shared implementations from consumer triggers:
 *   **Workflow action source checkout** inside the reusable workflows when they
     need local action implementations from ``.github/actions/``. The reusable
     workflow checks out the upstream ``php-fast-forward/dev-tools`` source into
-    a dedicated ``.dev-tools-actions`` workspace path. Jobs that use the shared
-    PHP bootstrap can then prefer the consumer-local ``vendor/bin/dev-tools``
-    when it exists and otherwise install a deterministic fallback runtime from
-    that workflow-source checkout.
+    a dedicated ``.dev-tools-actions`` workspace path. Jobs using shared PHP bootstrap resolve a pinned CPX runtime for consumers.
+    DevTools itself executes its checked-out source binary. The action-source
+    checkout is not a consumer runtime dependency installation.
 
 Wrapper Workflows
 -----------------
@@ -42,19 +41,15 @@ Example of an inherited workflow:
 .. code-block:: yaml
 
     name: "Fast Forward Reports"
-    uses: php-fast-forward/dev-tools/.github/workflows/reports.yml@main
+    uses: php-fast-forward/dev-tools/.github/workflows/reports.yml@v2.0.0
     secrets: inherit
 
-This approach ensures that all libraries in the ecosystem benefit from infrastructure updates without requiring manual changes to every repository.
-
-DevTools-owned wrappers intentionally follow the reviewed ``@main`` workflow
-contract so centrally deployed fixes reach consumers. This is an explicit
-shared-infrastructure update policy, distinct from pinning third-party
-actions. A workflow SHA alone would not freeze the existing action-source
-checkout, which also follows DevTools ``main``; a fully immutable migration
-would need to version both surfaces together. The external Changelog caller
-instead selects its published ``@v0`` channel; its update contract is documented
-below.
+Consumer wrappers select the full DevTools release tag ``@v2.0.0`` and a
+compatible exact runtime version. Adopt those refs only after verifying the
+published tag, workflow contents and Packagist package. Upgrades are reviewed
+caller-ref and runtime-pin changes. Verify nested action-source checkout refs
+too: freezing a caller alone does not freeze a moving nested checkout. The
+external Changelog caller retains its independently selected ``@v0`` channel.
 
 The packaged wrappers currently include:
 
@@ -76,13 +71,15 @@ For the protected-branch-safe preview and publish model, see
 
 The standard reusable workflows support workflow-only consumers without a
 local ``fast-forward/dev-tools`` Composer dependency. The shared
-``setup-composer`` action prefers the
-consumer ``vendor/bin/dev-tools`` when it exists and otherwise exposes a
-``dev-tools`` wrapper backed by the checked-out ``.dev-tools-actions`` source.
+``setup-composer`` action uses ``cpx --skip-local`` with the selected exact
+DevTools version, then reads ``runtime --json --no-ansi --no-interaction``
+to expose the real binary and autoloader. Consumer dependencies remain in their
+own Composer installation. The DevTools producer uses checked-out source.
 
 For Pages configured to use GitHub Actions, the optional
-``reports-native.yml`` workflow requires consumer-local DevTools and a template
-version of at least 2.1.0. Follow the `native Pages operator guide
+``reports-native.yml`` workflow has its own adoption contract, including a
+template version of at least 2.1.0. Review its current runtime requirements
+separately when migrating an existing caller. Follow the `native Pages operator guide
 <https://github.com/php-fast-forward/dev-tools/blob/main/resources/github-actions-optional/reports-native.md>`_
 before adopting it. The legacy ``reports.yml`` workflow remains unchanged.
 
@@ -237,7 +234,7 @@ Migration from the pointer-based workflows requires updating the consumer's
 ``wiki.yml`` and removing its automatic maintenance triggers. The packaged
 ``wiki-maintenance.yml`` is now a manual-only compatibility stub. Normal sync
 preserves existing files: replace the wrappers explicitly or review
-``composer dev-tools:sync --overwrite``. Sync does not delete files missing
+``cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync --overwrite``. Sync does not delete files missing
 from its packaged source directory.
 
 Remove only the ``.github/wiki`` gitlink and its matching ``.gitmodules``

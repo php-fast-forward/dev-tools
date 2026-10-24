@@ -44,10 +44,10 @@ Common Examples
 
 .. code-block:: bash
 
-   composer docs
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs
    vendor/bin/dev-tools docs --source=docs --target=.dev-tools
-   composer wiki
-   composer reports
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports
 
 What Each Command Is For
 ------------------------

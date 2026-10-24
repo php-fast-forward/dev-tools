@@ -14,9 +14,9 @@ Usage
 
 .. code-block:: bash
 
-   composer license
-   composer license [options]
-   composer dev-tools license -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" license
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" license [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" license [options]
    vendor/bin/dev-tools license [options]
 
 Options
@@ -48,13 +48,13 @@ Generate LICENSE file:
 
 .. code-block:: bash
 
-   composer license
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" license
 
 Generate to custom path:
 
 .. code-block:: bash
 
-   composer license --target=LICENCE
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" license --target=LICENCE
 
 Exit Codes
 ---------

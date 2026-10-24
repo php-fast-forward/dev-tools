@@ -17,10 +17,10 @@ Usage
 
 .. code-block:: bash
 
-   composer docs
-   composer dev-tools docs
-   composer docs [options]
-   composer dev-tools docs -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs [options]
    vendor/bin/dev-tools docs [options]
 
 Options
@@ -67,25 +67,25 @@ Generate docs with defaults:
 
 .. code-block:: bash
 
-   composer docs
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs
 
 Generate to custom directory:
 
 .. code-block:: bash
 
-   composer docs --target=dist/docs
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs --target=dist/docs
 
 Use custom source:
 
 .. code-block:: bash
 
-   composer docs --source=docs/user-guide
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs --source=docs/user-guide
 
 Generate without cache:
 
 .. code-block:: bash
 
-   composer docs --no-cache
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs --no-cache
 
 Exit Codes
 ---------

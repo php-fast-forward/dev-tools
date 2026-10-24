@@ -23,6 +23,7 @@ use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Config\ComposerDependencyAnalyserConfig;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use InvalidArgumentException;
@@ -34,6 +35,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+
 use function is_numeric;
 
 /**
@@ -292,7 +294,13 @@ final class DependenciesCommand extends Command
     {
         return $this->processBuilder
             ->withArgument('--ansi')
-            ->build('composer normalize');
+            ->withArgument('--no-update-lock')
+            ->build([
+                'composer',
+                '--working-dir=' . \dirname(DevToolsPathResolver::getRuntimeAutoloadPath(), 2),
+                'normalize',
+                WorkingProjectPathResolver::getProjectPath('composer.json'),
+            ]);
     }
 
     /**

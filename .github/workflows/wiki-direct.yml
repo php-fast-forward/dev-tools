@@ -2,6 +2,12 @@ name: Publish Wiki Directly
 
 on:
   workflow_call:
+    inputs:
+      dev-tools-version:
+        description: Published isolated DevTools runtime version for consumer repositories.
+        required: false
+        type: string
+        default: '2.0.0'
 
 permissions:
   contents: read
@@ -20,7 +26,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: php-fast-forward/dev-tools
-          ref: d5a3b7eec9896f9ea50974ff09b23c32887acbc0
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || format('v{0}', inputs.dev-tools-version || '2.0.0') }}
           path: .dev-tools-actions
           persist-credentials: false
       - name: Resolve PHP version
@@ -29,36 +35,22 @@ jobs:
       - name: Setup PHP and dependencies
         uses: ./.dev-tools-actions/.github/actions/php/setup-composer
         with:
+          dev-tools-version: ${{ inputs.dev-tools-version }}
           php-version: ${{ steps.php.outputs.php-version }}
           root-version: dev-main
           install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
-      - name: Install the pinned Markdown renderer
-        working-directory: .dev-tools-actions
-        env:
-          COMPOSER_ROOT_VERSION: dev-main
-        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts
+      - name: Install signed documentation generator in isolation
+        uses: ./.dev-tools-actions/.github/actions/php/setup-phpdoc
       - name: Generate API pages
         id: generate
         run: |
-          has_api=$(php -r 'require ".dev-tools-actions/vendor/autoload.php"; echo FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface::class)->resolve()->canGenerateApiDocumentation() ? "true" : "false";')
+          has_api=$(php -r 'require getenv("DEV_TOOLS_AUTOLOAD"); echo FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface::class)->resolve()->canGenerateApiDocumentation() ? "true" : "false";')
           echo "generated=${has_api}" >> "$GITHUB_OUTPUT"
           if [ "$has_api" = false ]; then
             echo 'No autoloaded PHP API directories; skip Wiki generation and publication.'
             exit 0
           fi
-          mkdir -p vendor/bin vendor/saggre/phpdocumentor-markdown/themes/markdown
-          cp .dev-tools-actions/vendor/bin/phpdoc vendor/bin/phpdoc
-          chmod +x vendor/bin/phpdoc
-          rsync -a --delete .dev-tools-actions/vendor/saggre/phpdocumentor-markdown/themes/markdown/ vendor/saggre/phpdocumentor-markdown/themes/markdown/
-          if [ "$GITHUB_REPOSITORY" = php-fast-forward/dev-tools ]; then
-            ./bin/dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
-          else
-            export DEV_TOOLS_BINARY="$GITHUB_WORKSPACE/.dev-tools-actions/bin/dev-tools"
-            export DEV_TOOLS_AUTOLOAD="$GITHUB_WORKSPACE/.dev-tools-actions/vendor/autoload.php"
-            export DEV_TOOLS_AUTO_RESOLVE_AUTOLOAD="$DEV_TOOLS_AUTOLOAD"
-            export DEV_TOOLS_RUNTIME_SOURCE=workflow
-            ./.dev-tools-actions/bin/dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
-          fi
+          dev-tools wiki --target=.dev-tools/wiki-generated --cache-dir="${RUNNER_TEMP}/wiki-phpdoc-cache"
           test -s .dev-tools/wiki-generated/Home.md
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         if: steps.generate.outputs.generated == 'true'

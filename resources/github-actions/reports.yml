@@ -22,7 +22,8 @@ permissions:
 
 jobs:
   reports:
-    uses: php-fast-forward/dev-tools/.github/workflows/reports.yml@main
+    uses: php-fast-forward/dev-tools/.github/workflows/reports.yml@v2.0.0
     secrets: inherit
     with:
+      dev-tools-version: '2.0.0'
       cleanup-previews: ${{ inputs.cleanup-previews || false }}

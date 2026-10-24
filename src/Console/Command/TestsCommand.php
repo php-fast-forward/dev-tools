@@ -45,6 +45,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+
 use function is_numeric;
 use function Safe\json_decode;
 use function Safe\preg_match;

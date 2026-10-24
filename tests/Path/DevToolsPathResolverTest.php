@@ -27,6 +27,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
+
 use function Safe\file_put_contents;
 use function Safe\mkdir;
 use function Safe\rmdir;

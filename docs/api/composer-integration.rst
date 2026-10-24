@@ -1,48 +1,16 @@
-Composer Integration
-====================
+Standalone Runtime and Composer Scripts
+=======================================
 
-FastForward DevTools is exposed through both a Composer plugin and a dedicated
-console application.
+DevTools is a Composer-distributed library exposing ``bin/dev-tools``.
+Version 2 removes the plugin, command provider and proxy commands.
+Installing or updating it does not synchronize a repository.
 
-Startup Chain
--------------
+The binary loads its own installation's autoloader. The shared container and
+``DevToolsCommandLoader`` lazily resolve Symfony Console commands. Consumer
+autoloading supports tools executing project code; it does not select the CLI.
 
-1. ``bin/dev-tools`` loads ``bin/dev-tools.php``.
-2. ``bin/dev-tools.php`` prefers the consumer project's
-   ``vendor/autoload.php`` and falls back to the package autoloader.
-3. ``bin/dev-tools.php`` starts ``FastForward\DevTools\Console\DevTools`` and appends
-   ``--no-plugins``.
-4. ``FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Console\DevTools::class)``
-   resolves the shared application container from
-   ``FastForward\DevTools\ServiceProvider\DevToolsServiceProvider``.
-5. ``FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader``
-   lazily discovers ``#[AsCommand]`` classes from the command namespace.
-6. ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider`` later
-   exposes that same command set to Composer.
-
-Composer Plugin Classes
------------------------
-
-.. list-table::
-   :header-rows: 1
-
-   * - Class
-     - Purpose
-   * - ``FastForward\DevTools\Composer\Plugin``
-     - Registers the command provider and runs ``dev-tools:sync`` after
-       Composer install and update.
-   * - ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``
-     - Exposes Symfony command instances to Composer through proxy commands
-       while filtering names and aliases already registered by Composer or the
-       root project's scripts.
-   * - ``FastForward\DevTools\Composer\Command\ProxyCommand``
-     - Adapts one Symfony command to Composer's command provider contract.
-   * - ``FastForward\DevTools\Console\DevTools``
-     - Console application used by the local binary.
-
-Why ``--no-plugins`` Is Appended
---------------------------------
-
-The local binary already knows which commands it needs. Appending
-``--no-plugins`` keeps the standalone application predictable and avoids
-pulling unrelated Composer plugins into the command runtime.
+Use CPX with ``--skip-local`` and an exact package version. Reviewed Composer
+scripts can wrap that invocation without requiring DevTools. The command
+``runtime --json --no-ansi --no-interaction`` reports ``binary``, ``autoload``,
+``package_root``, ``project_root`` and ``version`` for automation.
+See :doc:`../usage/dev-tools-2-migration`.

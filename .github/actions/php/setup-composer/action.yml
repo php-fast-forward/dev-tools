@@ -30,9 +30,13 @@ inputs:
     required: false
     default: ''
   dev-tools-source-directory:
-    description: Checked-out DevTools workflow source used to resolve the fallback runtime when the consumer does not install DevTools locally.
+    description: Checked-out DevTools action source directory (helpers only).
     required: false
     default: .dev-tools-actions
+  dev-tools-version:
+    description: Published DevTools version executed in an isolated CPX environment for consumers.
+    required: false
+    default: '2.0.0'
 
 outputs:
   dev-tools-binary:
@@ -42,7 +46,7 @@ outputs:
     description: Absolute path to the runtime autoload file used by packaged workflow helpers.
     value: ${{ steps.expose-dev-tools.outputs.autoload }}
   dev-tools-source:
-    description: Runtime source selected for this job, either `local` or `workflow`.
+    description: Runtime source selected for this job, either `local` (DevTools self checkout) or `cpx`.
     value: ${{ steps.expose-dev-tools.outputs.source }}
 
 runs:
@@ -54,6 +58,7 @@ runs:
         php-version: ${{ inputs.php-version }}
         extensions: ${{ inputs.extensions }}
         coverage: ${{ inputs.coverage }}
+        tools: cpx
 
     - name: Mark workspace as safe for git
       shell: bash
@@ -97,21 +102,10 @@ runs:
         INPUT_DEV_TOOLS_SOURCE_DIRECTORY: ${{ inputs.dev-tools-source-directory }}
       run: ${{ github.action_path }}/detect-dev-tools-runtime.sh
 
-    - name: Install fallback DevTools runtime
-      if: steps.resolve-dev-tools.outputs.needs-fallback == 'true'
-      uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # 4.0.0
-      env:
-        COMPOSER_AUTH: '{"github-oauth": {"github.com": "${{ github.token }}"} }'
-        COMPOSER_CACHE_DIR: ${{ inputs.cache-dir }}
-      with:
-        working-directory: ${{ inputs.dev-tools-source-directory }}
-        composer-options: --prefer-dist --no-plugins --no-scripts
-        require-lock-file: 'false'
-        custom-cache-suffix: dev-tools-runtime
-
     - name: Expose DevTools runtime
       id: expose-dev-tools
       shell: bash
       env:
         INPUT_DEV_TOOLS_SOURCE_DIRECTORY: ${{ inputs.dev-tools-source-directory }}
+        INPUT_DEV_TOOLS_VERSION: ${{ inputs.dev-tools-version }}
       run: ${{ github.action_path }}/expose-dev-tools-runtime.sh

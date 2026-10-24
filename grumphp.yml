@@ -1,7 +1,7 @@
 grumphp:
   stop_on_failure: true
   ignore_unstaged_changes: false
-  process_timeout: 120
+  process_timeout: 600
 
   environment:
     variables:
