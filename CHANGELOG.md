@@ -5,11 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-10-24
+## [2.0.0] - 2026-11-06
 
 ### Changed
 
 - Show the repository name and current-to-next version transition in managed release PR titles, including the packaged consumer workflow. ([#375](https://github.com/php-fast-forward/dev-tools/pull/375))
+- GitHub Actions(deps): bump toshimaru/auto-author-assign from 3.1.0 to 3.1.1
+
+  Update dependencies: `toshimaru/auto-author-assign`.
+
+  ([#398](https://github.com/php-fast-forward/dev-tools/pull/398), @dependabot[bot])
+
 - Uses the standalone Fast Forward Changelog CLI, upstream skill and workflow for fragment-based release preparation and automatic tag and GitHub Release publication after a validated version pull request is merged, normalizes historical release notes, and removes automatic pull-request conflict resolution. ([#372](https://github.com/php-fast-forward/dev-tools/pull/372))
 - Align the packaged documentation skill with the current code rather than release timing, while preserving migration history and verified installation claims. ([#371](https://github.com/php-fast-forward/dev-tools/pull/371))
 - Shows the current and next versions in automatically prepared release pull request titles. ([#374](https://github.com/php-fast-forward/dev-tools/pull/374))
