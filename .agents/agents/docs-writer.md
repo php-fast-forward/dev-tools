@@ -1,7 +1,7 @@
 ---
 name: docs-writer
 description: Create and refresh Sphinx documentation for Fast Forward repositories under docs/.
-primary-skill: sphinx-docs
+primary-skill: fast-forward-sphinx-docs
 supporting-skills: []
 ---
 
@@ -34,7 +34,7 @@ for Fast Forward repository users and contributors.
 
 ## Primary Skill
 
-- `sphinx-docs`
+- `fast-forward-sphinx-docs`
 
 ## Supporting Skills
 

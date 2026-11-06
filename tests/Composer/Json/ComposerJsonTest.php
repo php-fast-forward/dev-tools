@@ -32,6 +32,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use UnderflowException;
+
 use function Safe\file_put_contents;
 use function Safe\json_encode;
 use function Safe\tempnam;
@@ -78,6 +79,22 @@ final class ComposerJsonTest extends TestCase
         self::assertSame('Fast Forward Development Tools', $composerJson->getDescription());
         self::assertSame('1.2.3', $composerJson->getVersion());
         self::assertSame('composer-plugin', $composerJson->getType());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function identificationAccessorsWillDefaultToEmptyStringsForMinimalRootProjects(): void
+    {
+        $composerJson = $this->createComposerJson([
+            'require' => [
+                'php' => '^8.3',
+            ],
+        ]);
+
+        self::assertSame('', $composerJson->getName());
+        self::assertSame('', $composerJson->getDescription());
     }
 
     /**

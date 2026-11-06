@@ -8,8 +8,8 @@ Description
 
 The ``code-style`` command orchestrates code style checking and fixing using:
 
-- ``composer update --lock --quiet`` - updates lock file
-- ``composer normalize`` - normalizes composer.json format
+- ``composer normalize`` - runs the installed plugin in the isolated runtime
+  root against the consumer's absolute manifest path with ``--no-update-lock``
 - ``vendor/bin/ecs`` - EasyCodingStandard for PHP code style
 
 Usage
@@ -17,11 +17,11 @@ Usage
 
 .. code-block:: bash
 
-   composer code-style
-   composer dev-tools code-style
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" code-style
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" code-style
 
-   composer code-style --fix
-   composer dev-tools:fix code-style
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" code-style --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards --fix code-style
 
    vendor/bin/dev-tools code-style [options]
 
@@ -48,14 +48,14 @@ Check code style (dry-run):
 
 .. code-block:: bash
 
-   composer code-style
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" code-style
 
 Fix code style automatically:
 
 .. code-block:: bash
 
-   composer code-style --fix
-   composer dev-tools:fix code-style
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" code-style --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards --fix code-style
 
 Exit Codes
 ---------
@@ -73,7 +73,7 @@ Exit Codes
 Behavior
 ---------
 
-- Always runs ``composer update --lock --quiet`` first.
+- Does not run Composer dependency updates or refresh the lockfile first.
 - Composer Normalize runs in ``--dry-run`` mode unless ``--fix`` is specified.
 - ECS uses local ``ecs.php`` when present, otherwise falls back to packaged default.
 - Progress output is disabled by default; use ``--progress`` to re-enable it in

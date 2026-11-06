@@ -16,7 +16,7 @@ Documentation
 
       If you maintain Fast Forward libraries, continue with
       :doc:`advanced/index`, :doc:`api/index`, and :doc:`internals/index` to
-      understand how the Composer plugin, PHPUnit extension, and reusable
+      understand how the standalone CLI, PHPUnit extension, and reusable
       workflows fit together.
 
    .. container:: col-lg-5 text-center

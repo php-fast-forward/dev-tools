@@ -2,6 +2,12 @@ name: Native GitHub Pages Reports
 
 on:
   workflow_call:
+    inputs:
+      dev-tools-version:
+        description: Published isolated DevTools runtime version for consumer repositories.
+        required: false
+        type: string
+        default: '2.0.0'
 
 permissions:
   contents: read
@@ -26,7 +32,7 @@ jobs:
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
         with:
           repository: php-fast-forward/dev-tools
-          ref: main
+          ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || format('v{0}', inputs.dev-tools-version || '2.0.0') }}
           path: .dev-tools-actions
           persist-credentials: false
       - name: Resolve PHP version
@@ -35,45 +41,16 @@ jobs:
       - name: Setup PHP and plugin-free dependencies
         uses: ./.dev-tools-actions/.github/actions/php/setup-composer
         with:
+          dev-tools-version: ${{ inputs.dev-tools-version }}
           php-version: ${{ steps.php.outputs.php-version }}
           extensions: pcov, pcntl, dom, intl, zip
           coverage: pcov
           root-version: dev-main
           install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
       - name: Install signed documentation generator in isolation
-        shell: bash
-        run: |
-          command -v gpg
-          mkdir -p "$RUNNER_TEMP/phpdoc-tool"
-          php <<'PHP'
-          <?php
-          $manifest = [
-              'require' => ['phpdocumentor/shim' => '^3.9'],
-              'config' => ['allow-plugins' => ['phpdocumentor/shim' => true]],
-          ];
-          $json = json_encode($manifest, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
-          if (file_put_contents(getenv('RUNNER_TEMP') . '/phpdoc-tool/composer.json', $json) === false) {
-              throw new RuntimeException('Cannot write the documentation tool manifest.');
-          }
-          PHP
-          COMPOSER_HOME="$RUNNER_TEMP/phpdoc-home" composer install --working-dir="$RUNNER_TEMP/phpdoc-tool" --no-scripts --no-interaction --prefer-dist --no-progress 2>&1 | tee "$RUNNER_TEMP/phpdoc-install.log"
-          grep -F 'PHAR signature successfully verified' "$RUNNER_TEMP/phpdoc-install.log"
-          install -m 0755 "$RUNNER_TEMP/phpdoc-tool/vendor/bin/phpdoc" vendor/bin/phpdoc
+        uses: ./.dev-tools-actions/.github/actions/php/setup-phpdoc
       - name: Verify selected template version
-        run: |
-          php <<'PHP'
-          <?php
-          require 'vendor/autoload.php';
-          $name = 'fast-forward/phpdoc-bootstrap-template';
-          $version = Composer\InstalledVersions::getPrettyVersion($name);
-          if ($version === null || version_compare(ltrim($version, 'v'), '2.1.0', '<')) {
-              throw new RuntimeException('The documentation design system requires template 2.1.0 or newer.');
-          }
-          echo json_encode([
-              'template_version' => $version,
-              'template_reference' => Composer\InstalledVersions::getReference($name),
-          ], JSON_THROW_ON_ERROR) . PHP_EOL;
-          PHP
+        run: php .dev-tools-actions/.github/actions/php/setup-composer/resolve-report-template.php
       - name: Generate documentation, coverage and metrics
         env:
           COMPOSER_ROOT_VERSION: dev-main
@@ -89,7 +66,7 @@ jobs:
         run: |
           php <<'PHP'
           <?php
-          $template = 'vendor/fast-forward/phpdoc-bootstrap-template/data/';
+          $template = getenv('DEV_TOOLS_REPORTS_TEMPLATE') . '/data/';
           $outputs = [];
           foreach (['dash-reading.png' => 'dash_sha', 'fast-forward-logo-dark.svg' => 'logo_sha'] as $name => $key) {
               $generated = '.dev-tools/reports/images/' . $name;

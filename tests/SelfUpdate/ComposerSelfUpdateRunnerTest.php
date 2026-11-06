@@ -78,15 +78,15 @@ final class ComposerSelfUpdateRunnerTest extends TestCase
      * @return void
      */
     #[Test]
-    public function updateWillRunProjectComposerUpdate(): void
+    public function updateWillRunCpxUpdate(): void
     {
-        $this->processBuilder->build('composer update')
+        $this->processBuilder->build('cpx update')
             ->willReturn($this->process->reveal());
         $this->processQueue->add(
             $this->process->reveal(),
             false,
             false,
-            'Updating project DevTools installation',
+            'Updating CPX DevTools cache',
         )->shouldBeCalledOnce();
         $this->processQueue->run($this->output->reveal())
             ->willReturn(ProcessQueueInterface::SUCCESS);

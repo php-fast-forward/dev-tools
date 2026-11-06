@@ -38,6 +38,7 @@ use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Exception\ProcessStartFailedException;
 use Symfony\Component\Process\Process;
+
 use function Safe\preg_replace;
 
 #[CoversClass(ProcessQueue::class)]

@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\GitAttributes;
 
 use FastForward\DevTools\Filesystem\FilesystemInterface;
+
 use function Safe\preg_split;
 
 /**

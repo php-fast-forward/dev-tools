@@ -92,7 +92,8 @@ final class RefactorCommandTest extends TestCase
         $this->logger = $this->prophesize(LoggerInterface::class);
         $this->setContainerEntry(LoggerInterface::class, $this->logger->reveal());
 
-        $this->input->getOption('config')->willReturn(RefactorCommand::CONFIG);
+        $this->input->getOption('config')
+            ->willReturn(RefactorCommand::CONFIG);
         $this->input->getOption('fix')
             ->willReturn(false);
         $this->input->getOption('progress')
@@ -224,9 +225,11 @@ final class RefactorCommandTest extends TestCase
         $queue = $this->prophesize(ProcessQueueInterface::class);
         $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldNotBeCalled();
         $this->command = new RefactorCommand($this->fileLocator->reveal(), new ProcessBuilder(), $queue->reveal());
-        $this->input->getOption('config')->willReturn('custom rules/limited.php');
+        $this->input->getOption('config')
+            ->willReturn('custom rules/limited.php');
         $this->fileLocator->locate('custom rules/limited.php')
-            ->willReturn('/repo/custom rules/limited.php')->shouldBeCalledOnce();
+            ->willReturn('/repo/custom rules/limited.php')
+            ->shouldBeCalledOnce();
         $this->fileLocator->locate(RefactorCommand::CONFIG)->shouldNotBeCalled();
         $expected = new Process([
             DevToolsPathResolver::getPreferredToolBinaryPath('rector'),
@@ -238,14 +241,25 @@ final class RefactorCommandTest extends TestCase
             '--dry-run',
         ]);
         $queue->add(
-            Argument::that(static fn(Process $process): bool => $expected->getCommandLine() === $process->getCommandLine()),
+            Argument::that(
+                static fn(Process $process): bool => $expected->getCommandLine() === $process->getCommandLine()
+            ),
             false,
             false,
             'Refactoring Code with Rector',
         )->shouldBeCalledOnce();
-        $queue->run($this->output->reveal())->willReturn(RefactorCommand::SUCCESS);
-        $this->logger->log('info', 'Running Rector for code refactoring...', Argument::type('array'))->shouldBeCalledOnce();
-        $this->logger->log('info', 'Code refactoring checks completed successfully.', Argument::type('array'))->shouldBeCalledOnce();
+        $queue->run($this->output->reveal())
+            ->willReturn(RefactorCommand::SUCCESS);
+        $this->logger->log(
+            'info',
+            'Running Rector for code refactoring...',
+            Argument::type('array')
+        )->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'Code refactoring checks completed successfully.',
+            Argument::type('array')
+        )->shouldBeCalledOnce();
 
         self::assertSame(RefactorCommand::SUCCESS, $this->executeCommand());
     }
@@ -256,13 +270,18 @@ final class RefactorCommandTest extends TestCase
     #[Test]
     public function executeWillRejectInvalidExplicitConfigurationWithoutDefaultFallback(): void
     {
-        $this->input->getOption('config')->willReturn('missing/config.php');
+        $this->input->getOption('config')
+            ->willReturn('missing/config.php');
         $this->fileLocator->locate('missing/config.php')
             ->willThrow(new InvalidArgumentException('Configuration not found: missing/config.php'));
         $this->fileLocator->locate(RefactorCommand::CONFIG)->shouldNotBeCalled();
         $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
-        $this->logger->log('info', 'Running Rector for code refactoring...', Argument::type('array'))->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'Running Rector for code refactoring...',
+            Argument::type('array')
+        )->shouldBeCalledOnce();
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Configuration not found: missing/config.php');
 

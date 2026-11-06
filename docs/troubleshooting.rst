@@ -40,7 +40,7 @@ Scope: local and CI.
 
 Symptoms:
 
-- ``composer dev-tools`` fails because a binary is missing;
+- ``cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards`` fails because a binary is missing;
 - CI installs a dependency set that differs from the local machine;
 - Composer reports that ``composer.lock`` is not compatible with
   ``composer.json``.
@@ -67,13 +67,12 @@ review the dependency diff:
     composer update --lock
     git diff composer.lock
 
-Reusable workflow consumers have one extra fallback path: the shared
-``setup-composer`` action first looks for a consumer-local
-``vendor/bin/dev-tools`` and otherwise exposes a ``dev-tools`` wrapper backed
-by the checked-out ``.dev-tools-actions`` source. If a workflow-only consumer
-fails before a ``dev-tools`` command starts, confirm that the job ran the
-shared bootstrap and that the upstream ``.dev-tools-actions`` checkout includes
-the DevTools package source needed for the fallback runtime.
+Reusable workflow consumers use a separately resolved CPX installation.
+If a command fails before startup, check that CPX is available, the selected
+exact DevTools version is published, its PHP requirements are satisfied and
+``runtime --json --no-ansi --no-interaction`` returns valid binary/autoload
+paths. Install the consumer's own dependencies separately. DevTools itself
+uses checked-out source during producer CI.
 
 Branch Protection or Bot Commit Blocks
 --------------------------------------
@@ -163,7 +162,7 @@ Recovery:
 
 .. code-block:: bash
 
-    composer dev-tools -- --no-interaction
+    cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards -- --no-interaction
 
 When calling lower-level tools directly, use their non-interactive flags and
 provide required values through environment variables or workflow inputs.
@@ -184,7 +183,7 @@ Behavior:
 DevTools sets ``XDEBUG_MODE=off`` for queued child processes when Xdebug is
 loaded but the child command does not need Xdebug for coverage. Coverage runs
 keep Xdebug available when PCOV is not loaded, and use PCOV when it is
-available. A warning printed by the top-level ``composer dev-tools`` process
+available. A warning printed by the top-level ``cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards`` process
 can still appear before DevTools itself starts; run that command with
 ``XDEBUG_MODE=off`` when Xdebug is not needed for the top-level process.
 
@@ -223,8 +222,8 @@ Recovery:
 
 .. code-block:: bash
 
-    composer dev-tools tests
-    composer dev-tools tests -- --coverage=.dev-tools/coverage
+    cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests
+    cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --coverage=.dev-tools/coverage
 
 Add focused tests for the changed behavior before lowering thresholds. If local
 coverage differs from CI, compare PHP, Xdebug or PCOV, and PHPUnit versions.
@@ -236,7 +235,7 @@ Scope: local and CI.
 
 Symptoms:
 
-- ``composer dev-tools docs`` fails during API documentation generation;
+- ``cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs`` fails during API documentation generation;
 - generated docs are missing classes or links;
 - PHPDoc validation fails after a source change.
 
@@ -250,8 +249,8 @@ Recovery:
 
 .. code-block:: bash
 
-    composer dev-tools phpdoc
-    composer dev-tools docs
+    cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc
+    cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs
 
 Fix source PHPDoc first, then regenerate docs. Avoid editing generated API
 output directly; it should reflect source files and templates.

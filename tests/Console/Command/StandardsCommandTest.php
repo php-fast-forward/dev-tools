@@ -149,7 +149,8 @@ final class StandardsCommandTest extends TestCase
     {
         $this->processQueue->add(Argument::type(Process::class), Argument::cetera())
             ->shouldBeCalledTimes(4);
-        $this->input->getOption('json')->willReturn($json);
+        $this->input->getOption('json')
+            ->willReturn($json);
         $this->processQueue->run(Argument::type(OutputInterface::class))
             ->willReturn($exitCode)
             ->shouldBeCalledOnce();
@@ -159,6 +160,7 @@ final class StandardsCommandTest extends TestCase
             ))
                 ->shouldBeCalled();
         }
+
         $this->logger->error(
             'Code standards checks failed.',
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
@@ -251,11 +253,15 @@ final class StandardsCommandTest extends TestCase
         self::assertSame(StandardsCommand::SUCCESS, $this->invokeExecute());
     }
 
+    /**
+     * @return void
+     */
     #[Test]
     public function executeWillFailForAnActualSubprocessWithExitCodeTwo(): void
     {
         $environment = $this->prophesize(RuntimeEnvironmentInterface::class);
-        $environment->isGithubActions()->willReturn(false);
+        $environment->isGithubActions()
+            ->willReturn(false);
         $capabilities = $this->prophesize(OutputCapabilityDetectorInterface::class);
         $capabilities->supportsAnsi(Argument::type(OutputInterface::class))->willReturn(false);
         $configurator = $this->prophesize(ProcessEnvironmentConfiguratorInterface::class);
@@ -268,7 +274,7 @@ final class StandardsCommandTest extends TestCase
             $capabilities->reveal(),
         );
         $this->processBuilder->build(Argument::any())
-            ->will(static fn(): Process => new Process([PHP_BINARY, '-r', 'exit(2);']));
+            ->will(static fn(): Process => new Process([\PHP_BINARY, '-r', 'exit(2);']));
         $this->command = new StandardsCommand($this->processBuilder->reveal(), $queue);
         $this->logger->log(
             'info',
@@ -283,6 +289,9 @@ final class StandardsCommandTest extends TestCase
         self::assertSame(StandardsCommand::FAILURE, $this->invokeExecute());
     }
 
+    /**
+     * @return iterable
+     */
     public static function failureExitCodes(): iterable
     {
         foreach ([1, 2, 127, 143] as $exitCode) {
@@ -291,6 +300,9 @@ final class StandardsCommandTest extends TestCase
         }
     }
 
+    /**
+     * @return int
+     */
     private function invokeExecute(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))

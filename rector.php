@@ -17,6 +17,14 @@ declare(strict_types=1);
  * @see      https://datatracker.ietf.org/doc/html/rfc2119
  */
 
+use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector;
 use FastForward\DevTools\Config\RectorConfig;
 
-return RectorConfig::configure();
+return RectorConfig::configure(static function (Rector\Config\RectorConfig $rectorConfig): void {
+    // Keep the legacy classifier constructor contract retained by the Git rule precedence fix.
+    $rectorConfig->skip([
+        RemoveUnusedPromotedPropertyRector::class => [__DIR__ . '/src/GitIgnore/Merger.php'],
+        RemoveEmptyClassMethodRector::class => [__DIR__ . '/src/GitIgnore/Merger.php'],
+    ]);
+});

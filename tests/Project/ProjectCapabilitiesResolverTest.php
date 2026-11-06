@@ -31,6 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
+
 use function Safe\chdir;
 use function Safe\file_put_contents;
 use function Safe\getcwd;
@@ -60,7 +61,8 @@ final class ProjectCapabilitiesResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->composer = $this->prophesize(ComposerJsonInterface::class);
-        $this->composer->getAutoload('files')->willReturn([]);
+        $this->composer->getAutoload('files')
+            ->willReturn([]);
         $this->filesystem = new SymfonyFilesystem();
         $this->workingDirectory = getcwd();
         $this->workspace = sys_get_temp_dir() . '/dev-tools-project-capabilities-' . uniqid('', true);
@@ -189,10 +191,12 @@ final class ProjectCapabilitiesResolverTest extends TestCase
         file_put_contents($this->workspace . '/functions.php', "<?php\nfunction example(): void {}\n");
 
         foreach (['psr-4', 'psr-0', 'classmap'] as $type) {
-            $this->composer->getAutoload($type)->willReturn([]);
+            $this->composer->getAutoload($type)
+                ->willReturn([]);
         }
 
-        $this->composer->getAutoload('files')->willReturn(['missing.php', 'functions.php']);
+        $this->composer->getAutoload('files')
+            ->willReturn(['missing.php', 'functions.php']);
 
         $capabilities = $this->resolver->resolve();
 
@@ -213,10 +217,12 @@ final class ProjectCapabilitiesResolverTest extends TestCase
         file_put_contents($this->workspace . '/README.md', 'Guide');
 
         foreach (['psr-4', 'psr-0', 'classmap'] as $type) {
-            $this->composer->getAutoload($type)->willReturn([]);
+            $this->composer->getAutoload($type)
+                ->willReturn([]);
         }
 
-        $this->composer->getAutoload('files')->willReturn(['missing.php', 'README.md']);
+        $this->composer->getAutoload('files')
+            ->willReturn(['missing.php', 'README.md']);
 
         self::assertFalse($this->resolver->resolve()->canRunTests());
     }

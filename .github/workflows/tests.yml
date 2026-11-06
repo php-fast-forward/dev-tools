@@ -3,6 +3,11 @@ name: Run PHPUnit Tests
 on:
     workflow_call:
         inputs:
+            dev-tools-version:
+                description: Published isolated DevTools runtime version for consumer repositories.
+                required: false
+                type: string
+                default: '2.0.0'
             min-coverage:
                 description: Minimum line coverage percentage enforced by dev-tools tests.
                 required: false
@@ -20,6 +25,11 @@ on:
                 default: false
     workflow_dispatch:
         inputs:
+            dev-tools-version:
+                description: Published isolated DevTools runtime version for consumer repositories.
+                required: false
+                type: string
+                default: '2.0.0'
             min-coverage:
                 description: Minimum line coverage percentage enforced by dev-tools tests.
                 required: false
@@ -74,7 +84,7 @@ jobs:
               with:
                 persist-credentials: false
                 repository: php-fast-forward/dev-tools
-                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || format('v{0}', inputs.dev-tools-version || '2.0.0') }}
                 path: .dev-tools-actions
                 sparse-checkout: |
                   .github/actions
@@ -198,12 +208,13 @@ jobs:
               with:
                 persist-credentials: false
                 repository: php-fast-forward/dev-tools
-                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || format('v{0}', inputs.dev-tools-version || '2.0.0') }}
                 path: .dev-tools-actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
+                dev-tools-version: ${{ inputs.dev-tools-version || '2.0.0' }}
                 php-version: ${{ matrix.php-version }}
                 extensions: pcov, pcntl
                 coverage: pcov
@@ -245,12 +256,13 @@ jobs:
               with:
                 persist-credentials: false
                 repository: php-fast-forward/dev-tools
-                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || format('v{0}', inputs.dev-tools-version || '2.0.0') }}
                 path: .dev-tools-actions
 
             - name: Setup PHP and install dependencies
               uses: ./.dev-tools-actions/.github/actions/php/setup-composer
               with:
+                dev-tools-version: ${{ inputs.dev-tools-version || '2.0.0' }}
                 php-version: ${{ needs.resolve_php.outputs.php-version }}
                 root-version: ${{ env.TESTS_ROOT_VERSION }}
                 install-options: --prefer-dist --no-progress --no-interaction --no-plugins --no-scripts
@@ -290,7 +302,7 @@ jobs:
               with:
                 persist-credentials: false
                 repository: php-fast-forward/dev-tools
-                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || 'main' }}
+                ref: ${{ github.repository == 'php-fast-forward/dev-tools' && (github.event_name == 'pull_request_target' && github.event.pull_request.base.sha || github.sha) || format('v{0}', inputs.dev-tools-version || '2.0.0') }}
                 path: .dev-tools-actions
                 sparse-checkout: |
                   .github/actions

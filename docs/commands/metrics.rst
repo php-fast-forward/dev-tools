@@ -15,8 +15,8 @@ Usage
 
 .. code-block:: bash
 
-   composer metrics
-   composer metrics [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics [options]
    vendor/bin/dev-tools metrics [options]
 
 Options
@@ -66,25 +66,25 @@ Analyze the current repository with defaults:
 
 .. code-block:: bash
 
-   composer metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics
 
 Generate an HTML report for manual inspection:
 
 .. code-block:: bash
 
-   composer metrics --target=.dev-tools/metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics --target=.dev-tools/metrics
 
 Generate the full metrics artifact set for CI previews:
 
 .. code-block:: bash
 
-   composer metrics --target=.dev-tools/metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics --target=.dev-tools/metrics
 
 Analyze another checkout through Composer's inherited working directory:
 
 .. code-block:: bash
 
-   composer --working-dir=packages/example metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" --working-dir=packages/example metrics
 
 Behavior
 --------

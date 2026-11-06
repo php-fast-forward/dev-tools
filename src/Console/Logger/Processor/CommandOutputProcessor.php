@@ -23,6 +23,7 @@ use JsonException;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function Safe\json_decode;
 
 /**

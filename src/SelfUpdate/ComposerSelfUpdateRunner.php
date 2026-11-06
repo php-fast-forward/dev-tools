@@ -24,7 +24,7 @@ use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Updates DevTools through the active Composer executable.
+ * Updates DevTools through the package manager that owns its installation.
  */
 final readonly class ComposerSelfUpdateRunner implements SelfUpdateRunnerInterface
 {
@@ -49,8 +49,8 @@ final readonly class ComposerSelfUpdateRunner implements SelfUpdateRunnerInterfa
      */
     public function update(bool $global, OutputInterface $output): int
     {
-        $command = $global ? 'composer global update' : 'composer update';
-        $label = $global ? 'Updating global DevTools installation' : 'Updating project DevTools installation';
+        $command = $global ? 'composer global update' : 'cpx update';
+        $label = $global ? 'Updating global DevTools installation' : 'Updating CPX DevTools cache';
 
         $this->processQueue->add(
             process: $this->processBuilder

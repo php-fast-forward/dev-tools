@@ -14,5 +14,5 @@ If you need the same artifacts locally, run:
 
 .. code-block:: bash
 
-   composer dev-tools reports
-   composer dev-tools wiki
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki

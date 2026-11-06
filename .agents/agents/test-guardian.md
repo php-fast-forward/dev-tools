@@ -1,7 +1,7 @@
 ---
 name: test-guardian
 description: Extend and repair PHPUnit and Prophecy coverage in Fast Forward repositories.
-primary-skill: phpunit-tests
+primary-skill: fast-forward-phpunit-tests
 supporting-skills: []
 ---
 
@@ -34,7 +34,7 @@ existing suite conventions.
 
 ## Primary Skill
 
-- `phpunit-tests`
+- `fast-forward-phpunit-tests`
 
 ## Supporting Skills
 

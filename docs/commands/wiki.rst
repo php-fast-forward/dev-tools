@@ -14,8 +14,8 @@ Usage
 
 .. code-block:: bash
 
-   composer wiki
-   composer dev-tools wiki -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki [options]
    vendor/bin/dev-tools wiki [options]
 
 Options
@@ -54,25 +54,25 @@ Generate wiki docs:
 
 .. code-block:: bash
 
-   composer wiki
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki
 
 Generate to custom directory:
 
 .. code-block:: bash
 
-   composer dev-tools wiki -- --target=.dev-tools/wiki-generated
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki --target=.dev-tools/wiki-generated
 
 Initialize a legacy wiki submodule explicitly:
 
 .. code-block:: bash
 
-   composer wiki --init
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki --init
 
 Generate without cache:
 
 .. code-block:: bash
 
-   composer wiki --no-cache
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki --no-cache
 
 Exit Codes
 ---------

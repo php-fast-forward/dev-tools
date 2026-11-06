@@ -20,8 +20,8 @@ Usage
 
 .. code-block:: bash
 
-   composer dependencies
-   composer dependencies [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies [options]
 
    composer deps
    vendor/bin/dev-tools dependencies [options]
@@ -81,43 +81,43 @@ Run dependency analysis:
 
 .. code-block:: bash
 
-   composer dependencies
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies
 
 Allow up to 10 outdated packages:
 
 .. code-block:: bash
 
-   composer dependencies --max-outdated=10
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --max-outdated=10
 
 Report outdated packages without failing on their count:
 
 .. code-block:: bash
 
-   composer dependencies --max-outdated=-1
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --max-outdated=-1
 
 Preview the upgrade workflow:
 
 .. code-block:: bash
 
-   composer dependencies --dev
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --dev
 
 Dump all matched usages for one package:
 
 .. code-block:: bash
 
-   composer dependencies --dump-usage=symfony/console
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --dump-usage=symfony/console
 
 Audit shadow dependencies:
 
 .. code-block:: bash
 
-   composer dependencies --show-shadow-dependencies
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --show-shadow-dependencies
 
 Apply the upgrade workflow and then analyze dependencies:
 
 .. code-block:: bash
 
-   composer dependencies --upgrade --dev
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --upgrade --dev
 
 Using the alias:
 
@@ -167,3 +167,11 @@ Behavior
 - Returns a non-zero exit code when missing, unused, misplaced, or too many
   outdated dependencies are found.
 - Both tools must be available in ``vendor/bin/``.
+
+Normalization runtime
+---------------------
+
+Composer Normalize executes as a plugin from the isolated runtime root against
+the consumer's absolute manifest path with ``--no-update-lock``. The consumer
+does not need that plugin installed. An explicitly requested dependency upgrade
+may still update its Composer lockfile; normalization itself does not.

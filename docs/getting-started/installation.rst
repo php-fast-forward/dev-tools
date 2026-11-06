@@ -1,111 +1,28 @@
 Installation
 ============
 
-FastForward DevTools is installed as a development dependency and exposed
-through Composer as both a plugin and a local binary.
+DevTools 2 is a standalone CLI. CPX keeps its runtime outside the consumer's
+Composer dependency graph. Install CPX following https://github.com/laravel/cpx
+and select PHP compatible with the chosen DevTools release and bundled tools.
+Install the consumer's own dependencies before executing tests.
 
-Requirements
-------------
-
-- PHP 8.3 or newer.
-- Composer 2.
-- A project with PSR-4 autoload definitions in ``composer.json``.
-- Git, for repository metadata and workflow synchronization.
-
-Install with Composer
----------------------
+Assign an exact published 2.x numeric version to ``DEV_TOOLS_VERSION``. This
+variable does not assert that a particular release is already published.
 
 .. code-block:: bash
 
-   composer require --dev fast-forward/dev-tools
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" list
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests
 
-What happens after installation?
---------------------------------
-
-When Composer finishes the install or update, the package performs the
-following steps:
-
-1. Composer loads ``FastForward\DevTools\Composer\Plugin``.
-2. The plugin exposes commands through
-   ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
-3. Composer triggers ``vendor/bin/dev-tools dev-tools:sync`` after install and
-   update.
-4. ``dev-tools:sync`` adds or refreshes the ``dev-tools`` and
-   ``dev-tools:fix`` scripts in the consumer ``composer.json``.
-5. ``dev-tools:sync`` removes deprecated DevTools-managed
-   ``extra.grumphp.config-default-path`` entries, synchronizes funding
-   metadata, copies automation assets such as workflow stubs,
-   ``.editorconfig``, and ``.github/dependabot.yml``, and refreshes
-   ``.gitignore``, ``.gitattributes``, the project license, and packaged Git
-   hooks that prefer a project-local ``grumphp.yml`` override and otherwise
-   use a project-relative reference to the active packaged DevTools
-   ``grumphp.yml`` path.
-6. In normal mode, ``dev-tools:sync`` generates local Markdown documentation
-   in ``.dev-tools/wiki-generated`` without initializing a Wiki submodule.
-7. ``dev-tools:sync`` runs ``gitignore`` to merge canonical ignore rules into
-   the consumer project.
-8. ``dev-tools:sync`` runs ``skills`` and ``agents`` to create or repair
-   packaged links inside ``.agents/skills`` and ``.agents/agents`` when sync
-   runs in normal mode rather than preview/check mode.
-
-Wiki publication is separate from local synchronization. The synchronized
-``wiki.yml`` wrapper calls ``wiki-direct.yml`` to generate documentation with
-read-only permissions on pull requests and publish directly to the separate
-Wiki repository from ``main``. Its isolated, pinned DevTools checkout provides
-the renderer without changing the consumer's ``composer.json``,
-``composer.lock``, or plugin allowlist.
-
-The synchronized ``wiki-maintenance.yml`` is a manual-only migration notice.
-Existing callers of the legacy reusable preview and maintenance workflows
-remain supported until they migrate. The explicit ``wiki --init`` option also
-remains available for legacy submodule users; normal sync does not use it.
-
-First commands to try
----------------------
-
-After installation, these are the most useful sanity checks:
+Run from the consumer root or use ``--working-dir``. ``--skip-local`` avoids
+a project-local installation. No Composer commands or automatic install/update
+hooks are registered. Repository setup is explicit:
 
 .. code-block:: bash
 
-   composer skills
-   composer agents
-   composer tests
-   composer docs
-   composer dev-tools
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync --dry-run
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync
 
-If Composer argument forwarding becomes awkward, call the binary directly:
-
-.. code-block:: bash
-
-   vendor/bin/dev-tools tests --filter=SyncCommandTest
-
-If you want to verify the packaged skills or project agents on their own, run:
-
-.. code-block:: bash
-
-   vendor/bin/dev-tools skills
-   vendor/bin/dev-tools agents
-
-When manual sync is useful
---------------------------
-
-If the package was installed with Composer plugins disabled, or if you want to
-refresh consumer automation after upgrading this package, run:
-
-.. code-block:: bash
-
-   composer dev-tools:sync
-
-Or call the binary explicitly:
-
-.. code-block:: bash
-
-   vendor/bin/dev-tools dev-tools:sync
-
-.. important::
-
-   The ``docs`` and ``reports`` commands require a ``docs/`` directory. If
-   your package does not have one yet, create it before running those commands.
-   The ``skills`` and ``agents`` commands create ``.agents/skills`` and
-   ``.agents/agents`` when needed, but they do not overwrite existing
-   non-symlink directories inside those trees.
+Install skills separately through :doc:`../usage/syncing-packaged-skills`.
+For DevTools development itself use ``composer install`` followed by
+``php bin/dev-tools tests`` or the root ``composer dev-tools`` script.

@@ -1,81 +1,97 @@
-Syncing Packaged Skills
-=======================
+Installing Packaged Skills
+==========================
 
-The ``skills`` command keeps the consumer repository's ``.agents/skills``
-directory aligned with the skills shipped inside
-``fast-forward/dev-tools``.
+DevTools exports owned procedural packages under
+``resources/skills/fast-forward-*``. LLM Skills owns their installation,
+updates and provenance. Installing instructions does not install the CLI.
 
-Why This Command Exists
------------------------
+Use the supported LLM Skills integration (Composer package ``llm/skills``),
+then configure ``skills.json``. When DevTools is only an external tool, use
+a pinned GitHub source after verifying that release exists:
 
-Fast Forward libraries can share agent skills without copying them into every
-consumer repository. The packaged skill directories live in this repository,
-while consumer repositories receive lightweight repository-relative symlinks
-that point back to the packaged source.
+.. code-block:: json
 
-That approach keeps upgrades simple:
+   {
+     "target": ".agents/skills",
+     "aliases": [],
+     "discovery": false,
+     "vendor-sources": false,
+     "sources": [
+       {
+         "from": "github",
+         "package": "php-fast-forward/dev-tools",
+         "ref": "v2.0.0",
+         "skills": ["fast-forward-phpunit-tests", "fast-forward-phpdoc-code-style"]
+       }
+     ]
+   }
 
-- updating ``fast-forward/dev-tools`` changes the packaged skill source;
-- rerunning ``skills`` repairs missing or broken links;
-- consumer-specific directories are preserved when they are not symlinks.
-
-How to Run It
--------------
+The full tag above is the version 2 migration target, not a claim of published
+availability. Prefer an immutable verified release commit when adopting it.
+Select only the skills needed by the project.
 
 .. code-block:: bash
 
-   composer dev-tools skills
-   vendor/bin/dev-tools skills
+   composer skills:show
+   composer skills:update --dry-run
+   composer skills:update
 
-What the Command Does
----------------------
+For a focused GitHub-source update, LLM Skills also accepts the source package:
 
-.. list-table::
-   :header-rows: 1
+.. code-block:: bash
 
-   * - Situation
-     - Behavior
-   * - ``.agents/skills`` is missing
-     - Creates the directory in the consumer repository.
-   * - A packaged skill is missing locally
-     - Creates a repository-relative symlink that points to the packaged skill
-       directory.
-   * - A valid symlink already exists
-     - Leaves the link unchanged.
-   * - A symlink is broken
-     - Removes it and recreates it with the current packaged target.
-   * - A real directory already exists at the target path
-     - Preserves the directory and skips link creation to avoid overwriting
-       consumer-owned content.
+   composer skills:update php-fast-forward/dev-tools --dry-run
+   composer skills:update php-fast-forward/dev-tools
 
-When to Run It Manually
+A positional update explicitly trusts that operation; it is not proof that the
+same source is enabled for unattended default synchronization. Review preview,
+source configuration and provenance together. Keep LLM Skills' own metadata
+and lock state; DevTools must not manufacture substitute records.
+
+Composer Trusted donors
 -----------------------
 
-Run ``skills`` explicitly when:
+For libraries actually installed through Composer, trust their resolved skill
+payload rather than adding a second GitHub owner for the same skill:
 
-- you upgraded ``fast-forward/dev-tools`` and want to refresh local skill
-  links;
-- someone deleted or broke entries inside ``.agents/skills``;
-- Composer plugins were disabled during install, so ``dev-tools:sync`` did not
-  run automatically;
-- you are iterating on packaged skills and want to verify the consumer-facing
-  links without rerunning the entire repository sync flow.
+.. code-block:: json
 
-Relationship with ``dev-tools:sync``
-------------------------------------
+   {
+     "dependencies": {
+       "composer": {
+         "trusted": ["fast-forward/*"],
+         "trusted-replace": true
+       }
+     }
+   }
 
-``dev-tools:sync`` ends by running ``gitignore`` and ``skills``. That means
-the full onboarding command refreshes workflow stubs, repository defaults,
-packaged skills, and packaged role prompts in one pass.
+This trusts installed Composer donors in the ``fast-forward/*`` namespace.
+``trusted-replace`` replaces built-in and implicit direct-dependency trust, so
+packages outside that namespace stay untrusted. Trust does
+not install a missing library or fetch a GitHub replacement. A missing donor
+payload must fail review until a compatible donor or explicit source migration
+is selected. Review ownership changes and remove the prior source explicitly.
 
-What the Command Does Not Overwrite
------------------------------------
+Self development and extraction
+-------------------------------
 
-The command does not replace an existing non-symlink directory inside
-``.agents/skills``. This protects local experiments, package-specific custom
-skills, or directories managed by another tool.
+The DevTools checkout uses a ``dir`` source for its own ``resources/skills``,
+without a package-name override. The directory adapter derives its identity.
+The Changelog GitHub source selects stable ``0.4.x`` releases through
+``^0.4.0`` and discovers its skill through that package's Composer metadata,
+without a redundant skill allowlist. Development-only ``llm/skills`` and its
+specific plugin permission enable ``auto-sync: true`` after normal Composer
+install/update operations. ``composer skills:update`` refreshes the configured
+sources explicitly; ``--no-scripts`` suppresses automatic synchronization.
+Generated ``.agents/skills`` copies remain ignored; canonical DevTools payloads
+stay under ``resources/skills`` and repository role prompts remain local.
+Consumers use GitHub when DevTools is absent from their Composer graph.
+As code style, quality or another domain moves out, retain the
+``fast-forward-<responsibility>`` skill name, publish its new owner first,
+then transfer the source in one reviewed consumer change. Keep one owner per
+skill. Do not leave duplicated DevTools and donor sources for the same name.
 
-Internally, ``skills`` shares the same generic packaged-directory
-synchronization helper used by ``agents``. That keeps link creation, broken
-link repair, and consumer-owned-directory preservation consistent across both
-flows.
+Version 2 removes ``skills`` and ``agents`` from the DevTools command surface.
+Inventory old links and preserve edited/local directories before migrating.
+LLM Skills does not synchronize workflow files, Git hooks, metadata or generic
+project-agent prompts. See :doc:`dev-tools-2-migration`.

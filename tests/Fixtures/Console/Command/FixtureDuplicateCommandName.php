@@ -22,5 +22,5 @@ namespace FastForward\DevTools\Console\Command;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 
-#[AsCommand(name: 'agents')]
+#[AsCommand(name: 'runtime')]
 final class FixtureDuplicateCommandName extends Command {}

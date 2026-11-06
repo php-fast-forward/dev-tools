@@ -52,7 +52,9 @@ final class MergerTest extends TestCase
         yield 'negation' => [['*.log', '!important.log']];
         yield 'repeated rule after exception' => [['*.log', '!important.log', '*.log']];
         yield 'directory traversal exception' => [['build/*', '!build/keep/', 'build/keep/*', '!build/keep/file.txt']];
-        yield 'significant whitespace and escaped markers' => [[' leading', 'trailing\\ ', '\\#literal', '\\!literal', '0']];
+        yield 'significant whitespace and escaped markers' => [[
+            ' leading', 'trailing\\ ', '\\#literal', '\\!literal', '0'],
+        ];
     }
 
     /**

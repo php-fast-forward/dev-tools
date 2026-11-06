@@ -5,8 +5,7 @@ All public CLI commands are Symfony Console commands resolved lazily through
 ``DevToolsCommandLoader``. Command classes receive their collaborators from
 the shared ``DevToolsServiceProvider`` container, while orchestration commands
 such as ``standards`` dispatch other commands through the console application
-itself. Composer integration uses proxy commands to expose that same Symfony
-command set without forcing each command to extend Composer's ``BaseCommand``.
+itself.
 The architecture also relies on ``ProcessBuilder`` and ``ProcessQueue`` for
 fluent process management where subprocess execution is needed.
 
@@ -47,12 +46,6 @@ fluent process management where subprocess execution is needed.
    * - ``FastForward\DevTools\Console\Command\ReportsCommand``
      - ``reports``
      - Combines documentation, coverage, and metrics generation.
-   * - ``FastForward\DevTools\Console\Command\AgentsCommand``
-     - ``agents``
-     - Synchronizes packaged project agents into ``.agents/agents``.
-   * - ``FastForward\DevTools\Console\Command\SkillsCommand``
-     - ``skills``
-     - Synchronizes packaged agent skills into ``.agents/skills``.
    * - ``FastForward\DevTools\Console\Command\FundingCommand``
      - ``funding``
      - Synchronizes managed funding metadata between Composer and GitHub files.
@@ -61,8 +54,7 @@ fluent process management where subprocess execution is needed.
      - Generates managed ``.github/CODEOWNERS`` content from project metadata.
    * - ``FastForward\DevTools\Console\Command\SyncCommand``
      - ``dev-tools:sync``
-     - Synchronizes consumer-facing scripts, automation assets, and packaged
-       skills and project agents.
+     - Synchronizes consumer-facing scripts, metadata, workflows and defaults.
    * - ``FastForward\DevTools\Console\Command\GitIgnoreCommand``
      - ``gitignore``
      - Merges and synchronizes .gitignore files.

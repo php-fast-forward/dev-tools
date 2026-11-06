@@ -71,7 +71,9 @@ final class ChangelogWorkflowTest extends TestCase
         ], $workflow['jobs']['changelog']);
     }
 
-    /** Confirms identical lifecycle settings with an independent consuming repository identity in the title. */
+    /**
+     * Confirms identical lifecycle settings with an independent consuming repository identity in the title.
+     */
     #[Test]
     public function consumerTemplateWillMatchTheLifecycleWithItsOwnRepositoryName(): void
     {

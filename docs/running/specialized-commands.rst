@@ -28,8 +28,8 @@ Runs PHPUnit with the resolved ``phpunit.xml``.
 
 .. code-block:: bash
 
-   composer tests
-   composer tests -- --filter=EventTracerTest
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --filter=EventTracerTest
 
 Important details:
 
@@ -59,13 +59,13 @@ Analyzes missing, unused, misplaced, and outdated Composer dependencies.
 
 .. code-block:: bash
 
-   composer dependencies
-   composer dependencies --max-outdated=10
-   composer dependencies --max-outdated=-1
-   composer dependencies --dev
-   composer dependencies --dump-usage=symfony/console
-   composer dependencies --show-shadow-dependencies
-   composer dependencies --upgrade --dev
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --max-outdated=10
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --max-outdated=-1
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --dev
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --dump-usage=symfony/console
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --show-shadow-dependencies
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dependencies --upgrade --dev
 
 Important details:
 
@@ -101,10 +101,10 @@ Analyzes code metrics with PhpMetrics.
 
 .. code-block:: bash
 
-   composer metrics
-   composer metrics --target=.dev-tools/metrics
-   FAST_FORWARD_WORKSPACE_DIR=.artifacts composer metrics
-   composer --working-dir=packages/example metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics --target=.dev-tools/metrics
+   FAST_FORWARD_WORKSPACE_DIR=.artifacts cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" metrics
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" --working-dir=packages/example metrics
 
 Important details:
 
@@ -136,12 +136,12 @@ Runs Composer Normalize and ECS.
 
 .. code-block:: bash
 
-   composer code-style
-   composer code-style --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" code-style
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" code-style --fix
 
 Important details:
 
-- it always executes ``composer update --lock --quiet`` first;
+- it does not refresh the lockfile or run dependency updates first;
 - without ``--fix``, Composer Normalize runs in ``--dry-run`` mode;
 - ECS uses local ``ecs.php`` when present, otherwise the packaged fallback;
 - progress output is disabled by default; ``--progress`` re-enables it for text
@@ -156,7 +156,7 @@ Runs Rector against the current project.
 
 .. code-block:: bash
 
-   composer refactor --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" refactor --fix
 
 Important details:
 
@@ -176,8 +176,8 @@ Coordinates PHP-CS-Fixer and a focused Rector pass for missing method PHPDoc.
 
 .. code-block:: bash
 
-   composer phpdoc
-   composer phpdoc --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc --fix
 
 Important details:
 
@@ -204,7 +204,7 @@ Builds the HTML documentation site with phpDocumentor.
 
 .. code-block:: bash
 
-   composer docs --source=docs --target=.dev-tools
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" docs --source=docs --target=.dev-tools
 
 Important details:
 
@@ -228,7 +228,7 @@ Builds Markdown API pages for a GitHub wiki.
 
 .. code-block:: bash
 
-   composer wiki
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" wiki
 
 Important details:
 
@@ -251,7 +251,7 @@ Runs the documentation and test-report pipeline used by GitHub Pages.
 
 .. code-block:: bash
 
-   composer reports
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" reports
 
 Important details:
 
@@ -278,39 +278,11 @@ Important details:
   coverage instead;
 - it is the reporting stage used by ``standards``.
 
-``skills``
-----------
+Skill installation
+------------------
 
-Synchronizes packaged agent skills into the consumer repository.
-
-.. code-block:: bash
-
-   composer skills
-
-Important details:
-
-- it verifies the packaged ``.agents/skills`` directory before doing any work;
-- it creates the consumer ``.agents/skills`` directory when missing;
-- it creates missing symlinks and repairs broken ones;
-- it preserves an existing non-symlink directory instead of overwriting it.
-
-``agents``
-----------
-
-Synchronizes packaged project-agent prompts into the consumer repository.
-
-.. code-block:: bash
-
-   composer agents
-
-Important details:
-
-- it verifies the packaged ``.agents/agents`` directory before doing any work;
-- it creates the consumer ``.agents/agents`` directory when missing;
-- it creates missing symlinks and repairs broken ones;
-- it preserves an existing non-symlink directory instead of overwriting it;
-- it uses the same generic synchronization rules as ``skills`` through
-  ``FastForward\\DevTools\\Sync\\PackagedDirectorySynchronizer``.
+Use LLM Skills; see :doc:`../usage/syncing-packaged-skills`.
+DevTools no longer installs skill or agent links.
 
 ``funding``
 -----------
@@ -319,9 +291,9 @@ Synchronizes supported funding metadata between Composer and GitHub formats.
 
 .. code-block:: bash
 
-   composer funding
-   composer funding --dry-run
-   composer funding --check
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding --dry-run
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" funding --check
 
 Important details:
 
@@ -341,9 +313,9 @@ Generates managed CODEOWNERS files from repository metadata.
 
 .. code-block:: bash
 
-   composer codeowners
-   composer codeowners --dry-run
-   composer codeowners --interactive
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners --dry-run
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners --interactive
 
 Important details:
 
@@ -363,7 +335,7 @@ Synchronizes consumer-facing automation and defaults.
 
 .. code-block:: bash
 
-   composer dev-tools:sync
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync
 
 Important details:
 
@@ -379,13 +351,9 @@ Important details:
 - it calls ``gitignore`` to merge the canonical .gitignore with the project's
   .gitignore;
 - it calls ``gitattributes`` to manage export-ignore rules in .gitattributes;
-- it refreshes packaged Git hooks that prefer a local ``grumphp.yml``
-  override and otherwise use a project-relative reference to the active
-  packaged DevTools ``grumphp.yml`` path resolved when sync installs them;
-- it calls ``skills`` so ``.agents/skills`` contains links to the packaged
-  skill set;
-- it calls ``agents`` so ``.agents/agents`` contains links to the packaged
-  project-agent set.
+- it copies a missing local ``grumphp.yml`` and refreshes hooks that prefer
+  local GrumPHP, otherwise CPX ``phpro/grumphp-shim:2.26.0``; temporary
+  runtime/cache paths are not stored in hooks;
 
 ``gitattributes``
 ----------------
@@ -394,7 +362,7 @@ Manages .gitattributes export-ignore rules for leaner Composer package archives.
 
 .. code-block:: bash
 
-   composer gitattributes
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitattributes
 
 Important details:
 
@@ -415,7 +383,7 @@ Merges and synchronizes .gitignore files.
 
 .. code-block:: bash
 
-   composer gitignore --source=/path/to/source/.gitignore --target=/path/to/target/.gitignore
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitignore --source=/path/to/source/.gitignore --target=/path/to/target/.gitignore
 
 Important details:
 
@@ -434,7 +402,7 @@ Generates a LICENSE file from composer.json license information.
 
 .. code-block:: bash
 
-   composer license
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" license
 
 Important details:
 
@@ -453,7 +421,7 @@ Copies packaged or local resources into the consumer repository.
 
 .. code-block:: bash
 
-   composer copy-resource --source <path> --target <path> --overwrite
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" copy-resource --source <path> --target <path> --overwrite
 
 Important details:
 
@@ -470,7 +438,7 @@ Installs packaged Fast Forward Git hooks.
 
 .. code-block:: bash
 
-   composer git-hooks
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" git-hooks
 
 Important details:
 
@@ -489,7 +457,7 @@ Updates composer.json with Fast Forward dev-tools scripts and metadata.
 
 .. code-block:: bash
 
-   composer update-composer-json --file=composer.json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" update-composer-json --file=composer.json
 
 Important details:
 
@@ -500,3 +468,11 @@ Important details:
 - if the target file does not exist, exits silently with code 0;
 - existing scripts with the same name are overwritten;
 - preserves consumer-owned GrumPHP settings.
+
+Normalization runtime
+---------------------
+
+Composer Normalize executes as a plugin from the isolated runtime root against
+the consumer's absolute manifest path with ``--no-update-lock``. The consumer
+does not need that plugin installed. An explicitly requested dependency upgrade
+may still update its Composer lockfile; normalization itself does not.
