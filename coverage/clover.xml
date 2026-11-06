@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1792811724">
-  <project timestamp="1792811724" name="Clover Coverage">
+<coverage generated="1793933838">
+  <project timestamp="1793933838" name="Clover Coverage">
     <package name="FastForward\DevTools\CodeOwners">
       <file name="/home/runner/work/dev-tools/dev-tools/src/CodeOwners/CodeOwnersGenerator.php">
         <class name="FastForward\DevTools\CodeOwners\CodeOwnersGenerator" namespace="FastForward\DevTools\CodeOwners">
