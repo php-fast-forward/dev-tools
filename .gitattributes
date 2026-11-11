@@ -1,4 +1,5 @@
 *                      text=auto
+/.agents/              export-ignore
 /.github/              export-ignore
 /.vscode/              export-ignore
 /docs/                 export-ignore
@@ -14,3 +15,4 @@
 /README.md             export-ignore
 /SECURITY.md           export-ignore
 /SUPPORT.md            export-ignore
+/skills.json           export-ignore

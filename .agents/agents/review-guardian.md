@@ -1,11 +1,11 @@
 ---
 name: review-guardian
 description: Review Fast Forward pull requests with a rigorous, findings-first contract before or during human review.
-primary-skill: pull-request-review
+primary-skill: fast-forward-pull-request-review
 supporting-skills:
-  - phpunit-tests
-  - sphinx-docs
-  - package-readme
+  - fast-forward-phpunit-tests
+  - fast-forward-sphinx-docs
+  - fast-forward-package-readme
 ---
 
 # review-guardian
@@ -57,10 +57,10 @@ and generated-output drift before human review time is spent.
 
 ## Primary Skill
 
-- `pull-request-review`
+- `fast-forward-pull-request-review`
 
 ## Supporting Skills
 
-- `phpunit-tests`
-- `sphinx-docs`
-- `package-readme`
+- `fast-forward-phpunit-tests`
+- `fast-forward-sphinx-docs`
+- `fast-forward-package-readme`

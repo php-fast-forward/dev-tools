@@ -22,6 +22,7 @@ namespace FastForward\DevTools\Console\Command;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasJsonOption;
 use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use Symfony\Component\Config\FileLocatorInterface;
@@ -102,7 +103,7 @@ final class CodeStyleCommand extends Command
     /**
      * Executes the code style checks and fixes block.
      *
-     * The method MUST execute `composer update --lock`, `composer normalize`, and ECS using secure processes.
+     * The method MUST execute the runtime Composer Normalize plugin and ECS without updating dependency locks.
      * It SHALL return `self::SUCCESS` if all commands succeed, or `self::FAILURE` otherwise.
      *
      * @param InputInterface $input the input interface to retrieve options
@@ -120,15 +121,16 @@ final class CodeStyleCommand extends Command
 
         $this->log('Running code style checks and fixes...', $input);
 
-        $composerUpdate = $this->processBuilder
-            ->withArgument('--lock')
-            ->withArgument('--quiet')
-            ->build('composer update');
-
         $composerNormalize = $this->processBuilder
             ->withArgument('--ansi')
             ->withArgument($fix ? '--quiet' : '--dry-run')
-            ->build('composer normalize');
+            ->withArgument('--no-update-lock')
+            ->build([
+                'composer',
+                '--working-dir=' . \dirname(DevToolsPathResolver::getRuntimeAutoloadPath(), 2),
+                'normalize',
+                WorkingProjectPathResolver::getProjectPath('composer.json'),
+            ]);
 
         $processBuilder = $this->processBuilder
             ->withArgument('--ansi')
@@ -148,7 +150,6 @@ final class CodeStyleCommand extends Command
 
         $ecs = $processBuilder->build([DevToolsPathResolver::getPreferredToolBinaryPath('ecs')]);
 
-        $this->processQueue->add(process: $composerUpdate, label: 'Refreshing Composer Lock');
         $this->processQueue->add(
             process: $composerNormalize,
             label: 'Normalizing composer.json with Composer Normalize'

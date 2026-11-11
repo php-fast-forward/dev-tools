@@ -23,6 +23,7 @@ use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Php\ExtensionInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
+
 use function Safe\preg_match;
 
 /**

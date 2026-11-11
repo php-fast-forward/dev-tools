@@ -29,6 +29,7 @@ use FastForward\DevTools\Composer\Json\Schema\Support;
 use FastForward\DevTools\Composer\Json\Schema\SupportInterface;
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use UnderflowException;
+
 use function Safe\file_get_contents;
 use function Safe\json_decode;
 
@@ -105,7 +106,7 @@ final class ComposerJson implements ComposerJsonInterface
      */
     public function getName(): string
     {
-        return $this->data['name'];
+        return $this->data['name'] ?? '';
     }
 
     /**
@@ -119,7 +120,7 @@ final class ComposerJson implements ComposerJsonInterface
      */
     public function getDescription(): string
     {
-        return $this->data['description'];
+        return $this->data['description'] ?? '';
     }
 
     /**

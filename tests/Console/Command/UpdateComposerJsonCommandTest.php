@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Tests\Console\Command;
 
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\Command\UpdateComposerJsonCommand;
+use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GrumPhp\ManagedConfigPathSynchronizer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
@@ -45,6 +46,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
+
 use function Safe\json_decode;
 
 #[UsesClass(ContainerFactory::class)]
@@ -77,6 +79,8 @@ final class UpdateComposerJsonCommandTest extends TestCase
     private ObjectProphecy $io;
 
     private UpdateComposerJsonCommand $command;
+
+    private ObjectProphecy $versionChecker;
 
     /**
      * @return void
@@ -116,6 +120,10 @@ final class UpdateComposerJsonCommandTest extends TestCase
         $this->fileLocator->locate('grumphp.yml', Argument::type('string'))
             ->willReturn('/app/vendor/fast-forward/dev-tools/grumphp.yml');
 
+        $this->versionChecker = $this->prophesize(VersionCheckerInterface::class);
+        $this->versionChecker->getCurrentVersion()
+            ->willReturn('2.0.0');
+
         $this->command = new UpdateComposerJsonCommand(
             $this->composer->reveal(),
             $this->filesystem->reveal(),
@@ -123,6 +131,35 @@ final class UpdateComposerJsonCommandTest extends TestCase
             new ManagedConfigPathSynchronizer(),
             $this->fileDiffer->reveal(),
             $this->io->reveal(),
+            $this->versionChecker->reveal(),
+        );
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function managedScriptsWillFollowTheReleasedRuntimeWithoutChangingSelfExecution(): void
+    {
+        $scripts = new ReflectionMethod($this->command, 'getScripts');
+        $this->versionChecker->getCurrentVersion()
+            ->willReturn('v2.4.1');
+
+        self::assertSame(
+            'cpx --skip-local fast-forward/dev-tools:2.4.1',
+            $scripts->invoke($this->command, 'example/package')['dev-tools'],
+        );
+        self::assertSame(
+            '@php bin/dev-tools',
+            $scripts->invoke($this->command, 'fast-forward/dev-tools')['dev-tools'],
+        );
+
+        $this->versionChecker->getCurrentVersion()
+            ->willReturn('dev-main');
+
+        self::assertSame(
+            'cpx --skip-local fast-forward/dev-tools:2.0.0',
+            $scripts->invoke($this->command, 'example/package')['dev-tools'],
         );
     }
 
@@ -175,7 +212,7 @@ final class UpdateComposerJsonCommandTest extends TestCase
             Argument::that(static function (string $contents): bool {
                 $composerJson = json_decode($contents, true);
 
-                return 'dev-tools' === $composerJson['scripts']['dev-tools']
+                return 'cpx --skip-local fast-forward/dev-tools:2.0.0' === $composerJson['scripts']['dev-tools']
                     && '@dev-tools --fix' === $composerJson['scripts']['dev-tools:fix']
                     && ! isset($composerJson['extra']['grumphp']['config-default-path']);
             }),

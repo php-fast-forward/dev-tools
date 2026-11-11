@@ -51,6 +51,7 @@ use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+
 use function Safe\getcwd;
 
 #[UsesClass(ContainerFactory::class)]

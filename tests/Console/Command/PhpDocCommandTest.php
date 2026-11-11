@@ -57,6 +57,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Twig\Environment;
+use Twig\Loader\FilesystemLoader;
+use UnderflowException;
 
 #[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
@@ -121,7 +123,8 @@ final class PhpDocCommandTest extends TestCase
         $this->process->setEnv(Argument::type('array'))
             ->willReturn($this->process->reveal());
 
-        $this->input->getArgument('path')->willReturn([]);
+        $this->input->getArgument('path')
+            ->willReturn([]);
         $this->input->getOption('fix')
             ->willReturn(false);
         $this->input->getOption('cache')
@@ -225,6 +228,32 @@ final class PhpDocCommandTest extends TestCase
             Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
                 && $context['output'] instanceof OutputInterface),
         )->shouldBeCalled();
+
+        self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function executeWithoutAuthorsWillOmitAuthorHeaderAndRunPhpDocProcesses(): void
+    {
+        $this->composer->getAuthors(true)
+            ->willThrow(new UnderflowException('No author was defined.'));
+        $renderer = new Environment(new FilesystemLoader(DevToolsPathResolver::getResourcesPath()));
+        $this->renderer->render('docblock/.docheader', Argument::that(
+            static fn(array $context): bool => '' === $context['copyright_holder'],
+        ))->will(static fn(array $arguments): string => $renderer->render(...$arguments))
+            ->shouldBeCalledOnce();
+        $this->filesystem->dumpFile(PhpDocCommand::FILENAME, Argument::that(
+            static fn(string $header): bool => ! str_contains($header, '@author')
+                && str_contains($header, 'fast-forward/dev-tools')
+                && str_contains($header, '@license'),
+        ))->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(PhpDocCommand::SUCCESS)
+            ->shouldBeCalledOnce();
+        $this->logger->log(Argument::cetera())->shouldBeCalled();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }
@@ -355,16 +384,23 @@ final class PhpDocCommandTest extends TestCase
             $this->renderer->reveal(),
             $this->clock->reveal(),
         );
-        $this->input->getArgument('path')->willReturn($paths);
-        $this->input->getOption('fix')->willReturn(true);
+        $this->input->getArgument('path')
+            ->willReturn($paths);
+        $this->input->getOption('fix')
+            ->willReturn(true);
         foreach ($paths as $path) {
-            $this->filesystem->exists($path)->willReturn(true);
+            $this->filesystem->exists($path)
+                ->willReturn(true);
         }
+
         $suffix = (new Process(['--', ...$paths]))->getCommandLine();
         $queue->add(
             Argument::that(static fn(Process $process): bool => str_ends_with($process->getCommandLine(), $suffix)
                 && str_contains($process->getCommandLine(), '--path-mode=intersection')
-                && str_contains($process->getCommandLine(), DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer'))
+                && str_contains(
+                    $process->getCommandLine(),
+                    DevToolsPathResolver::getPreferredToolBinaryPath('php-cs-fixer')
+                )
                 && ! str_contains($process->getCommandLine(), '--dry-run')),
             false,
             false,
@@ -380,10 +416,19 @@ final class PhpDocCommandTest extends TestCase
             'Adding Missing PHPDoc with Rector',
         )->shouldBeCalledOnce();
         $this->filesystem->dumpFile(PhpDocCommand::FILENAME, 'docheader')->shouldBeCalledOnce();
-        $queue->run($this->output->reveal())->willReturn(PhpDocCommand::SUCCESS);
+        $queue->run($this->output->reveal())
+            ->willReturn(PhpDocCommand::SUCCESS);
         $this->logger->log('info', 'Checking and fixing PHPDocs...', Argument::type('array'))->shouldBeCalledOnce();
-        $this->logger->log('info', 'Created .docheader from repository template.', Argument::type('array'))->shouldBeCalledOnce();
-        $this->logger->log('info', 'PHPDoc checks completed successfully.', Argument::type('array'))->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'Created .docheader from repository template.',
+            Argument::type('array')
+        )->shouldBeCalledOnce();
+        $this->logger->log(
+            'info',
+            'PHPDoc checks completed successfully.',
+            Argument::type('array')
+        )->shouldBeCalledOnce();
 
         self::assertSame(PhpDocCommand::SUCCESS, $this->invokeExecute());
     }
@@ -405,8 +450,10 @@ final class PhpDocCommandTest extends TestCase
     #[Test]
     public function executeWillRejectMissingPathsBeforeWritingOrStartingTools(): void
     {
-        $this->input->getArgument('path')->willReturn(['missing.php']);
-        $this->filesystem->exists('missing.php')->willReturn(false);
+        $this->input->getArgument('path')
+            ->willReturn(['missing.php']);
+        $this->filesystem->exists('missing.php')
+            ->willReturn(false);
         $this->filesystem->dumpFile(Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldNotBeCalled();
         $this->processQueue->run(Argument::cetera())->shouldNotBeCalled();
