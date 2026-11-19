@@ -43,7 +43,7 @@
         "composer-plugin-api": "^2.0",
         "container-interop/service-provider": "^0.4.1",
         "dg/bypass-finals": "^1.9",
-        "ergebnis/agent-detector": "^1.1",
+        "ergebnis/agent-detector": "^2.0",
         "ergebnis/composer-normalize": "^2.51",
         "ergebnis/phpunit-agent-reporter": "^1.0",
         "ergebnis/rector-rules": "^1.18",
