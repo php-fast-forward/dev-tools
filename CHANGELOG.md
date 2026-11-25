@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [2.0.0] - 2026-11-11
+## [2.0.0] - 2026-11-25
 
 ### Changed
 
@@ -15,6 +15,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   Update dependencies: `toshimaru/auto-author-assign`.
 
   ([#398](https://github.com/php-fast-forward/dev-tools/pull/398), @dependabot[bot])
+
+- Composer(deps): update ergebnis/agent-detector requirement from ^1.1 to ^2.0 in the composer-production group
+
+  Update dependencies: `ergebnis/agent-detector`.
+
+  ([#400](https://github.com/php-fast-forward/dev-tools/pull/400), @dependabot[bot])
 
 - Uses the standalone Fast Forward Changelog CLI, upstream skill and workflow for fragment-based release preparation and automatic tag and GitHub Release publication after a validated version pull request is merged, normalizes historical release notes, and removes automatic pull-request conflict resolution. ([#372](https://github.com/php-fast-forward/dev-tools/pull/372))
 - Group Dependabot dependency updates by ecosystem and dependency type. ([#399](https://github.com/php-fast-forward/dev-tools/pull/399))
