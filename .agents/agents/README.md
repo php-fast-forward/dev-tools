@@ -24,6 +24,7 @@ Each agent file uses:
 
 ## Scope
 
-These prompts are packaged for Fast Forward repositories. They define durable
-role behavior and delegation boundaries that can be reused in consumer
-repositories, while `.agents/skills` remains the procedural source of truth.
+These repository prompts define durable role behavior and delegation boundaries.
+Portable procedures are published under `resources/skills`; consumers install
+those skills through their chosen installer. DevTools does not synchronize these
+role prompts into consumer repositories.

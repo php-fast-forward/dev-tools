@@ -128,7 +128,7 @@ final class GitHooksCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $sourcePath = $this->fileLocator->locate((string) $input->getOption('source'));
-        $projectPath = (string) $this->filesystem->getAbsolutePath('.');
+        $this->filesystem->getAbsolutePath('.');
         $targetPath = (string) $this->filesystem->getAbsolutePath((string) $input->getOption('target'));
         $overwrite = ! $input->getOption('no-overwrite');
         $dryRun = (bool) $input->getOption('dry-run');
@@ -146,7 +146,7 @@ final class GitHooksCommand extends Command
         foreach ($files as $file) {
             $sourcePath = $file->getRealPath();
             $sourceContents = $this->filesystem->readFile($sourcePath);
-            $renderedSourceContents = $this->hookContentRenderer->render($sourceContents, $projectPath);
+            $renderedSourceContents = $this->hookContentRenderer->render($sourceContents);
             $hookPath = Path::join($targetPath, $file->getRelativePathname());
 
             if (($dryRun || $check) && ! $this->filesystem->exists($hookPath)) {

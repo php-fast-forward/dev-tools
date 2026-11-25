@@ -1,0 +1,25 @@
+name: Setup signed phpDocumentor
+description: Install and verify the standalone documentation executable without enabling consumer Composer plugins.
+
+runs:
+  using: composite
+  steps:
+    - name: Install signed documentation generator in isolation
+      shell: bash
+      run: |
+        command -v gpg
+        mkdir -p "$RUNNER_TEMP/phpdoc-tool" vendor/bin
+        php <<'PHP'
+        <?php
+        $manifest = [
+            'require' => ['phpdocumentor/shim' => '^3.9'],
+            'config' => ['allow-plugins' => ['phpdocumentor/shim' => true]],
+        ];
+        $json = json_encode($manifest, JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT);
+        if (file_put_contents(getenv('RUNNER_TEMP') . '/phpdoc-tool/composer.json', $json) === false) {
+            throw new RuntimeException('Cannot write the documentation tool manifest.');
+        }
+        PHP
+        COMPOSER_HOME="$RUNNER_TEMP/phpdoc-home" composer install --working-dir="$RUNNER_TEMP/phpdoc-tool" --no-scripts --no-interaction --prefer-dist --no-progress 2>&1 | tee "$RUNNER_TEMP/phpdoc-install.log"
+        grep -F 'PHAR signature successfully verified' "$RUNNER_TEMP/phpdoc-install.log"
+        install -m 0755 "$RUNNER_TEMP/phpdoc-tool/vendor/bin/phpdoc" vendor/bin/phpdoc

@@ -1,48 +1,32 @@
 FAQ
 ===
 
-Why does ``composer dev-tools docs`` fail in a new package?
------------------------------------------------------------
+How can I use DevTools without require-dev?
+------------------------------------------
 
-Because the command requires a ``docs/`` directory. Create at least
-``docs/index.rst`` before running ``docs`` or ``reports``.
+Use CPX with ``--skip-local`` and an exact published version. Follow
+:doc:`getting-started/installation` and :doc:`usage/dev-tools-2-migration`.
 
-Why did my ``composer.json`` change after installing the package?
------------------------------------------------------------------
+Does installation synchronize repository files?
+----------------------------------------------
 
-The Composer plugin runs ``dev-tools:sync`` after install and update.
-That command adds the ``dev-tools`` scripts, removes deprecated
-DevTools-managed ``extra.grumphp.config-default-path`` values, and refreshes
-the packaged Git hooks.
+No. Version 2 removes Composer plugin activation and install/update hooks.
+Run ``dev-tools:sync`` explicitly after reviewing its preview.
 
-Do I always need to run ``dev-tools:sync`` manually?
-----------------------------------------------------
+How do I install skills and role prompts?
+----------------------------------------
 
-Usually no. The plugin already runs it after ``composer install`` and
-``composer update``. Manual sync is most useful when plugins were disabled or
-after upgrading ``fast-forward/dev-tools`` and wanting to refresh consumer
-automation. That flow also runs ``skills`` and ``agents`` so packaged skill
-links and packaged project-agent links are kept up to date.
+LLM Skills installs the ``fast-forward-*`` procedural packages independently.
+See :doc:`usage/syncing-packaged-skills`. Custom role prompts remain
+repository-owned; ``skills`` and ``agents`` are removed from DevTools.
 
-When should I run ``composer dev-tools skills`` manually?
----------------------------------------------------------
+Does code-style update dependencies?
+-----------------------------------
 
-Run it when you want to refresh ``.agents/skills`` without rerunning the full
-consumer sync flow, especially after upgrading ``fast-forward/dev-tools`` or
-after deleting a packaged skill link locally.
-
-When should I run ``composer agents`` manually?
------------------------------------------------
-
-Run it when you want to refresh ``.agents/agents`` without rerunning the full
-consumer sync flow, especially after upgrading ``fast-forward/dev-tools`` or
-after deleting a packaged project-agent link locally.
-
-Why does ``code-style`` touch ``composer.lock``?
-------------------------------------------------
-
-Because ``FastForward\DevTools\Console\Command\CodeStyleCommand`` always runs
-``composer update --lock --quiet`` before Composer Normalize and ECS.
+No. Code-style runs Composer Normalize as a plugin from the isolated runtime
+root against the absolute consumer manifest with ``--no-update-lock``, then
+runs ECS. It does not run ``composer update --lock``. Use ``--fix`` to permit
+formatting changes; no standalone Composer Normalize binary is assumed.
 
 Where did ``.docheader`` come from?
 -----------------------------------
@@ -58,7 +42,7 @@ Use the ``tests`` command with ``--filter``:
 
 .. code-block:: bash
 
-   composer dev-tools tests -- --filter=SyncCommandTest
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --filter=SyncCommandTest
 
 Why can my tests double final classes?
 --------------------------------------
@@ -90,20 +74,6 @@ Wiki submodule. When migrating to direct Wiki publication, remove the obsolete
 gitlink and matching ``.gitmodules`` stanza explicitly, preserving the separate
 Wiki repository and any other submodules. ``wiki --init`` remains available as
 an explicit legacy option.
-
-What happens if ``.agents/skills/my-skill`` already exists?
------------------------------------------------------------
-
-If that path is a real directory instead of a symlink, the ``skills`` command
-preserves it and skips link creation. Broken symlinks are repaired, but
-consumer-owned directories are not overwritten automatically.
-
-What happens if ``.agents/agents/my-agent`` already exists?
------------------------------------------------------------
-
-If that path is a real directory instead of a symlink, the ``agents`` command
-preserves it and skips link creation. Broken symlinks are repaired, but
-consumer-owned directories are not overwritten automatically.
 
 How do I override only one tool without forking the whole package?
 ------------------------------------------------------------------

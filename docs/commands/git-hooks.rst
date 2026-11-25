@@ -19,9 +19,9 @@ Usage
 
 .. code-block:: bash
 
-   composer git-hooks
-   composer git-hooks [options]
-   composer dev-tools git-hooks -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" git-hooks
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" git-hooks [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" git-hooks [options]
    vendor/bin/dev-tools git-hooks [options]
 
 Options
@@ -65,13 +65,13 @@ Install hooks with defaults:
 
 .. code-block:: bash
 
-   composer git-hooks
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" git-hooks
 
 Install hooks without overwriting existing ones:
 
 .. code-block:: bash
 
-   composer git-hooks --no-overwrite
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" git-hooks --no-overwrite
 
 Exit Codes
 ---------
@@ -95,3 +95,18 @@ and ``--check`` returns failure without creating files or parent directories,
 including when overwrite or interactive options are also supplied. When both
 preview flags are supplied, ``--check`` determines the failure status. Existing
 targets are compared without replacement or permission changes.
+
+Runtime and durable configuration
+---------------------------------
+
+Hooks prefer ``vendor/bin/grumphp`` or ``vendor/bin/grumphp.phar``; otherwise
+they run ``cpx --skip-local phpro/grumphp-shim:2.26.0 grumphp``. The explicit
+binary name avoids an interactive choice between ``grumphp`` and ``grumphp.phar``.
+CPX must be available
+when no local executable exists. GrumPHP is not a DevTools runtime dependency.
+Explicit ``dev-tools:sync`` copies a missing ``grumphp.yml`` into the consumer
+root. Local overrides remain authoritative; hooks do not persist temporary
+runtime/cache paths.
+
+The packaged GrumPHP configuration allows 600 seconds per process so its
+``composer dev-tools`` task can complete the full coverage and reports pipeline.

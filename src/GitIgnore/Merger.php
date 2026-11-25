@@ -28,6 +28,8 @@ final readonly class Merger implements MergerInterface
 {
     /**
      * Retains the classifier constructor parameter for compatibility with consumers.
+     *
+     * @param ClassifierInterface $classifier
      */
     public function __construct(
         private ClassifierInterface $classifier = new Classifier()
@@ -44,7 +46,7 @@ final readonly class Merger implements MergerInterface
         $canonicalEntries = $this->patterns($canonical->entries());
         $projectEntries = $this->patterns($project->entries());
 
-        if (array_slice($projectEntries, 0, count($canonicalEntries)) === $canonicalEntries) {
+        if (\array_slice($projectEntries, 0, \count($canonicalEntries)) === $canonicalEntries) {
             return new GitIgnore($project->path(), $projectEntries);
         }
 

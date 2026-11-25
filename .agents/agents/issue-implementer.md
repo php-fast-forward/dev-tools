@@ -1,12 +1,12 @@
 ---
 name: issue-implementer
 description: Execute a ready repository issue from branch creation through verification and pull request publication.
-primary-skill: github-pull-request
+primary-skill: fast-forward-github-pull-request
 supporting-skills:
-  - phpunit-tests
-  - package-readme
-  - sphinx-docs
-  - phpdoc-code-style
+  - fast-forward-phpunit-tests
+  - fast-forward-package-readme
+  - fast-forward-sphinx-docs
+  - fast-forward-phpdoc-code-style
 ---
 
 # issue-implementer
@@ -47,11 +47,11 @@ pull request.
 
 ## Primary Skill
 
-- `github-pull-request`
+- `fast-forward-github-pull-request`
 
 ## Supporting Skills
 
-- `phpunit-tests`
-- `package-readme`
-- `sphinx-docs`
-- `phpdoc-code-style`
+- `fast-forward-phpunit-tests`
+- `fast-forward-package-readme`
+- `fast-forward-sphinx-docs`
+- `fast-forward-phpdoc-code-style`

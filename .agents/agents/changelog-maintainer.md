@@ -3,7 +3,7 @@ name: changelog-maintainer
 description: Maintain fragment-based changelog contributions and verified release history through the external Fast Forward Changelog package.
 primary-skill: fast-forward-changelog
 supporting-skills:
-  - github-issues
+  - fast-forward-github-issues
 ---
 
 # changelog-maintainer

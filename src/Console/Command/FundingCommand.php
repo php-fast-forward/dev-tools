@@ -25,6 +25,8 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Funding\ComposerFundingCodec;
 use FastForward\DevTools\Funding\FundingProfileMerger;
 use FastForward\DevTools\Funding\FundingYamlCodec;
+use FastForward\DevTools\Path\DevToolsPathResolver;
+use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Resource\FileDiffer;
@@ -488,20 +490,13 @@ final class FundingCommand extends Command
             ->withArgument('--ansi')
             ->withArgument('--no-update-lock');
 
-        $workingDirectory = $this->filesystem->getDirectory($composerFile);
-
-        if ('.' !== $workingDirectory) {
-            $processBuilder = $processBuilder->withArgument('--working-dir', $workingDirectory);
-        }
-
-        $composerBasename = $this->filesystem->getBasename($composerFile);
-
-        if ('composer.json' !== $composerBasename) {
-            $processBuilder = $processBuilder->withArgument('--file', $composerBasename);
-        }
-
         $this->processQueue->add(
-            process: $processBuilder->build('composer normalize'),
+            process: $processBuilder->build([
+                'composer',
+                '--working-dir=' . \dirname(DevToolsPathResolver::getRuntimeAutoloadPath(), 2),
+                'normalize',
+                WorkingProjectPathResolver::getProjectPath($composerFile),
+            ]),
             label: 'Normalizing composer.json with Composer Normalize',
         );
 

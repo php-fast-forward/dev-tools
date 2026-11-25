@@ -17,8 +17,8 @@ Usage
 
 .. code-block:: bash
 
-   composer codeowners
-   composer codeowners [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners [options]
 
 Options
 -------
@@ -54,25 +54,25 @@ Generate CODEOWNERS from the current repository metadata:
 
 .. code-block:: bash
 
-   composer codeowners
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners
 
 Preview drift without writing:
 
 .. code-block:: bash
 
-   composer codeowners --dry-run
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners --dry-run
 
 Fail in CI when CODEOWNERS needs an update:
 
 .. code-block:: bash
 
-   composer codeowners --check
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners --check
 
 Prompt for explicit owners when metadata is incomplete:
 
 .. code-block:: bash
 
-   composer codeowners --interactive
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" codeowners --interactive
 
 Behavior
 --------

@@ -21,9 +21,9 @@ Usage
 
 .. code-block:: bash
 
-   composer tests
-   composer tests [path] [options]
-   composer dev-tools tests -- [path] [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests [path] [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests [path] [options]
    vendor/bin/dev-tools tests [path] [options]
 
 Arguments
@@ -81,62 +81,62 @@ Run all tests:
 
 .. code-block:: bash
 
-   composer tests
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests
 
 Run tests in a specific directory:
 
 .. code-block:: bash
 
-   composer tests ./tests/unit
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests ./tests/unit
 
 Run with coverage report:
 
 .. code-block:: bash
 
-   composer tests --coverage=.dev-tools/coverage
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --coverage=.dev-tools/coverage
 
 Run with concise coverage text output:
 
 .. code-block:: bash
 
-   composer tests --coverage=.dev-tools/coverage --coverage-summary
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --coverage=.dev-tools/coverage --coverage-summary
 
 Run tests matching a pattern:
 
 .. code-block:: bash
 
-   composer tests -- --filter=EventTracerTest
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --filter=EventTracerTest
 
 Run with minimum coverage enforcement:
 
 .. code-block:: bash
 
-   composer tests --min-coverage=80
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --min-coverage=80
 
 Run with structured JSON output:
 
 .. code-block:: bash
 
-   composer tests --json
-   composer tests --pretty-json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --json
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --pretty-json
 
 Run without cache:
 
 .. code-block:: bash
 
-   composer tests --no-cache
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --no-cache
 
 Force cache on explicitly:
 
 .. code-block:: bash
 
-   composer tests --cache
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --cache
 
 Run with PHPUnit progress output enabled:
 
 .. code-block:: bash
 
-   composer tests --progress
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" tests --progress
 
 Exit Codes
 ---------

@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Filesystem;
 
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Filesystem\Path;
+
 use function Safe\getcwd;
 
 /**

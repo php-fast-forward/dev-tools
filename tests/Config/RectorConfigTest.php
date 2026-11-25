@@ -39,6 +39,7 @@ use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Config\RectorConfig as RectorConfigInterface;
 use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
+
 use function Safe\getcwd;
 
 #[CoversClass(RectorConfig::class)]

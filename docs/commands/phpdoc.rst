@@ -19,9 +19,9 @@ Usage
 
 .. code-block:: bash
 
-   composer phpdoc
-   composer phpdoc [options]
-   composer dev-tools phpdoc -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc [options]
    vendor/bin/dev-tools phpdoc [options]
 
 Arguments
@@ -67,25 +67,25 @@ Check PHPDocs (dry-run):
 
 .. code-block:: bash
 
-   composer phpdoc
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc
 
 Fix PHPDocs automatically:
 
 .. code-block:: bash
 
-   composer phpdoc --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc --fix
 
 Check specific directory:
 
 .. code-block:: bash
 
-   composer phpdoc ./src
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc ./src
 
 Check without cache:
 
 .. code-block:: bash
 
-   composer phpdoc --no-cache
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" phpdoc --no-cache
 
 Exit Codes
 ---------

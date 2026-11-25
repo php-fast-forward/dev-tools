@@ -41,13 +41,8 @@ final class HookContentRendererTest extends TestCase
         $renderer = new HookContentRenderer();
 
         self::assertSame(
-            'DEVTOOLS_GRUMPHP_CONFIG=' . escapeshellarg(
-                DevToolsPathResolver::getPackagePathRelativeToProject('grumphp.yml', '/workspaces/project')
-            ),
-            $renderer->render(
-                'DEVTOOLS_GRUMPHP_CONFIG=' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER,
-                '/workspaces/project'
-            ),
+            'DEVTOOLS_GRUMPHP_CONFIG=' . escapeshellarg('./grumphp.yml'),
+            $renderer->render('DEVTOOLS_GRUMPHP_CONFIG=' . HookContentRenderer::MANAGED_GRUMPHP_CONFIG_PLACEHOLDER),
         );
     }
 }

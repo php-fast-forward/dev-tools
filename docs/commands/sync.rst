@@ -11,24 +11,22 @@ The ``dev-tools:sync`` command synchronizes consumer-facing automation and defau
 1. ``update-composer-json`` - adds dev-tools scripts to composer.json
 2. ``copy-resource`` - copies GitHub Actions workflows, including changelog automation
 3. ``copy-resource`` - copies .editorconfig
-4. ``copy-resource`` - copies dependabot.yml
+4. ``copy-resource`` - copies dependabot.yml and missing local grumphp.yml
 5. ``codeowners`` - generates ``.github/CODEOWNERS`` from local metadata
 6. ``funding`` - synchronizes ``composer.json`` funding metadata with ``.github/FUNDING.yml``
 7. ``wiki --target=.dev-tools/wiki-generated`` - generates local wiki Markdown
 8. ``gitignore`` - merges .gitignore files
 9. ``gitattributes`` - manages export-ignore rules
-10. ``skills`` - synchronizes packaged skills
-11. ``agents`` - synchronizes packaged project agents
-12. ``license`` - generates LICENSE file
-13. ``git-hooks`` - installs Git hooks
+10. ``license`` - generates LICENSE file
+11. ``git-hooks`` - installs Git hooks
 
 Usage
 -----
 
 .. code-block:: bash
 
-   composer dev-tools:sync
-   composer dev-tools:sync [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync [options]
 
 Options
 -------
@@ -62,25 +60,25 @@ Run sync:
 
 .. code-block:: bash
 
-   composer dev-tools:sync
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync
 
 Sync with overwrite:
 
 .. code-block:: bash
 
-   composer dev-tools:sync --overwrite
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync --overwrite
 
 Preview managed-file drift:
 
 .. code-block:: bash
 
-   composer dev-tools:sync --dry-run
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync --dry-run
 
 Fail in CI when managed files drift:
 
 .. code-block:: bash
 
-   composer dev-tools:sync --check
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" dev-tools:sync --check
 
 Exit Codes
 ---------
@@ -121,7 +119,5 @@ Behavior
   ``wiki-maintenance.yml`` wrappers explicitly or sync with ``--overwrite``.
   The packaged maintenance wrapper is manual-only compatibility guidance.
 - Calls other commands in sequence.
-- Runs ``skills`` and ``agents`` in normal mode so consumer repositories
-  receive both packaged procedural skills and packaged role prompts.
-- ``wiki``, ``skills``, and ``agents`` are skipped in preview/check modes
-  until they expose a non-destructive verification path.
+- LLM Skills installs skills independently. DevTools does not install agent links.
+- ``wiki`` is skipped in preview/check modes until it exposes a non-destructive verification path.

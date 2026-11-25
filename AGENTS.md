@@ -2,12 +2,12 @@
 
 ## Project Overview
 
-FastForward\DevTools is a Composer plugin that aggregates multiple PHP development tools into a single unified command. It provides automated execution of tests, static analysis, code styling, refactoring, and documentation generation.
+FastForward\DevTools is a standalone PHP CLI that aggregates multiple PHP development tools into a single unified command. It provides automated execution of tests, static analysis, code styling, refactoring, and documentation generation.
 
 **Key Technologies:**
 
 - PHP 8.3+
-- Composer plugin
+- Symfony Console CLI with isolated CPX execution
 - PHPUnit 12.5 (testing)
 - Rector 2.x (automated refactoring)
 - Easy Coding Standard (code style)
@@ -18,11 +18,12 @@ FastForward\DevTools is a Composer plugin that aggregates multiple PHP developme
 ## Setup Commands
 
 ```bash
-# Install as development dependency
-composer require --dev fast-forward/dev-tools:dev-main
-
-# Install dependencies
+# Develop this repository
 composer install
+php bin/dev-tools list
+
+# Consume a verified published version without require-dev
+cpx --skip-local fast-forward/dev-tools:2.0.0 tests
 ```
 
 ## Development Workflow
@@ -42,23 +43,21 @@ composer dev-tools phpdoc        # Check and fix PHPDoc comments
 composer dev-tools docs          # Generate HTML API documentation
 composer dev-tools wiki          # Generate Markdown documentation for wiki
 composer dev-tools reports       # Generate docs frontpage and reports
-composer dev-tools agents        # Sync packaged project agents into .agents/agents
-composer dev-tools:sync          # Sync managed repository assets and packaged agent surfaces
+php bin/dev-tools dev-tools:sync          # Explicitly sync managed metadata, workflows, defaults and hooks
 ```
 
 **Notable Specialized Commands:**
 
-- `composer skills`: Synchronize packaged skills into consumer `.agents/skills`
-- `composer funding`: Sync funding metadata between `composer.json` and `.github/FUNDING.yml`
-- `composer codeowners`: Generate `.github/CODEOWNERS` from repository metadata
-- `composer gitattributes`: Manage export-ignore rules in `.gitattributes`
-- `composer gitignore`: Synchronize managed `.gitignore` content
-- `composer license`: Generate or refresh repository `LICENSE` files
-- `composer dependencies`: Run dependency analysis workflows
-- `composer metrics`: Generate PhpMetrics reports and related artifacts
-- `composer update-composer-json`: Normalize managed `composer.json` settings
+- `php bin/dev-tools funding`: Sync funding metadata between `composer.json` and `.github/FUNDING.yml`
+- `php bin/dev-tools codeowners`: Generate `.github/CODEOWNERS` from repository metadata
+- `php bin/dev-tools gitattributes`: Manage export-ignore rules in `.gitattributes`
+- `php bin/dev-tools gitignore`: Synchronize managed `.gitignore` content
+- `php bin/dev-tools license`: Generate or refresh repository `LICENSE` files
+- `php bin/dev-tools dependencies`: Run dependency analysis workflows
+- `php bin/dev-tools metrics`: Generate PhpMetrics reports and related artifacts
+- `php bin/dev-tools update-composer-json`: Normalize managed `composer.json` settings
 - `cpx --skip-local fast-forward/changelog <arguments...>`: Run the independent changelog CLI with PHP 8.5, outside the consumer Composer dependency graph
-- `composer dev-tools:sync --dry-run|--check|--interactive`: Preview managed-file drift while intentionally skipping wiki, skills, and agents
+- `php bin/dev-tools dev-tools:sync --dry-run|--check|--interactive`: Preview managed-file drift while intentionally skipping wiki
 
 ## Testing Instructions
 
@@ -67,10 +66,10 @@ composer dev-tools:sync          # Sync managed repository assets and packaged a
 composer dev-tools tests
 
 # Run tests matching a pattern
-composer dev-tools tests -- --filter=CodeStyle
+php bin/dev-tools tests --filter=CodeStyle
 
 # Run with coverage report
-composer dev-tools tests -- --coverage=.dev-tools/coverage
+php bin/dev-tools tests --coverage=.dev-tools/coverage
 ```
 
 **Test Configuration:**
@@ -88,7 +87,7 @@ composer dev-tools tests -- --coverage=.dev-tools/coverage
 
 **Creating/Updating Tests:**
 
-- Use skill `phpunit-tests` in `.agents/skills/phpunit-tests/` for creating or updating PHPUnit tests with Prophecy
+- Use skill `fast-forward-phpunit-tests` in `resources/skills/fast-forward-phpunit-tests/` for creating or updating PHPUnit tests with Prophecy
 - Run skill when: creating new test classes, adding test methods, or fixing existing tests
 
 ## Code Style
@@ -109,13 +108,12 @@ composer dev-tools tests -- --coverage=.dev-tools/coverage
 - Commands: `src/Console/Command/`
 - PHPUnit events: `src/PhpUnit/Event/`
 - Rector rules: `src/Rector/`
-- Composer plugin: `src/Composer/`
 
 **Architecture Direction:**
 
 - Avoid introducing new dependencies on `composer/composer` outside the
-  existing Composer plugin integration and legacy surfaces already awaiting
-  decoupling.
+  legacy surfaces already awaiting decoupling. Do not restore a Composer plugin,
+  command provider, or automatic install/update sync hooks.
 - Prefer DevTools-owned interfaces for generic runtime concerns such as
   environment variables, process execution, filesystem access, and console
   presentation instead of reaching for Composer utility classes.
@@ -147,14 +145,14 @@ composer dev-tools tests -- --coverage=.dev-tools/coverage
 - All classes require docblocks with `@copyright` and `@license`
 - Use RFC 2119 keywords (MUST, SHOULD, MAY, etc.)
 - PHPDoc checked via dev-tools phpdoc command
-- Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
+- Use skill `fast-forward-phpdoc-code-style` in `resources/skills/fast-forward-phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
 
 ## Build and Deployment
 
-This repository ships a Composer plugin plus the local `bin/dev-tools` binary,
+This repository ships a standalone `bin/dev-tools` binary,
 so there is no separate frontend or asset build step. The package is published
-to Packagist, while consumer repositories adopt workflows, packaged skills, and
-other managed assets through `composer dev-tools:sync`.
+to Packagist. Consumers adopt metadata and workflow defaults through explicit
+`dev-tools:sync`; LLM Skills installs procedural packages independently.
 
 Release and publishing behavior is driven primarily through
 `.github/workflows/tests.yml`, `changelog.yml`, `reports.yml`, `wiki.yml`,
@@ -164,8 +162,8 @@ Release and publishing behavior is driven primarily through
 `resources/github-actions/`. Contract-specific templates in
 `resources/github-actions-optional/` require explicit adoption and are not
 installed by `dev-tools:sync`; read each companion guide before copying one
-into a consumer repository. Packaged skills live under `.agents/skills/`
-alongside mirrored project-agent prompts under `.agents/agents/`.
+into a consumer repository. Packaged skills live under `resources/skills/fast-forward-*`. LLM Skills owns
+installation; `.agents/agents/` prompts remain local repository guidance.
 
 The active `wiki.yml` entry and packaged wrapper call `wiki-direct.yml` for
 read-only generation on pull requests and direct publication from `main`.
@@ -193,8 +191,9 @@ history-writing or fragment-consuming operations only in disposable checkouts.
 
 **Package Details:**
 
-- Type: `composer-plugin`
-- Class: `FastForward\DevTools\Composer\Plugin`
+- Type: `library`
+- Consumer execution: `cpx --skip-local fast-forward/dev-tools:<verified-version>`
+- Runtime discovery: `runtime --json --no-ansi --no-interaction`
 - Minimum stability: `stable`
 
 ## Pull Request Guidelines
@@ -228,41 +227,51 @@ composer dev-tools
 - `resources/github-actions/`: consumer-facing workflow wrappers synchronized by `dev-tools:sync`
 - [resources/github-actions-optional/test-statuses.md](resources/github-actions-optional/test-statuses.md): explicit opt-in guide for Dependabot status aliases; verify source workflow identity, PHP matrix and protection contexts before adopting the checkout-free template
 - `.github/pull_request_template.md`: expected PR structure and reviewer checklist
-- `src/Sync/`: shared packaged-directory synchronization primitives used by `skills` and `agents`
-- `.agents/skills/`: packaged procedural skills shipped to consumer repositories
-- `.agents/agents/`: repository-specific role prompts mirrored through `.github/agents`
+- `resources/skills/fast-forward-*`: canonical packaged skills; installed via LLM Skills
+- `.agents/agents/`: local repository role prompts mirrored through `.github/agents`
 - `.dev-tools/wiki-generated`: local Markdown output from normal sync; wiki publication operates on a separate artifact and Wiki checkout
 
 ## Additional Notes
 
-- **GrumPHP**: Automatically runs on pre-commit (configured in `grumphp.yml`)
+- **GrumPHP**: Hooks prefer local GrumPHP, otherwise CPX `phpro/grumphp-shim:2.26.0`.
+  Explicit sync copies a durable local `grumphp.yml`; do not persist runtime/cache paths.
 - **Rector**: Custom rules in `src/Rector/` for automated refactoring
 - **Documentation**: Sphinx-based docs in `docs/` directory
 - **Wiki**: `.github/workflows/wiki.yml` delegates to `wiki-direct.yml`; pull requests generate without write credentials and only `main` publishes to the separate Wiki repository. `Home.md`, `classes/` and `functions/` are generated; preserve manually maintained pages outside those surfaces. Normal sync does not initialize a Wiki submodule; `wiki --init` remains an explicit legacy option.
 - **GitHub Actions**: Reusable workflows live in `.github/workflows/`, local workflow actions live in `.github/actions/`, and consumer wrappers are synchronized from `resources/github-actions/`
 - **Dependency Health CI**: `.github/workflows/tests.yml` always runs the dependency-health job, and its default `max-outdated` input is `-1` so outdated packages are reported without failing CI on count alone
-- **Sync Preview Modes**: `dev-tools:sync --dry-run`, `--check`, and `--interactive` intentionally skip wiki, skills, and agents because those flows do not yet expose non-destructive verification
-- **Project Agents**: Packaged role prompts synchronized via `composer agents` and `dev-tools:sync`
+- **Sync Preview Modes**: `dev-tools:sync --dry-run`, `--check`, and `--interactive` intentionally skip Wiki generation because it does not yet expose non-destructive verification
+- **Skills**: LLM Skills installs exported `fast-forward-*` skills; DevTools has no `skills` or `agents` command
+
+## Version 2 Consumer Contract
+
+- Read `docs/usage/dev-tools-2-migration.rst` before changing consumption or extraction.
+- Keep the DevTools runtime separate from the consumer Composer graph. Use a verified
+  exact CPX version; the 2.0.0 example requires publication verification before adoption.
+- Use Composer Trusted skills only from installed libraries' resolved payloads.
+  External tools use a pinned GitHub source. Keep one owner per skill and fail on
+  missing donor payloads rather than silently fetching a newer fallback.
+- Explicit sync still owns generic metadata/workflows/hooks. LLM Skills does not.
+- Do not migrate other repositories, merge or publish as an incidental local change.
 
 ## Skills Usage
 
 - **Changelog**: Use `.agents/skills/fast-forward-changelog/SKILL.md` for external fragment authoring, contribution checks, version-PR review and authorized release maintenance, following the selected release's documentation
 
-- **Creating/Updating Tests**: Use skill `phpunit-tests` in `.agents/skills/phpunit-tests/` for PHPUnit tests with Prophecy
-- **Creating/Refreshing AGENTS.md**: Use skill `create-agentsmd` in `.agents/skills/create-agentsmd/` to generate or update repository-root AGENTS instructions for coding agents
-- **Generating Documentation**: Use skill `sphinx-docs` in `.agents/skills/sphinx-docs/` for Sphinx documentation in `docs/`
-- **Updating README**: Use skill `package-readme` in `.agents/skills/package-readme/` for generating README.md files
-- **Updating PHPDoc / PHP Style**: Use skill `phpdoc-code-style` in `.agents/skills/phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
-- **Drafting / Publishing GitHub Issues**: Use skill `github-issues` in `.agents/skills/github-issues/` to transform a short feature description into a complete, production-ready GitHub issue and create or update it on GitHub when needed
-- **Implementing Issues & PRs**: Use skill `github-pull-request` in `.agents/skills/github-pull-request/` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests
-- **Reviewing Pull Requests**: Use skill `pull-request-review` in `.agents/skills/pull-request-review/` for findings-first Fast Forward pull-request review focused on regressions, missing tests, missing docs, workflow risk, and generated-output drift
+- **Creating/Updating Tests**: Use skill `fast-forward-phpunit-tests` in `resources/skills/fast-forward-phpunit-tests/` for PHPUnit tests with Prophecy
+- **Creating/Refreshing AGENTS.md**: Use skill `fast-forward-create-agentsmd` in `resources/skills/fast-forward-create-agentsmd/` to generate or update repository-root AGENTS instructions for coding agents
+- **Generating Documentation**: Use skill `fast-forward-sphinx-docs` in `resources/skills/fast-forward-sphinx-docs/` for Sphinx documentation in `docs/`
+- **Updating README**: Use skill `fast-forward-package-readme` in `resources/skills/fast-forward-package-readme/` for generating README.md files
+- **Updating PHPDoc / PHP Style**: Use skill `fast-forward-phpdoc-code-style` in `resources/skills/fast-forward-phpdoc-code-style/` for PHPDoc cleanup and repository-specific PHP formatting
+- **Drafting / Publishing GitHub Issues**: Use skill `fast-forward-github-issues` in `resources/skills/fast-forward-github-issues/` to transform a short feature description into a complete, production-ready GitHub issue and create or update it on GitHub when needed
+- **Implementing Issues & PRs**: Use skill `fast-forward-github-pull-request` in `resources/skills/fast-forward-github-pull-request/` to iterate through open GitHub issues and implement them one by one with branching, testing, documentation, and pull requests
+- **Reviewing Pull Requests**: Use skill `fast-forward-pull-request-review` in `resources/skills/fast-forward-pull-request-review/` for findings-first Fast Forward pull-request review focused on regressions, missing tests, missing docs, workflow risk, and generated-output drift
 
 ## Project Agents
 
-Packaged project-agent prompts live in `.agents/agents/` for both this
-repository and consumer repositories that synchronize DevTools assets. These
-role prompts define behavior and ownership boundaries, while `.agents/skills/`
-remains the procedural source of truth.
+Local project-agent prompts live in `.agents/agents/`. They define repository
+roles; procedural packages live under `resources/skills/fast-forward-*`.
+Do not restore vendor-relative skill/agent symlink installation.
 
 - Use `issue-editor` for issue drafting, refinement, comments, updates, and closure workflows.
 - Use `issue-implementer` for issue-to-branch-to-PR execution.

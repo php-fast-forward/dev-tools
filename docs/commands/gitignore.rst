@@ -14,9 +14,9 @@ Usage
 
 .. code-block:: bash
 
-   composer gitignore
-   composer gitignore [options]
-   composer dev-tools gitignore -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitignore
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitignore [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitignore [options]
    vendor/bin/dev-tools gitignore [options]
 
 Options
@@ -51,13 +51,13 @@ Merge .gitignore files:
 
 .. code-block:: bash
 
-   composer gitignore
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitignore
 
 Specify custom paths:
 
 .. code-block:: bash
 
-   composer gitignore --source=/path/to/source/.gitignore --target=/path/to/target/.gitignore
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" gitignore --source=/path/to/source/.gitignore --target=/path/to/target/.gitignore
 
 Exit Codes
 ---------

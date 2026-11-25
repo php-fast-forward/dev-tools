@@ -105,6 +105,10 @@ final class ComposerDependencyAnalyserConfigTest extends TestCase
             $configuration->getIgnoreList()
                 ->shouldIgnoreError(ErrorType::UNUSED_DEPENDENCY, null, 'ergebnis/phpunit-agent-reporter')
         );
+        self::assertFalse(
+            $configuration->getIgnoreList()
+                ->shouldIgnoreError(ErrorType::UNUSED_DEPENDENCY, null, 'phpro/grumphp-shim')
+        );
         self::assertTrue(
             $configuration->getIgnoreList()
                 ->shouldIgnoreError(ErrorType::UNUSED_DEPENDENCY, null, 'vendor/custom-package')

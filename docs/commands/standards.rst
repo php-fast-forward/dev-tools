@@ -18,17 +18,17 @@ Usage
 
 .. code-block:: bash
 
-   composer standards
-   composer standards --fix
-   composer dev-tools standards -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards [options]
    vendor/bin/dev-tools standards [options]
 
 Alternatively, you can run the unified fixing variant:
 
 .. code-block:: bash
 
-   composer dev-tools
-   composer dev-tools:fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards --fix
 
 Options
 -------
@@ -62,7 +62,7 @@ Exit Codes
 Behavior
 ---------
 
-- This is the default command when running ``composer dev-tools`` without args.
+- This is the default command when running ``cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards`` without args.
 - Each phase runs in sequence; every nonzero queue status makes the command
   return failure (1), including invalid invocations and missing executables.
   The original queue status is retained as ``exit_code`` in the failure log

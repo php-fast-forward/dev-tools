@@ -45,6 +45,7 @@ use Symplify\CodingStandard\Fixer\Spacing\StandaloneLinePromotedPropertyFixer;
 use Symplify\CodingStandard\Fixer\Strict\BlankLineAfterStrictTypesFixer;
 use Symplify\EasyCodingStandard\Config\ECSConfig as ECSConfigInterface;
 use Symplify\EasyCodingStandard\Configuration\ECSConfigBuilder;
+
 use function Safe\getcwd;
 
 /**

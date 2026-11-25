@@ -20,7 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Console\CommandLoader;
 
 use ArrayIterator;
-use FastForward\DevTools\Console\Command\AgentsCommand;
+use FastForward\DevTools\Console\Command\RuntimeCommand;
 use FastForward\DevTools\Console\Command\SyncCommand;
 use FastForward\DevTools\Console\Command\TestsCommand;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
@@ -41,7 +41,7 @@ use Symfony\Component\Finder\SplFileInfo;
 
 #[CoversClass(DevToolsCommandLoader::class)]
 #[UsesClass(ClassReflection::class)]
-#[UsesClass(AgentsCommand::class)]
+#[UsesClass(RuntimeCommand::class)]
 #[UsesClass(SyncCommand::class)]
 final class DevToolsCommandLoaderTest extends TestCase
 {
@@ -96,16 +96,16 @@ final class DevToolsCommandLoaderTest extends TestCase
             ->shouldBeCalled();
         $this->finder->getIterator()
             ->willReturn(new ArrayIterator([
-                new SplFileInfo($commandDirectory . '/AgentsCommand.php', '', 'AgentsCommand.php'),
+                new SplFileInfo($commandDirectory . '/RuntimeCommand.php', '', 'RuntimeCommand.php'),
             ]))->shouldBeCalled();
 
-        $this->container->has(AgentsCommand::class)->willReturn(true)->shouldBeCalled();
-        $this->container->get(AgentsCommand::class)->willReturn($command->reveal())->shouldBeCalled();
+        $this->container->has(RuntimeCommand::class)->willReturn(true)->shouldBeCalled();
+        $this->container->get(RuntimeCommand::class)->willReturn($command->reveal())->shouldBeCalled();
 
         $loader = new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());
 
-        self::assertTrue($loader->has('agents'));
-        self::assertSame($command->reveal(), $loader->get('agents'));
+        self::assertTrue($loader->has('runtime'));
+        self::assertSame($command->reveal(), $loader->get('runtime'));
     }
 
     /**
@@ -204,12 +204,12 @@ final class DevToolsCommandLoaderTest extends TestCase
                     '',
                     'FixtureDuplicateCommandName.php'
                 ),
-                new SplFileInfo($srcDirectory . '/AgentsCommand.php', '', 'AgentsCommand.php'),
+                new SplFileInfo($srcDirectory . '/RuntimeCommand.php', '', 'RuntimeCommand.php'),
             ]))->shouldBeCalled();
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
-            'Command agents is already registered and cannot be assigned to FastForward\\DevTools\\Console\\Command\\AgentsCommand.'
+            'Command runtime is already registered and cannot be assigned to FastForward\\DevTools\\Console\\Command\\RuntimeCommand.'
         );
 
         new DevToolsCommandLoader($this->finderFactory->reveal(), $this->container->reveal());

@@ -21,6 +21,7 @@ namespace FastForward\DevTools\Resource;
 
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Throwable;
+
 use function explode;
 use function implode;
 use function str_contains;

@@ -60,9 +60,13 @@ final class MergerTest extends TestCase
     {
         yield 'explicit unset exception' => ["*.txt export-ignore\nkeep.txt -export-ignore"];
         yield 'explicit unspecified exception' => ["*.txt export-ignore\nkeep.txt !export-ignore"];
-        yield 'repeated positive after exception' => ["*.txt export-ignore\nkeep.txt -export-ignore\n*.txt export-ignore"];
+        yield 'repeated positive after exception' => [
+            "*.txt export-ignore\nkeep.txt -export-ignore\n*.txt export-ignore",
+        ];
         yield 'repeated custom attributes' => ["* text=auto\n*.txt -text\n* text=auto"];
-        yield 'overlapping patterns' => ["docs/** export-ignore\ndocs/keep.* -export-ignore\ndocs/keep.txt export-ignore"];
+        yield 'overlapping patterns' => [
+            "docs/** export-ignore\ndocs/keep.* -export-ignore\ndocs/keep.txt export-ignore",
+        ];
         yield 'comments and whitespace' => ["# comment\n/docs/    export-ignore\n/tests/  export-ignore"];
         yield 'quoted path' => ['"docs with spaces/file.txt" export-ignore'];
     }

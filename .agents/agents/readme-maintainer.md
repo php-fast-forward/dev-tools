@@ -1,7 +1,7 @@
 ---
 name: readme-maintainer
 description: Keep the repository README aligned with commands, onboarding, links, badges, and public package guidance.
-primary-skill: package-readme
+primary-skill: fast-forward-package-readme
 supporting-skills: []
 ---
 
@@ -34,7 +34,7 @@ discovery, links, badges, and contributor orientation.
 
 ## Primary Skill
 
-- `package-readme`
+- `fast-forward-package-readme`
 
 ## Supporting Skills
 

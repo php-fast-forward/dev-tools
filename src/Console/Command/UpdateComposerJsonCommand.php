@@ -26,6 +26,7 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\GrumPhp\ManagedConfigPathSynchronizer;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Resource\FileDiffer;
+use FastForward\DevTools\SelfUpdate\VersionCheckerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\Config\FileLocatorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -35,8 +36,10 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Style\SymfonyStyle;
+
 use function Safe\json_decode;
 use function Safe\json_encode;
+use function Safe\preg_match;
 
 /**
  * Updates composer.json with the Fast Forward dev-tools integration metadata.
@@ -60,6 +63,7 @@ final class UpdateComposerJsonCommand extends Command
      * @param ManagedConfigPathSynchronizer $managedConfigPathSynchronizer synchronizes managed GrumPHP metadata
      * @param FileDiffer $fileDiffer the file differ used to summarize synchronization changes
      * @param SymfonyStyle $io the input/output service used to interact with the user
+     * @param VersionCheckerInterface $versionChecker
      */
     public function __construct(
         private readonly ComposerJsonInterface $composer,
@@ -68,6 +72,7 @@ final class UpdateComposerJsonCommand extends Command
         private readonly ManagedConfigPathSynchronizer $managedConfigPathSynchronizer,
         private readonly FileDiffer $fileDiffer,
         private readonly SymfonyStyle $io,
+        private readonly VersionCheckerInterface $versionChecker,
     ) {
         parent::__construct();
     }
@@ -220,7 +225,7 @@ final class UpdateComposerJsonCommand extends Command
             $scripts = [];
         }
 
-        foreach ($this->getScripts() as $name => $command) {
+        foreach ($this->getScripts($composerJsonData['name'] ?? '') as $name => $command) {
             $scripts[$name] = $command;
         }
 
@@ -253,12 +258,22 @@ final class UpdateComposerJsonCommand extends Command
     /**
      * Returns the Composer scripts managed by this command.
      *
+     * @param string $packageName
+     *
      * @return array<string, string> the script name to command map
      */
-    private function getScripts(): array
+    private function getScripts(string $packageName): array
     {
+        $version = $this->versionChecker->getCurrentVersion();
+
+        if (1 !== preg_match('/^v?\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/', $version)) {
+            $version = '2.0.0';
+        }
+
         return [
-            'dev-tools' => 'dev-tools',
+            'dev-tools' => 'fast-forward/dev-tools' === $packageName
+                ? '@php bin/dev-tools'
+                : 'cpx --skip-local fast-forward/dev-tools:' . ltrim($version, 'v'),
             'dev-tools:fix' => '@dev-tools --fix',
         ];
     }

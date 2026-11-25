@@ -19,8 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Container\ServiceProvider;
 
-use Composer\Plugin\Capability\CommandProvider;
-use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader;
@@ -174,7 +172,6 @@ class DevToolsServiceProvider implements ServiceProviderInterface
             InputInterface::class => get(ArgvInput::class),
             OutputInterface::class => get(ConsoleOutputInterface::class),
             CommandLoaderInterface::class => get(DevToolsCommandLoader::class),
-            CommandProvider::class => get(DevToolsCommandProvider::class),
             ConsoleOutputInterface::class => create(ConsoleOutput::class)
                 ->method('setVerbosity', ConsoleOutputInterface::VERBOSITY_VERBOSE)
                 ->method('setFormatter', get(LogLevelOutputFormatter::class)),

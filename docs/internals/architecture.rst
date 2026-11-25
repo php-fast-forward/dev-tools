@@ -1,103 +1,23 @@
 Architecture and Command Lifecycle
-=================================
+==================================
 
-The package has two connected execution models: local command execution and
-consumer repository synchronization.
+CPX installs the chosen DevTools runtime separately. ``bin/dev-tools`` loads
+its own autoloader and resolves ``Console\DevTools`` through the shared
+container. ``DevToolsCommandLoader`` lazily discovers Symfony commands.
+Commands read consumer metadata, local overrides, source and artifacts from
+the working directory, while tool binaries and packaged defaults come from
+the DevTools installation. ``standards`` orchestrates the default pipeline.
 
-Local Command Lifecycle
------------------------
+There is no Composer plugin or automatic install/update hook.
+``dev-tools:sync`` explicitly manages repository metadata, workflow callers,
+defaults and Git hooks. LLM Skills owns skill installation and provenance;
+the old skill/agent link synchronizer is removed.
 
-1. ``bin/dev-tools`` loads ``bin/dev-tools.php``.
-2. ``bin/dev-tools.php`` prefers the consumer ``vendor/autoload.php`` and
-   falls back to the package autoloader.
-3. ``FastForward\DevTools\Container\ContainerFactory::get(FastForward\DevTools\Console\DevTools::class)``
-   resolves the shared application container from
-   ``FastForward\DevTools\ServiceProvider\DevToolsServiceProvider``.
-4. ``FastForward\DevTools\Console\CommandLoader\DevToolsCommandLoader``
-   lazily discovers ``#[AsCommand]`` classes and resolves them from that
-   container.
-5. ``standards`` is used as the default command when no explicit command name
-   is given.
-6. ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider`` only
-   adapts the same application command set for Composer plugin integration.
+DevTools may require extracted config, container or other runtime libraries.
+Those libraries run DevTools through CPX for development, avoiding a reverse
+Composer dependency. Separate resolution does not guarantee incompatible PHP
+APIs can coexist in one process. Preserve actual consumer test dependencies
+and validate the test/runtime boundary.
 
-Consumer Synchronization Lifecycle
-----------------------------------
-
-1. A library installs ``fast-forward/dev-tools`` as a development dependency.
-2. Composer loads ``FastForward\DevTools\Composer\Plugin``.
-3. The plugin exposes commands through
-   ``FastForward\DevTools\Composer\Capability\DevToolsCommandProvider``.
-4. After ``composer install`` or ``composer update``, the plugin runs
-   ``vendor/bin/dev-tools dev-tools:sync``.
-5. ``FastForward\DevTools\Console\Command\SyncCommand`` updates
-   ``composer.json`` scripts, funding metadata, workflow stubs,
-   ``.editorconfig``, ``dependabot.yml``, ``.gitignore``,
-   ``.gitattributes``, the project license, and packaged Git hooks.
-6. In normal mode, ``dev-tools:sync`` also runs
-   ``wiki --target=.dev-tools/wiki-generated``, ``skills``, and ``agents``
-   to generate local API Markdown without a wiki submodule and
-   synchronize packaged links into ``.agents/skills`` and
-   ``.agents/agents``.
-7. In ``--dry-run``, ``--check``, and ``--interactive`` modes, ``wiki``,
-   ``skills``, and ``agents`` are skipped because they do not yet expose
-   non-destructive verification paths.
-8. ``FastForward\DevTools\Sync\PackagedDirectorySynchronizer`` creates
-   missing links, repairs broken ones, and preserves consumer-owned
-   directories for both synchronization flows.
-
-Documentation Pipeline
-----------------------
-
-1. ``FastForward\DevTools\Console\Command\DocsCommand`` reads PSR-4 paths from
-   ``composer.json`` via ``ComposerJsonInterface``.
-2. It generates a temporary ``phpdocumentor.xml`` file in the configured cache
-   directory.
-3. phpDocumentor builds API pages from those PSR-4 paths.
-4. phpDocumentor also builds the guide from the selected ``docs/`` source
-   directory.
-5. ``FastForward\DevTools\Console\Command\ReportsCommand`` combines that
-   documentation build with PHPUnit coverage generation.
-
-Dependency Injection
---------------------
-
-``DevToolsServiceProvider`` builds the shared application container used by
-``ContainerFactory::get(DevTools::class)``. Most commands receive collaborators through
-constructor injection once resolved by that container, while command discovery
-itself stays lazy through ``DevToolsCommandLoader``.
-
-The provider wires the command runtime by concern rather than by one flat
-command list:
-
-.. list-table::
-   :header-rows: 1
-
-   * - Concern
-     - Services
-   * - ``FastForward\DevTools\Process\ProcessBuilderInterface``
-     - ``ProcessBuilderInterface`` and ``ProcessQueueInterface`` build and
-       execute subprocess pipelines, while process environment and output
-       Symfony-style sections keep nested command output readable without PTY
-       and suppress unnecessary Xdebug overhead in child processes.
-   * - ``Filesystem and metadata``
-     - ``FilesystemInterface``, ``ComposerJsonInterface``, and
-       ``FileLocatorInterface`` resolve local files, project metadata, and
-       packaged resources.
-   * - ``Console bootstrapping``
-     - ``CommandLoaderInterface`` resolves lazy command loading, and
-       ``Composer\Plugin\Capability\CommandProvider`` exposes the same
-       command set to Composer.
-   * - ``External changelog and Git``
-     - The independent Changelog package owns fragment parsing, history,
-       versioning and publication policy, with its own CLI and workflow.
-       ``GitClientInterface`` remains available for DevTools Git operations.
-   * - ``Synchronization helpers``
-     - Git ignore, Git attributes, license, resource diffing, and coverage
-       summary services support consumer sync and reporting workflows.
-   * - ``Shared infrastructure``
-     - ``LoggerInterface``, ``ClockInterface``,
-       ``RuntimeEnvironmentInterface``, and Twig's ``LoaderInterface``
-       provide reusable runtime infrastructure, including centralized checks
-       for GitHub Actions, generic CI, Composer test runs, and truthy
-       environment flags.
+Keep process policy centralized in ``ProcessQueue`` configurators. See
+:doc:`../usage/dev-tools-2-migration` for staged extraction and ownership.

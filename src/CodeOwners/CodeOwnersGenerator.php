@@ -23,6 +23,7 @@ use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
 use FastForward\DevTools\Composer\Json\Schema\AuthorInterface;
 use FastForward\DevTools\Filesystem\FilesystemInterface;
 use Symfony\Component\Config\FileLocatorInterface;
+
 use function Safe\preg_match;
 use function Safe\parse_url;
 use function Safe\preg_replace;

@@ -2,9 +2,11 @@
 
 declare(strict_types=1);
 
-require __DIR__ . '/vendor/autoload.php';
-
 use FastForward\DevTools\Path\WorkingProjectPathResolver;
+
+if (! class_exists(WorkingProjectPathResolver::class)) {
+    require_once __DIR__ . '/src/Path/WorkingProjectPathResolver.php';
+}
 
 $rules = [
     'phpdoc_indent' => true,

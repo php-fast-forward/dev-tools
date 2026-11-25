@@ -14,10 +14,10 @@ Usage
 
 .. code-block:: bash
 
-   composer refactor
-   composer refactor --fix
-   composer dev-tools:fix refactor
-   composer dev-tools refactor -- [options]
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" refactor
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" refactor --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" standards --fix refactor
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" refactor [options]
    vendor/bin/dev-tools refactor [options]
 
 Options
@@ -47,13 +47,13 @@ Run Rector in dry-run mode:
 
 .. code-block:: bash
 
-   composer refactor
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" refactor
 
 Apply fixes automatically:
 
 .. code-block:: bash
 
-   composer refactor --fix
+   cpx --skip-local "fast-forward/dev-tools:$DEV_TOOLS_VERSION" refactor --fix
 
 Exit Codes
 ---------

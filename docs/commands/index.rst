@@ -1,7 +1,10 @@
 Command Reference
 =================
 
-Detailed documentation for each dev-tools command.
+Detailed documentation for each DevTools command. CPX examples assume
+``DEV_TOOLS_VERSION`` contains an exact published 2.x numeric version selected
+as described in :doc:`../getting-started/installation`. The consumer's own
+Composer dependencies remain separate from the DevTools runtime.
 
 .. toctree::
    :maxdepth: 1
