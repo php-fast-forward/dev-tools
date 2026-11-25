@@ -130,15 +130,22 @@ The final publisher requires successful pending publication and a matrix that
 actually finished with success or failure. It does not run for skipped or
 cancelled matrices, so a publication failure cannot make it select earlier
 successful jobs. Neither publisher checks out repository files or executes
-consumer code. The final publisher reads GitHub job attempts for that exact
-run, selects the newest attempt for each PHP version, and requires that result
-to be completed before publishing it under its required-check name, such as
-``Run Tests (8.3)``, ``Run Tests (8.4)``, and ``Run Tests (8.5)``.
+consumer code. The final publisher requires one completed job for every PHP
+version from the exact run and current attempt. It publishes those conclusions
+under the required-check names, such as ``Run Tests (8.3)``,
+``Run Tests (8.4)``, and ``Run Tests (8.5)``.
 
-When only failed jobs are rerun, successful versions can remain in an earlier
-attempt. The publisher retains those completed results and replaces only the
-versions that have a newer attempt. An incomplete or ambiguous newest attempt
-fails publication rather than falling back to an older successful result.
+GitHub can return an older result before the current job becomes visible.
+The publisher cannot distinguish that case from a leg not repeated in a
+partial rerun, so it never substitutes an earlier attempt. Use
+**Re-run all jobs** or dispatch a new test run to refresh the required
+statuses, not **Re-run failed jobs** or a rerun of an individual job.
+
+If GitHub's API briefly lags behind the runner, the publishers retry while the
+current run is still queued or its current-attempt matrix jobs are not ready.
+Invalid identity or ambiguous results fail immediately. The final publisher
+also waits if the observed terminal results disagree with the matrix dependency
+outcome. If results remain incomplete or disagree, publication fails.
 
 Full reruns execute the pending phase again before the new matrix starts. A
 missing, ambiguous, incomplete or wrong-run result makes final publication fail
@@ -150,10 +157,12 @@ older in-progress runs for the same pull request.
 Pending publication is not instantaneous or atomic. Earlier statuses may remain
 visible while the run is scheduled or PHP versions are resolved. An API failure
 before the first pending POST leaves old statuses unchanged; failure between
-POSTs can leave only some contexts updated. Rerunning an individual successful
-test job can retain its successful pending-job ancestor instead of executing
-that ancestor again. Prefer the exact native qualified GitHub Actions checks
-when deliberately migrating a consumer's branch protection policy.
+POSTs can leave only some contexts updated. A partial rerun can reuse the
+successful pending-job ancestor instead of executing it again, so previously
+published commit statuses can remain visible. They are not proof that the
+latest attempt was verified; check the run and attempt before relying on them.
+Prefer the exact native qualified GitHub Actions checks when deliberately
+migrating a consumer's branch protection policy.
 
 Jobs that execute checked-out code have read-only contents access and no status
 write permission; all checkouts disable credential persistence. Only the

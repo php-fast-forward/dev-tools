@@ -44,7 +44,7 @@ final class PendingTestStatusWorkflowTest extends TestCase
         yield 'string attempt' => [['run_attempt' => '1'], 'Workflow run attempt is not an integer.'];
         yield 'missing attempt' => [['run_attempt' => null], 'Workflow run attempt is not an integer.'];
         yield 'different attempt' => [['run_attempt' => 2], 'Workflow run attempt does not match the current attempt.'];
-        foreach (['queued', 'completed', 'cancelled', null, "untrusted\nTOKEN_MARKER"] as $status) {
+        foreach (['completed', 'cancelled', null, "untrusted\nTOKEN_MARKER"] as $status) {
             yield 'status ' . ($status ?? 'missing') => [['status' => $status], 'Workflow run status is not in_progress.'];
         }
     }
@@ -83,13 +83,45 @@ final class PendingTestStatusWorkflowTest extends TestCase
         }
     }
 
+    #[Test]
+    public function pendingPublisherWaitsForTheSameRunAndAttemptToStart(): void
+    {
+        [$code, $output] = $this->executePublisher(['status' => 'queued'], [['status' => 'in_progress']]);
+
+        self::assertSame(0, $code, $output);
+        self::assertSame(2, substr_count($output, 'RUN_READ'));
+        self::assertSame(3, substr_count($output, 'STATUS_WRITE'));
+        self::assertLessThan(strpos($output, 'STATUS_WRITE'), strrpos($output, 'RUN_READ'));
+    }
+
+    #[Test]
+    public function pendingPublisherStopsAfterEightSnapshotsWithoutWrites(): void
+    {
+        [$code, $output] = $this->executePublisher(['status' => 'queued']);
+
+        self::assertNotSame(0, $code);
+        self::assertSame(8, substr_count($output, 'RUN_READ'));
+        self::assertStringNotContainsString('STATUS_WRITE', $output);
+    }
+
+    #[Test]
+    public function pendingPublisherRejectsASupersedingAttemptDuringPolling(): void
+    {
+        [$code, $output] = $this->executePublisher(['status' => 'queued'], [['run_attempt' => 2]]);
+
+        self::assertNotSame(0, $code);
+        self::assertSame(2, substr_count($output, 'RUN_READ'));
+        self::assertStringNotContainsString('STATUS_WRITE', $output);
+    }
+
     /**
      * Execute the actual embedded program with only its GitHub transport substituted.
      *
      * @param array<string, mixed> $overrides
+     * @param list<array<string, mixed>> $subsequent
      * @return array{int, string}
      */
-    private function executePublisher(array $overrides): array
+    private function executePublisher(array $overrides, array $subsequent = []): array
     {
         $workflow = Yaml::parseFile(__DIR__ . '/../../.github/workflows/tests.yml');
         $shell = $workflow['jobs']['publish_pending_statuses']['steps'][0]['run'];
@@ -100,17 +132,20 @@ final class PendingTestStatusWorkflowTest extends TestCase
         $end = strpos($program, '$repository = getenv');
         self::assertIsInt($start);
         self::assertIsInt($end);
-        $run = array_replace([
+        $default = [
             'id' => 7,
             'repository' => ['full_name' => 'example/repo'],
             'run_attempt' => 1,
             'status' => 'in_progress',
-        ], $overrides);
-        $transport = 'function githubApi(array $arguments): array {'
+        ];
+        $runs = array_map(static fn (array $snapshot): array => array_replace($default, $snapshot), [$overrides, ...$subsequent]);
+        $transport = 'function sleep(int $seconds): int { return 0; }' . "\n"
+            . 'function githubApi(array $arguments): array {'
             . 'if ($arguments[0] === "--method") { echo "STATUS_WRITE\\n" . var_export($arguments, true) . "\\n"; return []; }'
-            . 'return ' . var_export($run, true) . '; }' . "\n";
+            . 'static $poll = 0; echo "RUN_READ\\n"; $runs = ' . var_export($runs, true) . ';'
+            . 'return $runs[min($poll++, count($runs) - 1)]; }' . "\n";
         $program = substr($program, 0, $start) . $transport . substr($program, $end);
-        $process = proc_open(escapeshellarg(PHP_BINARY), [['pipe', 'r'], ['pipe', 'w'], ['redirect', 1]], $pipes, null, array_merge(getenv(), [
+        $process = proc_open(escapeshellarg(PHP_BINARY) . ' -d disable_functions=sleep', [['pipe', 'r'], ['pipe', 'w'], ['redirect', 1]], $pipes, null, array_merge(getenv(), [
             'GITHUB_REPOSITORY' => 'example/repo',
             'GITHUB_RUN_ID' => '7',
             'GITHUB_RUN_ATTEMPT' => '1',
