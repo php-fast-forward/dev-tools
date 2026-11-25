@@ -161,20 +161,19 @@ above when its protection policy needs aliases.
 If pending publication fails, the matrix is blocked and the final publisher
 does not run. The final publisher requires successful pending publication and
 an actual success or failure matrix outcome; skipped or cancelled matrices
-cannot cause it to republish older successful jobs. Final results come from
-GitHub job metadata for that exact run, selecting the newest attempt for each
-version and requiring it to be completed. A failed-only retry can retain results from
-unaffected versions, while incomplete or ambiguous newest results stop
-publication.
+cannot cause it to republish older successful jobs. Final results require a
+completed job for every PHP version from the exact run and current attempt.
+Missing, incomplete or ambiguous results stop publication; a result from an
+earlier attempt cannot stand in for a missing job.
 
-Full reruns reexecute the ordered pending publisher. Rerunning only an
-individual successful job may retain its successful ancestors and therefore
-does not guarantee another pending publication. There is also a scheduling and
-PHP-resolution gap before the pending job runs. A failed API read before its
-first POST leaves existing statuses unchanged, and later API failures may leave
-only some contexts updated. Commit-status mirroring does not provide an atomic
-replacement of earlier results. Prefer native qualified checks when migrating
-a repository's protection policy. See
+To refresh required contexts, use **Re-run all jobs** or dispatch a fresh run.
+A partial rerun can retain its successful pending-publisher ancestor, so
+previously published statuses may remain visible without verifying that attempt.
+There is also a scheduling and PHP-resolution gap before the pending job runs.
+A failed API read before its first POST leaves existing statuses unchanged,
+and later API failures may leave only some contexts updated. Commit-status
+mirroring does not provide an atomic replacement of earlier results. Prefer
+native qualified checks when migrating a repository's protection policy. See
 :doc:`../advanced/branch-protection-and-bot-commits` for the permission ceiling
 and bot-authored commit flow.
 

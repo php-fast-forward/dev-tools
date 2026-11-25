@@ -34,24 +34,25 @@ use function Safe\stream_get_contents;
 final class RequiredTestStatusWorkflowTest extends TestCase
 {
     #[Test]
-    public function publisherWaitsForNewestJobsAndKeepsUnaffectedResultsFromPartialReruns(): void
+    public function publisherWaitsForCompleteCurrentAttemptAcrossAllPages(): void
     {
-        $unchanged = self::job('8.3', 1);
+        $success = self::job('8.3', 2);
         $oldSuccess = self::job('8.5', 1);
         $nullConclusion = self::job('8.4', 2, 'completed', null);
         $inProgress = self::job('8.5', 2, 'in_progress', null);
         $failed = self::job('8.5', 2, 'completed', 'failure');
 
         [$code, $output] = $this->executePublisher([
-            [['jobs' => [$unchanged, self::job('8.4', 1), $oldSuccess]]],
-            [['jobs' => [$unchanged, $oldSuccess, $inProgress]]],
-            [['jobs' => [$unchanged, $oldSuccess, $nullConclusion, $inProgress]]],
-            [['jobs' => [$unchanged, $oldSuccess]], ['jobs' => [self::job('8.4', 2), $failed]]],
+            [['jobs' => [$success, self::job('8.4', 1), $oldSuccess]]],
+            [['jobs' => [$success, $oldSuccess, $inProgress]]],
+            [['jobs' => [$success, $oldSuccess, $nullConclusion, $inProgress]]],
+            [['jobs' => [$success, $oldSuccess]], ['jobs' => [self::job('8.4', 2), $failed]]],
         ], 'failure');
 
         self::assertSame(0, $code, $output);
         self::assertSame(4, substr_count($output, 'JOBS_READ'));
-        self::assertStringContainsString('Workflow jobs do not reflect the test matrix result yet.', $output);
+        self::assertStringContainsString('Missing current-attempt workflow job for 8.5', $output);
+        self::assertStringContainsString('Incomplete current-attempt workflow job for 8.5', $output);
         self::assertSame(3, substr_count($output, 'STATUS_WRITE'));
         self::assertLessThan(strpos($output, 'STATUS_WRITE'), strrpos($output, 'JOBS_READ'));
         self::assertStringContainsString('state=success|Run Tests (8.3)', $output);
@@ -68,47 +69,79 @@ final class RequiredTestStatusWorkflowTest extends TestCase
 
         self::assertSame(75, $code, $output);
         self::assertSame(8, substr_count($output, 'JOBS_READ'));
-        self::assertStringContainsString('Incomplete latest workflow job for 8.5', $output);
+        self::assertStringContainsString('Incomplete current-attempt workflow job for 8.5', $output);
         self::assertStringNotContainsString('STATUS_WRITE', $output);
     }
 
     #[Test]
-    public function publisherWillNotMirrorAnEntirelyGreenSnapshotWhenTheDependencyFailed(): void
+    public function publisherWillNotMirrorAnEntirelyGreenCurrentAttemptWhenTheDependencyFailed(): void
     {
         [$code, $output] = $this->executePublisher([
-            [['jobs' => [self::job('8.3', 1), self::job('8.4', 1), self::job('8.5', 1)]]],
+            [['jobs' => [self::job('8.3', 2), self::job('8.4', 2), self::job('8.5', 2)]]],
         ], 'failure');
 
         self::assertSame(75, $code, $output);
         self::assertSame(8, substr_count($output, 'JOBS_READ'));
+        self::assertStringContainsString('Workflow jobs do not reflect the test matrix result yet.', $output);
         self::assertStringNotContainsString('STATUS_WRITE', $output);
     }
 
     #[Test]
-    public function publisherWaitsWhenAnOldFailureContradictsASuccessfulDependency(): void
+    public function publisherWaitsWhenACurrentAttemptFailureContradictsASuccessfulDependency(): void
     {
         [$code, $output] = $this->executePublisher([
-            [['jobs' => [self::job('8.3', 1), self::job('8.4', 1), self::job('8.5', 1, 'completed', 'failure')]]],
-            [['jobs' => [self::job('8.3', 1), self::job('8.4', 1), self::job('8.5', 2)]]],
+            [['jobs' => [self::job('8.3', 2), self::job('8.4', 2), self::job('8.5', 2, 'completed', 'failure')]]],
+            [['jobs' => [self::job('8.3', 2), self::job('8.4', 2), self::job('8.5', 2)]]],
         ]);
 
         self::assertSame(0, $code, $output);
         self::assertSame(2, substr_count($output, 'JOBS_READ'));
         self::assertSame(3, substr_count($output, 'STATUS_WRITE'));
+        self::assertStringContainsString('Workflow jobs do not reflect the test matrix result yet.', $output);
         self::assertStringContainsString('state=success|Run Tests (8.5)', $output);
         self::assertStringNotContainsString('state=failure', $output);
     }
 
     #[Test]
-    public function publisherOnlyRerunCanKeepAllPreviouslyCompletedMatrixJobs(): void
+    public function publisherOnlyRerunCannotMirrorPreviouslyCompletedMatrixJobs(): void
     {
         [$code, $output] = $this->executePublisher([
             [['jobs' => [self::job('8.3', 1), self::job('8.4', 1), self::job('8.5', 1)]]],
         ]);
 
-        self::assertSame(0, $code, $output);
-        self::assertSame(1, substr_count($output, 'JOBS_READ'));
-        self::assertSame(3, substr_count($output, 'STATUS_WRITE'));
+        self::assertSame(75, $code, $output);
+        self::assertSame(8, substr_count($output, 'JOBS_READ'));
+        self::assertStringContainsString('Missing current-attempt workflow job for 8.5', $output);
+        self::assertStringNotContainsString('STATUS_WRITE', $output);
+    }
+
+    /**
+     * @return iterable<string, array{bool}>
+     */
+    public static function incompleteLegVisibility(): iterable
+    {
+        yield 'missing from every snapshot' => [false];
+        yield 'visible incomplete and later disappears' => [true];
+    }
+
+    #[Test]
+    #[DataProvider('incompleteLegVisibility')]
+    public function publisherWillNotSubstituteAnOlderSuccessEvenWhenAnotherFailureMatchesTheAggregate(
+        bool $initiallyVisible
+    ): void {
+        $stale = [self::job('8.3', 2), self::job('8.4', 2, 'completed', 'failure'), self::job('8.5', 1)];
+        $snapshots = [];
+        if ($initiallyVisible) {
+            $snapshots[] = [['jobs' => [...$stale, self::job('8.5', 2, 'in_progress', null)]]];
+        }
+        $snapshots[] = [['jobs' => $stale]];
+
+        [$code, $output] = $this->executePublisher($snapshots, 'failure');
+
+        self::assertSame(75, $code, $output);
+        self::assertSame(8, substr_count($output, 'JOBS_READ'));
+        self::assertStringContainsString('Missing current-attempt workflow job for 8.5', $output);
+        self::assertStringNotContainsString('STATUS_WRITE', $output);
     }
 
     /**
@@ -117,11 +150,11 @@ final class RequiredTestStatusWorkflowTest extends TestCase
     public static function invalidSnapshots(): iterable
     {
         $job = self::job('8.5', 2);
-        yield 'ambiguous' => [[['jobs' => [$job, $job]]], 'Ambiguous latest workflow job for 8.5'];
+        yield 'ambiguous' => [[['jobs' => [$job, $job]]], 'Ambiguous current-attempt workflow job for 8.5'];
         yield 'wrong run' => [[['jobs' => [array_replace($job, ['run_id' => 99])]]], 'Invalid workflow job attempt for 8.5'];
         yield 'superseding attempt' => [[['jobs' => [self::job('8.5', 3)]]], 'Invalid workflow job attempt for 8.5'];
         yield 'malformed response' => [[['jobs' => false]], 'Malformed workflow jobs response.'];
-        yield 'invalid result' => [[['jobs' => [array_replace($job, ['conclusion' => false])]]], 'Invalid latest workflow job result for 8.5'];
+        yield 'invalid result' => [[['jobs' => [array_replace($job, ['conclusion' => false])]]], 'Invalid current-attempt workflow job result for 8.5'];
     }
 
     /**

@@ -388,10 +388,6 @@ jobs:
                         return is_string($job["name"] ?? null)
                           && ($job["name"] === $name || str_ends_with($job["name"], " / " . $name));
                       }));
-                      if ($matches === []) {
-                        $notReady[] = "Missing workflow job for " . $version;
-                        continue;
-                      }
                       foreach ($matches as $candidate) {
                         if ((string) ($candidate["run_id"] ?? "") !== getenv("GITHUB_RUN_ID")
                           || !is_int($candidate["run_attempt"] ?? null) || $candidate["run_attempt"] < 1
@@ -399,27 +395,32 @@ jobs:
                           throw new RuntimeException("Invalid workflow job attempt for " . $version);
                         }
                       }
-                      $latestAttempt = max(array_column($matches, "run_attempt"));
-                      $latest = array_values(array_filter($matches, static fn ($job) => $job["run_attempt"] === $latestAttempt));
-                      if (count($latest) !== 1) {
-                        throw new RuntimeException("Ambiguous latest workflow job for " . $version);
+                      // Absence cannot distinguish an unchanged leg from an
+                      // unobserved retry. Never use a result from an older attempt.
+                      $current = array_values(array_filter($matches, static fn ($job) => $job["run_attempt"] === (int) $attempt));
+                      if ($current === []) {
+                        $notReady[] = "Missing current-attempt workflow job for " . $version;
+                        continue;
                       }
-                      $job = $latest[0];
+                      if (count($current) !== 1) {
+                        throw new RuntimeException("Ambiguous current-attempt workflow job for " . $version);
+                      }
+                      $job = $current[0];
                       $status = $job["status"] ?? null;
                       $conclusion = $job["conclusion"] ?? null;
                       if ($conclusion === null && in_array($status, ["queued", "in_progress", "waiting", "pending", "requested", "completed"], true)) {
-                        $notReady[] = "Incomplete latest workflow job for " . $version;
+                        $notReady[] = "Incomplete current-attempt workflow job for " . $version;
                         continue;
                       }
                       if ($status !== "completed" || !is_string($conclusion) || preg_match("/\A[a-z_]+\z/", $conclusion) !== 1) {
-                        throw new RuntimeException("Invalid latest workflow job result for " . $version);
+                        throw new RuntimeException("Invalid current-attempt workflow job result for " . $version);
                       }
                       $hasNonSuccess = $hasNonSuccess || $conclusion !== "success";
                       $results[] = $version . "\t" . ($conclusion === "success" ? "success" : "failure")
                         . "\t" . $conclusion;
                     }
-                    // A stale snapshot can omit a rerun leg entirely. Confirm
-                    // terminal results agree with the completed matrix dependency.
+                    // Independently confirm that the complete terminal snapshot
+                    // agrees with the matrix dependency outcome.
                     if ($notReady === [] && ($expected === "failure") !== $hasNonSuccess) {
                       $notReady[] = "Workflow jobs do not reflect the test matrix result yet.";
                     }
