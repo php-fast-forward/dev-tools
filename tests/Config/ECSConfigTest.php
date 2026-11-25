@@ -93,6 +93,41 @@ final class ECSConfigTest extends TestCase
         self::assertInstanceOf(ArrayListItemNewlineFixer::class, $config->make(ArrayListItemNewlineFixer::class));
     }
 
+    #[Test]
+    public function standalonePresetWillRegisterTheUpstreamDocblockFixers(): void
+    {
+        require_once InstalledVersions::getInstallPath('symplify/easy-coding-standard')
+            . '/vendor/squizlabs/php_codesniffer/autoload.php';
+
+        $config = new ECSConfigInterface();
+        ECSConfig::applyPhpCsFixerSets($config);
+
+        $family = 'Symplify\\CodingStandard\\Fixer\\Commenting\\';
+        $fixers = [
+            'AddMissingParamNameFixer',
+            'AddMissingVarNameFixer',
+            'DoubleAsteriskInlineVarFixer',
+            'FixParamNameTypoFixer',
+            'RemoveDeadParamFixer',
+            'RemoveParamNameReferenceFixer',
+            'RemoveSuperfluousReturnNameFixer',
+            'RemoveSuperfluousVarNameFixer',
+            'SingleLineInlineVarDocBlockFixer',
+            'SwitchedTypeAndNameFixer',
+        ];
+        $expectedNames = array_map(static fn (string $name): string => $family . $name, $fixers);
+        if (count(array_filter($expectedNames, class_exists(...))) !== count($expectedNames)) {
+            $expectedNames = [$family . 'ParamReturnAndVarTagMalformsFixer'];
+        }
+
+        foreach ($expectedNames as $fixer) {
+            self::assertInstanceOf($fixer, $config->make($fixer));
+            if (method_exists($config, 'getCheckerClasses')) {
+                self::assertContains($fixer, $config->getCheckerClasses());
+            }
+        }
+    }
+
     /**
      * @return void
      */

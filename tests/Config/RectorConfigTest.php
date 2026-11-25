@@ -37,6 +37,8 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Rector\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector;
+use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 use Rector\Config\RectorConfig as RectorConfigInterface;
 use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
 use function Safe\getcwd;
@@ -134,6 +136,9 @@ final class RectorConfigTest extends TestCase
             SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES),
         );
         self::assertNotEmpty(SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_SETS));
+        $registeredRules = SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES);
+        self::assertContains(InlineIsAInstanceOfRector::class, $registeredRules);
+        self::assertContains(ChangeIfElseValueAssignToEarlyReturnRector::class, $registeredRules);
         self::assertContains(
             LongArrayToShortArrayRector::class,
             SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES),
@@ -153,8 +158,6 @@ final class RectorConfigTest extends TestCase
                 SetList::CODING_STYLE,
                 SetList::TYPE_DECLARATION,
                 SetList::PRIVATIZATION,
-                SetList::INSTANCEOF,
-                SetList::EARLY_RETURN,
             ],
             RectorConfig::DEFAULT_SETS
         );

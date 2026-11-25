@@ -50,7 +50,7 @@ use function Safe\getcwd;
 final class RectorConfig
 {
     /**
-     * @var list<string> the default Rector sets applied to Fast Forward projects
+     * @var list<string> stable default Rector sets; configure() also loads legacy sets on older Rector
      */
     public const array DEFAULT_SETS = [
         SetList::DEAD_CODE,
@@ -58,8 +58,6 @@ final class RectorConfig
         SetList::CODING_STYLE,
         SetList::TYPE_DECLARATION,
         SetList::PRIVATIZATION,
-        SetList::INSTANCEOF,
-        SetList::EARLY_RETURN,
     ];
 
     /**
@@ -95,7 +93,21 @@ final class RectorConfig
             $skipPaths = WorkingProjectPathResolver::getToolingExcludedDirectories();
             $skipRules = self::DEFAULT_SKIPPED_RULES;
 
-            $rectorConfig->sets(self::DEFAULT_SETS);
+            $sets = self::DEFAULT_SETS;
+
+            // On older Rector releases the rules still live in these sets.
+            // Newer releases include them in the stable sets and removed the constants.
+            foreach (['INSTANCEOF', 'EARLY_RETURN'] as $legacySet) {
+                $constant = SetList::class . '::' . $legacySet;
+                if (\defined($constant)) {
+                    $set = \constant($constant);
+                    if (\is_string($set)) {
+                        $sets[] = $set;
+                    }
+                }
+            }
+
+            $rectorConfig->sets($sets);
             $rectorConfig->paths($paths);
             $rectorConfig->skip([...$skipPaths, ...$skipRules]);
             $rectorConfig->cacheDirectory(
