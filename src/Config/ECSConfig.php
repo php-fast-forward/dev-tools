@@ -36,7 +36,16 @@ use Symplify\CodingStandard\Fixer\Annotation\RemovePHPStormAnnotationFixer;
 use Symplify\CodingStandard\Fixer\Annotation\RemovePropertyVariableNameDescriptionFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayListItemNewlineFixer;
 use Symplify\CodingStandard\Fixer\ArrayNotation\ArrayOpenerAndCloserNewlineFixer;
-use Symplify\CodingStandard\Fixer\Commenting\ParamReturnAndVarTagMalformsFixer;
+use Symplify\CodingStandard\Fixer\Commenting\AddMissingParamNameFixer;
+use Symplify\CodingStandard\Fixer\Commenting\AddMissingVarNameFixer;
+use Symplify\CodingStandard\Fixer\Commenting\DoubleAsteriskInlineVarFixer;
+use Symplify\CodingStandard\Fixer\Commenting\FixParamNameTypoFixer;
+use Symplify\CodingStandard\Fixer\Commenting\RemoveDeadParamFixer;
+use Symplify\CodingStandard\Fixer\Commenting\RemoveParamNameReferenceFixer;
+use Symplify\CodingStandard\Fixer\Commenting\RemoveSuperfluousReturnNameFixer;
+use Symplify\CodingStandard\Fixer\Commenting\RemoveSuperfluousVarNameFixer;
+use Symplify\CodingStandard\Fixer\Commenting\SingleLineInlineVarDocBlockFixer;
+use Symplify\CodingStandard\Fixer\Commenting\SwitchedTypeAndNameFixer;
 use Symplify\CodingStandard\Fixer\Commenting\RemoveUselessDefaultCommentFixer;
 use Symplify\CodingStandard\Fixer\LineLength\LineLengthFixer;
 use Symplify\CodingStandard\Fixer\Spacing\MethodChainingNewlineFixer;
@@ -107,6 +116,25 @@ final class ECSConfig
             'only_untyped' => false,
         ],
     ];
+
+    /**
+     * @var list<class-string> successors of ECS's bundled malformed PHPDoc-tag fixer
+     * @see https://github.com/ecsphp/ecs-src/pull/334
+     */
+    private const array PHPDOC_TAG_FIXERS = [
+        AddMissingParamNameFixer::class,
+        AddMissingVarNameFixer::class,
+        DoubleAsteriskInlineVarFixer::class,
+        FixParamNameTypoFixer::class,
+        RemoveDeadParamFixer::class,
+        RemoveParamNameReferenceFixer::class,
+        RemoveSuperfluousReturnNameFixer::class,
+        RemoveSuperfluousVarNameFixer::class,
+        SingleLineInlineVarDocBlockFixer::class,
+        SwitchedTypeAndNameFixer::class,
+    ];
+
+    private const string LEGACY_PHPDOC_TAG_FIXER = 'Symplify\\CodingStandard\\Fixer\\Commenting\\ParamReturnAndVarTagMalformsFixer';
 
     /**
      * Creates the default ECS configuration.
@@ -201,7 +229,7 @@ final class ECSConfig
         if (self::DEFAULT_PREPARED_SETS['symplify']) {
             $config->rules([
                 RemovePHPStormAnnotationFixer::class,
-                ParamReturnAndVarTagMalformsFixer::class,
+                ...self::phpdocTagFixers($config),
                 RemoveUselessDefaultCommentFixer::class,
                 RemoveMethodNameDuplicateDescriptionFixer::class,
                 RemovePropertyVariableNameDescriptionFixer::class,
@@ -217,5 +245,25 @@ final class ECSConfig
                 'annotations' => ['throws', 'author', 'package', 'group', 'covers', 'category'],
             ]);
         }
+    }
+
+    /**
+     * @return list<class-string>
+     */
+    private static function phpdocTagFixers(ECSConfigInterface $config): array
+    {
+        foreach (self::PHPDOC_TAG_FIXERS as $fixer) {
+            if (! class_exists($fixer)) {
+                // Older supported ECS releases bundle the original complete fixer.
+                return [self::LEGACY_PHPDOC_TAG_FIXER];
+            }
+        }
+
+        // Recent ECS versions already register the successors in the clean-code set.
+        if (method_exists($config, 'getCheckerClasses')) {
+            return array_values(array_diff(self::PHPDOC_TAG_FIXERS, $config->getCheckerClasses()));
+        }
+
+        return self::PHPDOC_TAG_FIXERS;
     }
 }

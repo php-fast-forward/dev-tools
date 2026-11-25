@@ -28,6 +28,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Prophecy\PhpUnit\ProphecyTrait;
 use Prophecy\Prophecy\ObjectProphecy;
+use function Safe\putenv;
 
 #[CoversClass(RuntimeEnvironment::class)]
 final class RuntimeEnvironmentTest extends TestCase
@@ -170,11 +171,19 @@ final class RuntimeEnvironmentTest extends TestCase
     #[Test]
     public function isAgentPresentWillReturnWhetherKnownAgentVariablesExist(): void
     {
-        $this->environment->get()
-            ->willReturn([
-                'CODEX_SANDBOX' => '1',
-            ]);
+        $previousMarker = getenv('CODEX_SANDBOX');
+        $previousDisable = getenv('AGENT_DETECTOR_DISABLE');
 
-        self::assertTrue($this->runtimeEnvironment->isAgentPresent());
+        try {
+            putenv('CODEX_SANDBOX=1');
+            putenv('AGENT_DETECTOR_DISABLE');
+            self::assertTrue($this->runtimeEnvironment->isAgentPresent());
+
+            putenv('AGENT_DETECTOR_DISABLE=1');
+            self::assertFalse($this->runtimeEnvironment->isAgentPresent());
+        } finally {
+            putenv(false === $previousMarker ? 'CODEX_SANDBOX' : 'CODEX_SANDBOX=' . $previousMarker);
+            putenv(false === $previousDisable ? 'AGENT_DETECTOR_DISABLE' : 'AGENT_DETECTOR_DISABLE=' . $previousDisable);
+        }
     }
 }
