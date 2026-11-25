@@ -137,8 +137,14 @@ to be completed before publishing it under its required-check name, such as
 
 When only failed jobs are rerun, successful versions can remain in an earlier
 attempt. The publisher retains those completed results and replaces only the
-versions that have a newer attempt. An incomplete or ambiguous newest attempt
-fails publication rather than falling back to an older successful result.
+versions that have a newer attempt.
+
+If GitHub's API briefly lags behind the runner, the publishers retry while the
+current run is still queued or its newest matrix jobs are not ready. Invalid
+identity or ambiguous results fail immediately. The final publisher also waits
+if the observed terminal results disagree with the matrix dependency outcome.
+If the results remain incomplete or disagree, publication fails rather than
+falling back to an older success.
 
 Full reruns execute the pending phase again before the new matrix starts. A
 missing, ambiguous, incomplete or wrong-run result makes final publication fail

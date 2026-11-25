@@ -146,21 +146,29 @@ jobs:
                 if (count($versions) !== count(array_unique($versions))) {
                     throw new RuntimeException('Duplicate PHP test matrix entry.');
                 }
-                $run = githubApi(["repos/$repository/actions/runs/$runId"]);
-                if ((string) ($run['id'] ?? '') !== $runId) {
-                    throw new RuntimeException('Workflow run ID does not match the current run.');
-                }
-                if (($run['repository']['full_name'] ?? null) !== $repository) {
-                    throw new RuntimeException('Workflow repository does not match the current repository.');
-                }
-                if (!is_int($run['run_attempt'] ?? null)) {
-                    throw new RuntimeException('Workflow run attempt is not an integer.');
-                }
-                if ((string) $run['run_attempt'] !== $attempt) {
-                    throw new RuntimeException('Workflow run attempt does not match the current attempt.');
-                }
-                if (($run['status'] ?? null) !== 'in_progress') {
-                    throw new RuntimeException('Workflow run status is not in_progress.');
+                // The API can briefly lag behind the runner that started this job.
+                for ($poll = 1; ; ++$poll) {
+                    $run = githubApi(["repos/$repository/actions/runs/$runId"]);
+                    if ((string) ($run['id'] ?? '') !== $runId) {
+                        throw new RuntimeException('Workflow run ID does not match the current run.');
+                    }
+                    if (($run['repository']['full_name'] ?? null) !== $repository) {
+                        throw new RuntimeException('Workflow repository does not match the current repository.');
+                    }
+                    if (!is_int($run['run_attempt'] ?? null)) {
+                        throw new RuntimeException('Workflow run attempt is not an integer.');
+                    }
+                    if ((string) $run['run_attempt'] !== $attempt) {
+                        throw new RuntimeException('Workflow run attempt does not match the current attempt.');
+                    }
+                    $status = $run['status'] ?? null;
+                    if ($status === 'in_progress') {
+                        break;
+                    }
+                    if ($poll === 8 || !in_array($status, ['queued', 'requested', 'waiting', 'pending'], true)) {
+                        throw new RuntimeException('Workflow run status is not in_progress.');
+                    }
+                    sleep(3);
                 }
 
                 // Validate the full matrix and current attempt before the first write.
@@ -309,7 +317,7 @@ jobs:
                   - Dependency health result: `${{ needs.dependency-health.result }}`
 
     publish_required_statuses:
-        if: ${{ always() && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' && needs.publish_pending_statuses.result == 'success' && (needs.tests.result == 'success' || needs.tests.result == 'failure') }}
+        if: ${{ !cancelled() && inputs.publish-required-statuses && github.actor != 'dependabot[bot]' && needs.publish_pending_statuses.result == 'success' && (needs.tests.result == 'success' || needs.tests.result == 'failure') }}
         name: Publish Required Test Statuses
         needs:
             - resolve_php
@@ -327,67 +335,111 @@ jobs:
                 TARGET_SHA: ${{ github.sha }}
                 TARGET_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
                 TEST_MATRIX: ${{ needs.resolve_php.outputs.test-matrix }}
+                TEST_RESULT: ${{ needs.tests.result }}
               run: |
                 export TEST_JOBS_FILE="${RUNNER_TEMP}/required-test-jobs.json"
-                gh api --paginate --slurp \
-                  "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?filter=all&per_page=100" > "$TEST_JOBS_FILE"
+                # Wait for the API to reflect completed matrix dependencies. Only the
+                # explicit readiness exit code is retried; malformed evidence fails closed.
+                for poll in {1..8}; do
+                  gh api --paginate --slurp \
+                    "repos/${GITHUB_REPOSITORY}/actions/runs/${GITHUB_RUN_ID}/jobs?filter=all&per_page=100" > "$TEST_JOBS_FILE"
 
-                # PHP evaluates these variables; Bash must leave them literal.
-                # shellcheck disable=SC2016
-                php -r '
-                  $matrix = json_decode(getenv("TEST_MATRIX"), true, 512, JSON_THROW_ON_ERROR);
-                  $versions = $matrix["php-version"] ?? null;
-                  if (!is_array($versions) || $versions === []) {
-                    throw new RuntimeException("A non-empty PHP test matrix is required.");
-                  }
-                  foreach ($versions as $version) {
-                    if (!is_string($version) || preg_match("/\A[0-9]+\.[0-9]+\z/", $version) !== 1) {
-                      throw new RuntimeException("Unsupported PHP test matrix entry.");
+                  # PHP evaluates these variables; Bash must leave them literal.
+                  # shellcheck disable=SC2016
+                  if results=$(php -d display_errors=stderr -r '
+                    $matrix = json_decode(getenv("TEST_MATRIX"), true, 512, JSON_THROW_ON_ERROR);
+                    $versions = $matrix["php-version"] ?? null;
+                    if (!is_array($versions) || $versions === [] || !array_is_list($versions)) {
+                      throw new RuntimeException("A non-empty PHP test matrix is required.");
                     }
-                  }
-                  if (count($versions) !== count(array_unique($versions))) {
-                    throw new RuntimeException("Duplicate PHP test matrix entry.");
-                  }
-                  $pages = json_decode(file_get_contents(getenv("TEST_JOBS_FILE")), true, 512, JSON_THROW_ON_ERROR);
-                  $jobs = [];
-                  foreach ($pages as $page) {
-                    if (!is_array($page["jobs"] ?? null)) {
-                      throw new RuntimeException("Malformed workflow jobs response.");
-                    }
-                    $jobs = array_merge($jobs, $page["jobs"]);
-                  }
-                  $results = [];
-                  foreach ($versions as $version) {
-                    $name = "Run Tests (" . $version . ")";
-                    $matches = array_values(array_filter($jobs, static function ($job) use ($name) {
-                      return is_string($job["name"] ?? null)
-                        && ($job["name"] === $name || str_ends_with($job["name"], " / " . $name));
-                    }));
-                    if ($matches === []) {
-                      throw new RuntimeException("Missing workflow job for " . $version);
-                    }
-                    foreach ($matches as $candidate) {
-                      if ((string) ($candidate["run_id"] ?? "") !== getenv("GITHUB_RUN_ID")
-                        || !is_int($candidate["run_attempt"] ?? null) || $candidate["run_attempt"] < 1) {
-                        throw new RuntimeException("Invalid workflow job attempt for " . $version);
+                    foreach ($versions as $version) {
+                      if (!is_string($version) || preg_match("/\A[0-9]+\.[0-9]+\z/", $version) !== 1) {
+                        throw new RuntimeException("Unsupported PHP test matrix entry.");
                       }
                     }
-                    $latestAttempt = max(array_column($matches, "run_attempt"));
-                    $latest = array_values(array_filter($matches, static fn ($job) => $job["run_attempt"] === $latestAttempt));
-                    if (count($latest) !== 1) {
-                      throw new RuntimeException("Ambiguous latest workflow job for " . $version);
+                    if (count($versions) !== count(array_unique($versions))) {
+                      throw new RuntimeException("Duplicate PHP test matrix entry.");
                     }
-                    $job = $latest[0];
-                    if (($job["status"] ?? null) !== "completed"
-                      || !is_string($job["conclusion"] ?? null) || $job["conclusion"] === ""
-                      || preg_match("/\A[a-z_]+\z/", $job["conclusion"]) !== 1) {
-                      throw new RuntimeException("Incomplete latest workflow job for " . $version);
+                    $pages = json_decode(file_get_contents(getenv("TEST_JOBS_FILE")), true, 512, JSON_THROW_ON_ERROR);
+                    if (!is_array($pages) || $pages === [] || !array_is_list($pages)) {
+                      throw new RuntimeException("Malformed workflow jobs response.");
                     }
-                    $results[] = $version . "\t" . ($job["conclusion"] === "success" ? "success" : "failure")
-                      . "\t" . $job["conclusion"];
-                  }
-                  echo implode(PHP_EOL, $results), PHP_EOL;
-                ' | while IFS=$'\t' read -r php_version state conclusion; do
+                    $jobs = [];
+                    foreach ($pages as $page) {
+                      if (!is_array($page["jobs"] ?? null) || !array_is_list($page["jobs"])) {
+                        throw new RuntimeException("Malformed workflow jobs response.");
+                      }
+                      $jobs = array_merge($jobs, $page["jobs"]);
+                    }
+                    $attempt = getenv("GITHUB_RUN_ATTEMPT");
+                    if (!is_string($attempt) || preg_match("/\A[1-9][0-9]*\z/", $attempt) !== 1) {
+                      throw new RuntimeException("Invalid current workflow attempt.");
+                    }
+                    $expected = getenv("TEST_RESULT");
+                    if (!in_array($expected, ["success", "failure"], true)) {
+                      throw new RuntimeException("Invalid matrix dependency result.");
+                    }
+                    $results = [];
+                    $notReady = [];
+                    $hasNonSuccess = false;
+                    foreach ($versions as $version) {
+                      $name = "Run Tests (" . $version . ")";
+                      $matches = array_values(array_filter($jobs, static function ($job) use ($name) {
+                        return is_string($job["name"] ?? null)
+                          && ($job["name"] === $name || str_ends_with($job["name"], " / " . $name));
+                      }));
+                      if ($matches === []) {
+                        $notReady[] = "Missing workflow job for " . $version;
+                        continue;
+                      }
+                      foreach ($matches as $candidate) {
+                        if ((string) ($candidate["run_id"] ?? "") !== getenv("GITHUB_RUN_ID")
+                          || !is_int($candidate["run_attempt"] ?? null) || $candidate["run_attempt"] < 1
+                          || $candidate["run_attempt"] > (int) $attempt) {
+                          throw new RuntimeException("Invalid workflow job attempt for " . $version);
+                        }
+                      }
+                      $latestAttempt = max(array_column($matches, "run_attempt"));
+                      $latest = array_values(array_filter($matches, static fn ($job) => $job["run_attempt"] === $latestAttempt));
+                      if (count($latest) !== 1) {
+                        throw new RuntimeException("Ambiguous latest workflow job for " . $version);
+                      }
+                      $job = $latest[0];
+                      $status = $job["status"] ?? null;
+                      $conclusion = $job["conclusion"] ?? null;
+                      if ($conclusion === null && in_array($status, ["queued", "in_progress", "waiting", "pending", "requested", "completed"], true)) {
+                        $notReady[] = "Incomplete latest workflow job for " . $version;
+                        continue;
+                      }
+                      if ($status !== "completed" || !is_string($conclusion) || preg_match("/\A[a-z_]+\z/", $conclusion) !== 1) {
+                        throw new RuntimeException("Invalid latest workflow job result for " . $version);
+                      }
+                      $hasNonSuccess = $hasNonSuccess || $conclusion !== "success";
+                      $results[] = $version . "\t" . ($conclusion === "success" ? "success" : "failure")
+                        . "\t" . $conclusion;
+                    }
+                    // A stale snapshot can omit a rerun leg entirely. Confirm
+                    // terminal results agree with the completed matrix dependency.
+                    if ($notReady === [] && ($expected === "failure") !== $hasNonSuccess) {
+                      $notReady[] = "Workflow jobs do not reflect the test matrix result yet.";
+                    }
+                    if ($notReady !== []) {
+                      fwrite(STDERR, implode(PHP_EOL, $notReady) . PHP_EOL);
+                      exit(75);
+                    }
+                    echo implode(PHP_EOL, $results), PHP_EOL;
+                  '); then
+                    break
+                  else
+                    status=$?
+                    if [[ "$status" != 75 || "$poll" == 8 ]]; then
+                      exit "$status"
+                    fi
+                    sleep 3
+                  fi
+                done
+
+                while IFS=$'\t' read -r php_version state conclusion; do
                   gh api \
                     --method POST \
                     "repos/${GITHUB_REPOSITORY}/statuses/${TARGET_SHA}" \
@@ -395,4 +447,4 @@ jobs:
                     -f context="Run Tests (${php_version})" \
                     -f description="PHP ${php_version} matrix job result: ${conclusion}." \
                     -f target_url="${TARGET_URL}"
-                done
+                done <<< "$results"
