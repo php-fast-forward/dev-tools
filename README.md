@@ -39,6 +39,10 @@ across Fast Forward libraries.
   wiki generation gracefully when no runnable PHP surface exists
 - Works both as a Composer plugin and as a local binary
 - Preserves local overrides through consumer-first configuration resolution
+- Supports selecting available checks per project through a versioned
+  [tooling capability profile](docs/commands/capability-profiles.rst)
+- Provides optional [guided skills setup](docs/commands/setup-skills.rst)
+  through LLM Skills.
 
 ## 🚀 Installation
 

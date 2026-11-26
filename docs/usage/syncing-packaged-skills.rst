@@ -5,6 +5,9 @@ The ``skills`` command keeps the consumer repository's ``.agents/skills``
 directory aligned with the skills shipped inside
 ``fast-forward/dev-tools``.
 
+For guided optional adoption through LLM Skills, see
+:doc:`../commands/setup-skills`.
+
 Why This Command Exists
 -----------------------
 

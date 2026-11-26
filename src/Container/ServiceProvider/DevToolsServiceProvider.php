@@ -94,6 +94,8 @@ use FastForward\DevTools\SelfUpdate\VersionCheckNotifier;
 use FastForward\DevTools\SelfUpdate\VersionCheckNotifierInterface;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcher;
 use FastForward\DevTools\SelfUpdate\WorkingDirectorySwitcherInterface;
+use FastForward\DevTools\Tooling\ToolingProfile;
+use FastForward\DevTools\Tooling\ToolingProfileInterface;
 use Interop\Container\ServiceProviderInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -125,6 +127,7 @@ class DevToolsServiceProvider implements ServiceProviderInterface
     public function getFactories(): array
     {
         return [
+            ToolingProfileInterface::class => get(ToolingProfile::class),
             // Process
             EnvironmentInterface::class => get(Environment::class),
             RuntimeEnvironmentInterface::class => get(RuntimeEnvironment::class),

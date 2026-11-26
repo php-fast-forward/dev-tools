@@ -6,15 +6,21 @@ Generates the frontpage for Fast Forward documentation.
 Description
 -----------
 
-The ``reports`` command generates the documentation frontpage, runs tests with
-coverage, and generates code metrics. It combines:
+Without ``dev-tools.json``, ``reports`` retains the legacy reporting plan:
 
 - ``docs --target`` - generates API documentation
 - ``tests --coverage`` - generates test coverage reports
 - ``metrics --target`` - generates PhpMetrics HTML and JSON reports
 
-The documentation build runs in parallel with PHPUnit, and the metrics step
-runs after PHPUnit so it can reuse the generated JUnit report.
+With an explicit :doc:`capability-profiles` selection, only selected applicable
+``docs``, ``tests`` and ``metrics`` stages run. Documentation requires guides or
+API directories; tests require testable PHP source. Metrics remains applicable
+to repository metadata/history. ``quality`` and ``dependencies`` do not add
+report stages. The command fails if the profile is invalid, no selected stage
+applies or a required tool is unavailable.
+
+When both are enabled, documentation runs in parallel with PHPUnit. Metrics
+runs after PHPUnit when coverage is enabled so it can reuse its JUnit report.
 
 Usage
 -----
@@ -29,17 +35,18 @@ Options
 -------
 
 ``--target`` (optional)
-   The target directory for the generated documentation.
+   The target directory for generated documentation when that stage is enabled.
    Default: selected workspace directory, ``.dev-tools`` unless
    ``--workspace-dir`` or ``FAST_FORWARD_WORKSPACE_DIR`` is configured.
 
 ``--coverage, -c`` (optional)
-   The target directory for the generated test coverage report.
+   The target directory for test coverage when the tests stage is enabled.
    Default: selected workspace ``coverage`` directory, usually
    ``.dev-tools/coverage``.
 
 ``--metrics`` (optional)
-   The target directory for the generated metrics report.
+   The target directory for metrics when that stage is enabled. Passing this
+   option does not enable ``metrics`` in the project profile.
    Default: selected workspace ``metrics`` directory, usually
    ``.dev-tools/metrics``.
 
@@ -99,15 +106,16 @@ Exit Codes
    * - Code
      - Meaning
    * - 0
-     - Success. Documentation, coverage, and metrics generated successfully.
+     - Success. The planned report stages completed successfully.
    * - 1
-     - Failure. One or more report stages failed.
+     - Failure. A stage failed, required tools are unavailable, the profile is
+       invalid or no selected stages apply.
 
 Behavior
 ---------
 
-- Runs ``docs`` in parallel with ``tests --coverage``.
-- Runs ``metrics --target`` after tests so the JUnit report is available.
+- Runs enabled ``docs`` in parallel with enabled ``tests --coverage``.
+- Runs enabled ``metrics --target`` after tests when both are selected.
 - Cache stays enabled by default for nested cache-aware steps; omit both flags
   to keep the command default, pass ``--cache`` to force it on, and pass
   ``--no-cache`` to force it off.
@@ -123,9 +131,9 @@ Behavior
 - When ``--json`` or ``--pretty-json`` is active, it forwards JSON mode to the
   ``docs``, ``tests``, and ``metrics`` subprocesses and suppresses transient
   progress output where those tools support it.
-- Nested ``docs`` and ``tests`` stages can now skip gracefully with warnings in
-  guide-only or automation-only repositories, while ``reports`` still returns a
-  successful aggregate result for the stages that were actually generated.
+- Without a profile, nested ``docs`` and ``tests`` stages retain their legacy
+  graceful-skip behavior. With a profile, report selection is filtered by
+  applicability first and an empty plan fails.
 - Passes ``--junit <coverage>/junit.xml`` to the metrics step.
 - Used by the ``standards`` command as the final phase.
 - This is the reporting stage used by GitHub Pages.

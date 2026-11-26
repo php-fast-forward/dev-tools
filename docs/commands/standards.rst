@@ -6,12 +6,19 @@ Runs Fast Forward code standards checks.
 Description
 -----------
 
-The ``standards`` command runs the full quality pipeline:
+Without ``dev-tools.json``, ``standards`` retains the full legacy pipeline:
 
 1. ``refactor`` - Rector code refactoring
 2. ``phpdoc`` - PHPDoc checks and fixes
 3. ``code-style`` - Code style checking
 4. ``reports`` - Documentation and test reports
+
+With an explicit :doc:`capability-profiles` selection, ``quality`` enables the
+first three phases. Selecting any of ``tests``, ``docs`` or ``metrics`` enables
+``reports``, which applies the selected capabilities and project applicability.
+``dependencies`` remains an explicit command and does not add a standards
+phase. A profile with no standards checks, missing required tools or a report
+plan with no applicable checks fails instead of succeeding without execution.
 
 Usage
 -----
@@ -57,7 +64,8 @@ Exit Codes
    * - 0
      - Success. All checks passed.
    * - 1
-     - Failure. One or more checks failed.
+     - Failure. A selected check failed, required tools are unavailable, the
+       profile is invalid or no selected checks apply.
 
 Behavior
 ---------

@@ -30,6 +30,8 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummary;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
+use FastForward\DevTools\PhpUnit\Coverage\MinimumCoverageResolver;
+use FastForward\DevTools\PhpUnit\Result\ProcessResultInterpreter;
 use FastForward\DevTools\Process\ProcessBuilder;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -41,6 +43,7 @@ use FastForward\DevTools\Path\WorkingProjectPathResolver;
 use FastForward\DevTools\Environment\Environment as DevToolsEnvironment;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\Attributes\UsesTrait;
@@ -66,6 +69,8 @@ use function Safe\getcwd;
 #[CoversClass(TestsCommand::class)]
 #[UsesClass(BootstrapShimGenerator::class)]
 #[UsesClass(CoverageSummary::class)]
+#[UsesClass(MinimumCoverageResolver::class)]
+#[UsesClass(ProcessResultInterpreter::class)]
 #[UsesClass(ContainerFactory::class)]
 #[UsesClass(DevToolsServiceProvider::class)]
 #[UsesClass(DevToolsPathResolver::class)]
@@ -491,6 +496,50 @@ final class TestsCommandTest extends TestCase
         $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
 
         self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @param string $rawOutput the captured reporter output
+     *
+     * @return void
+     */
+    #[Test]
+    #[DataProvider('reportedFailuresWithZeroExit')]
+    public function executeWillRejectReportedFailureOrAmbiguousOutputDespiteZeroExitCode(string $rawOutput): void
+    {
+        $this->input->getOption('json')
+            ->willReturn(true);
+        $this->processQueue->add(
+            Argument::type(Process::class),
+            false,
+            false,
+            'Running PHPUnit Tests',
+        )->shouldBeCalledOnce();
+        $this->processQueue->run(Argument::type(OutputInterface::class))
+            ->will(static function (array $arguments) use ($rawOutput): int {
+                $arguments[0]->write($rawOutput);
+
+                return TestsCommand::SUCCESS;
+            })->shouldBeCalledOnce();
+        $this->logger->log(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error(
+            'PHPUnit tests failed.',
+            Argument::that(static fn(array $context): bool => $context['input'] instanceof InputInterface
+                && 'failure' === ($context['output']['result'] ?? null)),
+        )->shouldBeCalledOnce();
+        $this->output->writeln(Argument::cetera())->shouldNotBeCalled();
+
+        self::assertSame(TestsCommand::FAILURE, $this->invokeExecute());
+    }
+
+    /**
+     * @return iterable<string, array{string}>
+     */
+    public static function reportedFailuresWithZeroExit(): iterable
+    {
+        yield 'explicit failure from warning' => ['{"result":"failure","summary":{"tests":1,"warnings":1}}'];
+        yield 'successful and failed reporters' => ["{\"result\":\"success\"}\n{\"result\":\"failure\"}"];
+        yield 'two successful reporters remain ambiguous' => ["{\"result\":\"success\"}\n{\"result\":\"success\"}"];
     }
 
     /**

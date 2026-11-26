@@ -44,14 +44,21 @@ final readonly class BootstrapShimGenerator
      *
      * @param string $projectBootstrap the consumer-project bootstrap path
      * @param string $cacheDirectory the cache directory where the shim SHOULD be stored
+     * @param string|null $runtimeAutoload the explicit runtime autoloader, defaulting to the current DevTools runtime
      *
      * @return string the generated bootstrap shim path
      */
-    public function generate(string $projectBootstrap, string $cacheDirectory): string
-    {
+    public function generate(
+        string $projectBootstrap,
+        string $cacheDirectory,
+        ?string $runtimeAutoload = null,
+    ): string {
         $bootstrapShim = Path::join($cacheDirectory, 'bootstrap.php');
 
-        $this->filesystem->dumpFile($bootstrapShim, $this->render($projectBootstrap));
+        $this->filesystem->dumpFile($bootstrapShim, $this->render(
+            $projectBootstrap,
+            $runtimeAutoload ?? DevToolsPathResolver::getRuntimeAutoloadPath(),
+        ));
 
         return $bootstrapShim;
     }
@@ -60,13 +67,12 @@ final readonly class BootstrapShimGenerator
      * Renders the bootstrap shim contents.
      *
      * @param string $projectBootstrap the consumer-project bootstrap path
+     * @param string $runtimeAutoload the runtime autoloader selected by the caller
      *
      * @return string the bootstrap shim source code
      */
-    private function render(string $projectBootstrap): string
+    private function render(string $projectBootstrap, string $runtimeAutoload): string
     {
-        $devToolsAutoload = DevToolsPathResolver::getRuntimeAutoloadPath();
-
         return <<<PHP
             <?php
 
@@ -74,8 +80,8 @@ final readonly class BootstrapShimGenerator
 
             require_once {$this->export($projectBootstrap)};
 
-            if (file_exists({$this->export($devToolsAutoload)})) {
-                require_once {$this->export($devToolsAutoload)};
+            if (file_exists({$this->export($runtimeAutoload)})) {
+                require_once {$this->export($runtimeAutoload)};
             }
             PHP;
     }
