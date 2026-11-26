@@ -19,7 +19,6 @@ declare(strict_types=1);
 
 namespace FastForward\DevTools\Console\Command;
 
-use JsonException;
 use FastForward\DevTools\Console\Command\Traits\LogsCommandResults;
 use FastForward\DevTools\Console\Input\HasCacheOption;
 use FastForward\DevTools\Console\Input\HasJsonOption;
@@ -29,6 +28,8 @@ use FastForward\DevTools\Filesystem\FilesystemInterface;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator;
 use FastForward\DevTools\PhpUnit\Coverage\CoverageSummaryLoaderInterface;
+use FastForward\DevTools\PhpUnit\Coverage\MinimumCoverageResolver;
+use FastForward\DevTools\PhpUnit\Result\ProcessResultInterpreter;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
@@ -45,9 +46,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-use function is_numeric;
-use function Safe\json_decode;
-use function Safe\preg_match;
 
 /**
  * Facilitates the execution of the PHPUnit testing framework.
@@ -83,6 +81,8 @@ final class TestsCommand extends Command
      * @param ProcessQueueInterface $processQueue the queue used to execute PHPUnit
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the project capability resolver
      * @param EnvironmentInterface $environment the environment resolver for CLI-scoped flags
+     * @param ProcessResultInterpreter $processResultInterpreter the reusable captured-output interpreter
+     * @param MinimumCoverageResolver $minimumCoverageResolver the reusable percentage validator
      */
     public function __construct(
         private readonly CoverageSummaryLoaderInterface $coverageSummaryLoader,
@@ -94,6 +94,8 @@ final class TestsCommand extends Command
         private readonly ProcessQueueInterface $processQueue,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
         private readonly EnvironmentInterface $environment,
+        private readonly ProcessResultInterpreter $processResultInterpreter = new ProcessResultInterpreter(),
+        private readonly MinimumCoverageResolver $minimumCoverageResolver = new MinimumCoverageResolver(),
     ) {
         parent::__construct();
     }
@@ -253,7 +255,8 @@ final class TestsCommand extends Command
         $result = $this->processQueue->run($processOutput);
         $processResultContext = $this->resolveProcessResultContext($processOutput, $result, $structuredOutput);
 
-        if (self::SUCCESS !== $result) {
+        if (self::SUCCESS !== $result
+            || ($structuredOutput && 'failure' === $processResultContext['output']['result'])) {
             return $this->failure('PHPUnit tests failed.', $input, $processResultContext);
         }
 
@@ -341,34 +344,10 @@ final class TestsCommand extends Command
      */
     private function resolveStructuredProcessResultPayload(OutputInterface $processOutput, int $exitCode): array
     {
-        $payload = [
-            'result' => self::SUCCESS === $exitCode ? 'success' : 'failure',
-        ];
-
-        if (! $processOutput instanceof BufferedOutput) {
-            return $payload;
-        }
-
-        $rawOutput = trim($processOutput->fetch());
-
-        if ('' === $rawOutput) {
-            return $payload;
-        }
-
-        [$decoded, $supplementalOutput] = $this->decodeStructuredProcessOutput($rawOutput);
-
-        if (\is_array($decoded)) {
-            $payload = [
-                ...$decoded,
-                'result' => $payload['result'],
-            ];
-        }
-
-        if (null !== $supplementalOutput) {
-            $payload['raw_output'] = $supplementalOutput;
-        }
-
-        return $payload;
+        return ($this->processResultInterpreter)(
+            $processOutput instanceof BufferedOutput ? $processOutput->fetch() : '',
+            $exitCode,
+        );
     }
 
     /**
@@ -407,42 +386,6 @@ final class TestsCommand extends Command
         $context['output'] = $payload;
 
         return $context;
-    }
-
-    /**
-     * Attempts to decode structured PHPUnit output while preserving any
-     * non-JSON prelude that was emitted before the final reporter payload.
-     *
-     * @param string $rawOutput the captured subprocess output
-     *
-     * @return array{array<string, mixed>|null, string|null} decoded payload and preserved supplemental output
-     */
-    private function decodeStructuredProcessOutput(string $rawOutput): array
-    {
-        try {
-            $decoded = json_decode($rawOutput, true);
-
-            return [\is_array($decoded) ? $decoded : null, null];
-        } catch (JsonException) {
-        }
-
-        if (1 !== preg_match('/^(?P<prefix>.*?)(?P<payload>\{\s*"result".*)$/s', $rawOutput, $matches)) {
-            return [null, $rawOutput];
-        }
-
-        try {
-            $decoded = json_decode($matches['payload'], true);
-        } catch (JsonException) {
-            return [null, $rawOutput];
-        }
-
-        if (! \is_array($decoded)) {
-            return [null, $rawOutput];
-        }
-
-        $prefix = trim($matches['prefix']);
-
-        return [$decoded, '' === $prefix ? null : $prefix];
     }
 
     /**
@@ -519,23 +462,7 @@ final class TestsCommand extends Command
 
         $minimumCoverage ??= $this->resolveMinimumCoverageFromEnvironment();
 
-        if (false === $minimumCoverage || '' === trim((string) $minimumCoverage)) {
-            return null;
-        }
-
-        $minimumCoverage = trim((string) $minimumCoverage);
-
-        if (! is_numeric($minimumCoverage)) {
-            throw new InvalidArgumentException('The --min-coverage option MUST be a numeric percentage.');
-        }
-
-        $minimumCoverage = (float) $minimumCoverage;
-
-        if (0.0 > $minimumCoverage || 100.0 < $minimumCoverage) {
-            throw new InvalidArgumentException('The --min-coverage option MUST be between 0 and 100.');
-        }
-
-        return $minimumCoverage;
+        return ($this->minimumCoverageResolver)(false === $minimumCoverage ? null : (string) $minimumCoverage);
     }
 
     /**

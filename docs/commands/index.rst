@@ -7,6 +7,7 @@ Detailed documentation for each dev-tools command.
    :maxdepth: 1
 
    standards
+   capability-profiles
    tests
    changelog
    dependencies
@@ -19,6 +20,7 @@ Detailed documentation for each dev-tools command.
    reports
    agents
    skills
+   setup-skills
    sync
    self-update
    funding

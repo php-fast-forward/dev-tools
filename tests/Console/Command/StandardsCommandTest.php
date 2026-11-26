@@ -46,6 +46,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
+use FastForward\DevTools\Tooling\ToolingProfileInterface;
+use RuntimeException;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Path\DevToolsPathResolver;
 use Symfony\Component\Console\Input\InputInterface;
@@ -77,6 +79,8 @@ final class StandardsCommandTest extends TestCase
     private ObjectProphecy $output;
 
     private StandardsCommand $command;
+
+    private ObjectProphecy $profile;
 
     /**
      * @return void
@@ -111,7 +115,14 @@ final class StandardsCommandTest extends TestCase
         $this->processBuilder->build(Argument::any())
             ->willReturn($this->prophesize(Process::class)->reveal());
 
-        $this->command = new StandardsCommand($this->processBuilder->reveal(), $this->processQueue->reveal());
+        $this->profile = $this->prophesize(ToolingProfileInterface::class);
+        $this->profile->read()
+            ->willReturn(null);
+        $this->command = new StandardsCommand(
+            $this->processBuilder->reveal(),
+            $this->processQueue->reveal(),
+            $this->profile->reveal()
+        );
     }
 
     /**
@@ -269,7 +280,7 @@ final class StandardsCommandTest extends TestCase
         );
         $this->processBuilder->build(Argument::any())
             ->will(static fn(): Process => new Process([PHP_BINARY, '-r', 'exit(2);']));
-        $this->command = new StandardsCommand($this->processBuilder->reveal(), $queue);
+        $this->command = new StandardsCommand($this->processBuilder->reveal(), $queue, $this->profile->reveal());
         $this->logger->log(
             'info',
             'Running code standards checks...',
@@ -291,6 +302,77 @@ final class StandardsCommandTest extends TestCase
         }
     }
 
+    /**
+     * @return void
+     */
+    #[Test]
+    public function explicitQualityWillRunOnlyTheThreeQualityPhases(): void
+    {
+        $this->profile->read()
+            ->willReturn(['quality']);
+        $this->profile->assertAvailable(['quality'])->shouldBeCalledOnce();
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledTimes(3);
+        $this->processBuilder->build([DevToolsPathResolver::getBinaryPath(), 'reports'])->shouldNotBeCalled();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(0);
+
+        self::assertSame(0, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function explicitTestsWillRunReportsWithoutQuality(): void
+    {
+        $this->profile->read()
+            ->willReturn(['tests']);
+        $this->processBuilder->build([DevToolsPathResolver::getBinaryPath(), 'reports'])->shouldBeCalledOnce()
+            ->willReturn(new Process(['true']));
+        $this->processQueue->add(Argument::type(Process::class), Argument::cetera())->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(0);
+
+        self::assertSame(0, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function explicitEmptyProfileWillFailWithoutQueuingChecks(): void
+    {
+        $this->profile->read()
+            ->willReturn([]);
+        $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error(
+            'No standards checks are selected in dev-tools.json.',
+            Argument::any()
+        )->shouldBeCalledOnce();
+
+        self::assertSame(1, $this->invokeExecute());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function missingSelectedQualityToolWillFailBeforeRunning(): void
+    {
+        $this->profile->read()
+            ->willReturn(['quality']);
+        $this->profile->assertAvailable(['quality'])->willThrow(
+            new RuntimeException('Selected quality tool is missing.')
+        );
+        $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error('Selected quality tool is missing.', Argument::any())->shouldBeCalledOnce();
+
+        self::assertSame(1, $this->invokeExecute());
+    }
+
+    /**
+     * @return int
+     */
     private function invokeExecute(): int
     {
         return (new ReflectionMethod($this->command, 'execute'))

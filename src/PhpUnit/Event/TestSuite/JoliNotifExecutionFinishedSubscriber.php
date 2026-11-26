@@ -48,10 +48,8 @@ use Symfony\Component\Console\Helper\Helper;
  *   the relevant failure and error counters, followed by expanded telemetry
  *   details.
  *
- * When process forking support is available, notification delivery SHOULD be
- * delegated to a child process so the main PHPUnit process MAY continue
- * shutting down without waiting for the desktop notification transport to
- * complete.
+ * Notification delivery MUST remain in the PHPUnit process so an exception
+ * cannot resume a forked copy of its reporting and shutdown lifecycle.
  *
  * @codeCoverageIgnore
  */
@@ -80,11 +78,9 @@ final readonly class JoliNotifExecutionFinishedSubscriber implements ExecutionFi
      *
      * This method MUST build the final notification payload using the computed
      * title, execution summary, and telemetry details.
-     * When process forking is available, the parent process SHALL return
-     * immediately after a successful fork, and the child process SHALL send
-     * the notification and terminate explicitly. When forking support is not
-     * available, or the fork attempt fails, the notification MUST still be
-     * delivered synchronously so functional behavior remains unchanged.
+     * Delivery is synchronous. Transport exceptions remain visible to PHPUnit
+     * through its subscriber-error handling; this method MUST NOT duplicate
+     * the runner or suppress its warning and exit policies.
      *
      * @param ExecutionFinished $event the emitted PHPUnit execution finished
      *                                 event
@@ -98,17 +94,7 @@ final readonly class JoliNotifExecutionFinishedSubscriber implements ExecutionFi
             ->setBody($this->getBody() . $this->getTelemetryBody($event))
             ->setIcon(DevToolsPathResolver::getResourcesPath('phpunit.avif'));
 
-        $pid = \function_exists('pcntl_fork') ? pcntl_fork() : -1;
-
-        if ($pid > 0) {
-            return;
-        }
-
         $this->notifier->send($notification);
-
-        if (0 === $pid) {
-            exit(0);
-        }
     }
 
     /**

@@ -27,6 +27,9 @@ use FastForward\DevTools\Project\ProjectCapabilitiesResolverInterface;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
 use FastForward\DevTools\Path\ManagedWorkspace;
+use FastForward\DevTools\Tooling\ToolingProfile;
+use FastForward\DevTools\Tooling\ToolingProfileInterface;
+use Throwable;
 use Psr\Log\LogLevel;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -55,11 +58,13 @@ final class ReportsCommand extends Command
      * @param ProcessBuilderInterface $processBuilder the builder instance used to construct execution processes
      * @param ProcessQueueInterface $processQueue the execution queue mechanism for running sub-processes
      * @param ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver the resolver for project capability detection
+     * @param ?ToolingProfileInterface $toolingProfile
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
         private readonly ProjectCapabilitiesResolverInterface $projectCapabilitiesResolver,
+        private readonly ?ToolingProfileInterface $toolingProfile = null,
     ) {
         parent::__construct();
     }
@@ -129,6 +134,40 @@ final class ReportsCommand extends Command
         $coveragePath = (string) $input->getOption('coverage');
         $metricsPath = (string) $input->getOption('metrics');
 
+        try {
+            $profile = $this->toolingProfile ?? new ToolingProfile();
+            $selection = $profile->read();
+            $projectCapabilities = $this->projectCapabilitiesResolver->resolve();
+            $runDocs = null === $selection || (\in_array(
+                'docs',
+                $selection,
+                true
+            ) && $projectCapabilities->canGenerateDocs());
+            $runTests = $projectCapabilities->canRunTests() && (null === $selection || \in_array(
+                'tests',
+                $selection,
+                true
+            ));
+            $runMetrics = null === $selection || (\in_array(
+                'metrics',
+                $selection,
+                true
+            ) && $projectCapabilities->canGenerateMetrics());
+            if (null !== $selection) {
+                $required = [
+                    ...($runDocs ? ['docs'] : []),
+                    ...($runTests ? ['tests'] : []),
+                    ...($runMetrics ? ['metrics'] : []),
+                ];
+                if ([] === $required) {
+                    return $this->failure('No applicable report checks are selected in dev-tools.json.', $input);
+                }
+                $profile->assertAvailable($required);
+            }
+        } catch (Throwable $exception) {
+            return $this->failure($exception->getMessage(), $input);
+        }
+
         $this->log('Generating frontpage for Fast Forward documentation...', $input);
 
         $docsBuilder = $this->processBuilder
@@ -138,9 +177,11 @@ final class ReportsCommand extends Command
             ->withArgument('--coverage-summary')
             ->withArgument('--coverage', $coveragePath);
 
-        $metricsBuilder = $this->processBuilder
-            ->withArgument('--junit', $coveragePath . '/junit.xml')
-            ->withArgument('--target', $metricsPath);
+        $metricsBuilder = $this->processBuilder;
+        if (null === $selection || $runTests) {
+            $metricsBuilder = $metricsBuilder->withArgument('--junit', $coveragePath . '/junit.xml');
+        }
+        $metricsBuilder = $metricsBuilder->withArgument('--target', $metricsPath);
 
         if (! $jsonOutput) {
             $docsBuilder = $docsBuilder->withArgument('--ansi');
@@ -168,7 +209,7 @@ final class ReportsCommand extends Command
             $docsBuilder = $docsBuilder->withArgument('--pretty-json');
         }
 
-        $docs = $docsBuilder->build([DevToolsPathResolver::getBinaryPath(), 'docs']);
+        $docs = $runDocs ? $docsBuilder->build([DevToolsPathResolver::getBinaryPath(), 'docs']) : null;
 
         if (null !== $cacheArgument) {
             $coverageBuilder = $coverageBuilder->withArgument($cacheArgument);
@@ -190,11 +231,10 @@ final class ReportsCommand extends Command
             $coverageBuilder = $coverageBuilder->withArgument('--pretty-json');
         }
 
-        $projectCapabilities = $this->projectCapabilitiesResolver->resolve();
-        if ($projectCapabilities->canRunTests()) {
+        if ($runTests) {
             $coverage = $coverageBuilder->build([DevToolsPathResolver::getBinaryPath(), 'tests']);
             $this->processQueue->add(process: $coverage, label: 'Generating Coverage Report');
-        } else {
+        } elseif (null === $selection || \in_array('tests', $selection, true)) {
             $this->log(
                 'Skipping coverage report because no tests directory or PHP source files were detected.',
                 $input,
@@ -214,10 +254,13 @@ final class ReportsCommand extends Command
             $metricsBuilder = $metricsBuilder->withArgument('--pretty-json');
         }
 
-        $metrics = $metricsBuilder->build([DevToolsPathResolver::getBinaryPath(), 'metrics']);
-
-        $this->processQueue->add(process: $docs, detached: true, label: 'Generating API Docs Report');
-        $this->processQueue->add(process: $metrics, label: 'Generating Metrics Report');
+        if (null !== $docs) {
+            $this->processQueue->add(process: $docs, detached: true, label: 'Generating API Docs Report');
+        }
+        if ($runMetrics) {
+            $metrics = $metricsBuilder->build([DevToolsPathResolver::getBinaryPath(), 'metrics']);
+            $this->processQueue->add(process: $metrics, label: 'Generating Metrics Report');
+        }
 
         $result = $this->processQueue->run($processOutput);
 

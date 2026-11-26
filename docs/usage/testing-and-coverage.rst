@@ -67,6 +67,12 @@ When ``tests`` itself runs in structured mode, DevTools also forces the
 reporter path for the PHPUnit subprocess so the nested payload remains compact
 and parseable for bots and agent workflows.
 
+Desktop notification delivery is synchronous in the PHPUnit process. The
+subscriber does not fork a second reporting/shutdown lifecycle. Transport
+exceptions remain visible through PHPUnit's subscriber warnings and configured
+warning/exit policies. Packaged extension registration and default profiles
+remain unchanged; this delivery change introduces no notification opt-in policy.
+
 Programmatic Coverage Access
 -----------------------------
 
@@ -86,6 +92,58 @@ external tooling or build custom reports:
    $summary->percentage();        // e.g., 84.52
    $summary->percentageAsString(); // e.g., "84.52%"
 
+``FastForward\DevTools\PhpUnit\Coverage\MinimumCoverageResolver`` is a final
+readonly invocable validator with signature ``__invoke(?string $value): ?float``.
+It trims the supplied string and returns ``null`` for null or blank input,
+disabling the threshold. Numeric percentages from ``0`` through ``100``
+inclusive return a float. Invalid values throw ``InvalidArgumentException``
+with the existing messages:
+
+- ``The --min-coverage option MUST be a numeric percentage.`` for non-numeric input;
+- ``The --min-coverage option MUST be between 0 and 100.`` for an out-of-range percentage.
+
+The validator reads no environment or console state. ``TestsCommand`` still
+selects the CLI value first, reads ``FAST_FORWARD_MIN_COVERAGE`` only when
+that value is null, and passes the selected value to this validator.
+
+Programmatic Bootstrap and Result Interpretation
+------------------------------------------------
+
+``FastForward\DevTools\PhpUnit\Bootstrap\BootstrapShimGenerator`` accepts
+``generate($projectBootstrap, $cacheDirectory, $runtimeAutoload = null)``.
+It writes and returns a bootstrap shim under the cache directory. The shim
+loads the project bootstrap first, then the selected runtime autoloader if that
+file exists. Pass an explicit isolated runtime autoloader when the caller owns
+that runtime; omitting it retains the current DevTools runtime resolution and
+the existing consumer-first loading order.
+
+``FastForward\DevTools\PhpUnit\Result\ProcessResultInterpreter`` is an
+invocable, final readonly helper that interprets captured process output
+without starting a process, reading files or writing console output:
+
+.. code-block:: php
+
+   use FastForward\DevTools\PhpUnit\Result\ProcessResultInterpreter;
+
+   $interpret = new ProcessResultInterpreter();
+   $payload = $interpret($capturedOutput, $exitCode);
+
+The helper retains the reporter payload shape. A nonzero process exit code or
+an explicit reporter ``result`` of ``failure`` produces ``failure``; exit code
+``0`` does not override a reporter failure. Multiple complete reporter objects
+also produce ``failure``, even when each reports success, and preserve the full
+trimmed captured output as ``raw_output``. ``TestsCommand`` propagates a
+structured failure as command failure even when the process queue exits ``0``.
+
+Decoded fields from a single reporter payload are retained. Human-readable or
+malformed output keeps the existing trimmed ``raw_output`` fallback; when a
+recognized final reporter object follows supplemental text, that text is
+preserved there instead. Empty output returns only the exit-code-derived
+result. Recovery from malformed output has a bounded scan budget. Exhausting
+that budget returns failure with the complete captured output, even when an
+ambiguous stream ends with a success object. This helper does not define a
+separate versioned result schema.
+
 When to Override Locally
 ------------------------
 
@@ -98,5 +156,5 @@ agent-oriented JSON output.
 
 .. note::
 
-   Desktop notifications are a convenience feature, not a requirement. Test
-   execution still works when the notification transport is unavailable.
+   Notification transport errors are not silently ignored. PHPUnit's subscriber
+   warning and exit policies determine their effect on the completed test run.

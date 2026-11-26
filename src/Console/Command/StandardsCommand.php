@@ -26,6 +26,9 @@ use FastForward\DevTools\Path\DevToolsPathResolver;
 use FastForward\DevTools\Path\ManagedWorkspace;
 use FastForward\DevTools\Process\ProcessBuilderInterface;
 use FastForward\DevTools\Process\ProcessQueueInterface;
+use FastForward\DevTools\Tooling\ToolingProfile;
+use FastForward\DevTools\Tooling\ToolingProfileInterface;
+use Throwable;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -51,10 +54,12 @@ final class StandardsCommand extends Command
     /**
      * @param ProcessBuilderInterface $processBuilder
      * @param ProcessQueueInterface $processQueue
+     * @param ?ToolingProfileInterface $toolingProfile
      */
     public function __construct(
         private readonly ProcessBuilderInterface $processBuilder,
         private readonly ProcessQueueInterface $processQueue,
+        private readonly ?ToolingProfileInterface $toolingProfile = null,
     ) {
         parent::__construct();
     }
@@ -106,9 +111,29 @@ final class StandardsCommand extends Command
         $commands = [];
         $fix = (bool) $input->getOption('fix');
 
+        try {
+            $profile = $this->toolingProfile ?? new ToolingProfile();
+            $selection = $profile->read();
+            $planned = ['refactor', 'phpdoc', 'code-style', 'reports'];
+            if (null !== $selection) {
+                $planned = \in_array('quality', $selection, true) ? ['refactor', 'phpdoc', 'code-style'] : [];
+                if ([] !== array_intersect($selection, ['tests', 'docs', 'metrics'])) {
+                    $planned[] = 'reports';
+                }
+                if ([] === $planned) {
+                    return $this->failure('No standards checks are selected in dev-tools.json.', $input);
+                }
+                if (\in_array('quality', $selection, true)) {
+                    $profile->assertAvailable(['quality']);
+                }
+            }
+        } catch (Throwable $exception) {
+            return $this->failure($exception->getMessage(), $input);
+        }
+
         $this->log('Running code standards checks...', $input);
 
-        foreach (['refactor', 'phpdoc', 'code-style', 'reports'] as $command) {
+        foreach ($planned as $command) {
             $commands[] = $command;
             $processBuilder = $this->processBuilder;
 

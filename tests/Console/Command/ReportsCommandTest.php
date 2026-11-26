@@ -47,6 +47,8 @@ use Prophecy\Prophecy\ObjectProphecy;
 use Psr\Log\LoggerInterface;
 use FastForward\DevTools\Tests\Container\UsesContainerFactory;
 use ReflectionMethod;
+use FastForward\DevTools\Tooling\ToolingProfileInterface;
+use RuntimeException;
 use Symfony\Component\Console\Formatter\OutputFormatter;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -87,6 +89,8 @@ final class ReportsCommandTest extends TestCase
     private ObjectProphecy $projectCapabilitiesResolver;
 
     private ReportsCommand $command;
+
+    private ObjectProphecy $profile;
 
     /**
      * @return void
@@ -136,10 +140,14 @@ final class ReportsCommandTest extends TestCase
         $this->projectCapabilitiesResolver->resolve()
             ->willReturn($this->createProjectCapabilities(canRunTests: true));
 
+        $this->profile = $this->prophesize(ToolingProfileInterface::class);
+        $this->profile->read()
+            ->willReturn(null);
         $this->command = new ReportsCommand(
             $this->processBuilder->reveal(),
             $this->processQueue->reveal(),
             $this->projectCapabilitiesResolver->reveal(),
+            $this->profile->reveal(),
         );
     }
 
@@ -354,6 +362,83 @@ final class ReportsCommandTest extends TestCase
     {
         return (new ReflectionMethod($this->command, 'execute'))
             ->invoke($this->command, $this->input->reveal(), $this->output->reveal());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function explicitMetricsProfileWillRunOnlyMetrics(): void
+    {
+        $this->processBuilder->withArgument('--junit', Argument::any())->shouldNotBeCalled();
+        $this->profile->read()
+            ->willReturn(['metrics']);
+        $this->profile->assertAvailable(['metrics'])->shouldBeCalledOnce();
+        $this->projectCapabilitiesResolver->resolve()
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->processBuilder->build([DevToolsPathResolver::getBinaryPath(), 'docs'])->shouldNotBeCalled();
+        $this->processBuilder->build([DevToolsPathResolver::getBinaryPath(), 'tests'])->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(0);
+
+        self::assertSame(0, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function explicitTestsProfileWillRunOnlyCoverageWhenApplicable(): void
+    {
+        $this->profile->read()
+            ->willReturn(['tests']);
+        $this->profile->assertAvailable(['tests'])->shouldBeCalledOnce();
+        $this->projectCapabilitiesResolver->resolve()
+            ->willReturn(new ProjectCapabilities(['src'], 'Example', false, true, false, true));
+        $this->processBuilder->build([DevToolsPathResolver::getBinaryPath(), 'docs'])->shouldNotBeCalled();
+        $this->processBuilder->build([DevToolsPathResolver::getBinaryPath(), 'metrics'])->shouldNotBeCalled();
+        $this->processQueue->add($this->process->reveal(), Argument::cetera())->shouldBeCalledOnce();
+        $this->processQueue->run($this->output->reveal())
+            ->willReturn(0);
+
+        self::assertSame(0, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function selectedTestsWithoutPhpSourceWillFailInsteadOfReportingAnEmptySuccess(): void
+    {
+        $this->profile->read()
+            ->willReturn(['tests']);
+        $this->projectCapabilitiesResolver->resolve()
+            ->willReturn(new ProjectCapabilities([], null, false, true, false, false));
+        $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error(
+            'No applicable report checks are selected in dev-tools.json.',
+            Argument::any()
+        )->shouldBeCalledOnce();
+
+        self::assertSame(1, $this->executeCommand());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function missingSelectedMetricsWillFailWithoutRunningOtherCapabilities(): void
+    {
+        $this->profile->read()
+            ->willReturn(['metrics']);
+        $this->projectCapabilitiesResolver->resolve()
+            ->willReturn(new ProjectCapabilities([], null, false, false, false, false));
+        $this->profile->assertAvailable(['metrics'])->willThrow(new RuntimeException('Missing phpmetrics.'));
+        $this->processQueue->add(Argument::cetera())->shouldNotBeCalled();
+        $this->logger->error('Missing phpmetrics.', Argument::any())->shouldBeCalledOnce();
+
+        self::assertSame(1, $this->executeCommand());
     }
 
     /**
