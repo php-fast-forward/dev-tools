@@ -82,12 +82,6 @@ final readonly class RuntimeEnvironment implements RuntimeEnvironmentInterface
      */
     public function isAgentPresent(): bool
     {
-        $environment = $this->environment->get();
-
-        if (! \is_array($environment)) {
-            return false;
-        }
-
-        return $this->agentDetector->isAgentPresent($environment);
+        return $this->agentDetector->isAgentPresent();
     }
 }

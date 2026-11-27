@@ -20,6 +20,7 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Tests\Environment;
 
 use Ergebnis\AgentDetector\Detector;
+use Ergebnis\AgentDetector\EnvironmentDetector;
 use FastForward\DevTools\Environment\EnvironmentInterface;
 use FastForward\DevTools\Environment\RuntimeEnvironment;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -86,7 +87,28 @@ final class RuntimeEnvironmentTest extends TestCase
     protected function setUp(): void
     {
         $this->environment = $this->prophesize(EnvironmentInterface::class);
-        $this->runtimeEnvironment = new RuntimeEnvironment($this->environment->reveal(), new Detector());
+        $this->runtimeEnvironment = new RuntimeEnvironment($this->environment->reveal(), self::createAgentDetector());
+    }
+
+    /**
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        putenv('AGENT_DETECTOR_DISABLE');
+        putenv('CODEX_SANDBOX');
+    }
+
+    /**
+     * @return Detector
+     */
+    private static function createAgentDetector(): Detector
+    {
+        if (class_exists(EnvironmentDetector::class)) {
+            return new EnvironmentDetector();
+        }
+
+        return new Detector();
     }
 
     /**
@@ -170,11 +192,20 @@ final class RuntimeEnvironmentTest extends TestCase
     #[Test]
     public function isAgentPresentWillReturnWhetherKnownAgentVariablesExist(): void
     {
-        $this->environment->get()
-            ->willReturn([
-                'CODEX_SANDBOX' => '1',
-            ]);
+        putenv('CODEX_SANDBOX=1');
 
         self::assertTrue($this->runtimeEnvironment->isAgentPresent());
+    }
+
+    /**
+     * @return void
+     */
+    #[Test]
+    public function isAgentPresentWillReturnFalseWhenAgentDetectionIsDisabled(): void
+    {
+        putenv('CODEX_SANDBOX=1');
+        putenv('AGENT_DETECTOR_DISABLE=1');
+
+        self::assertFalse($this->runtimeEnvironment->isAgentPresent());
     }
 }
