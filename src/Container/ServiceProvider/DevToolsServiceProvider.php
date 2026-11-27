@@ -20,6 +20,8 @@ declare(strict_types=1);
 namespace FastForward\DevTools\Container\ServiceProvider;
 
 use Composer\Plugin\Capability\CommandProvider;
+use Ergebnis\AgentDetector\Detector;
+use Ergebnis\AgentDetector\EnvironmentDetector;
 use FastForward\DevTools\Composer\Capability\DevToolsCommandProvider;
 use FastForward\DevTools\Composer\Json\ComposerJson;
 use FastForward\DevTools\Composer\Json\ComposerJsonInterface;
@@ -128,6 +130,15 @@ class DevToolsServiceProvider implements ServiceProviderInterface
             // Process
             EnvironmentInterface::class => get(Environment::class),
             RuntimeEnvironmentInterface::class => get(RuntimeEnvironment::class),
+            Detector::class => factory(
+                static function (): Detector {
+                    if (class_exists(EnvironmentDetector::class)) {
+                        return new EnvironmentDetector();
+                    }
+
+                    return new Detector();
+                }
+            ),
             ExtensionInterface::class => get(Extension::class),
             OutputCapabilityDetectorInterface::class => get(OutputCapabilityDetector::class),
             ProcessBuilderInterface::class => get(ProcessBuilder::class),
